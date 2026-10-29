@@ -1,7 +1,7 @@
 /-
 # Naming things
 
-Welcome! In this game you write **definitions** in Lean, a language for
+Welcome, {name}! In this game you write **definitions** in Lean, a language for
 mathematics. You never write proofs: a hidden *referee* tests your definitions
 and reports what it finds. The first levels teach the syntax step by step.
 

@@ -121,6 +121,29 @@ know the answer.**
 | only 2 is prime | false | the AI's precedence bug |
 | real primes | **open** | "proved an open problem: probably vacuous" |
 
+## Online version
+
+A static copy of the game that needs no Lean on the server. The browser sends the player's
+code to the Lean Playground (<https://live.lean-lang.org/>, project `MathlibDemo`) over a
+websocket and reads the referee's verdicts from the diagnostics.
+
+```bash
+python3 online/build.py          # writes dist/online/: upload it to any static web host
+```
+
+* `online/build.py` exports the levels to `data/levels.json` and turns `Referee.lean` into
+  `data/prelude.lean`, one self-contained block (its `initialize` references become global
+  values, since a file cannot use its own `initialize`). `web/static/live.js` pastes it, the
+  player's code and all the tests into **one** file per run, which is how it differs from the
+  local server (one Lean process per test).
+* A run takes about a minute for most levels, and a few minutes for the hardest. A test that
+  runs more than 60 s is dropped (✅ for a test that should stay open, ❓ otherwise), and a
+  cut-off session continues with the remaining tests.
+* The Welcome page tells the player that the code goes to a public server.
+* It depends on the Playground: its Lean and Mathlib versions (this project pins
+  `lean-toolchain`; the Playground follows the latest Mathlib), its availability and its limits.
+  Ask the Lean community before sending real traffic its way.
+
 ## Verified behaviour
 
 `variants/L<n>/` holds sample answers for every level: a correct one and the

@@ -15,14 +15,24 @@ const store = {
   },
 };
 
+/* ------------------------------------------------------------ the player's name */
+
+/* Asked once, on the first run, and kept in the browser. `{name}` in any level text is
+   replaced by it. Skipping the question (or an empty name) gives "friend". */
+const REPO = "mmasdeu/leancraftgame";
+const playerName = () => (store.get("name", "") || "").trim() || "friend";
+const personalize = (s) => s.replace(/\{name\}/g, playerName());
+
 /* A small Markdown subset for the level text: headings, bullet and numbered lists, quotes,
    fenced code, `code`, **bold**, *italic*. */
 function inline(s) {
+  s = personalize(s);
   return s.split("`").map((part, i) => i % 2
     ? `<code>${esc(part)}</code>`
     : esc(part).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\*(\S.*?)\*/g, "<i>$1</i>")).join("");
 }
 function markdown(text) {
+  text = personalize(text);
   const out = [];
   let para = [], list = [], ordered = false, quote = [], code = null;
   const flush = () => {
@@ -275,10 +285,20 @@ function jumpTo(d) {
 
 /* ------------------------------------------------------------ levels */
 
+/* Online (a static site, see online/build.py) the levels are files, and the tests run on the
+   Lean Playground through live.js; locally they come from, and run on, web/server.py. */
+const ONLINE = Boolean(window.LEANCRAFT?.online);
+let hosted = null;                     // online: { levels: every level with its tests, prelude }
+
 let levels = [], level = null;
 
 async function loadLevels() {
-  levels = await (await fetch("/api/levels")).json();
+  if (ONLINE) {
+    const [all, prelude] = await Promise.all([fetch("data/levels.json").then((r) => r.json()),
+      fetch("data/prelude.lean").then((r) => r.text())]);
+    hosted = { levels: all, prelude };
+    levels = all.map(({ id, num, world, title, skill }) => ({ id, num, world, title, skill }));
+  } else levels = await (await fetch("/api/levels")).json();
   // the Welcome page for a first visit; otherwise where the player was (a link wins)
   const want = new URLSearchParams(location.search).get("level") ?? store.get("level", "intro");
   if (want === "intro") return openIntro();
@@ -305,23 +325,30 @@ function renderTabs() {
 /* The Welcome page: the introduction replaces the editor and the report. */
 async function openIntro() {
   stopRun();
-  const { markdown: text } = await (await fetch("/api/intro")).json();
+  const text = ONLINE ? await (await fetch("data/intro.md")).text()
+    : (await (await fetch("/api/intro")).json()).markdown;
   level = null;
   store.set("level", "intro");
   history.replaceState(null, "", "?level=intro");
   document.title = "Lean Craft Game · Welcome";
   document.body.classList.add("intro-mode");
   renderTabs();
-  $("intro").innerHTML = markdown(text) + `<p class="start"><button class="primary" id="start">
+  $("intro").innerHTML = `<p class="whoami">Playing as <b>${esc(playerName())}</b>
+    <button class="quiet" id="rename">Change name</button></p>` + markdown(text) +
+    `<p class="start"><button class="primary" id="start">
     Start with level 1: ${esc(levels[0].title)} →</button></p>`;
   $("start").onclick = () => openLevel(levels[0].id);
+  $("rename").onclick = () => askName().then(openIntro);
   window.scrollTo(0, 0);
 }
 
 async function openLevel(id) {
   stopRun();
   document.body.classList.remove("intro-mode");
-  level = await (await fetch(`/api/levels/${id}`)).json();
+  if (ONLINE) {
+    const full = hosted.levels.find((l) => l.id === id);
+    level = { ...full, tests: full.tests.map((t, i) => ({ id: i, name: t.name, kind: t.kind })) };
+  } else level = await (await fetch(`/api/levels/${id}`)).json();
   store.set("level", id);
   history.replaceState(null, "", `?level=${id}`);
   document.title = `Lean Craft Game · ${level.title}`;
@@ -424,11 +451,11 @@ function updateSummary(note = "") {
     const cleared = store.get("cleared", []);
     if (!cleared.includes(level.id)) { store.set("cleared", [...cleared, level.id]); renderTabs(); }
     const next = levels[levels.findIndex((l) => l.id === level.id) + 1];
-    setSummary("cleared", `🏆 <b>Level cleared!</b> Every test passed on this code.${line}` +
-      (next ? `<button class="primary" id="next">Next: ${esc(next.title)} →</button>` : "You have cleared the last level."));
+    setSummary("cleared", `🏆 <b>Level cleared, ${esc(playerName())}!</b> Every test passed on this code.${line}` +
+      (next ? `<button class="primary" id="next">Next: ${esc(next.title)} →</button>` : `You have cleared the last level. Well done, ${esc(playerName())}!`));
     if (next) $("next").onclick = () => openLevel(next.id);
   } else if (failed) {
-    setSummary("failed", `${pre}🔁 <b>Not yet.</b> Read the ❌ test below: it tells you what your
+    setSummary("failed", `${pre}🔁 <b>Not yet, ${esc(playerName())}.</b> Read the ❌ test below: it tells you what your
       definition gets wrong.${line}`);
   } else if (passed || n("unknown")) {
     setSummary("", `${pre}${line}${n("unknown") ? `${n("unknown")} could not be settled. ` : ""}
@@ -436,7 +463,7 @@ function updateSummary(note = "") {
   } else {
     setSummary("muted", pre + (stale
       ? "Your code changed since the last run, so the earlier results no longer apply. Press <b>Run tests</b>."
-      : "Write your definition, then press <b>Run tests</b>."));
+      : `Write your definition, ${esc(playerName())}, then press <b>Run tests</b>.`));
   }
 }
 
@@ -494,27 +521,33 @@ async function runTests(ids = null) {
     renderTests();
   };
   try {
-    const res = await fetch(`/api/levels/${level.id}/run`, {
-      method: "POST", signal: ctl.signal,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code, tests: ids, stopOnFail: ids === null }),
-    });
-    const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
-    let buf = "";
-    for (;;) {
-      const { value, done } = await reader.read();
-      if (done) break;
-      buf += value;
-      let i;
-      while ((i = buf.indexOf("\n\n")) >= 0) {
-        const chunk = buf.slice(0, i);
-        buf = buf.slice(i + 2);
-        const ev = /^event: (.*)$/m.exec(chunk), data = /^data: (.*)$/m.exec(chunk);
-        if (ev && data) handle(ev[1], JSON.parse(data[1]));
+    if (ONLINE) {
+      const full = hosted.levels.find((l) => l.id === level.id);
+      await LiveRunner.run({ level: full, prelude: hosted.prelude, code, ids, stopOnFail: ids === null }, handle, ctl.signal);
+    } else {
+      const res = await fetch(`/api/levels/${level.id}/run`, {
+        method: "POST", signal: ctl.signal,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, tests: ids, stopOnFail: ids === null }),
+      });
+      const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
+      let buf = "";
+      for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        buf += value;
+        let i;
+        while ((i = buf.indexOf("\n\n")) >= 0) {
+          const chunk = buf.slice(0, i);
+          buf = buf.slice(i + 2);
+          const ev = /^event: (.*)$/m.exec(chunk), data = /^data: (.*)$/m.exec(chunk);
+          if (ev && data) handle(ev[1], JSON.parse(data[1]));
+        }
       }
     }
   } catch (err) {
-    if (err.name !== "AbortError") outcome = `Lost contact with the server (${esc(String(err))}). Is <code>web/server.py</code> still running?`;
+    if (err.name !== "AbortError") outcome = ONLINE ? `Could not check your code: ${esc(err.message || String(err))}`
+      : `Lost contact with the server (${esc(String(err))}). Is <code>web/server.py</code> still running?`;
   }
   if (controller !== ctl) return;           // superseded or stopped
   if (outcome === null) outcome = "The run ended unexpectedly. Check the server's terminal.";
@@ -650,6 +683,56 @@ buildSymbols();
 
 $("run").onclick = () => runTests();
 
+/* ------------------------------------------------------------ name, report a problem */
+
+/* Ask "How should I call you?"; resolves once the player has answered or skipped. */
+function askName() {
+  const dlg = $("name-dialog"), input = $("name-input");
+  input.value = store.get("name", "") || "";
+  $("name-skip").hidden = store.get("name", null) !== null;      // already answered: no skipping
+  $("name-cancel").hidden = !$("name-skip").hidden;
+  return new Promise((resolve) => {
+    const done = (value) => {
+      if (value !== null) store.set("name", value);
+      dlg.close();
+      resolve();
+    };
+    $("name-form").onsubmit = (e) => { e.preventDefault(); done(input.value.trim()); };
+    $("name-skip").onclick = () => done("");
+    $("name-cancel").onclick = () => done(null);
+    dlg.oncancel = (e) => { e.preventDefault(); done($("name-skip").hidden ? null : ""); };
+    dlg.showModal();
+    input.focus();
+    input.select();
+  });
+}
+
+/* Open a prefilled "new issue" page on GitHub. The code goes into the URL, so a long
+   file is cut and the whole of it is copied to the clipboard for pasting instead. */
+function reportProblem() {
+  const lines = ["**What went wrong?**", "", "<!-- Describe the problem here. -->", "", "---",
+    `Level: ${level ? `${level.num} · ${level.title}` : "Welcome page"}`,
+    `Browser: ${navigator.userAgent}`];
+  if (level) {
+    const failing = tests.filter((t) => view(t) === "fail").map((t) => `- ❌ ${t.name}`);
+    if (failing.length) lines.push("", "Failing tests:", ...failing.slice(0, 8));
+    const url = (body) => `https://github.com/${REPO}/issues/new?` +
+      new URLSearchParams({ title: level ? `Level ${level.num}: ` : "", body }).toString();
+    const fence = (code) => ["", "My code:", "```lean", code.trimEnd(), "```"];
+    let body = lines.concat(fence(src.value)).join("\n");
+    if (url(body).length > 6000) {
+      try { navigator.clipboard.writeText(src.value); } catch { /* no clipboard */ }
+      const head = src.value.slice(0, 600);
+      body = lines.concat(fence(head + "\n-- … (cut)"),
+        ["", "_My full code is too long for the link. It was copied to the clipboard: please paste it here._"]).join("\n");
+    }
+    return window.open(url(body), "_blank", "noopener");
+  }
+  window.open(`https://github.com/${REPO}/issues/new?` +
+    new URLSearchParams({ body: lines.join("\n") }), "_blank", "noopener");
+}
+$("report").onclick = reportProblem;
+
 /* ------------------------------------------------------------ app: first-launch setup, quit */
 
 function renderSetup(s) {
@@ -693,7 +776,9 @@ $("quit").onclick = async () => {
   try { await fetch("/api/quit", { method: "POST" }); } catch { /* already gone */ }
   document.body.innerHTML = '<p class="bye">Lean Craft Game has stopped. You can close this tab.</p>';
 };
-setupReady = false;
-watchSetup();
+if (!ONLINE) {
+  setupReady = false;
+  watchSetup();
+}
 $("stop").onclick = stopRun;
-loadLevels();
+(store.get("name", null) === null ? askName() : Promise.resolve()).then(loadLevels);

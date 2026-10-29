@@ -1,4 +1,4 @@
-# Welcome to Lean Craft Game
+# Welcome to Lean Craft Game, {name}!
 
 In this game you learn to write **definitions** in Lean, a language for mathematics.
 You do not need to know anything about Lean, or to have read a line of code before.
@@ -116,7 +116,8 @@ with the keys to type it, and a short typing drill. You can try it right now.
 ## Good to know
 
 * Your code and progress are saved in your browser, so you can close the page and
-  come back. Nothing is sent anywhere.
+  come back. Nothing is sent anywhere, and the **Report a problem** button at the top
+  only opens a prefilled page on GitHub, which you send yourself.
 * Some tests take several seconds, and the hardest up to a minute, because the referee
   really is searching for proofs. A spinner shows which tests are running, and
   **Stop** cancels the run.
