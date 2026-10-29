@@ -5,8 +5,10 @@ in your web browser. One player at a time; no accounts.
 
 ## The easy way: download the app
 
-The [Releases page](https://github.com/mmasdeu/DefGame/releases) has a ready-made app
-for Windows, macOS (Apple Silicon) and Linux. Nothing else needs to be installed first.
+The [DefGame website](https://mmasdeu.github.io/DefGame/) links to a ready-made app
+for Windows, macOS (Apple Silicon) and Linux, which you can also find on the
+[Releases page](https://github.com/mmasdeu/DefGame/releases). Nothing else needs to be
+installed first.
 
 * **Windows:** unzip `DefGame-windows-x64.zip` and run `DefGame.exe` in the `DefGame`
   folder. Windows may warn about an unrecognized app: choose *More info → Run anyway*.
@@ -172,6 +174,22 @@ fresh machine: install Lean and Mathlib, then play two levels with a correct and
 buggy answer. Only if all three pass does it publish the apps and the pack as a
 GitHub Release. Running the workflow by hand (Actions → Release → Run workflow)
 builds and tests without publishing.
+
+### The website
+
+The landing page is `site/index.html`, a single static file with no external resources.
+Its download buttons point to the latest release, and it uses the GitHub API to show
+the version and the file sizes (without it, the plain links still work). The buttons
+rely on the files of a release having these exact names, which `app/build_app.py` gives them:
+`DefGame-windows-x64.zip`, `DefGame-macos-arm64.dmg`, `DefGame-linux-x64.tar.gz`.
+
+`.github/workflows/pages.yml` copies `site/` to the `gh-pages` branch whenever it changes
+on `main`. One-time setup, after the workflow has run once and created the branch:
+*Settings → Pages → Build and deployment → Source: Deploy from a branch → `gh-pages`, `/ (root)`*.
+The site is then at <https://mmasdeu.github.io/DefGame/>. To preview it locally:
+`python3 -m http.server --directory site`.
+
+### Trying the app without a release
 
 To try the app from a checkout without freezing it:
 

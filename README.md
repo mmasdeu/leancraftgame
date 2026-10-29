@@ -24,6 +24,7 @@ so it has a concrete witness against your definition) or ❓ (unsettled).
 ## Quick start
 
 **To play:** download the app for Windows, macOS or Linux from the
+[DefGame website](https://mmasdeu.github.io/DefGame/) or the
 [Releases page](https://github.com/mmasdeu/DefGame/releases). It installs Lean and
 the parts of Mathlib it needs on its first launch, then works offline. See
 [INSTALL.md](INSTALL.md).
@@ -143,6 +144,7 @@ app/launcher.py          the desktop app: installs Lean and the Mathlib pack on 
 app/make_pack.py         builds the Mathlib pack (the modules the game loads) and deps.json
 app/build_app.py         freezes the app with PyInstaller for the current OS
 .github/workflows/release.yml   builds, smoke-tests and publishes the apps for Windows, macOS and Linux
+site/                    the landing page with the download links (published to gh-pages by .github/workflows/pages.yml)
 ```
 
 **The referee** (`Referee.lean`) is deliberately simple: iterative

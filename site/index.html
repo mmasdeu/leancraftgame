@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DefGame: a Lean game about definitions, not proofs</title>
+  <meta name="description" content="Learn to write Lean definitions that mean what you intend. Download DefGame for Windows, macOS or Linux.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text x='4' y='25' font-size='24' font-family='serif'>∀</text></svg>">
+  <style>
+    :root {
+      --bg: #f7f6f2;
+      --surface: #ffffff;
+      --fg: #1d1f23;
+      --muted: #676d76;
+      --border: #e2e0d8;
+      --accent: #2f5fd0;
+      --accent-fg: #ffffff;
+      --code-bg: #f1f0eb;
+      --pass: #1f8a4c;
+      --mono: "JetBrains Mono", "Fira Code", "Cascadia Code", "DejaVu Sans Mono", Menlo, Consolas, monospace;
+      --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #14161a;
+        --surface: #1c1f24;
+        --fg: #e6e6e3;
+        --muted: #9aa0a8;
+        --border: #2d3138;
+        --accent: #7a9fff;
+        --accent-fg: #0d1117;
+        --code-bg: #24282e;
+        --pass: #4cc282;
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.6 var(--sans); }
+    a { color: var(--accent); }
+    code { font-family: var(--mono); font-size: .9em; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+    main { max-width: 960px; margin: 0 auto; padding: 0 20px 64px; }
+    h1, h2, h3 { line-height: 1.25; }
+    h2 { font-size: 24px; margin: 48px 0 12px; }
+    h3 { font-size: 17px; margin: 0 0 6px; }
+    .muted { color: var(--muted); }
+
+    /* hero */
+    .hero { padding: 56px 0 24px; }
+    .logo { font: 700 15px var(--mono); letter-spacing: .04em; color: var(--muted); }
+    .hero h1 { font-size: clamp(32px, 6vw, 52px); letter-spacing: -.02em; margin: 8px 0 14px; }
+    .hero h1 .sym { font-family: var(--mono); color: var(--accent); }
+    .lead { font-size: 19px; max-width: 40em; color: var(--fg); margin: 0 0 24px; }
+
+    /* downloads */
+    .downloads { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 8px 0 12px; }
+    @media (max-width: 760px) { .downloads { grid-template-columns: 1fr; } }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+    .card.recommended { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .card .badge { font-size: 12px; line-height: 16px; height: 16px; color: var(--accent); font-weight: 600; }
+    .btn {
+      display: block; text-align: center; text-decoration: none; font-weight: 600;
+      padding: 10px 14px; border-radius: 10px; border: 1px solid var(--accent);
+      color: var(--accent); background: transparent;
+    }
+    .recommended .btn { background: var(--accent); color: var(--accent-fg); }
+    .btn:hover { filter: brightness(1.08); }
+    .btn small { display: block; font-weight: 400; opacity: .85; font-size: 12px; }
+    .card p { margin: 0; font-size: 14px; color: var(--muted); }
+    .status { font-size: 14px; color: var(--muted); min-height: 1.6em; }
+    .status.warn { color: var(--fg); background: var(--code-bg); border-radius: 8px; padding: 8px 12px; }
+    .other { font-size: 14px; color: var(--muted); }
+
+    /* sections */
+    .shot { width: 100%; height: auto; display: block; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+    figcaption { font-size: 14px; color: var(--muted); margin-top: 8px; }
+    figure { margin: 24px 0 0; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+    .grid > div { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+    .grid p { margin: 0; font-size: 15px; }
+    ol.steps { padding-left: 1.2em; }
+    ol.steps li { margin: 6px 0; }
+    pre { background: var(--code-bg); padding: 12px 14px; border-radius: 10px; overflow-x: auto; font: 14px/1.5 var(--mono); margin: 12px 0; }
+    details { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; margin: 8px 0; }
+    summary { cursor: pointer; font-weight: 600; }
+    details p { margin: 8px 0 4px; }
+    footer { border-top: 1px solid var(--border); margin-top: 56px; padding-top: 20px; font-size: 14px; color: var(--muted); }
+  </style>
+</head>
+<body>
+<main>
+  <header class="hero">
+    <div class="logo">DEFGAME</div>
+    <h1>Write <span class="sym">∀</span> definitions that mean what you intend</h1>
+    <p class="lead">
+      A Lean game about <b>definitions, not proofs</b>. You write a definition; a hidden
+      referee tries to prove or refute dozens of facts about it, and shows you what your
+      definition gets wrong. It starts from zero Lean and ends with auditing a formal
+      statement.
+    </p>
+
+    <div id="status" class="status" aria-live="polite"></div>
+    <div class="downloads" id="downloads">
+      <div class="card" data-os="windows">
+        <span class="badge"></span>
+        <h3>Windows</h3>
+        <a class="btn" data-asset="DefGame-windows-x64.zip"
+           href="https://github.com/mmasdeu/DefGame/releases/latest/download/DefGame-windows-x64.zip">Download for Windows<small>DefGame-windows-x64.zip</small></a>
+        <p>Windows 10 or 11, 64-bit. Unzip it and run <code>DefGame.exe</code>. If Windows warns about an
+          unrecognized app, choose <i>More info → Run anyway</i>.</p>
+      </div>
+      <div class="card" data-os="macos">
+        <span class="badge"></span>
+        <h3>macOS</h3>
+        <a class="btn" data-asset="DefGame-macos-arm64.dmg"
+           href="https://github.com/mmasdeu/DefGame/releases/latest/download/DefGame-macos-arm64.dmg">Download for macOS<small>DefGame-macos-arm64.dmg</small></a>
+        <p>Apple Silicon (M1 or later). Drag DefGame to Applications, then right-click it and choose
+          <i>Open</i> the first time. Intel Macs: see <a href="#source">running from source</a>.</p>
+      </div>
+      <div class="card" data-os="linux">
+        <span class="badge"></span>
+        <h3>Linux</h3>
+        <a class="btn" data-asset="DefGame-linux-x64.tar.gz"
+           href="https://github.com/mmasdeu/DefGame/releases/latest/download/DefGame-linux-x64.tar.gz">Download for Linux<small>DefGame-linux-x64.tar.gz</small></a>
+        <p>x86-64 with glibc 2.35 or newer (Ubuntu 22.04, Debian 12, Fedora 36 or later). Unpack it and run
+          <code>DefGame/DefGame</code>.</p>
+      </div>
+    </div>
+    <div class="other">
+      All versions and release notes: <a href="https://github.com/mmasdeu/DefGame/releases">GitHub Releases</a>
+      · <a href="https://github.com/mmasdeu/DefGame">source code</a>
+    </div>
+  </header>
+
+  <figure>
+    <img class="shot" src="screenshot.png" width="1280" height="860"
+         alt="DefGame in a browser: the lesson text on the left, and the referee's report on the right, with one failed test and its hint">
+    <figcaption>A lesson, a definition with a classic off-by-one mistake, and the referee's verdict with a hint.</figcaption>
+  </figure>
+
+  <h2>How it works</h2>
+  <div class="grid">
+    <div>
+      <h3>You never write a proof</h3>
+      <p>You write a definition: a predicate, a structure, a formal statement. Dozens of hidden
+        tests then ask an automated referee to prove or refute facts about it.</p>
+    </div>
+    <div>
+      <h3>Every ❌ comes with evidence</h3>
+      <p>The referee only says a definition is wrong when it has a Lean proof of the opposite,
+        so each failure is a concrete counterexample, with a hint.</p>
+    </div>
+    <div>
+      <h3>22 levels, from zero</h3>
+      <p>Syntax first (<code>def</code>, <code>if</code>, <code>∧ ∨ ¬ →</code>, <code>∀ ∃</code>), then the traps of
+        Lean and Mathlib: casts, <code>x / 0 = 0</code>, sets, limits in ℝ. Last, auditing an AI's
+        "proof" of Goldbach's conjecture.</p>
+    </div>
+    <div>
+      <h3>Learn to type the symbols</h3>
+      <p>A built-in table shows how to type <code>∀</code>, <code>→</code>, <code>≤</code> and the rest
+        with a backslash, with a typing drill.</p>
+    </div>
+  </div>
+
+  <h2>Install</h2>
+  <ol class="steps">
+    <li>Download the file for your system above, and unpack it.</li>
+    <li>Start <b>DefGame</b>. It opens in your web browser.</li>
+    <li>The first launch downloads <b>Lean</b> (about 300 MB) and the parts of <b>Mathlib</b> the game uses
+      (about 450 MB). You can read the first levels meanwhile. It needs about 6 GB of disk space.</li>
+    <li>From then on, the game works <b>offline</b>. Everything it downloaded is in one folder, so deleting that
+      folder uninstalls it completely.</li>
+  </ol>
+  <p class="muted">Your code and progress are saved in the browser. No account, no data leaves your computer.</p>
+
+  <h2 id="source">Questions</h2>
+  <details>
+    <summary>Why does my system warn about the app?</summary>
+    <p>The apps are not signed with a paid developer certificate, so Windows SmartScreen and macOS Gatekeeper
+      show a warning for software they do not know. On Windows choose <i>More info → Run anyway</i>; on macOS
+      right-click the app and choose <i>Open</i>. The source code and the build are public, in the
+      <a href="https://github.com/mmasdeu/DefGame">repository</a> and its release workflow.</p>
+  </details>
+  <details>
+    <summary>Can I run it from source, or change the levels?</summary>
+    <p>Yes. You need <a href="https://github.com/leanprover/elan">elan</a> (Lean's installer) and Python 3.9 or newer:</p>
+<pre>git clone https://github.com/mmasdeu/DefGame
+cd DefGame
+lake exe cache get
+python3 web/server.py --open</pre>
+    <p>This is also the way to run it on an Intel Mac. See
+      <a href="https://github.com/mmasdeu/DefGame/blob/main/INSTALL.md">INSTALL.md</a> for details, and
+      <a href="https://github.com/mmasdeu/DefGame/blob/main/CURRICULUM.md">CURRICULUM.md</a> for what each level teaches.</p>
+  </details>
+  <details>
+    <summary>Where does the game store its files?</summary>
+    <p>Windows: <code>%LOCALAPPDATA%\DefGame</code>. macOS: <code>~/Library/Application Support/DefGame</code>.
+      Linux: <code>~/.local/share/defgame</code>. The folder also has <code>defgame.log</code>, the place to
+      look if something goes wrong.</p>
+  </details>
+
+  <footer>
+    DefGame is open source. Built with <a href="https://lean-lang.org">Lean 4</a> and
+    <a href="https://leanprover-community.github.io">Mathlib</a>; formulas are typeset with MathJax.
+  </footer>
+</main>
+
+<script>
+  // Highlight the download for the visitor's system, and show the latest version and file sizes
+  // from the GitHub API. Everything works without it: the buttons link to the latest release.
+  (function () {
+    var REPO = "mmasdeu/DefGame";
+
+    var ua = navigator.userAgent || "";
+    var platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+    var os = /android|iphone|ipad|ipod/i.test(ua) ? "mobile"
+      : /win/i.test(platform) || /windows/i.test(ua) ? "windows"
+      : /mac/i.test(platform) || /macintosh|mac os x/i.test(ua) ? "macos"
+      : /linux|x11|cros/i.test(platform + ua) ? "linux" : "";
+    var card = document.querySelector('.card[data-os="' + os + '"]');
+    if (card) {
+      card.classList.add("recommended");
+      card.querySelector(".badge").textContent = "Recommended for your system";
+    }
+    var status = document.getElementById("status");
+    var note = os === "mobile" ? "DefGame needs a computer: Windows, macOS or Linux. " : "";
+    status.textContent = note;
+
+    function size(bytes) { return bytes >= 1e6 ? Math.round(bytes / 1e6) + " MB" : Math.round(bytes / 1e3) + " KB"; }
+
+    fetch("https://api.github.com/repos/" + REPO + "/releases/latest", { headers: { Accept: "application/vnd.github+json" } })
+      .then(function (r) {
+        if (r.status === 404) throw new Error("none");
+        if (!r.ok) throw new Error("http " + r.status);
+        return r.json();
+      })
+      .then(function (rel) {
+        var date = rel.published_at ? new Date(rel.published_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) : "";
+        status.textContent = note + "Latest version: " + rel.tag_name + (date ? ", released " + date : "") + ".";
+        document.querySelectorAll("a[data-asset]").forEach(function (a) {
+          var asset = (rel.assets || []).find(function (x) { return x.name === a.dataset.asset; });
+          if (!asset) return;
+          a.href = asset.browser_download_url;
+          a.querySelector("small").textContent = asset.name + " · " + size(asset.size);
+        });
+      })
+      .catch(function (err) {
+        if (err.message === "none") {
+          status.className = "status warn";
+          status.innerHTML = note + "The first release is not published yet. Until then, " +
+            '<a href="#source">run it from source</a>.';
+        }
+        // any other error (offline, rate limit): keep the plain links
+      });
+  })();
+</script>
+</body>
+</html>
