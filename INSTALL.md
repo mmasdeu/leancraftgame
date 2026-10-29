@@ -3,6 +3,40 @@
 DefGame runs on your own machine: a small local server runs Lean, and you play
 in your web browser. One player at a time; no accounts.
 
+## The easy way: download the app
+
+The [Releases page](https://github.com/mmasdeu/DefGame/releases) has a ready-made app
+for Windows, macOS (Apple Silicon) and Linux. Nothing else needs to be installed first.
+
+* **Windows:** unzip `DefGame-windows-x64.zip` and run `DefGame.exe` in the `DefGame`
+  folder. Windows may warn about an unrecognized app: choose *More info → Run anyway*.
+  A console window shows what the game is doing; closing it stops the game.
+* **macOS:** open `DefGame-macos-arm64.dmg` and drag DefGame to Applications. The
+  first time, right-click it and choose *Open*, because the app is not notarized.
+* **Linux:** unpack `DefGame-linux-x64.tar.gz` and run `DefGame/DefGame`. It needs
+  glibc 2.35 or newer (Ubuntu 22.04, Debian 12, Fedora 36 or later).
+
+The game opens in your web browser. On the first launch it downloads Lean (about
+300 MB) and the parts of Mathlib the game uses (about 450 MB), which take about 6 GB
+on disk. You can read the first levels while this happens. After that, the game
+works offline. **Quit** in the top right corner stops it.
+
+Everything the app downloads goes into one folder, so deleting that folder
+uninstalls it completely:
+
+| System | Folder |
+|---|---|
+| Windows | `%LOCALAPPDATA%\DefGame` |
+| macOS | `~/Library/Application Support/DefGame` |
+| Linux | `~/.local/share/defgame` |
+
+If you already have Lean installed with elan and the right toolchain, the app uses it
+instead of downloading its own. The folder also holds `defgame.log`, which is the place
+to look if something goes wrong.
+
+The rest of this file is about running the game from a copy of this repository,
+which is what you need to change levels or the referee.
+
 ## Requirements
 
 * **Lean 4** installed through [elan](https://github.com/leanprover/elan), so
@@ -121,6 +155,31 @@ to it.
   `TendsToInfinity` or deleted `IsPrime`. Press **Reset** to see the original.
 * **A ⚠️ on a test**: Lean could not even state the test with your definition.
   The message shows Lean's error.
+
+## Making a release
+
+`.github/workflows/release.yml` builds the app on GitHub's Windows, macOS and Linux
+machines. Pushing a tag starting with `v` publishes a release:
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The workflow builds the referee and the Mathlib pack (`app/make_pack.py`), builds
+the app for each system (`app/build_app.py`), and runs each app's self-test on a
+fresh machine: install Lean and Mathlib, then play two levels with a correct and a
+buggy answer. Only if all three pass does it publish the apps and the pack as a
+GitHub Release. Running the workflow by hand (Actions → Release → Run workflow)
+builds and tests without publishing.
+
+To try the app from a checkout without freezing it:
+
+```bash
+lake exe cache get && lake build DefGame.Referee
+python3 app/make_pack.py --out dist --url-base file:///unused
+DEFGAME_DEPS=dist/deps.json DEFGAME_PACK_FILE=$(ls dist/mathlib-*.tar.xz) python3 app/launcher.py
+```
 
 ## Adding or changing a level
 

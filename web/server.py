@@ -7,6 +7,10 @@
 Only the Python standard library is needed. Each test in DefGame/L<n>/Tests.lean
 runs as its own Lean process, with the player's code pasted in, so tests run in
 parallel and their verdicts stream to the browser as they arrive.
+
+Run from a checkout, the server uses `lake` to build the referee and find Lean. The
+desktop app (app/launcher.py) instead sets DEFGAME_ROOT (the game files),
+DEFGAME_WORK (a writable folder), LEAN_ENV and SETUP itself.
 """
 import argparse
 import hashlib
@@ -15,7 +19,6 @@ import os
 import queue
 import re
 import shutil
-import signal
 import subprocess
 import sys
 import threading
@@ -25,15 +28,19 @@ import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(os.environ.get("DEFGAME_ROOT") or Path(__file__).resolve().parent.parent)
 STATIC = ROOT / "web" / "static"
-WORK = ROOT / ".lake" / "defgame-web"
+WORK = Path(os.environ.get("DEFGAME_WORK") or ROOT / ".lake" / "defgame-web")
 RUNS = WORK / "runs"
 CACHE_FILE = WORK / "cache.json"
 # Levels in the order they are played. The numbers are directory names (DefGame/L<n>);
 # the number shown to the player is the position in this list.
 LEVELS = [4, 5, 6, 15, 7, 8, 9, 16, 17, 10, 11, 12, 13, 18, 1, 19, 20, 21, 22, 14, 2, 3]
-LEAN_ENV = {}       # the environment of `lake env`, filled in by build_referee()
+LEAN_ENV = {}       # environment for running Lean (LEAN, LEAN_PATH, …), see prepare_lean()
+# The app's first-launch setup (an object with status() and retry()), or None when the
+# server runs from a checkout and Lean is ready from the start.
+SETUP = None
+UTF8 = {"encoding": "utf-8", "errors": "replace"}
 
 ICONS = {"✅": "pass", "❌": "fail", "❓": "unknown"}
 
@@ -78,10 +85,10 @@ def split_tests(src):
 
 def load_level(n):
     d = ROOT / "DefGame" / f"L{n}"
-    meta = json.loads((d / "level.json").read_text())
-    intro, template = split_intro((d / "Player.lean").read_text())
+    meta = json.loads((d / "level.json").read_text(encoding="utf-8"))
+    intro, template = split_intro((d / "Player.lean").read_text(encoding="utf-8"))
     return {**meta, "id": n, "num": LEVELS.index(n) + 1, "intro": intro, "template": template,
-            **split_tests((d / "Tests.lean").read_text())}
+            **split_tests((d / "Tests.lean").read_text(encoding="utf-8"))}
 
 
 def public_level(lv):
@@ -129,13 +136,15 @@ class Run:
         self.cancelled = False
         self.stopped = False
         self.procs = set()
+        self.killed = set()
         self.lock = threading.Lock()
 
     def _kill_all(self):
         for p in self.procs:
+            self.killed.add(p)
             try:
-                os.killpg(p.pid, signal.SIGKILL)
-            except (ProcessLookupError, PermissionError):
+                p.kill()
+            except OSError:
                 pass
 
     def cancel(self):
@@ -151,24 +160,24 @@ class Run:
     def lean(self, name, text, timeout):
         """Run `lean --json` on `text`. Returns the messages, or None on timeout or cancel."""
         path = self.dir / f"{name}.lean"
-        path.write_text(text)
+        path.write_text(text, encoding="utf-8")
         with self.lock:
             if self.cancelled or self.stopped:
                 return None
-            p = subprocess.Popen([LEAN_ENV["LEAN"], "--json", str(path)], cwd=ROOT, env=LEAN_ENV,
-                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                                 text=True, start_new_session=True)
+            p = subprocess.Popen([LEAN_ENV["LEAN"], "--json", str(path)], cwd=WORK, env=LEAN_ENV,
+                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT, **UTF8,
+                                 creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
             self.procs.add(p)
         try:
             out, _ = p.communicate(timeout=timeout)
         except subprocess.TimeoutExpired:
-            os.killpg(p.pid, signal.SIGKILL)
+            p.kill()
             p.communicate()
             return None
         finally:
             with self.lock:
                 self.procs.discard(p)
-        if self.cancelled or (self.stopped and p.returncode < 0):
+        if self.cancelled or p in self.killed:
             return None
         msgs = []
         for line in out.splitlines():
@@ -186,7 +195,7 @@ class Cache:
     def __init__(self):
         self.lock = threading.Lock()
         try:
-            self.data = json.loads(CACHE_FILE.read_text())
+            self.data = json.loads(CACHE_FILE.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             self.data = {}
 
@@ -206,7 +215,7 @@ class Cache:
         with self.lock:
             self.data[key] = value
             WORK.mkdir(parents=True, exist_ok=True)
-            CACHE_FILE.write_text(json.dumps(self.data))
+            CACHE_FILE.write_text(json.dumps(self.data), encoding="utf-8")
 
 
 def compile_check(run, lv, code, timeout):
@@ -353,6 +362,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         path = self.path.split("?")[0]
+        if path == "/api/setup":
+            return self.send(200, SETUP.status() if SETUP else {"ready": True, "app": False})
         if path == "/api/levels":
             out = []
             for n in LEVELS:
@@ -374,9 +385,18 @@ class Handler(BaseHTTPRequestHandler):
         self.send(404, {"error": "not found"})
 
     def do_POST(self):
+        if self.path == "/api/setup/retry" and SETUP:
+            SETUP.retry()
+            return self.send(200, {"ok": True})
+        if self.path == "/api/quit" and SETUP:          # only the app can be quit from the page
+            self.send(200, {"ok": True})
+            threading.Thread(target=self.server.shutdown, daemon=True).start()
+            return
         m = re.fullmatch(r"/api/levels/(\d+)/run", self.path)
         if not m or int(m.group(1)) not in LEVELS:
             return self.send(404, {"error": "not found"})
+        if SETUP and not SETUP.status()["ready"]:
+            return self.send(503, {"error": "Lean and Mathlib are still being set up."})
         body = json.loads(self.rfile.read(int(self.headers.get("Content-Length", 0))) or b"{}")
         run, events = Run(), queue.Queue()
         with Handler.current_lock:
@@ -409,20 +429,51 @@ class Handler(BaseHTTPRequestHandler):
 
 # ---------------------------------------------------------------- main
 
-def build_referee():
+def prepare_lean():
+    """From a checkout: build the referee with lake and ask lake for Lean's environment."""
     print("Building the referee (lake build DefGame.Referee)…", flush=True)
-    r = subprocess.run(["lake", "build", "DefGame.Referee"], cwd=ROOT, capture_output=True, text=True)
+    r = subprocess.run(["lake", "build", "DefGame.Referee"], cwd=ROOT, capture_output=True, **UTF8)
     if r.returncode != 0:
         sys.exit(f"`lake build DefGame.Referee` failed:\n{r.stdout}{r.stderr}")
-    # Ask lake once for the environment (LEAN, LEAN_PATH, …): running `lake env` for
-    # every test would be slower, and parallel calls can contend for lake's lock.
-    r = subprocess.run(["lake", "env", "env", "-0"], cwd=ROOT, capture_output=True, text=True, check=True)
-    LEAN_ENV.update(kv.split("=", 1) for kv in r.stdout.split("\0") if "=" in kv)
+    # Ask lake once for LEAN, LEAN_PATH, …: running `lake env` for every test would be
+    # slower, and parallel calls can contend for lake's lock.
+    r = subprocess.run(["lake", "env"], cwd=ROOT, capture_output=True, check=True, **UTF8)
+    LEAN_ENV.update(os.environ)
+    LEAN_ENV.update(l.split("=", 1) for l in r.stdout.splitlines() if re.match(r"(LEAN|LAKE|ELAN)\w*=", l))
+
+
+def clean_old_runs():
+    # Each run deletes its own folder when it ends; only clear leftovers from crashed
+    # servers here, so that several servers (or --run) can work side by side.
+    for d in RUNS.glob("*"):
+        if time.time() - d.stat().st_mtime > 3600:
+            shutil.rmtree(d, ignore_errors=True)
+
+
+def serve(port, jobs, timeout, open_browser=False):
+    """Serve the game on localhost until Ctrl+C or, in the app, the Quit button."""
+    WORK.mkdir(parents=True, exist_ok=True)
+    clean_old_runs()
+    Handler.opts, Handler.cache = argparse.Namespace(jobs=jobs, timeout=timeout), Cache()
+    server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
+    server.daemon_threads = True
+    url = f"http://localhost:{port}/"
+    print(f"DefGame is running at {url}  (Ctrl+C to stop)", flush=True)
+    if open_browser:
+        webbrowser.open(url)
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.server_close()
+        if Handler.current:
+            Handler.current.cancel()
 
 
 def cli_run(opts):
     """Run one level on a file and print the report."""
-    code = Path(opts.run[1]).read_text()
+    code = Path(opts.run[1]).read_text(encoding="utf-8")
     events, lv = queue.Queue(), load_level(int(opts.run[0]))
     threading.Thread(target=run_level, daemon=True,
                      args=(Run(), int(opts.run[0]), code, events, opts.jobs, opts.timeout, Cache())).start()
@@ -455,33 +506,19 @@ def main():
     ap.add_argument("--open", action="store_true", help="open the game in a web browser")
     ap.add_argument("--run", nargs=2, metavar=("LEVEL", "FILE"), help="run a level on a file and exit")
     opts = ap.parse_args()
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")       # ✅ and ❌ on a Windows console
     if shutil.which("lake") is None:
         sys.exit("`lake` was not found on your PATH. See INSTALL.md.")
-    # Each run deletes its own folder when it ends; only clear leftovers from crashed
-    # servers here, so that several servers (or --run) can work side by side.
-    for d in RUNS.glob("*"):
-        if time.time() - d.stat().st_mtime > 3600:
-            shutil.rmtree(d, ignore_errors=True)
-    build_referee()
+    WORK.mkdir(parents=True, exist_ok=True)
+    clean_old_runs()
+    prepare_lean()
     if opts.run:
         return cli_run(opts)
-    Handler.opts, Handler.cache = opts, Cache()
     try:
-        server = ThreadingHTTPServer(("127.0.0.1", opts.port), Handler)
+        serve(opts.port, opts.jobs, opts.timeout, opts.open)
     except OSError as e:
         sys.exit(f"Could not listen on port {opts.port} ({e.strerror}). Try --port 8001.")
-    server.daemon_threads = True
-    url = f"http://localhost:{opts.port}/"
-    print(f"DefGame is running at {url}  (Ctrl+C to stop)", flush=True)
-    if opts.open:
-        webbrowser.open(url)
-    try:
-        server.serve_forever()
-    except KeyboardInterrupt:
-        pass
-    finally:
-        if Handler.current:
-            Handler.current.cancel()
 
 
 if __name__ == "__main__":

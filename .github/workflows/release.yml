@@ -1,0 +1,144 @@
+# Builds the DefGame app for Windows, macOS and Linux, smoke-tests each one on a fresh
+# machine, and publishes them, with the Mathlib pack they download, as a GitHub Release.
+#
+#   git tag v0.1.0 && git push origin v0.1.0     build, test and publish release v0.1.0
+#   Actions tab → Release → Run workflow          build and test only (nothing is published)
+
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pack:
+    name: Referee and Mathlib pack
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Get the prebuilt Mathlib
+        run: lake exe cache get
+
+      - name: Build the referee
+        run: lake build DefGame.Referee
+
+      - name: Build the pack
+        run: >
+          python3 app/make_pack.py --out dist
+          --url-base "https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pack
+          path: dist/*.tar.xz
+          compression-level: 0
+          retention-days: 7
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-inputs
+          path: |
+            dist/deps.json
+            dist/olean
+          retention-days: 7
+
+  app:
+    name: App (${{ matrix.os }})
+    needs: pack
+    strategy:
+      fail-fast: false
+      matrix:
+        # ubuntu-22.04: the Linux app then runs on glibc 2.35 or newer.
+        # macos-latest: Apple Silicon.
+        os: [ubuntu-22.04, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: python -m pip install pyinstaller certifi
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: app-inputs
+          path: inputs
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: pack
+          path: pack
+
+      - name: Build the app
+        id: build
+        run: python app/build_app.py --deps inputs/deps.json --olean inputs/olean --out dist
+
+      - name: Smoke test (fresh install of Lean and Mathlib, then two levels)
+        shell: python
+        env:
+          DEFGAME_DATA: ${{ runner.temp }}/defgame-data
+          DEFGAME_IGNORE_SYSTEM_ELAN: "1"
+        run: |
+          import glob, os, subprocess, sys
+          os.environ["DEFGAME_PACK_FILE"] = os.path.abspath(glob.glob("pack/*.tar.xz")[0])
+          r = subprocess.run([r"${{ steps.build.outputs.executable }}", "--self-test"])
+          log = os.path.join(os.environ["DEFGAME_DATA"], "defgame.log")
+          if os.path.exists(log):
+              print(open(log, encoding="utf-8").read())
+          sys.exit(r.returncode)
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ matrix.os }}
+          path: ${{ steps.build.outputs.package }}
+          compression-level: 0
+          retention-days: 7
+
+  release:
+    name: Publish
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [pack, app]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: assets
+          merge-multiple: true
+
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat > notes.md <<'EOF'
+          ## Install
+
+          Download the file for your system, unpack it and start **DefGame**:
+
+          * **Windows:** `DefGame-windows-x64.zip`. Unzip it and run `DefGame.exe` in the `DefGame` folder.
+            Windows may warn about an unrecognized app: choose *More info → Run anyway*.
+          * **macOS (Apple Silicon):** `DefGame-macos-arm64.dmg`. Drag DefGame to Applications.
+            The first time, right-click it and choose *Open* (the app is not notarized).
+          * **Linux (x64, glibc 2.35 or newer):** `DefGame-linux-x64.tar.gz`. Unpack it and run `DefGame/DefGame`.
+
+          The game opens in your web browser. The first launch downloads Lean and the
+          parts of Mathlib the game needs (about 750 MB, 6 GB on disk) into your user
+          folder; after that it works offline. The `mathlib-….tar.xz` file below is that
+          download: you do not need to fetch it yourself.
+          EOF
+          gh release create "${{ github.ref_name }}" \
+            assets/*.tar.xz assets/*.zip assets/*.dmg assets/*.tar.gz \
+            --repo "${{ github.repository }}" --title "DefGame ${{ github.ref_name }}" --notes-file notes.md

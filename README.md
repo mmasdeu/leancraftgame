@@ -23,9 +23,13 @@ so it has a concrete witness against your definition) or ❓ (unsettled).
 
 ## Quick start
 
-Requires Lean `v4.35.0` and Mathlib (`lake exe cache get` downloads it
-prebuilt). To play in the browser (needs Python 3.9+, nothing else to install;
-see [INSTALL.md](INSTALL.md)):
+**To play:** download the app for Windows, macOS or Linux from the
+[Releases page](https://github.com/mmasdeu/DefGame/releases). It installs Lean and
+the parts of Mathlib it needs on its first launch, then works offline. See
+[INSTALL.md](INSTALL.md).
+
+**From a checkout** (to change levels or the referee): this needs Lean `v4.35.0`
+and Mathlib (`lake exe cache get` downloads it prebuilt), and Python 3.9+:
 
 ```bash
 lake exe cache get      # first time only
@@ -135,6 +139,10 @@ web/static/              the browser game (plain HTML/CSS/JS, no build step)
 web/static/vendor/       MathJax 3.2.2 (tex-chtml.js and its fonts), bundled for offline use
 variants/                sample answers for every level (correct and buggy)
 check_levels.py          checks every level against its sample answers
+app/launcher.py          the desktop app: installs Lean and the Mathlib pack on first launch, then serves the game
+app/make_pack.py         builds the Mathlib pack (the modules the game loads) and deps.json
+app/build_app.py         freezes the app with PyInstaller for the current OS
+.github/workflows/release.yml   builds, smoke-tests and publishes the apps for Windows, macOS and Linux
 ```
 
 **The referee** (`Referee.lean`) is deliberately simple: iterative

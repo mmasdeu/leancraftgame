@@ -28,6 +28,7 @@
     </div>
     <button id="symbols-btn" class="symbols-btn" aria-expanded="false" aria-controls="symbols"
             title="How to type ∀ ∃ → ∧ ∨ ≤ …">∀ Symbols</button>
+    <button id="quit" class="quiet" hidden title="Stop DefGame">Quit</button>
     <nav id="levels" aria-label="Levels"></nav>
   </header>
 
@@ -43,6 +44,19 @@
     <h3>Practice</h3>
     <div id="drill" class="drill"></div>
   </aside>
+
+  <section id="setup" class="setup" hidden aria-live="polite">
+    <div class="setup-head">
+      <b>Setting up DefGame</b>
+      <span class="muted">The first launch downloads Lean and the parts of Mathlib the game uses
+        (about 750 MB). You can read the first levels meanwhile; the tests can run once it is done.</span>
+    </div>
+    <ol id="setup-steps" class="setup-steps"></ol>
+    <div id="setup-message" class="setup-message"></div>
+    <div class="progress"><div id="setup-bar"></div></div>
+    <div id="setup-error" class="diag error" hidden></div>
+    <button id="setup-retry" class="primary" hidden>Retry</button>
+  </section>
 
   <main class="layout">
     <section class="left">

@@ -326,6 +326,7 @@ const KIND = {
 };
 const ICON = { pass: "✅", fail: "❌", unknown: "❓", error: "⚠️" };
 let tests = [], ticker = null, controller = null;
+let setupReady = true;     // false while the app is still installing Lean and Mathlib
 
 /* The state to show: a finished result for other code is undefined ("waiting"). */
 function view(t) {
@@ -358,7 +359,7 @@ function hintFor(name) {
 }
 
 function renderTests() {
-  const busy = controller !== null;
+  const busy = controller !== null || !setupReady;
   $("tests").innerHTML = tests.map((t) => {
     const v = view(t);
     let icon = "○", time = "", title = "not run on the current code";
@@ -429,6 +430,7 @@ function showCompile(c) {
 /* Run the tests `ids` (all of them when null) on the current code. A full run stops at
    the first failure; a single test always runs to the end. */
 async function runTests(ids = null) {
+  if (!setupReady) return;
   stopRun();
   const code = src.value, ctl = (controller = new AbortController());
   let run = [], outcome = null;
@@ -616,5 +618,51 @@ document.addEventListener("keydown", (e) => { if (e.key === "Escape") toggleSymb
 buildSymbols();
 
 $("run").onclick = () => runTests();
+
+/* ------------------------------------------------------------ app: first-launch setup, quit */
+
+function renderSetup(s) {
+  $("setup").hidden = s.ready;
+  $("run").disabled = !s.ready;
+  $("run").title = s.ready ? "Ctrl+Enter" : "Available once Lean and Mathlib are installed";
+  if (s.ready) return;
+  $("setup-steps").innerHTML = s.steps.map((name, i) => {
+    const icon = i < s.step ? "✅" : i === s.step ? (s.error ? "❌" : '<span class="spin"></span>') : "○";
+    return `<li class="${i < s.step ? "done" : i === s.step ? "now" : ""}">${icon} ${esc(name)}</li>`;
+  }).join("");
+  $("setup-message").textContent = s.message || "";
+  const p = s.progress;
+  $("setup-bar").parentElement.hidden = !(p && p[1]);
+  if (p && p[1]) $("setup-bar").style.width = `${Math.min(100, (100 * p[0]) / p[1]).toFixed(1)}%`;
+  $("setup-error").hidden = !s.error;
+  $("setup-error").textContent = s.error || "";
+  $("setup-retry").hidden = !s.error;
+}
+
+async function watchSetup() {
+  for (;;) {
+    let s = null;
+    try { s = await (await fetch("/api/setup")).json(); } catch { /* server restarting */ }
+    if (s) {
+      $("quit").hidden = !s.app;
+      const was = setupReady;
+      setupReady = s.ready;
+      renderSetup(s);
+      if (setupReady !== was && level) renderTests();
+      if (s.ready) return;
+    }
+    await new Promise((r) => setTimeout(r, 700));
+  }
+}
+
+$("setup-retry").onclick = () => fetch("/api/setup/retry", { method: "POST" });
+$("quit").onclick = async () => {
+  if (!confirm("Quit DefGame? Your code and progress are kept.")) return;
+  stopRun();
+  try { await fetch("/api/quit", { method: "POST" }); } catch { /* already gone */ }
+  document.body.innerHTML = '<p class="bye">DefGame has stopped. You can close this tab.</p>';
+};
+setupReady = false;
+watchSetup();
 $("stop").onclick = stopRun;
 loadLevels();

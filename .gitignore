@@ -2,3 +2,6 @@
 .lake/
 # Python bytecode
 __pycache__/
+# App builds (app/build_app.py, app/make_pack.py)
+build/
+dist/

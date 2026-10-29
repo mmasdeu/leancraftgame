@@ -50,6 +50,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body {
   margin: 0;
   background: var(--bg);
@@ -262,3 +263,20 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
 #drill-input:focus { outline: 2px solid var(--accent); border-color: transparent; }
 .drill-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
 .drill-ok { font-size: 16px; }
+
+/* first-launch setup (app) */
+.setup {
+  max-width: 1500px; margin: 16px auto 0; padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--accent); border-radius: 12px;
+}
+.setup[hidden] { display: none; }
+@media (min-width: 961px) { .setup { margin: 24px 24px 0; } }
+.setup-head { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.setup-steps { display: flex; gap: 18px; list-style: none; padding: 0; margin: 10px 0 6px; }
+.setup-steps li { color: var(--muted); }
+.setup-steps li.now { color: var(--fg); font-weight: 600; }
+.setup-message { font-family: var(--mono); font-size: 13px; color: var(--muted); min-height: 1.4em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.setup .progress[hidden] { display: none; }
+.setup #setup-retry { margin-top: 8px; }
+.bye { font-size: 18px; text-align: center; margin-top: 30vh; }

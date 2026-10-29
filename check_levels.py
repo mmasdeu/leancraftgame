@@ -50,7 +50,7 @@ def main():
     ap.add_argument("--jobs", type=int, default=8, help="Lean processes run in parallel")
     ap.add_argument("--timeout", type=int, default=60, help="seconds allowed per test")
     opts = ap.parse_args()
-    server.build_referee()
+    server.prepare_lean()
     cache = server.Cache()
     unexpected = 0
     for n in opts.levels or server.LEVELS:
