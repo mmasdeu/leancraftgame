@@ -259,11 +259,14 @@ partial def solve (fuel : Nat) (strong : Bool := false) : TacticM Unit := do
           return true
         catch _ => s.restore
       return false
+    -- a goal `False` with a hypothesis `¬ Q` usually comes from refuting a conjunction
+    -- such as "the mutant accepts every good sequence and rejects every bad one": the
+    -- cheapest route is to prove `Q`, so that move goes first
+    if ← tryNegHyp then return
     if ← trySpecialize false then return
     if ← tryWitnesses false then return
     if ← tryWitnesses true then return
     if ← trySpecialize true then return
-    if ← tryNegHyp then return
     throwError "search failed"
 
 /-- One attempt: prove `P` after unfolding the given definitions (throws on failure). -/
