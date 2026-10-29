@@ -26,7 +26,9 @@ lake exe cache get
 ```
 
 This downloads Mathlib's source and its prebuilt `.olean` files (a few minutes
-on a good connection). Do not skip it: without the prebuilt files, the next
+on a good connection). It is the only step that needs the network: after it,
+the game runs fully offline. (MathJax, which typesets the formulas in the
+referee's report, is bundled in `web/static/vendor/mathjax/`.) Do not skip it: without the prebuilt files, the next
 step would compile Mathlib from source, which takes hours.
 
 ## Start the game

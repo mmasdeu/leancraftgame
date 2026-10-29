@@ -365,8 +365,12 @@ class Handler(BaseHTTPRequestHandler):
         name = "index.html" if path == "/" else path.lstrip("/")
         f = (STATIC / name).resolve()
         if STATIC in f.parents and f.is_file():
-            types = {".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml"}
-            return self.send(200, f.read_bytes(), types.get(f.suffix, "application/octet-stream") + "; charset=utf-8")
+            types = {".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".svg": "image/svg+xml",
+                     ".woff": "font/woff", ".woff2": "font/woff2", ".md": "text/plain"}
+            ctype = types.get(f.suffix, "application/octet-stream")
+            if ctype.startswith("text/"):
+                ctype += "; charset=utf-8"
+            return self.send(200, f.read_bytes(), ctype)
         self.send(404, {"error": "not found"})
 
     def do_POST(self):

@@ -47,6 +47,80 @@ function markdown(text) {
   return out.join("\n");
 }
 
+/* ------------------------------------------------------------ math in test names */
+
+/* Test names quote Lean functions such as `(fun n => n % 2)`. Show them in the usual
+   notation, n ↦ n mod 2, typeset by MathJax; until MathJax has loaded (or if it cannot
+   load), a plain-text version is shown. */
+
+const BLACKBOARD = { "ℕ": "\\mathbb{N}", "ℤ": "\\mathbb{Z}", "ℚ": "\\mathbb{Q}", "ℝ": "\\mathbb{R}" };
+
+/* A Lean arithmetic expression as { tex, plain }. */
+function exprToMath(e) {
+  e = e.trim();
+  for (let prev = null; prev !== e; ) {              // drop casts and type ascriptions
+    prev = e;
+    e = e.replace(/\(([^():]+?)\s*:\s*[^():]+\)/g, "($1)").replace(/\((\w+)\)/g, "$1");
+  }
+  const m = /^if (.+?) then (.+?) else (.+)$/.exec(e);
+  if (m) {
+    const [c, a, b] = [exprToMath(m[1]), exprToMath(m[2]), exprToMath(m[3])];
+    return { tex: `\\begin{cases} ${a.tex} & \\text{if } ${c.tex} \\\\ ${b.tex} & \\text{otherwise} \\end{cases}`,
+             plain: `(${a.plain} if ${c.plain}, else ${b.plain})` };
+  }
+  const product = (s, op) => s.replace(/(\d+) \* (\w)/g, "$1$2").replace(/ \* /g, op);
+  let tex = product(e, " \\cdot ").replace(/ % /g, " \\bmod ")
+    .replace(/≤/g, "\\le").replace(/≥/g, "\\ge").replace(/≠/g, "\\ne")
+    .replace(/[ℕℤℚℝ]/g, (c) => BLACKBOARD[c]);
+  const plain = product(e, " · ").replace(/ % /g, " mod ");
+  return { tex, plain };
+}
+
+/* `fun x => body` (or `fun x : T => body`) as { tex, plain }, or null. */
+function funToMath(s) {
+  const m = /^fun\s+(\w+|_)\s*(?::[^=]*)?=>\s*([\s\S]+)$/.exec(s.trim());
+  if (!m) return null;
+  const v = m[1] === "_" ? "n" : m[1], body = exprToMath(m[2]);
+  return { tex: `${v} \\mapsto ${body.tex}`, plain: `${v} ↦ ${body.plain}` };
+}
+
+const mathCache = {};
+function texToHtml(tex, plain) {
+  if (!window.MathJax?.tex2chtml) return `<span class="math-plain">${esc(plain)}</span>`;
+  if (!(tex in mathCache)) {
+    try {
+      mathCache[tex] = MathJax.tex2chtml(tex, { display: false }).outerHTML;
+      const sheet = MathJax.chtmlStylesheet();
+      if (!sheet.isConnected) document.head.appendChild(sheet);
+    } catch {
+      mathCache[tex] = `<span class="math-plain">${esc(plain)}</span>`;
+    }
+  }
+  return mathCache[tex];
+}
+
+/* A test name as HTML, with every `(fun …)` shown as mathematics. */
+function nameToHtml(name) {
+  let out = "", i = 0;
+  while (i < name.length) {
+    if (name.startsWith("(fun ", i)) {
+      let depth = 0, j = i;
+      for (; j < name.length; j++) {
+        if (name[j] === "(") depth++;
+        else if (name[j] === ")" && --depth === 0) break;
+      }
+      const f = funToMath(name.slice(i + 1, j));
+      if (f && j < name.length) {
+        out += texToHtml(`\\left(${f.tex}\\right)`, `(${f.plain})`);
+        i = j + 1;
+        continue;
+      }
+    }
+    out += esc(name[i++]);
+  }
+  return out;
+}
+
 /* ------------------------------------------------------------ editor */
 
 /* Lean's backslash abbreviations (a subset of the VS Code extension's table). */
@@ -295,7 +369,7 @@ function renderTests() {
     const shown = ICON[v] || v === "skipped";
     const hint = (v === "fail" || v === "unknown") && hintFor(t.name);
     return `<li class="test ${v}">
-      <div class="row"><span class="icon" title="${title}">${icon}</span><span class="name">${esc(t.name)}</span>
+      <div class="row"><span class="icon" title="${title}">${icon}</span><span class="name">${nameToHtml(t.name)}</span>
         <span class="kind">${KIND[t.kind] || ""}</span><span class="time">${time}</span>
         <button class="run1" data-id="${t.id}" title="Run only this test on the current code"${busy ? " disabled" : ""}>▶</button></div>
       ${shown && t.detail ? `<div class="detail">${esc(t.detail)}</div>` : ""}

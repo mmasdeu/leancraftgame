@@ -132,6 +132,7 @@ DefGame/L<n>/Tests.lean        hidden test battery (the level designer's real wo
 DefGame/L<n>/level.json        title, signature checks and hints for the web version
 web/server.py            local web server: runs each test as its own Lean process, streams verdicts
 web/static/              the browser game (plain HTML/CSS/JS, no build step)
+web/static/vendor/       MathJax 3.2.2 (tex-chtml.js and its fonts), bundled for offline use
 variants/                sample answers for every level (correct and buggy)
 check_levels.py          checks every level against its sample answers
 ```

@@ -6,6 +6,19 @@
   <title>DefGame</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text x='4' y='25' font-size='24' font-family='serif'>∀</text></svg>">
   <link rel="stylesheet" href="style.css">
+  <script>
+    // MathJax typesets the functions in test names (n ↦ n mod 2). Without it, they are shown as text.
+    window.MathJax = {
+      startup: {
+        typeset: false,
+        ready() {
+          MathJax.startup.defaultReady();
+          MathJax.startup.promise.then(() => { if (typeof level !== "undefined" && level) renderTests(); });
+        },
+      },
+    };
+  </script>
+  <script src="vendor/mathjax/tex-chtml.js" async></script>
 </head>
 <body>
   <header class="top">
