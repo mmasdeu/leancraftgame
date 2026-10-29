@@ -1,4 +1,4 @@
-# Builds the DefGame app for Windows, macOS and Linux, smoke-tests each one on a fresh
+# Builds the Lean Craft Game app for Windows, macOS and Linux, smoke-tests each one on a fresh
 # machine, and publishes them, with the Mathlib pack they download, as a GitHub Release.
 #
 #   git tag v0.1.0 && git push origin v0.1.0     build, test and publish release v0.1.0
@@ -31,7 +31,7 @@ jobs:
         run: lake exe cache get
 
       - name: Build the referee
-        run: lake build DefGame.Referee
+        run: lake build LeanCraftGame.Referee
 
       - name: Build the pack
         run: >
@@ -90,13 +90,13 @@ jobs:
       - name: Smoke test (fresh install of Lean and Mathlib, then two levels)
         shell: python
         env:
-          DEFGAME_DATA: ${{ runner.temp }}/defgame-data
-          DEFGAME_IGNORE_SYSTEM_ELAN: "1"
+          LEANCRAFT_DATA: ${{ runner.temp }}/leancraftgame-data
+          LEANCRAFT_IGNORE_SYSTEM_ELAN: "1"
         run: |
           import glob, os, subprocess, sys
-          os.environ["DEFGAME_PACK_FILE"] = os.path.abspath(glob.glob("pack/*.tar.xz")[0])
+          os.environ["LEANCRAFT_PACK_FILE"] = os.path.abspath(glob.glob("pack/*.tar.xz")[0])
           r = subprocess.run([r"${{ steps.build.outputs.executable }}", "--self-test"])
-          log = os.path.join(os.environ["DEFGAME_DATA"], "defgame.log")
+          log = os.path.join(os.environ["LEANCRAFT_DATA"], "leancraftgame.log")
           if os.path.exists(log):
               print(open(log, encoding="utf-8").read())
           sys.exit(r.returncode)
@@ -126,13 +126,13 @@ jobs:
           cat > notes.md <<'EOF'
           ## Install
 
-          Download the file for your system, unpack it and start **DefGame**:
+          Download the file for your system, unpack it and start **LeanCraftGame**:
 
-          * **Windows:** `DefGame-windows-x64.zip`. Unzip it and run `DefGame.exe` in the `DefGame` folder.
+          * **Windows:** `LeanCraftGame-windows-x64.zip`. Unzip it and run `LeanCraftGame.exe` in the `LeanCraftGame` folder.
             Windows may warn about an unrecognized app: choose *More info → Run anyway*.
-          * **macOS (Apple Silicon):** `DefGame-macos-arm64.dmg`. Drag DefGame to Applications.
+          * **macOS (Apple Silicon):** `LeanCraftGame-macos-arm64.dmg`. Drag LeanCraftGame to Applications.
             The first time, right-click it and choose *Open* (the app is not notarized).
-          * **Linux (x64, glibc 2.35 or newer):** `DefGame-linux-x64.tar.gz`. Unpack it and run `DefGame/DefGame`.
+          * **Linux (x64, glibc 2.35 or newer):** `LeanCraftGame-linux-x64.tar.gz`. Unpack it and run `LeanCraftGame/LeanCraftGame`.
 
           The game opens in your web browser. The first launch downloads Lean and the
           parts of Mathlib the game needs (about 750 MB, 6 GB on disk) into your user
@@ -141,4 +141,4 @@ jobs:
           EOF
           gh release create "${{ github.ref_name }}" \
             assets/*.tar.xz assets/*.zip assets/*.dmg assets/*.tar.gz \
-            --repo "${{ github.repository }}" --title "DefGame ${{ github.ref_name }}" --notes-file notes.md
+            --repo "${{ github.repository }}" --title "Lean Craft Game ${{ github.ref_name }}" --notes-file notes.md

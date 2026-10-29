@@ -7,15 +7,16 @@ const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">"
 
 const store = {
   get(key, fallback) {
-    try { const v = localStorage.getItem("defgame." + key); return v === null ? fallback : JSON.parse(v); }
+    try { const v = localStorage.getItem("leancraftgame." + key); return v === null ? fallback : JSON.parse(v); }
     catch { return fallback; }
   },
   set(key, value) {
-    try { localStorage.setItem("defgame." + key, JSON.stringify(value)); } catch { /* private mode */ }
+    try { localStorage.setItem("leancraftgame." + key, JSON.stringify(value)); } catch { /* private mode */ }
   },
 };
 
-/* A small Markdown subset for the level text: headings, lists, quotes, `code`, **bold**, *italic*. */
+/* A small Markdown subset for the level text: headings, bullet and numbered lists, quotes,
+   fenced code, `code`, **bold**, *italic*. */
 function inline(s) {
   return s.split("`").map((part, i) => i % 2
     ? `<code>${esc(part)}</code>`
@@ -23,10 +24,13 @@ function inline(s) {
 }
 function markdown(text) {
   const out = [];
-  let para = [], list = [], quote = [], code = null;
+  let para = [], list = [], ordered = false, quote = [], code = null;
   const flush = () => {
     if (para.length) out.push(`<p>${inline(para.join(" "))}</p>`);
-    if (list.length) out.push(`<ul>${list.map((l) => `<li>${inline(l)}</li>`).join("")}</ul>`);
+    if (list.length) {
+      const tag = ordered ? "ol" : "ul";
+      out.push(`<${tag}>${list.map((l) => `<li>${inline(l)}</li>`).join("")}</${tag}>`);
+    }
     if (quote.length) out.push(`<blockquote>${inline(quote.join(" "))}</blockquote>`);
     para = []; list = []; quote = [];
   };
@@ -38,7 +42,11 @@ function markdown(text) {
     } else if (code) code.push(line);
     else if (!line.trim()) flush();
     else if ((m = /^(#{1,3})\s+(.*)/.exec(line))) { flush(); out.push(`<h${m[1].length}>${inline(m[2])}</h${m[1].length}>`); }
-    else if ((m = /^[*-]\s+(.*)/.exec(line))) { if (para.length || quote.length) flush(); list.push(m[1]); }
+    else if ((m = /^(?:([*-])|\d+\.)\s+(.*)/.exec(line))) {
+      if (para.length || quote.length || (list.length && ordered !== !m[1])) flush();
+      ordered = !m[1];
+      list.push(m[2]);
+    }
     else if (list.length && /^\s+/.test(line)) list[list.length - 1] += " " + line.trim();
     else if (/^\s{2,}/.test(line)) { if (para.length) flush(); quote.push(line.trim()); }
     else { if (list.length) flush(); para.push(line.trim()); }
@@ -271,30 +279,52 @@ let levels = [], level = null;
 
 async function loadLevels() {
   levels = await (await fetch("/api/levels")).json();
-  const want = Number(new URLSearchParams(location.search).get("level")) || store.get("level", 1);
-  await openLevel(levels.some((l) => l.id === want) ? want : levels[0].id);
+  // the Welcome page for a first visit; otherwise where the player was (a link wins)
+  const want = new URLSearchParams(location.search).get("level") ?? store.get("level", "intro");
+  if (want === "intro") return openIntro();
+  const id = Number(want);
+  await openLevel(levels.some((l) => l.id === id) ? id : levels[0].id);
 }
 
 function renderTabs() {
   const cleared = store.get("cleared", []);
-  let html = "", world = null;
+  let html = `<button class="level-tab welcome${level ? "" : " active"}" data-id="intro"
+    title="What Lean is, and how this game works"><span class="ttl">Welcome</span></button>`;
+  let world = null;
   for (const l of levels) {
     if (l.world !== world) { world = l.world; html += `<span class="world-label">${esc(world)}</span>`; }
-    html += `<button class="level-tab${l.id === level.id ? " active" : ""}" data-id="${l.id}"
+    html += `<button class="level-tab${level && l.id === level.id ? " active" : ""}" data-id="${l.id}"
       title="Level ${l.num} · ${esc(l.title)} (${esc(l.skill)})"><span class="num">${l.num}</span>
       <span class="ttl">${esc(l.title)}</span>${cleared.includes(l.id) ? '<span class="done" title="cleared">✓</span>' : ""}</button>`;
   }
   $("levels").innerHTML = html;
   for (const b of $("levels").querySelectorAll("button"))
-    b.onclick = () => openLevel(Number(b.dataset.id));
+    b.onclick = () => (b.dataset.id === "intro" ? openIntro() : openLevel(Number(b.dataset.id)));
+}
+
+/* The Welcome page: the introduction replaces the editor and the report. */
+async function openIntro() {
+  stopRun();
+  const { markdown: text } = await (await fetch("/api/intro")).json();
+  level = null;
+  store.set("level", "intro");
+  history.replaceState(null, "", "?level=intro");
+  document.title = "Lean Craft Game · Welcome";
+  document.body.classList.add("intro-mode");
+  renderTabs();
+  $("intro").innerHTML = markdown(text) + `<p class="start"><button class="primary" id="start">
+    Start with level 1: ${esc(levels[0].title)} →</button></p>`;
+  $("start").onclick = () => openLevel(levels[0].id);
+  window.scrollTo(0, 0);
 }
 
 async function openLevel(id) {
   stopRun();
+  document.body.classList.remove("intro-mode");
   level = await (await fetch(`/api/levels/${id}`)).json();
   store.set("level", id);
   history.replaceState(null, "", `?level=${id}`);
-  document.title = `DefGame · ${level.title}`;
+  document.title = `Lean Craft Game · ${level.title}`;
   renderTabs();
   $("intro").innerHTML = markdown(level.intro);
   src.value = store.get(`draft.${id}`, level.template);
@@ -595,6 +625,7 @@ function buildSymbols() {
     </button>`).join("");
   for (const b of $("symtable").querySelectorAll("button")) {
     b.onclick = () => {
+      if (!level) return;                       // the Welcome page has no editor
       const sym = SYMBOLS[Number(b.dataset.i)][0].split(" ")[0];
       replaceRange(src, src.selectionStart, src.selectionEnd, sym);
       diagnostics = [];
@@ -657,10 +688,10 @@ async function watchSetup() {
 
 $("setup-retry").onclick = () => fetch("/api/setup/retry", { method: "POST" });
 $("quit").onclick = async () => {
-  if (!confirm("Quit DefGame? Your code and progress are kept.")) return;
+  if (!confirm("Quit Lean Craft Game? Your code and progress are kept.")) return;
   stopRun();
   try { await fetch("/api/quit", { method: "POST" }); } catch { /* already gone */ }
-  document.body.innerHTML = '<p class="bye">DefGame has stopped. You can close this tab.</p>';
+  document.body.innerHTML = '<p class="bye">Lean Craft Game has stopped. You can close this tab.</p>';
 };
 setupReady = false;
 watchSetup();

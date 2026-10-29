@@ -1,8 +1,8 @@
-# DefGame: a Lean game about definitions, not proofs
+# Lean Craft Game: a Lean game about definitions, not proofs
 
 LLMs now write many Lean proofs well, so the scarce skill has moved upstream:
 **saying what you mean**. A definition can compile and still be wrong, vacuous,
-or unusable, and no proof checker will warn you. DefGame teaches that skill.
+or unusable, and no proof checker will warn you. Lean Craft Game teaches that skill.
 
 **The core mechanic.** The player never writes a proof. The player writes a
 definition (a predicate, a structure, a formal statement). A hidden *test
@@ -24,8 +24,8 @@ so it has a concrete witness against your definition) or ❓ (unsettled).
 ## Quick start
 
 **To play:** download the app for Windows, macOS or Linux from the
-[DefGame website](https://mmasdeu.github.io/DefGame/) or the
-[Releases page](https://github.com/mmasdeu/DefGame/releases). It installs Lean and
+[Lean Craft Game website](https://mmasdeu.github.io/leancraftgame/) or the
+[Releases page](https://github.com/mmasdeu/leancraftgame/releases). It installs Lean and
 the parts of Mathlib it needs on its first launch, then works offline. See
 [INSTALL.md](INSTALL.md).
 
@@ -40,13 +40,14 @@ python3 web/server.py --open
 Or, without a browser, run a level on a file of your own:
 
 ```bash
-python3 web/server.py --run 4 DefGame/L4/Player.lean
+python3 web/server.py --run 4 LeanCraftGame/L4/Player.lean
 ```
 
 ## The levels
 
-The game starts from zero: no Lean knowledge is assumed, and each level teaches
-one construct, with a worked example in the lesson text. There are 22 levels
+The game starts from zero: no Lean knowledge is assumed. A Welcome page (`LeanCraftGame/Intro.md`)
+introduces Lean and the game to first-time visitors, and then each level teaches one
+construct, with a worked example in the lesson text. There are 22 levels
 in nine worlds; [CURRICULUM.md](CURRICULUM.md) lists what each one teaches and
 which mistakes its tests catch.
 
@@ -60,7 +61,7 @@ which mistakes its tests catch.
   writing, reading and auditing definitions (described below).
 
 The order is set by `LEVELS` in `web/server.py`; the directories
-`DefGame/L<n>` are numbered in the order the levels were written.
+`LeanCraftGame/L<n>` are numbered in the order the levels were written.
 
 The browser has a **Symbols** drawer that lists every symbol with the keys to
 type it (`\forall`, `\to`, `\le`, …) and its plain-ASCII spelling, with a
@@ -131,10 +132,10 @@ by the test designed for it.
 ## Architecture
 
 ```
-DefGame/Referee.lean     the referee: witness search + core tactics, and the test commands
-DefGame/L<n>/Player.lean       what the player edits; its first comment is the lesson text
-DefGame/L<n>/Tests.lean        hidden test battery (the level designer's real work)
-DefGame/L<n>/level.json        title, signature checks and hints for the web version
+LeanCraftGame/Referee.lean     the referee: witness search + core tactics, and the test commands
+LeanCraftGame/L<n>/Player.lean       what the player edits; its first comment is the lesson text
+LeanCraftGame/L<n>/Tests.lean        hidden test battery (the level designer's real work)
+LeanCraftGame/L<n>/level.json        title, signature checks and hints for the web version
 web/server.py            local web server: runs each test as its own Lean process, streams verdicts
 web/static/              the browser game (plain HTML/CSS/JS, no build step)
 web/static/vendor/       MathJax 3.2.2 (tex-chtml.js and its fonts), bundled for offline use

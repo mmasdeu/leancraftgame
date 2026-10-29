@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""DefGame in the browser: a local web server that runs the referee on the player's code.
+"""Lean Craft Game in the browser: a local web server that runs the referee on the player's code.
 
     python3 web/server.py                    serve the game on http://localhost:8000
     python3 web/server.py --run 1 FILE       run level 1 on FILE and print the report
 
-Only the Python standard library is needed. Each test in DefGame/L<n>/Tests.lean
+Only the Python standard library is needed. Each test in LeanCraftGame/L<n>/Tests.lean
 runs as its own Lean process, with the player's code pasted in, so tests run in
 parallel and their verdicts stream to the browser as they arrive.
 
 Run from a checkout, the server uses `lake` to build the referee and find Lean. The
-desktop app (app/launcher.py) instead sets DEFGAME_ROOT (the game files),
-DEFGAME_WORK (a writable folder), LEAN_ENV and SETUP itself.
+desktop app (app/launcher.py) instead sets LEANCRAFT_ROOT (the game files),
+LEANCRAFT_WORK (a writable folder), LEAN_ENV and SETUP itself.
 """
 import argparse
 import hashlib
@@ -28,12 +28,12 @@ import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
-ROOT = Path(os.environ.get("DEFGAME_ROOT") or Path(__file__).resolve().parent.parent)
+ROOT = Path(os.environ.get("LEANCRAFT_ROOT") or Path(__file__).resolve().parent.parent)
 STATIC = ROOT / "web" / "static"
-WORK = Path(os.environ.get("DEFGAME_WORK") or ROOT / ".lake" / "defgame-web")
+WORK = Path(os.environ.get("LEANCRAFT_WORK") or ROOT / ".lake" / "leancraftgame-web")
 RUNS = WORK / "runs"
 CACHE_FILE = WORK / "cache.json"
-# Levels in the order they are played. The numbers are directory names (DefGame/L<n>);
+# Levels in the order they are played. The numbers are directory names (LeanCraftGame/L<n>);
 # the number shown to the player is the position in this list.
 LEVELS = [4, 5, 6, 15, 7, 8, 9, 16, 17, 10, 11, 12, 13, 18, 1, 19, 20, 21, 22, 14, 2, 3]
 LEAN_ENV = {}       # environment for running Lean (LEAN, LEAN_PATH, …), see prepare_lean()
@@ -69,7 +69,7 @@ def split_tests(src):
     out = {"imports": [], "preamble": [], "gates": [], "tests": []}
     for c in cmds:
         if c.startswith("import "):
-            if not re.match(r"import DefGame\.L\d+\.Player\s*$", c):
+            if not re.match(r"import LeanCraftGame\.L\d+\.Player\s*$", c):
                 out["imports"].append(c)
         elif c.startswith("#no_sorry"):
             out["gates"].append(c)
@@ -84,7 +84,7 @@ def split_tests(src):
 
 
 def load_level(n):
-    d = ROOT / "DefGame" / f"L{n}"
+    d = ROOT / "LeanCraftGame" / f"L{n}"
     meta = json.loads((d / "level.json").read_text(encoding="utf-8"))
     intro, template = split_intro((d / "Player.lean").read_text(encoding="utf-8"))
     return {**meta, "id": n, "num": LEVELS.index(n) + 1, "intro": intro, "template": template,
@@ -104,7 +104,7 @@ def assemble(lv, code, extra):
     lines = code.rstrip("\n").split("\n")
     imports = [l.strip() for l in lines if re.match(r"import\s", l)]
     code = "\n".join("" if re.match(r"import\s", l) else l for l in lines)
-    segs = [("head", "\n".join(["import DefGame.Referee"] + lv["imports"] + imports), None),
+    segs = [("head", "\n".join(["import LeanCraftGame.Referee"] + lv["imports"] + imports), None),
             ("player", code, None),
             ("preamble", "\n".join(lv["preamble"]), None)] + extra
     lines, ranges, cur = [], [], 1
@@ -202,7 +202,7 @@ class Cache:
     @staticmethod
     def key(text):
         h = hashlib.sha256()
-        for f in ("lean-toolchain", "lake-manifest.json", "DefGame/Referee.lean"):
+        for f in ("lean-toolchain", "lake-manifest.json", "LeanCraftGame/Referee.lean"):
             h.update((ROOT / f).read_bytes())
         h.update(text.encode())
         return h.hexdigest()
@@ -364,6 +364,8 @@ class Handler(BaseHTTPRequestHandler):
         path = self.path.split("?")[0]
         if path == "/api/setup":
             return self.send(200, SETUP.status() if SETUP else {"ready": True, "app": False})
+        if path == "/api/intro":
+            return self.send(200, {"markdown": (ROOT / "LeanCraftGame" / "Intro.md").read_text(encoding="utf-8")})
         if path == "/api/levels":
             out = []
             for n in LEVELS:
@@ -431,10 +433,10 @@ class Handler(BaseHTTPRequestHandler):
 
 def prepare_lean():
     """From a checkout: build the referee with lake and ask lake for Lean's environment."""
-    print("Building the referee (lake build DefGame.Referee)…", flush=True)
-    r = subprocess.run(["lake", "build", "DefGame.Referee"], cwd=ROOT, capture_output=True, **UTF8)
+    print("Building the referee (lake build LeanCraftGame.Referee)…", flush=True)
+    r = subprocess.run(["lake", "build", "LeanCraftGame.Referee"], cwd=ROOT, capture_output=True, **UTF8)
     if r.returncode != 0:
-        sys.exit(f"`lake build DefGame.Referee` failed:\n{r.stdout}{r.stderr}")
+        sys.exit(f"`lake build LeanCraftGame.Referee` failed:\n{r.stdout}{r.stderr}")
     # Ask lake once for LEAN, LEAN_PATH, …: running `lake env` for every test would be
     # slower, and parallel calls can contend for lake's lock.
     r = subprocess.run(["lake", "env"], cwd=ROOT, capture_output=True, check=True, **UTF8)
@@ -458,7 +460,7 @@ def serve(port, jobs, timeout, open_browser=False):
     server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
     server.daemon_threads = True
     url = f"http://localhost:{port}/"
-    print(f"DefGame is running at {url}  (Ctrl+C to stop)", flush=True)
+    print(f"Lean Craft Game is running at {url}  (Ctrl+C to stop)", flush=True)
     if open_browser:
         webbrowser.open(url)
     try:
@@ -499,7 +501,7 @@ def cli_run(opts):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="DefGame web server")
+    ap = argparse.ArgumentParser(description="Lean Craft Game web server")
     ap.add_argument("--port", type=int, default=8000)
     ap.add_argument("--jobs", type=int, default=os.cpu_count() or 4, help="Lean processes run in parallel")
     ap.add_argument("--timeout", type=int, default=60, help="seconds allowed per test")

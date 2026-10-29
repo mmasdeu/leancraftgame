@@ -9,8 +9,16 @@ the hidden `→` and `∧` in bounded quantifiers, and the library's own names a
 classes. The last worlds are the real subject of the game: writing, reading
 and auditing definitions.
 
+Before level 1 comes a **Welcome page** (`LeanCraftGame/Intro.md`, the first tab in the
+browser), which a first-time visitor sees on arrival. It is written for someone who has
+never seen Lean: what Lean is, the difference between a definition and a theorem, why a
+definition can be accepted and still be wrong (the referee exists to catch that), how a
+level works (editor, **Run tests**, ✅ ❌ ❓, hints, `sorry`), five things to know about
+reading Lean, how to type the symbols, and a map of the worlds ahead. Returning players
+resume where they left off.
+
 The number is the position in the browser (set by `LEVELS` in
-`web/server.py`). The directory is `DefGame/L<n>`, numbered in the order the
+`web/server.py`). The directory is `LeanCraftGame/L<n>`, numbered in the order the
 levels were written.
 
 | # | Dir | World | Level | Skill |

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the Mathlib pack for the app: the compiled Lean files the game loads, outside Lean's core.
 
-Run in a checkout, after `lake exe cache get` and `lake build DefGame.Referee`:
+Run in a checkout, after `lake exe cache get` and `lake build LeanCraftGame.Referee`:
 
     python3 app/make_pack.py --out dist --url-base https://github.com/OWNER/REPO/releases/download/TAG
 
@@ -11,7 +11,7 @@ Writes to the output folder:
                                   that the referee or a level imports, directly or not
     deps.json                     what the app needs: the toolchain, and the pack's id, URL,
                                   sha256 and size
-    olean/DefGame/Referee.olean   the compiled referee, which goes inside the app
+    olean/LeanCraftGame/Referee.olean   the compiled referee, which goes inside the app
 
 The id names the Mathlib revision, the toolchain and a hash of the module list, so the app
 downloads a new pack only when its content changes.
@@ -41,9 +41,9 @@ CLOSURE = """{imports}
 
 
 def game_imports():
-    """`import DefGame.Referee` and the imports of every level's Player.lean."""
-    imports = {"import DefGame.Referee"}
-    for player in sorted(ROOT.glob("DefGame/L*/Player.lean")):
+    """`import LeanCraftGame.Referee` and the imports of every level's Player.lean."""
+    imports = {"import LeanCraftGame.Referee"}
+    for player in sorted(ROOT.glob("LeanCraftGame/L*/Player.lean")):
         imports |= {l.strip() for l in player.read_text(encoding="utf-8").splitlines() if re.match(r"import\s", l)}
     return sorted(imports)
 
@@ -84,7 +84,7 @@ def main():
     for olean in closure():
         olean = olean.resolve()
         if own in olean.parents:
-            continue                  # DefGame's own modules: only the referee is needed, shipped in the app
+            continue                  # LeanCraftGame's own modules: only the referee is needed, shipped in the app
         if "toolchains" in olean.parts:
             continue                  # Lean's core library comes with the toolchain
         for suffix in KEEP:
@@ -120,9 +120,9 @@ def main():
             "url": f"{opts.url_base.rstrip('/')}/{name}",
             "sha256": h.hexdigest(), "size": (out / name).stat().st_size}
     (out / "deps.json").write_text(json.dumps(deps, indent=2) + "\n", encoding="utf-8")
-    referee = out / "olean" / "DefGame" / "Referee.olean"
+    referee = out / "olean" / "LeanCraftGame" / "Referee.olean"
     referee.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(own / "lib" / "lean" / "DefGame" / "Referee.olean", referee)
+    shutil.copy2(own / "lib" / "lean" / "LeanCraftGame" / "Referee.olean", referee)
     print(json.dumps(deps, indent=2))
 
 

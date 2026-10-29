@@ -280,3 +280,15 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
 .setup .progress[hidden] { display: none; }
 .setup #setup-retry { margin-top: 8px; }
 .bye { font-size: 18px; text-align: center; margin-top: 30vh; }
+
+/* Welcome page */
+.level-tab.welcome { border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.level-tab.welcome.active { background: var(--accent); color: var(--accent-fg); }
+.intro-mode .layout { grid-template-columns: minmax(0, 780px); justify-content: center; }
+.intro-mode .toolbar, .intro-mode .editor, .intro-mode .editor-help,
+.intro-mode #diagnostics, .intro-mode aside.right { display: none; }
+.intro-mode .sym-row { pointer-events: none; }      /* there is no editor to insert into */
+.prose ol, .prose ul { padding-left: 1.4em; }
+.prose li { margin: 4px 0; }
+.prose .start { margin: 18px 0 14px; }
+.prose .start button { font-size: 16px; padding: 10px 20px; }

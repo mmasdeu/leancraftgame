@@ -2,7 +2,7 @@
 """Check every level against its sample answers in variants/L<n>/.
 
     python3 check_levels.py            all levels, in the order they are played
-    python3 check_levels.py 4 15       only the levels in DefGame/L4 and DefGame/L15
+    python3 check_levels.py 4 15       only the levels in LeanCraftGame/L4 and LeanCraftGame/L15
 
 * An answer named `correct*.lean` or `fix*.lean` must pass every test.
 * An answer named `bug*.lean` must fail at least one test (❌), or be rejected
@@ -56,7 +56,7 @@ def main():
     for n in opts.levels or server.LEVELS:
         lv = server.load_level(n)
         names = [t["name"] for t in lv["tests"]]
-        answers = [ROOT / f"DefGame/L{n}/Player.lean"] + sorted((ROOT / f"variants/L{n}").glob("*.lean"))
+        answers = [ROOT / f"LeanCraftGame/L{n}/Player.lean"] + sorted((ROOT / f"variants/L{n}").glob("*.lean"))
         for f in answers:
             label = "(start)" if f.name == "Player.lean" else f.stem
             t0 = time.time()

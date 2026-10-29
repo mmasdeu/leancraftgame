@@ -1,21 +1,21 @@
-# Installing and running DefGame
+# Installing and running Lean Craft Game
 
-DefGame runs on your own machine: a small local server runs Lean, and you play
+Lean Craft Game runs on your own machine: a small local server runs Lean, and you play
 in your web browser. One player at a time; no accounts.
 
 ## The easy way: download the app
 
-The [DefGame website](https://mmasdeu.github.io/DefGame/) links to a ready-made app
+The [Lean Craft Game website](https://mmasdeu.github.io/leancraftgame/) links to a ready-made app
 for Windows, macOS (Apple Silicon) and Linux, which you can also find on the
-[Releases page](https://github.com/mmasdeu/DefGame/releases). Nothing else needs to be
+[Releases page](https://github.com/mmasdeu/leancraftgame/releases). Nothing else needs to be
 installed first.
 
-* **Windows:** unzip `DefGame-windows-x64.zip` and run `DefGame.exe` in the `DefGame`
+* **Windows:** unzip `LeanCraftGame-windows-x64.zip` and run `LeanCraftGame.exe` in the `LeanCraftGame`
   folder. Windows may warn about an unrecognized app: choose *More info → Run anyway*.
   A console window shows what the game is doing; closing it stops the game.
-* **macOS:** open `DefGame-macos-arm64.dmg` and drag DefGame to Applications. The
+* **macOS:** open `LeanCraftGame-macos-arm64.dmg` and drag LeanCraftGame to Applications. The
   first time, right-click it and choose *Open*, because the app is not notarized.
-* **Linux:** unpack `DefGame-linux-x64.tar.gz` and run `DefGame/DefGame`. It needs
+* **Linux:** unpack `LeanCraftGame-linux-x64.tar.gz` and run `LeanCraftGame/LeanCraftGame`. It needs
   glibc 2.35 or newer (Ubuntu 22.04, Debian 12, Fedora 36 or later).
 
 The game opens in your web browser. On the first launch it downloads Lean (about
@@ -28,12 +28,12 @@ uninstalls it completely:
 
 | System | Folder |
 |---|---|
-| Windows | `%LOCALAPPDATA%\DefGame` |
-| macOS | `~/Library/Application Support/DefGame` |
-| Linux | `~/.local/share/defgame` |
+| Windows | `%LOCALAPPDATA%\LeanCraftGame` |
+| macOS | `~/Library/Application Support/LeanCraftGame` |
+| Linux | `~/.local/share/leancraftgame` |
 
 If you already have Lean installed with elan and the right toolchain, the app uses it
-instead of downloading its own. The folder also holds `defgame.log`, which is the place
+instead of downloading its own. The folder also holds `leancraftgame.log`, which is the place
 to look if something goes wrong.
 
 The rest of this file is about running the game from a copy of this repository,
@@ -73,7 +73,7 @@ step would compile Mathlib from source, which takes hours.
 python3 web/server.py --open
 ```
 
-This builds the referee (`lake build DefGame.Referee`, a few seconds),
+This builds the referee (`lake build LeanCraftGame.Referee`, a few seconds),
 starts the server on <http://localhost:8000/> and opens it in your browser.
 Leave the terminal open while you play and press `Ctrl+C` to stop.
 
@@ -119,14 +119,14 @@ Your code for each level and the levels you cleared are saved in the
 browser (`localStorage`), so you can close the tab and come back. **Reset**
 restores a level's original file.
 
-Verdicts are cached in `.lake/defgame-web/cache.json`, keyed by the exact
+Verdicts are cached in `.lake/leancraftgame-web/cache.json`, keyed by the exact
 file sent to Lean and the referee's source, so running the same code again is
 instant. Delete that file to clear the cache.
 
 ## Command line
 
 The web server can also run a level without a browser, which is handy for
-checking answers. The number is the level's directory (`DefGame/L<n>`):
+checking answers. The number is the level's directory (`LeanCraftGame/L<n>`):
 
 ```bash
 python3 web/server.py --run 1 variants/L1/correct_a.lean
@@ -181,12 +181,12 @@ The landing page is `site/index.html`, a single static file with no external res
 Its download buttons point to the latest release, and it uses the GitHub API to show
 the version and the file sizes (without it, the plain links still work). The buttons
 rely on the files of a release having these exact names, which `app/build_app.py` gives them:
-`DefGame-windows-x64.zip`, `DefGame-macos-arm64.dmg`, `DefGame-linux-x64.tar.gz`.
+`LeanCraftGame-windows-x64.zip`, `LeanCraftGame-macos-arm64.dmg`, `LeanCraftGame-linux-x64.tar.gz`.
 
 `.github/workflows/pages.yml` copies `site/` to the `gh-pages` branch whenever it changes
 on `main`. One-time setup, after the workflow has run once and created the branch:
 *Settings → Pages → Build and deployment → Source: Deploy from a branch → `gh-pages`, `/ (root)`*.
-The site is then at <https://mmasdeu.github.io/DefGame/>. To preview it locally:
+The site is then at <https://mmasdeu.github.io/leancraftgame/>. To preview it locally:
 `python3 -m http.server --directory site`.
 
 ### Trying the app without a release
@@ -194,14 +194,16 @@ The site is then at <https://mmasdeu.github.io/DefGame/>. To preview it locally:
 To try the app from a checkout without freezing it:
 
 ```bash
-lake exe cache get && lake build DefGame.Referee
+lake exe cache get && lake build LeanCraftGame.Referee
 python3 app/make_pack.py --out dist --url-base file:///unused
-DEFGAME_DEPS=dist/deps.json DEFGAME_PACK_FILE=$(ls dist/mathlib-*.tar.xz) python3 app/launcher.py
+LEANCRAFT_DEPS=dist/deps.json LEANCRAFT_PACK_FILE=$(ls dist/mathlib-*.tar.xz) python3 app/launcher.py
 ```
 
 ## Adding or changing a level
 
-A level is a directory `DefGame/L<n>/` with three files:
+The Welcome page that first-time visitors see is `LeanCraftGame/Intro.md` (the same Markdown
+subset as the lesson texts); edit it like any level. A level is a directory
+`LeanCraftGame/L<n>/` with three files:
 
 * `Player.lean`: the starting code. Its first `/- … -/` comment is shown as
   the level text (Markdown); the rest goes into the editor. Right after that

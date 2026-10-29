@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""DefGame as a desktop app: sets up Lean and Mathlib on first launch, then serves the game.
+"""Lean Craft Game as a desktop app: sets up Lean and Mathlib on first launch, then serves the game.
 
-    DefGame                  start the game (first launch: install Lean and Mathlib)
-    DefGame --self-test      set up, then check two levels; exit status 0 if all is well
+    LeanCraftGame                  start the game (first launch: install Lean and Mathlib)
+    LeanCraftGame --self-test      set up, then check two levels; exit status 0 if all is well
 
 The app carries the game files, the compiled referee and `deps.json`, which names the
 Lean toolchain and the Mathlib pack (the part of Mathlib the game loads, built by
@@ -11,13 +11,13 @@ app/make_pack.py). Everything it downloads goes into one data folder (see data_d
     elan/          a private elan and Lean toolchain, if the user has none
     deps/<id>/     the unpacked Mathlib pack
     work/          the server's temporary files and verdict cache
-    defgame.log    the log
+    leancraftgame.log    the log
 
-Environment variables, mainly for testing: DEFGAME_DATA (the data folder),
-DEFGAME_DEPS (a deps.json other than the bundled one), DEFGAME_PACK_FILE (use this
-local pack instead of downloading it), DEFGAME_IGNORE_SYSTEM_ELAN=1 (always install a
+Environment variables, mainly for testing: LEANCRAFT_DATA (the data folder),
+LEANCRAFT_DEPS (a deps.json other than the bundled one), LEANCRAFT_PACK_FILE (use this
+local pack instead of downloading it), LEANCRAFT_IGNORE_SYSTEM_ELAN=1 (always install a
 private elan). Run from a checkout, the referee comes from .lake/build after
-`lake build DefGame.Referee`.
+`lake build LeanCraftGame.Referee`.
 """
 import argparse
 import hashlib
@@ -45,23 +45,23 @@ NO_WINDOW = getattr(subprocess, "CREATE_NO_WINDOW", 0)
 
 
 def data_dir():
-    if os.environ.get("DEFGAME_DATA"):
-        return Path(os.environ["DEFGAME_DATA"])
+    if os.environ.get("LEANCRAFT_DATA"):
+        return Path(os.environ["LEANCRAFT_DATA"])
     if os.name == "nt":
-        return Path(os.environ.get("LOCALAPPDATA", Path.home() / "AppData" / "Local")) / "DefGame"
+        return Path(os.environ.get("LOCALAPPDATA", Path.home() / "AppData" / "Local")) / "LeanCraftGame"
     if sys.platform == "darwin":
-        return Path.home() / "Library" / "Application Support" / "DefGame"
-    return Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local" / "share")) / "defgame"
+        return Path.home() / "Library" / "Application Support" / "LeanCraftGame"
+    return Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local" / "share")) / "leancraftgame"
 
 
 DATA = data_dir()
 DATA.mkdir(parents=True, exist_ok=True)
-os.environ.setdefault("DEFGAME_ROOT", str(BUNDLE))
-os.environ.setdefault("DEFGAME_WORK", str(DATA / "work"))
+os.environ.setdefault("LEANCRAFT_ROOT", str(BUNDLE))
+os.environ.setdefault("LEANCRAFT_WORK", str(DATA / "work"))
 sys.path.insert(0, str(BUNDLE / "web"))
-import server  # noqa: E402  (needs DEFGAME_ROOT and DEFGAME_WORK)
+import server  # noqa: E402  (needs LEANCRAFT_ROOT and LEANCRAFT_WORK)
 
-DEPS = json.loads(Path(os.environ.get("DEFGAME_DEPS") or BUNDLE / "deps.json").read_text(encoding="utf-8"))
+DEPS = json.loads(Path(os.environ.get("LEANCRAFT_DEPS") or BUNDLE / "deps.json").read_text(encoding="utf-8"))
 # the compiled referee: bundled in the app, or built by lake in a checkout
 OLEAN = BUNDLE / "olean" if (BUNDLE / "olean").is_dir() else BUNDLE / ".lake" / "build" / "lib" / "lean"
 TOOLCHAIN_DIR = DEPS["toolchain"].replace("/", "--").replace(":", "---")
@@ -91,7 +91,7 @@ def ssl_context():
 
 def download(url, dest, progress):
     """Download `url` to `dest`, calling progress(done, total) along the way."""
-    req = urllib.request.Request(url, headers={"User-Agent": "DefGame"})
+    req = urllib.request.Request(url, headers={"User-Agent": "LeanCraftGame"})
     with urllib.request.urlopen(req, context=ssl_context(), timeout=60) as r, open(dest, "wb") as f:
         total, done = int(r.headers.get("Content-Length") or 0), 0
         while chunk := r.read(1 << 20):
@@ -153,7 +153,7 @@ class Setup:
 
     def toolchain(self):
         homes = [DATA / "elan"]
-        if not os.environ.get("DEFGAME_IGNORE_SYSTEM_ELAN"):
+        if not os.environ.get("LEANCRAFT_IGNORE_SYSTEM_ELAN"):
             homes.insert(0, Path(os.environ.get("ELAN_HOME") or Path.home() / ".elan"))
         for home in homes:
             lean = home / "toolchains" / TOOLCHAIN_DIR / "bin" / f"lean{EXE}"
@@ -211,7 +211,7 @@ class Setup:
             self._set(message="Mathlib is already installed.")
             return target
         target.parent.mkdir(parents=True, exist_ok=True)
-        local = os.environ.get("DEFGAME_PACK_FILE")
+        local = os.environ.get("LEANCRAFT_PACK_FILE")
         archive = Path(local) if local else target.parent / f"{DEPS['id']}.tar.xz"
         if not local:
             mb = DEPS["size"] / 1e6
@@ -251,7 +251,7 @@ class Setup:
     def check(self, env):
         with tempfile.TemporaryDirectory() as tmp:
             f = Path(tmp) / "Check.lean"
-            f.write_text('import DefGame.Referee\n#eval "referee loaded"\n', encoding="utf-8")
+            f.write_text('import LeanCraftGame.Referee\n#eval "referee loaded"\n', encoding="utf-8")
             r = subprocess.run([env["LEAN"], str(f)], env=env, capture_output=True, timeout=600,
                                creationflags=NO_WINDOW, encoding="utf-8", errors="replace")
         if r.returncode != 0 or "referee loaded" not in r.stdout:
@@ -303,7 +303,7 @@ def already_running(port):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="DefGame, a Lean game about definitions")
+    ap = argparse.ArgumentParser(description="Lean Craft Game, a Lean game about definitions")
     ap.add_argument("--port", type=int, default=PORT)
     ap.add_argument("--jobs", type=int, default=os.cpu_count() or 4, help="Lean processes run in parallel")
     ap.add_argument("--timeout", type=int, default=60, help="seconds allowed per test")
@@ -311,19 +311,19 @@ def main():
     ap.add_argument("--self-test", action="store_true", help="set up, check two levels, and exit")
     opts = ap.parse_args()
 
-    logfile = open(DATA / "defgame.log", "a", encoding="utf-8", buffering=1)
+    logfile = open(DATA / "leancraftgame.log", "a", encoding="utf-8", buffering=1)
     if sys.stdout is None or (not opts.self_test and not sys.stdout.isatty()):
         sys.stdout = sys.stderr = logfile         # no console (macOS app, desktop launcher)
     elif hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8")
-    log(f"DefGame starting; data folder {DATA}")
+    log(f"Lean Craft Game starting; data folder {DATA}")
 
     setup = Setup()
     if opts.self_test:
         sys.exit(self_test(setup))
 
     if already_running(opts.port):
-        log("DefGame is already running; opening it in the browser.")
+        log("Lean Craft Game is already running; opening it in the browser.")
         if not opts.no_browser:
             import webbrowser
             webbrowser.open(f"http://localhost:{opts.port}/")
@@ -335,7 +335,7 @@ def main():
     except OSError as e:
         log(f"Could not listen on port {opts.port}: {e}")
         sys.exit(1)
-    log("DefGame stopped.")
+    log("Lean Craft Game stopped.")
 
 
 if __name__ == "__main__":

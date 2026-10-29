@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DefGame: a Lean game about definitions, not proofs</title>
-  <meta name="description" content="Learn to write Lean definitions that mean what you intend. Download DefGame for Windows, macOS or Linux.">
+  <title>Lean Craft Game: a Lean game about definitions, not proofs</title>
+  <meta name="description" content="Learn to write Lean definitions that mean what you intend. Download Lean Craft Game for Windows, macOS or Linux.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text x='4' y='25' font-size='24' font-family='serif'>∀</text></svg>">
   <style>
     :root {
@@ -89,7 +89,7 @@
 <body>
 <main>
   <header class="hero">
-    <div class="logo">DEFGAME</div>
+    <div class="logo">LEAN CRAFT GAME</div>
     <h1>Write <span class="sym">∀</span> definitions that mean what you intend</h1>
     <p class="lead">
       A Lean game about <b>definitions, not proofs</b>. You write a definition; a hidden
@@ -103,37 +103,37 @@
       <div class="card" data-os="windows">
         <span class="badge"></span>
         <h3>Windows</h3>
-        <a class="btn" data-asset="DefGame-windows-x64.zip"
-           href="https://github.com/mmasdeu/DefGame/releases/latest/download/DefGame-windows-x64.zip">Download for Windows<small>DefGame-windows-x64.zip</small></a>
-        <p>Windows 10 or 11, 64-bit. Unzip it and run <code>DefGame.exe</code>. If Windows warns about an
+        <a class="btn" data-asset="LeanCraftGame-windows-x64.zip"
+           href="https://github.com/mmasdeu/leancraftgame/releases/latest/download/LeanCraftGame-windows-x64.zip">Download for Windows<small>LeanCraftGame-windows-x64.zip</small></a>
+        <p>Windows 10 or 11, 64-bit. Unzip it and run <code>LeanCraftGame.exe</code>. If Windows warns about an
           unrecognized app, choose <i>More info → Run anyway</i>.</p>
       </div>
       <div class="card" data-os="macos">
         <span class="badge"></span>
         <h3>macOS</h3>
-        <a class="btn" data-asset="DefGame-macos-arm64.dmg"
-           href="https://github.com/mmasdeu/DefGame/releases/latest/download/DefGame-macos-arm64.dmg">Download for macOS<small>DefGame-macos-arm64.dmg</small></a>
-        <p>Apple Silicon (M1 or later). Drag DefGame to Applications, then right-click it and choose
+        <a class="btn" data-asset="LeanCraftGame-macos-arm64.dmg"
+           href="https://github.com/mmasdeu/leancraftgame/releases/latest/download/LeanCraftGame-macos-arm64.dmg">Download for macOS<small>LeanCraftGame-macos-arm64.dmg</small></a>
+        <p>Apple Silicon (M1 or later). Drag LeanCraftGame to Applications, then right-click it and choose
           <i>Open</i> the first time. Intel Macs: see <a href="#source">running from source</a>.</p>
       </div>
       <div class="card" data-os="linux">
         <span class="badge"></span>
         <h3>Linux</h3>
-        <a class="btn" data-asset="DefGame-linux-x64.tar.gz"
-           href="https://github.com/mmasdeu/DefGame/releases/latest/download/DefGame-linux-x64.tar.gz">Download for Linux<small>DefGame-linux-x64.tar.gz</small></a>
+        <a class="btn" data-asset="LeanCraftGame-linux-x64.tar.gz"
+           href="https://github.com/mmasdeu/leancraftgame/releases/latest/download/LeanCraftGame-linux-x64.tar.gz">Download for Linux<small>LeanCraftGame-linux-x64.tar.gz</small></a>
         <p>x86-64 with glibc 2.35 or newer (Ubuntu 22.04, Debian 12, Fedora 36 or later). Unpack it and run
-          <code>DefGame/DefGame</code>.</p>
+          <code>LeanCraftGame/LeanCraftGame</code>.</p>
       </div>
     </div>
     <div class="other">
-      All versions and release notes: <a href="https://github.com/mmasdeu/DefGame/releases">GitHub Releases</a>
-      · <a href="https://github.com/mmasdeu/DefGame">source code</a>
+      All versions and release notes: <a href="https://github.com/mmasdeu/leancraftgame/releases">GitHub Releases</a>
+      · <a href="https://github.com/mmasdeu/leancraftgame">source code</a>
     </div>
   </header>
 
   <figure>
     <img class="shot" src="screenshot.png" width="1280" height="860"
-         alt="DefGame in a browser: the lesson text on the left, and the referee's report on the right, with one failed test and its hint">
+         alt="Lean Craft Game in a browser: the lesson text on the left, and the referee's report on the right, with one failed test and its hint">
     <figcaption>A lesson, a definition with a classic off-by-one mistake, and the referee's verdict with a hint.</figcaption>
   </figure>
 
@@ -165,7 +165,7 @@
   <h2>Install</h2>
   <ol class="steps">
     <li>Download the file for your system above, and unpack it.</li>
-    <li>Start <b>DefGame</b>. It opens in your web browser.</li>
+    <li>Start <b>LeanCraftGame</b>. It opens in your web browser.</li>
     <li>The first launch downloads <b>Lean</b> (about 300 MB) and the parts of <b>Mathlib</b> the game uses
       (about 450 MB). You can read the first levels meanwhile. It needs about 6 GB of disk space.</li>
     <li>From then on, the game works <b>offline</b>. Everything it downloaded is in one folder, so deleting that
@@ -179,28 +179,28 @@
     <p>The apps are not signed with a paid developer certificate, so Windows SmartScreen and macOS Gatekeeper
       show a warning for software they do not know. On Windows choose <i>More info → Run anyway</i>; on macOS
       right-click the app and choose <i>Open</i>. The source code and the build are public, in the
-      <a href="https://github.com/mmasdeu/DefGame">repository</a> and its release workflow.</p>
+      <a href="https://github.com/mmasdeu/leancraftgame">repository</a> and its release workflow.</p>
   </details>
   <details>
     <summary>Can I run it from source, or change the levels?</summary>
     <p>Yes. You need <a href="https://github.com/leanprover/elan">elan</a> (Lean's installer) and Python 3.9 or newer:</p>
-<pre>git clone https://github.com/mmasdeu/DefGame
-cd DefGame
+<pre>git clone https://github.com/mmasdeu/leancraftgame
+cd leancraftgame
 lake exe cache get
 python3 web/server.py --open</pre>
     <p>This is also the way to run it on an Intel Mac. See
-      <a href="https://github.com/mmasdeu/DefGame/blob/main/INSTALL.md">INSTALL.md</a> for details, and
-      <a href="https://github.com/mmasdeu/DefGame/blob/main/CURRICULUM.md">CURRICULUM.md</a> for what each level teaches.</p>
+      <a href="https://github.com/mmasdeu/leancraftgame/blob/main/INSTALL.md">INSTALL.md</a> for details, and
+      <a href="https://github.com/mmasdeu/leancraftgame/blob/main/CURRICULUM.md">CURRICULUM.md</a> for what each level teaches.</p>
   </details>
   <details>
     <summary>Where does the game store its files?</summary>
-    <p>Windows: <code>%LOCALAPPDATA%\DefGame</code>. macOS: <code>~/Library/Application Support/DefGame</code>.
-      Linux: <code>~/.local/share/defgame</code>. The folder also has <code>defgame.log</code>, the place to
+    <p>Windows: <code>%LOCALAPPDATA%\LeanCraftGame</code>. macOS: <code>~/Library/Application Support/LeanCraftGame</code>.
+      Linux: <code>~/.local/share/leancraftgame</code>. The folder also has <code>leancraftgame.log</code>, the place to
       look if something goes wrong.</p>
   </details>
 
   <footer>
-    DefGame is open source. Built with <a href="https://lean-lang.org">Lean 4</a> and
+    Lean Craft Game is open source. Built with <a href="https://lean-lang.org">Lean 4</a> and
     <a href="https://leanprover-community.github.io">Mathlib</a>; formulas are typeset with MathJax.
   </footer>
 </main>
@@ -209,7 +209,7 @@ python3 web/server.py --open</pre>
   // Highlight the download for the visitor's system, and show the latest version and file sizes
   // from the GitHub API. Everything works without it: the buttons link to the latest release.
   (function () {
-    var REPO = "mmasdeu/DefGame";
+    var REPO = "mmasdeu/leancraftgame";
 
     var ua = navigator.userAgent || "";
     var platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
@@ -223,7 +223,7 @@ python3 web/server.py --open</pre>
       card.querySelector(".badge").textContent = "Recommended for your system";
     }
     var status = document.getElementById("status");
-    var note = os === "mobile" ? "DefGame needs a computer: Windows, macOS or Linux. " : "";
+    var note = os === "mobile" ? "Lean Craft Game needs a computer: Windows, macOS or Linux. " : "";
     status.textContent = note;
 
     function size(bytes) { return bytes >= 1e6 ? Math.round(bytes / 1e6) + " MB" : Math.round(bytes / 1e3) + " KB"; }

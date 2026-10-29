@@ -1,5 +1,5 @@
 # Publishes the landing page (site/) to the gh-pages branch, which GitHub Pages serves at
-# https://mmasdeu.github.io/DefGame/. Runs when the page changes, or by hand.
+# https://mmasdeu.github.io/leancraftgame/. Runs when the page changes, or by hand.
 #
 # One-time setup: Settings → Pages → Build and deployment → Source: "Deploy from a branch",
 # Branch: gh-pages, folder: / (root). The branch is created by the first run of this workflow.
