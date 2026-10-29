@@ -70,9 +70,8 @@ def levels():
         lv = server.load_level(n)
         # the referee is pasted into the file (prelude.lean), not imported
         imports = [i for i in lv["imports"] if i.strip() != "import LeanCraftGame.Referee"]
-        out.append({k: lv[k] for k in ("id", "num", "world", "title", "skill", "intro", "template", "hints",
-                                       "preamble", "gates", "tests")} | {"imports": imports}
-                   | {"checks": lv.get("checks", [])})
+        out.append({k: lv[k] for k in server.PUBLIC_KEYS + ("preamble", "gates", "tests") if k in lv}
+                   | {"imports": imports} | {"checks": lv.get("checks", [])})
     return out
 
 

@@ -1,0 +1,43 @@
+{
+  "world": "Analysis World",
+  "title": "Spot the bug: limits",
+  "skill": "reading",
+  "public": "all",
+  "checks": [
+    {
+      "lean": "example : ℕ → ℝ := L29.seqA\nexample : ℝ := L29.limA\nexample : ℕ → ℝ := L29.seqB\nexample : ℝ := L29.limB",
+      "message": "Keep `seqA`, `seqB : ℕ → ℝ` and `limA`, `limB : ℝ`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "seqA converges",
+      "steps": [
+        "`seqA` must really converge to `limA`. What is the simplest convergent sequence you know?"
+      ],
+      "hint": "A constant sequence converges to its value: `seqA := fun _ => 0`, `limA := 0`."
+    },
+    {
+      "match": "Alice",
+      "steps": [
+        "Alice's definition is missing something that yours had. What happens to `|u n - a| < ε` when `ε` is 0, or negative?",
+        "With `ε = 0`, the condition `|u n - a| < 0` never holds. So which sequences does Alice's definition accept?"
+      ],
+      "hint": "Alice's definition accepts no sequence at all, so *every* convergent sequence shows the bug: a constant one is enough."
+    },
+    {
+      "match": "seqB converges",
+      "steps": [
+        "`seqB` must *not* converge to `limB`, and yet come within every `ε` of `limB` at least once."
+      ],
+      "hint": "`seqB := fun n => if n % 2 = 0 then 0 else 1` and `limB := 0`: the even terms are exactly 0, but the odd ones stay at 1."
+    },
+    {
+      "match": "Bob",
+      "steps": [
+        "Bob's definition only asks for *one* term within `ε` of the limit. Which sequences come close once, but do not stay close?"
+      ],
+      "hint": "Any sequence that hits the limit exactly at some index is accepted: `fun n => if n % 2 = 0 then 0 else 1` with limit 0."
+    }
+  ]
+}

@@ -2,6 +2,20 @@
   "world": "Statements World",
   "title": "True or false?",
   "skill": "syntax",
+  "predict": [
+    {
+      "test": "IsEven 0 is true",
+      "statement": "IsEven 0"
+    },
+    {
+      "test": "IsSmall 10 is false",
+      "statement": "IsSmall 10"
+    },
+    {
+      "test": "GoesInto 1 7 is true",
+      "statement": "GoesInto 1 7"
+    }
+  ],
   "checks": [
     {
       "lean": "example : Nat → Prop := L7.IsEven",
@@ -19,6 +33,9 @@
   "hints": [
     {
       "match": "IsEven",
+      "steps": [
+        "What is the remainder when an even number is divided by 2?"
+      ],
       "hint": "An even number leaves remainder 0 when divided by 2: `n % 2 = 0`."
     },
     {
@@ -27,10 +44,16 @@
     },
     {
       "match": "IsSmall",
+      "steps": [
+        "Is 10 itself below 10? Check the boundary."
+      ],
       "hint": "`n < 10`."
     },
     {
       "match": "GoesInto",
+      "steps": [
+        "`GoesInto a b` says that `a` goes into `b`. Which number is divided by which?"
+      ],
       "hint": "`b % a = 0`: the remainder of `b` divided by `a` is zero. Mind the order of `a` and `b`."
     },
     {

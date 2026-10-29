@@ -2,6 +2,20 @@
   "world": "Predicate World",
   "title": "Going to infinity",
   "skill": "writing",
+  "predict": [
+    {
+      "test": "u n = n / 2 tends to infinity (it is not strictly increasing!)",
+      "statement": "TendsToInfinity (fun n => n / 2)"
+    },
+    {
+      "test": "0, 4, 2, 6, 4, 8, … tends to infinity (it is not monotone!)",
+      "statement": "TendsToInfinity (fun n => n + 3 * (n % 2))"
+    },
+    {
+      "test": "0, 0, 2, 0, 4, 0, … does not tend to infinity (unbounded is not enough!)",
+      "statement": "TendsToInfinity (fun n => if n % 2 = 0 then n else 0)"
+    }
+  ],
   "checks": [
     {
       "lean": "example : (Nat → Nat) → Prop := L1.TendsToInfinity",

@@ -1,0 +1,34 @@
+{
+  "world": "Basics World",
+  "title": "Spot the bug",
+  "skill": "reading",
+  "public": "all",
+  "checks": [
+    {
+      "lean": "example : Nat := L23.ma\nexample : Nat := L23.mb\nexample : Nat := L23.mc",
+      "message": "Keep `ma`, `mb` and `mc` as three natural numbers (`Nat`)."
+    },
+    {
+      "lean": "example : Nat := L23.year",
+      "message": "Keep `year : Nat`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "middle",
+      "steps": [
+        "Did you try inputs in every order? The colleague probably tested `1 2 3`. What about the same three numbers in other orders?",
+        "Look at the first branch: when `a ≤ b` but not `b ≤ c`, `middle` returns `c`. Is the median always `c` then?"
+      ],
+      "hint": "`middle 2 3 1` is 1, but the median of 2, 3 and 1 is 2. So `ma = 2`, `mb = 3`, `mc = 1` works."
+    },
+    {
+      "match": "isLeap",
+      "steps": [
+        "The specification has *two* exceptions. Does the code handle both?",
+        "The code handles \"except the centuries\". What about \"except every fourth century\"?"
+      ],
+      "hint": "2000 is divisible by 400, so it was a leap year, but `isLeap 2000` is `false`."
+    }
+  ]
+}

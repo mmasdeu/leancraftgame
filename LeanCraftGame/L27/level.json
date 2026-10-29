@@ -1,0 +1,74 @@
+{
+  "world": "Predicate World",
+  "title": "Be the referee",
+  "skill": "testing",
+  "public": [
+    "good₁ tends to infinity",
+    "good₂ tends to infinity",
+    "bad₁ tends to infinity",
+    "bad₂ tends to infinity"
+  ],
+  "checks": [
+    {
+      "lean": "example : ℕ → ℕ := L27.good₁\nexample : ℕ → ℕ := L27.good₂\nexample : ℕ → ℕ := L27.bad₁\nexample : ℕ → ℕ := L27.bad₂",
+      "message": "Keep `good₁`, `good₂`, `bad₁` and `bad₂` as sequences `ℕ → ℕ`, written with `fun`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "good₁ tends",
+      "hint": "`good₁` is labelled as tending to infinity, but it does not. Every label must be honest."
+    },
+    {
+      "match": "good₂ tends",
+      "hint": "`good₂` is labelled as tending to infinity, but it does not. Every label must be honest."
+    },
+    {
+      "match": "bad₁ tends",
+      "hint": "`bad₁` is labelled as not tending to infinity, but it does. Every label must be honest."
+    },
+    {
+      "match": "bad₂ tends",
+      "hint": "`bad₂` is labelled as not tending to infinity, but it does. Every label must be honest."
+    },
+    {
+      "match": "quantifiers swapped",
+      "hint": "This mutant is false for every sequence, so it rejects any honest `good` sequence. If it survived, check that your `good` sequences really tend to infinity."
+    },
+    {
+      "match": "merely unbounded",
+      "steps": [
+        "This mutant accepts every unbounded sequence. To catch it, one of your `bad` sequences must be unbounded, and still not tend to infinity."
+      ],
+      "hint": "`fun n => if n % 2 = 0 then n else 0` (0, 0, 2, 0, 4, 0, …) is unbounded but keeps falling back to 0."
+    },
+    {
+      "match": "strictly increasing",
+      "steps": [
+        "This mutant rejects every sequence that ever stays level or goes down. Can a sequence tend to infinity while sometimes staying level?"
+      ],
+      "hint": "`fun n => n / 2` (0, 0, 1, 1, 2, 2, …) tends to infinity but is not strictly increasing: use it as a `good` sequence."
+    },
+    {
+      "match": "monotone and unbounded",
+      "steps": [
+        "This mutant rejects every sequence that ever goes down. Can a sequence tend to infinity while going down now and then?"
+      ],
+      "hint": "`fun n => n + 3 * (n % 2)` (0, 4, 2, 6, 4, 8, …) goes up and down, and tends to infinity: use it as a `good` sequence."
+    },
+    {
+      "match": "at least the identity",
+      "steps": [
+        "This mutant only accepts sequences with `n ≤ u n` for every `n`. Can a sequence tend to infinity while growing more slowly than `n`?"
+      ],
+      "hint": "`fun n => n / 2` tends to infinity, but `1 / 2 = 0` is smaller than 1."
+    },
+    {
+      "match": "eventually positive",
+      "steps": [
+        "This mutant accepts every sequence whose terms are eventually at least 1. To catch it, one of your `bad` sequences must be eventually positive, and still not tend to infinity."
+      ],
+      "hint": "A constant sequence such as `fun _ => 7` is positive but does not tend to infinity."
+    }
+  ]
+}

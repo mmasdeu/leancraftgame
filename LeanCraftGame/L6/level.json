@@ -2,6 +2,8 @@
   "world": "Basics World",
   "title": "Making choices",
   "skill": "syntax",
+  "public": "all",
+  "hintsAfter": 1,
   "checks": [
     {
       "lean": "example : Nat → Nat → Nat := L6.smallest",

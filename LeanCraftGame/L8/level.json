@@ -2,6 +2,20 @@
   "world": "Statements World",
   "title": "And",
   "skill": "syntax",
+  "predict": [
+    {
+      "test": "InRange 10 20 10 is true",
+      "statement": "InRange 10 20 10"
+    },
+    {
+      "test": "IsTeen 19 is true",
+      "statement": "IsTeen 19"
+    },
+    {
+      "test": "EvenInRange 1 10 12 is false",
+      "statement": "EvenInRange 1 10 12"
+    }
+  ],
   "checks": [
     {
       "lean": "example : Nat → Prop := L8.IsTeen",
@@ -23,6 +37,9 @@
     },
     {
       "match": "IsTeen",
+      "steps": [
+        "Check both ends: is 13 a teenager? Is 19?"
+      ],
       "hint": "You can write `13 ≤ n ∧ n ≤ 19`, or reuse the definition above: `InRange 13 19 n`."
     },
     {
@@ -35,6 +52,9 @@
     },
     {
       "match": "EvenInRange",
+      "steps": [
+        "Two conditions must hold at once. Which connective says that?"
+      ],
       "hint": "`n % 2 = 0 ∧ InRange lo hi n`."
     },
     {

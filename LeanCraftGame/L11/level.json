@@ -2,6 +2,20 @@
   "world": "Quantifiers World",
   "title": "If … then …",
   "skill": "syntax",
+  "predict": [
+    {
+      "test": "LateBig (fun n => if n < 5 then 0 else 9) is true (the first terms are 0: that is fine!)",
+      "statement": "LateBig (fun n => if n < 5 then 0 else 9)"
+    },
+    {
+      "test": "LateBig (fun n => n % 4) is false",
+      "statement": "LateBig (fun n => n % 4)"
+    },
+    {
+      "test": "EvenToEven (fun n => n + 2) is true",
+      "statement": "EvenToEven (fun n => n + 2)"
+    }
+  ],
   "checks": [
     {
       "lean": "example : (Nat → Nat) → Prop := L11.LateBig",
@@ -23,10 +37,16 @@
     },
     {
       "match": "LateBig",
+      "steps": [
+        "Read it as \"for every `n`, if `n` is at least 5, then …\"."
+      ],
       "hint": "`∀ n, 5 ≤ n → 3 ≤ u n`."
     },
     {
       "match": "EvenToEven",
+      "steps": [
+        "\"Whenever `n` is even\" is an *if*. Which arrow says that?"
+      ],
       "hint": "`∀ n, n % 2 = 0 → u n % 2 = 0`."
     },
     {

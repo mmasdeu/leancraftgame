@@ -50,8 +50,11 @@ This is the skill the game trains. You never write a proof. Instead:
 * A hidden *referee*, an automated prover, tests it. It asks questions such as
   "is 10 even?" and "is 7 even?", and tries to prove or refute each answer from your
   definition.
-* When your definition gets a question wrong, the referee shows you which one, and
-  gives you a hint.
+* When your definition gets a question wrong, the referee shows you which one.
+
+And the other way round: every world ends with a level where you **read** a
+colleague's definition, which compiles but is wrong, and *you* find the input that
+proves it.
 
 A ❌ always comes with evidence: it means the referee found a real Lean proof of the
 opposite of what you meant. The game never tells you that you are wrong without a
@@ -60,20 +63,34 @@ counterexample.
 ## How a level works
 
 1. Read the **lesson** on the left. It explains the new syntax, with an example.
-2. Complete the code in the **editor**. Some definitions are already written, to be
+2. **Predict.** In many levels, before your first run, the report asks you a few
+   questions: should *this* statement be true or false? Answer from the lesson, then
+   lock in your answers. They are marked right or wrong straight away, and they cannot
+   be changed. Predicting first is the habit the game is about: knowing what a
+   definition *should* say before you see what yours does.
+3. Complete the code in the **editor**. Some definitions are already written, to be
    read as examples. Others contain `sorry`, a placeholder meaning "to be filled in":
    replace each one with your own definition.
-3. Press **Run tests**. Each test appears in the report on the right as soon as it is
+4. Press **Run tests**. Each test appears in the report on the right as soon as it is
    done: ✅ means that the definition behaves as expected, ❌ that it does not, and
    ❓ that the referee could not decide.
-4. A run **stops at the first ❌**. Open its **Hint** if you need one. The ▶ button next
-   to a test runs only that test, which is handy once you have fixed a definition.
-5. When **every test has passed on the same code**, the level is cleared. The next one
-   unlocks. Edit your code, and the earlier results turn grey: they are about the old
-   code.
+5. **Most tests are hidden** (🔒). A hidden test shows up when it fails, so you see the
+   input that broke your definition, but not the whole list in advance. Do not wait
+   for the referee: ask yourself which inputs could break your definition.
+6. A run **stops at the first ❌**. The ▶ button next to a test runs only that test,
+   which is handy once you have fixed a definition.
+7. **Hints unlock as you go.** After two failed runs (one in the Basics world), a failing
+   test offers the first step of its hint: usually a question. Each further failed run
+   unlocks the next step, and the last step gives the answer away.
+8. When **every test has passed on the same code**, the level is cleared, every test
+   is shown, and the next one unlocks. Edit your code, and the earlier results turn
+   grey: they are about the old code.
 
 You can run the tests as often as you like. There is no penalty for a wrong answer,
-and mistakes are how this game teaches.
+and mistakes are how this game teaches. A cleared level earns up to three stars: one
+for clearing it, one for doing it without opening a hint, and one for predicting every
+statement right (or, in a level without predictions, for clearing it without a failed
+run). The menu at the top shows your best result.
 
 ## Reading Lean: five things to know
 
@@ -100,12 +117,17 @@ with the keys to type it, and a short typing drill. You can try it right now.
 
 ## The road ahead
 
+Every world ends with a **Spot the bug** level: a colleague's definitions compile
+but are wrong, and you prove it with a counterexample.
+
 * **Basics:** values, functions, choices and recursion.
 * **Statements:** true or false, and the connectives *and*, *or*, *not*.
 * **Numbers:** integers, casts, and what happens when you divide by zero.
 * **Quantifiers:** *for all*, *there exists*, *if … then …*, and why their order
   matters.
-* **Predicate:** your first real definition, of a sequence going to infinity.
+* **Predicate:** your first real definition, of a sequence going to infinity. Then
+  you swap roles with the referee: you write the tests, and it tries to slip wrong
+  definitions past them.
 * **Library:** sets, the definitions that Mathlib already has, and generality.
 * **Analysis:** the limit of a sequence of real numbers.
 * **Structure:** bundling data and axioms; finding the mistake in a colleague's

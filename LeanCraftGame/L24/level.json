@@ -1,0 +1,53 @@
+{
+  "world": "Statements World",
+  "title": "Spot the bug: connectives",
+  "skill": "reading",
+  "public": "all",
+  "checks": [
+    {
+      "lean": "example : Nat := L24.teen\nexample : Nat := L24.weekendDay\nexample : Nat := L24.oddA\nexample : Nat := L24.oddB",
+      "message": "Keep `teen`, `weekendDay`, `oddA` and `oddB` as natural numbers (`Nat`)."
+    }
+  ],
+  "hints": [
+    {
+      "match": "IsTeen accepts",
+      "steps": [
+        "Read `13 ≤ n ∨ n ≤ 19` aloud. Which numbers satisfy at least one of the two sides?"
+      ],
+      "hint": "Every number is either at least 13 or at most 19, so `IsTeen` accepts everything. Take `teen := 5`."
+    },
+    {
+      "match": "from 13 to 19",
+      "steps": [
+        "Your number is a genuine teenager. You need one that `IsTeen` accepts *and* that is outside 13 to 19."
+      ],
+      "hint": "Take a child, such as `5`, or an adult, such as `40`."
+    },
+    {
+      "match": "weekend day (6 or 7)",
+      "hint": "The weekend days are 6 and 7: `weekendDay` must be one of them."
+    },
+    {
+      "match": "IsWeekend accepts",
+      "steps": [
+        "Can a day be equal to 6 *and* to 7?"
+      ],
+      "hint": "`d = 6 ∧ d = 7` is false for every `d`, so `IsWeekend` rejects every day. Both 6 and 7 work."
+    },
+    {
+      "match": "BothOdd accepts",
+      "steps": [
+        "Put in the parentheses that Lean puts in: `¬` binds tighter than `∧`. What does the right-hand side `b % 2 = 0` say about `b`?"
+      ],
+      "hint": "`BothOdd a b` means `(¬ a % 2 = 0) ∧ (b % 2 = 0)`: `a` odd and `b` *even*. Take `oddA := 1`, `oddB := 2`."
+    },
+    {
+      "match": "both odd",
+      "steps": [
+        "Your two numbers are both odd, so they do not show the bug. Which pairs does `BothOdd` accept?"
+      ],
+      "hint": "Take `a` odd and `b` even, such as 1 and 2."
+    }
+  ]
+}

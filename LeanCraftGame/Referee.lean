@@ -241,10 +241,29 @@ partial def solve (fuel : Nat) (strong : Bool := false) : TacticM Unit := do
               return true
             catch _ => s.restore
       return false
+    -- use a negated hypothesis `h : ¬ Q` to close `False`: it is enough to prove `Q`.
+    -- The hypothesis is cleared on that branch, so the move cannot repeat itself.
+    let tryNegHyp : TacticM Bool := do
+      unless tgt.isConstOf ``False do return false
+      for d in (← g.getDecl).lctx do
+        if d.isImplementationDetail then continue
+        let ty ← whnfR d.type
+        let some q := ty.not? | continue
+        let s ← saveState
+        try
+          let m ← mkFreshExprSyntheticOpaqueMVar q
+          g.assign (mkApp d.toExpr m)
+          let m' ← m.mvarId!.clear d.fvarId
+          setGoals [m']
+          solve (fuel - 1) strong
+          return true
+        catch _ => s.restore
+      return false
     if ← trySpecialize false then return
     if ← tryWitnesses false then return
     if ← tryWitnesses true then return
     if ← trySpecialize true then return
+    if ← tryNegHyp then return
     throwError "search failed"
 
 /-- One attempt: prove `P` after unfolding the given definitions (throws on failure). -/
@@ -275,6 +294,10 @@ syntax (name := expectTrue) "#expect_true " str (unfoldClause)? " : " term : com
 syntax (name := expectFalse) "#expect_false " str (unfoldClause)? " : " term : command
 /-- `#expect_open "name" : P` — neither `P` nor `¬P` should be easy. -/
 syntax (name := expectOpen) "#expect_open " str (unfoldClause)? " : " term : command
+/-- `#expect_caught "name" : P` — a mutation test. `P` says that a wrong definition
+(a *mutant*) agrees with every probe of the player's test suite. It should be false:
+then some probe catches the mutant. -/
+syntax (name := expectCaught) "#expect_caught " str (unfoldClause)? " : " term : command
 
 def getUnfolds : Option (TSyntax ``unfoldClause) → Array Ident
   | some stx => match stx with
@@ -323,6 +346,10 @@ def runTest (name : String) (t : Term) (unfolds : Array Ident) (mode : Nat) : Co
   | 1, false, true => bump 0; logInfo m!"✅ {name}"
   | 1, true, _ => bump 1; logWarning m!"❌ {name}\n   This should be FALSE, but the referee PROVED it under your definition."
   | 1, false, false => bump 2; logWarning m!"❓ {name}\n   The referee could not settle this (neither proved nor refuted)."
+  -- a mutant should be caught (`P`, "the mutant agrees with every probe", is false)
+  | 3, false, true => bump 0; logInfo m!"✅ {name}\n   (one of your probes tells it apart from the right definition)"
+  | 3, true, _ => bump 1; logWarning m!"❌ {name}\n   This wrong definition SURVIVES: it gives the right verdict on every one of your probes, so your tests cannot tell it apart from the right definition."
+  | 3, false, false => bump 2; logWarning m!"❓ {name}\n   The referee could not settle whether one of your probes catches this mutant."
   -- should be open
   | _, false, false => bump 0; logInfo m!"✅ {name}\n   (the referee could not settle it, as expected)"
   | _, true, _ => bump 1; logWarning m!"❌ {name}\n   The referee PROVED this. A famous open problem should not be this easy: your statement is probably vacuous."
@@ -332,6 +359,7 @@ elab_rules : command
   | `(#expect_true $n:str $[$u]? : $t) => runTest n.getString t (getUnfolds u) 0
   | `(#expect_false $n:str $[$u]? : $t) => runTest n.getString t (getUnfolds u) 1
   | `(#expect_open $n:str $[$u]? : $t) => runTest n.getString t (getUnfolds u) 2
+  | `(#expect_caught $n:str $[$u]? : $t) => runTest n.getString t (getUnfolds u) 3
 
 /-! ## Model tests for structures
 

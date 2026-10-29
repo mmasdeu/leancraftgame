@@ -2,6 +2,16 @@
   "world": "Analysis World",
   "title": "Limits",
   "skill": "writing",
+  "predict": [
+    {
+      "test": "7, 7, 7, 7, 7, 0, 0, 0, … converges to 0",
+      "statement": "ConvergesTo (fun n => if n < 5 then 7 else 0) 0"
+    },
+    {
+      "test": "0, 1, 0, 1, … does not converge to 0",
+      "statement": "ConvergesTo (fun n => if n % 2 = 0 then 0 else 1) 0"
+    }
+  ],
   "checks": [
     {
       "lean": "example : (ℕ → ℝ) → ℝ → Prop := L22.ConvergesTo",
@@ -23,6 +33,10 @@
     },
     {
       "match": "",
+      "steps": [
+        "Read your definition aloud, and compare it with the sentence in the lesson, clause by clause.",
+        "Check the three mistakes listed under \"What can go wrong\" in the lesson."
+      ],
       "hint": "`∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - a| < ε`."
     }
   ]

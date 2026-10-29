@@ -2,6 +2,20 @@
   "world": "Statements World",
   "title": "Or and not",
   "skill": "syntax",
+  "predict": [
+    {
+      "test": "FreeTicket 65 is true",
+      "statement": "FreeTicket 65"
+    },
+    {
+      "test": "FreeTicket 5 is false",
+      "statement": "FreeTicket 5"
+    },
+    {
+      "test": "NotTiny 1 is false",
+      "statement": "NotTiny 1"
+    }
+  ],
   "checks": [
     {
       "lean": "example : Nat → Prop := L9.FreeTicket",
@@ -39,14 +53,23 @@
     },
     {
       "match": "FreeTicket",
+      "steps": [
+        "Who gets a free ticket: children, *or* seniors? Which connective is that?"
+      ],
       "hint": "`age < 5 ∨ 65 ≤ age`."
     },
     {
       "match": "PaysFull",
+      "steps": [
+        "Paying full is the opposite of a free ticket. Can you reuse `FreeTicket`?"
+      ],
       "hint": "`¬ FreeTicket age`."
     },
     {
       "match": "NotTiny",
+      "steps": [
+        "Is `n ≠ 0 ∨ n ≠ 1` ever false? Try `n = 0` and `n = 1`."
+      ],
       "hint": "`¬ (n = 0 ∨ n = 1)`, or `n ≠ 0 ∧ n ≠ 1`. Careful with the parentheses and with `∧` versus `∨`."
     },
     {

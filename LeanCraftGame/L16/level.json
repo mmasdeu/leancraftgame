@@ -2,6 +2,16 @@
   "world": "Numbers World",
   "title": "Integers and casts",
   "skill": "syntax",
+  "predict": [
+    {
+      "test": "diff 3 5 = -2",
+      "statement": "diff 3 5 = -2"
+    },
+    {
+      "test": "IsNegative 0 is false",
+      "statement": "IsNegative 0"
+    }
+  ],
   "checks": [
     {
       "lean": "example : ℕ → ℕ → ℤ := L16.diff",
@@ -23,6 +33,9 @@
     },
     {
       "match": "diff",
+      "steps": [
+        "Where does your subtraction happen: in ℕ, or in ℤ?"
+      ],
       "hint": "`(a : ℤ) - (b : ℤ)`."
     },
     {
@@ -31,6 +44,9 @@
     },
     {
       "match": "distance",
+      "steps": [
+        "What does `.toNat` do to a negative number?"
+      ],
       "hint": "`(a - b).natAbs`."
     },
     {
@@ -39,6 +55,9 @@
     },
     {
       "match": "IsNegative",
+      "steps": [
+        "Is 0 negative?"
+      ],
       "hint": "`x < 0`."
     },
     {

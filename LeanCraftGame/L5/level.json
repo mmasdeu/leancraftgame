@@ -2,6 +2,8 @@
   "world": "Basics World",
   "title": "Functions",
   "skill": "syntax",
+  "public": "all",
+  "hintsAfter": 1,
   "checks": [
     {
       "lean": "example : Nat → Nat := L5.double",

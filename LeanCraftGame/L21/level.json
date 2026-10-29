@@ -2,6 +2,16 @@
   "world": "Library World",
   "title": "Generality",
   "skill": "writing",
+  "predict": [
+    {
+      "test": "Between (2 : ℕ) 5 5 is true",
+      "statement": "Between (2 : ℕ) 5 5"
+    },
+    {
+      "test": "IsUpperBound {x : ℤ | x < 5} 3 is false",
+      "statement": "IsUpperBound {x : ℤ | x < 5} 3"
+    }
+  ],
   "checks": [
     {
       "lean": "example : ℤ → ℤ → ℤ → Prop := L21.Between",
@@ -31,14 +41,23 @@
     },
     {
       "match": "Between",
+      "steps": [
+        "Replace `ℕ` by a type variable, and ask for an order on it."
+      ],
       "hint": "`def Between {α : Type*} [Preorder α] (a b x : α) : Prop := a ≤ x ∧ x ≤ b`."
     },
     {
       "match": "IsUpperBound",
+      "steps": [
+        "Every `ℕ` must become `α`, also the one inside `Set`."
+      ],
       "hint": "Replace `ℕ` by `α` everywhere, including in `Set α`, and add `{α : Type*} [Preorder α]`."
     },
     {
       "match": "largest",
+      "steps": [
+        "An `if` has to *decide* `a ≤ b`. Which class makes that possible?"
+      ],
       "hint": "An `if` needs to decide `a ≤ b`: use `[LinearOrder α]`."
     },
     {

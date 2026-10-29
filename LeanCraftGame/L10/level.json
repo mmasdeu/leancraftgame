@@ -2,6 +2,20 @@
   "world": "Quantifiers World",
   "title": "For all",
   "skill": "syntax",
+  "predict": [
+    {
+      "test": "AlwaysBelow (fun _ => 4) 4 is true",
+      "statement": "AlwaysBelow (fun _ => 4) 4"
+    },
+    {
+      "test": "AlwaysBelow (fun n => n % 3) 1 is false",
+      "statement": "AlwaysBelow (fun n => n % 3) 1"
+    },
+    {
+      "test": "AllEven (fun _ => 0) is true",
+      "statement": "AllEven (fun _ => 0)"
+    }
+  ],
   "checks": [
     {
       "lean": "example : (Nat → Nat) → Nat → Prop := L10.AlwaysBelow",
@@ -15,10 +29,16 @@
   "hints": [
     {
       "match": "AlwaysBelow",
+      "steps": [
+        "Read the comment again: for *every* `n`, …"
+      ],
       "hint": "`∀ n, u n ≤ B`: for every `n`, the term `u n` is at most `B`."
     },
     {
       "match": "AllEven",
+      "steps": [
+        "Which quantifier says \"every term\"?"
+      ],
       "hint": "`∀ n, u n % 2 = 0`."
     },
     {

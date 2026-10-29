@@ -2,6 +2,16 @@
   "world": "Structure World",
   "title": "Your first structure",
   "skill": "writing",
+  "predict": [
+    {
+      "test": "Interval [5, 5] is an interval",
+      "statement": "an Interval with lo = 5 and hi = 5"
+    },
+    {
+      "test": "0 is not a positive number",
+      "statement": "a PosNat with val = 0"
+    }
+  ],
   "checks": [
     {
       "lean": "example := fun (a b : Nat) => L14.Interval.mk a b",

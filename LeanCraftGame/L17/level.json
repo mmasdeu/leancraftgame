@@ -2,6 +2,20 @@
   "world": "Numbers World",
   "title": "Division by zero",
   "skill": "writing",
+  "predict": [
+    {
+      "test": "IsHalf 6 3 is true",
+      "statement": "IsHalf 6 3"
+    },
+    {
+      "test": "IsReciprocal 0 0 is false (0 has no reciprocal)",
+      "statement": "IsReciprocal 0 0"
+    },
+    {
+      "test": "HasSlope 1 2 1 2 0 is false (one point does not determine a line)",
+      "statement": "HasSlope 1 2 1 2 0"
+    }
+  ],
   "checks": [
     {
       "lean": "example : ℚ → ℚ → ℚ := L17.average",
@@ -23,6 +37,9 @@
     },
     {
       "match": "average",
+      "steps": [
+        "Which binds tighter, `/` or `+`?"
+      ],
       "hint": "`(a + b) / 2`."
     },
     {
@@ -31,6 +48,9 @@
     },
     {
       "match": "IsReciprocal",
+      "steps": [
+        "What is `1 / 0` in Lean?"
+      ],
       "hint": "`x * y = 1`."
     },
     {
@@ -43,6 +63,9 @@
     },
     {
       "match": "HasSlope",
+      "steps": [
+        "What happens to your definition when `x₁ = x₂`?"
+      ],
       "hint": "`x₁ ≠ x₂ ∧ m * (x₂ - x₁) = y₂ - y₁`."
     },
     {

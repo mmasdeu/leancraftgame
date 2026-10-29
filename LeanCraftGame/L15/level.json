@@ -2,6 +2,8 @@
   "world": "Basics World",
   "title": "Recursion",
   "skill": "syntax",
+  "public": "all",
+  "hintsAfter": 1,
   "checks": [
     {
       "lean": "example : Nat → Nat := L15.sumTo",

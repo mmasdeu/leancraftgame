@@ -315,7 +315,7 @@ function renderTabs() {
     if (l.world !== world) { world = l.world; html += `<span class="world-label">${esc(world)}</span>`; }
     html += `<button class="level-tab${level && l.id === level.id ? " active" : ""}" data-id="${l.id}"
       title="Level ${l.num} · ${esc(l.title)} (${esc(l.skill)})"><span class="num">${l.num}</span>
-      <span class="ttl">${esc(l.title)}</span>${cleared.includes(l.id) ? '<span class="done" title="cleared">✓</span>' : ""}</button>`;
+      <span class="ttl">${esc(l.title)}</span>${cleared.includes(l.id) ? doneMark(l.id) : ""}</button>`;
   }
   $("levels").innerHTML = html;
   for (const b of $("levels").querySelectorAll("button"))
@@ -358,6 +358,8 @@ async function openLevel(id) {
   diagnostics = [];
   render();
   $("diagnostics").innerHTML = "";
+  openHints = new Set();
+  draftPredictions = {};
   resetReport();
 }
 
@@ -371,6 +373,155 @@ $("reset").onclick = () => {
   updateSummary();
 };
 
+/* ------------------------------------------------------------ predict first, hidden tests, hints */
+
+/* Three mechanics keep the player thinking about the *meaning* of a definition, instead of
+   turning the test list green by trial and error:
+
+   * Predictions (`predict` in level.json): before the first run of a level, the player says
+     whether a few statements should be true or false. The answers lock in, and are marked
+     right or wrong; those tests then stay visible.
+   * Hidden tests: apart from the predicted ones and those listed in `public` (or every test
+     with `"public": "all"`), a test is hidden until it fails or comes back ❓, and every
+     test is shown once the level is cleared.
+   * Gated hints: hints unlock after `hintsAfter` failed runs (default 2), one step at a
+     time: each further failed run unlocks the next step of the hint (its `steps`, then the
+     `hint` itself).
+
+   Clearing a level earns up to three stars: one for clearing it, one for not opening a hint,
+   and one for predicting every statement right (or, in a level without predictions, for
+   clearing it without a failed run). The best result is kept. */
+
+const levelKey = (what) => `${what}.${level.id}`;
+let draftPredictions = {};             // choices made but not locked in yet
+let openHints = new Set();             // tests whose hint is open, kept across re-renders
+
+const probes = () => level.predict || [];
+const predictions = () => store.get(levelKey("predict"), null);      // {test: bool} | "skipped" | null
+const predictionsPending = () => probes().length > 0 && predictions() === null;
+const isModelKind = (kind) => kind === "expect_model" || kind === "expect_not_model";
+const expectedTrue = (kind) => kind === "expect_true" || kind === "expect_model";
+
+function isCleared(id) { return store.get("cleared", []).includes(id); }
+
+function revealed() { return new Set(store.get(levelKey("revealed"), [])); }
+function reveal(name) {
+  const r = revealed();
+  if (!r.has(name)) store.set(levelKey("revealed"), [...r, name]);
+}
+
+/* Is the test shown in the report? */
+function isVisible(t) {
+  if (level.public === "all" || isCleared(level.id)) return true;
+  if ((level.public || []).includes(t.name)) return true;
+  if (probes().some((p) => p.test === t.name)) return !predictionsPending();
+  return revealed().has(t.name);
+}
+
+/* The prediction for a probe test: null when there is none, else { said, right }. */
+function predictionFor(t) {
+  const p = predictions();
+  if (!p || p === "skipped" || !(t.name in p)) return null;
+  return { said: p[t.name], right: p[t.name] === expectedTrue(t.kind) };
+}
+
+function allPredictionsRight() {
+  const p = predictions();
+  if (!p || p === "skipped") return false;
+  return probes().every((q) => {
+    const t = tests.find((x) => x.name === q.test);
+    return t && p[q.test] === expectedTrue(t.kind);
+  });
+}
+
+function renderPredict() {
+  const box = $("predict");
+  if (!level || !predictionsPending()) { box.hidden = true; box.innerHTML = ""; return; }
+  box.hidden = false;
+  const rows = probes().map((q, i) => {
+    const t = tests.find((x) => x.name === q.test);
+    const [yes, no] = isModelKind(t.kind) ? ["allowed", "not allowed"] : ["true", "false"];
+    const pick = draftPredictions[q.test];
+    const btn = (val, label) => `<button class="choice${pick === val ? " picked" : ""}" data-i="${i}" data-v="${val}"
+      aria-pressed="${pick === val}">${label}</button>`;
+    return `<li><span class="statement">${nameToHtml(q.statement)}</span>
+      <span class="choices">${btn(true, yes)}${btn(false, no)}</span></li>`;
+  }).join("");
+  const ready = probes().every((q) => q.test in draftPredictions);
+  box.innerHTML = `<h3>Before you run: predict</h3>
+    <p class="muted">For each statement, what should the answer be, if the definitions mean what the
+      lesson says? Your answers lock in when you confirm them, and the referee then checks your
+      definitions on exactly these statements, among others.</p>
+    <ol class="probes">${rows}</ol>
+    <div class="predict-buttons"><button class="quiet" id="predict-skip">Skip (no ★ for predictions)</button>
+      <button class="primary" id="predict-lock"${ready ? "" : " disabled"}>Lock in my predictions</button></div>`;
+  for (const b of box.querySelectorAll("button.choice"))
+    b.onclick = () => {
+      draftPredictions[probes()[Number(b.dataset.i)].test] = b.dataset.v === "true";
+      renderPredict();
+    };
+  $("predict-lock").onclick = () => { store.set(levelKey("predict"), { ...draftPredictions }); afterPredict(); };
+  $("predict-skip").onclick = () => { store.set(levelKey("predict"), "skipped"); afterPredict(); };
+}
+
+function afterPredict() {
+  renderPredict();
+  renderTests();
+  const p = predictions(), wrong = p && p !== "skipped" ? probes().filter((q) => {
+    const t = tests.find((x) => x.name === q.test);
+    return p[q.test] !== expectedTrue(t.kind);
+  }).length : 0;
+  updateSummary(p === "skipped" ? "" : wrong
+    ? `${wrong === 1 ? "One prediction was" : `${wrong} predictions were`} wrong: see ✗ below. Re-read the lesson before you write your definition.`
+    : "All your predictions are right. Now make your definition agree with them.");
+}
+
+/* Hints: the tiers of the first hint that matches the test, and how many are unlocked. */
+function hintFor(name) {
+  const h = level.hints.find((h) => name.includes(h.match));
+  return h ? [...(h.steps || []), h.hint] : null;
+}
+const failedRuns = () => store.get(levelKey("failedRuns"), 0);
+const hintsAfter = () => level.hintsAfter ?? 2;
+const tiersUnlocked = () => Math.max(0, failedRuns() - hintsAfter() + 1);
+
+function hintHtml(t) {
+  const tiers = hintFor(t.name);
+  if (!tiers) return "";
+  const k = Math.min(tiers.length, tiersUnlocked());
+  if (k === 0) {
+    const more = hintsAfter() - failedRuns();
+    return `<div class="hint-locked">🔒 A hint unlocks after ${more === 1 ? "one more failed run" : `${more} more failed runs`}.
+      Until then: which input would show what is wrong?</div>`;
+  }
+  const label = tiers.length > 1 ? `Hint (${k} of ${tiers.length})` : "Hint";
+  const items = tiers.slice(0, k).map((h) => `<li>${inline(h)}</li>`).join("");
+  const more = k < tiers.length ? '<p class="muted">The next step of this hint unlocks after your next failed run.</p>' : "";
+  return `<details data-name="${esc(t.name)}"${openHints.has(t.name) ? " open" : ""}><summary>${label}</summary>
+    <ol class="hint-steps">${items}</ol>${more}</details>`;
+}
+
+/* Stars for the current state of the level; the best ever is kept in `stars.<id>`. */
+function starFlags() {
+  return { noHints: !store.get(levelKey("hintsOpened"), false),
+           sharp: probes().length ? allPredictionsRight() : failedRuns() === 0 };
+}
+function starsNow() {
+  const f = starFlags();
+  return 1 + f.noHints + f.sharp;
+}
+function doneMark(id) {
+  const n = store.get(`stars.${id}`, 0);
+  return n ? `<span class="done" title="cleared, ${n} of 3 stars">${"★".repeat(n)}${"☆".repeat(3 - n)}</span>`
+    : '<span class="done" title="cleared">✓</span>';
+}
+function starsLine() {
+  const f = starFlags();
+  const item = (got, what) => `<li class="${got ? "got" : ""}">${got ? "★" : "☆"} ${what}</li>`;
+  return `<ul class="stars">${item(true, "level cleared")}${item(f.noHints, "no hint opened")}${
+    item(f.sharp, probes().length ? "every prediction right" : "cleared without a failed run")}</ul>`;
+}
+
 /* ------------------------------------------------------------ report */
 
 /* Each test remembers the code its result was computed for (`t.code`). A result only
@@ -380,6 +531,7 @@ $("reset").onclick = () => {
 const KIND = {
   expect_true: "should hold", expect_false: "should fail", expect_open: "should stay open",
   expect_model: "should be a model", expect_not_model: "should not be a model",
+  expect_caught: "should be caught",
 };
 const ICON = { pass: "✅", fail: "❌", unknown: "❓", error: "⚠️" };
 let tests = [], ticker = null, controller = null;
@@ -410,14 +562,11 @@ function setSummary(cls, html) {
   $("summary").innerHTML = html;
 }
 
-function hintFor(name) {
-  const h = level.hints.find((h) => name.includes(h.match));
-  return h ? h.hint : null;
-}
-
 function renderTests() {
   const busy = controller !== null || !setupReady;
-  $("tests").innerHTML = tests.map((t) => {
+  renderPredict();
+  const hidden = tests.filter((t) => !isVisible(t));
+  $("tests").innerHTML = tests.filter(isVisible).map((t) => {
     const v = view(t);
     let icon = "○", time = "", title = "not run on the current code";
     if (v === "running") { icon = '<span class="spin"></span>'; time = ((Date.now() - t.started) / 1000).toFixed(0) + " s"; title = "running"; }
@@ -425,17 +574,41 @@ function renderTests() {
     else if (ICON[v]) { icon = ICON[v]; time = t.cached ? "cached" : t.seconds + " s"; title = ""; }
     else if (v === "skipped") { icon = "–"; title = "not run: the run stopped at the first failure"; }
     const shown = ICON[v] || v === "skipped";
-    const hint = (v === "fail" || v === "unknown") && hintFor(t.name);
+    const hint = (v === "fail" || v === "unknown") ? hintHtml(t) : "";
+    const p = predictionFor(t);
+    const yes = isModelKind(t.kind) ? "allowed" : "true", no = isModelKind(t.kind) ? "not allowed" : "false";
+    const said = p && `<div class="prediction ${p.right ? "right" : "wrong"}">You predicted <b>${p.said ? yes : no}</b>
+      ${p.right ? "✓" : `✗: the intended answer is <b>${p.said ? no : yes}</b>.`}
+      ${p.right && v === "fail" ? " You knew the answer; your definition does not say it yet." : ""}</div>`;
     return `<li class="test ${v}">
       <div class="row"><span class="icon" title="${title}">${icon}</span><span class="name">${nameToHtml(t.name)}</span>
         <span class="kind">${KIND[t.kind] || ""}</span><span class="time">${time}</span>
         <button class="run1" data-id="${t.id}" title="Run only this test on the current code"${busy ? " disabled" : ""}>▶</button></div>
+      ${said || ""}
       ${shown && t.detail ? `<div class="detail">${esc(t.detail)}</div>` : ""}
-      ${hint ? `<details><summary>Hint</summary>${inline(hint)}</details>` : ""}
+      ${hint}
     </li>`;
-  }).join("");
+  }).join("") + hiddenRow(hidden);
+  for (const d of $("tests").querySelectorAll("details[data-name]"))
+    d.addEventListener("toggle", () => {
+      if (d.open) { openHints.add(d.dataset.name); store.set(levelKey("hintsOpened"), true); }
+      else openHints.delete(d.dataset.name);
+    });
   for (const b of $("tests").querySelectorAll("button.run1"))
     b.onclick = () => runTests([Number(b.dataset.id)]);
+}
+
+/* One row standing for the tests that are still hidden. */
+function hiddenRow(hidden) {
+  if (!hidden.length) return "";
+  const vs = hidden.map(view), n = (s) => vs.filter((v) => v === s).length;
+  const busy = n("running") + n("queued");
+  const parts = [n("pass") && `${n("pass")} ✅`, busy && `${busy} running`,
+    hidden.length - n("pass") - busy > 0 && `${hidden.length - n("pass") - busy} not run on this code`].filter(Boolean);
+  return `<li class="test hidden-tests"><div class="row"><span class="icon">🔒</span>
+    <span class="name">${hidden.length === 1 ? "1 hidden test" : `${hidden.length} hidden tests`}</span>
+    <span class="kind">${parts.join(" · ")}</span></div>
+    <div class="detail">A hidden test shows up when it fails. Do not wait for it: which inputs could break your definition?</div></li>`;
 }
 
 /* The summary box, from the results that hold for the current code. */
@@ -448,10 +621,14 @@ function updateSummary(note = "") {
   const line = `<div class="score">${passed}/${total} passed on this code</div>`;
   const pre = note ? note + "<br>" : "";
   if (passed === total) {
-    const cleared = store.get("cleared", []);
-    if (!cleared.includes(level.id)) { store.set("cleared", [...cleared, level.id]); renderTabs(); }
+    const cleared = store.get("cleared", []), n = starsNow();
+    const wasHidden = tests.some((t) => !isVisible(t));
+    if (!cleared.includes(level.id)) store.set("cleared", [...cleared, level.id]);
+    if (n > store.get(levelKey("stars"), 0)) store.set(levelKey("stars"), n);
+    renderTabs();
+    if (wasHidden) renderTests();          // a cleared level shows every test
     const next = levels[levels.findIndex((l) => l.id === level.id) + 1];
-    setSummary("cleared", `🏆 <b>Level cleared, ${esc(playerName())}!</b> Every test passed on this code.${line}` +
+    setSummary("cleared", `🏆 <b>Level cleared, ${esc(playerName())}!</b> Every test passed on this code.${line}${starsLine()}` +
       (next ? `<button class="primary" id="next">Next: ${esc(next.title)} →</button>` : `You have cleared the last level. Well done, ${esc(playerName())}!`));
     if (next) $("next").onclick = () => openLevel(next.id);
   } else if (failed) {
@@ -488,9 +665,16 @@ function showCompile(c) {
    the first failure; a single test always runs to the end. */
 async function runTests(ids = null) {
   if (!setupReady) return;
+  if (predictionsPending()) {
+    updateSummary("<b>Predict first.</b> Lock in your predictions above (or skip them): they cannot be changed once you have seen the referee's verdicts.");
+    $("predict").classList.remove("flash");
+    void $("predict").offsetWidth;                 // restart the animation
+    $("predict").classList.add("flash");
+    return;
+  }
   stopRun();
   const code = src.value, ctl = (controller = new AbortController());
-  let run = [], outcome = null;
+  let run = [], outcome = null, failedThisRun = false;
   $("run").hidden = true;
   $("stop").hidden = false;
   $("diagnostics").innerHTML = "";
@@ -510,6 +694,7 @@ async function runTests(ids = null) {
       Object.assign(tests[data.id], { state: "running", started: Date.now() });
     } else if (event === "result") {
       Object.assign(tests[data.id], { state: data.status, detail: data.detail, seconds: data.seconds, cached: data.cached, code });
+      if (data.status !== "pass") { reveal(tests[data.id].name); failedThisRun = true; }
       progress(run);
     } else if (event === "skipped") {
       Object.assign(tests[data.id], { state: "skipped", detail: "", code });
@@ -551,6 +736,11 @@ async function runTests(ids = null) {
   }
   if (controller !== ctl) return;           // superseded or stopped
   if (outcome === null) outcome = "The run ended unexpectedly. Check the server's terminal.";
+  if (failedThisRun) {
+    const before = tiersUnlocked();
+    store.set(levelKey("failedRuns"), failedRuns() + 1);
+    if (tiersUnlocked() > before) outcome += (outcome ? " " : "") + "A new hint step has unlocked.";
+  }
   endRun();
   saveResults();
   renderTests();

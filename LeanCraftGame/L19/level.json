@@ -2,6 +2,20 @@
   "world": "Library World",
   "title": "Sets",
   "skill": "syntax",
+  "predict": [
+    {
+      "test": "0 ∈ multiplesOf 5 is true",
+      "statement": "0 ∈ multiplesOf 5"
+    },
+    {
+      "test": "BoundedSet ∅ is true",
+      "statement": "BoundedSet ∅"
+    },
+    {
+      "test": "evens ⊆ multiplesOf 4 is false",
+      "statement": "evens ⊆ multiplesOf 4"
+    }
+  ],
   "checks": [
     {
       "lean": "example : ℕ → Set ℕ := L19.multiplesOf",
@@ -19,6 +33,9 @@
     },
     {
       "match": "multiplesOf",
+      "steps": [
+        "Is `n` divided by `k`, or `k` by `n`?"
+      ],
       "hint": "`{n | n % k = 0}`."
     },
     {
@@ -27,6 +44,9 @@
     },
     {
       "match": "BoundedSet",
+      "steps": [
+        "Does the bound `B` come before the element, or after it?"
+      ],
       "hint": "`∃ B, ∀ n ∈ s, n ≤ B`."
     },
     {

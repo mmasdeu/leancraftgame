@@ -2,6 +2,16 @@
   "world": "Quantifiers World",
   "title": "There exists",
   "skill": "syntax",
+  "predict": [
+    {
+      "test": "HasZero (fun n => n % 3) is true",
+      "statement": "HasZero (fun n => n % 3)"
+    },
+    {
+      "test": "HasEvenBig (fun n => if n = 0 then 4 else 11) is false (4 is even, 11 is big, but no term is both)",
+      "statement": "HasEvenBig (fun n => if n = 0 then 4 else 11)"
+    }
+  ],
   "checks": [
     {
       "lean": "example : (Nat → Nat) → Prop := L12.HasZero",
@@ -15,6 +25,9 @@
   "hints": [
     {
       "match": "HasZero",
+      "steps": [
+        "\"Some term is 0\": which quantifier?"
+      ],
       "hint": "`∃ n, u n = 0`."
     },
     {
@@ -27,6 +40,9 @@
     },
     {
       "match": "HasEvenBig",
+      "steps": [
+        "Both properties are about the *same* term. How many `∃` do you need?"
+      ],
       "hint": "`∃ n, u n % 2 = 0 ∧ 10 ≤ u n`."
     },
     {

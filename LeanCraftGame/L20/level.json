@@ -2,6 +2,20 @@
   "world": "Library World",
   "title": "Using Mathlib",
   "skill": "writing",
+  "predict": [
+    {
+      "test": "CommonDivisor 5 0 0 is true",
+      "statement": "CommonDivisor 5 0 0"
+    },
+    {
+      "test": "TwinPrime 2 is false",
+      "statement": "TwinPrime 2"
+    },
+    {
+      "test": "OneToOne (fun n => n / 2) is false",
+      "statement": "OneToOne (fun n => n / 2)"
+    }
+  ],
   "checks": [
     {
       "lean": "example : ℕ → Prop := L20.TwinPrime",
@@ -27,6 +41,9 @@
     },
     {
       "match": "TwinPrime",
+      "steps": [
+        "*Both* numbers must be prime."
+      ],
       "hint": "`Nat.Prime p ∧ Nat.Prime (p + 2)`, or `p.Prime ∧ (p + 2).Prime`."
     },
     {
@@ -35,6 +52,9 @@
     },
     {
       "match": "CommonDivisor",
+      "steps": [
+        "`d ∣ a` reads \"d divides a\"."
+      ],
       "hint": "`d ∣ a ∧ d ∣ b`, with the divides symbol `\\|`."
     },
     {
@@ -43,6 +63,9 @@
     },
     {
       "match": "OneToOne",
+      "steps": [
+        "Which Mathlib name means \"no two inputs give the same output\"?"
+      ],
       "hint": "`Function.Injective f`."
     },
     {

@@ -300,3 +300,32 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
 .name-dialog input { width: 100%; box-sizing: border-box; margin: 8px 0 14px; padding: 8px 10px; font: inherit; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--fg); }
 .name-buttons { display: flex; gap: 8px; justify-content: flex-end; }
 .whoami { color: var(--muted); margin: 0 0 8px; }
+
+/* predict first */
+.predict { border: 1px solid var(--accent); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+.predict h3 { margin: 0 0 4px; font-size: 16px; }
+.predict p { margin: 0 0 8px; font-size: 14px; }
+.predict .probes { margin: 0; padding-left: 1.4em; }
+.predict .probes li { padding: 6px 0; border-top: 1px solid var(--border); }
+.predict .probes li:first-child { border-top: 0; }
+.predict .statement { display: block; margin-bottom: 4px; }
+.predict .choices { display: inline-flex; gap: 6px; }
+.predict .choice { padding: 2px 10px; }
+.predict .choice.picked { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.predict .predict-buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+.predict.flash { animation: flash 0.9s ease-out 2; }
+@keyframes flash { 50% { box-shadow: 0 0 0 4px var(--accent); } }
+.test .prediction { margin: 4px 0 0 2.1em; font-size: 14px; }
+.test .prediction.right { color: var(--pass); }
+.test .prediction.wrong { color: var(--fail); }
+
+/* hidden tests and gated hints */
+.test.hidden-tests .name { color: var(--muted); }
+.test .hint-locked { margin: 6px 0 0 2.1em; font-size: 14px; color: var(--muted); }
+.test .hint-steps { margin: 4px 0 0; padding-left: 1.4em; }
+.test .hint-steps li { margin: 2px 0; }
+
+/* stars */
+.summary .stars { list-style: none; margin: 6px 0 0; padding: 0; font-size: 14px; color: var(--muted); }
+.summary .stars li.got { color: inherit; }
+.level-tab .done { letter-spacing: -1px; }

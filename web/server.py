@@ -35,7 +35,15 @@ RUNS = WORK / "runs"
 CACHE_FILE = WORK / "cache.json"
 # Levels in the order they are played. The numbers are directory names (LeanCraftGame/L<n>);
 # the number shown to the player is the position in this list.
-LEVELS = [4, 5, 6, 15, 7, 8, 9, 16, 17, 10, 11, 12, 13, 18, 1, 19, 20, 21, 22, 14, 2, 3]
+LEVELS = [4, 5, 6, 15, 23,             # Basics
+          7, 8, 9, 24,                 # Statements
+          16, 17, 25,                  # Numbers
+          10, 11, 12, 13, 18, 26,      # Quantifiers
+          1, 27,                       # Predicate
+          19, 20, 21, 28,              # Library
+          22, 29,                      # Analysis
+          14, 2,                       # Structure
+          3]                           # Faithfulness
 LEAN_ENV = {}       # environment for running Lean (LEAN, LEAN_PATH, …), see prepare_lean()
 # The app's first-launch setup (an object with status() and retry()), or None when the
 # server runs from a checkout and Lean is ready from the start.
@@ -91,9 +99,51 @@ def load_level(n):
             **split_tests((d / "Tests.lean").read_text(encoding="utf-8"))}
 
 
+# What the browser needs to know about a level, besides its tests. `predict`, `public` and
+# `hintsAfter` drive the predictions, the hidden tests and the hint gates (see
+# validate_level and web/static/app.js).
+PUBLIC_KEYS = ("id", "num", "world", "title", "skill", "intro", "template", "hints",
+               "predict", "public", "hintsAfter")
+
+
 def public_level(lv):
-    return {k: lv[k] for k in ("id", "num", "world", "title", "skill", "intro", "template", "hints")} | {
+    return {k: lv[k] for k in PUBLIC_KEYS if k in lv} | {
         "tests": [{"id": i, "name": t["name"], "kind": t["kind"]} for i, t in enumerate(lv["tests"])]}
+
+
+def validate_level(lv):
+    """Problems with a level's metadata (level.json against Tests.lean), as strings.
+
+    * `predict`: [{"test": name, "statement": text}], tests the player must predict before
+      the first run. They must be true/false or model tests, not open ones.
+    * `public`: "all", or a list of test names shown from the start. Every other test is
+      hidden until it fails, or until the level is cleared.
+    * `hintsAfter`: failed runs before the first hint unlocks (default 2).
+    * hints: {"match", "hint", "steps"?}. The steps come first, one more after each
+      failed run, and the `hint` itself last."""
+    names = {t["name"]: t["kind"] for t in lv["tests"]}
+    out = []
+    for p in lv.get("predict", []):
+        if set(p) != {"test", "statement"}:
+            out.append(f"predict entry {p} needs exactly the keys `test` and `statement`")
+        elif p["test"] not in names:
+            out.append(f"predict: no test is called {p['test']!r}")
+        elif names[p["test"]] not in ("expect_true", "expect_false", "expect_model", "expect_not_model"):
+            out.append(f"predict: {p['test']!r} is an {names[p['test']]} test, which cannot be predicted")
+    public = lv.get("public", [])
+    if public != "all":
+        if not isinstance(public, list):
+            out.append('public must be "all" or a list of test names')
+        else:
+            out += [f"public: no test is called {n!r}" for n in public if n not in names]
+    if not isinstance(lv.get("hintsAfter", 0), int) or lv.get("hintsAfter", 0) < 0:
+        out.append("hintsAfter must be a natural number")
+    for h in lv.get("hints", []):
+        if "hint" not in h or "match" not in h:
+            out.append(f"hint {h} needs `match` and `hint`")
+        if not isinstance(h.get("steps", []), list):
+            out.append(f"hint {h.get('match')!r}: steps must be a list")
+    return out
 
 
 def assemble(lv, code, extra):

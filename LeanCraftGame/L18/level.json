@@ -2,6 +2,20 @@
   "world": "Quantifiers World",
   "title": "Bounded quantifiers",
   "skill": "syntax",
+  "predict": [
+    {
+      "test": "HasPositiveRoot (fun n => n) is false (its only root is 0)",
+      "statement": "HasPositiveRoot (fun n => n)"
+    },
+    {
+      "test": "EventuallyZero (fun n => if n < 5 then 7 else 0) is true",
+      "statement": "EventuallyZero (fun n => if n < 5 then 7 else 0)"
+    },
+    {
+      "test": "EventuallyZero (fun n => n % 2) is false (0, 1, 0, 1, … keeps returning to 1)",
+      "statement": "EventuallyZero (fun n => n % 2)"
+    }
+  ],
   "checks": [
     {
       "lean": "example : (ℕ → ℕ) → Prop := L18.HasPositiveRoot",
@@ -19,6 +33,9 @@
     },
     {
       "match": "HasPositiveRoot",
+      "steps": [
+        "Under `∃`, a bound such as `n > 0` hides an `∧`, not an `→`."
+      ],
       "hint": "`∃ n > 0, f n = 0`."
     },
     {
@@ -27,6 +44,9 @@
     },
     {
       "match": "EventuallyZero",
+      "steps": [
+        "\"From some index on\": first the index `N`, then every `n` after it."
+      ],
       "hint": "`∃ N, ∀ n ≥ N, u n = 0`."
     },
     {

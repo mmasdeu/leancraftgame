@@ -17,9 +17,27 @@ about it:
 | `#expect_model` | a structure must admit the intended models | axioms that are too strong |
 | `#expect_not_model` | a structure must rule out junk models | axioms that are too weak |
 | `#expect_open` | an open problem must not be trivially provable or refutable | vacuous or silly statements |
+| `#expect_caught` | a wrong definition (a *mutant*) must disagree with one of the player's tests | test suites that miss a mistake |
 
 Each test comes back ✅ (as expected), ❌ (the referee *proved the opposite*,
 so it has a concrete witness against your definition) or ❓ (unsettled).
+
+**Thinking before running.** So that a level is not cleared by turning a visible list
+green by trial and error:
+
+* **Predict first.** Before the first run, the player says whether a few statements
+  should be true or false; the answers lock in and are marked.
+* **Hidden tests.** Most tests stay hidden until they fail (the failure, with its
+  counterexample, is always shown), and all are shown once the level is cleared.
+* **Gated hints.** Hints unlock after failed runs, one step at a time, from a
+  question to the answer.
+* **Stars.** A cleared level earns up to three: cleared, no hint opened, every
+  prediction right.
+
+**Reading in every world.** Every world ends with a *Spot the bug* level, in which
+the player proves a colleague's definitions wrong with counterexamples, and the
+Predicate world has *Be the referee*, in which the player writes the tests and hidden
+mutants must each fail one of them.
 
 ## Quick start
 
@@ -47,9 +65,10 @@ python3 web/server.py --run 4 LeanCraftGame/L4/Player.lean
 
 The game starts from zero: no Lean knowledge is assumed. A Welcome page (`LeanCraftGame/Intro.md`)
 introduces Lean and the game to first-time visitors, and then each level teaches one
-construct, with a worked example in the lesson text. There are 22 levels
+construct, with a worked example in the lesson text. There are 29 levels
 in nine worlds; [CURRICULUM.md](CURRICULUM.md) lists what each one teaches and
-which mistakes its tests catch.
+which mistakes its tests catch, and how predictions, hidden tests and hints are
+set in `level.json`.
 
 * **Basics, Statements, Quantifiers:** the syntax of definitions (`def`,
   functions, recursion, `Prop`, `∧ ∨ ¬ →`, `∀ ∃` and their order, bounded
@@ -59,6 +78,9 @@ which mistakes its tests catch.
   implicit and instance arguments, limits in ℝ).
 * **Predicate, Structure, Faithfulness:** the three original levels, about
   writing, reading and auditing definitions (described below).
+* **Spot the bug** (the last level of every world) and **Be the referee**: reading a
+  colleague's definitions and proving them wrong with counterexamples, and writing a
+  test suite that catches hidden wrong definitions.
 
 The order is set by `LEVELS` in `web/server.py`; the directories
 `LeanCraftGame/L<n>` are numbered in the order the levels were written.
@@ -70,7 +92,7 @@ typing drill. Clicking a symbol inserts it into the editor.
 The last levels, in more detail, exercise three different skills:
 **writing**, **reading**, and **auditing**.
 
-### Going to infinity (Predicate World, level 15, writing)
+### Going to infinity (Predicate World, level 19, writing)
 
 *Define `TendsToInfinity (u : ℕ → ℕ) : Prop`.*
 
@@ -85,7 +107,7 @@ specific, readable test:
 | `∃ N, ∀ M, ∀ n ≥ N, M ≤ u n` (quantifier swap) | ❌ "u n = n tends to infinity". The downstream lemmas still pass, but only *vacuously*: nothing satisfies the definition. |
 | monotone ∧ unbounded | ❌ "0, 4, 2, 6, 4, 8, … tends to infinity (it is not monotone!)" |
 
-### A colleague's groups (Structure World, level 21, reading, then fixing)
+### A colleague's groups (Structure World, level 28, reading, then fixing)
 
 A colleague's `Group'` has associativity, a **left** identity and a **right**
 inverse. It compiles, and every group is an instance, but it is not the theory
@@ -100,7 +122,7 @@ of groups.
   some axiom. Adding `mul_comm` "to be safe" fails on S₃, and the report names
   `mul_comm` as the axiom that fails.
 
-### The AI proved Goldbach! (Faithfulness World, level 22, auditing)
+### The AI proved Goldbach! (Faithfulness World, level 29, auditing)
 
 An "AI" formalises Goldbach as
 `∀ n, 2 < n → n % 2 = 0 → ∃ p q, IsPrime p ∧ IsPrime q → p + q = n`
@@ -150,7 +172,8 @@ python3 online/build.py          # writes dist/online/: upload it to any static 
 typical mistakes. `python3 check_levels.py` runs them all through the referee
 and checks that every correct answer clears its level and every buggy answer
 gets at least one ❌ (or is rejected before the tests run). Each bug is caught
-by the test designed for it.
+by the test designed for it. `python3 check_levels.py --static` only checks the
+levels' metadata (predictions, public tests, hints) against their tests, without Lean.
 
 ## Architecture
 
@@ -158,7 +181,7 @@ by the test designed for it.
 LeanCraftGame/Referee.lean     the referee: witness search + core tactics, and the test commands
 LeanCraftGame/L<n>/Player.lean       what the player edits; its first comment is the lesson text
 LeanCraftGame/L<n>/Tests.lean        hidden test battery (the level designer's real work)
-LeanCraftGame/L<n>/level.json        title, signature checks and hints for the web version
+LeanCraftGame/L<n>/level.json        title, signature checks, predictions, public tests and hints for the web version
 web/server.py            local web server: runs each test as its own Lean process, streams verdicts
 web/static/              the browser game (plain HTML/CSS/JS, no build step)
 web/static/vendor/       MathJax 3.2.2 (tex-chtml.js and its fonts), bundled for offline use
@@ -174,7 +197,8 @@ site/                    the landing page with the download links (published to 
 **The referee** (`Referee.lean`) is deliberately simple: iterative
 deepening that alternates between proving `P` and proving `¬P`. Its moves are:
 instantiate a `∀`-hypothesis, pick a witness for an `∃`-goal, split `∧`, and
-destructure hypotheses. The candidate values are local variables, `x+1`, `2x`,
+destructure hypotheses; when the goal is `False`, a hypothesis `¬ Q` can be used by
+proving `Q` instead. The candidate values are local variables, `x+1`, `2x`,
 `2x+1`, `x-1`, `x-2` and small numerals (also `1/2` in ℚ and ℝ). After
 instantiating a `∀`-hypothesis, side conditions such as `0 < ε`, `N ≤ n` or
 `x ∈ s` are discharged on the spot. Set membership and `⊆` are unfolded. Leaves

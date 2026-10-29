@@ -8,6 +8,9 @@
 * An answer named `bug*.lean` must fail at least one test (❌), or be rejected
   before the tests run (for example by a check in level.json).
 * The starting file `Player.lean` must not clear the level.
+* Every level's metadata (predictions, public tests, hints) must match its tests.
+
+    python3 check_levels.py --static   only check the metadata (no Lean needed)
 
 Prints one line per answer and exits with status 1 if anything is unexpected.
 """
@@ -49,7 +52,22 @@ def main():
     ap.add_argument("levels", nargs="*", type=int, help="level directories to check (default: all)")
     ap.add_argument("--jobs", type=int, default=8, help="Lean processes run in parallel")
     ap.add_argument("--timeout", type=int, default=60, help="seconds allowed per test")
+    ap.add_argument("--static", action="store_true", help="only check the levels' metadata")
     opts = ap.parse_args()
+    problems = 0
+    for n in opts.levels or server.LEVELS:
+        lv = server.load_level(n)
+        for p in server.validate_level(lv):
+            print(f"!! L{n:<3}{p}")
+            problems += 1
+        if not (ROOT / f"variants/L{n}").is_dir():
+            print(f"!! L{n:<3}has no sample answers in variants/L{n}")
+            problems += 1
+    if opts.static:
+        print("All level metadata is consistent." if not problems else f"{problems} problem(s).")
+        sys.exit(1 if problems else 0)
+    if problems:
+        sys.exit(f"{problems} problem(s) with the level metadata: fix them first.")
     server.prepare_lean()
     cache = server.Cache()
     unexpected = 0
