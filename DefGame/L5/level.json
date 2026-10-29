@@ -1,0 +1,49 @@
+{
+  "world": "Basics World",
+  "title": "Functions",
+  "skill": "syntax",
+  "checks": [
+    {
+      "lean": "example : Nat → Nat := L5.double",
+      "message": "Keep `double : Nat → Nat`."
+    },
+    {
+      "lean": "example : Nat → Nat := L5.squared",
+      "message": "Keep `squared : Nat → Nat`."
+    },
+    {
+      "lean": "example : Nat → Nat := L5.addTen",
+      "message": "Keep `addTen : Nat → Nat`."
+    },
+    {
+      "lean": "example : Nat → Nat := L5.minusOne",
+      "message": "Keep `minusOne : Nat → Nat`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "double 7",
+      "hint": "`double n` should be twice `n`: `2 * n` or `n + n`."
+    },
+    {
+      "match": "squared",
+      "hint": "The square of `n` is `n` times `n`: write `n * n`."
+    },
+    {
+      "match": "addTen",
+      "hint": "Ten more than `n` is `n + 10`."
+    },
+    {
+      "match": "minusOne 0",
+      "hint": "Natural subtraction stops at zero, so `n - 1` already gives `0 - 1 = 0`."
+    },
+    {
+      "match": "minusOne",
+      "hint": "One less than `n` is `n - 1`."
+    },
+    {
+      "match": "",
+      "hint": "Re-read the examples in the comment above the function."
+    }
+  ]
+}

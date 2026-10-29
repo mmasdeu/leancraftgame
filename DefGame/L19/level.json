@@ -1,0 +1,37 @@
+{
+  "world": "Library World",
+  "title": "Sets",
+  "skill": "syntax",
+  "checks": [
+    {
+      "lean": "example : ℕ → Set ℕ := L19.multiplesOf",
+      "message": "Keep `multiplesOf : ℕ → Set ℕ`."
+    },
+    {
+      "lean": "example : Set ℕ → Prop := L19.BoundedSet",
+      "message": "Keep `BoundedSet : Set ℕ → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "12 ∈ multiplesOf 3",
+      "hint": "A multiple of `k` leaves remainder 0 when divided by `k`: `{n | n % k = 0}`. Mind the order of `n` and `k`."
+    },
+    {
+      "match": "multiplesOf",
+      "hint": "`{n | n % k = 0}`."
+    },
+    {
+      "match": "no upper bound",
+      "hint": "Your definition lets `B` depend on the element. Choose `B` first: `∃ B, ∀ n ∈ s, n ≤ B`."
+    },
+    {
+      "match": "BoundedSet",
+      "hint": "`∃ B, ∀ n ∈ s, n ≤ B`."
+    },
+    {
+      "match": "",
+      "hint": "Read your definition aloud, expanding `∈` and the bounded quantifiers."
+    }
+  ]
+}

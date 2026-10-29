@@ -1,0 +1,29 @@
+{
+  "world": "Quantifiers World",
+  "title": "Quantifiers in order",
+  "skill": "syntax",
+  "checks": [
+    {
+      "lean": "example : (Nat → Nat) → Prop := L13.HitsEverything",
+      "message": "Keep `HitsEverything : (Nat → Nat) → Prop`."
+    },
+    {
+      "lean": "example : (Nat → Nat) → Prop := L13.Unbounded",
+      "message": "Keep `Unbounded : (Nat → Nat) → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "HitsEverything",
+      "hint": "`∀ m, ∃ n, f n = m`: first pick the target `m`, then look for a position."
+    },
+    {
+      "match": "Unbounded",
+      "hint": "`∀ M, ∃ n, M ≤ u n`."
+    },
+    {
+      "match": "",
+      "hint": "Is the order of your quantifiers right? `∀ M, ∃ n, …` lets `n` depend on `M`; `∃ n, ∀ M, …` does not."
+    }
+  ]
+}

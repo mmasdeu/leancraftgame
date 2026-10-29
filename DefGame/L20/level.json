@@ -1,0 +1,53 @@
+{
+  "world": "Library World",
+  "title": "Using Mathlib",
+  "skill": "writing",
+  "checks": [
+    {
+      "lean": "example : ℕ → Prop := L20.TwinPrime",
+      "message": "Keep `TwinPrime : ℕ → Prop`."
+    },
+    {
+      "lean": "example : ℕ → ℕ → ℕ → Prop := L20.CommonDivisor",
+      "message": "Keep `CommonDivisor : ℕ → ℕ → ℕ → Prop`."
+    },
+    {
+      "lean": "example : (ℕ → ℕ) → Prop := L20.OneToOne",
+      "message": "Keep `OneToOne : (ℕ → ℕ) → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "TwinPrime 7",
+      "hint": "7 is prime but 9 is not: both must be prime, so use `∧`."
+    },
+    {
+      "match": "TwinPrime 2",
+      "hint": "2 is prime but 4 is not: both must be prime, so use `∧`."
+    },
+    {
+      "match": "TwinPrime",
+      "hint": "`Nat.Prime p ∧ Nat.Prime (p + 2)`, or `p.Prime ∧ (p + 2).Prime`."
+    },
+    {
+      "match": "CommonDivisor 3 6 9",
+      "hint": "`d ∣ a` reads \"d divides a\". Check the order: `d ∣ a ∧ d ∣ b`."
+    },
+    {
+      "match": "CommonDivisor",
+      "hint": "`d ∣ a ∧ d ∣ b`, with the divides symbol `\\|`."
+    },
+    {
+      "match": "OneToOne (fun n => 2 * n)",
+      "hint": "Doubling never sends two numbers to the same place. Are you using `Function.Injective`? (`Surjective` means something else.)"
+    },
+    {
+      "match": "OneToOne",
+      "hint": "`Function.Injective f`."
+    },
+    {
+      "match": "",
+      "hint": "Look up the name of the notion in the lesson text."
+    }
+  ]
+}

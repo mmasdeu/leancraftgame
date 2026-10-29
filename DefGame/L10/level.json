@@ -1,0 +1,29 @@
+{
+  "world": "Quantifiers World",
+  "title": "For all",
+  "skill": "syntax",
+  "checks": [
+    {
+      "lean": "example : (Nat → Nat) → Nat → Prop := L10.AlwaysBelow",
+      "message": "Keep `AlwaysBelow : (Nat → Nat) → Nat → Prop`."
+    },
+    {
+      "lean": "example : (Nat → Nat) → Prop := L10.AllEven",
+      "message": "Keep `AllEven : (Nat → Nat) → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "AlwaysBelow",
+      "hint": "`∀ n, u n ≤ B`: for every `n`, the term `u n` is at most `B`."
+    },
+    {
+      "match": "AllEven",
+      "hint": "`∀ n, u n % 2 = 0`."
+    },
+    {
+      "match": "",
+      "hint": "Read your definition aloud: \"for every n, …\". Does it say what the comment says?"
+    }
+  ]
+}

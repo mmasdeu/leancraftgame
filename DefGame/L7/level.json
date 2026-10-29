@@ -1,0 +1,41 @@
+{
+  "world": "Statements World",
+  "title": "True or false?",
+  "skill": "syntax",
+  "checks": [
+    {
+      "lean": "example : Nat → Prop := L7.IsEven",
+      "message": "Keep `IsEven : Nat → Prop`."
+    },
+    {
+      "lean": "example : Nat → Prop := L7.IsSmall",
+      "message": "Keep `IsSmall : Nat → Prop`."
+    },
+    {
+      "lean": "example : Nat → Nat → Prop := L7.GoesInto",
+      "message": "Keep `GoesInto : Nat → Nat → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "IsEven",
+      "hint": "An even number leaves remainder 0 when divided by 2: `n % 2 = 0`."
+    },
+    {
+      "match": "IsSmall 10",
+      "hint": "Off by one: 10 is not smaller than 10. Use `<`, not `≤`."
+    },
+    {
+      "match": "IsSmall",
+      "hint": "`n < 10`."
+    },
+    {
+      "match": "GoesInto",
+      "hint": "`b % a = 0`: the remainder of `b` divided by `a` is zero. Mind the order of `a` and `b`."
+    },
+    {
+      "match": "",
+      "hint": "Check the examples in the comment above the predicate."
+    }
+  ]
+}

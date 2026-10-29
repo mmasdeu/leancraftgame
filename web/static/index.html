@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DefGame</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text x='4' y='25' font-size='24' font-family='serif'>∀</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="logo">DefGame</span>
+      <span class="tagline">a Lean game about definitions, not proofs</span>
+    </div>
+    <button id="symbols-btn" class="symbols-btn" aria-expanded="false" aria-controls="symbols"
+            title="How to type ∀ ∃ → ∧ ∨ ≤ …">∀ Symbols</button>
+    <nav id="levels" aria-label="Levels"></nav>
+  </header>
+
+  <aside id="symbols" class="drawer" hidden aria-label="Symbols">
+    <div class="drawer-head"><h2>Typing symbols</h2><button id="symbols-close" class="quiet" aria-label="Close">✕</button></div>
+    <p>Lean uses mathematical symbols that are not on your keyboard. Type a <b>backslash</b>
+      <code>\</code>, then the name, as in VS Code: <code>\forall</code> gives ∀. Some symbols
+      appear by themselves; for the others (like <code>\le</code> or <code>\to</code>, which
+      could be the start of a longer name) press <kbd>Space</kbd> or <kbd>Tab</kbd>.</p>
+    <p class="muted">Click a row to insert the symbol into your code. Most symbols also have a
+      plain-keyboard spelling that Lean understands.</p>
+    <div id="symtable" class="symtable"></div>
+    <h3>Practice</h3>
+    <div id="drill" class="drill"></div>
+  </aside>
+
+  <main class="layout">
+    <section class="left">
+      <article id="intro" class="prose"></article>
+
+      <div class="toolbar">
+        <button id="run" class="primary" title="Ctrl+Enter">▶ Run tests</button>
+        <button id="stop" hidden>■ Stop</button>
+        <span class="spacer"></span>
+        <button id="reset" class="quiet" title="Restore the original file">Reset</button>
+      </div>
+
+      <div class="editor" id="editor">
+        <pre class="gutter" id="gutter" aria-hidden="true"></pre>
+        <div class="code">
+          <div class="marks" id="marks" aria-hidden="true"></div>
+          <pre class="hl" id="hl" aria-hidden="true"></pre>
+          <textarea id="src" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off"
+                    aria-label="Your Lean code"></textarea>
+        </div>
+      </div>
+      <p class="editor-help">
+        Type Lean symbols with a backslash, as in VS Code:
+        <code>\forall</code> ∀ · <code>\exists</code> ∃ · <code>\to</code> → · <code>\and</code> ∧ ·
+        <code>\or</code> ∨ · <code>\le</code> ≤ · <code>\ge</code> ≥ · <code>\ne</code> ≠ · <code>\N</code> ℕ ·
+        <code>\_2</code> ₂. See <b>∀ Symbols</b> above for the full list and practice.
+        <kbd>Ctrl</kbd>+<kbd>Enter</kbd> runs the tests.
+      </p>
+      <div id="diagnostics"></div>
+    </section>
+
+    <aside class="right">
+      <div class="report">
+        <h2>Referee report</h2>
+        <div id="summary" class="summary muted">Write your definition, then press <b>Run tests</b>.</div>
+        <ol id="tests" class="tests"></ol>
+        <p class="legend">
+          ✅ as expected · ❌ the referee proved the opposite, so it has a counterexample to your
+          definition · ❓ the referee could not settle it
+        </p>
+      </div>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

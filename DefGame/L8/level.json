@@ -1,0 +1,45 @@
+{
+  "world": "Statements World",
+  "title": "And",
+  "skill": "syntax",
+  "checks": [
+    {
+      "lean": "example : Nat → Prop := L8.IsTeen",
+      "message": "Keep `IsTeen : Nat → Prop`."
+    },
+    {
+      "lean": "example : Nat → Nat → Nat → Prop := L8.EvenInRange",
+      "message": "Keep `EvenInRange : Nat → Nat → Nat → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "IsTeen 12",
+      "hint": "12 is not a teenager: the lower bound must be 13."
+    },
+    {
+      "match": "IsTeen 20",
+      "hint": "20 is not a teenager: the upper bound must be 19."
+    },
+    {
+      "match": "IsTeen",
+      "hint": "You can write `13 ≤ n ∧ n ≤ 19`, or reuse the definition above: `InRange 13 19 n`."
+    },
+    {
+      "match": "EvenInRange 1 10 5",
+      "hint": "5 is in range but odd. You need *both* conditions: join them with `∧`."
+    },
+    {
+      "match": "EvenInRange 1 10 12",
+      "hint": "12 is even but out of range. You need *both* conditions: join them with `∧`."
+    },
+    {
+      "match": "EvenInRange",
+      "hint": "`n % 2 = 0 ∧ InRange lo hi n`."
+    },
+    {
+      "match": "",
+      "hint": "Check the examples in the comment above the predicate."
+    }
+  ]
+}

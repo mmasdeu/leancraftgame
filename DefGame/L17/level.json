@@ -1,0 +1,53 @@
+{
+  "world": "Numbers World",
+  "title": "Division by zero",
+  "skill": "writing",
+  "checks": [
+    {
+      "lean": "example : ℚ → ℚ → ℚ := L17.average",
+      "message": "Keep `average : ℚ → ℚ → ℚ`."
+    },
+    {
+      "lean": "example : ℚ → ℚ → Prop := L17.IsReciprocal",
+      "message": "Keep `IsReciprocal : ℚ → ℚ → Prop`."
+    },
+    {
+      "lean": "example : ℚ → ℚ → ℚ → ℚ → ℚ → Prop := L17.HasSlope",
+      "message": "Keep `HasSlope` with five rational inputs."
+    }
+  ],
+  "hints": [
+    {
+      "match": "average 1 2",
+      "hint": "`a + b / 2` means `a + (b / 2)`. Add parentheses: `(a + b) / 2`."
+    },
+    {
+      "match": "average",
+      "hint": "`(a + b) / 2`."
+    },
+    {
+      "match": "0 has no reciprocal",
+      "hint": "With `y = 1 / x`, 0 is its own reciprocal, because `1 / 0 = 0` in Lean. Say it without dividing: `x * y = 1`."
+    },
+    {
+      "match": "IsReciprocal",
+      "hint": "`x * y = 1`."
+    },
+    {
+      "match": "vertical line",
+      "hint": "With a division, the vertical line gets slope `5 / 0 = 0`. Multiply instead, and require `x₁ ≠ x₂`."
+    },
+    {
+      "match": "one point",
+      "hint": "Through a single point, every slope fits `m * 0 = 0`. Require `x₁ ≠ x₂`."
+    },
+    {
+      "match": "HasSlope",
+      "hint": "`x₁ ≠ x₂ ∧ m * (x₂ - x₁) = y₂ - y₁`."
+    },
+    {
+      "match": "",
+      "hint": "Is there a division that could be by zero?"
+    }
+  ]
+}

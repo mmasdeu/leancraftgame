@@ -1,0 +1,45 @@
+{
+  "world": "Structure World",
+  "title": "Your first structure",
+  "skill": "writing",
+  "checks": [
+    {
+      "lean": "example := fun (a b : Nat) => L14.Interval.mk a b",
+      "message": "`Interval` needs the fields `lo`, `hi` (in this order) and then your axiom."
+    },
+    {
+      "lean": "example := fun (a : Nat) => L14.PosNat.mk a",
+      "message": "`PosNat` needs the field `val` and then your axiom."
+    }
+  ],
+  "hints": [
+    {
+      "match": "Interval [5, 2]",
+      "hint": "Your structure accepts `lo = 5`, `hi = 2`. Add an axiom field: `h : lo ≤ hi`."
+    },
+    {
+      "match": "Interval [1, 0]",
+      "hint": "Your structure accepts `lo = 1`, `hi = 0`. Add an axiom field: `h : lo ≤ hi`."
+    },
+    {
+      "match": "0 is not",
+      "hint": "Your structure accepts `val = 0`. Add an axiom field: `pos : 0 < val`."
+    },
+    {
+      "match": "[2, 5]",
+      "hint": "A valid interval was rejected: check the direction of your inequality (`lo ≤ hi`)."
+    },
+    {
+      "match": "[5, 5]",
+      "hint": "An interval with `lo = hi` is allowed: use `≤`, not `<`."
+    },
+    {
+      "match": "3 is a positive",
+      "hint": "3 is positive but your axiom rejects it. Is it `0 < val`?"
+    },
+    {
+      "match": "",
+      "hint": "An axiom is a field whose type is a statement, such as `h : lo ≤ hi`."
+    }
+  ]
+}

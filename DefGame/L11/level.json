@@ -1,0 +1,37 @@
+{
+  "world": "Quantifiers World",
+  "title": "If … then …",
+  "skill": "syntax",
+  "checks": [
+    {
+      "lean": "example : (Nat → Nat) → Prop := L11.LateBig",
+      "message": "Keep `LateBig : (Nat → Nat) → Prop`."
+    },
+    {
+      "lean": "example : (Nat → Nat) → Prop := L11.EvenToEven",
+      "message": "Keep `EvenToEven : (Nat → Nat) → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "first terms are 0",
+      "hint": "Your definition rejects a sequence that starts with small values. Did you write `∧` where `→` belongs?"
+    },
+    {
+      "match": "LateBig (fun n => n) is true",
+      "hint": "This should hold: if you used `∧`, you claimed *all* `n` are at least 5. Use `→`."
+    },
+    {
+      "match": "LateBig",
+      "hint": "`∀ n, 5 ≤ n → 3 ≤ u n`."
+    },
+    {
+      "match": "EvenToEven",
+      "hint": "`∀ n, n % 2 = 0 → u n % 2 = 0`."
+    },
+    {
+      "match": "",
+      "hint": "Read your definition aloud: \"for every n, if …, then …\"."
+    }
+  ]
+}

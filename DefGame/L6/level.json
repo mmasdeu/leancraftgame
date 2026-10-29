@@ -1,0 +1,41 @@
+{
+  "world": "Basics World",
+  "title": "Making choices",
+  "skill": "syntax",
+  "checks": [
+    {
+      "lean": "example : Nat → Nat → Nat := L6.smallest",
+      "message": "Keep `smallest : Nat → Nat → Nat`."
+    },
+    {
+      "lean": "example : Nat → Nat → Nat := L6.gap",
+      "message": "Keep `gap : Nat → Nat → Nat`."
+    },
+    {
+      "lean": "example : Nat → Nat := L6.zeroOrOne",
+      "message": "Keep `zeroOrOne : Nat → Nat`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "smallest",
+      "hint": "Copy `biggest` and swap the two branches: `if a ≤ b then a else b`."
+    },
+    {
+      "match": "gap 4 10",
+      "hint": "`a - b` is 0 when `a` is smaller than `b`. You need to subtract the smaller from the larger: use an `if` to decide which."
+    },
+    {
+      "match": "gap",
+      "hint": "`if a ≤ b then b - a else a - b`: always subtract the smaller number from the larger."
+    },
+    {
+      "match": "zeroOrOne",
+      "hint": "`if n = 0 then 0 else 1`."
+    },
+    {
+      "match": "",
+      "hint": "Re-read the examples in the comment above the function."
+    }
+  ]
+}

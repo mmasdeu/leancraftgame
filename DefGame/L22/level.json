@@ -1,0 +1,29 @@
+{
+  "world": "Analysis World",
+  "title": "Limits",
+  "skill": "writing",
+  "checks": [
+    {
+      "lean": "example : (ℕ → ℝ) → ℝ → Prop := L22.ConvergesTo",
+      "message": "Keep `ConvergesTo : (ℕ → ℝ) → ℝ → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "constant sequence 3 converges",
+      "hint": "Even a constant sequence fails: did you forget `ε > 0`? With `ε = 0` nothing is close enough."
+    },
+    {
+      "match": "7, 7, 7",
+      "hint": "The first terms should not matter. Use `∀ n ≥ N`."
+    },
+    {
+      "match": "0, 1, 0, 1",
+      "hint": "Your definition accepts a sequence that only comes close to 0 now and then. Every term from `N` on must be close: `∀ n ≥ N, |u n - a| < ε`."
+    },
+    {
+      "match": "",
+      "hint": "`∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - a| < ε`."
+    }
+  ]
+}

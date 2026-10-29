@@ -1,0 +1,4 @@
+# Lake build output, Mathlib and the web server's work files and verdict cache
+.lake/
+# Python bytecode
+__pycache__/

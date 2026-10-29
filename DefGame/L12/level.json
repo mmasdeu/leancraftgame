@@ -1,0 +1,37 @@
+{
+  "world": "Quantifiers World",
+  "title": "There exists",
+  "skill": "syntax",
+  "checks": [
+    {
+      "lean": "example : (Nat → Nat) → Prop := L12.HasZero",
+      "message": "Keep `HasZero : (Nat → Nat) → Prop`."
+    },
+    {
+      "lean": "example : (Nat → Nat) → Prop := L12.HasEvenBig",
+      "message": "Keep `HasEvenBig : (Nat → Nat) → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "HasZero",
+      "hint": "`∃ n, u n = 0`."
+    },
+    {
+      "match": "no term is both",
+      "hint": "One term is even and another is big, but no single term is both. Both conditions must be about the *same* `n`: put the `∧` inside one `∃`."
+    },
+    {
+      "match": "HasEvenBig (fun n => 2 * n + 1)",
+      "hint": "Every term is odd, so no term is even *and* big. Both conditions must hold for the same `n`: `∃ n, u n % 2 = 0 ∧ 10 ≤ u n`."
+    },
+    {
+      "match": "HasEvenBig",
+      "hint": "`∃ n, u n % 2 = 0 ∧ 10 ≤ u n`."
+    },
+    {
+      "match": "",
+      "hint": "Read your definition aloud: \"there is an n such that …\"."
+    }
+  ]
+}

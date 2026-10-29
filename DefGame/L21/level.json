@@ -1,0 +1,49 @@
+{
+  "world": "Library World",
+  "title": "Generality",
+  "skill": "writing",
+  "checks": [
+    {
+      "lean": "example : ℤ → ℤ → ℤ → Prop := L21.Between",
+      "message": "`Between` must work for any ordered type (the tests use ℤ): add `{α : Type*} [Preorder α]` and replace `ℕ` by `α`."
+    },
+    {
+      "lean": "example : ℚ → ℚ → ℚ → Prop := L21.Between",
+      "message": "`Between` must work for any ordered type (the tests use ℚ)."
+    },
+    {
+      "lean": "example : Set ℤ → ℤ → Prop := L21.IsUpperBound",
+      "message": "`IsUpperBound` must work for any ordered type (the tests use ℤ): `(s : Set α) (B : α)`."
+    },
+    {
+      "lean": "example : ℤ → ℤ → ℤ := L21.largest",
+      "message": "`largest` must work for any linearly ordered type (the tests use ℤ)."
+    },
+    {
+      "lean": "example : ℚ → ℚ → ℚ := L21.largest",
+      "message": "`largest` must work for any linearly ordered type (the tests use ℚ)."
+    }
+  ],
+  "hints": [
+    {
+      "match": "Between (2 : ℕ) 5 5",
+      "hint": "The ends are included: use `≤`, not `<`."
+    },
+    {
+      "match": "Between",
+      "hint": "`def Between {α : Type*} [Preorder α] (a b x : α) : Prop := a ≤ x ∧ x ≤ b`."
+    },
+    {
+      "match": "IsUpperBound",
+      "hint": "Replace `ℕ` by `α` everywhere, including in `Set α`, and add `{α : Type*} [Preorder α]`."
+    },
+    {
+      "match": "largest",
+      "hint": "An `if` needs to decide `a ≤ b`: use `[LinearOrder α]`."
+    },
+    {
+      "match": "",
+      "hint": "Replace `ℕ` by a type variable `α`, and ask for the order with `[Preorder α]`."
+    }
+  ]
+}

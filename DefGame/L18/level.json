@@ -1,0 +1,37 @@
+{
+  "world": "Quantifiers World",
+  "title": "Bounded quantifiers",
+  "skill": "syntax",
+  "checks": [
+    {
+      "lean": "example : (ℕ → ℕ) → Prop := L18.HasPositiveRoot",
+      "message": "Keep `HasPositiveRoot : (ℕ → ℕ) → Prop`."
+    },
+    {
+      "lean": "example : (ℕ → ℕ) → Prop := L18.EventuallyZero",
+      "message": "Keep `EventuallyZero : (ℕ → ℕ) → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "only root is 0",
+      "hint": "Your definition accepts a function whose only root is 0. Under `∃`, the bound needs `∧`: `∃ n > 0, f n = 0` means `∃ n, n > 0 ∧ f n = 0`."
+    },
+    {
+      "match": "HasPositiveRoot",
+      "hint": "`∃ n > 0, f n = 0`."
+    },
+    {
+      "match": "keeps returning",
+      "hint": "Your definition accepts a sequence that is 0 infinitely often but not from some point on. The `∃ N` must come first: `∃ N, ∀ n ≥ N, u n = 0`."
+    },
+    {
+      "match": "EventuallyZero",
+      "hint": "`∃ N, ∀ n ≥ N, u n = 0`."
+    },
+    {
+      "match": "",
+      "hint": "Expand the shorthand: `∀ n ≥ N` hides an `→`, `∃ n > 0` hides an `∧`."
+    }
+  ]
+}

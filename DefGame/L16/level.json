@@ -1,0 +1,49 @@
+{
+  "world": "Numbers World",
+  "title": "Integers and casts",
+  "skill": "syntax",
+  "checks": [
+    {
+      "lean": "example : ℕ → ℕ → ℤ := L16.diff",
+      "message": "Keep `diff : ℕ → ℕ → ℤ`."
+    },
+    {
+      "lean": "example : ℤ → ℤ → ℕ := L16.distance",
+      "message": "Keep `distance : ℤ → ℤ → ℕ`."
+    },
+    {
+      "lean": "example : ℤ → Prop := L16.IsNegative",
+      "message": "Keep `IsNegative : ℤ → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "diff 3 5",
+      "hint": "If you get 0 instead of -2, the subtraction happened in ℕ before the cast. Cast first: `(a : ℤ) - (b : ℤ)`."
+    },
+    {
+      "match": "diff",
+      "hint": "`(a : ℤ) - (b : ℤ)`."
+    },
+    {
+      "match": "distance (-4) 3",
+      "hint": "`(a - b).toNat` turns the negative number -7 into 0. Use `(a - b).natAbs`."
+    },
+    {
+      "match": "distance",
+      "hint": "`(a - b).natAbs`."
+    },
+    {
+      "match": "IsNegative 0",
+      "hint": "0 is not negative: use `<`, not `≤`."
+    },
+    {
+      "match": "IsNegative",
+      "hint": "`x < 0`."
+    },
+    {
+      "match": "",
+      "hint": "Check the examples in the comments."
+    }
+  ]
+}
