@@ -175,6 +175,8 @@ attachAbbrev(src, () => {
   diagnostics = [];
   render();
   store.set(`draft.${level.id}`, src.value);
+  renderTests();
+  updateSummary();
 }, () => runTests());
 
 /* Select a (1-based line, 0-based codepoint column) range from a Lean message. */
@@ -234,9 +236,15 @@ $("reset").onclick = () => {
   store.set(`draft.${level.id}`, src.value);
   diagnostics = [];
   render();
+  renderTests();
+  updateSummary();
 };
 
 /* ------------------------------------------------------------ report */
+
+/* Each test remembers the code its result was computed for (`t.code`). A result only
+   counts while the editor holds exactly that code; after an edit it is shown as
+   undefined. A level is cleared when every test has passed on the same code. */
 
 const KIND = {
   expect_true: "should hold", expect_false: "should fail", expect_open: "should stay open",
@@ -245,10 +253,24 @@ const KIND = {
 const ICON = { pass: "✅", fail: "❌", unknown: "❓", error: "⚠️" };
 let tests = [], ticker = null, controller = null;
 
+/* The state to show: a finished result for other code is undefined ("waiting"). */
+function view(t) {
+  if (t.state === "running" || t.state === "queued") return t.state;
+  return t.code === src.value ? t.state : "waiting";
+}
+
+function saveResults() {
+  const keep = {};
+  for (const t of tests)
+    if (ICON[t.state]) keep[t.name] = { state: t.state, detail: t.detail, seconds: t.seconds, cached: t.cached, code: t.code };
+  store.set(`results.${level.id}`, keep);
+}
+
 function resetReport() {
-  tests = level.tests.map((t) => ({ ...t, state: "waiting" }));
-  setSummary("muted", "Write your definition, then press <b>Run tests</b>.");
+  const saved = store.get(`results.${level.id}`, {});
+  tests = level.tests.map((t) => ({ ...t, state: "waiting", ...(saved[t.name] || {}) }));
   renderTests();
+  updateSummary();
 }
 
 function setSummary(cls, html) {
@@ -262,25 +284,62 @@ function hintFor(name) {
 }
 
 function renderTests() {
+  const busy = controller !== null;
   $("tests").innerHTML = tests.map((t) => {
-    let icon = "○", time = "";
-    if (t.state === "running") { icon = '<span class="spin"></span>'; time = ((Date.now() - t.started) / 1000).toFixed(0) + " s"; }
-    else if (ICON[t.state]) { icon = ICON[t.state]; time = t.cached ? "cached" : t.seconds + " s"; }
-    else if (t.state === "skipped") icon = "–";
-    const hint = (t.state === "fail" || t.state === "unknown") && hintFor(t.name);
-    return `<li class="test ${t.state}">
-      <div class="row"><span class="icon">${icon}</span><span class="name">${esc(t.name)}</span>
-        <span class="kind">${KIND[t.kind] || ""}</span><span class="time">${time}</span></div>
-      ${t.detail ? `<div class="detail">${esc(t.detail)}</div>` : ""}
+    const v = view(t);
+    let icon = "○", time = "", title = "not run on the current code";
+    if (v === "running") { icon = '<span class="spin"></span>'; time = ((Date.now() - t.started) / 1000).toFixed(0) + " s"; title = "running"; }
+    else if (v === "queued") { icon = '<span class="spin idle"></span>'; title = "waiting for a free slot"; }
+    else if (ICON[v]) { icon = ICON[v]; time = t.cached ? "cached" : t.seconds + " s"; title = ""; }
+    else if (v === "skipped") { icon = "–"; title = "not run: the run stopped at the first failure"; }
+    const shown = ICON[v] || v === "skipped";
+    const hint = (v === "fail" || v === "unknown") && hintFor(t.name);
+    return `<li class="test ${v}">
+      <div class="row"><span class="icon" title="${title}">${icon}</span><span class="name">${esc(t.name)}</span>
+        <span class="kind">${KIND[t.kind] || ""}</span><span class="time">${time}</span>
+        <button class="run1" data-id="${t.id}" title="Run only this test on the current code"${busy ? " disabled" : ""}>▶</button></div>
+      ${shown && t.detail ? `<div class="detail">${esc(t.detail)}</div>` : ""}
       ${hint ? `<details><summary>Hint</summary>${inline(hint)}</details>` : ""}
     </li>`;
   }).join("");
+  for (const b of $("tests").querySelectorAll("button.run1"))
+    b.onclick = () => runTests([Number(b.dataset.id)]);
 }
 
-function progress() {
-  const done = tests.filter((t) => ICON[t.state]).length;
-  setSummary("", `Running ${tests.length} tests… ${done}/${tests.length} done
-    <div class="progress"><div style="width:${(100 * done) / tests.length}%"></div></div>`);
+/* The summary box, from the results that hold for the current code. */
+function updateSummary(note = "") {
+  if (controller) return;
+  const vs = tests.map(view), total = tests.length;
+  const n = (s) => vs.filter((v) => v === s).length;
+  const passed = n("pass"), failed = n("fail") + n("error");
+  const stale = tests.some((t) => ICON[t.state] && t.code !== src.value);
+  const line = `<div class="score">${passed}/${total} passed on this code</div>`;
+  const pre = note ? note + "<br>" : "";
+  if (passed === total) {
+    const cleared = store.get("cleared", []);
+    if (!cleared.includes(level.id)) { store.set("cleared", [...cleared, level.id]); renderTabs(); }
+    const next = levels[levels.findIndex((l) => l.id === level.id) + 1];
+    setSummary("cleared", `🏆 <b>Level cleared!</b> Every test passed on this code.${line}` +
+      (next ? `<button class="primary" id="next">Next: ${esc(next.title)} →</button>` : "You have cleared the last level."));
+    if (next) $("next").onclick = () => openLevel(next.id);
+  } else if (failed) {
+    setSummary("failed", `${pre}🔁 <b>Not yet.</b> Read the ❌ test below: it tells you what your
+      definition gets wrong.${line}`);
+  } else if (passed || n("unknown")) {
+    setSummary("", `${pre}${line}${n("unknown") ? `${n("unknown")} could not be settled. ` : ""}
+      Press <b>Run tests</b> to run the rest, or ▶ to run a single test.`);
+  } else {
+    setSummary("muted", pre + (stale
+      ? "Your code changed since the last run, so the earlier results no longer apply. Press <b>Run tests</b>."
+      : "Write your definition, then press <b>Run tests</b>."));
+  }
+}
+
+function progress(ids) {
+  const done = ids.filter((i) => ICON[tests[i].state] || tests[i].state === "skipped").length;
+  const what = ids.length === 1 ? "1 test" : `${ids.length} tests`;
+  setSummary("", `Running ${what}… ${done}/${ids.length} done
+    <div class="progress"><div style="width:${(100 * done) / ids.length}%"></div></div>`);
 }
 
 function showCompile(c) {
@@ -293,62 +352,46 @@ function showCompile(c) {
     b.onclick = () => jumpTo(c.diagnostics[Number(b.dataset.i)]);
 }
 
-function finish(d) {
-  const line = `<div class="score">${d.passed}/${d.total} passed</div>
-    ${d.failed} failed · ${d.unknown} unsettled${d.errors ? ` · ${d.errors} could not run` : ""}`;
-  if (d.passed === d.total) {
-    const cleared = store.get("cleared", []);
-    if (!cleared.includes(level.id)) store.set("cleared", [...cleared, level.id]);
-    renderTabs();
-    const next = levels[levels.findIndex((l) => l.id === level.id) + 1];
-    setSummary("cleared", `🏆 <b>Level cleared!</b>${line}` +
-      (next ? `<br><button class="primary" id="next">Next: ${esc(next.title)} →</button>` : "<br>You have cleared the last level."));
-    if (next) $("next").onclick = () => openLevel(next.id);
-  } else if (d.failed === 0 && d.errors === 0) {
-    setSummary("", `🤔 No test failed, but some could not be settled. Make your definition easier
-      for the referee to work with.${line}`);
-  } else {
-    setSummary("failed", `🔁 <b>Not yet.</b> Read the ❌ tests below: each one tells you what your
-      definition gets wrong.${line}`);
-  }
-}
-
-function handle(event, data) {
-  if (event === "tests") {
-    tests = data.map((t) => ({ ...t, state: "waiting" }));
-    setSummary("", '<span class="spin"></span> Compiling your code…');
-  } else if (event === "compile") {
-    showCompile(data);
-    if (!data.ok) {
-      tests.forEach((t) => (t.state = "skipped"));
-      setSummary("failed", "Your code does not compile yet, or does not fit the level. Fix the problems shown below the editor.");
-    } else progress();
-  } else if (event === "start") {
-    Object.assign(tests[data.id], { state: "running", started: Date.now() });
-  } else if (event === "result") {
-    Object.assign(tests[data.id], { state: data.status, detail: data.detail, seconds: data.seconds, cached: data.cached });
-    progress();
-  } else if (event === "done") {
-    finish(data);
-  } else if (event === "fatal") {
-    setSummary("failed", `The server hit an error: ${esc(data.message)}`);
-  }
-  renderTests();
-}
-
-async function runTests() {
+/* Run the tests `ids` (all of them when null) on the current code. A full run stops at
+   the first failure; a single test always runs to the end. */
+async function runTests(ids = null) {
   stopRun();
-  const ctl = (controller = new AbortController());
+  const code = src.value, ctl = (controller = new AbortController());
+  let run = [], outcome = null;
   $("run").hidden = true;
   $("stop").hidden = false;
   $("diagnostics").innerHTML = "";
   ticker = setInterval(() => tests.some((t) => t.state === "running") && renderTests(), 1000);
-  let finished = false;
+  const handle = (event, data) => {
+    if (event === "tests") {
+      run = data.map((t) => t.id);
+      for (const i of run) Object.assign(tests[i], { state: "queued", code, detail: "", cached: false });
+      setSummary("", '<span class="spin"></span> Compiling your code…');
+    } else if (event === "compile") {
+      showCompile(data);
+      if (!data.ok) {
+        for (const i of run) Object.assign(tests[i], { state: "waiting", code: undefined });
+        outcome = "Your code does not compile yet, or does not fit the level. Fix the problems shown below the editor.";
+      } else progress(run);
+    } else if (event === "start") {
+      Object.assign(tests[data.id], { state: "running", started: Date.now() });
+    } else if (event === "result") {
+      Object.assign(tests[data.id], { state: data.status, detail: data.detail, seconds: data.seconds, cached: data.cached, code });
+      progress(run);
+    } else if (event === "skipped") {
+      Object.assign(tests[data.id], { state: "skipped", detail: "", code });
+    } else if (event === "done") {
+      outcome = data.stopped ? "Stopped at the first failure: the remaining tests were not run." : "";
+    } else if (event === "fatal") {
+      outcome = `The server hit an error: ${esc(data.message)}`;
+    }
+    renderTests();
+  };
   try {
     const res = await fetch(`/api/levels/${level.id}/run`, {
       method: "POST", signal: ctl.signal,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: src.value }),
+      body: JSON.stringify({ code, tests: ids, stopOnFail: ids === null }),
     });
     const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
     let buf = "";
@@ -361,20 +404,18 @@ async function runTests() {
         const chunk = buf.slice(0, i);
         buf = buf.slice(i + 2);
         const ev = /^event: (.*)$/m.exec(chunk), data = /^data: (.*)$/m.exec(chunk);
-        if (ev && data) {
-          const payload = JSON.parse(data[1]);
-          handle(ev[1], payload);
-          if (ev[1] === "done" || ev[1] === "fatal" || (ev[1] === "compile" && !payload.ok)) finished = true;
-        }
+        if (ev && data) handle(ev[1], JSON.parse(data[1]));
       }
     }
   } catch (err) {
-    if (err.name !== "AbortError") setSummary("failed", `Lost contact with the server (${esc(String(err))}). Is <code>web/server.py</code> still running?`);
+    if (err.name !== "AbortError") outcome = `Lost contact with the server (${esc(String(err))}). Is <code>web/server.py</code> still running?`;
   }
-  if (controller === ctl) {
-    if (!finished && !ctl.signal.aborted) setSummary("failed", "The run ended unexpectedly. Check the server's terminal.");
-    endRun();
-  }
+  if (controller !== ctl) return;           // superseded or stopped
+  if (outcome === null) outcome = "The run ended unexpectedly. Check the server's terminal.";
+  endRun();
+  saveResults();
+  renderTests();
+  updateSummary(outcome);
 }
 
 function endRun() {
@@ -388,10 +429,10 @@ function stopRun() {
   if (!controller) return;
   controller.abort();
   endRun();
-  tests.forEach((t) => { if (t.state === "running") t.state = "waiting"; });
+  tests.forEach((t) => { if (t.state === "running" || t.state === "queued") Object.assign(t, { state: "waiting", code: undefined }); });
   if (level) {
-    setSummary("muted", "Stopped.");
     renderTests();
+    updateSummary("Stopped.");
   }
 }
 
@@ -483,6 +524,8 @@ function buildSymbols() {
       diagnostics = [];
       render();
       store.set(`draft.${level.id}`, src.value);
+      renderTests();
+      updateSummary();
     };
   }
   renderDrill();
@@ -498,6 +541,6 @@ $("symbols-close").onclick = () => toggleSymbols(false);
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") toggleSymbols(false); });
 buildSymbols();
 
-$("run").onclick = runTests;
+$("run").onclick = () => runTests();
 $("stop").onclick = stopRun;
 loadLevels();

@@ -120,30 +120,40 @@ def locate(msg, ranges):
 # ---------------------------------------------------------------- running Lean
 
 class Run:
-    """One submission. Cancelling it kills every Lean process it started."""
+    """One submission. Cancelling it kills every Lean process it started and ends the
+    run; stopping the tests (after a failure) kills them too, but the run still reports."""
 
     def __init__(self):
         self.id = uuid.uuid4().hex[:12]
         self.dir = RUNS / self.id
         self.cancelled = False
+        self.stopped = False
         self.procs = set()
         self.lock = threading.Lock()
+
+    def _kill_all(self):
+        for p in self.procs:
+            try:
+                os.killpg(p.pid, signal.SIGKILL)
+            except (ProcessLookupError, PermissionError):
+                pass
 
     def cancel(self):
         with self.lock:
             self.cancelled = True
-            for p in self.procs:
-                try:
-                    os.killpg(p.pid, signal.SIGKILL)
-                except (ProcessLookupError, PermissionError):
-                    pass
+            self._kill_all()
+
+    def stop_tests(self):
+        with self.lock:
+            self.stopped = True
+            self._kill_all()
 
     def lean(self, name, text, timeout):
         """Run `lean --json` on `text`. Returns the messages, or None on timeout or cancel."""
         path = self.dir / f"{name}.lean"
         path.write_text(text)
         with self.lock:
-            if self.cancelled:
+            if self.cancelled or self.stopped:
                 return None
             p = subprocess.Popen([LEAN_ENV["LEAN"], "--json", str(path)], cwd=ROOT, env=LEAN_ENV,
                                  stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -158,7 +168,7 @@ class Run:
         finally:
             with self.lock:
                 self.procs.discard(p)
-        if self.cancelled:
+        if self.cancelled or (self.stopped and p.returncode < 0):
             return None
         msgs = []
         for line in out.splitlines():
@@ -240,12 +250,18 @@ def interpret(msgs, ranges):
     return {"status": "error", "detail": "\n".join(errors) or "The referee produced no verdict."}
 
 
-def run_level(run, n, code, events, jobs, timeout, cache):
-    """Check and test the player's code, putting (event, data) pairs on `events`."""
+def run_level(run, n, code, events, jobs, timeout, cache, only=None, stop_on_fail=False):
+    """Check and test the player's code, putting (event, data) pairs on `events`.
+
+    `only` restricts the run to these test ids. With `stop_on_fail`, the first test that
+    fails (❌, or ⚠ when it cannot even be stated) stops the others; they are reported
+    with a `skipped` event."""
     try:
         lv = load_level(n)
         run.dir.mkdir(parents=True, exist_ok=True)
-        events.put(("tests", [{"id": i, "name": t["name"], "kind": t["kind"]} for i, t in enumerate(lv["tests"])]))
+        chosen = [i for i in range(len(lv["tests"])) if only is None or i in only]
+        events.put(("tests", [{"id": i, "name": lv["tests"][i]["name"], "kind": lv["tests"][i]["kind"]}
+                              for i in chosen]))
         check = compile_check(run, lv, code, timeout)
         if check is None:
             events.put(("compile", {"ok": False, "diagnostics": [],
@@ -255,7 +271,7 @@ def run_level(run, n, code, events, jobs, timeout, cache):
         if not check["ok"]:
             return
 
-        results = [None] * len(lv["tests"])
+        results = {}
         slots = threading.Semaphore(jobs)
 
         def one(i, t):
@@ -268,11 +284,17 @@ def run_level(run, n, code, events, jobs, timeout, cache):
                 with slots:
                     if run.cancelled:
                         return
+                    if run.stopped:
+                        events.put(("skipped", {"id": i}))
+                        return
                     events.put(("start", {"id": i}))
                     t0 = time.time()
                     msgs = run.lean(f"T{i}", text, timeout)
                     secs = round(time.time() - t0, 1)
                 if run.cancelled:
+                    return
+                if msgs is None and run.stopped:
+                    events.put(("skipped", {"id": i}))
                     return
                 if msgs is None and t["kind"] == "expect_open":
                     # an open statement should not be settled, and the referee did not settle it
@@ -287,17 +309,20 @@ def run_level(run, n, code, events, jobs, timeout, cache):
                         cache.put(key, res)
             results[i] = res
             events.put(("result", {"id": i, **res}))
+            if stop_on_fail and res["status"] in ("fail", "error"):
+                run.stop_tests()
 
-        threads = [threading.Thread(target=one, args=(i, t), daemon=True) for i, t in enumerate(lv["tests"])]
+        threads = [threading.Thread(target=one, args=(i, lv["tests"][i]), daemon=True) for i in chosen]
         for th in threads:
             th.start()
         for th in threads:
             th.join()
         if run.cancelled:
             return
-        count = lambda s: sum(r is not None and r["status"] == s for r in results)
-        events.put(("done", {"total": len(results), "passed": count("pass"), "failed": count("fail"),
-                             "unknown": count("unknown"), "errors": count("error")}))
+        count = lambda s: sum(r["status"] == s for r in results.values())
+        events.put(("done", {"total": len(chosen), "passed": count("pass"), "failed": count("fail"),
+                             "unknown": count("unknown"), "errors": count("error"),
+                             "stopped": run.stopped}))
     except Exception as e:  # report instead of leaving the browser waiting
         events.put(("fatal", {"message": f"{type(e).__name__}: {e}"}))
     finally:
@@ -356,7 +381,8 @@ class Handler(BaseHTTPRequestHandler):
             Handler.current = run
         threading.Thread(target=run_level, daemon=True,
                          args=(run, int(m.group(1)), body.get("code", ""), events,
-                               self.opts.jobs, self.opts.timeout, self.cache)).start()
+                               self.opts.jobs, self.opts.timeout, self.cache,
+                               body.get("tests"), bool(body.get("stopOnFail")))).start()
         self.send_response(200)
         self.send_header("Content-Type", "text/event-stream; charset=utf-8")
         self.send_header("Cache-Control", "no-store")

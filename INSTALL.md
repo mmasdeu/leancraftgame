@@ -64,6 +64,12 @@ Options:
 * Then each hidden test runs in its own Lean process, and its result appears
   as soon as it is known: ✅ as expected, ❌ the referee proved the opposite,
   ❓ the referee could not settle it. Failed tests have a **Hint**.
+* **Run tests** stops at the first ❌: the tests still running are cancelled
+  and shown as `–` (not run). The ▶ button next to a test runs only that test.
+* Every result belongs to the exact code it was computed for. As soon as you
+  edit the code, the earlier results turn grey (undefined); undoing the edit
+  brings them back. A level is cleared when **every test has passed on the same
+  code**.
 * Tests that end up ❓ are the slow ones: the referee tries every move it
   knows, until the time limit (60 s by default) stops it. A timer shows which
   tests are still running. **Stop** cancels the run. Some tests that should pass

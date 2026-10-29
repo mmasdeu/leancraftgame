@@ -205,7 +205,15 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
 .test.fail .detail { color: var(--fail); }
 .test.unknown .detail { color: var(--unknown); }
 .test.error .detail { color: var(--fail); font-family: var(--mono); font-size: 12px; }
-.test.waiting .name, .test.skipped .name { color: var(--muted); }
+.test.waiting .name, .test.skipped .name, .test.queued .name { color: var(--muted); }
+.test .run1 {
+  flex: none; padding: 0 7px; font-size: 11px; line-height: 20px; border-radius: 6px;
+  color: var(--muted); opacity: .55;
+}
+.test:hover .run1, .test .run1:focus-visible { opacity: 1; }
+.test .run1:hover:not(:disabled) { color: var(--accent); }
+.test .run1:disabled { opacity: .25; }
+.spin.idle { border-top-color: var(--border); animation: none; }
 .test details { margin: 6px 0 0 2.1em; font-size: 14px; }
 .test summary { cursor: pointer; color: var(--accent); }
 .spin {
