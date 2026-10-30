@@ -6,16 +6,16 @@ open L1
 
 #no_sorry answer
 #no_sorry language
-#no_sorry flag
+#no_sorry successor
 #level_start "Naming things"
 
 #expect_true "answer = 42" unfolding answer :
   answer = 42
-#expect_true "answer + 1 = 43" unfolding answer :
-  answer + 1 = 43
+#expect_true "successor = 43" unfolding successor :
+  successor = 43
+#expect_true "successor is one more than answer" unfolding answer successor :
+  successor = answer + 1
 #expect_true "language is the text Lean (with a capital L)" unfolding language :
   language = "Lean"
-#expect_true "flag = true" unfolding flag :
-  flag = true
 
 #level_report

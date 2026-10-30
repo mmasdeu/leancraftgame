@@ -5,15 +5,16 @@ A function on natural numbers can be defined **by cases**, one line per shape
 of the input:
 
 ```lean
-def isZero : Nat → Bool
-  | 0 => true
-  | _ => false
+def bonus : Nat → Nat
+  | 0 => 10
+  | 1 => 20
+  | _ => 0
 ```
 
 * The input is not named before the colon. Instead, its type is part of the
-  function type `Nat → Bool` ("from `Nat` to `Bool`"; type `→` as `\to`).
+  function type `Nat → Nat` ("from `Nat` to `Nat`"; type `→` as `\to`).
 * Each line `| pattern => result` handles the inputs that match the pattern.
-  `_` matches anything.
+  `_` matches anything: here `bonus 0` is 10, `bonus 1` is 20 and `bonus 5` is 0.
 
 ## Recursion
 

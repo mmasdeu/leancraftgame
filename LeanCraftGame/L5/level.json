@@ -23,12 +23,12 @@
       "hint": "`middle 2 3 1` is 1, but the median of 2, 3 and 1 is 2. So `ma = 2`, `mb = 3`, `mc = 1` works."
     },
     {
-      "match": "isLeap",
+      "match": "daysInYear",
       "steps": [
         "The specification has *two* exceptions. Does the code handle both?",
         "The code handles \"except the centuries\". What about \"except every fourth century\"?"
       ],
-      "hint": "2000 is divisible by 400, so it was a leap year, but `isLeap 2000` is `false`."
+      "hint": "2000 is divisible by 400, so it had 366 days, but `daysInYear 2000` is 365, not 366."
     }
   ]
 }

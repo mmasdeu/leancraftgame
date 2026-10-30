@@ -4,5 +4,5 @@ def answer : Nat := 42
 -- The name of this programming language, as text.
 def language : String := "Lean"
 
--- The truth value "yes".
-def flag : Bool := true
+-- One more than the answer. Use `answer` in the definition.
+def successor : Nat := answer + 1

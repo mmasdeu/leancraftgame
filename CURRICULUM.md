@@ -104,12 +104,13 @@ of them with the keys to type them, and has a typing drill.
 
 ### 1. Naming things (L1)
 
-* **Teaches:** `def name : Type := value`; the types `Nat`, `String` and
-  `Bool`; `sorry` as a placeholder; `--` comments; how to run the tests and read ✅/❌.
+* **Teaches:** `def name : Type := value`; the types `Nat` and `String`; using a
+  defined name in another definition; `sorry` as a placeholder; `--` comments; how to
+  run the tests and read ✅/❌.
   (The `namespace … end` lines that wrap every level's code are added by the game and
   never shown, so they are not taught.)
 * **Task:** give three constants their values: `answer : Nat` (42),
-  `language : String` ("Lean"), `flag : Bool` (true).
+  `language : String` ("Lean"), `successor : Nat` (one more than `answer`).
 * **Tests catch:** a wrong value, wrong capitalisation of the text.
 
 ### 2. Functions (L2)
@@ -149,10 +150,10 @@ of them with the keys to type them, and has a typing drill.
   hunting systematically (every branch of an `if`, every "except" in the
   specification).
 * **Task:** the colleague's `middle` (a median that is wrong when the largest
-  number comes first or second) and `isLeap` (which forgot the 400-year rule). Give
+  number comes first or second) and `daysInYear` (which forgot the 400-year rule). Give
   three numbers and a year on which they are wrong.
 * **Tests catch:** an input in sorted order (`1 2 3`), on which `middle` happens to
-  be right, and the year 1900, on which `isLeap` happens to be right.
+  be right, and the year 1900, on which `daysInYear` happens to be right.
 
 ---
 

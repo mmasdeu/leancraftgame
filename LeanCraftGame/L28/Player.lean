@@ -19,7 +19,8 @@ structure Group' (G : Type) where
 /-
 ## Part A: Break it
 
-Find a *junk model*: an operation on `Bool` that satisfies every axiom of
+Find a *junk model*: an operation on `Bool` (the type with the two values `true`
+and `false`) that satisfies every axiom of
 `Group'` but is NOT a group. Only give the data; the referee checks the
 axioms for you.
 

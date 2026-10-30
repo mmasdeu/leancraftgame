@@ -22,8 +22,12 @@ Read it piece by piece:
 * `:=` means "is defined to be".
 * `42` is the value.
 
-Two more types: `String` is text in double quotes, like `"hello"`, and `Bool`
-has exactly two values, `true` and `false`.
+One more type: `String` is text in double quotes, like `"hello"`.
+
+## Using names
+
+A definition can use the names defined before it. If `answer` is 42, then
+`answer + 1` is 43. That is what names are for.
 
 ## `sorry` and comments
 
@@ -49,7 +53,7 @@ def answer : Nat := sorry
 -- The name of this programming language, as text.
 def language : String := sorry
 
--- The truth value "yes".
-def flag : Bool := sorry
+-- One more than the answer. Use `answer` in the definition.
+def successor : Nat := sorry
 
 end L1

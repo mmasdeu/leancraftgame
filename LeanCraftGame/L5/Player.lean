@@ -21,14 +21,15 @@ def middle (a b c : Nat) : Nat :=
   if a ≤ b then (if b ≤ c then b else c)
   else (if a ≤ c then a else c)
 
--- is year y a leap year? A year divisible by 4 is a leap year, except the
--- centuries, except every fourth century: 2024 and 2000 were leap years,
--- 2023 and 1900 were not.
-def isLeap (y : Nat) : Bool := y % 4 == 0 && y % 100 != 0
+-- how many days has year y? A year divisible by 4 is a leap year (366 days),
+-- except the centuries, except every fourth century: 2024 and 2000 had 366
+-- days, 2023 and 1900 had 365.
+def daysInYear (y : Nat) : Nat :=
+  if y % 4 = 0 then (if y % 100 = 0 then 365 else 366) else 365
 ```
 
-(`==` and `!=` compare two numbers and give a `Bool`; `&&` is "and" for
-`Bool`s.)
+(`y % 4` is the remainder of `y` divided by 4, and `=` tests whether two
+numbers are equal. Level 6 explains both.)
 
 ## How to hunt
 
@@ -42,7 +43,7 @@ def isLeap (y : Nat) : Bool := y % 4 == 0 && y % 100 != 0
 ## Your task
 
 Give three numbers on which `middle` returns the wrong number, and a year on
-which `isLeap` gives the wrong answer.
+which `daysInYear` gives the wrong answer.
 -/
 namespace L5
 
@@ -52,14 +53,15 @@ def middle (a b c : Nat) : Nat :=
   if a ≤ b then (if b ≤ c then b else c)
   else (if a ≤ c then a else c)
 
-def isLeap (y : Nat) : Bool := y % 4 == 0 && y % 100 != 0
+def daysInYear (y : Nat) : Nat :=
+  if y % 4 = 0 then (if y % 100 = 0 then 365 else 366) else 365
 
 -- Three numbers on which `middle` is wrong.
 def ma : Nat := sorry
 def mb : Nat := sorry
 def mc : Nat := sorry
 
--- A year on which `isLeap` is wrong.
+-- A year on which `daysInYear` is wrong.
 def year : Nat := sorry
 
 end L5
