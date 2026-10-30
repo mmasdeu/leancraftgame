@@ -1,5 +1,3 @@
-namespace L6
-
 -- the larger of two numbers (already done)
 def biggest (a b : Nat) : Nat :=
   if a ≤ b then b else a
@@ -12,5 +10,3 @@ def gap (a b : Nat) : Nat := a - b
 
 -- 0 for the input 0, and 1 for any other input   (zeroOrOne 0 is 0, zeroOrOne 9 is 1)
 def zeroOrOne (n : Nat) : Nat := if n = 0 then 0 else 1
-
-end L6

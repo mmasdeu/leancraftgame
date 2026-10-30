@@ -28,10 +28,10 @@ end L27Ref
   L27Ref.TendsToInfinity good₁
 #expect_true "good₂ tends to infinity" unfolding L27Ref.TendsToInfinity good₂ :
   L27Ref.TendsToInfinity good₂
-#expect_false "bad₁ tends to infinity" unfolding L27Ref.TendsToInfinity bad₁ :
-  L27Ref.TendsToInfinity bad₁
-#expect_false "bad₂ tends to infinity" unfolding L27Ref.TendsToInfinity bad₂ :
-  L27Ref.TendsToInfinity bad₂
+#expect_true "bad₁ does not tend to infinity" unfolding L27Ref.TendsToInfinity bad₁ :
+  ¬ (L27Ref.TendsToInfinity bad₁)
+#expect_true "bad₂ does not tend to infinity" unfolding L27Ref.TendsToInfinity bad₂ :
+  ¬ (L27Ref.TendsToInfinity bad₂)
 
 -- The mutants. Each one must get at least one of your four sequences wrong.
 -- A mutant that is *stronger* than the right definition (it implies tending to

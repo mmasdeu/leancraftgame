@@ -1,5 +1,3 @@
-namespace L8
-
 -- lo ≤ n ≤ hi (already done)
 def InRange (lo hi n : Nat) : Prop := lo ≤ n ∧ n ≤ hi
 
@@ -8,5 +6,3 @@ def IsTeen (n : Nat) : Prop := 13 ≤ n ∧ n ≤ 19
 
 -- n is even and lies between lo and hi        (EvenInRange 1 10 4 is true, EvenInRange 1 10 5 is false)
 def EvenInRange (lo hi n : Nat) : Prop := n % 2 = 0 ∧ InRange lo hi n
-
-end L8

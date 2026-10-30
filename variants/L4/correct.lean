@@ -1,5 +1,3 @@
-namespace L4
-
 -- The answer to life, the universe and everything.
 def answer : Nat := 42
 
@@ -8,5 +6,3 @@ def language : String := "Lean"
 
 -- The truth value "yes".
 def flag : Bool := true
-
-end L4

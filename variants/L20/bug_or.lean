@@ -1,5 +1,3 @@
-namespace L20
-
 -- n is even and at least 4 (already done)
 def BigEven (n : ℕ) : Prop := Even n ∧ 4 ≤ n
 
@@ -11,5 +9,3 @@ def CommonDivisor (d a b : ℕ) : Prop := d ∣ a ∧ d ∣ b
 
 -- f never takes the same value twice (use Mathlib's name for this)
 def OneToOne (f : ℕ → ℕ) : Prop := Function.Injective f
-
-end L20

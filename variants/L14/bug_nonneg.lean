@@ -1,5 +1,3 @@
-namespace L14
-
 -- two numbers `lo` and `hi`, in this order, with an axiom `lo ≤ hi`
 structure Interval where
   lo : Nat
@@ -10,5 +8,3 @@ structure Interval where
 structure PosNat where
   val : Nat
   pos : 0 ≤ val
-
-end L14

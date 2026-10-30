@@ -46,7 +46,7 @@
       "hint": "`M = 0` works for every sequence, so the colleague's `Unbounded` accepts everything."
     },
     {
-      "match": "arbitrarily large",
+      "match": "is bounded",
       "steps": [
         "Your sequence really is unbounded. Pick one that stays below some bound."
       ],

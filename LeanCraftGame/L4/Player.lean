@@ -25,18 +25,17 @@ Read it piece by piece:
 Two more types: `String` is text in double quotes, like `"hello"`, and `Bool`
 has exactly two values, `true` and `false`.
 
-## `sorry`, comments and the other lines
+## `sorry` and comments
 
 * `sorry` is a placeholder meaning "to be filled in". Replace every `sorry`
   with a value. The tests only run once no `sorry` is left.
 * A line starting with `--` is a *comment*: Lean ignores it.
-* `namespace L4` and `end L4` wrap the file. Leave them alone.
 
 ## How to play
 
 Edit the code on the left, then press **Run tests** (or `Ctrl`+`Enter`). The
 report on the right shows ✅ for a passed test and ❌ for a failed one.
-Open **Hint** under a failed test if you are stuck.
+If you are stuck, a **Hint** appears under a failed test after a failed run.
 
 ## Your task
 

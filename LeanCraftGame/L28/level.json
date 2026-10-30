@@ -18,7 +18,7 @@
       "hint": "The colleague defined a common *multiple*. Take `cdD := 6`, `cdA := 2`, `cdB := 3`: 2 and 3 divide 6, but 6 does not divide 2."
     },
     {
-      "match": "cdD divides both",
+      "match": "cdD does not divide both",
       "steps": [
         "Your `cdD` really is a common divisor. You need numbers where `cdA` and `cdB` divide `cdD`, but not the other way round."
       ],
@@ -46,7 +46,7 @@
       "hint": "`k % n = 0` says that `n` divides `k`: the colleague defined the divisors of `k`. Take `mulK := 6`, `mulN := 3`."
     },
     {
-      "match": "is a multiple of",
+      "match": "is not a multiple of",
       "steps": [
         "Your `mulN` really is a multiple of `mulK`. You need an element of the colleague's set that is not one."
       ],

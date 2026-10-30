@@ -47,5 +47,3 @@ structure Group₂ (G : Type) where
   one_mul   : ∀ a, mul one a = a
   mul_inv   : ∀ a, mul a (inv a) = one
   mul_one   : ∀ a, mul a one = a
-
-end L2

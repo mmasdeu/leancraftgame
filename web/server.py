@@ -91,11 +91,31 @@ def split_tests(src):
     return out
 
 
+def strip_namespace(code, ns):
+    """The player's code without the `namespace <ns>` … `end <ns>` lines around it.
+
+    Player.lean files keep these lines so that they compile as modules, but the player never
+    sees them: the template shown in the editor is the inside, and `assemble` puts them back."""
+    lines = code.strip("\n").split("\n")
+    if lines and lines[0].strip() == f"namespace {ns}":
+        lines = lines[1:]
+    if lines and lines[-1].strip() == f"end {ns}":
+        lines = lines[:-1]
+    return "\n".join(lines).strip("\n") + "\n"
+
+
+def has_namespace(code, ns):
+    """Does the code open the level's namespace itself (a draft saved before the lines were hidden)?"""
+    return re.search(rf"^\s*namespace\s+{re.escape(ns)}\s*$", code, re.M) is not None
+
+
 def load_level(n):
     d = ROOT / "LeanCraftGame" / f"L{n}"
     meta = json.loads((d / "level.json").read_text(encoding="utf-8"))
     intro, template = split_intro((d / "Player.lean").read_text(encoding="utf-8"))
-    return {**meta, "id": n, "num": LEVELS.index(n) + 1, "intro": intro, "template": template,
+    ns = f"L{n}"
+    return {**meta, "id": n, "num": LEVELS.index(n) + 1, "intro": intro, "namespace": ns,
+            "template": strip_namespace(template, ns),
             **split_tests((d / "Tests.lean").read_text(encoding="utf-8"))}
 
 
@@ -103,7 +123,7 @@ def load_level(n):
 # `hintsAfter` drive the predictions, the hidden tests and the hint gates (see
 # validate_level and web/static/app.js).
 PUBLIC_KEYS = ("id", "num", "world", "title", "skill", "intro", "template", "hints",
-               "predict", "public", "hintsAfter")
+               "predict", "public", "hintsAfter", "namespace")
 
 
 def public_level(lv):
@@ -150,13 +170,19 @@ def assemble(lv, code, extra):
     """Build a Lean file from segments; return its text and the line range of each segment.
 
     The player's `import` lines move to the head of the file (Lean wants them first);
-    they are blanked in place so that line numbers in the player's code stay the same."""
+    they are blanked in place so that line numbers in the player's code stay the same.
+    The level's namespace wraps the player's code in segments of their own, unless the
+    code already opens it (an old draft that still has the lines)."""
     lines = code.rstrip("\n").split("\n")
     imports = [l.strip() for l in lines if re.match(r"import\s", l)]
     code = "\n".join("" if re.match(r"import\s", l) else l for l in lines)
-    segs = [("head", "\n".join(["import LeanCraftGame.Referee"] + lv["imports"] + imports), None),
-            ("player", code, None),
-            ("preamble", "\n".join(lv["preamble"]), None)] + extra
+    ns = lv["namespace"]
+    wrap = not has_namespace(code, ns)
+    segs = [("head", "\n".join(["import LeanCraftGame.Referee"] + lv["imports"] + imports), None)]
+    segs += [("namespace", f"namespace {ns}", None)] if wrap else []
+    segs += [("player", code, None)]
+    segs += [("namespace", f"end {ns}", None)] if wrap else []
+    segs += [("preamble", "\n".join(lv["preamble"]), None)] + extra
     lines, ranges, cur = [], [], 1
     for kind, text, info in segs:
         n = text.count("\n") + 1

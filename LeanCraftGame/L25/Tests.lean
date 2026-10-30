@@ -20,8 +20,8 @@ end L25Ref
   L25Ref.diff L25.diffA L25.diffB ≠ (L25.diffA : ℤ) - (L25.diffB : ℤ)
 #expect_true "IsReciprocal accepts your two numbers" unfolding L25Ref.IsReciprocal L25.recX L25.recY :
   L25Ref.IsReciprocal L25.recX L25.recY
-#expect_false "your two numbers multiply to 1" unfolding L25.recX L25.recY :
-  L25.recX * L25.recY = 1
+#expect_true "your two numbers do not multiply to 1" unfolding L25.recX L25.recY :
+  ¬ (L25.recX * L25.recY = 1)
 #expect_true "average gets your two numbers wrong" unfolding L25Ref.average L25.avgA L25.avgB :
   L25Ref.average L25.avgA L25.avgB ≠ (L25.avgA + L25.avgB) / 2
 

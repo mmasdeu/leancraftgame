@@ -221,7 +221,10 @@ partial def solve (fuel : Nat) (strong : Bool := false) : TacticM Unit := do
         if let .forallE _ dom _ _ := ty then
           if (← inferType dom).isProp then continue
           let (ls, ns) ← candidates dom
-          for c in (if useNums then ns else ls.filter (fun e => e.isFVar || e.isAppOfArity ``HAdd.hAdd 6)) do
+          -- from local variables: x, x + 1, 2x and 2x + 1 (the doubles reach the even and
+          -- odd terms of sequences defined by parity, such as `n % 2 * n`)
+          for c in (if useNums then ns else ls.filter (fun e => e.isFVar || e.isAppOfArity ``HAdd.hAdd 6
+              || e.isAppOfArity ``HMul.hMul 6)) do
             let s ← saveState
             try
               let mut e := mkApp d.toExpr c

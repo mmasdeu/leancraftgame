@@ -24,8 +24,16 @@ const LiveRunner = (() => {
     const imports = lines.filter((l) => /^import\s/.test(l)).map((l) => l.trim());
     const body = lines.map((l) => (/^import\s/.test(l) ? "" : l)).join("\n");
     const head = [...new Set(["import Mathlib.Tactic", ...level.imports, ...imports])].join("\n");
+    // the level's namespace wraps the player's code (the editor never shows those lines),
+    // unless the code opens it itself (a draft saved before they were hidden)
+    const ns = level.namespace;
+    const wrap = ns && !new RegExp(`^\\s*namespace\\s+${ns}\\s*$`, "m").test(body);
     const segs = [
-      ["head", head, null], ["player", body, null], ["prelude", prelude, null],
+      ["head", head, null],
+      ...(wrap ? [["namespace", `namespace ${ns}`, null]] : []),
+      ["player", body, null],
+      ...(wrap ? [["namespace", `end ${ns}`, null]] : []),
+      ["prelude", prelude, null],
       ["preamble", level.preamble.join("\n"), null],
       ...level.gates.map((g) => ["gate", g, null]),
       ...level.checks.map((c) => ["check", c.lean, c.message]),

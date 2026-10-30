@@ -7,7 +7,7 @@
 * An answer named `correct*.lean` or `fix*.lean` must pass every test.
 * An answer named `bug*.lean` must fail at least one test (❌), or be rejected
   before the tests run (for example by a check in level.json).
-* The starting file `Player.lean` must not clear the level.
+* The starting code (`Player.lean` as the player sees it) must not clear the level.
 * Every level's metadata (predictions, public tests, hints) must match its tests.
 
     python3 check_levels.py --static   only check the metadata (no Lean needed)
@@ -74,11 +74,12 @@ def main():
     for n in opts.levels or server.LEVELS:
         lv = server.load_level(n)
         names = [t["name"] for t in lv["tests"]]
-        answers = [ROOT / f"LeanCraftGame/L{n}/Player.lean"] + sorted((ROOT / f"variants/L{n}").glob("*.lean"))
+        answers = [None] + sorted((ROOT / f"variants/L{n}").glob("*.lean"))
         for f in answers:
-            label = "(start)" if f.name == "Player.lean" else f.stem
+            label = "(start)" if f is None else f.stem
+            code = lv["template"] if f is None else f.read_text()
             t0 = time.time()
-            compiled, results, done = run(n, f.read_text(), opts.jobs, opts.timeout, cache)
+            compiled, results, done = run(n, code, opts.jobs, opts.timeout, cache)
             if not compiled["ok"]:
                 why = (compiled["problems"] or [d["text"] for d in compiled["diagnostics"]])[0]
                 line = "rejected: " + why.replace("\n", " ")[:80]

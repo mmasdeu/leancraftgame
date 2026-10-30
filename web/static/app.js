@@ -386,7 +386,9 @@ $("reset").onclick = () => {
      test is shown once the level is cleared.
    * Gated hints: hints unlock after `hintsAfter` failed runs (default 2), one step at a
      time: each further failed run unlocks the next step of the hint (its `steps`, then the
-     `hint` itself).
+     `hint` itself). A failed run is one with a ❌ (or ⚠️): a ❓ is not a verdict against the
+     player's definition, so it neither counts as a failure nor shows a hint (hints are
+     written for a test that failed, and would claim something the referee did not prove).
 
    Clearing a level earns up to three stars: one for clearing it, one for not opening a hint,
    and one for predicting every statement right (or, in a level without predictions, for
@@ -529,9 +531,9 @@ function starsLine() {
    undefined. A level is cleared when every test has passed on the same code. */
 
 const KIND = {
-  expect_true: "should hold", expect_false: "should fail", expect_open: "should stay open",
-  expect_model: "should be a model", expect_not_model: "should not be a model",
-  expect_caught: "should be caught",
+  expect_true: "must be true", expect_false: "must be false", expect_open: "must stay open",
+  expect_model: "must be allowed", expect_not_model: "must be ruled out",
+  expect_caught: "must be caught",
 };
 const ICON = { pass: "✅", fail: "❌", unknown: "❓", error: "⚠️" };
 let tests = [], ticker = null, controller = null;
@@ -574,7 +576,7 @@ function renderTests() {
     else if (ICON[v]) { icon = ICON[v]; time = t.cached ? "cached" : t.seconds + " s"; title = ""; }
     else if (v === "skipped") { icon = "–"; title = "not run: the run stopped at the first failure"; }
     const shown = ICON[v] || v === "skipped";
-    const hint = (v === "fail" || v === "unknown") ? hintHtml(t) : "";
+    const hint = v === "fail" ? hintHtml(t) : v === "unknown" ? UNSETTLED : "";
     const p = predictionFor(t);
     const yes = isModelKind(t.kind) ? "allowed" : "true", no = isModelKind(t.kind) ? "not allowed" : "false";
     const said = p && `<div class="prediction ${p.right ? "right" : "wrong"}">You predicted <b>${p.said ? yes : no}</b>
@@ -597,6 +599,11 @@ function renderTests() {
   for (const b of $("tests").querySelectorAll("button.run1"))
     b.onclick = () => runTests([Number(b.dataset.id)]);
 }
+
+/* Shown under a ❓ instead of a hint: hints are written for a test that failed. */
+const UNSETTLED = `<div class="hint-locked">❓ is not a verdict against your definition: the referee could
+  neither prove nor refute this one in time. If the other tests pass, try a simpler way of writing
+  your definition or your example (the referee is a small search, not a mathematician).</div>`;
 
 /* One row standing for the tests that are still hidden. */
 function hiddenRow(hidden) {
@@ -694,7 +701,8 @@ async function runTests(ids = null) {
       Object.assign(tests[data.id], { state: "running", started: Date.now() });
     } else if (event === "result") {
       Object.assign(tests[data.id], { state: data.status, detail: data.detail, seconds: data.seconds, cached: data.cached, code });
-      if (data.status !== "pass") { reveal(tests[data.id].name); failedThisRun = true; }
+      if (data.status !== "pass") reveal(tests[data.id].name);
+      if (data.status === "fail" || data.status === "error") failedThisRun = true;
       progress(run);
     } else if (event === "skipped") {
       Object.assign(tests[data.id], { state: "skipped", detail: "", code });

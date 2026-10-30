@@ -1,5 +1,3 @@
-namespace L15
-
 -- 1 * 2 * … * n (already done)
 def factorial : Nat → Nat
   | 0 => 1
@@ -20,5 +18,3 @@ def fib : Nat → Nat
   | 0 => 0
   | 1 => 1
   | n + 2 => fib (n + 1) + fib (n + 1)
-
-end L15

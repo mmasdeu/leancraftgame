@@ -16,10 +16,10 @@ end L29Ref
 
 #expect_true "seqA converges to limA" unfolding L29Ref.ConvergesTo L29.seqA L29.limA :
   L29Ref.ConvergesTo L29.seqA L29.limA
-#expect_false "Alice's ConvergesA accepts seqA and limA" unfolding L29Ref.ConvergesA L29.seqA L29.limA :
-  L29Ref.ConvergesA L29.seqA L29.limA
-#expect_false "seqB converges to limB" unfolding L29Ref.ConvergesTo L29.seqB L29.limB :
-  L29Ref.ConvergesTo L29.seqB L29.limB
+#expect_true "Alice's ConvergesA rejects seqA and limA" unfolding L29Ref.ConvergesA L29.seqA L29.limA :
+  ¬ (L29Ref.ConvergesA L29.seqA L29.limA)
+#expect_true "seqB does not converge to limB" unfolding L29Ref.ConvergesTo L29.seqB L29.limB :
+  ¬ (L29Ref.ConvergesTo L29.seqB L29.limB)
 #expect_true "Bob's ConvergesB accepts seqB and limB" unfolding L29Ref.ConvergesB L29.seqB L29.limB :
   L29Ref.ConvergesB L29.seqB L29.limB
 

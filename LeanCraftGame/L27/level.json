@@ -5,8 +5,8 @@
   "public": [
     "good₁ tends to infinity",
     "good₂ tends to infinity",
-    "bad₁ tends to infinity",
-    "bad₂ tends to infinity"
+    "bad₁ does not tend to infinity",
+    "bad₂ does not tend to infinity"
   ],
   "checks": [
     {
@@ -24,11 +24,11 @@
       "hint": "`good₂` is labelled as tending to infinity, but it does not. Every label must be honest."
     },
     {
-      "match": "bad₁ tends",
+      "match": "bad₁ does not tend",
       "hint": "`bad₁` is labelled as not tending to infinity, but it does. Every label must be honest."
     },
     {
-      "match": "bad₂ tends",
+      "match": "bad₂ does not tend",
       "hint": "`bad₂` is labelled as not tending to infinity, but it does. Every label must be honest."
     },
     {

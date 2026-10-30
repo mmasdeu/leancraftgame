@@ -15,15 +15,15 @@ end L26Ref
 
 #expect_true "HasPositiveRoot accepts your function" unfolding L26Ref.HasPositiveRoot L26.noRoot :
   L26Ref.HasPositiveRoot L26.noRoot
-#expect_false "your function has a root other than 0" unfolding L26.noRoot :
-  ∃ n > 0, L26.noRoot n = 0
+#expect_true "your function has no root other than 0" unfolding L26.noRoot :
+  ¬ (∃ n > 0, L26.noRoot n = 0)
 #expect_true "EventuallyZero accepts your sequence" unfolding L26Ref.EventuallyZero L26.notEventuallyZero :
   L26Ref.EventuallyZero L26.notEventuallyZero
-#expect_false "your sequence is eventually 0" unfolding L26.notEventuallyZero :
-  ∃ N, ∀ n ≥ N, L26.notEventuallyZero n = 0
+#expect_true "your sequence is not eventually 0" unfolding L26.notEventuallyZero :
+  ¬ (∃ N, ∀ n ≥ N, L26.notEventuallyZero n = 0)
 #expect_true "Unbounded accepts your sequence" unfolding L26Ref.Unbounded L26.bounded :
   L26Ref.Unbounded L26.bounded
-#expect_false "your sequence takes arbitrarily large values" unfolding L26.bounded :
-  ∀ M, ∃ n, M ≤ L26.bounded n
+#expect_true "your sequence is bounded" unfolding L26.bounded :
+  ¬ (∀ M, ∃ n, M ≤ L26.bounded n)
 
 #level_report

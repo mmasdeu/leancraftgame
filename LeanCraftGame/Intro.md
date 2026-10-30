@@ -81,7 +81,9 @@ counterexample.
    which is handy once you have fixed a definition.
 7. **Hints unlock as you go.** After two failed runs (one in the Basics world), a failing
    test offers the first step of its hint: usually a question. Each further failed run
-   unlocks the next step, and the last step gives the answer away.
+   unlocks the next step, and the last step gives the answer away. A failed run is one
+   with a ❌. A ❓ (the referee could not decide) is not held against you: it does not
+   count as a failure and shows no hint.
 8. When **every test has passed on the same code**, the level is cleared, every test
    is shown, and the next one unlocks. Edit your code, and the earlier results turn
    grey: they are about the old code.

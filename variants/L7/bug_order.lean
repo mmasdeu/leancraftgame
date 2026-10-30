@@ -1,5 +1,3 @@
-namespace L7
-
 -- n is at least 100 (already done)
 def IsBig (n : Nat) : Prop := 100 ≤ n
 
@@ -11,5 +9,3 @@ def IsSmall (n : Nat) : Prop := n < 10
 
 -- dividing b by a leaves no remainder   (GoesInto 3 12 is true, GoesInto 5 12 is false)
 def GoesInto (a b : Nat) : Prop := a % b = 0
-
-end L7

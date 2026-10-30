@@ -37,5 +37,3 @@ such worlds, including the real one.
 
 def GoldbachFor (P : Nat → Prop) : Prop :=
   ∀ n, 2 < n ∧ n % 2 = 0 ∧ ∃ p q, P p ∧ P q ∧ p + q = n
-
-end L3

@@ -29,7 +29,7 @@
       "hint": "The weekend days are 6 and 7: `weekendDay` must be one of them."
     },
     {
-      "match": "IsWeekend accepts",
+      "match": "IsWeekend rejects",
       "steps": [
         "Can a day be equal to 6 *and* to 7?"
       ],

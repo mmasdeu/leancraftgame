@@ -29,8 +29,8 @@ green by trial and error:
   should be true or false; the answers lock in and are marked.
 * **Hidden tests.** Most tests stay hidden until they fail (the failure, with its
   counterexample, is always shown), and all are shown once the level is cleared.
-* **Gated hints.** Hints unlock after failed runs, one step at a time, from a
-  question to the answer.
+* **Gated hints.** Hints unlock after failed runs (runs with a ❌; a ❓ does not
+  count), one step at a time, from a question to the answer.
 * **Stars.** A cleared level earns up to three: cleared, no hint opened, every
   prediction right.
 
@@ -179,7 +179,8 @@ levels' metadata (predictions, public tests, hints) against their tests, without
 
 ```
 LeanCraftGame/Referee.lean     the referee: witness search + core tactics, and the test commands
-LeanCraftGame/L<n>/Player.lean       what the player edits; its first comment is the lesson text
+LeanCraftGame/L<n>/Player.lean       what the player edits; its first comment is the lesson text; the `namespace`/`end` lines
+                                     around the code are never shown, and are added back when the tests run
 LeanCraftGame/L<n>/Tests.lean        hidden test battery (the level designer's real work)
 LeanCraftGame/L<n>/level.json        title, signature checks, predictions, public tests and hints for the web version
 web/server.py            local web server: runs each test as its own Lean process, streams verdicts

@@ -35,10 +35,15 @@ tests green by trial and error. They are set per level in `level.json`.
   input that broke the definition, so the evidence is never withheld, but the player
   cannot read the whole battery in advance and code against it. The Basics world and
   the "Spot the bug" levels set `"public": "all"`: their tests are the task itself.
+  In those levels every test is a claim about the player's counterexample that must be
+  true ("your two numbers do not multiply to 1"), so that no test reads as "should fail".
 * **Gated, stepped hints** (`hintsAfter`, `steps`). A hint unlocks after
   `hintsAfter` failed runs (2 by default, 1 in the Basics world). A hint may have
   `steps` before it, usually a question; each further failed run unlocks the next
-  step, and the hint itself, which often gives the answer, comes last.
+  step, and the hint itself, which often gives the answer, comes last. Only a ❌ (or ⚠️)
+  makes a run a failed run and shows a hint: a ❓ is not a verdict against the
+  player's definition, and a hint written for a failure would claim something the
+  referee did not prove.
 
 A cleared level earns up to three stars: one for clearing it, one for not opening a
 hint, and one for predicting every statement right (or, in a level without
@@ -100,8 +105,9 @@ of them with the keys to type them, and has a typing drill.
 ### 1. Naming things (L4)
 
 * **Teaches:** `def name : Type := value`; the types `Nat`, `String` and
-  `Bool`; `sorry` as a placeholder; `--` comments; the `namespace … end` wrapper
-  (leave it alone); how to run the tests and read ✅/❌.
+  `Bool`; `sorry` as a placeholder; `--` comments; how to run the tests and read ✅/❌.
+  (The `namespace … end` lines that wrap every level's code are added by the game and
+  never shown, so they are not taught.)
 * **Task:** give three constants their values: `answer : Nat` (42),
   `language : String` ("Lean"), `flag : Bool` (true).
 * **Tests catch:** a wrong value, wrong capitalisation of the text.

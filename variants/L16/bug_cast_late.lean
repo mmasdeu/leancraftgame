@@ -1,5 +1,3 @@
-namespace L16
-
 -- a minus b, as an integer        (diff 3 5 is -2)
 def diff (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)
 
@@ -8,5 +6,3 @@ def distance (a b : ℤ) : ℕ := (a - b).natAbs
 
 -- x is negative
 def IsNegative (x : ℤ) : Prop := x < 0
-
-end L16
