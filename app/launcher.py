@@ -266,7 +266,7 @@ def self_test(setup):
     if setup.status()["error"]:
         return 1
     failures = 0
-    cases = [(4, "correct", True), (4, "bug_text", False), (17, "correct", True), (17, "bug_divide", False)]
+    cases = [(1, "correct", True), (1, "bug_text", False), (11, "correct", True), (11, "bug_divide", False)]
     for n, name, should_clear in cases:
         code = (BUNDLE / "variants" / f"L{n}" / f"{name}.lean").read_text(encoding="utf-8")
         events, t0 = queue.Queue(), time.time()
