@@ -128,6 +128,8 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
   border: 1px solid var(--border);
   border-radius: 12px;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;       /* a swipe at the edge of the code does not leave the page */
 }
 .editor:focus-within { border-color: var(--accent); }
 .gutter, .hl, .editor textarea {
@@ -149,12 +151,16 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
 }
 .gutter .err { color: var(--fail); font-weight: 700; }
 .gutter .warn { color: var(--unknown); font-weight: 700; }
-.code { position: relative; flex: 1; min-width: 0; }
+/* The code area is as wide as the longest line (`flex-basis: auto`), so the textarea, which fills
+   it, covers all the text. The editor scrolls, by touch too; a textarea only as wide as the screen
+   leaves the rest of a long line untouchable. */
+.code { position: relative; flex: 1 0 auto; min-width: 0; }
 .hl { width: max-content; min-width: 100%; min-height: calc(12 * var(--lh) + 2 * var(--pad)); position: relative; z-index: 1; pointer-events: none; }
 .editor textarea {
   position: absolute; inset: 0; z-index: 1;
   width: 100%; height: 100%;
   border: 0; outline: 0; resize: none; overflow: hidden;
+  touch-action: pan-x pan-y;
   background: transparent; color: transparent; caret-color: var(--fg);
 }
 .editor textarea::selection { background: color-mix(in srgb, var(--accent) 30%, transparent); color: transparent; }

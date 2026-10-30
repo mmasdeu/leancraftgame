@@ -190,6 +190,25 @@ function render() {
     `<div class="${s}" style="top: calc(var(--pad) + ${l - 1} * var(--lh))"></div>`).join("");
 }
 
+/* The textarea is as big as its text, so the editor box scrolls, not the textarea, and the
+   browser no longer brings the caret into view by itself. Do it here. */
+const measure = document.createElement("canvas").getContext("2d");
+function revealCaret() {
+  const box = $("editor");
+  const before = src.value.slice(0, src.selectionEnd).split("\n");
+  const style = getComputedStyle(src);
+  measure.font = `${style.fontSize} ${style.fontFamily}`;
+  const pad = parseFloat(style.paddingLeft), lh = parseFloat(style.lineHeight);
+  const x = pad + measure.measureText(before[before.length - 1]).width + $("gutter").offsetWidth;
+  const y = parseFloat(style.paddingTop) + (before.length - 1) * lh;
+  const margin = 24;
+  if (x > box.scrollLeft + box.clientWidth - margin) box.scrollLeft = x - box.clientWidth + margin;
+  else if (x - $("gutter").offsetWidth < box.scrollLeft + margin) box.scrollLeft = Math.max(0, x - $("gutter").offsetWidth - margin);
+  const top = box.getBoundingClientRect().top + y, bottom = top + lh;
+  if (bottom > innerHeight - 8) scrollBy(0, bottom - innerHeight + 80);
+  else if (top < 60) scrollBy(0, top - 80);
+}
+
 /* Replace el.value[start, end) with `s`, keeping the browser's undo history when possible. */
 function replaceRange(el, start, end, s, caret) {
   expanding = true;
@@ -239,6 +258,7 @@ function attachAbbrev(el, onChange, onRun) {
       }
     }
     onChange();
+    if (el === src) revealCaret();
   });
 
   el.addEventListener("keydown", (e) => {
