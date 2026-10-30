@@ -1,0 +1,46 @@
+{
+  "world": "Classes World",
+  "title": "Spot the bug: classes",
+  "skill": "reading",
+  "public": "all",
+  "checks": [
+    {
+      "lean": "example : ℕ := L131.assocA\nexample : ℕ := L131.assocB\nexample : ℕ := L131.assocC",
+      "message": "Keep `assocA`, `assocB` and `assocC` as natural numbers."
+    },
+    {
+      "lean": "example : List ℕ := L131.badList",
+      "message": "Keep `badList` as a `List ℕ`, for example `[1, 2]`."
+    },
+    {
+      "lean": "example : ℕ × ℕ := L131.version1\nexample : ℕ × ℕ := L131.version2",
+      "message": "Keep `version1` and `version2` as pairs `(major, minor)` of natural numbers, for example `(1, 2)`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "different results",
+      "steps": [
+        "Work it out by hand for the marks 0, 0, 4. Which two do you add first in `(a + b) + c`? In `a + (b + c)`?",
+        "Rounding down is what breaks the symmetry: choose numbers where it matters."
+      ],
+      "hint": "`assocA = 0`, `assocB = 0`, `assocC = 4`: `(0 + 0) + 4` is `(0 + 4) / 2 = 2`, but `0 + (0 + 4)` is `(0 + 2) / 2 = 1`."
+    },
+    {
+      "match": "Size of your list",
+      "steps": [
+        "Which entries does the `match` look at, and which does it ignore?",
+        "A list where the ignored entries are not all 0."
+      ],
+      "hint": "`[1, 2]`: the colleague's size is 1 (only the first entry), but the sum is 3."
+    },
+    {
+      "match": "max of your two versions",
+      "steps": [
+        "`max` looks at the minor numbers only. `compare` looks at the major number first.",
+        "You need two versions where the higher major has the lower minor."
+      ],
+      "hint": "`version1 = (2, 0)`, `version2 = (1, 5)`: `max` compares the minors 0 ≤ 5 and returns `(1, 5)`, but `compare` says `(1, 5)` is lower than `(2, 0)`."
+    }
+  ]
+}

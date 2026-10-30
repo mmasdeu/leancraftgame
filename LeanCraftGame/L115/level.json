@@ -1,0 +1,89 @@
+{
+  "world": "Faithfulness World",
+  "title": "The AI proved the infinitude of primes!",
+  "skill": "auditing",
+  "predict": [
+    {
+      "test": "Toy world 6: the 'primes' are 2 and 3 (FALSE: only two of them, though the AI's claim holds)",
+      "statement": "Unbounded (fun p => p = 2 ∨ p = 3): infinitely many 'primes', if the 'primes' were just 2 and 3"
+    },
+    {
+      "test": "Toy world 2: the 'primes' are the odd numbers (infinitely many: TRUE)",
+      "statement": "Unbounded (fun p => p % 2 = 1): infinitely many 'primes', if the 'primes' were the odd numbers"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : (Nat → Prop) → Prop := L115.Unbounded",
+      "message": "Keep the name and the type: `L115.Unbounded : (Nat → Prop) → Prop`."
+    },
+    {
+      "lean": "example : Nat → Prop := L115.smallWorld",
+      "message": "Keep the name and the type: `L115.smallWorld : Nat → Prop`."
+    },
+    {
+      "lean": "example : Nat := L115.fakePrime",
+      "message": "Keep the name and the type: `L115.fakePrime : Nat`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "Toy world 1",
+      "steps": ["In the world where every number is 'prime', are there infinitely many of them?", "Does your formula still ask for the primes to get bigger than every `n`?"],
+      "hint": "Every number is 'prime' here, so for any `n` the number `n + 1` is a bigger one. A statement of the form `∃ n, ∀ p, …` instead of `∀ n, ∃ p, …` fails here: the order of the quantifiers matters."
+    },
+    {
+      "match": "Toy world 2",
+      "hint": "Odd numbers go on forever: for any `n`, `2 * n + 1` is odd and bigger than `n`. If your statement says no, check the order of `∀ n` and `∃ p`, and that it asks for `n < p`."
+    },
+    {
+      "match": "Toy world 3",
+      "hint": "The numbers ≥ 2 go on forever. If your statement says no, check the order of the quantifiers."
+    },
+    {
+      "match": "Toy world 4",
+      "steps": ["If nothing is 'prime', can there be a 'prime' bigger than `n`?", "Look at how you combined `P p` with `n < p`: `→` or `∧`?"],
+      "hint": "Nothing is 'prime', so nothing can be. `∃ p, P p → n < p` is true for every `P` (take any `p` with `¬ P p`, the implication is vacuous). Under `∃`, use `∧`."
+    },
+    {
+      "match": "Toy world 5",
+      "hint": "With only 2 as a 'prime' there are not infinitely many. If your statement holds, it probably does not ask for a 'prime' *bigger than* `n`."
+    },
+    {
+      "match": "Toy world 6",
+      "steps": ["The AI's claim holds here: for any `n` there is a 'prime' other than `n`. Is that the same as infinitely many?", "What does 'infinitely many' mean: for every bound `n`, …?"],
+      "hint": "`∀ n, ∃ p, P p ∧ p ≠ n` only says there are at least two 'primes'. Infinitely many means: for every `n` there is one *bigger than* `n`, so you need `n < p` instead of `p ≠ n`."
+    },
+    {
+      "match": "Toy world 7",
+      "hint": "The numbers up to 100 are finitely many: nothing above 100. If your statement holds, it is not asking for `n < p`."
+    },
+    {
+      "match": "≥ 2",
+      "hint": "A world of 'primes' should look like one: no 0 and no 1. Use something like `fun p => p = 2 ∨ p = 3`."
+    },
+    {
+      "match": "nothing above 100",
+      "hint": "Keep it finite and small, so that the referee can check it: for instance `fun p => p = 2 ∨ p = 3`."
+    },
+    {
+      "match": "the AI's claim holds",
+      "steps": ["For `n = 2` and `n = 3`, which 'prime' other than `n` is there in your world?", "How many numbers does a world need so that for every `n` there is one different from `n`?"],
+      "hint": "The AI's claim says: for every `n` there is a 'prime' different from `n`. A world with a single number fails at `n` = that number. Two numbers are enough: `fun p => p = 2 ∨ p = 3`."
+    },
+    {
+      "match": "should NOT be infinitely many",
+      "steps": ["Is your world finite? Name a number above which there is nothing."],
+      "hint": "If the world is infinite, the real claim holds there and nothing is wrong with the AI's statement in it. Use a finite world, such as `fun p => p = 2 ∨ p = 3`."
+    },
+    {
+      "match": "IsPrime accepts",
+      "steps": ["The AI's `IsPrime p` only says that every divisor is 1 or `p`. Which numbers have that property although they are not prime?", "Try the borders: `0`, `1`, `2`. Does `0` pass the test? (`2 ∣ 0`, but is `2 = 1 ∨ 2 = 0`?)"],
+      "hint": "Try `fakePrime := 1`. Its only divisor is 1, so the AI's definition accepts it, but the real definition requires `2 ≤ p`."
+    },
+    {
+      "match": "must not be a real prime",
+      "hint": "Your number is a real prime. You need one that the AI's definition accepts and `Nat.Prime` rejects; check the borders `0` and `1`."
+    }
+  ]
+}

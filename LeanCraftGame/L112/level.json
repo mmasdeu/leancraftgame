@@ -1,0 +1,93 @@
+{
+  "world": "Analysis World",
+  "title": "Cluster values",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "7 is not a cluster value of 7, 7, 7, 7, 7, 0, 0, 0, …",
+      "statement": "ClusterValue (fun n => if n < 5 then 7 else 0) 7"
+    },
+    {
+      "test": "0 is a cluster value of 0, 1, 0, 1, …",
+      "statement": "ClusterValue (fun n => if n % 2 = 0 then 0 else 1) 0"
+    },
+    {
+      "test": "the constant sequence 3 does not diverge",
+      "statement": "Diverges (fun _ => 3)"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : (ℕ → ℝ) → Prop := L112.Diverges",
+      "message": "Keep `Diverges : (ℕ → ℝ) → Prop`."
+    },
+    {
+      "lean": "example : (ℕ → ℝ) → ℝ → Prop := L112.ClusterValue",
+      "message": "Keep `ClusterValue : (ℕ → ℝ) → ℝ → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "constant sequence 3 does not diverge",
+      "steps": [
+        "Your `Diverges` accepts a constant sequence. Which numbers `a` is it *not* converging to?",
+        "Does your definition say \"for every `a`, `u` does not converge to `a`\", or only \"for some `a`\"?"
+      ],
+      "hint": "`¬ ∃ a, ConvergesTo u a` (or `∀ a, ¬ ConvergesTo u a`). With `∃ a, ¬ ConvergesTo u a` the choice `a = 4` already makes a constant sequence \"diverge\"."
+    },
+    {
+      "match": "7, 7, 7, 7, 7, 0, 0, 0, … does not diverge",
+      "hint": "This sequence converges to 0, so `Diverges` must be false for it. Check that you talk about *all* `a`, not about one fixed `a`."
+    },
+    {
+      "match": "0, 1, 0, 1, … diverges",
+      "hint": "`Diverges u` is the negation of \"there is a limit\": `¬ ∃ a, ConvergesTo u a`."
+    },
+    {
+      "match": "0, 1, 2, 3, … diverges",
+      "hint": "`Diverges u` is the negation of \"there is a limit\": `¬ ∃ a, ConvergesTo u a`."
+    },
+    {
+      "match": "3 is a cluster value",
+      "hint": "Did you forget `ε > 0`? With `ε = 0` nothing is within distance 0 of `a`."
+    },
+    {
+      "match": "7 is not a cluster value",
+      "steps": [
+        "In `7, 7, 7, 7, 7, 0, 0, 0, …` after index 5 every term is 0. Is there a term beyond index 5 that is close to 7?"
+      ],
+      "hint": "The index must be beyond `N` and `N` is chosen first: `∀ ε > 0, ∀ N, ∃ n ≥ N, |u n - a| < ε`. If `n` is not bounded below by `N` (or if you pick `N` yourself with `∃ N`), the early terms count."
+    },
+    {
+      "match": "0 is a cluster value",
+      "steps": [
+        "Your definition rejects `0, 1, 0, 1, …`, which comes back to 0 forever. Is it the definition of a *limit*?"
+      ],
+      "hint": "Only *some* late terms have to be close, not all of them: `∀ ε > 0, ∀ N, ∃ n ≥ N, |u n - a| < ε`."
+    },
+    {
+      "match": "1 is a cluster value",
+      "hint": "Only *some* late terms have to be close, not all of them: `∀ ε > 0, ∀ N, ∃ n ≥ N, |u n - a| < ε`."
+    },
+    {
+      "match": "4 is not a cluster value",
+      "hint": "A cluster value must be approached: `|u n - a| < ε` for some `n ≥ N`, for every `ε > 0` and every `N`."
+    },
+    {
+      "match": "2 is not a cluster value",
+      "hint": "A cluster value must be approached: `|u n - a| < ε` for some `n ≥ N`, for every `ε > 0` and every `N`."
+    },
+    {
+      "match": "no cluster value",
+      "hint": "Beyond `N = 1` every term of `0, 1, 2, 3, …` is at distance at least 1 from 0. Is your `N` universally quantified, with `n ≥ N`?"
+    },
+    {
+      "match": "",
+      "steps": [
+        "Read your definitions aloud, and compare them with the sentences in the lesson, clause by clause.",
+        "Check the mistakes listed under \"What can go wrong\" in the lesson."
+      ],
+      "hint": "`Diverges u := ¬ ∃ a, ConvergesTo u a`, and `ClusterValue u a := ∀ ε > 0, ∀ N, ∃ n ≥ N, |u n - a| < ε`."
+    }
+  ]
+}

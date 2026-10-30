@@ -1,0 +1,70 @@
+{
+  "world": "Analysis World",
+  "title": "Cauchy sequences",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "1, 0, 0, 0, … is Cauchy: the first terms never matter",
+      "statement": "IsCauchy (fun n => if n = 0 then 1 else 0)"
+    },
+    {
+      "test": "0, 1, 0, 1, … is not Cauchy",
+      "statement": "IsCauchy (fun n => if n % 2 = 0 then 0 else 1)"
+    },
+    {
+      "test": "7, 7, 7, 7, 7, 0, 0, 0, … is eventually constant",
+      "statement": "IsEventuallyConstant (fun n => if n < 5 then 7 else 0)"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : (ℕ → ℝ) → Prop := L111.IsEventuallyConstant",
+      "message": "Keep `IsEventuallyConstant : (ℕ → ℝ) → Prop`."
+    },
+    {
+      "lean": "example : (ℕ → ℝ) → Prop := L111.IsCauchy",
+      "message": "Keep `IsCauchy : (ℕ → ℝ) → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "is eventually constant",
+      "hint": "The first terms should not matter: the condition is only about the terms from `N` on, `∀ n ≥ N, …`."
+    },
+    {
+      "match": "not eventually constant",
+      "hint": "Your definition accepts a sequence that takes the value `u N` only once. *Every* term from `N` on must equal `u N`: `∀ n ≥ N, u n = u N`."
+    },
+    {
+      "match": "constant sequence 3 is Cauchy",
+      "hint": "Even a constant sequence fails: did you forget `ε > 0`? With `ε = 0` no two terms are \"within `ε`\" of each other."
+    },
+    {
+      "match": "first terms never matter",
+      "steps": [
+        "In `1, 0, 0, 0, …`, which pair of terms is far apart? Are both of them beyond `N` when `N` is large?"
+      ],
+      "hint": "Both indices must be at least `N`: `∀ m ≥ N, ∀ n ≥ N, |u m - u n| < ε`. If `n` is free, the wild first term `u 0` spoils it."
+    },
+    {
+      "match": "7, 7, 7",
+      "hint": "Both indices must be at least `N`: `∀ m ≥ N, ∀ n ≥ N, |u m - u n| < ε`."
+    },
+    {
+      "match": "is not Cauchy",
+      "steps": [
+        "Your definition accepts a sequence whose terms stay far apart. Which two terms of it, however far you go, are at distance 1?",
+        "Does your definition say \"*any* two terms\" or \"*some* two terms\"?"
+      ],
+      "hint": "Use `∀ m ≥ N, ∀ n ≥ N` for the two indices: with `∃`, one pair (even `m = n`) would be enough."
+    },
+    {
+      "match": "",
+      "steps": [
+        "Read your definitions aloud, and compare them with the sentences in the lesson, clause by clause.",
+        "Check the mistakes listed under \"What can go wrong\" in the lesson."
+      ],
+      "hint": "`IsEventuallyConstant u := ∃ N, ∀ n ≥ N, u n = u N`, and `IsCauchy u := ∀ ε > 0, ∃ N, ∀ m ≥ N, ∀ n ≥ N, |u m - u n| < ε`."
+    }
+  ]
+}

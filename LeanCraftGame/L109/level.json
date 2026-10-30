@@ -1,0 +1,102 @@
+{
+  "world": "Library World",
+  "title": "Relations",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "Reflexive' (fun _ _ => False) is false",
+      "statement": "Reflexive' (fun _ _ => False)"
+    },
+    {
+      "test": "Antisymmetric' (fun a b => a % 3 = b % 3) is false",
+      "statement": "Antisymmetric' (fun a b => a % 3 = b % 3)"
+    },
+    {
+      "test": "Transitive' (fun a b => a ≠ b) is false",
+      "statement": "Transitive' (fun a b => a ≠ b)"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : (ℕ → ℕ → Prop) → Prop := L109.Reflexive'",
+      "message": "Keep `Reflexive' : (ℕ → ℕ → Prop) → Prop`."
+    },
+    {
+      "lean": "example : (ℕ → ℕ → Prop) → Prop := L109.Symmetric'",
+      "message": "Keep `Symmetric' : (ℕ → ℕ → Prop) → Prop`."
+    },
+    {
+      "lean": "example : (ℕ → ℕ → Prop) → Prop := L109.Transitive'",
+      "message": "Keep `Transitive' : (ℕ → ℕ → Prop) → Prop`."
+    },
+    {
+      "lean": "example : (ℕ → ℕ → Prop) → Prop := L109.Antisymmetric'",
+      "message": "Keep `Antisymmetric' : (ℕ → ℕ → Prop) → Prop`."
+    },
+    {
+      "lean": "example : (ℕ → ℕ → Prop) → Prop := L109.IsEquivalence'",
+      "message": "Keep `IsEquivalence' : (ℕ → ℕ → Prop) → Prop`."
+    },
+    {
+      "lean": "example : (ℕ → ℕ → Prop) → Prop := L109.IsPartialOrder'",
+      "message": "Keep `IsPartialOrder' : (ℕ → ℕ → Prop) → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "Reflexive' (fun _ _ => False)",
+      "steps": [
+        "Does the empty relation relate `0` to `0`?"
+      ],
+      "hint": "Reflexivity is not an \"if\": it says outright that `r a a` holds for every `a`. `∀ a, r a a`. A form like `∀ a b, r a b → r a a` is vacuous when nothing is related."
+    },
+    {
+      "match": "Reflexive'",
+      "steps": [
+        "Which numbers must be related to themselves: only some, or all?"
+      ],
+      "hint": "`∀ a, r a a`."
+    },
+    {
+      "match": "Symmetric'",
+      "steps": [
+        "Say it with the quantifiers: for all `a` and `b`, if `r a b` then …?"
+      ],
+      "hint": "`∀ a b, r a b → r b a`. If `≤` comes out symmetric, you wrote something that is always true, such as `r a b → r a b`."
+    },
+    {
+      "match": "Transitive'",
+      "steps": [
+        "There are three numbers, and the middle one appears in both hypotheses.",
+        "Is the conclusion about `a` and `c`?"
+      ],
+      "hint": "`∀ a b c, r a b → r b c → r a c`."
+    },
+    {
+      "match": "Antisymmetric'",
+      "steps": [
+        "The conclusion is an equality of numbers, not a statement about `r`.",
+        "`≤` has `r 0 0`: your definition must not forbid it."
+      ],
+      "hint": "`∀ a b, r a b → r b a → a = b`. (\"Not symmetric\" or \"asymmetric\" is something else: `≤` is antisymmetric although `0 ≤ 0`.)"
+    },
+    {
+      "match": "IsEquivalence'",
+      "steps": [
+        "Which three laws? Reuse the definitions you just wrote."
+      ],
+      "hint": "`Reflexive' r ∧ Symmetric' r ∧ Transitive' r`."
+    },
+    {
+      "match": "IsPartialOrder'",
+      "steps": [
+        "Which three laws? One of them is not symmetry."
+      ],
+      "hint": "`Reflexive' r ∧ Antisymmetric' r ∧ Transitive' r`."
+    },
+    {
+      "match": "",
+      "hint": "Write each law as \"for all …, if … then …\" and check the order of the variables and the conclusion."
+    }
+  ]
+}

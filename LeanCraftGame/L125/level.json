@@ -1,0 +1,121 @@
+{
+  "world": "Structure Syntax World",
+  "title": "Challenge: structures",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "nextDay ⟨2024, 3, 30⟩ is the 1st of month 4",
+      "statement": "(Date.nextDay ⟨2024, 3, 30⟩).month = 4 ∧ (Date.nextDay ⟨2024, 3, 30⟩).day = 1  (months have 30 days)"
+    },
+    {
+      "test": "23:30 plus 45 minutes moves the date to 2024-3-15",
+      "statement": "(Moment.addMinutes (Moment.mk ⟨2024, 3, 14⟩ ⟨23, 30⟩) 45).day = 15  (23:30 plus 45 minutes is after midnight)"
+    },
+    {
+      "test": "nextDay ⟨2024, 12, 29⟩ stays in year 2024",
+      "statement": "(Date.nextDay ⟨2024, 12, 29⟩).year = 2024"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : ℕ → ℕ → ℕ → L125.Date := L125.Date.mk",
+      "message": "`Date` needs three natural-number fields `year`, `month`, `day`, in this order."
+    },
+    {
+      "lean": "example : ℕ → L125.Date := L125.newYear\nexample : L125.Date → L125.Date := L125.Date.nextDay\nexample : L125.Date → ℕ → L125.Date := L125.Date.addDays",
+      "message": "Keep `newYear : ℕ → Date`, `Date.nextDay : Date → Date` and `Date.addDays : Date → ℕ → Date`."
+    },
+    {
+      "lean": "example : L125.Date → L125.Time → L125.Moment := L125.Moment.mk",
+      "message": "`Moment` must extend `Date` and have one more field, `time : Time`."
+    },
+    {
+      "lean": "example : L125.Moment → ℕ → L125.Moment := L125.Moment.addMinutes",
+      "message": "Keep `Moment.addMinutes : Moment → ℕ → Moment`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "Date.mk 2024 3 14",
+      "hint": "Declare the fields in the order `year`, `month`, `day`, one per line."
+    },
+    {
+      "match": "default month",
+      "hint": "`month : ℕ := 1`."
+    },
+    {
+      "match": "default day",
+      "hint": "`day : ℕ := 1`. Mind the value: the first day of a month is 1, not 0."
+    },
+    {
+      "match": "newYear",
+      "hint": "`{ year := y }`: the month and the day take their default value 1."
+    },
+    {
+      "match": "nextDay ⟨2024, 3, 29⟩",
+      "hint": "The 29th has a next day in the same month: only when `d.day` is 30 does the month change. Compare with `d.day < 30`."
+    },
+    {
+      "match": "nextDay ⟨2024, 3, 14⟩",
+      "hint": "In the ordinary case only the `day` changes: `{ d with day := d.day + 1 }`."
+    },
+    {
+      "match": "nextDay ⟨2024, 3, 30⟩",
+      "steps": [
+        "What happens on the 30th? Which fields change, and what are their new values?"
+      ],
+      "hint": "`{ d with month := d.month + 1, day := 1 }`: the day goes back to 1 (do not forget it)."
+    },
+    {
+      "match": "nextDay ⟨2024, 11, 30⟩",
+      "hint": "Month 12 exists: only when `d.month` is already 12 does the year change. Compare with `d.month < 12`."
+    },
+    {
+      "match": "nextDay ⟨2024, 12, 29⟩",
+      "hint": "The year must change only on the 30th of month 12, not on every day of December."
+    },
+    {
+      "match": "nextDay",
+      "steps": [
+        "Three cases: an ordinary day; the last day of a month; the last day of the year. In which of them does the year change?"
+      ],
+      "hint": "`if d.day < 30 then { d with day := d.day + 1 } else if d.month < 12 then { d with month := d.month + 1, day := 1 } else { year := d.year + 1, month := 1, day := 1 }`"
+    },
+    {
+      "match": "addDays",
+      "steps": [
+        "`addDays d 0` is `d`. What is `addDays d (n + 1)` in terms of `addDays d n`?"
+      ],
+      "hint": "`| 0 => d` and `| n + 1 => (Date.addDays d n).nextDay`."
+    },
+    {
+      "match": "10:15 plus 50",
+      "steps": [
+        "Count in minutes since midnight: `60 * hour + minute + k`. How do you get hours and minutes back from that number?"
+      ],
+      "hint": "Minutes: `total % 60`. Hours: `(total / 60) % 24`."
+    },
+    {
+      "match": "10:15 plus 20 minutes is 10:35",
+      "hint": "Start from the total number of minutes since midnight: `60 * m.time.hour + m.time.minute + k`, and make the hour `(total / 60) % 24`, the minute `total % 60`."
+    },
+    {
+      "match": "23:30 plus 45",
+      "steps": [
+        "The hour of the new time is `(total / 60) % 24`. How many whole days have gone by?"
+      ],
+      "hint": "The number of days passed is `total / 1440`. Build `{ toDate := m.toDate.addDays (total / 1440), time := ⟨(total / 60) % 24, total % 60⟩ }`."
+    },
+    {
+      "match": "Moment",
+      "steps": [
+        "Two parts change: the `time`, and the date (which moves by the number of whole days that passed)."
+      ],
+      "hint": "With `total = 60 * m.time.hour + m.time.minute + k`: `{ toDate := m.toDate.addDays (total / 1440), time := ⟨(total / 60) % 24, total % 60⟩ }`."
+    },
+    {
+      "match": "",
+      "hint": "Test small cases by hand, especially the first and last day of a month and of the year."
+    }
+  ]
+}

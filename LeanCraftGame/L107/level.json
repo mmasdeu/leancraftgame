@@ -1,0 +1,140 @@
+{
+  "world": "Predicate World",
+  "title": "Sequences that come back",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "InfinitelyOften (7, 7, 7, 7, 7, 0, 0, …) 7 is false (met five times, not infinitely often)",
+      "statement": "InfinitelyOften (fun n => if n < 5 then 7 else 0) 7"
+    },
+    {
+      "test": "InfinitelyOften (0, 1, 0, 3, 0, 5, …) 0 is true",
+      "statement": "InfinitelyOften (fun n => if n % 2 = 0 then 0 else n) 0"
+    },
+    {
+      "test": "Recurrent (1, 0, 0, 0, …) is false (u 0 = 1, not 0)",
+      "statement": "Recurrent (fun n => if n = 0 then 1 else 0)"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : (ℕ → ℕ) → ℕ → Prop := L107.EventuallyEqual\nexample : (ℕ → ℕ) → ℕ → Prop := L107.InfinitelyOften\nexample : (ℕ → ℕ) → ℕ → Prop := L107.OnlyFinitelyOften\nexample : (ℕ → ℕ) → Prop := L107.Recurrent",
+      "message": "Keep the names and the types: `EventuallyEqual`, `InfinitelyOften` and `OnlyFinitelyOften` have type `(ℕ → ℕ) → ℕ → Prop`; `Recurrent` has type `(ℕ → ℕ) → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "InfinitelyOften (0, 1, 0, 1, …) 0",
+      "hint": "0 appears at every even position, so it appears infinitely often. Infinitely often is `∀ N, ∃ n ≥ N, u n = a`: beyond any `N` there is another occurrence."
+    },
+    {
+      "match": "InfinitelyOften (0, 1, 0, 1, …) 1",
+      "hint": "1 appears at every odd position. If your definition rejects it, you probably wrote `∃ N, ∀ n ≥ N, …` (eventually) instead of `∀ N, ∃ n ≥ N, …`."
+    },
+    {
+      "match": "EventuallyEqual (0, 1, 0, 1, …)",
+      "hint": "The sequence keeps leaving 0, so it is not eventually 0. Your definition is too weak: eventually means `∃ N, ∀ n ≥ N, …`, with the `∃` first."
+    },
+    {
+      "match": "EventuallyEqual (7, 7, 7, 7, 7, 0, 0, …) 0",
+      "hint": "From index 5 on all terms are 0. The start of the sequence does not matter for 'eventually'."
+    },
+    {
+      "match": "EventuallyEqual (7, 7, 7, 7, 7, 0, 0, …) 7",
+      "hint": "7 is only the beginning of the sequence: it is not what the sequence ends up equal to."
+    },
+    {
+      "match": "InfinitelyOften (7, 7",
+      "steps": [
+        "How many times does 7 appear in 7, 7, 7, 7, 7, 0, 0, …?"
+      ],
+      "hint": "Five times: that is not infinitely often. `∃ n, u n = a` only says 'at least once'; you need `∀ N, ∃ n ≥ N, u n = a`."
+    },
+    {
+      "match": "OnlyFinitelyOften (7, 7",
+      "hint": "After index 5 the value 7 never appears again: `∃ N, ∀ n ≥ N, u n ≠ 7`."
+    },
+    {
+      "match": "Recurrent (7, 7",
+      "steps": [
+        "What is `u 0`? Does the sequence come back to it again and again?"
+      ],
+      "hint": "`u 0 = 7`, and 7 stops appearing after index 4. Returning to the start *once* is not recurrence."
+    },
+    {
+      "match": "InfinitelyOften (n) 3",
+      "hint": "3 appears exactly once in 0, 1, 2, 3, …. Look for the word 'once' in your definition."
+    },
+    {
+      "match": "EventuallyEqual (n) 0",
+      "hint": "0, 1, 2, … is never eventually constant."
+    },
+    {
+      "match": "OnlyFinitelyOften (n) 3",
+      "hint": "After index 3 the value 3 never appears: `∃ N, ∀ n ≥ N, u n ≠ 3`."
+    },
+    {
+      "match": "Recurrent (n)",
+      "hint": "0, 1, 2, … never returns to its starting value 0."
+    },
+    {
+      "match": "a constant 7) 0",
+      "hint": "A constant 7 is never 0, so it is not eventually 0. Does your definition use the value `a`?"
+    },
+    {
+      "match": "a constant 7) 7",
+      "hint": "A constant 7 is eventually (even always) 7."
+    },
+    {
+      "match": "Recurrent (a constant)",
+      "hint": "A constant sequence is back to its starting value at every step."
+    },
+    {
+      "match": "3 is never met",
+      "hint": "The values are only 0, 1 and 2, so 3 does not appear at all."
+    },
+    {
+      "match": "EventuallyEqual (0, 1, 2, 0",
+      "hint": "0, 1, 2, 0, 1, 2, … keeps leaving 0, so it is not eventually 0."
+    },
+    {
+      "match": "InfinitelyOften (0, 1, 0, 3, 0, 5, …) 0",
+      "hint": "This sequence is unbounded, but 0 still appears at every even position. 'Infinitely often' does not need the other terms to be small."
+    },
+    {
+      "match": "EventuallyEqual (0, 1, 0, 3",
+      "hint": "The odd positions keep giving 1, 3, 5, …, so the sequence does not stay at 0."
+    },
+    {
+      "match": "5 is met only once",
+      "hint": "5 appears at position 5 and never again."
+    },
+    {
+      "match": "Recurrent (0, 1, 0, 3",
+      "hint": "The starting value is 0, and 0 comes back at every even position."
+    },
+    {
+      "match": "Recurrent (0, 1, 0, 1",
+      "hint": "The starting value is 0, and 0 comes back at every even position."
+    },
+    {
+      "match": "Recurrent (1, 0, 0, 0",
+      "steps": [
+        "What is `u 0` here?"
+      ],
+      "hint": "`u 0 = 1`, and the sequence never returns to 1. Recurrent means coming back to `u 0`, not to 0."
+    },
+    {
+      "match": "OnlyFinitelyOften (0, 1, 0, 1",
+      "hint": "0 keeps coming back, so it does not stop appearing. `OnlyFinitelyOften` should be the negation of `InfinitelyOften`, with the `¬` pushed inside: `∃ N, ∀ n ≥ N, u n ≠ a`."
+    },
+    {
+      "match": "OnlyFinitelyOften (a constant",
+      "hint": "A constant 7 is 7 at every position, so 7 never stops appearing."
+    },
+    {
+      "match": "implies",
+      "hint": "A user of your definitions needs this lemma. If it is ❓, the referee could not derive it: check the quantifiers and try the standard formulations."
+    }
+  ]
+}

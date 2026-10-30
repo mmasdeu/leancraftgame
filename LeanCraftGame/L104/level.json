@@ -1,0 +1,77 @@
+{
+  "world": "Quantifiers World",
+  "title": "Challenge: patterns in sequences",
+  "skill": "writing",
+  "hintsAfter": 2,
+  "predict": [
+    { "test": "Periodic (fun n => n) is false (p = 0 is not a period)", "statement": "Periodic (fun n => n)" },
+    { "test": "Periodic (fun n => if n < 5 then 7 else 0) is false (irregular start)", "statement": "Periodic (fun n => if n < 5 then 7 else 0)" },
+    { "test": "HasMaximum (fun _ => 5) is true (the maximum may be reached many times)", "statement": "HasMaximum (fun _ => 5)" }
+  ],
+  "checks": [
+    { "lean": "example : (ℕ → ℕ) → Prop := L104.Periodic", "message": "Keep `Periodic : (ℕ → ℕ) → Prop`." },
+    { "lean": "example : (ℕ → ℕ) → Prop := L104.EventuallyConstant", "message": "Keep `EventuallyConstant : (ℕ → ℕ) → Prop`." },
+    { "lean": "example : (ℕ → ℕ) → Prop := L104.HasMaximum", "message": "Keep `HasMaximum : (ℕ → ℕ) → Prop`." },
+    { "lean": "example : (ℕ → ℕ) → Prop := L104.EventuallyPeriodic", "message": "Keep `EventuallyPeriodic : (ℕ → ℕ) → Prop`." }
+  ],
+  "hints": [
+    {
+      "match": "p = 0 is not a period",
+      "steps": ["Is `u (n + 0) = u n` true for every sequence? What does that do to a definition that allows `p = 0`?"],
+      "hint": "Require a positive period: `∃ p > 0, …`."
+    },
+    {
+      "match": "irregular start",
+      "steps": ["A periodic sequence repeats from the very first term. Which quantifier says \"for every `n`\", with no lower bound?"],
+      "hint": "`∃ p > 0, ∀ n, u (n + p) = u n`: the `∀ n` has no `n ≥ N`."
+    },
+    {
+      "match": "Periodic",
+      "steps": ["First the period `p` (positive), then \"for all `n`\", the equation `u (n + p) = u n`."],
+      "hint": "`∃ p > 0, ∀ n, u (n + p) = u n`."
+    },
+    {
+      "match": "the constant is not 0",
+      "steps": ["Does the sequence have to settle at 0? Where is the value fixed in your definition?"],
+      "hint": "The value is chosen by `∃`, together with `N`: `∃ N c, ∀ n ≥ N, u n = c`."
+    },
+    {
+      "match": "EventuallyConstant (fun n => n) is false",
+      "steps": ["In your definition, can the value change with `n`? Where is the quantifier over the value, relative to `∀ n`?"],
+      "hint": "`∃ N c, ∀ n ≥ N, u n = c`: `c` must be chosen *before* `n`, once and for all."
+    },
+    {
+      "match": "keeps changing",
+      "steps": ["Is `u n = u (n + 1)` for large `n` enough? Think of `n % 2`: does it settle?"],
+      "hint": "`∃ N c, ∀ n ≥ N, u n = c`."
+    },
+    {
+      "match": "EventuallyConstant",
+      "steps": ["\"From some index on\": `∃ N`, `∀ n ≥ N`. And the common value?"],
+      "hint": "`∃ N c, ∀ n ≥ N, u n = c`."
+    },
+    {
+      "match": "reached many times",
+      "hint": "The maximum is a term that is *at least* every term, so use `≤`, not `<`."
+    },
+    {
+      "match": "every term is beaten",
+      "steps": ["`∀ n, ∃ m, u n ≤ u m` says every term is beaten by *some* term. Is that true for `n`? Which quantifier should come first?"],
+      "hint": "`∃ m, ∀ n, u n ≤ u m`: one term `m` that works for all `n`."
+    },
+    {
+      "match": "HasMaximum",
+      "steps": ["One special index `m`, and for every `n`, `u n` is at most `u m`."],
+      "hint": "`∃ m, ∀ n, u n ≤ u m`."
+    },
+    {
+      "match": "EventuallyPeriodic",
+      "steps": ["Combine the two previous ideas: a positive period, and an index `N` from which the repetition holds."],
+      "hint": "`∃ p > 0, ∃ N, ∀ n ≥ N, u (n + p) = u n`."
+    },
+    {
+      "match": "",
+      "hint": "Read your definition aloud, quantifier by quantifier, and try it on `fun n => n`."
+    }
+  ]
+}

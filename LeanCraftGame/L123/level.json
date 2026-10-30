@@ -1,0 +1,83 @@
+{
+  "world": "Structure Syntax World",
+  "title": "Functions on structures",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "dist2 ⟨1, 1⟩ ⟨4, 5⟩ = 25",
+      "statement": "Point.dist2 ⟨1, 1⟩ ⟨4, 5⟩ = 25  (a 3-4-5 triangle, the squared distance is 25)"
+    },
+    {
+      "test": "grow ⟨7, 2⟩ 1 has width 9",
+      "statement": "(Rectangle.grow ⟨7, 2⟩ 1).width = 9"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : L123.Point → L123.Point → L123.Point := L123.Point.add",
+      "message": "Keep `Point.add : Point → Point → Point`."
+    },
+    {
+      "lean": "example : L123.Point → L123.Point → ℕ := L123.Point.dist2",
+      "message": "Keep `Point.dist2 : Point → Point → ℕ`."
+    },
+    {
+      "lean": "example : L123.Rectangle → ℕ := L123.Rectangle.area",
+      "message": "Keep `Rectangle.area : Rectangle → ℕ`."
+    },
+    {
+      "lean": "example : L123.Rectangle → ℕ → L123.Rectangle := L123.Rectangle.grow",
+      "message": "Keep `Rectangle.grow : Rectangle → ℕ → Rectangle`."
+    },
+    {
+      "lean": "example : L123.Rectangle → L123.Point := L123.Rectangle.topRight",
+      "message": "Keep `Rectangle.topRight : Rectangle → Point`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "add",
+      "steps": [
+        "The new point has two fields. What is the new `x`? What is the new `y`?"
+      ],
+      "hint": "`⟨p.x + q.x, p.y + q.y⟩`, or with patterns: `| ⟨a, b⟩, ⟨c, d⟩ => ⟨a + c, b + d⟩`."
+    },
+    {
+      "match": "dist2 ⟨1, 1⟩ ⟨4, 5⟩",
+      "steps": [
+        "Compute `(p.x - q.x)` by hand for `p.x = 1` and `q.x = 4`. In natural numbers, what is `1 - 4`?"
+      ],
+      "hint": "`1 - 4` is `0` for natural numbers, so the difference is lost. Take the difference in the right order: `(p.x - q.x)^2 + (q.x - p.x)^2` is right, because one of the two terms is 0. (Or use `max` and `min`, or an `if`.)"
+    },
+    {
+      "match": "dist2",
+      "steps": [
+        "Does your function give the same answer when the two points are exchanged? The distance should.",
+        "Subtraction of natural numbers truncates at 0. Which point is bigger in the failing test?"
+      ],
+      "hint": "For each coordinate, subtract the smaller from the bigger: `(p.x - q.x)^2 + (q.x - p.x)^2` does it for `x` (one term is 0), and the same for `y`."
+    },
+    {
+      "match": "area",
+      "hint": "`r.width * r.height`."
+    },
+    {
+      "match": "grow",
+      "steps": [
+        "Compare with the example: `⟨7, 2⟩` grown by `1` is `⟨9, 4⟩`. Which field did you change, and by how much?"
+      ],
+      "hint": "`⟨r.width + 2 * k, r.height + 2 * k⟩`. Keep `width` in the first place and `height` in the second."
+    },
+    {
+      "match": "topRight",
+      "steps": [
+        "What are the coordinates of the corner opposite to the origin of a 7 by 2 rectangle?"
+      ],
+      "hint": "`⟨r.width, r.height⟩`: the `x` of the point is the width, the `y` is the height."
+    },
+    {
+      "match": "",
+      "hint": "Build the result with `⟨_, _⟩` in the declared order of the fields, reading the inputs with `p.x`, `r.width`, …"
+    }
+  ]
+}

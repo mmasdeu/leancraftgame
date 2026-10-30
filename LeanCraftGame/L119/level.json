@@ -1,0 +1,78 @@
+{
+  "world": "Finite Sums World",
+  "title": "Closed forms",
+  "skill": "writing",
+  "hintsAfter": 2,
+  "predict": [
+    { "test": "geomFormula 0 = 0", "statement": "geomFormula 0 = 0" },
+    { "test": "meanSquare 0 = 0 (division by zero gives 0)", "statement": "meanSquare 0 = 0" },
+    { "test": "cubeFormula 2 = 9 (the square of 1 + 2)", "statement": "cubeFormula 2 = 9" }
+  ],
+  "checks": [
+    { "lean": "example : ℕ → ℕ := L119.cubeSum", "message": "Keep `cubeSum : ℕ → ℕ`." },
+    { "lean": "example : ℕ → ℕ := L119.cubeFormula", "message": "Keep `cubeFormula : ℕ → ℕ`." },
+    { "lean": "example : ℕ → ℕ := L119.sameParity", "message": "Keep `sameParity : ℕ → ℕ`." },
+    { "lean": "example : ℕ → ℚ := L119.geom", "message": "Keep `geom : ℕ → ℚ`." },
+    { "lean": "example : ℕ → ℚ := L119.geomFormula", "message": "Keep `geomFormula : ℕ → ℚ`." },
+    { "lean": "example : ℕ → ℚ := L119.meanSquare", "message": "Keep `meanSquare : ℕ → ℚ`." }
+  ],
+  "hints": [
+    {
+      "match": "cubeSum",
+      "steps": ["1³ up to n³: which of `range n`, `Icc 1 n` has both ends right?"],
+      "hint": "`∑ i ∈ Finset.Icc 1 n, i ^ 3`."
+    },
+    {
+      "match": "cubeFormula 2",
+      "steps": ["Square the *whole* closed form `n * (n + 1) / 2`. Mind the brackets: what does `n * (n + 1) / 2 ^ 2` mean?"],
+      "hint": "`(n * (n + 1) / 2) ^ 2`."
+    },
+    {
+      "match": "cubeFormula",
+      "steps": ["The sum of the first n cubes is the square of the sum of the first n numbers, and that sum is `n * (n + 1) / 2`."],
+      "hint": "`(n * (n + 1) / 2) ^ 2`."
+    },
+    {
+      "match": "agrees with cubeFormula",
+      "hint": "One of the two is off. Compare the values the tests show: `cubeSum 3 = 36`, `cubeFormula 3 = 36`. Is a bracket or an end point wrong?"
+    },
+    {
+      "match": "sameParity",
+      "steps": [
+        "Use `pairs` as a model, but put an `if … then 1 else 0` inside, so that only the pairs with `i + j` even are counted.",
+        "The test for even is `(i + j) % 2 = 0`."
+      ],
+      "hint": "`∑ i ∈ Finset.range n, ∑ j ∈ Finset.range i, if (i + j) % 2 = 0 then 1 else 0`."
+    },
+    {
+      "match": "geom agrees",
+      "hint": "Compare `geom n` and `geomFormula n` for a few `n`: the first value where they differ shows which one is wrong."
+    },
+    {
+      "match": "geomFormula 0",
+      "steps": ["What is `n - 1` when `n = 0`, in `ℕ`? Does your formula really give `0` at `n = 0`?"],
+      "hint": "Avoid `n - 1` in the exponent. The partial sum is `2 - 2 * (1/2)^n`, written `2 - 2 * (1 / 2 : ℚ) ^ n`."
+    },
+    {
+      "match": "geomFormula",
+      "steps": ["The sum of the first `n` terms is `2 - ` (the next term, doubled). Check `n = 1`: it must be 1."],
+      "hint": "`2 - 2 * (1 / 2 : ℚ) ^ n`."
+    },
+    {
+      "match": "geom",
+      "steps": ["Write `(1 / 2 : ℚ) ^ i` to make the division happen in `ℚ`. If you wrote `1 / 2` with natural numbers, it is `0`."],
+      "hint": "`∑ i ∈ Finset.range n, (1 / 2 : ℚ) ^ i`."
+    },
+    {
+      "match": "meanSquare 3",
+      "steps": ["Natural division rounds down. Where does your division take place: in `ℕ` or in `ℚ`?"],
+      "hint": "Cast first: `(∑ i ∈ Finset.range n, (i : ℚ) ^ 2) / n`. The `n` in the denominator is cast automatically."
+    },
+    {
+      "match": "meanSquare",
+      "steps": ["The mean is the sum divided by how many terms there are. Mind the end points, and division by zero."],
+      "hint": "`(∑ i ∈ Finset.range n, (i : ℚ) ^ 2) / n`: for `n = 0`, `0 / 0` is `0` in Lean."
+    },
+    { "match": "", "hint": "Compare your values with the examples in the comments, and check each end point." }
+  ]
+}

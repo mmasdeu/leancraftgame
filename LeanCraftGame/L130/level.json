@@ -1,0 +1,85 @@
+{
+  "world": "Classes World",
+  "title": "Challenge: classes",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "max (Score.mk 2 0) (Score.mk 9 8) = Score.mk 2 0 (value 2 beats value 1)",
+      "statement": "max (Score.mk 2 0) (Score.mk 9 8) = Score.mk 2 0"
+    },
+    {
+      "test": "best [Score.mk 0 3] = Score.mk 0 3 (a lone negative score)",
+      "statement": "best [Score.mk 0 3] = Score.mk 0 3"
+    },
+    {
+      "test": "max (Score.mk 4 0) (Score.mk 5 1) = Score.mk 5 1 (equal values, other order)",
+      "statement": "max (Score.mk 4 0) (Score.mk 5 1) = Score.mk 5 1"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : L130.Score → ℤ := L130.Score.value",
+      "message": "`Score.value` must return an integer `ℤ`."
+    },
+    {
+      "lean": "example : Ord L130.Score := inferInstance\nexample : Max L130.Score := inferInstance\nexample : Min L130.Score := inferInstance",
+      "message": "`Score` needs its `Ord`, `Max` and `Min` instances."
+    },
+    {
+      "lean": "example : List L130.Score → L130.Score := L130.best",
+      "message": "`best` must keep its type `List Score → Score`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "Score.value",
+      "steps": ["Subtraction in `ℕ` stops at 0. Convert to `ℤ` *before* subtracting."],
+      "hint": "`(s.pts : ℤ) - s.penalty`."
+    },
+    {
+      "match": "value -4",
+      "hint": "The value of `Score.mk 1 5` is -4, below 0. If `Score.value` subtracts in `ℕ` it gives 0. Cast first: `(s.pts : ℤ) - s.penalty`."
+    },
+    {
+      "match": "(Score.mk 9 8)",
+      "steps": ["Compare the *values* first: 9 points with 8 penalty is only value 1.", "Points are only used to break ties."],
+      "hint": "Your instance seems to look at the points first. `compare a b := (compare a.value b.value).then (compare a.pts b.pts)`, and `max`, `min` should use that comparison."
+    },
+    {
+      "match": "equal values",
+      "steps": ["When two scores have the same value, who ranks higher? And does the answer depend on the order of the arguments?", "Try `max a b` and `max b a` on these two scores: should they agree?"],
+      "hint": "`max a b := if compare a b = .lt then b else a` and `min a b := if compare a b = .gt then b else a`: decide using the full ranking, so `max a b = max b a`. A test like `if a.value ≤ b.value then b else a` breaks on ties."
+    },
+    {
+      "match": "= .eq",
+      "hint": "`compare a a` must be `.eq`. Do you have a case that never returns `.eq`? Antisymmetry needs `.lt`, `.eq` and `.gt` to be used for the right cases."
+    },
+    {
+      "match": "compare",
+      "steps": ["`compare a b = .gt` means `a` ranks higher than `b`. Is the direction right?"],
+      "hint": "`compare a b := (compare a.value b.value).then (compare a.pts b.pts)`."
+    },
+    {
+      "match": "max",
+      "hint": "`max a b := if compare a b = .lt then b else a`: `b` only when `a` ranks strictly lower."
+    },
+    {
+      "match": "min",
+      "hint": "`min a b := if compare a b = .gt then b else a`: `b` only when `a` ranks strictly higher."
+    },
+    {
+      "match": "a lone negative",
+      "steps": ["How does your `best` start? Could the starting value win against a negative score?"],
+      "hint": "Do not start from `Score.mk 0 0` unless the list is empty: match `[]`, `[a]` and `a :: b :: rest`, and combine with `max a (best (b :: rest))`."
+    },
+    {
+      "match": "best",
+      "steps": ["`best` should use the `max` instance, which already knows the ranking."],
+      "hint": "`| [] => Score.mk 0 0 | [a] => a | a :: b :: rest => max a (best (b :: rest))`."
+    },
+    {
+      "match": "",
+      "hint": "Decide the ranking once, in `compare`, and define `max`, `min` by it."
+    }
+  ]
+}

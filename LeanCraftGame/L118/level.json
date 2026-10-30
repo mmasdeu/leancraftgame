@@ -1,0 +1,70 @@
+{
+  "world": "Finite Sums World",
+  "title": "Filters and counting",
+  "skill": "writing",
+  "hintsAfter": 2,
+  "predict": [
+    { "test": "numDivisors 0 = 0 (0 has no positive divisor)", "statement": "numDivisors 0 = 0" },
+    { "test": "countPrimes 11 = 4 (11 itself is not below 11)", "statement": "countPrimes 11 = 4" },
+    { "test": "IsPerfect 0 is false (the empty sum is 0, but 0 is not positive)", "statement": "IsPerfect 0" }
+  ],
+  "checks": [
+    { "lean": "example : ℕ → ℕ := L118.numDivisors", "message": "Keep `numDivisors : ℕ → ℕ`." },
+    { "lean": "example : ℕ → ℕ := L118.countPrimes", "message": "Keep `countPrimes : ℕ → ℕ`." },
+    { "lean": "example : ℕ → ℕ := L118.fact", "message": "Keep `fact : ℕ → ℕ`." },
+    { "lean": "example : ℕ → ℕ := L118.multiples3or5", "message": "Keep `multiples3or5 : ℕ → ℕ`." },
+    { "lean": "example : ℕ → Prop := L118.IsPerfect", "message": "Keep `IsPerfect : ℕ → Prop`." }
+  ],
+  "hints": [
+    {
+      "match": "numDivisors 0",
+      "steps": ["Which numbers could divide `n`? Is `0` among the candidates you ask about? What does `0 ∣ 0` say?"],
+      "hint": "Only positive numbers up to `n` can divide `n`: `Finset.Icc 1 n`. With `Finset.range (n + 1)` the number `0` is a candidate, and `0 ∣ 0` is true."
+    },
+    {
+      "match": "numDivisors",
+      "steps": [
+        "Which set of candidates should be filtered? It must contain `n` itself, and not `0`.",
+        "The condition, as a function of the candidate `d`, is `d ∣ n` (type `\\|`)."
+      ],
+      "hint": "`(Finset.filter (fun d => d ∣ n) (Finset.Icc 1 n)).card`."
+    },
+    {
+      "match": "countPrimes 11",
+      "hint": "`Finset.range n` stops at `n - 1`, so for `n = 11` the candidates are `0, …, 10`. That is what \"below n\" means: `range n` is right, `range (n + 1)` or `Icc` would be wrong."
+    },
+    {
+      "match": "countPrimes",
+      "steps": ["Filter `Finset.range n` with the condition `Nat.Prime`, then count."],
+      "hint": "`(Finset.filter (fun p => Nat.Prime p) (Finset.range n)).card`."
+    },
+    {
+      "match": "fact",
+      "steps": ["Which numbers do you multiply? Does your set contain `0`? A single `0` makes the whole product `0`."],
+      "hint": "`∏ i ∈ Finset.Icc 1 n, i`. The empty product, for `n = 0`, is `1` by itself."
+    },
+    {
+      "match": "multiples3or5 16",
+      "hint": "15 is a multiple of both 3 and 5: it must be added once. Is your condition `∨` (or), not `∧` (and), and is it a filter (one copy) rather than two separate sums?"
+    },
+    {
+      "match": "multiples3or5",
+      "steps": ["\"Below n\" means `Finset.range n`. The condition is: `i % 3 = 0` *or* `i % 5 = 0`."],
+      "hint": "`∑ i ∈ Finset.filter (fun i => i % 3 = 0 ∨ i % 5 = 0) (Finset.range n), i`."
+    },
+    {
+      "match": "IsPerfect 0",
+      "hint": "The sum of the divisors of `0` below `0` is the empty sum, `0`, and `0 = 0`. The definition also requires `0 < n`."
+    },
+    {
+      "match": "IsPerfect 1",
+      "hint": "The divisors of 1 *below* 1: there are none, the sum is 0, which is not 1. If you used `Icc 1 n` the divisor `n` itself is counted, and the sum then has to be `2 * n`, not `n`."
+    },
+    {
+      "match": "IsPerfect",
+      "steps": ["The divisors of `n` that are smaller than `n`: filter `Finset.Ico 1 n` by `d ∣ n`, and add them up."],
+      "hint": "`0 < n ∧ ∑ d ∈ Finset.filter (fun d => d ∣ n) (Finset.Ico 1 n), d = n`."
+    },
+    { "match": "", "hint": "Check the two ends of your set against the examples in the comments." }
+  ]
+}

@@ -21,27 +21,45 @@
   "hints": [
     {
       "match": "World 1",
-      "hint": "If every number is 'prime', every even n > 2 is trivially a sum of two of them. Check how you combined the hypotheses: `2 < n ∧ n % 2 = 0 ∧ …` claims that every n is even, instead of assuming it."
+      "hint": "If every number is 'prime', every even n > 2 is trivially a sum of two of them. Check how you combined the hypotheses: `2 < n ∧ n % 2 = 0 ∧ …` claims that every n is even, instead of assuming it.",
+      "steps": [
+        "If every number is 'prime', what should Goldbach's conjecture say? Is your statement true for the right reason?"
+      ]
     },
     {
       "match": "World 2",
-      "hint": "Here the 'primes' are the odd numbers. Every even n > 2 is 1 + (n − 1), but an odd n is never a sum of two odd numbers. Did you forget to assume that n is even?"
+      "hint": "Here the 'primes' are the odd numbers. Every even n > 2 is 1 + (n − 1), but an odd n is never a sum of two odd numbers. Did you forget to assume that n is even?",
+      "steps": [
+        "The 'primes' are the odd numbers here. Is every even n > 2 a sum of two of them? And what about an odd n?"
+      ]
     },
     {
       "match": "World 3",
-      "hint": "Here the 'primes' are the numbers ≥ 2. Every n > 2 that is even is 2 + (n − 2), but 2 is not a sum of two such numbers. Check `2 < n` against `2 ≤ n`."
+      "hint": "Here the 'primes' are the numbers ≥ 2. Every n > 2 that is even is 2 + (n − 2), but 2 is not a sum of two such numbers. Check `2 < n` against `2 ≤ n`.",
+      "steps": [
+        "Here every n ≥ 2 is 'prime'. Which n > 2 would your statement have to cover? Try n = 2 and n = 3."
+      ]
     },
     {
       "match": "World 4",
-      "hint": "If nothing is 'prime', Goldbach must be false. If your statement still holds, the `∃ p q` is satisfied for a silly reason: check the precedence of `∧` and `→`."
+      "hint": "If nothing is 'prime', Goldbach must be false. If your statement still holds, the `∃ p q` is satisfied for a silly reason: check the precedence of `∧` and `→`.",
+      "steps": [
+        "If nothing is 'prime', can any number be a sum of two primes? So what should Goldbach say in this world?"
+      ]
     },
     {
       "match": "World 5",
-      "hint": "If 2 is the only 'prime', 6 is not a sum of two of them, so Goldbach must be false. If your statement still holds, check the precedence of `∧` and `→`."
+      "hint": "If 2 is the only 'prime', 6 is not a sum of two of them, so Goldbach must be false. If your statement still holds, check the precedence of `∧` and `→`.",
+      "steps": [
+        "Only 2 is 'prime'. Which even numbers are a sum of two 2s, and which are not?"
+      ]
     },
     {
       "match": "real world",
-      "hint": "A simple search settled your statement of an open problem. It is probably vacuous, or false for a silly reason. Compare with the toy worlds above."
+      "hint": "A simple search settled your statement of an open problem. It is probably vacuous, or false for a silly reason. Compare with the toy worlds above.",
+      "steps": [
+        "Compare how your statement behaves in the toy worlds above. Which of them did it get wrong?"
+      ]
     }
   ]
 }

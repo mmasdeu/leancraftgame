@@ -1,0 +1,86 @@
+{
+  "world": "Classes World",
+  "title": "Instances that depend on instances",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "Size.size [[1, 2], [3]] = 6",
+      "statement": "Size.size [[1, 2], [3]] = 6"
+    },
+    {
+      "test": "heavy \"ab\" = 12",
+      "statement": "heavy \"ab\" = 12"
+    }
+  ],
+  "public": [
+    "Pair.mk (1 : ℕ) 2 + Pair.mk 3 4 = Pair.mk 4 6"
+  ],
+  "checks": [
+    {
+      "lean": "example {α : Type} [Add α] : Add (L129.Pair α) := inferInstance",
+      "message": "`Add (Pair α)` must work for every `α` that has `Add`: keep `{α : Type} [Add α]` in the instance."
+    },
+    {
+      "lean": "example {α : Type} [L129.Size α] : L129.Size (L129.Pair α) := inferInstance\nexample {α : Type} [L129.Size α] : L129.Size (List α) := inferInstance",
+      "message": "The instances for `Pair α` and `List α` must work for every `α` that has a `Size`: keep `{α : Type} [Size α]`."
+    },
+    {
+      "lean": "example {α : Type} [L129.Size α] : List α → ℕ := L129.largest",
+      "message": "`largest` must work for every `α` with a `Size`: keep `{α : Type} [Size α] (xs : List α)`."
+    },
+    {
+      "lean": "example {α : Type} [L129.Weighted α] : α → ℕ := L129.heavy",
+      "message": "`heavy` must work for every `α` with a `Weighted` instance: keep `{α : Type} [Weighted α]`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "Pair (Pair ℕ)",
+      "hint": "Add the fields of the pairs with `+` itself, not with a number function: then Lean uses your instance again for the inner pairs. `add p q := ⟨p.fst + q.fst, p.snd + q.snd⟩`."
+    },
+    {
+      "match": "Pair (ℕ × ℕ)",
+      "hint": "Use `+` on the entries (`p.fst + q.fst`): it works for any `α` with an `Add`, also for `ℕ × ℕ`."
+    },
+    {
+      "match": "Pair.mk (5 : ℤ)",
+      "hint": "`add p q := ⟨p.fst + q.fst, p.snd + q.snd⟩`: first with first, second with second."
+    },
+    {
+      "match": "Pair.mk (0 : ℕ) 7",
+      "hint": "`add p q := ⟨p.fst + q.fst, p.snd + q.snd⟩`: first with first, second with second."
+    },
+    {
+      "match": "Pair.mk (1 : ℕ) 2 +",
+      "hint": "`add p q := ⟨p.fst + q.fst, p.snd + q.snd⟩`."
+    },
+    {
+      "match": "Size.size (Pair.mk",
+      "steps": ["The size of a pair involves both values. Which function measures a value of type `α`?"],
+      "hint": "`size p := Size.size p.fst + Size.size p.snd`."
+    },
+    {
+      "match": "Size.size [",
+      "steps": ["Is the size of a list its length, or the sum of the sizes of its entries?"],
+      "hint": "`size xs := (xs.map Size.size).sum`: measure every entry with `Size.size`, then add."
+    },
+    {
+      "match": "Size.size ([]",
+      "hint": "The empty list has size 0 (the empty sum)."
+    },
+    {
+      "match": "largest",
+      "steps": ["The answer is a *size*, not an entry: measure every entry with `Size.size`.", "What should `largest` give for the empty list, and how do you start a maximum?"],
+      "hint": "`(xs.map Size.size).foldr max 0`, or `xs.foldr (fun a m => max (Size.size a) m) 0`."
+    },
+    {
+      "match": "heavy",
+      "steps": ["`weight` is a field of `Weighted`; `size` is a field of the `Size` that `Weighted` extends."],
+      "hint": "`heavy a := Size.size a + Weighted.weight a`."
+    },
+    {
+      "match": "",
+      "hint": "An instance with a condition `[Size α]` may use `Size.size` on values of type `α` in its body."
+    }
+  ]
+}

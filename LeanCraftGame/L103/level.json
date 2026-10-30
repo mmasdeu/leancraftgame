@@ -1,0 +1,71 @@
+{
+  "world": "Numbers World",
+  "title": "Challenge: truncated arithmetic",
+  "skill": "writing",
+  "hintsAfter": 2,
+  "predict": [
+    { "test": "absDiff 3 5 = 2 (the smaller number comes first)", "statement": "absDiff 3 5 = 2" },
+    { "test": "ratio 1 2 = 1 / 2 (not rounded down)", "statement": "ratio 1 2 = 1 / 2" },
+    { "test": "percent 1 8 = 13 (12.5 rounds up)", "statement": "percent 1 8 = 13" }
+  ],
+  "checks": [
+    { "lean": "example : ℕ → ℕ → ℕ := L103.absDiff", "message": "Keep `absDiff : ℕ → ℕ → ℕ`." },
+    { "lean": "example : ℤ → ℤ := L103.signum", "message": "Keep `signum : ℤ → ℤ`." },
+    { "lean": "example : ℕ → ℕ → ℚ := L103.ratio", "message": "Keep `ratio : ℕ → ℕ → ℚ`." },
+    { "lean": "example : ℕ → ℕ → ℕ := L103.percent", "message": "Keep `percent : ℕ → ℕ → ℕ`." }
+  ],
+  "hints": [
+    {
+      "match": "absDiff 3 5",
+      "steps": ["What is `3 - 5` in `ℕ`? Which of the two subtractions `a - b`, `b - a` is the \"real\" one?"],
+      "hint": "Compare first: `if a ≤ b then b - a else a - b`. Or add the two truncated differences: `(a - b) + (b - a)`."
+    },
+    {
+      "match": "absDiff",
+      "steps": ["One of `a - b` and `b - a` is 0 and the other is the distance."],
+      "hint": "`if a ≤ b then b - a else a - b`."
+    },
+    {
+      "match": "signum (-",
+      "steps": ["Three cases: negative, zero, positive. Did your definition forget one of them?"],
+      "hint": "`if x < 0 then -1 else if x = 0 then 0 else 1`."
+    },
+    {
+      "match": "signum",
+      "hint": "`if x < 0 then -1 else if x = 0 then 0 else 1`."
+    },
+    {
+      "match": "ratio 1 2",
+      "steps": ["What is `1 / 2` in `ℕ`? Where is your cast: before or after the division?"],
+      "hint": "Cast each number first: `(a : ℚ) / b`."
+    },
+    {
+      "match": "ratio 5 0",
+      "steps": ["What does Mathlib say `x / 0` is in `ℚ`? Does it fit what we want here?"],
+      "hint": "`(a : ℚ) / b` already gives 0 when `b = 0`. Nothing else to do."
+    },
+    {
+      "match": "ratio",
+      "hint": "`(a : ℚ) / b`: both numbers are cast to `ℚ` before dividing."
+    },
+    {
+      "match": "percent 1 8",
+      "steps": ["Which half of 12.5 do you want, 12 or 13? Dividing in `ℕ` rounds down: what could you add before dividing?"],
+      "hint": "`(200 * a + b) / (2 * b)`: adding half the divisor to the numerator rounds to nearest, with halves up."
+    },
+    {
+      "match": "rounded to nearest",
+      "steps": ["`100 * a / b` rounds down. 2/3 is 66.67 percent: what should the answer be?"],
+      "hint": "`(200 * a + b) / (2 * b)`."
+    },
+    {
+      "match": "percent",
+      "steps": ["Rounding to nearest is rounding down after adding one half. What is one half in units of `a / b`?"],
+      "hint": "`(200 * a + b) / (2 * b)`. When `b = 0` the division by zero gives 0 by itself."
+    },
+    {
+      "match": "",
+      "hint": "Compute the failing case by hand, in `ℕ` and in `ℤ`/`ℚ`, and see where the two differ."
+    }
+  ]
+}

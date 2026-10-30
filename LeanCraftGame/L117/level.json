@@ -1,0 +1,52 @@
+{
+  "world": "Finite Sums World",
+  "title": "Sums",
+  "skill": "syntax",
+  "public": "all",
+  "hintsAfter": 1,
+  "predict": [
+    { "test": "sumBelow 1 = 0 (only 0 is below 1)", "statement": "sumBelow 1 = 0" },
+    { "test": "sumBetween 4 4 = 0 (nothing between 4 and 4)", "statement": "sumBetween 4 4 = 0" },
+    { "test": "squares 0 = 0 (the empty sum)", "statement": "squares 0 = 0" }
+  ],
+  "checks": [
+    { "lean": "example : ℕ → ℕ := L117.squares", "message": "Keep `squares : ℕ → ℕ`." },
+    { "lean": "example : ℕ → ℕ := L117.oddSum", "message": "Keep `oddSum : ℕ → ℕ`." },
+    { "lean": "example : ℕ → ℕ := L117.sumBelow", "message": "Keep `sumBelow : ℕ → ℕ`." },
+    { "lean": "example : ℕ → ℕ → ℕ := L117.sumBetween", "message": "Keep `sumBetween : ℕ → ℕ → ℕ` (two inputs)." }
+  ],
+  "hints": [
+    {
+      "match": "squares 4",
+      "steps": ["`Finset.range 4` is `{0, 1, 2, 3}`. Does the sum you want run over exactly those numbers?"],
+      "hint": "You want 1² up to n². Either `∑ i ∈ Finset.Icc 1 n, i ^ 2` (both ends included), or `∑ i ∈ Finset.range n, (i + 1) ^ 2`."
+    },
+    {
+      "match": "squares",
+      "hint": "Add up `i ^ 2` for `i` running through `Finset.Icc 1 n`: `∑ i ∈ Finset.Icc 1 n, i ^ 2`."
+    },
+    {
+      "match": "oddSum",
+      "steps": ["Which odd number comes first, and how far apart are the odd numbers? Write the k-th one as a formula in `i`."],
+      "hint": "With `i` running through `Finset.range n` (that is 0, …, n - 1), the odd numbers are `2 * i + 1`: `∑ i ∈ Finset.range n, (2 * i + 1)`."
+    },
+    {
+      "match": "sumBelow",
+      "steps": ["`Finset.range n` is exactly the set of numbers below `n`."],
+      "hint": "`∑ i ∈ Finset.range n, i`."
+    },
+    {
+      "match": "sumBetween 6 3",
+      "hint": "`Finset.Ico a b` is empty when `b ≤ a`, so the sum is `0` by itself. Did you subtract (`b - a`) or use `range b` minus something? Use `∑ i ∈ Finset.Ico a b, i`."
+    },
+    {
+      "match": "sumBetween",
+      "steps": ["`a` is added, `b` is not. Which of `Icc` and `Ico` leaves out its right end?"],
+      "hint": "`∑ i ∈ Finset.Ico a b, i`."
+    },
+    {
+      "match": "",
+      "hint": "Re-read the examples in the comments, and check the end points: does your set contain the first and last number you want, and no other?"
+    }
+  ]
+}

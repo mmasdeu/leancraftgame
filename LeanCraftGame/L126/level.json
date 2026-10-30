@@ -1,0 +1,52 @@
+{
+  "world": "Structure Syntax World",
+  "title": "Spot the bug: structures",
+  "skill": "reading",
+  "public": "all",
+  "checks": [
+    {
+      "lean": "example : L126.Version := L126.vPatch\nexample : L126.Version := L126.vMinor",
+      "message": "Keep `vPatch` and `vMinor` as values of type `Version`."
+    },
+    {
+      "lean": "example : L126.Version := L126.vSet\nexample : ℕ := L126.pSet",
+      "message": "Keep `vSet : Version` and `pSet : ℕ`."
+    },
+    {
+      "lean": "example : L126.Version := L126.vA\nexample : L126.Version := L126.vB",
+      "message": "Keep `vA` and `vB` as values of type `Version`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "bumpPatch",
+      "steps": [
+        "Look at the right-hand side of `patch := ...`. Which field does it read?",
+        "The result only goes wrong if the field it reads differs from the field it should read."
+      ],
+      "hint": "It computes the new patch as `v.minor + 1` instead of `v.patch + 1`. Take a version whose minor and patch numbers differ: `⟨1, 4, 7⟩` gives `1.4.5` instead of `1.4.8`."
+    },
+    {
+      "match": "bumpMinor",
+      "steps": [
+        "`{ v with ... }` copies every field it does not mention. Which field should *not* be copied here?"
+      ],
+      "hint": "The patch number should start again from 0, but it is copied. `⟨1, 4, 7⟩` gives `1.5.7` instead of `1.5.0`. Any version with a non-zero patch works."
+    },
+    {
+      "match": "setPatch",
+      "steps": [
+        "Compare `⟨v.major, p, v.patch⟩` with the declaration of `Version`: which field receives `p`?"
+      ],
+      "hint": "`p` goes into the minor field and the old patch is kept. Take `⟨1, 4, 7⟩` and `p = 9`: the colleague gets `1.9.7` instead of `1.4.9`."
+    },
+    {
+      "match": "newer",
+      "steps": [
+        "The colleague requires *every* number of `a` to be at most that of `b`. In the specification, which number decides first?",
+        "Find two versions where `a` is older than `b`, but one of its numbers is bigger."
+      ],
+      "hint": "`newer ⟨1, 5, 0⟩ ⟨2, 0, 0⟩` returns `1.5.0`, but the more recent one is `2.0.0`: the minor number `5` is bigger, but it should not count, because the major numbers already differ."
+    }
+  ]
+}

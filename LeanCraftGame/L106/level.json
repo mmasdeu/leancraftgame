@@ -1,0 +1,92 @@
+{
+  "world": "Predicate World",
+  "title": "Injective and surjective",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "Surjective (n + 1) is false (nothing is sent to 0)",
+      "statement": "Surjective (fun n => n + 1)"
+    },
+    {
+      "test": "Injective (n - 1) is false (0 and 1 both go to 0)",
+      "statement": "Injective (fun n => n - 1)"
+    },
+    {
+      "test": "Bijective (swap neighbours: 1, 0, 3, 2, …) is true",
+      "statement": "Bijective (fun n => if n % 2 = 0 then n + 1 else n - 1)"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : (ℕ → ℕ) → Prop := L106.Injective\nexample : (ℕ → ℕ) → Prop := L106.Surjective\nexample : (ℕ → ℕ) → Prop := L106.Bijective",
+      "message": "Keep the names and the types: `Injective`, `Surjective` and `Bijective` all have type `(ℕ → ℕ) → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "Injective (n + 1) is true",
+      "hint": "`n + 1` never sends two different numbers to the same place. Injectivity reads `∀ a b, f a = f b → a = b`: the arrow goes from equal outputs to equal inputs."
+    },
+    {
+      "match": "Surjective (n + 1)",
+      "steps": [
+        "Which number is never an output of `n + 1`?"
+      ],
+      "hint": "Nothing is sent to 0, so `n + 1` is not surjective. A definition that accepts it is too weak: is your `∃ x` after the `∀ y`, and does it say `f x = y`?"
+    },
+    {
+      "match": "Surjective (n - 1) is true",
+      "hint": "Every `y` is hit by `x = y + 1`. In ℕ, `0 - 1 = 0`, so 0 is hit twice, which is fine for surjectivity. Write `∀ y, ∃ x, f x = y`."
+    },
+    {
+      "match": "Injective (n - 1)",
+      "steps": [
+        "What are `f 0` and `f 1` for `n - 1` in ℕ?"
+      ],
+      "hint": "Both are 0, so it is not injective. If your definition accepts it, check the direction of the arrow: `a = b → f a = f b` is true for every function."
+    },
+    {
+      "match": "Injective (n % 3)",
+      "hint": "`0` and `3` both go to 0. Your definition is too weak: injectivity must forbid two different inputs with the same output."
+    },
+    {
+      "match": "Surjective (n % 3)",
+      "hint": "The outputs are only 0, 1 and 2, so 3 is never hit. With `∀ x, ∃ y, f x = y` every function qualifies (take `y = f x`): the `∀` must range over the *outputs*, and the witness over the *inputs*."
+    },
+    {
+      "match": "Injective (2 * n)",
+      "hint": "`2 * a = 2 * b` forces `a = b`. A correct injectivity does not care that 1 is never hit."
+    },
+    {
+      "match": "Surjective (2 * n)",
+      "hint": "No `x` has `2 * x = 1`. Your definition accepts it: is it `∀ y, ∃ x, f x = y`, with `∃` inside?"
+    },
+    {
+      "match": "fun _ => 0",
+      "hint": "A constant function is neither injective nor surjective. Check each definition against `fun _ => 0`."
+    },
+    {
+      "match": "Bijective (n) is true",
+      "hint": "The identity is injective and surjective. `Bijective f` means both: `Injective f ∧ Surjective f`."
+    },
+    {
+      "match": "swap neighbours",
+      "steps": [
+        "Compute the first values: 1, 0, 3, 2, 5, 4, … Is any value repeated? Is any value missing?"
+      ],
+      "hint": "Each pair {2k, 2k+1} is just swapped, so every number is hit exactly once: the function is bijective. If the referee rejects it, your definition is too strong."
+    },
+    {
+      "match": "Bijective (n + 1) is false",
+      "hint": "`n + 1` is injective but not surjective, so it is not bijective: `Bijective` needs `∧`, not `∨`."
+    },
+    {
+      "match": "Bijective (n - 1) is false",
+      "hint": "`n - 1` is surjective but not injective, so it is not bijective: `Bijective` needs `∧`, not `∨`."
+    },
+    {
+      "match": "implies",
+      "hint": "A user of your definition needs this lemma. If it is ❓, the referee could not derive it from your definitions: try the standard formulations."
+    }
+  ]
+}

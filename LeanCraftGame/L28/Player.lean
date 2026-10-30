@@ -1,8 +1,22 @@
 /-
 # A colleague's groups
 
-A colleague has formalised groups as follows. It compiles, and every group
-you can think of is an instance. Is it right?
+In this world you have written the axioms of a structure yourself, and the
+referee judged them on models: real examples that must be accepted and junk
+that must be rejected. Now the roles are reversed. Someone else wrote the
+axioms, for a structure every mathematician knows.
+
+A **group** is a type `G` with a multiplication `mul`, a special element `one`
+and a function `inv` that gives every element its inverse. A colleague has
+formalised groups as follows. It compiles, and every group you can think of is
+an instance. Is it right?
+
+An axiom system can fail in two ways:
+
+* it asks for **too much**: a real group is rejected;
+* it asks for **too little**: a junk structure is accepted.
+
+Part A looks for the second kind of failure, Part B repairs it.
 -/
 import Mathlib.Tactic
 

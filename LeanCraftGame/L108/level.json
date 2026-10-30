@@ -1,0 +1,130 @@
+{
+  "world": "Library World",
+  "title": "Divisibility and gcd",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "IsGcd 0 0 0 is true",
+      "statement": "IsGcd 0 0 0"
+    },
+    {
+      "test": "Coprime' 0 4 is false",
+      "statement": "Coprime' 0 4"
+    },
+    {
+      "test": "IsPrime' 1 is false",
+      "statement": "IsPrime' 1"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : ℕ → ℕ → Prop := L108.Coprime'",
+      "message": "Keep `Coprime' : ℕ → ℕ → Prop`."
+    },
+    {
+      "lean": "example : ℕ → ℕ → ℕ → Prop := L108.IsGcd",
+      "message": "Keep `IsGcd : ℕ → ℕ → ℕ → Prop`."
+    },
+    {
+      "lean": "example : ℕ → Prop := L108.IsPrime'",
+      "message": "Keep `IsPrime' : ℕ → Prop`."
+    },
+    {
+      "lean": "example : ℕ → Prop := L108.Squarefree'",
+      "message": "Keep `Squarefree' : ℕ → Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "IsGcd 0 0 4",
+      "hint": "Every number is a common divisor of 0 and 0, so 3 is one that does not divide 4. Only 0, which every number divides, qualifies."
+    },
+    {
+      "match": "IsGcd 8 12 2",
+      "hint": "2 is a common divisor of 8 and 12, but 4 is a common divisor too and 4 does not divide 2: the greatest common divisor is 4."
+    },
+    {
+      "match": "Coprime' 6 15",
+      "hint": "Coprime means that the *only* common divisor is 1: `∀ d, d ∣ a → d ∣ b → d = 1`."
+    },
+    {
+      "match": "Coprime' 0 4",
+      "steps": [
+        "Which numbers divide 0? Which divide 5?"
+      ],
+      "hint": "Every number divides 0, so the common divisors of 0 and 5 are the divisors of 5. `∀ d, d ∣ a → d ∣ b → d = 1` handles this without special cases."
+    },
+    {
+      "match": "Coprime'",
+      "steps": [
+        "Say it as: every common divisor is …?"
+      ],
+      "hint": "`∀ d, d ∣ a → d ∣ b → d = 1`."
+    },
+    {
+      "match": "IsGcd 12 18 3",
+      "hint": "3 is a common divisor of 12 and 18, but not every common divisor divides it (6 does not). Did you forget the \"every common divisor divides `d`\" part?"
+    },
+    {
+      "match": "IsGcd 0 5 5 is",
+      "hint": "Check the direction of `∣` in the last clause: every common divisor `e` divides `d`, i.e. `e ∣ d`, not `d ∣ e`. (Also: 5 divides 0 and 5, and every common divisor of 0 and 5 divides 5.)"
+    },
+    {
+      "match": "IsGcd 0 0 0",
+      "steps": [
+        "With `a = b = 0`, which numbers are common divisors? Is there a largest one?"
+      ],
+      "hint": "Every number divides 0, so there is no *largest* common divisor of 0 and 0, yet 0 is the one divisible by all of them. Use `∀ e, e ∣ a → e ∣ b → e ∣ d` rather than `e ≤ d`."
+    },
+    {
+      "match": "IsGcd 6 0 6",
+      "hint": "Both clauses should hold for `d = 5`: 5 divides 0 and 5, and every common divisor of 0 and 5 divides 5."
+    },
+    {
+      "match": "IsGcd",
+      "steps": [
+        "Two parts: `d` is a common divisor, and every common divisor `e` …?"
+      ],
+      "hint": "`d ∣ a ∧ d ∣ b ∧ ∀ e, e ∣ a → e ∣ b → e ∣ d`."
+    },
+    {
+      "match": "IsPrime' 1",
+      "steps": [
+        "How many divisors does 1 have? How many does a prime have?"
+      ],
+      "hint": "1 is not prime: add `2 ≤ p` (or `1 < p`). Its only divisor is 1 itself, so the divisor clause alone does not rule it out."
+    },
+    {
+      "match": "IsPrime' 0",
+      "steps": [
+        "Which numbers divide 0?"
+      ],
+      "hint": "Every number divides 0, so 0 has more than two divisors. A clause like `∀ d, 1 < d → d < p → ¬ d ∣ p` is vacuously true for 0 (and 1): add `2 ≤ p`."
+    },
+    {
+      "match": "IsPrime'",
+      "steps": [
+        "Two things: the size of `p`, and what its divisors can be."
+      ],
+      "hint": "`2 ≤ p ∧ ∀ d, d ∣ p → d = 1 ∨ d = p`."
+    },
+    {
+      "match": "Squarefree'",
+      "steps": [
+        "For which `d` do you want to forbid `d * d ∣ n`? Is `d = 1` allowed?"
+      ],
+      "hint": "`∀ d, d * d ∣ n → d = 1`."
+    },
+    {
+      "match": "Squarefree' 0",
+      "steps": [
+        "Which squares divide 0?"
+      ],
+      "hint": "Every square divides 0, for instance 4 ∣ 0, so 0 is not squarefree. Use `∀ d, d * d ∣ n → d = 1`, which gives the right answer without a special case."
+    },
+    {
+      "match": "",
+      "hint": "Test your definition on the corner cases 0 and 1, and remember that `n ∣ 0` always holds."
+    }
+  ]
+}

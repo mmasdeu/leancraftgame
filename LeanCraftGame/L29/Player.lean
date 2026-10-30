@@ -1,6 +1,12 @@
 /-
 # The AI proved Goldbach!
 
+The last world asks the hardest question about formalisation: does the formal
+statement **say what it claims to say**? Lean checks that a proof proves the
+statement it is attached to, nothing more. If the statement is wrong, a flawless
+proof is worth nothing. The levels before this one showed you how such flaws
+look: junk values, a missing hypothesis, a notion that is too permissive.
+
 An AI assistant was asked to formalise and prove Goldbach's conjecture:
 
   "Every even integer greater than 2 is the sum of two primes."
@@ -34,7 +40,8 @@ were "prime"? What if none were? A faithful statement has to give the
 right answer in every one of these worlds. The referee checks several
 such worlds, including the real one.
 
-(Hint: what is the precedence of `∧` versus `→` in the AI's statement?)
+Start by reading the AI's statement the way Lean does: which parts do `∃`,
+`∧` and `→` group together?
 -/
 
 def GoldbachFor (P : Nat → Prop) : Prop :=

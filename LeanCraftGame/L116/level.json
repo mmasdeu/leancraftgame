@@ -1,0 +1,82 @@
+{
+  "world": "Faithfulness World",
+  "title": "The AI proved the Collatz conjecture!",
+  "skill": "auditing",
+  "predict": [
+    {
+      "test": "Process 3: everything jumps to 0 after the start (FALSE: 0 is not 1, even though 0 ≤ 1)",
+      "statement": "Collatz (fun n k => if k = 0 then n else 0): does a process that falls to 0 reach 1?"
+    },
+    {
+      "test": "Process 1: counting down, n - k (TRUE: k = n - 1 lands on 1; but 0 never does, so n = 0 must be excluded)",
+      "statement": "Collatz (fun n k => n - k): does counting down from every positive start reach 1?"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : (Nat → Nat → Nat) → Prop := L116.Collatz",
+      "message": "Keep the name and the type: `L116.Collatz : (Nat → Nat → Nat) → Prop`."
+    },
+    {
+      "lean": "example : Nat → Nat → Nat := L116.lazyWorld",
+      "message": "Keep the name and the type: `L116.lazyWorld : Nat → Nat → Nat`."
+    },
+    {
+      "lean": "example : Nat := L116.stuckStart",
+      "message": "Keep the name and the type: `L116.stuckStart : Nat`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "Process 1",
+      "steps": ["Which starting number can never reach 1 when you count down? (`0 - k` is always 0.)", "Does your formula say 'positive' somewhere?"],
+      "hint": "If your statement says FALSE here, it includes the start `n = 0`, which counts down to 0 forever. Add the hypothesis `0 < n` (as `→` after `∀ n`)."
+    },
+    {
+      "match": "Process 2",
+      "steps": ["Counting up from 2 gives 2, 3, 4, …. Does it return to 1?", "Which relation does your formula use between `o n k` and 1? Does `k = 0` already satisfy it?"],
+      "hint": "Counting up never returns to a smaller number, so the real claim is false. If your statement holds, `k = 0` is probably a witness: you wrote `≤ n` or `n ≤`, not `= 1`."
+    },
+    {
+      "match": "Process 3",
+      "steps": ["The process falls to 0 and stays. Is 0 equal to 1? Is it ≤ 1?"],
+      "hint": "0 is not 1. `o n k ≤ 1` is also true when you land on 0, and that is a junk value: use `= 1`."
+    },
+    {
+      "match": "Process 4",
+      "hint": "From 2 this process goes 2, 0, 0, …, so it skips 1. If your statement holds, it accepts 0 (or something `≤ 1`) as 'reaching 1': use `= 1`."
+    },
+    {
+      "match": "Process 5",
+      "steps": ["Which quantifier comes first in your statement, `∀ n` or `∃ k`?"],
+      "hint": "The step `k` is allowed to depend on `n`: `∀ n, 0 < n → ∃ k, …`. With `∃ k, ∀ n, …` one single `k` would have to work for every start."
+    },
+    {
+      "match": "Process 6",
+      "hint": "Nothing moves, so from 2 you never reach 1. The AI's claim holds with `k = 0`; yours must not: ask for `o n k = 1`."
+    },
+    {
+      "match": "lazyWorld is a process",
+      "hint": "A process starts at `n`: `lazyWorld n 0` must be `n`. Try `fun n k => n + k` (counting up)."
+    },
+    {
+      "match": "AI's claim holds there",
+      "steps": ["The AI asks for a `k` with `lazyWorld n k ≤ n`. Which `k` is the laziest?"],
+      "hint": "With `k = 0` the AI's claim only needs `lazyWorld n 0 ≤ n`, which holds for every process that starts at `n`. So any process works, provided `lazyWorld n 0 = n`."
+    },
+    {
+      "match": "must FAIL there",
+      "steps": ["Pick a process that never returns to 1 from 2: counting up, or standing still."],
+      "hint": "Try `fun n k => n + k`: the AI's claim holds (`k = 0`), but from `n = 2` you never get 1. If the referee cannot settle your world, simplify it."
+    },
+    {
+      "match": "leaves it where it is",
+      "steps": ["Which number does `step` send to itself? Try `n / 2 = n` for even numbers.", "Which number is 'stuck' because dividing it by 2 changes nothing?"],
+      "hint": "`step 0 = 0 / 2 = 0`: the junk value 0 is stuck, so the process starting at 0 never reaches 1. (1 is not stuck: 1 → 4 → 2 → 1.)"
+    },
+    {
+      "match": "not 1",
+      "hint": "The number 1 goes to 4. You need a number that `step` leaves alone: only one works, and it is not positive."
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "world": "Structure Syntax World",
+  "title": "Declaring a structure",
+  "skill": "syntax",
+  "public": "all",
+  "hintsAfter": 1,
+  "checks": [
+    {
+      "lean": "example : ℕ → ℕ → L122.Rectangle := L122.Rectangle.mk",
+      "message": "`Rectangle` needs two natural-number fields, `width` and `height`, in this order."
+    },
+    {
+      "lean": "example : ℕ → ℕ → L122.Card := L122.Card.mk",
+      "message": "`Card` needs two natural-number fields, `rank` and `suit`, in this order."
+    },
+    {
+      "lean": "example : L122.Point := L122.origin\nexample : L122.Point := L122.p34",
+      "message": "Keep `origin` and `p34` as values of type `Point`."
+    },
+    {
+      "lean": "example : L122.Rectangle := L122.wide\nexample : L122.Card := L122.queenOfHearts",
+      "message": "Keep `wide : Rectangle` and `queenOfHearts : Card`."
+    },
+    {
+      "lean": "example : L122.Rectangle → ℕ := L122.perimeter\nexample : L122.Point → L122.Point := L122.swapPoint",
+      "message": "Keep `perimeter : Rectangle → ℕ` and `swapPoint : Point → Point`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "first field of a Rectangle",
+      "hint": "Declare the fields one per line, each indented: `width : ℕ` and then `height : ℕ`. The first one declared is the first argument of `Rectangle.mk`."
+    },
+    {
+      "match": "second field of a Rectangle",
+      "hint": "Declare `height : ℕ` on the line after `width : ℕ`."
+    },
+    {
+      "match": "first field of a Card",
+      "hint": "Declare `rank : ℕ` first and `suit : ℕ` second, one per line."
+    },
+    {
+      "match": "second field of a Card",
+      "hint": "Declare `suit : ℕ` on the line after `rank : ℕ`."
+    },
+    {
+      "match": "origin",
+      "hint": "`⟨0, 0⟩`, or `{ x := 0, y := 0 }`."
+    },
+    {
+      "match": "p34",
+      "hint": "`⟨3, 4⟩`: the first number is `x`, the second is `y`."
+    },
+    {
+      "match": "wide",
+      "steps": [
+        "The first number you give goes into the first declared field. Which one is that for a `Rectangle`?"
+      ],
+      "hint": "Width 7 and height 2: `⟨7, 2⟩`, or `{ width := 7, height := 2 }`, which cannot mix them up."
+    },
+    {
+      "match": "queenOfHearts",
+      "steps": [
+        "Which field comes first in your `Card`: the rank or the suit?"
+      ],
+      "hint": "Rank 12, suit 2: `⟨12, 2⟩`, or `{ rank := 12, suit := 2 }`."
+    },
+    {
+      "match": "perimeter",
+      "steps": [
+        "Read the two fields with `r.width` and `r.height`. A 7 by 2 rectangle has sides 7, 2, 7, 2."
+      ],
+      "hint": "`2 * (r.width + r.height)`. Mind the brackets: `2 * r.width + r.height` is not the perimeter."
+    },
+    {
+      "match": "swapPoint",
+      "steps": [
+        "You must build a new `Point`. What goes into its first field, `x`?"
+      ],
+      "hint": "`⟨p.y, p.x⟩`: the new `x` is the old `y` and the other way around."
+    },
+    {
+      "match": "",
+      "hint": "Fields are declared one per line as `name : type`; values are built with `⟨a, b⟩` in the same order, and fields are read with `p.name`."
+    }
+  ]
+}

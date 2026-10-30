@@ -1,0 +1,70 @@
+{
+  "world": "Classes World",
+  "title": "Standard instances",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "Vec.mk 1 2 - Vec.mk 5 5 = Vec.mk (-4) (-3)",
+      "statement": "Vec.mk 1 2 - Vec.mk 5 5 = Vec.mk (-4) (-3)"
+    },
+    {
+      "test": "Vec.mk 1 2 + (-1 : ℤ) = Vec.mk 0 1",
+      "statement": "Vec.mk 1 2 + (-1 : ℤ) = Vec.mk 0 1"
+    }
+  ],
+  "public": [
+    "Vec.mk 1 2 + Vec.mk 3 4 = Vec.mk 4 6"
+  ],
+  "checks": [
+    {
+      "lean": "example : Add L128.Vec := inferInstance\nexample : Zero L128.Vec := inferInstance\nexample : Neg L128.Vec := inferInstance\nexample : Sub L128.Vec := inferInstance",
+      "message": "`Vec` needs instances of `Add`, `Zero`, `Neg` and `Sub`: keep them (do not delete one)."
+    },
+    {
+      "lean": "example : HAdd L128.Vec ℤ L128.Vec := inferInstance",
+      "message": "`Vec` needs an instance `HAdd Vec ℤ Vec` (the instance for `v + n` with `n : ℤ`)."
+    }
+  ],
+  "hints": [
+    {
+      "match": "Vec.mk 1 2 + (",
+      "steps": ["Does `v + n` change both coordinates? By how much each?"],
+      "hint": "`hAdd v n := ⟨v.x + n, v.y + n⟩`: add `n` to each coordinate."
+    },
+    {
+      "match": "Vec.mk 4 3 + (0 : ℤ)",
+      "hint": "Moving by 0 should change nothing: `hAdd v n := ⟨v.x + n, v.y + n⟩`."
+    },
+    {
+      "match": "Vec.mk 1 2 - Vec.mk 5 5",
+      "steps": ["Which arrow is subtracted from which? Try the smaller example `Vec.mk 5 5 - Vec.mk 1 2`."],
+      "hint": "`sub u v := ⟨u.x - v.x, u.y - v.y⟩`, or `u + -v`. Your instance has the two arguments the wrong way round."
+    },
+    {
+      "match": "Vec.mk 5 5 - Vec.mk 1 2",
+      "hint": "`sub u v` is `u` minus `v`: `⟨u.x - v.x, u.y - v.y⟩`, or `u + -v`."
+    },
+    {
+      "match": "-(Vec",
+      "steps": ["Reversing an arrow changes *both* coordinates."],
+      "hint": "`neg v := ⟨-v.x, -v.y⟩`."
+    },
+    {
+      "match": "(0 : Vec)",
+      "hint": "The zero arrow is `⟨0, 0⟩`: adding it must change nothing."
+    },
+    {
+      "match": "Vec.mk 2 3",
+      "hint": "`v + -v` and `v - v` must both be the zero arrow. Check `neg`, `sub` and `add` together."
+    },
+    {
+      "match": "+",
+      "steps": ["Each coordinate is added to the same coordinate of the other arrow."],
+      "hint": "`add u v := ⟨u.x + v.x, u.y + v.y⟩`."
+    },
+    {
+      "match": "",
+      "hint": "Each instance gives one field: `add`, `zero`, `neg`, `sub`, `hAdd`. Use `⟨_, _⟩` to build a `Vec`."
+    }
+  ]
+}

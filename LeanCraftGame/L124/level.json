@@ -1,0 +1,104 @@
+{
+  "world": "Structure Syntax World",
+  "title": "Extending and updating",
+  "skill": "syntax",
+  "public": "all",
+  "hintsAfter": 1,
+  "checks": [
+    {
+      "lean": "example : L124.Point → ℕ → L124.Point := L124.moveRight",
+      "message": "Keep `moveRight : Point → ℕ → Point`."
+    },
+    {
+      "lean": "example : ℕ → ℕ → ℕ → L124.Settings := L124.Settings.mk",
+      "message": "`Settings` needs three natural-number fields: `volume`, `brightness`, `muted`, in this order."
+    },
+    {
+      "lean": "example : L124.Settings := L124.quiet",
+      "message": "Keep `quiet : Settings`."
+    },
+    {
+      "lean": "example : L124.Point → ℕ → L124.Point3 := L124.Point3.mk",
+      "message": "`Point3` must extend `Point` and have one more field `z : ℕ`."
+    },
+    {
+      "lean": "example : L124.Point3 → ℕ → L124.Point3 := L124.raise",
+      "message": "Keep `raise : Point3 → ℕ → Point3`."
+    },
+    {
+      "lean": "example : ℕ → ℕ → L124.Pair ℕ := L124.Pair.mk",
+      "message": "`Pair` takes a type `(α : Type)` and has two fields `fst` and `snd` of type `α`."
+    },
+    {
+      "lean": "example : ∀ {α : Type}, L124.Pair α → L124.Pair α := L124.Pair.swap\nexample : ∀ {α : Type}, α → L124.Pair α := L124.Pair.dup",
+      "message": "Keep `Pair.swap {α : Type} (p : Pair α) : Pair α` and `Pair.dup {α : Type} (a : α) : Pair α`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "moveRight ⟨3, 4⟩ 2 has x",
+      "steps": [
+        "`{ p with x := ... }` replaces the field `x`. What should the new value be: `n`, or something that uses the old `p.x`?"
+      ],
+      "hint": "`{ p with x := p.x + n }`."
+    },
+    {
+      "match": "moveRight",
+      "hint": "Update only `x`: `{ p with x := p.x + n }`. The field `y` is copied from `p` automatically."
+    },
+    {
+      "match": "default volume",
+      "hint": "Write the default after the type: `volume : ℕ := 5`."
+    },
+    {
+      "match": "default brightness",
+      "hint": "`brightness : ℕ := 7`."
+    },
+    {
+      "match": "default muted",
+      "hint": "`muted : ℕ := 0`."
+    },
+    {
+      "match": "second field of Settings",
+      "hint": "Declare `volume`, then `brightness`, then `muted`, one per line."
+    },
+    {
+      "match": "third field of Settings",
+      "hint": "Declare `volume`, then `brightness`, then `muted`, one per line."
+    },
+    {
+      "match": "quiet",
+      "steps": [
+        "Which fields must `quiet` set, and which can be left out because of the defaults?"
+      ],
+      "hint": "`{ volume := 0 }`: the fields you leave out take their default values."
+    },
+    {
+      "match": "Point3.mk",
+      "hint": "`structure Point3 extends Point where` followed by the line `z : ℕ`."
+    },
+    {
+      "match": "raise",
+      "steps": [
+        "Which field changes? What happens to `x` and `y` if you write `{ q with z := ... }`?"
+      ],
+      "hint": "`{ q with z := q.z + h }`. The fields `x` and `y` are inherited from `q`."
+    },
+    {
+      "match": "first field of a Pair",
+      "hint": "`structure Pair (α : Type) where` with the two lines `fst : α` and `snd : α`."
+    },
+    {
+      "match": "swap",
+      "hint": "`⟨p.snd, p.fst⟩`, or `{ fst := p.snd, snd := p.fst }`."
+    },
+    {
+      "match": "dup",
+      "hint": "`⟨a, a⟩`."
+    },
+    {
+      "match": "",
+      "hint": "Re-read the part of the introduction about the syntax you are using: `with`, `:=` defaults, `extends`, or `(α : Type)`."
+    }
+  ]
+}

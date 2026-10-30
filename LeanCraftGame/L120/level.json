@@ -1,0 +1,70 @@
+{
+  "world": "Finite Sums World",
+  "title": "Challenge: finite sums",
+  "skill": "writing",
+  "hintsAfter": 2,
+  "predict": [
+    { "test": "sumPlusOne 0 = 1 (the empty sum, plus one)", "statement": "sumPlusOne 0 = 1" },
+    { "test": "rangeSum 5 3 = 0 (b < a: nothing to add)", "statement": "rangeSum 5 3 = 0" },
+    { "test": "telescope 1 = 1/2", "statement": "telescope 1 = 1 / 2" }
+  ],
+  "checks": [
+    { "lean": "example : ℕ → ℚ := L120.telescope", "message": "Keep `telescope : ℕ → ℚ`." },
+    { "lean": "example : ℕ → ℕ := L120.sumPlusOne", "message": "Keep `sumPlusOne : ℕ → ℕ`." },
+    { "lean": "example : ℕ → ℕ → ℕ := L120.rangeSum", "message": "Keep `rangeSum : ℕ → ℕ → ℕ` (two inputs)." },
+    { "lean": "example : (ℕ → ℕ) → ℕ → ℕ := L120.totalChange", "message": "Keep `totalChange : (ℕ → ℕ) → ℕ → ℕ`: a sequence, then the number of steps." },
+    { "lean": "example : ℕ → ℕ := L120.floorSum", "message": "Keep `floorSum : ℕ → ℕ`." }
+  ],
+  "hints": [
+    {
+      "match": "telescope 1",
+      "steps": ["In which type does `1 / (i * (i + 1))` get computed in your code? In `ℕ`, `1 / 2` is `0`."],
+      "hint": "Cast `i` to `ℚ` first: `∑ i ∈ Finset.Icc 1 n, 1 / ((i : ℚ) * (i + 1))`."
+    },
+    {
+      "match": "telescope",
+      "steps": ["Write the first terms by hand: for `n = 2`, `i = 1` and `i = 2`. Do you start at `1`, and do you include `n`?"],
+      "hint": "`∑ i ∈ Finset.Icc 1 n, 1 / ((i : ℚ) * (i + 1))`."
+    },
+    {
+      "match": "sumPlusOne 0",
+      "steps": ["Where does the sum stop? Read `∑ i ∈ Finset.range n, i + 1` aloud: what is being added up for each `i`?"],
+      "hint": "Everything after the comma belongs to the sum, so `∑ i ∈ Finset.range n, i + 1` is the sum of the numbers `i + 1`: it adds one *per term*. Use brackets: `(∑ i ∈ Finset.range n, i) + 1`."
+    },
+    {
+      "match": "sumPlusOne",
+      "hint": "`(∑ i ∈ Finset.range n, i) + 1`. Mind the brackets: the `+ 1` must be outside the sum."
+    },
+    {
+      "match": "rangeSum 5 3",
+      "steps": ["Do you compute a difference like `b - a`, or subtract one sum from another? In `ℕ`, a subtraction that would go below `0` gives `0`, but the sums themselves do not know that."],
+      "hint": "`∑ i ∈ Finset.Icc a b, i`: the set `Finset.Icc 5 3` is empty by itself, so the sum is `0`."
+    },
+    {
+      "match": "rangeSum",
+      "steps": ["Both ends are added. Which of `Icc` and `Ico` includes both?"],
+      "hint": "`∑ i ∈ Finset.Icc a b, i`."
+    },
+    {
+      "match": "totalChange (fun i => 10 - i) 4",
+      "steps": ["Your definition only sees the steps where the sequence goes up (or only those where it goes down). `a i - a (i + 1)` is `0` whenever `a (i + 1)` is bigger: natural subtraction stops at `0`."],
+      "hint": "Add the two differences: `(a (i + 1) - a i) + (a i - a (i + 1))`. One of the two is always `0`, the other is the distance."
+    },
+    {
+      "match": "totalChange",
+      "steps": ["The distance between two natural numbers `x` and `y` is `x - y` if `y ≤ x`, and `y - x` otherwise. With truncated subtraction, one of `x - y` and `y - x` is `0`: how can you use both?", "The sum runs over `i < n`, because step `i` goes from `a i` to `a (i + 1)`."],
+      "hint": "`∑ i ∈ Finset.range n, ((a (i + 1) - a i) + (a i - a (i + 1)))`."
+    },
+    {
+      "match": "floorSum 4",
+      "steps": ["Write the terms for `n = 4`: `4 / 1 + 4 / 2 + 4 / 3 + 4 / 4`. Does your set contain both the `i = 1` and the `i = n` terms?"],
+      "hint": "`∑ i ∈ Finset.Icc 1 n, n / i`. With `Finset.range n` the last term, `n / n = 1`, is missing."
+    },
+    {
+      "match": "floorSum",
+      "steps": ["The terms are `n / i` for `i = 1, …, n`: natural division, rounded down, which is just what you want here. Do not cast to `ℚ`."],
+      "hint": "`∑ i ∈ Finset.Icc 1 n, n / i`."
+    },
+    { "match": "", "hint": "Write out the terms of the sum by hand for the smallest `n` that fails, and compare with what your set contains." }
+  ]
+}

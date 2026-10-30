@@ -1,0 +1,62 @@
+{
+  "world": "Classes World",
+  "title": "Classes and instances",
+  "skill": "syntax",
+  "public": "all",
+  "predict": [],
+  "checks": [
+    {
+      "lean": "example : L127.Size String := inferInstance",
+      "message": "`String` needs a `Size` instance: `instance sizeString : Size String where size s := …`."
+    },
+    {
+      "lean": "example : L127.Size (List ℕ) := inferInstance",
+      "message": "`List ℕ` needs a `Size` instance: `instance sizeList : Size (List ℕ) where size xs := …`."
+    },
+    {
+      "lean": "example : L127.Size L127.Rect := inferInstance",
+      "message": "`Rect` needs a `Size` instance: `instance sizeRect : Size Rect where size r := …`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "bigger [1, 2, 3]",
+      "steps": ["`bigger` compares two sizes. Which size does each list have under your instance?"],
+      "hint": "The size of `[1, 2, 3]` must be 3 (its length), and that of `[100]` must be 1. Your instance for lists does not count entries."
+    },
+    {
+      "match": "bigger (Rect.mk 1 9)",
+      "hint": "The sizes are 9 and 9: a 1 × 9 and a 3 × 3 rectangle have different shapes but the same area. If this fails, your `Size Rect` is not the area."
+    },
+    {
+      "match": "bigger \"hello\"",
+      "hint": "`\"hello\"` has 5 characters and `\"abc\"` has 3, so `bigger` should hold: check the instance for `String`."
+    },
+    {
+      "match": "[10, 20]",
+      "steps": ["Does the instance for lists count how many entries there are, or add the entries up?"],
+      "hint": "The size of a list is its number of entries: `size xs := xs.length`."
+    },
+    {
+      "match": "[7]",
+      "hint": "The size of `[7]` is 1 (one entry), not 7: use `xs.length`."
+    },
+    {
+      "match": "Size.size ([] :",
+      "hint": "The empty list has no entries: its size is 0."
+    },
+    {
+      "match": "Rect",
+      "steps": ["Unit squares in a rectangle: how many in each row, how many rows?"],
+      "hint": "`size r := r.w * r.h`. The area, not the sum or the perimeter."
+    },
+    {
+      "match": "\"",
+      "hint": "The size of a string is its number of characters: `size s := s.length`."
+    },
+    {
+      "match": "",
+      "hint": "Each instance gives the field `size` for one type: `instance sizeString : Size String where size s := s.length`."
+    }
+  ]
+}

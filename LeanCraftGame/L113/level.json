@@ -1,0 +1,71 @@
+{
+  "world": "Structure World",
+  "title": "Order relations",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "< on ℕ is not a partial order",
+      "statement": "the relation `<` on ℕ, as a PartialOrder'"
+    },
+    {
+      "test": "divisibility on ℕ is a partial order",
+      "statement": "the relation `∣` on ℕ, as a PartialOrder'"
+    },
+    {
+      "test": "'differ by at most 1' is not a partial order",
+      "statement": "the relation `a ≤ b + 1 ∧ b ≤ a + 1` on ℕ, as a PartialOrder'"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example := fun (α : Type) (r : α → α → Prop) => L113.PartialOrder'.mk r",
+      "message": "`PartialOrder'` needs the field `le : α → α → Prop` first, then your three axioms."
+    }
+  ],
+  "hints": [
+    {
+      "match": "< on ℕ",
+      "steps": ["Is `a < a` ever true?", "Which of your axioms should rule out `<`?"],
+      "hint": "`<` is not reflexive. Add `refl : ∀ a, le a a`."
+    },
+    {
+      "match": "≠ on ℕ",
+      "steps": ["Is `a ≠ a` true?"],
+      "hint": "`≠` is not reflexive: you need `refl : ∀ a, le a a`."
+    },
+    {
+      "match": "always-true",
+      "steps": ["The relation relates 0 and 1 in both directions. Do they have to be equal?"],
+      "hint": "Add antisymmetry: `antisymm : ∀ a b, le a b → le b a → a = b`."
+    },
+    {
+      "match": "differ by at most 1",
+      "steps": ["0 ~ 1 and 1 ~ 2. Is 0 ~ 2?"],
+      "hint": "Add transitivity: `trans : ∀ a b c, le a b → le b c → le a c`."
+    },
+    {
+      "match": "% 2",
+      "steps": ["Take a = 0 and b = 2: both `a % 2 ≤ b % 2` and `b % 2 ≤ a % 2`. Equal?"],
+      "hint": "This relation is reflexive and transitive but not antisymmetric: `∀ a b, le a b → le b a → a = b` rules it out."
+    },
+    {
+      "match": "a ≤ b + 1",
+      "steps": ["Compare with `b + 1`: take a = 2, b = 1 and then b = 0."],
+      "hint": "This relation is reflexive but not transitive (2 ≤ 1+1, 1 ≤ 0+1, but not 2 ≤ 0+1). Check that your transitivity axiom is there and has the right shape."
+    },
+    {
+      "match": "≤ on ℕ",
+      "steps": ["Which axiom fails, according to the report?", "Antisymmetry says that two elements related both ways are *equal*; it is not the same as symmetry."],
+      "hint": "Antisymmetry is `∀ a b, le a b → le b a → a = b`, with the conclusion `a = b`. Transitivity is `le a b → le b c → le a c`."
+    },
+    {
+      "match": "≥ on ℕ",
+      "steps": ["The axioms must hold for the reversed order too."],
+      "hint": "Axioms must not mention `≤` directly: they are about the field `le`."
+    },
+    {
+      "match": "",
+      "hint": "Each axiom is a field whose type is a `∀` statement about `le`, for example `refl : ∀ a, le a a`."
+    }
+  ]
+}

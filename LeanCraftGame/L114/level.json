@@ -1,0 +1,81 @@
+{
+  "world": "Structure World",
+  "title": "Metric spaces",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "(x - y)^2 on ℤ is not a metric",
+      "statement": "the distance `(x - y)^2` on ℤ, as a Metric'"
+    },
+    {
+      "test": "the zero distance is not a metric",
+      "statement": "the distance that is always 0, as a Metric'"
+    },
+    {
+      "test": "the discrete metric on ℕ is a metric",
+      "statement": "the distance that is 0 for equal points and 1 otherwise, on ℕ, as a Metric'"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example := fun (α : Type) (d : α → α → Int) => L114.Metric'.mk d",
+      "message": "`Metric'` needs the field `dist : α → α → ℤ` first, then your four axioms."
+    }
+  ],
+  "hints": [
+    {
+      "match": "x - y on ℤ",
+      "steps": ["What is the distance from 0 to 1, and from 1 to 0?", "Which of the axioms rules this out?"],
+      "hint": "`x - y` is neither symmetric nor non-negative. You need `symm : ∀ a b, dist a b = dist b a` and `nonneg : ∀ a b, 0 ≤ dist a b`."
+    },
+    {
+      "match": "(x - y)^2",
+      "steps": ["It is symmetric, non-negative and 0 only on equal points. Try the points 0, 1, 2."],
+      "hint": "Triangle inequality: `∀ a b c, dist a c ≤ dist a b + dist b c`. For 0, 1, 2 we get 4 ≤ 1 + 1, which is false."
+    },
+    {
+      "match": "zero distance",
+      "steps": ["The distance between 0 and 1 is 0. Should it be?"],
+      "hint": "Distance 0 must force equality: `eq_zero : ∀ a b, dist a b = 0 ↔ a = b`. With only the direction `a = b → dist a b = 0` the zero distance would slip through."
+    },
+    {
+      "match": "parity",
+      "steps": ["Which points have distance 0 from each other? Are they equal?"],
+      "hint": "You need the direction `dist a b = 0 → a = b` too, so write the axiom with `↔`."
+    },
+    {
+      "match": "x + y",
+      "steps": ["What is `dist a a`?"],
+      "hint": "`dist a a` must be 0: this is the direction `a = b → dist a b = 0` of `eq_zero`."
+    },
+    {
+      "match": "max x y",
+      "steps": ["What is `dist a a`?"],
+      "hint": "`dist a a` must be 0: this is the direction `a = b → dist a b = 0` of `eq_zero`."
+    },
+    {
+      "match": "constant distance 1",
+      "steps": ["What is `dist a a`?"],
+      "hint": "`dist a a` must be 0: this is the direction `a = b → dist a b = 0` of `eq_zero`."
+    },
+    {
+      "match": "one-way",
+      "steps": ["Compare the distance from 0 to 1 with the one from 1 to 0."],
+      "hint": "Add `symm : ∀ a b, dist a b = dist b a`."
+    },
+    {
+      "match": "-|x - y|",
+      "steps": ["Distances cannot be negative."],
+      "hint": "Add `nonneg : ∀ a b, 0 ≤ dist a b`. Unlike with `ℕ`, nothing forces this on `ℤ`."
+    },
+    {
+      "match": "is a metric",
+      "steps": ["Which axiom fails, according to the report?", "Check the direction of `≤` in the triangle inequality and which points are used."],
+      "hint": "The triangle inequality is `∀ a b c, dist a c ≤ dist a b + dist b c` (the *short cut* on the left). Reversing it rejects every genuine distance."
+    },
+    {
+      "match": "",
+      "hint": "Each axiom is a `∀` statement about `dist`, for example `symm : ∀ a b, dist a b = dist b a`."
+    }
+  ]
+}

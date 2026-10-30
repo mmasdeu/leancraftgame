@@ -1,0 +1,63 @@
+{
+  "world": "Basics World",
+  "title": "Challenge: counting",
+  "skill": "writing",
+  "hintsAfter": 2,
+  "predict": [
+    { "test": "stairs 0 = 1 (one way to climb nothing: do nothing)", "statement": "stairs 0 = 1" },
+    { "test": "choose 3 5 = 0 (cannot pick more than there are)", "statement": "choose 3 5 = 0" },
+    { "test": "countEven 0 = 1 (0 is even)", "statement": "countEven 0 = 1" }
+  ],
+  "checks": [
+    { "lean": "example : Nat → Nat := L101.stairs", "message": "Keep `stairs : Nat → Nat`." },
+    { "lean": "example : Nat → Nat → Nat := L101.choose", "message": "Keep `choose : Nat → Nat → Nat` (two inputs)." },
+    { "lean": "example : Nat → Nat := L101.countEven", "message": "Keep `countEven : Nat → Nat`." }
+  ],
+  "hints": [
+    {
+      "match": "stairs 0",
+      "steps": ["How many different ways are there to climb zero steps? Is \"doing nothing\" a way?"],
+      "hint": "`stairs 0 = 1`: there is exactly one way, the empty one."
+    },
+    {
+      "match": "stairs",
+      "steps": [
+        "Look at your last move: it was either a 1-step or a 2-step. What is left to climb in each case?",
+        "The ways to climb `n + 2` steps split in two groups, by the last move."
+      ],
+      "hint": "`stairs 0 = 1`, `stairs 1 = 1`, `stairs (n + 2) = stairs n + stairs (n + 1)`."
+    },
+    {
+      "match": "choose 3 5",
+      "steps": ["Can you pick 5 objects out of 3? How many ways are there to do something impossible?"],
+      "hint": "Zero. It comes out by itself if `choose 0 (k + 1) = 0` and the recursion reduces both inputs."
+    },
+    {
+      "match": "choose 5 0",
+      "hint": "Picking nothing can be done in exactly one way, whatever `n` is: the case `choose _ 0 = 1` must come first."
+    },
+    {
+      "match": "choose",
+      "steps": [
+        "Which are the base cases: picking 0 objects (any `n`), and picking `k + 1` objects out of 0?",
+        "For `choose (n + 1) (k + 1)`: the first object is in your pick, or it is not."
+      ],
+      "hint": "`| _, 0 => 1`, `| 0, k + 1 => 0`, `| n + 1, k + 1 => choose n k + choose n (k + 1)`."
+    },
+    {
+      "match": "countEven 0",
+      "hint": "0 is even, so among 0, …, 0 there is one even number."
+    },
+    {
+      "match": "countEven",
+      "steps": [
+        "`countEven (n + 1)` is `countEven n` plus the new number `n + 1`, if that number counts. When does it?"
+      ],
+      "hint": "`| 0 => 1`, `| n + 1 => if (n + 1) % 2 = 0 then countEven n + 1 else countEven n`."
+    },
+    {
+      "match": "",
+      "hint": "Compute the first values by hand and compare with your cases."
+    }
+  ]
+}
