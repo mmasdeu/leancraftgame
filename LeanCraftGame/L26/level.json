@@ -5,7 +5,7 @@
   "public": "all",
   "checks": [
     {
-      "lean": "example : ℕ → ℝ := L29.seqA\nexample : ℝ := L29.limA\nexample : ℕ → ℝ := L29.seqB\nexample : ℝ := L29.limB",
+      "lean": "example : ℕ → ℝ := L26.seqA\nexample : ℝ := L26.limA\nexample : ℕ → ℝ := L26.seqB\nexample : ℝ := L26.limB",
       "message": "Keep `seqA`, `seqB : ℕ → ℝ` and `limA`, `limB : ℝ`."
     }
   ],

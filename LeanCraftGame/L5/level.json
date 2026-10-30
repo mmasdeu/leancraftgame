@@ -5,11 +5,11 @@
   "public": "all",
   "checks": [
     {
-      "lean": "example : Nat := L23.ma\nexample : Nat := L23.mb\nexample : Nat := L23.mc",
+      "lean": "example : Nat := L5.ma\nexample : Nat := L5.mb\nexample : Nat := L5.mc",
       "message": "Keep `ma`, `mb` and `mc` as three natural numbers (`Nat`)."
     },
     {
-      "lean": "example : Nat := L23.year",
+      "lean": "example : Nat := L5.year",
       "message": "Keep `year : Nat`."
     }
   ],

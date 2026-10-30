@@ -18,11 +18,11 @@
   ],
   "checks": [
     {
-      "lean": "example : (Nat → Nat) → Nat → Prop := L10.AlwaysBelow",
+      "lean": "example : (Nat → Nat) → Nat → Prop := L13.AlwaysBelow",
       "message": "Keep `AlwaysBelow : (Nat → Nat) → Nat → Prop`."
     },
     {
-      "lean": "example : (Nat → Nat) → Prop := L10.AllEven",
+      "lean": "example : (Nat → Nat) → Prop := L13.AllEven",
       "message": "Keep `AllEven : (Nat → Nat) → Prop`."
     }
   ],

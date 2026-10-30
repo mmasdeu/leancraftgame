@@ -18,15 +18,15 @@
   ],
   "checks": [
     {
-      "lean": "example : Nat → Prop := L7.IsEven",
+      "lean": "example : Nat → Prop := L6.IsEven",
       "message": "Keep `IsEven : Nat → Prop`."
     },
     {
-      "lean": "example : Nat → Prop := L7.IsSmall",
+      "lean": "example : Nat → Prop := L6.IsSmall",
       "message": "Keep `IsSmall : Nat → Prop`."
     },
     {
-      "lean": "example : Nat → Nat → Prop := L7.GoesInto",
+      "lean": "example : Nat → Nat → Prop := L6.GoesInto",
       "message": "Keep `GoesInto : Nat → Nat → Prop`."
     }
   ],

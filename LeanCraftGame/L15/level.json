@@ -14,11 +14,11 @@
   ],
   "checks": [
     {
-      "lean": "example : (Nat → Nat) → Prop := L12.HasZero",
+      "lean": "example : (Nat → Nat) → Prop := L15.HasZero",
       "message": "Keep `HasZero : (Nat → Nat) → Prop`."
     },
     {
-      "lean": "example : (Nat → Nat) → Prop := L12.HasEvenBig",
+      "lean": "example : (Nat → Nat) → Prop := L15.HasEvenBig",
       "message": "Keep `HasEvenBig : (Nat → Nat) → Prop`."
     }
   ],

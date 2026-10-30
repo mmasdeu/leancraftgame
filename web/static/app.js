@@ -15,24 +15,16 @@ const store = {
   },
 };
 
-/* ------------------------------------------------------------ the player's name */
-
-/* Asked once, on the first run, and kept in the browser. `{name}` in any level text is
-   replaced by it. Skipping the question (or an empty name) gives "friend". */
-const REPO = "mmasdeu/leancraftgame";
-const playerName = () => (store.get("name", "") || "").trim() || "friend";
-const personalize = (s) => s.replace(/\{name\}/g, playerName());
+const REPO = "mmasdeu/leancraftgame";          // where "Report a problem" opens an issue
 
 /* A small Markdown subset for the level text: headings, bullet and numbered lists, quotes,
    fenced code, `code`, **bold**, *italic*. */
 function inline(s) {
-  s = personalize(s);
   return s.split("`").map((part, i) => i % 2
     ? `<code>${esc(part)}</code>`
     : esc(part).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\*(\S.*?)\*/g, "<i>$1</i>")).join("");
 }
 function markdown(text) {
-  text = personalize(text);
   const out = [];
   let para = [], list = [], ordered = false, quote = [], code = null;
   const flush = () => {
@@ -303,6 +295,29 @@ function jumpTo(d) {
   src.setSelectionRange(offset(d.line, d.col), offset(d.endLine, d.endCol));
 }
 
+/* Saved progress is keyed by level number. Before the folders were renumbered to follow the
+   play order, a level's number was its position in an older, scattered numbering: move what
+   a returning player saved to the new numbers, once. */
+(function migrateLevelNumbers() {
+  if (store.get("numbering", 1) >= 2) return;
+  const NEW = { 4: 1, 5: 2, 6: 3, 15: 4, 23: 5, 7: 6, 8: 7, 9: 8, 24: 9, 16: 10, 17: 11, 25: 12, 10: 13, 11: 14,
+    12: 15, 13: 16, 18: 17, 26: 18, 1: 19, 27: 20, 19: 21, 20: 22, 21: 23, 28: 24, 22: 25, 29: 26, 14: 27, 2: 28, 3: 29 };
+  const PER_LEVEL = ["draft", "results", "predict", "revealed", "failedRuns", "hintsOpened", "stars"];
+  const moved = {};
+  for (const [o, n] of Object.entries(NEW)) for (const what of PER_LEVEL) {
+    const v = store.get(`${what}.${o}`, undefined);
+    if (v !== undefined) moved[`${what}.${n}`] = v;
+  }
+  for (const [o] of Object.entries(NEW)) for (const what of PER_LEVEL) {
+    try { localStorage.removeItem(`leancraftgame.${what}.${o}`); } catch { /* private mode */ }
+  }
+  for (const [k, v] of Object.entries(moved)) store.set(k, v);
+  store.set("cleared", store.get("cleared", []).map((id) => NEW[id] ?? id));
+  const at = store.get("level", "intro");
+  if (at !== "intro") store.set("level", NEW[at] ?? at);
+  store.set("numbering", 2);
+})();
+
 /* ------------------------------------------------------------ levels */
 
 /* Online (a static site, see online/build.py) the levels are files, and the tests run on the
@@ -326,20 +341,38 @@ async function loadLevels() {
   await openLevel(levels.some((l) => l.id === id) ? id : levels[0].id);
 }
 
+/* The level menu shows every world, and the levels of the open worlds only. By default that
+   is the world of the current level; a click on a world opens or closes it (until the player
+   moves to another level). */
+let worldToggled = {};                 // world -> true/false, set by clicking on it
+
 function renderTabs() {
   const cleared = store.get("cleared", []);
+  const current = level ? level.world : null;
   let html = `<button class="level-tab welcome${level ? "" : " active"}" data-id="intro"
     title="What Lean is, and how this game works"><span class="ttl">Welcome</span></button>`;
-  let world = null;
-  for (const l of levels) {
-    if (l.world !== world) { world = l.world; html += `<span class="world-label">${esc(world)}</span>`; }
-    html += `<button class="level-tab${level && l.id === level.id ? " active" : ""}" data-id="${l.id}"
-      title="Level ${l.num} · ${esc(l.title)} (${esc(l.skill)})"><span class="num">${l.num}</span>
-      <span class="ttl">${esc(l.title)}</span>${cleared.includes(l.id) ? doneMark(l.id) : ""}</button>`;
+  for (const world of [...new Set(levels.map((l) => l.world))]) {
+    const inWorld = levels.filter((l) => l.world === world);
+    const open = worldToggled[world] ?? world === current;
+    const done = inWorld.filter((l) => cleared.includes(l.id)).length;
+    html += `<span class="world${open ? " open" : ""}"><button class="world-toggle" data-world="${esc(world)}"
+      aria-expanded="${open}" title="${open ? "Hide" : "Show"} the levels of this world"><span class="caret">${open ? "▾" : "▸"}</span>
+      ${esc(world)} <span class="count">${done}/${inWorld.length}</span></button>`;
+    if (open) for (const l of inWorld)
+      html += `<button class="level-tab${level && l.id === level.id ? " active" : ""}" data-id="${l.id}"
+        title="Level ${l.num} · ${esc(l.title)} (${esc(l.skill)})"><span class="num">${l.num}</span>
+        <span class="ttl">${esc(l.title)}</span>${cleared.includes(l.id) ? doneMark(l.id) : ""}</button>`;
+    html += "</span>";
   }
   $("levels").innerHTML = html;
-  for (const b of $("levels").querySelectorAll("button"))
-    b.onclick = () => (b.dataset.id === "intro" ? openIntro() : openLevel(Number(b.dataset.id)));
+  for (const b of $("levels").querySelectorAll("button")) {
+    if (b.dataset.world) b.onclick = () => {
+      worldToggled[b.dataset.world] = b.getAttribute("aria-expanded") !== "true";
+      renderTabs();
+      $("levels").querySelector(`.world-toggle[data-world="${CSS.escape(b.dataset.world)}"]`)?.focus();
+    };
+    else b.onclick = () => (b.dataset.id === "intro" ? openIntro() : openLevel(Number(b.dataset.id)));
+  }
 }
 
 /* The Welcome page: the introduction replaces the editor and the report. */
@@ -352,13 +385,11 @@ async function openIntro() {
   history.replaceState(null, "", "?level=intro");
   document.title = "Lean Craft Game · Welcome";
   document.body.classList.add("intro-mode");
+  worldToggled = {};
   renderTabs();
-  $("intro").innerHTML = `<p class="whoami">Playing as <b>${esc(playerName())}</b>
-    <button class="quiet" id="rename">Change name</button></p>` + markdown(text) +
-    `<p class="start"><button class="primary" id="start">
+  $("intro").innerHTML = markdown(text) + `<p class="start"><button class="primary" id="start">
     Start with level 1: ${esc(levels[0].title)} →</button></p>`;
   $("start").onclick = () => openLevel(levels[0].id);
-  $("rename").onclick = () => askName().then(openIntro);
   window.scrollTo(0, 0);
 }
 
@@ -372,6 +403,7 @@ async function openLevel(id) {
   store.set("level", id);
   history.replaceState(null, "", `?level=${id}`);
   document.title = `Lean Craft Game · ${level.title}`;
+  worldToggled = {};
   renderTabs();
   $("intro").innerHTML = markdown(level.intro);
   src.value = store.get(`draft.${id}`, level.template);
@@ -655,11 +687,11 @@ function updateSummary(note = "") {
     renderTabs();
     if (wasHidden) renderTests();          // a cleared level shows every test
     const next = levels[levels.findIndex((l) => l.id === level.id) + 1];
-    setSummary("cleared", `🏆 <b>Level cleared, ${esc(playerName())}!</b> Every test passed on this code.${line}${starsLine()}` +
-      (next ? `<button class="primary" id="next">Next: ${esc(next.title)} →</button>` : `You have cleared the last level. Well done, ${esc(playerName())}!`));
+    setSummary("cleared", `🏆 <b>Level cleared!</b> Every test passed on this code.${line}${starsLine()}` +
+      (next ? `<button class="primary" id="next">Next: ${esc(next.title)} →</button>` : "You have cleared the last level."));
     if (next) $("next").onclick = () => openLevel(next.id);
   } else if (failed) {
-    setSummary("failed", `${pre}🔁 <b>Not yet, ${esc(playerName())}.</b> Read the ❌ test below: it tells you what your
+    setSummary("failed", `${pre}🔁 <b>Not yet.</b> Read the ❌ test below: it tells you what your
       definition gets wrong.${line}`);
   } else if (passed || n("unknown")) {
     setSummary("", `${pre}${line}${n("unknown") ? `${n("unknown")} could not be settled. ` : ""}
@@ -667,7 +699,7 @@ function updateSummary(note = "") {
   } else {
     setSummary("muted", pre + (stale
       ? "Your code changed since the last run, so the earlier results no longer apply. Press <b>Run tests</b>."
-      : `Write your definition, ${esc(playerName())}, then press <b>Run tests</b>.`));
+      : "Write your definition, then press <b>Run tests</b>."));
   }
 }
 
@@ -901,29 +933,7 @@ buildSymbols();
 
 $("run").onclick = () => runTests();
 
-/* ------------------------------------------------------------ name, report a problem */
-
-/* Ask "How should I call you?"; resolves once the player has answered or skipped. */
-function askName() {
-  const dlg = $("name-dialog"), input = $("name-input");
-  input.value = store.get("name", "") || "";
-  $("name-skip").hidden = store.get("name", null) !== null;      // already answered: no skipping
-  $("name-cancel").hidden = !$("name-skip").hidden;
-  return new Promise((resolve) => {
-    const done = (value) => {
-      if (value !== null) store.set("name", value);
-      dlg.close();
-      resolve();
-    };
-    $("name-form").onsubmit = (e) => { e.preventDefault(); done(input.value.trim()); };
-    $("name-skip").onclick = () => done("");
-    $("name-cancel").onclick = () => done(null);
-    dlg.oncancel = (e) => { e.preventDefault(); done($("name-skip").hidden ? null : ""); };
-    dlg.showModal();
-    input.focus();
-    input.select();
-  });
-}
+/* ------------------------------------------------------------ report a problem */
 
 /* Open a prefilled "new issue" page on GitHub. The code goes into the URL, so a long
    file is cut and the whole of it is copied to the clipboard for pasting instead. */
@@ -999,4 +1009,4 @@ if (!ONLINE) {
   watchSetup();
 }
 $("stop").onclick = stopRun;
-(store.get("name", null) === null ? askName() : Promise.resolve()).then(loadLevels);
+loadLevels();

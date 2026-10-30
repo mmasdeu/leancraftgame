@@ -39,7 +39,7 @@ it does **not** have the property the comment describes:
 * `notEventuallyZero`: not eventually 0, yet `EventuallyZero` accepts it.
 * `bounded`: bounded, yet `Unbounded` accepts it.
 -/
-namespace L26
+namespace L18
 
 -- The colleague's code, to read (the referee uses its own copy).
 def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n, n > 0 → f n = 0
@@ -55,4 +55,4 @@ def notEventuallyZero : ℕ → ℕ := sorry
 -- accepted by Unbounded, but bounded
 def bounded : ℕ → ℕ := sorry
 
-end L26
+end L18

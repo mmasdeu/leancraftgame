@@ -46,7 +46,7 @@ Fill in the four sequences so that every mutant is caught. The report shows
 how many mutants are hidden. A mutant that survives is revealed, with its
 definition, so that you can see what your suite missed.
 -/
-namespace L27
+namespace L20
 
 -- the right definition (already done)
 def TendsToInfinity (u : ℕ → ℕ) : Prop := ∀ M, ∃ N, ∀ n ≥ N, M ≤ u n
@@ -59,4 +59,4 @@ def good₂ : ℕ → ℕ := sorry
 def bad₁ : ℕ → ℕ := sorry
 def bad₂ : ℕ → ℕ := sorry
 
-end L27
+end L20

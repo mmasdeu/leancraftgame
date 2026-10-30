@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Naming things. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L4.Player
+import LeanCraftGame.L1.Player
 
-open L4
+open L1
 
 #no_sorry answer
 #no_sorry language

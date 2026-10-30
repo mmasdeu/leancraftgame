@@ -18,11 +18,11 @@
   ],
   "checks": [
     {
-      "lean": "example : (Nat → Nat) → Prop := L11.LateBig",
+      "lean": "example : (Nat → Nat) → Prop := L14.LateBig",
       "message": "Keep `LateBig : (Nat → Nat) → Prop`."
     },
     {
-      "lean": "example : (Nat → Nat) → Prop := L11.EvenToEven",
+      "lean": "example : (Nat → Nat) → Prop := L14.EvenToEven",
       "message": "Keep `EvenToEven : (Nat → Nat) → Prop`."
     }
   ],

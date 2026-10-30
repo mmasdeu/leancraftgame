@@ -5,7 +5,7 @@
   "public": "all",
   "checks": [
     {
-      "lean": "example : Nat := L24.teen\nexample : Nat := L24.weekendDay\nexample : Nat := L24.oddA\nexample : Nat := L24.oddB",
+      "lean": "example : Nat := L9.teen\nexample : Nat := L9.weekendDay\nexample : Nat := L9.oddA\nexample : Nat := L9.oddB",
       "message": "Keep `teen`, `weekendDay`, `oddA` and `oddB` as natural numbers (`Nat`)."
     }
   ],

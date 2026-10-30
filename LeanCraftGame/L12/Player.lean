@@ -32,7 +32,7 @@ which division can be by zero, and where would the parentheses go?
 A rational number is written like an integer, or as a fraction: `3`, `-2`,
 `(1 / 2 : ℚ)`.
 -/
-namespace L25
+namespace L12
 
 -- The colleague's code, to read (the referee uses its own copy).
 def diff (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)
@@ -51,4 +51,4 @@ def recY : ℚ := sorry
 def avgA : ℚ := sorry
 def avgB : ℚ := sorry
 
-end L25
+end L12

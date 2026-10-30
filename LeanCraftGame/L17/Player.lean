@@ -26,7 +26,7 @@ def EventuallyBig (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 10 ≤ u n
 
 `EventuallyBig` is done. Define `HasPositiveRoot f` and `EventuallyZero u`.
 -/
-namespace L18
+namespace L17
 
 -- from some index on, every term is at least 10 (already done)
 def EventuallyBig (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 10 ≤ u n
@@ -37,4 +37,4 @@ def HasPositiveRoot (f : ℕ → ℕ) : Prop := sorry
 -- from some index on, every term is 0
 def EventuallyZero (u : ℕ → ℕ) : Prop := sorry
 
-end L18
+end L17

@@ -14,11 +14,11 @@
   ],
   "checks": [
     {
-      "lean": "example := fun (a b : Nat) => L14.Interval.mk a b",
+      "lean": "example := fun (a b : Nat) => L27.Interval.mk a b",
       "message": "`Interval` needs the fields `lo`, `hi` (in this order) and then your axiom."
     },
     {
-      "lean": "example := fun (a : Nat) => L14.PosNat.mk a",
+      "lean": "example := fun (a : Nat) => L27.PosNat.mk a",
       "message": "`PosNat` needs the field `val` and then your axiom."
     }
   ],

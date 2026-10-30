@@ -29,7 +29,7 @@ def BoundedSeq (u : ℕ → ℝ) : Prop := ∃ M, ∀ n, |u n| ≤ M
 
 `BoundedSeq` is done. Define `ConvergesTo u a`.
 -/
-namespace L22
+namespace L25
 
 -- some bound M is at least every |u n| (already done)
 def BoundedSeq (u : ℕ → ℝ) : Prop := ∃ M, ∀ n, |u n| ≤ M
@@ -38,4 +38,4 @@ def BoundedSeq (u : ℕ → ℝ) : Prop := ∃ M, ∀ n, |u n| ≤ M
 -- every term u n is within ε of a
 def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := sorry
 
-end L22
+end L25

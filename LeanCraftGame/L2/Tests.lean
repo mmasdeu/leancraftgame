@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Functions. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L5.Player
+import LeanCraftGame.L2.Player
 
-open L5
+open L2
 
 #no_sorry double
 #no_sorry squared

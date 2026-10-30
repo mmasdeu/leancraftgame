@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Limits. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L22.Player
+import LeanCraftGame.L25.Player
 
-open L22
+open L25
 
 #no_sorry ConvergesTo
 #level_start "Limits"

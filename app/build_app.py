@@ -36,7 +36,7 @@ def main():
     data = [(ROOT / "web" / "static", "web/static"), (ROOT / "LeanCraftGame", "LeanCraftGame"),
             (ROOT / "lean-toolchain", "."), (ROOT / "lake-manifest.json", "."),
             (opts.deps.resolve(), "."), (opts.olean.resolve(), "olean"),
-            (ROOT / "variants" / "L4", "variants/L4"), (ROOT / "variants" / "L17", "variants/L17")]
+            (ROOT / "variants" / "L1", "variants/L1"), (ROOT / "variants" / "L11", "variants/L11")]
     args = [str(ROOT / "app" / "launcher.py"), "--name", "LeanCraftGame", "--noconfirm", "--clean", "--onedir",
             "--paths", str(ROOT / "web"), "--hidden-import", "server", "--hidden-import", "certifi",
             "--distpath", str(build / "dist"), "--workpath", str(build / "work"), "--specpath", str(build)]

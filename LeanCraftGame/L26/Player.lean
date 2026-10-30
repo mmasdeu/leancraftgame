@@ -34,7 +34,7 @@ usual: `0`, `1`, `(1 / 2 : ℝ)`.
 * `seqB`, `limB`: a sequence that does not converge to `limB`, but that
   `ConvergesB` accepts.
 -/
-namespace L29
+namespace L26
 
 -- The colleagues' code, to read (the referee uses its own copy).
 def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
@@ -48,4 +48,4 @@ def limA : ℝ := sorry
 def seqB : ℕ → ℝ := sorry
 def limB : ℝ := sorry
 
-end L29
+end L26

@@ -6,7 +6,7 @@ you can think of is an instance. Is it right?
 -/
 import Mathlib.Tactic
 
-namespace L2
+namespace L28
 
 structure Group' (G : Type) where
   mul : G → G → G
@@ -49,4 +49,4 @@ structure Group₂ (G : Type) where
   one_mul   : ∀ a, mul one a = a
   mul_inv   : ∀ a, mul a (inv a) = one
 
-end L2
+end L28

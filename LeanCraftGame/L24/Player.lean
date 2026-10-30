@@ -33,7 +33,7 @@ although it does not have the property in the comment:
 * `mulK`, `mulN`: `mulN ∈ multiplesOf mulK` holds, but `mulN` is not a multiple
   of `mulK`.
 -/
-namespace L28
+namespace L24
 
 -- The colleague's code, to read (the referee uses its own copy).
 def CommonDivisor (d a b : ℕ) : Prop := a ∣ d ∧ b ∣ d
@@ -52,4 +52,4 @@ def twin : ℕ := sorry
 def mulK : ℕ := sorry
 def mulN : ℕ := sorry
 
-end L28
+end L24

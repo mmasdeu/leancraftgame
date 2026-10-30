@@ -10,7 +10,7 @@ there is no `sorry`.
 -/
 import Mathlib.Tactic
 
-namespace L3
+namespace L29
 
 def IsPrime (p : Nat) : Prop := 2 ≤ p ∧ ∀ d, d ∣ p → d = 1 ∨ d = p
 
@@ -40,4 +40,4 @@ such worlds, including the real one.
 def GoldbachFor (P : Nat → Prop) : Prop :=
   sorry
 
-end L3
+end L29

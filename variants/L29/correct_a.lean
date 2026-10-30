@@ -1,5 +1,5 @@
 /-
-# Level 3 · Faithfulness World · "The AI proved Goldbach!"
+# Level 29 · Faithfulness World · "The AI proved Goldbach!"
 
 An AI assistant was asked to formalise and prove Goldbach's conjecture:
 
@@ -8,7 +8,7 @@ An AI assistant was asked to formalise and prove Goldbach's conjecture:
 It came back with the statement and proof below. Both compile, and
 there is no `sorry`.
 -/
-namespace L3
+namespace L29
 
 def IsPrime (p : Nat) : Prop := 2 ≤ p ∧ ∀ d, d ∣ p → d = 1 ∨ d = p
 

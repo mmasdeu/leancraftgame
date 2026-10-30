@@ -5,11 +5,11 @@
   "public": "all",
   "checks": [
     {
-      "lean": "example : ℕ := L25.diffA\nexample : ℕ := L25.diffB",
+      "lean": "example : ℕ := L12.diffA\nexample : ℕ := L12.diffB",
       "message": "Keep `diffA` and `diffB` as natural numbers (`ℕ`)."
     },
     {
-      "lean": "example : ℚ := L25.recX\nexample : ℚ := L25.recY\nexample : ℚ := L25.avgA\nexample : ℚ := L25.avgB",
+      "lean": "example : ℚ := L12.recX\nexample : ℚ := L12.recY\nexample : ℚ := L12.avgA\nexample : ℚ := L12.avgB",
       "message": "Keep `recX`, `recY`, `avgA` and `avgB` as rationals (`ℚ`)."
     }
   ],

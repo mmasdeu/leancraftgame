@@ -1,10 +1,10 @@
 /-
-# Level 2 · Structure World · "A colleague's groups"
+# Level 28 · Structure World · "A colleague's groups"
 
 A colleague has formalised groups as follows. It compiles, and every group
 you can think of is an instance. Is it right?
 -/
-namespace L2
+namespace L28
 
 structure Group' (G : Type) where
   mul : G → G → G

@@ -30,7 +30,7 @@ Typing `∀` and friends: click **Symbols** at the top right of the page. It lis
 `AllBig` is done. Define `AlwaysBelow u B` (every term is at most `B`) and
 `AllEven u` (every term is even).
 -/
-namespace L10
+namespace L13
 
 -- every term is at least 10 (already done)
 def AllBig (u : Nat → Nat) : Prop := ∀ n, 10 ≤ u n
@@ -41,4 +41,4 @@ def AlwaysBelow (u : Nat → Nat) (B : Nat) : Prop := sorry
 -- every term is even
 def AllEven (u : Nat → Nat) : Prop := sorry
 
-end L10
+end L13

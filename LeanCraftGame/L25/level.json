@@ -14,7 +14,7 @@
   ],
   "checks": [
     {
-      "lean": "example : (ℕ → ℝ) → ℝ → Prop := L22.ConvergesTo",
+      "lean": "example : (ℕ → ℝ) → ℝ → Prop := L25.ConvergesTo",
       "message": "Keep `ConvergesTo : (ℕ → ℝ) → ℝ → Prop`."
     }
   ],

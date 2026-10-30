@@ -35,7 +35,7 @@ which binds tighter than `∨`.
 * `oddA` and `oddB`: two numbers that `BothOdd` accepts, although they are not
   both odd.
 -/
-namespace L24
+namespace L9
 
 -- The colleague's code, to read (the referee uses its own copy).
 def IsTeen (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19
@@ -52,4 +52,4 @@ def weekendDay : Nat := sorry
 def oddA : Nat := sorry
 def oddB : Nat := sorry
 
-end L24
+end L9

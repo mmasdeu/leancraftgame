@@ -1,8 +1,8 @@
 /- Hidden test battery for Level True or false?. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L7.Player
+import LeanCraftGame.L6.Player
 
-open L7
+open L6
 
 #no_sorry IsEven
 #no_sorry IsSmall

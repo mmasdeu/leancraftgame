@@ -2,7 +2,7 @@
 """Check every level against its sample answers in variants/L<n>/.
 
     python3 check_levels.py            all levels, in the order they are played
-    python3 check_levels.py 4 15       only the levels in LeanCraftGame/L4 and LeanCraftGame/L15
+    python3 check_levels.py 1 4        only the levels in LeanCraftGame/L1 and LeanCraftGame/L4
 
 * An answer named `correct*.lean` or `fix*.lean` must pass every test.
 * An answer named `bug*.lean` must fail at least one test (❌), or be rejected

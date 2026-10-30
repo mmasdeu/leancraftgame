@@ -1,8 +1,8 @@
-/- Hidden test battery for Level 2. -/
+/- Hidden test battery for Level 28. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L2.Player
+import LeanCraftGame.L28.Player
 
-open L2
+open L28
 
 /-! A non-commutative group: S₃ ≅ ℤ/3 ⋊ ℤ/2, encoded on `Fin 6` as `a + 3s`. -/
 def S3.mul (x y : Fin 6) : Fin 6 :=
@@ -12,7 +12,7 @@ def S3.inv (x : Fin 6) : Fin 6 :=
   let a := x.val % 3; let s := x.val / 3
   Fin.ofNat 6 ((if s = 0 then (3 - a) % 3 else a) + 3 * s)
 
-#level_start "Level 2 · A colleague's groups"
+#level_start "Level 28 · A colleague's groups"
 
 /-! ### Part A: your junk model -/
 #expect_model "Part A: your junk model satisfies the colleague's axioms" :

@@ -35,7 +35,7 @@ and casts `a` and `b` first.
 
 Define `diff`, `distance` and `IsNegative`.
 -/
-namespace L16
+namespace L10
 
 -- a minus b, as an integer        (diff 3 5 is -2)
 def diff (a b : ℕ) : ℤ := sorry
@@ -46,4 +46,4 @@ def distance (a b : ℤ) : ℕ := sorry
 -- x is negative
 def IsNegative (x : ℤ) : Prop := sorry
 
-end L16
+end L10

@@ -27,7 +27,7 @@ is at least 3, which is false for every sequence. When a statement is about
 `BigAfter` is done. Define `LateBig u` (from index 5 on, every term is at
 least 3) and `EvenToEven u` (whenever `n` is even, `u n` is even).
 -/
-namespace L11
+namespace L14
 
 -- from index 3 on, the terms are at least 10 (already done)
 def BigAfter (u : Nat → Nat) : Prop := ∀ n, 3 ≤ n → 10 ≤ u n
@@ -38,4 +38,4 @@ def LateBig (u : Nat → Nat) : Prop := sorry
 -- if n is even then u n is even
 def EvenToEven (u : Nat → Nat) : Prop := sorry
 
-end L11
+end L14

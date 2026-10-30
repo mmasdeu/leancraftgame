@@ -18,15 +18,15 @@
   ],
   "checks": [
     {
-      "lean": "example : ℚ → ℚ → ℚ := L17.average",
+      "lean": "example : ℚ → ℚ → ℚ := L11.average",
       "message": "Keep `average : ℚ → ℚ → ℚ`."
     },
     {
-      "lean": "example : ℚ → ℚ → Prop := L17.IsReciprocal",
+      "lean": "example : ℚ → ℚ → Prop := L11.IsReciprocal",
       "message": "Keep `IsReciprocal : ℚ → ℚ → Prop`."
     },
     {
-      "lean": "example : ℚ → ℚ → ℚ → ℚ → ℚ → Prop := L17.HasSlope",
+      "lean": "example : ℚ → ℚ → ℚ → ℚ → ℚ → Prop := L11.HasSlope",
       "message": "Keep `HasSlope` with five rational inputs."
     }
   ],

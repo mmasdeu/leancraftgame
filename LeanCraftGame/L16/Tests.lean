@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Quantifiers in order. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L13.Player
+import LeanCraftGame.L16.Player
 
-open L13
+open L16
 
 #no_sorry HitsEverything
 #no_sorry Unbounded

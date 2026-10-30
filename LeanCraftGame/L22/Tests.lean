@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Using Mathlib. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L20.Player
+import LeanCraftGame.L22.Player
 
-open L20
+open L22
 
 #no_sorry TwinPrime
 #no_sorry CommonDivisor

@@ -129,7 +129,7 @@ The web server can also run a level without a browser, which is handy for
 checking answers. The number is the level's directory (`LeanCraftGame/L<n>`):
 
 ```bash
-python3 web/server.py --run 1 variants/L1/correct_a.lean
+python3 web/server.py --run 19 variants/L19/correct_a.lean
 ```
 
 To check every level against all its sample answers (after changing the

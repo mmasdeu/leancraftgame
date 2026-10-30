@@ -27,7 +27,7 @@ The tests will check the boundary values.
 `IsBig` is done. Define `IsEven`, `IsSmall` (below 10) and `GoesInto`
 (`GoesInto a b` says that `a` divides `b` exactly).
 -/
-namespace L7
+namespace L6
 
 -- n is at least 100 (already done)
 def IsBig (n : Nat) : Prop := 100 ≤ n
@@ -41,4 +41,4 @@ def IsSmall (n : Nat) : Prop := sorry
 -- dividing b by a leaves no remainder   (GoesInto 3 12 is true, GoesInto 5 12 is false)
 def GoesInto (a b : Nat) : Prop := sorry
 
-end L7
+end L6

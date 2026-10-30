@@ -6,19 +6,19 @@
   "hintsAfter": 1,
   "checks": [
     {
-      "lean": "example : Nat → Nat := L5.double",
+      "lean": "example : Nat → Nat := L2.double",
       "message": "Keep `double : Nat → Nat`."
     },
     {
-      "lean": "example : Nat → Nat := L5.squared",
+      "lean": "example : Nat → Nat := L2.squared",
       "message": "Keep `squared : Nat → Nat`."
     },
     {
-      "lean": "example : Nat → Nat := L5.addTen",
+      "lean": "example : Nat → Nat := L2.addTen",
       "message": "Keep `addTen : Nat → Nat`."
     },
     {
-      "lean": "example : Nat → Nat := L5.minusOne",
+      "lean": "example : Nat → Nat := L2.minusOne",
       "message": "Keep `minusOne : Nat → Nat`."
     }
   ],

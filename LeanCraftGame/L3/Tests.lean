@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Making choices. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L6.Player
+import LeanCraftGame.L3.Player
 
-open L6
+open L3
 
 #no_sorry smallest
 #no_sorry gap

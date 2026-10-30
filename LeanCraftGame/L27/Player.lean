@@ -37,7 +37,7 @@ Define `Interval` with two numbers `lo` and `hi` and an axiom saying that
 `lo ≤ hi`. Then define `PosNat`, a number `val` that is positive.
 Keep the fields in the order they are listed.
 -/
-namespace L14
+namespace L27
 
 -- two numbers `lo` and `hi`, in this order, with an axiom `lo ≤ hi`
 structure Interval where
@@ -50,4 +50,4 @@ structure PosNat where
   val : Nat
   -- your axiom here
 
-end L14
+end L27

@@ -18,11 +18,11 @@
   ],
   "checks": [
     {
-      "lean": "example : (Nat → Nat) → Prop := L13.HitsEverything",
+      "lean": "example : (Nat → Nat) → Prop := L16.HitsEverything",
       "message": "Keep `HitsEverything : (Nat → Nat) → Prop`."
     },
     {
-      "lean": "example : (Nat → Nat) → Prop := L13.Unbounded",
+      "lean": "example : (Nat → Nat) → Prop := L16.Unbounded",
       "message": "Keep `Unbounded : (Nat → Nat) → Prop`."
     }
   ],

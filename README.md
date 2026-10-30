@@ -58,7 +58,7 @@ python3 web/server.py --open
 Or, without a browser, run a level on a file of your own:
 
 ```bash
-python3 web/server.py --run 4 LeanCraftGame/L4/Player.lean
+python3 web/server.py --run 1 LeanCraftGame/L1/Player.lean
 ```
 
 ## The levels
@@ -217,7 +217,7 @@ closing tactic was called, how often it succeeded and how long it took.
 ## Known limitations and next steps
 
 * **The referee is weak on purpose.** `grind` cannot derive `a * 1 = a` from
-  left identity, left inverse and right inverse, which is why Level 2 checks
+  left identity, left inverse and right inverse, which is why Level 28 checks
   structures against models instead of deriving theorems from them. The
   Mathlib tactics are now available, but I have not tested whether they
   suffice for downstream tests like "every `Group₂` has a right identity".

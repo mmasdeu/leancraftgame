@@ -6,15 +6,15 @@
   "hintsAfter": 1,
   "checks": [
     {
-      "lean": "example : Nat := L4.answer",
+      "lean": "example : Nat := L1.answer",
       "message": "Keep the name and the type: `answer : Nat`."
     },
     {
-      "lean": "example : String := L4.language",
+      "lean": "example : String := L1.language",
       "message": "Keep the name and the type: `language : String`."
     },
     {
-      "lean": "example : Bool := L4.flag",
+      "lean": "example : Bool := L1.flag",
       "message": "Keep the name and the type: `flag : Bool`."
     }
   ],

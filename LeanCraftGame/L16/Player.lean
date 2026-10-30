@@ -18,7 +18,7 @@ Define `HitsEverything f` (every natural number is the value of `f` at some
 position) and `Unbounded u` (however large `M` is, some term of `u` is at least
 `M`). These two are exactly the kind of definitions the next level builds on.
 -/
-namespace L13
+namespace L16
 
 -- every natural number is a value of f
 def HitsEverything (f : Nat → Nat) : Prop := sorry
@@ -26,4 +26,4 @@ def HitsEverything (f : Nat → Nat) : Prop := sorry
 -- the sequence gets above every bound M at least once
 def Unbounded (u : Nat → Nat) : Prop := sorry
 
-end L13
+end L16

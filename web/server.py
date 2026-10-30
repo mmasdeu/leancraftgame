@@ -33,17 +33,10 @@ STATIC = ROOT / "web" / "static"
 WORK = Path(os.environ.get("LEANCRAFT_WORK") or ROOT / ".lake" / "leancraftgame-web")
 RUNS = WORK / "runs"
 CACHE_FILE = WORK / "cache.json"
-# Levels in the order they are played. The numbers are directory names (LeanCraftGame/L<n>);
-# the number shown to the player is the position in this list.
-LEVELS = [4, 5, 6, 15, 23,             # Basics
-          7, 8, 9, 24,                 # Statements
-          16, 17, 25,                  # Numbers
-          10, 11, 12, 13, 18, 26,      # Quantifiers
-          1, 27,                       # Predicate
-          19, 20, 21, 28,              # Library
-          22, 29,                      # Analysis
-          14, 2,                       # Structure
-          3]                           # Faithfulness
+# Levels in the order they are played. The number of a level is the name of its directory
+# (LeanCraftGame/L<n>, variants/L<n>), and also the number shown to the player. A world is a
+# run of consecutive levels (see "world" in level.json).
+LEVELS = sorted(int(d.name[1:]) for d in (ROOT / "LeanCraftGame").glob("L[0-9]*") if d.is_dir())
 LEAN_ENV = {}       # environment for running Lean (LEAN, LEAN_PATH, …), see prepare_lean()
 # The app's first-launch setup (an object with status() and retry()), or None when the
 # server runs from a checkout and Lean is ready from the start.

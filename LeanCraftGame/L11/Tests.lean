@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Division by zero. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L17.Player
+import LeanCraftGame.L11.Player
 
-open L17
+open L11
 
 #no_sorry average
 #no_sorry IsReciprocal

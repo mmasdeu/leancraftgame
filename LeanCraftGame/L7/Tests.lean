@@ -1,8 +1,8 @@
 /- Hidden test battery for Level And. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L8.Player
+import LeanCraftGame.L7.Player
 
-open L8
+open L7
 
 #no_sorry IsTeen
 #no_sorry EvenInRange

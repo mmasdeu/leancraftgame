@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Your first structure. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L14.Player
+import LeanCraftGame.L27.Player
 
-open L14
+open L27
 
 #level_start "Your first structure"
 

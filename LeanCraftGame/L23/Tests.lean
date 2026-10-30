@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Generality. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L21.Player
+import LeanCraftGame.L23.Player
 
-open L21
+open L23
 
 #level_start "Generality"
 

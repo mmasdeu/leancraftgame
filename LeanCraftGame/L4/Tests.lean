@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Recursion. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L15.Player
+import LeanCraftGame.L4.Player
 
-open L15
+open L4
 
 #no_sorry sumTo
 #no_sorry pow2

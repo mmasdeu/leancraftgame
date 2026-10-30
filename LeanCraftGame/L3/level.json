@@ -6,15 +6,15 @@
   "hintsAfter": 1,
   "checks": [
     {
-      "lean": "example : Nat → Nat → Nat := L6.smallest",
+      "lean": "example : Nat → Nat → Nat := L3.smallest",
       "message": "Keep `smallest : Nat → Nat → Nat`."
     },
     {
-      "lean": "example : Nat → Nat → Nat := L6.gap",
+      "lean": "example : Nat → Nat → Nat := L3.gap",
       "message": "Keep `gap : Nat → Nat → Nat`."
     },
     {
-      "lean": "example : Nat → Nat := L6.zeroOrOne",
+      "lean": "example : Nat → Nat := L3.zeroOrOne",
       "message": "Keep `zeroOrOne : Nat → Nat`."
     }
   ],

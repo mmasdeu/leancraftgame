@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Integers and casts. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L16.Player
+import LeanCraftGame.L10.Player
 
-open L16
+open L10
 
 #no_sorry diff
 #no_sorry distance

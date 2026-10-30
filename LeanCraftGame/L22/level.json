@@ -18,15 +18,15 @@
   ],
   "checks": [
     {
-      "lean": "example : ℕ → Prop := L20.TwinPrime",
+      "lean": "example : ℕ → Prop := L22.TwinPrime",
       "message": "Keep `TwinPrime : ℕ → Prop`."
     },
     {
-      "lean": "example : ℕ → ℕ → ℕ → Prop := L20.CommonDivisor",
+      "lean": "example : ℕ → ℕ → ℕ → Prop := L22.CommonDivisor",
       "message": "Keep `CommonDivisor : ℕ → ℕ → ℕ → Prop`."
     },
     {
-      "lean": "example : (ℕ → ℕ) → Prop := L20.OneToOne",
+      "lean": "example : (ℕ → ℕ) → Prop := L22.OneToOne",
       "message": "Keep `OneToOne : (ℕ → ℕ) → Prop`."
     }
   ],

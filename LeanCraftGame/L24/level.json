@@ -5,7 +5,7 @@
   "public": "all",
   "checks": [
     {
-      "lean": "example : ℕ := L28.cdD\nexample : ℕ := L28.cdA\nexample : ℕ := L28.cdB\nexample : ℕ := L28.twin\nexample : ℕ := L28.mulK\nexample : ℕ := L28.mulN",
+      "lean": "example : ℕ := L24.cdD\nexample : ℕ := L24.cdA\nexample : ℕ := L24.cdB\nexample : ℕ := L24.twin\nexample : ℕ := L24.mulK\nexample : ℕ := L24.mulN",
       "message": "Keep `cdD`, `cdA`, `cdB`, `twin`, `mulK` and `mulN` as natural numbers (`ℕ`). Small numbers make the referee's job easier."
     }
   ],

@@ -18,11 +18,11 @@
   ],
   "checks": [
     {
-      "lean": "example : (ℕ → ℕ) → Prop := L18.HasPositiveRoot",
+      "lean": "example : (ℕ → ℕ) → Prop := L17.HasPositiveRoot",
       "message": "Keep `HasPositiveRoot : (ℕ → ℕ) → Prop`."
     },
     {
-      "lean": "example : (ℕ → ℕ) → Prop := L18.EventuallyZero",
+      "lean": "example : (ℕ → ℕ) → Prop := L17.EventuallyZero",
       "message": "Keep `EventuallyZero : (ℕ → ℕ) → Prop`."
     }
   ],

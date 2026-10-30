@@ -21,7 +21,7 @@ def evens : Set ℕ := {n | n % 2 = 0}
 
 `evens` is done. Define `multiplesOf k` and `BoundedSet s`.
 -/
-namespace L19
+namespace L21
 
 -- the even numbers (already done)
 def evens : Set ℕ := {n | n % 2 = 0}
@@ -32,4 +32,4 @@ def multiplesOf (k : ℕ) : Set ℕ := sorry
 -- some number B is at least as big as every element of s
 def BoundedSet (s : Set ℕ) : Prop := sorry
 
-end L19
+end L21

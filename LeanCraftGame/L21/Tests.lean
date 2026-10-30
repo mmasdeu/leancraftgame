@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Sets. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L19.Player
+import LeanCraftGame.L21.Player
 
-open L19
+open L21
 
 #no_sorry multiplesOf
 #no_sorry BoundedSet

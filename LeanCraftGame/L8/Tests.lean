@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Or and not. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L9.Player
+import LeanCraftGame.L8.Player
 
-open L9
+open L8
 
 #no_sorry FreeTicket
 #no_sorry PaysFull

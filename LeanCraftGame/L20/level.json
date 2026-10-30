@@ -10,7 +10,7 @@
   ],
   "checks": [
     {
-      "lean": "example : ℕ → ℕ := L27.good₁\nexample : ℕ → ℕ := L27.good₂\nexample : ℕ → ℕ := L27.bad₁\nexample : ℕ → ℕ := L27.bad₂",
+      "lean": "example : ℕ → ℕ := L20.good₁\nexample : ℕ → ℕ := L20.good₂\nexample : ℕ → ℕ := L20.bad₁\nexample : ℕ → ℕ := L20.bad₂",
       "message": "Keep `good₁`, `good₂`, `bad₁` and `bad₂` as sequences `ℕ → ℕ`, written with `fun`."
     }
   ],

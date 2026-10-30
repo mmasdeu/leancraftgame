@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Bounded quantifiers. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L18.Player
+import LeanCraftGame.L17.Player
 
-open L18
+open L17
 
 #no_sorry HasPositiveRoot
 #no_sorry EventuallyZero

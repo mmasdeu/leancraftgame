@@ -40,7 +40,7 @@ def factorial : Nat → Nat
 
 `factorial` is done. Fill in the right-hand sides of the cases below.
 -/
-namespace L15
+namespace L4
 
 -- 1 * 2 * … * n (already done)
 def factorial : Nat → Nat
@@ -63,4 +63,4 @@ def fib : Nat → Nat
   | 1 => sorry
   | n + 2 => sorry
 
-end L15
+end L4

@@ -4,11 +4,11 @@
   "skill": "reading",
   "checks": [
     {
-      "lean": "example : Bool → Bool → Bool := L2.junkMul\nexample : Bool := L2.junkOne\nexample : Bool → Bool := L2.junkInv",
+      "lean": "example : Bool → Bool → Bool := L28.junkMul\nexample : Bool := L28.junkOne\nexample : Bool → Bool := L28.junkInv",
       "message": "Keep the names and types of Part A: `junkMul : Bool → Bool → Bool`, `junkOne : Bool`, `junkInv : Bool → Bool`."
     },
     {
-      "lean": "example := fun (G : Type) (m : G → G → G) (o : G) (i : G → G) => L2.Group₂.mk m o i",
+      "lean": "example := fun (G : Type) (m : G → G → G) (o : G) (i : G → G) => L28.Group₂.mk m o i",
       "message": "`Group₂` must keep `mul`, `one`, `inv` as its first three fields, in this order."
     }
   ],

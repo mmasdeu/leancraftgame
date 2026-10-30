@@ -18,11 +18,11 @@
   ],
   "checks": [
     {
-      "lean": "example : Nat → Prop := L8.IsTeen",
+      "lean": "example : Nat → Prop := L7.IsTeen",
       "message": "Keep `IsTeen : Nat → Prop`."
     },
     {
-      "lean": "example : Nat → Nat → Nat → Prop := L8.EvenInRange",
+      "lean": "example : Nat → Nat → Nat → Prop := L7.EvenInRange",
       "message": "Keep `EvenInRange : Nat → Nat → Nat → Prop`."
     }
   ],

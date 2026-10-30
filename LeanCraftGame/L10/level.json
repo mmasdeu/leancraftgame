@@ -14,15 +14,15 @@
   ],
   "checks": [
     {
-      "lean": "example : ℕ → ℕ → ℤ := L16.diff",
+      "lean": "example : ℕ → ℕ → ℤ := L10.diff",
       "message": "Keep `diff : ℕ → ℕ → ℤ`."
     },
     {
-      "lean": "example : ℤ → ℤ → ℕ := L16.distance",
+      "lean": "example : ℤ → ℤ → ℕ := L10.distance",
       "message": "Keep `distance : ℤ → ℤ → ℕ`."
     },
     {
-      "lean": "example : ℤ → Prop := L16.IsNegative",
+      "lean": "example : ℤ → Prop := L10.IsNegative",
       "message": "Keep `IsNegative : ℤ → Prop`."
     }
   ],

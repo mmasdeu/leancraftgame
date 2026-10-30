@@ -18,15 +18,15 @@
   ],
   "checks": [
     {
-      "lean": "example : Nat → Prop := L9.FreeTicket",
+      "lean": "example : Nat → Prop := L8.FreeTicket",
       "message": "Keep `FreeTicket : Nat → Prop`."
     },
     {
-      "lean": "example : Nat → Prop := L9.PaysFull",
+      "lean": "example : Nat → Prop := L8.PaysFull",
       "message": "Keep `PaysFull : Nat → Prop`."
     },
     {
-      "lean": "example : Nat → Prop := L9.NotTiny",
+      "lean": "example : Nat → Prop := L8.NotTiny",
       "message": "Keep `NotTiny : Nat → Prop`."
     }
   ],

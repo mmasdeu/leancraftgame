@@ -1,11 +1,11 @@
-/- Hidden test battery for Level 3. -/
+/- Hidden test battery for Level 29. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L3.Player
+import LeanCraftGame.L29.Player
 
-open L3
+open L29
 
 #no_sorry GoldbachFor
-#level_start "Level 3 · The AI proved Goldbach!"
+#level_start "Level 29 · The AI proved Goldbach!"
 
 -- Toy worlds where the answer is known
 #expect_true "World 1: every number is 'prime' (Goldbach is trivially TRUE)" unfolding GoldbachFor :

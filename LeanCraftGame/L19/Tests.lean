@@ -1,11 +1,11 @@
-/- Hidden test battery for Level 1. Players don't edit (or ideally see) this file. -/
+/- Hidden test battery for Level 19. Players don't edit (or ideally see) this file. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L1.Player
+import LeanCraftGame.L19.Player
 
-open L1
+open L19
 
 #no_sorry TendsToInfinity
-#level_start "Level 1 · Going to infinity"
+#level_start "Level 19 · Going to infinity"
 
 -- Sanity: things that should tend to infinity
 #expect_true "u n = n tends to infinity" unfolding TendsToInfinity :

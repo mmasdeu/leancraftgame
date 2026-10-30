@@ -1,7 +1,7 @@
 /-
 # Going to infinity
 
-{name}, write down what it means for a sequence of natural numbers `u : ℕ → ℕ`
+Write down what it means for a sequence of natural numbers `u : ℕ → ℕ`
 to tend to infinity.
 
 You never write a proof in this game. The referee is an automated prover:
@@ -16,9 +16,9 @@ infinity? Would your definition say so?
 -/
 import Mathlib.Tactic
 
-namespace L1
+namespace L19
 
 def TendsToInfinity (u : Nat → Nat) : Prop :=
   sorry
 
-end L1
+end L19

@@ -31,7 +31,7 @@ Division on natural numbers drops the remainder: `7 / 2` is `3`, and
 
 Define the four functions below. The comment above each one gives examples.
 -/
-namespace L5
+namespace L2
 
 -- twice the input        (double 4 is 8)
 def double (n : Nat) : Nat := sorry
@@ -45,4 +45,4 @@ def addTen (n : Nat) : Nat := sorry
 -- one less than the input, but 0 stays 0   (minusOne 5 is 4, minusOne 0 is 0)
 def minusOne (n : Nat) : Nat := sorry
 
-end L5
+end L2

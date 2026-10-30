@@ -20,7 +20,7 @@ This says that **at least one** term of `u` is at least 10.
 `HasBig` is done. Define `HasZero u` (some term is zero) and `HasEvenBig u`
 (some term is even **and** at least 10, both for the same `n`).
 -/
-namespace L12
+namespace L15
 
 -- some term is at least 10 (already done)
 def HasBig (u : Nat → Nat) : Prop := ∃ n, 10 ≤ u n
@@ -31,4 +31,4 @@ def HasZero (u : Nat → Nat) : Prop := sorry
 -- some single term is both even and at least 10
 def HasEvenBig (u : Nat → Nat) : Prop := sorry
 
-end L12
+end L15

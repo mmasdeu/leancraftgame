@@ -33,7 +33,7 @@ definition applies to.
 The three definitions at the bottom only work for `ℕ`. Make each of them work
 for every type with an order. The tests use them on ℕ, ℤ and ℚ.
 -/
-namespace L21
+namespace L23
 
 -- every term of u is at most B, for any type with ≤ (already done)
 def AlwaysBelow {α : Type*} [Preorder α] (u : ℕ → α) (B : α) : Prop := ∀ n, u n ≤ B
@@ -50,4 +50,4 @@ def IsUpperBound (s : Set ℕ) (B : ℕ) : Prop := ∀ x ∈ s, x ≤ B
 -- the larger of a and b
 def largest (a b : ℕ) : ℕ := if a ≤ b then b else a
 
-end L21
+end L23

@@ -5,7 +5,7 @@
   "public": "all",
   "checks": [
     {
-      "lean": "example : ℕ → ℕ := L26.noRoot\nexample : ℕ → ℕ := L26.notEventuallyZero\nexample : ℕ → ℕ := L26.bounded",
+      "lean": "example : ℕ → ℕ := L18.noRoot\nexample : ℕ → ℕ := L18.notEventuallyZero\nexample : ℕ → ℕ := L18.bounded",
       "message": "Keep `noRoot`, `notEventuallyZero` and `bounded` as sequences `ℕ → ℕ`, written with `fun`."
     }
   ],

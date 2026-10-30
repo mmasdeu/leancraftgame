@@ -18,8 +18,8 @@
   ],
   "checks": [
     {
-      "lean": "example : (Nat → Nat) → Prop := L1.TendsToInfinity",
-      "message": "Keep the name and the type: `L1.TendsToInfinity : (Nat → Nat) → Prop`."
+      "lean": "example : (Nat → Nat) → Prop := L19.TendsToInfinity",
+      "message": "Keep the name and the type: `L19.TendsToInfinity : (Nat → Nat) → Prop`."
     }
   ],
   "hints": [

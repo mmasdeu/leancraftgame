@@ -22,7 +22,7 @@ Typing `∀` and friends: click **Symbols** at the top right of the page. It lis
 
 `InRange` is done. Define `IsTeen` (13 to 19 inclusive) and `EvenInRange`.
 -/
-namespace L8
+namespace L7
 
 -- lo ≤ n ≤ hi (already done)
 def InRange (lo hi n : Nat) : Prop := lo ≤ n ∧ n ≤ hi
@@ -33,4 +33,4 @@ def IsTeen (n : Nat) : Prop := sorry
 -- n is even and lies between lo and hi        (EvenInRange 1 10 4 is true, EvenInRange 1 10 5 is false)
 def EvenInRange (lo hi n : Nat) : Prop := sorry
 
-end L8
+end L7

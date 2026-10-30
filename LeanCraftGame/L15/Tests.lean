@@ -1,8 +1,8 @@
 /- Hidden test battery for Level There exists. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L12.Player
+import LeanCraftGame.L15.Player
 
-open L12
+open L15
 
 #no_sorry HasZero
 #no_sorry HasEvenBig

@@ -1,7 +1,7 @@
 /-
 # Naming things
 
-Welcome, {name}! In this game you write **definitions** in Lean, a language for
+Welcome! In this game you write **definitions** in Lean, a language for
 mathematics. You never write proofs: a hidden *referee* tests your definitions
 and reports what it finds. The first levels teach the syntax step by step.
 
@@ -41,7 +41,7 @@ If you are stuck, a **Hint** appears under a failed test after a failed run.
 
 Give the three definitions below their right values.
 -/
-namespace L4
+namespace L1
 
 -- The answer to life, the universe and everything.
 def answer : Nat := sorry
@@ -52,4 +52,4 @@ def language : String := sorry
 -- The truth value "yes".
 def flag : Bool := sorry
 
-end L4
+end L1

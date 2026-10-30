@@ -64,35 +64,35 @@ levels were written.
 
 | # | Dir | World | Level | Skill |
 |---|---|---|---|---|
-| 1 | L4 | Basics | Naming things | syntax |
-| 2 | L5 | Basics | Functions | syntax |
-| 3 | L6 | Basics | Making choices | syntax |
-| 4 | L15 | Basics | Recursion | syntax |
-| 5 | L23 | Basics | Spot the bug | reading |
-| 6 | L7 | Statements | True or false? | syntax |
-| 7 | L8 | Statements | And | syntax |
-| 8 | L9 | Statements | Or and not | syntax |
-| 9 | L24 | Statements | Spot the bug: connectives | reading |
-| 10 | L16 | Numbers | Integers and casts | syntax |
-| 11 | L17 | Numbers | Division by zero | writing |
-| 12 | L25 | Numbers | Spot the bug: numbers | reading |
-| 13 | L10 | Quantifiers | For all | syntax |
-| 14 | L11 | Quantifiers | If … then … | syntax |
-| 15 | L12 | Quantifiers | There exists | syntax |
-| 16 | L13 | Quantifiers | Quantifiers in order | syntax |
-| 17 | L18 | Quantifiers | Bounded quantifiers | syntax |
-| 18 | L26 | Quantifiers | Spot the bug: quantifiers | reading |
-| 19 | L1 | Predicate | Going to infinity | writing |
-| 20 | L27 | Predicate | Be the referee | testing |
-| 21 | L19 | Library | Sets | syntax |
-| 22 | L20 | Library | Using Mathlib | writing |
-| 23 | L21 | Library | Generality | writing |
-| 24 | L28 | Library | Spot the bug: the library | reading |
-| 25 | L22 | Analysis | Limits | writing |
-| 26 | L29 | Analysis | Spot the bug: limits | reading |
-| 27 | L14 | Structure | Your first structure | writing |
-| 28 | L2 | Structure | A colleague's groups | reading |
-| 29 | L3 | Faithfulness | The AI proved Goldbach! | auditing |
+| 1 | L1 | Basics | Naming things | syntax |
+| 2 | L2 | Basics | Functions | syntax |
+| 3 | L3 | Basics | Making choices | syntax |
+| 4 | L4 | Basics | Recursion | syntax |
+| 5 | L5 | Basics | Spot the bug | reading |
+| 6 | L6 | Statements | True or false? | syntax |
+| 7 | L7 | Statements | And | syntax |
+| 8 | L8 | Statements | Or and not | syntax |
+| 9 | L9 | Statements | Spot the bug: connectives | reading |
+| 10 | L10 | Numbers | Integers and casts | syntax |
+| 11 | L11 | Numbers | Division by zero | writing |
+| 12 | L12 | Numbers | Spot the bug: numbers | reading |
+| 13 | L13 | Quantifiers | For all | syntax |
+| 14 | L14 | Quantifiers | If … then … | syntax |
+| 15 | L15 | Quantifiers | There exists | syntax |
+| 16 | L16 | Quantifiers | Quantifiers in order | syntax |
+| 17 | L17 | Quantifiers | Bounded quantifiers | syntax |
+| 18 | L18 | Quantifiers | Spot the bug: quantifiers | reading |
+| 19 | L19 | Predicate | Going to infinity | writing |
+| 20 | L20 | Predicate | Be the referee | testing |
+| 21 | L21 | Library | Sets | syntax |
+| 22 | L22 | Library | Using Mathlib | writing |
+| 23 | L23 | Library | Generality | writing |
+| 24 | L24 | Library | Spot the bug: the library | reading |
+| 25 | L25 | Analysis | Limits | writing |
+| 26 | L26 | Analysis | Spot the bug: limits | reading |
+| 27 | L27 | Structure | Your first structure | writing |
+| 28 | L28 | Structure | A colleague's groups | reading |
+| 29 | L29 | Faithfulness | The AI proved Goldbach! | auditing |
 
 Symbols are introduced when they are first needed, each with its plain-ASCII
 spelling where Lean has one. The **∀ Symbols** drawer in the browser lists all
@@ -102,7 +102,7 @@ of them with the keys to type them, and has a typing drill.
 
 ## Basics World: values and functions
 
-### 1. Naming things (L4)
+### 1. Naming things (L1)
 
 * **Teaches:** `def name : Type := value`; the types `Nat`, `String` and
   `Bool`; `sorry` as a placeholder; `--` comments; how to run the tests and read ✅/❌.
@@ -112,7 +112,7 @@ of them with the keys to type them, and has a typing drill.
   `language : String` ("Lean"), `flag : Bool` (true).
 * **Tests catch:** a wrong value, wrong capitalisation of the text.
 
-### 2. Functions (L5)
+### 2. Functions (L2)
 
 * **Teaches:** parameters `(n : Nat)`; the output type; applying a function with
   `f x` (no brackets or commas; brackets only group); `+ - * / %`; division
@@ -121,7 +121,7 @@ of them with the keys to type them, and has a typing drill.
 * **Tests catch:** `n + n` for the square, and `minusOne 0`, the truncated
   subtraction case.
 
-### 3. Making choices (L6)
+### 3. Making choices (L3)
 
 * **Teaches:** several parameters `(a b : Nat)`; `if … then … else …` (both
   branches, same type); the comparisons `= ≠ < ≤ > ≥`; that `=` is a
@@ -131,7 +131,7 @@ of them with the keys to type them, and has a typing drill.
   `zeroOrOne`.
 * **Tests catch:** `a - b` for the gap, which is 0 when `a < b`.
 
-### 4. Recursion (L15)
+### 4. Recursion (L4)
 
 * **Teaches:** definitions by cases, `| 0 => … | n + 1 => …`; the function
   type `Nat → Nat` before the cases; `_` as a wildcard; recursive calls on a
@@ -143,7 +143,7 @@ of them with the keys to type them, and has a typing drill.
   steps (`sumTo n + n`, `fib (n + 1) + fib (n + 1)`).
 
 
-### 5. Spot the bug (L23) · reading
+### 5. Spot the bug (L5) · reading
 
 * **Teaches:** reading code instead of writing it; a counterexample as evidence;
   hunting systematically (every branch of an `if`, every "except" in the
@@ -158,7 +158,7 @@ of them with the keys to type them, and has a typing drill.
 
 ## Statements World: `Prop` and the connectives
 
-### 6. True or false? (L7)
+### 6. True or false? (L6)
 
 * **Teaches:** `Prop`, a statement that is true or false; a *predicate* is a
   function returning `Prop`; no `if`, `true` or `false` in the body; naming
@@ -167,7 +167,7 @@ of them with the keys to type them, and has a typing drill.
 * **Task:** `IsEven`, `IsSmall` (below 10), `GoesInto a b`.
 * **Tests catch:** `n % 2 = 1`, `n ≤ 10` (boundary value 10), swapped `a` and `b`.
 
-### 7. And (L8)
+### 7. And (L7)
 
 * **Teaches:** `∧` (`\and`, or `/\`); there is no `lo ≤ n ≤ hi`, write two
   comparisons; a definition may use earlier ones.
@@ -175,7 +175,7 @@ of them with the keys to type them, and has a typing drill.
 * **Task:** `IsTeen` (13 to 19), `EvenInRange` (reusing `InRange`).
 * **Tests catch:** `∨` instead of `∧`, strict bounds, a missing condition.
 
-### 8. Or and not (L9)
+### 8. Or and not (L8)
 
 * **Teaches:** `∨` (`\or`, or `\/`); `¬` (`\not`, or `Not p`); binding strength
   `¬`, then `∧`, then `∨`, then `→`; parentheses.
@@ -185,7 +185,7 @@ of them with the keys to type them, and has a typing drill.
   `n ≠ 0 ∨ n ≠ 1`, which is always true.
 
 
-### 9. Spot the bug: connectives (L24) · reading
+### 9. Spot the bug: connectives (L9) · reading
 
 * **Teaches:** that a predicate can be wrong in two directions, too weak (accepts
   too much) or too strong (rejects too much); binding strengths again.
@@ -199,7 +199,7 @@ of them with the keys to type them, and has a typing drill.
 
 ## Numbers World: types of numbers and their traps
 
-### 10. Integers and casts (L16)
+### 10. Integers and casts (L10)
 
 * **Teaches:** `ℤ` and `ℕ` (`\Z`, `\N`); type ascription `(3 : ℤ)`; casts
   `(n : ℤ)`, displayed `↑n`; *where* the cast goes matters,
@@ -210,7 +210,7 @@ of them with the keys to type them, and has a typing drill.
 * **Tests catch:** the late cast (`diff 3 5 = 0`), `.toNat` instead of
   `.natAbs` (`distance (-4) 3 = 0`), `x ≤ 0` for negative.
 
-### 11. Division by zero (L17)
+### 11. Division by zero (L11)
 
 * **Teaches:** `ℚ` (`\Q`); in Lean every function is total, so `x / 0` has a
   value, and Mathlib chose `0`; the other junk values (`3 - 5`, `7 / 0`,
@@ -225,7 +225,7 @@ of them with the keys to type them, and has a typing drill.
   parentheses in `a + b / 2`.
 
 
-### 12. Spot the bug: numbers (L25) · reading
+### 12. Spot the bug: numbers (L12) · reading
 
 * **Teaches:** that junk-value bugs agree with the intended meaning on most inputs,
   so random checks miss them; asking "where is the junk value?".
@@ -238,7 +238,7 @@ of them with the keys to type them, and has a typing drill.
 
 ## Quantifiers World: statements about sequences
 
-### 13. For all (L10)
+### 13. For all (L13)
 
 * **Teaches:** a sequence is a function `u : Nat → Nat`; the arrow `→` (`\to`,
   or `->`); `fun n => …`; `∀ n, P n` (`\forall`, or `forall`) and its comma.
@@ -246,7 +246,7 @@ of them with the keys to type them, and has a typing drill.
 * **Task:** `AlwaysBelow u B`, `AllEven u`.
 * **Tests catch:** `∃` for `∀`, the bound the wrong way round, odd for even.
 
-### 14. If … then … (L11)
+### 14. If … then … (L14)
 
 * **Teaches:** `p → q` as "if p then q"; `→` binds weakest; `∀ n, p n → q n` for
   statements about only some positions; the classic mistake
@@ -256,7 +256,7 @@ of them with the keys to type them, and has a typing drill.
 * **Tests catch:** `∧` for `→`. A sequence with small early terms must
   satisfy `LateBig`, and `∧` rejects it. This foreshadows the Goldbach level.
 
-### 15. There exists (L12)
+### 15. There exists (L15)
 
 * **Teaches:** `∃ n, P n` (`\exists`, or `exists`); `∀` and `∃` are
   opposites; two properties of the *same* element go inside one `∃` joined by `∧`.
@@ -265,7 +265,7 @@ of them with the keys to type them, and has a typing drill.
 * **Tests catch:** `∀` for `∃`, and `(∃ n, even) ∧ (∃ n, big)`, which is
   caught by a sequence with an even term and a big term but none both.
 
-### 16. Quantifiers in order (L13)
+### 16. Quantifiers in order (L16)
 
 * **Teaches:** quantifiers are read left to right and the order matters;
   `∀ m, ∃ n, …` lets `n` depend on `m`, `∃ n, ∀ m, …` does not.
@@ -274,7 +274,7 @@ of them with the keys to type them, and has a typing drill.
   `∃ M, ∀ n, M ≤ u n` for `Unbounded` (it means "bounded below", so it accepts
   the constant sequence 7 and 0, 1, 0, 1, …).
 
-### 17. Bounded quantifiers (L18)
+### 17. Bounded quantifiers (L17)
 
 * **Teaches:** Mathlib's shorthand `∀ n ≥ N, P n` and `∃ n > 0, P n`; that the
   bound becomes `→` under `∀` and `∧` under `∃`; why the hand-written
@@ -286,7 +286,7 @@ of them with the keys to type them, and has a typing drill.
   0, 1, 0, 1, …).
 
 
-### 18. Spot the bug: quantifiers (L26) · reading
+### 18. Spot the bug: quantifiers (L18) · reading
 
 * **Teaches:** translating a quantified statement literally before judging it;
   counterexamples that are functions (`fun n => …`).
@@ -301,7 +301,7 @@ of them with the keys to type them, and has a typing drill.
 
 ## Predicate World: the first real definition
 
-### 19. Going to infinity (L1) · writing
+### 19. Going to infinity (L19) · writing
 
 * **Builds on:** `∀ ∃ ∀` from level 16, bounded quantifiers from level 17, and
   the `∧`/`→` lesson from level 14.
@@ -316,7 +316,7 @@ of them with the keys to type them, and has a typing drill.
 * **Also tests** three downstream lemmas a user of the definition needs.
 
 
-### 20. Be the referee (L27) · testing
+### 20. Be the referee (L20) · testing
 
 * **Teaches:** choosing tests. A good probe sits on the boundary of the notion: a
   sequence that tends to infinity *without* a property people confuse with it
@@ -337,7 +337,7 @@ of them with the keys to type them, and has a typing drill.
 
 ## Library World: speaking Mathlib
 
-### 21. Sets (L19)
+### 21. Sets (L21)
 
 * **Teaches:** `Set ℕ`; set-builder notation `{n | P n}`; `∈`, `∉`, `⊆`, `∅`
   (`\in`, `\notin`, `\sub`, `\empty`); bounded quantifiers over sets,
@@ -347,7 +347,7 @@ of them with the keys to type them, and has a typing drill.
 * **Tests catch:** `{n | k % n = 0}` (the divisors, not the multiples), and
   `∀ n ∈ s, ∃ B, n ≤ B` (always true: accepts 5, 6, 7, …).
 
-### 22. Using Mathlib (L20)
+### 22. Using Mathlib (L22)
 
 * **Teaches:** reusing library notions (`Even`, `Odd`, `Nat.Prime`, `∣`,
   `Function.Injective`, `Function.Surjective`, `Monotone`, `StrictMono`);
@@ -360,7 +360,7 @@ of them with the keys to type them, and has a typing drill.
 * **Tests catch:** `a ∣ d` (divisibility the wrong way round), `∨` in
   `TwinPrime`, and `Function.Surjective` for injective.
 
-### 23. Generality (L21)
+### 23. Generality (L23)
 
 * **Teaches:** implicit arguments `{α : Type*}`; instance arguments
   `[Preorder α]`; the error *failed to synthesize* when one is missing;
@@ -374,7 +374,7 @@ of them with the keys to type them, and has a typing drill.
   rejected by the checks before the tests run.
 
 
-### 24. Spot the bug: the library (L28) · reading
+### 24. Spot the bug: the library (L24) · reading
 
 * **Teaches:** that library notions have fixed meanings and argument orders, and a
   definition using them can still say the wrong thing.
@@ -387,7 +387,7 @@ of them with the keys to type them, and has a typing drill.
 
 ## Analysis World: real numbers
 
-### 25. Limits (L22)
+### 25. Limits (L25)
 
 * **Teaches:** `ℝ` (`\R`); real sequences `ℕ → ℝ`; the absolute value `|x|`;
   casts `(n : ℝ)`; `ε` (`\e`) and `∀ ε > 0`; the ε–N definition of a limit.
@@ -401,7 +401,7 @@ of them with the keys to type them, and has a typing drill.
   the Archimedean property, which the referee cannot find.
 
 
-### 26. Spot the bug: limits (L29) · reading
+### 26. Spot the bug: limits (L26) · reading
 
 * **Teaches:** working out *which way* a definition is wrong (too strong or too
   weak) before looking for a counterexample.
@@ -415,7 +415,7 @@ of them with the keys to type them, and has a typing drill.
 
 ## Structure World: bundling data and axioms
 
-### 27. Your first structure (L14) · writing
+### 27. Your first structure (L27) · writing
 
 * **Teaches:** `structure Name where` and its fields; building a value with
   `Name.mk`; a field whose type is a statement is an *axiom*; how the referee
@@ -425,7 +425,7 @@ of them with the keys to type them, and has a typing drill.
 * **Tests catch:** a missing axiom (junk values accepted), `<` for `≤`, the
   inequality reversed, `0 ≤ val`.
 
-### 28. A colleague's groups (L2) · reading, then fixing
+### 28. A colleague's groups (L28) · reading, then fixing
 
 * A colleague's `Group'` has associativity, a **left** identity and a
   **right** inverse. It compiles and every group is an instance, but it is
@@ -441,7 +441,7 @@ of them with the keys to type them, and has a typing drill.
 
 ## Faithfulness World: auditing a formal statement
 
-### 29. The AI proved Goldbach! (L3) · auditing
+### 29. The AI proved Goldbach! (L29) · auditing
 
 * An "AI" formalises Goldbach as
   `∀ n, 2 < n → n % 2 = 0 → ∃ p q, IsPrime p ∧ IsPrime q → p + q = n` and

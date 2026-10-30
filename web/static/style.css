@@ -86,11 +86,14 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
 .logo { font-weight: 700; font-size: 20px; letter-spacing: -.01em; }
 .tagline { color: var(--muted); font-size: 14px; }
 #levels { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; flex-basis: 100%; }
-.world-label {
+.world { display: contents; }
+.world-toggle {
+  display: flex; align-items: baseline; gap: 5px; padding: 3px 9px;
   font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted);
-  margin: 0 2px 0 10px;
 }
-.world-label:first-child { margin-left: 0; }
+.world.open .world-toggle { color: var(--fg); border-color: var(--accent); }
+.world-toggle .caret { font-size: 10px; }
+.world-toggle .count { letter-spacing: 0; font-variant-numeric: tabular-nums; opacity: .8; }
 .level-tab { display: flex; align-items: baseline; gap: 6px; padding: 3px 10px; font-size: 13px; line-height: 1.4; }
 .level-tab .num { color: var(--muted); font-variant-numeric: tabular-nums; }
 .level-tab.active { border-color: var(--accent); box-shadow: inset 0 -2px 0 var(--accent); }
@@ -298,14 +301,6 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
 .prose li { margin: 4px 0; }
 .prose .start { margin: 18px 0 14px; }
 .prose .start button { font-size: 16px; padding: 10px 20px; }
-
-/* name prompt, Welcome page identity */
-.name-dialog { border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--fg); padding: 20px 24px; max-width: 420px; }
-.name-dialog::backdrop { background: rgba(0, 0, 0, .4); }
-.name-dialog h2 { margin: 0 0 6px; font-size: 18px; }
-.name-dialog input { width: 100%; box-sizing: border-box; margin: 8px 0 14px; padding: 8px 10px; font: inherit; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--fg); }
-.name-buttons { display: flex; gap: 8px; justify-content: flex-end; }
-.whoami { color: var(--muted); margin: 0 0 8px; }
 
 /* predict first */
 .predict { border: 1px solid var(--accent); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }

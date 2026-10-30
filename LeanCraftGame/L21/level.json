@@ -18,11 +18,11 @@
   ],
   "checks": [
     {
-      "lean": "example : ℕ → Set ℕ := L19.multiplesOf",
+      "lean": "example : ℕ → Set ℕ := L21.multiplesOf",
       "message": "Keep `multiplesOf : ℕ → Set ℕ`."
     },
     {
-      "lean": "example : Set ℕ → Prop := L19.BoundedSet",
+      "lean": "example : Set ℕ → Prop := L21.BoundedSet",
       "message": "Keep `BoundedSet : Set ℕ → Prop`."
     }
   ],

@@ -33,7 +33,7 @@ Remember the binding strengths: `a + b / 2` is `a + (b / 2)`.
 `IsHalf` is done. Define `average`, `IsReciprocal` and `HasSlope`. The tests
 include the cases where a division by zero would hide.
 -/
-namespace L17
+namespace L11
 
 -- y is half of x (already done; note: no division)
 def IsHalf (x y : ℚ) : Prop := 2 * y = x
@@ -48,4 +48,4 @@ def IsReciprocal (x y : ℚ) : Prop := sorry
 -- A vertical line (x₁ = x₂) has no slope at all.
 def HasSlope (x₁ y₁ x₂ y₂ m : ℚ) : Prop := sorry
 
-end L17
+end L11

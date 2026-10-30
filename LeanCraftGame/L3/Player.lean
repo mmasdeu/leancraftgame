@@ -38,7 +38,7 @@ languages: it is a statement, "is equal to".
 `biggest` is already written, so you can read it. Define the other three
 functions in the same style.
 -/
-namespace L6
+namespace L3
 
 -- the larger of two numbers (already done)
 def biggest (a b : Nat) : Nat :=
@@ -53,4 +53,4 @@ def gap (a b : Nat) : Nat := sorry
 -- 0 for the input 0, and 1 for any other input   (zeroOrOne 0 is 0, zeroOrOne 9 is 1)
 def zeroOrOne (n : Nat) : Nat := sorry
 
-end L6
+end L3

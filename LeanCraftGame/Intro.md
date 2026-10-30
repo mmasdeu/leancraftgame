@@ -1,4 +1,4 @@
-# Welcome to Lean Craft Game, {name}!
+# Welcome to Lean Craft Game
 
 In this game you learn to write **definitions** in Lean, a language for mathematics.
 You do not need to know anything about Lean, or to have read a line of code before.

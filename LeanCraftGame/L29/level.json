@@ -14,8 +14,8 @@
   ],
   "checks": [
     {
-      "lean": "example : (Nat → Prop) → Prop := L3.GoldbachFor",
-      "message": "Keep the name and the type: `L3.GoldbachFor : (Nat → Prop) → Prop`."
+      "lean": "example : (Nat → Prop) → Prop := L29.GoldbachFor",
+      "message": "Keep the name and the type: `L29.GoldbachFor : (Nat → Prop) → Prop`."
     }
   ],
   "hints": [

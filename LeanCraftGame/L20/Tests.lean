@@ -1,8 +1,8 @@
 /- Hidden test battery for Level Be the referee. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L27.Player
+import LeanCraftGame.L20.Player
 
-open L27
+open L20
 
 namespace L27Ref
 def TendsToInfinity (u : ℕ → ℕ) : Prop := ∀ M, ∃ N, ∀ n ≥ N, M ≤ u n

@@ -44,7 +44,7 @@ def isLeap (y : Nat) : Bool := y % 4 == 0 && y % 100 != 0
 Give three numbers on which `middle` returns the wrong number, and a year on
 which `isLeap` gives the wrong answer.
 -/
-namespace L23
+namespace L5
 
 -- The colleague's code, to read (changing it here changes nothing: the
 -- referee uses its own copy).
@@ -62,4 +62,4 @@ def mc : Nat := sorry
 -- A year on which `isLeap` is wrong.
 def year : Nat := sorry
 
-end L23
+end L5

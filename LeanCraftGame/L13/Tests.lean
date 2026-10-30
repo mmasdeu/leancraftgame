@@ -1,8 +1,8 @@
 /- Hidden test battery for Level For all. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L10.Player
+import LeanCraftGame.L13.Player
 
-open L10
+open L13
 
 #no_sorry AlwaysBelow
 #no_sorry AllEven
