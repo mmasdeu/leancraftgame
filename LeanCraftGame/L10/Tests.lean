@@ -1,34 +1,31 @@
-/- Hidden test battery for Level For all. -/
+/- Hidden test battery for Level Integers and casts. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L10.Player
+import LeanCraftGame.L16.Player
 
-open L10
+open L16
 
-#no_sorry AlwaysBelow
-#no_sorry AllEven
-#level_start "For all"
+#no_sorry diff
+#no_sorry distance
+#no_sorry IsNegative
+#level_start "Integers and casts"
 
--- the worked example
-#expect_true "AllBig (fun n => n + 10) is true" unfolding AllBig :
-  AllBig (fun n => n + 10)
-#expect_false "AllBig (fun n => n) is false" unfolding AllBig :
-  AllBig (fun n => n)
--- your predicates
-#expect_true "AlwaysBelow (fun n => n % 3) 2 is true" unfolding AlwaysBelow :
-  AlwaysBelow (fun n => n % 3) 2
-#expect_true "AlwaysBelow (fun _ => 4) 4 is true" unfolding AlwaysBelow :
-  AlwaysBelow (fun _ => 4) 4
-#expect_false "AlwaysBelow (fun n => n % 3) 1 is false" unfolding AlwaysBelow :
-  AlwaysBelow (fun n => n % 3) 1
-#expect_false "AlwaysBelow (fun n => n) 5 is false" unfolding AlwaysBelow :
-  AlwaysBelow (fun n => n) 5
-#expect_true "AllEven (fun n => 2 * n) is true" unfolding AllEven :
-  AllEven (fun n => 2 * n)
-#expect_true "AllEven (fun _ => 0) is true" unfolding AllEven :
-  AllEven (fun _ => 0)
-#expect_false "AllEven (fun n => n) is false" unfolding AllEven :
-  AllEven (fun n => n)
-#expect_false "AllEven (fun n => 2 * n + 1) is false" unfolding AllEven :
-  AllEven (fun n => 2 * n + 1)
+#expect_true "diff 3 5 = -2" unfolding diff :
+  diff 3 5 = -2
+#expect_true "diff 5 3 = 2" unfolding diff :
+  diff 5 3 = 2
+#expect_true "diff 0 0 = 0" unfolding diff :
+  diff 0 0 = 0
+#expect_true "distance 3 (-4) = 7" unfolding distance :
+  distance 3 (-4) = 7
+#expect_true "distance (-4) 3 = 7" unfolding distance :
+  distance (-4) 3 = 7
+#expect_true "distance 2 2 = 0" unfolding distance :
+  distance 2 2 = 0
+#expect_true "IsNegative (-1) is true" unfolding IsNegative :
+  IsNegative (-1)
+#expect_false "IsNegative 0 is false" unfolding IsNegative :
+  IsNegative 0
+#expect_false "IsNegative 5 is false" unfolding IsNegative :
+  IsNegative 5
 
 #level_report

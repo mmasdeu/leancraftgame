@@ -1,56 +1,43 @@
 {
-  "world": "Quantifiers World",
-  "title": "Spot the bug: quantifiers",
+  "world": "Analysis World",
+  "title": "Spot the bug: limits",
   "skill": "reading",
   "public": "all",
   "checks": [
     {
-      "lean": "example : ℕ → ℕ := L26.noRoot\nexample : ℕ → ℕ := L26.notEventuallyZero\nexample : ℕ → ℕ := L26.bounded",
-      "message": "Keep `noRoot`, `notEventuallyZero` and `bounded` as sequences `ℕ → ℕ`, written with `fun`."
+      "lean": "example : ℕ → ℝ := L29.seqA\nexample : ℝ := L29.limA\nexample : ℕ → ℝ := L29.seqB\nexample : ℝ := L29.limB",
+      "message": "Keep `seqA`, `seqB : ℕ → ℝ` and `limA`, `limB : ℝ`."
     }
   ],
   "hints": [
     {
-      "match": "HasPositiveRoot accepts",
+      "match": "seqA converges",
       "steps": [
-        "An implication `p → q` is true whenever `p` is false. Is there an `n` for which `n > 0` is false?"
+        "`seqA` must really converge to `limA`. What is the simplest convergent sequence you know?"
       ],
-      "hint": "Take `n = 0`: `0 > 0` is false, so the implication holds whatever `f` is. `HasPositiveRoot` accepts *every* function."
+      "hint": "A constant sequence converges to its value: `seqA := fun _ => 0`, `limA := 0`."
     },
     {
-      "match": "root other than 0",
+      "match": "Alice",
       "steps": [
-        "The colleague's definition accepts everything, so you only need a function with no root other than 0. Does yours have one?"
+        "Alice's definition is missing something that yours had. What happens to `|u n - a| < ε` when `ε` is 0, or negative?",
+        "With `ε = 0`, the condition `|u n - a| < 0` never holds. So which sequences does Alice's definition accept?"
       ],
-      "hint": "`fun n => n + 1` is never 0."
+      "hint": "Alice's definition accepts no sequence at all, so *every* convergent sequence shows the bug: a constant one is enough."
     },
     {
-      "match": "EventuallyZero accepts",
+      "match": "seqB does not converge",
       "steps": [
-        "The colleague's definition asks for a 0 after *every* index. Does your sequence keep coming back to 0?"
+        "`seqB` must *not* converge to `limB`, and yet come within every `ε` of `limB` at least once."
       ],
-      "hint": "`fun n => n % 2` is 0 at every even index."
+      "hint": "`seqB := fun n => if n % 2 = 0 then 0 else 1` and `limB := 0`: the even terms are exactly 0, but the odd ones stay at 1."
     },
     {
-      "match": "eventually 0",
+      "match": "Bob",
       "steps": [
-        "Your sequence is 0 from some index on, so it does not show the bug. You need one that returns to 0 again and again, and also leaves it again and again."
+        "Bob's definition only asks for *one* term within `ε` of the limit. Which sequences come close once, but do not stay close?"
       ],
-      "hint": "`fun n => n % 2`: 0, 1, 0, 1, …."
-    },
-    {
-      "match": "Unbounded accepts",
-      "steps": [
-        "`∃ M, ∀ n, M ≤ u n` says that the sequence is bounded *below*. Which `M` makes `M ≤ u n` true for every sequence of natural numbers?"
-      ],
-      "hint": "`M = 0` works for every sequence, so the colleague's `Unbounded` accepts everything."
-    },
-    {
-      "match": "is bounded",
-      "steps": [
-        "Your sequence really is unbounded. Pick one that stays below some bound."
-      ],
-      "hint": "`fun _ => 7`."
+      "hint": "Any sequence that hits the limit exactly at some index is accepted: `fun n => if n % 2 = 0 then 0 else 1` with limit 0."
     }
   ]
 }

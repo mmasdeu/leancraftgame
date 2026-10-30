@@ -1,25 +1,43 @@
-/- Hidden test battery for Level Limits. -/
+/- Hidden test battery for Level Using Mathlib. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L22.Player
+import LeanCraftGame.L20.Player
 
-open L22
+open L20
 
-#no_sorry ConvergesTo
-#level_start "Limits"
+#no_sorry TwinPrime
+#no_sorry CommonDivisor
+#no_sorry OneToOne
+#level_start "Using Mathlib"
 
 -- the worked example
-#expect_true "BoundedSeq (fun _ => 3) is true" unfolding BoundedSeq :
-  BoundedSeq (fun _ => 3)
--- your definition
-#expect_true "the constant sequence 3 converges to 3" unfolding ConvergesTo :
-  ConvergesTo (fun _ => 3) 3
-#expect_true "7, 7, 7, 7, 7, 0, 0, 0, … converges to 0" unfolding ConvergesTo :
-  ConvergesTo (fun n => if n < 5 then 7 else 0) 0
-#expect_false "the constant sequence 3 does not converge to 4" unfolding ConvergesTo :
-  ConvergesTo (fun _ => 3) 4
-#expect_false "0, 1, 2, 3, … does not converge to 0" unfolding ConvergesTo :
-  ConvergesTo (fun n => (n : ℝ)) 0
-#expect_false "0, 1, 0, 1, … does not converge to 0" unfolding ConvergesTo :
-  ConvergesTo (fun n => if n % 2 = 0 then 0 else 1) 0
+#expect_true "BigEven 6 is true" unfolding BigEven :
+  BigEven 6
+#expect_false "BigEven 2 is false" unfolding BigEven :
+  BigEven 2
+#expect_false "BigEven 7 is false" unfolding BigEven :
+  BigEven 7
+-- your definitions
+#expect_true "TwinPrime 5 is true" unfolding TwinPrime :
+  TwinPrime 5
+#expect_true "TwinPrime 11 is true" unfolding TwinPrime :
+  TwinPrime 11
+#expect_false "TwinPrime 7 is false" unfolding TwinPrime :
+  TwinPrime 7
+#expect_false "TwinPrime 2 is false" unfolding TwinPrime :
+  TwinPrime 2
+#expect_true "CommonDivisor 3 6 9 is true" unfolding CommonDivisor :
+  CommonDivisor 3 6 9
+#expect_true "CommonDivisor 5 0 0 is true" unfolding CommonDivisor :
+  CommonDivisor 5 0 0
+#expect_false "CommonDivisor 2 6 9 is false" unfolding CommonDivisor :
+  CommonDivisor 2 6 9
+#expect_true "OneToOne (fun n => 2 * n) is true" unfolding OneToOne Function.Injective Function.Surjective :
+  OneToOne (fun n => 2 * n)
+#expect_true "OneToOne (fun n => n + 3) is true" unfolding OneToOne Function.Injective Function.Surjective :
+  OneToOne (fun n => n + 3)
+#expect_false "OneToOne (fun n => n / 2) is false" unfolding OneToOne Function.Injective Function.Surjective :
+  OneToOne (fun n => n / 2)
+#expect_false "OneToOne (fun _ => 0) is false" unfolding OneToOne Function.Injective Function.Surjective :
+  OneToOne (fun _ => 0)
 
 #level_report

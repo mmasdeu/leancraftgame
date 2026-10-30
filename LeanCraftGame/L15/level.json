@@ -1,47 +1,53 @@
 {
-  "world": "Basics World",
-  "title": "Recursion",
+  "world": "Quantifiers World",
+  "title": "There exists",
   "skill": "syntax",
-  "public": "all",
-  "hintsAfter": 1,
+  "predict": [
+    {
+      "test": "HasZero (fun n => n % 3) is true",
+      "statement": "HasZero (fun n => n % 3)"
+    },
+    {
+      "test": "HasEvenBig (fun n => if n = 0 then 4 else 11) is false (4 is even, 11 is big, but no term is both)",
+      "statement": "HasEvenBig (fun n => if n = 0 then 4 else 11)"
+    }
+  ],
   "checks": [
     {
-      "lean": "example : Nat → Nat := L15.sumTo",
-      "message": "Keep `sumTo : Nat → Nat`."
+      "lean": "example : (Nat → Nat) → Prop := L12.HasZero",
+      "message": "Keep `HasZero : (Nat → Nat) → Prop`."
     },
     {
-      "lean": "example : Nat → Nat := L15.pow2",
-      "message": "Keep `pow2 : Nat → Nat`."
-    },
-    {
-      "lean": "example : Nat → Nat := L15.fib",
-      "message": "Keep `fib : Nat → Nat`."
+      "lean": "example : (Nat → Nat) → Prop := L12.HasEvenBig",
+      "message": "Keep `HasEvenBig : (Nat → Nat) → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "sumTo 0",
-      "hint": "Adding no numbers at all (0 + … up to 0) gives 0."
+      "match": "HasZero",
+      "steps": [
+        "\"Some term is 0\": which quantifier?"
+      ],
+      "hint": "`∃ n, u n = 0`."
     },
     {
-      "match": "sumTo",
-      "hint": "`sumTo (n + 1)` is `sumTo n` plus the new number, which is `n + 1`."
+      "match": "no term is both",
+      "hint": "One term is even and another is big, but no single term is both. Both conditions must be about the *same* `n`: put the `∧` inside one `∃`."
     },
     {
-      "match": "pow2 0",
-      "hint": "2 multiplied by itself zero times is 1, like `factorial 0`."
+      "match": "HasEvenBig (fun n => 2 * n + 1)",
+      "hint": "Every term is odd, so no term is even *and* big. Both conditions must hold for the same `n`: `∃ n, u n % 2 = 0 ∧ 10 ≤ u n`."
     },
     {
-      "match": "pow2",
-      "hint": "`pow2 (n + 1)` is twice `pow2 n`."
-    },
-    {
-      "match": "fib",
-      "hint": "`fib 0` is 0, `fib 1` is 1, and `fib (n + 2)` is `fib n + fib (n + 1)`."
+      "match": "HasEvenBig",
+      "steps": [
+        "Both properties are about the *same* term. How many `∃` do you need?"
+      ],
+      "hint": "`∃ n, u n % 2 = 0 ∧ 10 ≤ u n`."
     },
     {
       "match": "",
-      "hint": "Compute a few small values by hand and compare with your cases."
+      "hint": "Read your definition aloud: \"there is an n such that …\"."
     }
   ]
 }

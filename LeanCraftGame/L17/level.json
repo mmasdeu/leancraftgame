@@ -1,76 +1,57 @@
 {
-  "world": "Numbers World",
-  "title": "Division by zero",
-  "skill": "writing",
+  "world": "Quantifiers World",
+  "title": "Bounded quantifiers",
+  "skill": "syntax",
   "predict": [
     {
-      "test": "IsHalf 6 3 is true",
-      "statement": "IsHalf 6 3"
+      "test": "HasPositiveRoot (fun n => n) is false (its only root is 0)",
+      "statement": "HasPositiveRoot (fun n => n)"
     },
     {
-      "test": "IsReciprocal 0 0 is false (0 has no reciprocal)",
-      "statement": "IsReciprocal 0 0"
+      "test": "EventuallyZero (fun n => if n < 5 then 7 else 0) is true",
+      "statement": "EventuallyZero (fun n => if n < 5 then 7 else 0)"
     },
     {
-      "test": "HasSlope 1 2 1 2 0 is false (one point does not determine a line)",
-      "statement": "HasSlope 1 2 1 2 0"
+      "test": "EventuallyZero (fun n => n % 2) is false (0, 1, 0, 1, … keeps returning to 1)",
+      "statement": "EventuallyZero (fun n => n % 2)"
     }
   ],
   "checks": [
     {
-      "lean": "example : ℚ → ℚ → ℚ := L17.average",
-      "message": "Keep `average : ℚ → ℚ → ℚ`."
+      "lean": "example : (ℕ → ℕ) → Prop := L18.HasPositiveRoot",
+      "message": "Keep `HasPositiveRoot : (ℕ → ℕ) → Prop`."
     },
     {
-      "lean": "example : ℚ → ℚ → Prop := L17.IsReciprocal",
-      "message": "Keep `IsReciprocal : ℚ → ℚ → Prop`."
-    },
-    {
-      "lean": "example : ℚ → ℚ → ℚ → ℚ → ℚ → Prop := L17.HasSlope",
-      "message": "Keep `HasSlope` with five rational inputs."
+      "lean": "example : (ℕ → ℕ) → Prop := L18.EventuallyZero",
+      "message": "Keep `EventuallyZero : (ℕ → ℕ) → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "average 1 2",
-      "hint": "`a + b / 2` means `a + (b / 2)`. Add parentheses: `(a + b) / 2`."
+      "match": "only root is 0",
+      "hint": "Your definition accepts a function whose only root is 0. Under `∃`, the bound needs `∧`: `∃ n > 0, f n = 0` means `∃ n, n > 0 ∧ f n = 0`."
     },
     {
-      "match": "average",
+      "match": "HasPositiveRoot",
       "steps": [
-        "Which binds tighter, `/` or `+`?"
+        "Under `∃`, a bound such as `n > 0` hides an `∧`, not an `→`."
       ],
-      "hint": "`(a + b) / 2`."
+      "hint": "`∃ n > 0, f n = 0`."
     },
     {
-      "match": "0 has no reciprocal",
-      "hint": "With `y = 1 / x`, 0 is its own reciprocal, because `1 / 0 = 0` in Lean. Say it without dividing: `x * y = 1`."
+      "match": "keeps returning",
+      "hint": "Your definition accepts a sequence that is 0 infinitely often but not from some point on. The `∃ N` must come first: `∃ N, ∀ n ≥ N, u n = 0`."
     },
     {
-      "match": "IsReciprocal",
+      "match": "EventuallyZero",
       "steps": [
-        "What is `1 / 0` in Lean?"
+        "\"From some index on\": first the index `N`, then every `n` after it."
       ],
-      "hint": "`x * y = 1`."
-    },
-    {
-      "match": "vertical line",
-      "hint": "With a division, the vertical line gets slope `5 / 0 = 0`. Multiply instead, and require `x₁ ≠ x₂`."
-    },
-    {
-      "match": "one point",
-      "hint": "Through a single point, every slope fits `m * 0 = 0`. Require `x₁ ≠ x₂`."
-    },
-    {
-      "match": "HasSlope",
-      "steps": [
-        "What happens to your definition when `x₁ = x₂`?"
-      ],
-      "hint": "`x₁ ≠ x₂ ∧ m * (x₂ - x₁) = y₂ - y₁`."
+      "hint": "`∃ N, ∀ n ≥ N, u n = 0`."
     },
     {
       "match": "",
-      "hint": "Is there a division that could be by zero?"
+      "hint": "Expand the shorthand: `∀ n ≥ N` hides an `→`, `∃ n > 0` hides an `∧`."
     }
   ]
 }

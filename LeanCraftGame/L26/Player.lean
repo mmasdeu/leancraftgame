@@ -1,58 +1,51 @@
 /-
-# Spot the bug: quantifiers
+# Spot the bug: limits
 
-A colleague wrote three predicates about sequences. Each one compiles and
-each one is wrong, in the way you learned to avoid in this world.
+Two colleagues each wrote down the limit of a real sequence, from memory.
+Both got it wrong, in opposite directions.
 
 ```lean
--- f has a root other than 0
-def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n, n > 0 → f n = 0
+-- Alice: u converges to a
+def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
 
--- from some index on, every term of u is 0
-def EventuallyZero (u : ℕ → ℕ) : Prop := ∀ N, ∃ n ≥ N, u n = 0
-
--- u takes arbitrarily large values
-def Unbounded (u : ℕ → ℕ) : Prop := ∃ M, ∀ n, M ≤ u n
+-- Bob: u converges to a
+def ConvergesB (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ n, |u n - a| < ε
 ```
 
-This time the counterexamples are **functions**. Write them with `fun`, as the
-referee's tests did in the earlier levels: `fun n => n % 2` is the sequence
-0, 1, 0, 1, …. You may use `if … then … else …`.
+One of them is **too strong**: it rejects sequences that do converge. The other
+is **too weak**: it accepts sequences that do not. Your first job is to work
+out which is which. Compare each with the definition you wrote in "Limits":
 
-## Translate before you hunt
+```lean
+def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - a| < ε
+```
 
-Read each definition aloud, *as written*, quantifier by quantifier. Then ask:
-what does it really say, and how does that differ from the comment?
+Then find a counterexample for each: a sequence and a limit on which the
+colleague's definition and the right one disagree.
 
-* `∃ n, n > 0 → …`: is there an `n` for which the implication holds
-  trivially?
-* `∀ N, ∃ n ≥ N, …`: "after every index there is another one with …". Is
-  that "from some index on"?
-* `∃ M, ∀ n, M ≤ u n`: which `M` always works?
+Keep your sequences simple, so that the referee can check them: constants,
+`if … then … else …`, and `n % 2` are all fine. Real numbers are written as
+usual: `0`, `1`, `(1 / 2 : ℝ)`.
 
 ## Your task
 
-Each counterexample must be **accepted** by the colleague's predicate, although
-it does **not** have the property the comment describes:
-
-* `noRoot`: no root other than 0, yet `HasPositiveRoot` accepts it.
-* `notEventuallyZero`: not eventually 0, yet `EventuallyZero` accepts it.
-* `bounded`: bounded, yet `Unbounded` accepts it.
+* `seqA`, `limA`: a sequence that converges to `limA`, but that `ConvergesA`
+  rejects.
+* `seqB`, `limB`: a sequence that does not converge to `limB`, but that
+  `ConvergesB` accepts.
 -/
-namespace L26
+namespace L29
 
--- The colleague's code, to read (the referee uses its own copy).
-def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n, n > 0 → f n = 0
-def EventuallyZero (u : ℕ → ℕ) : Prop := ∀ N, ∃ n ≥ N, u n = 0
-def Unbounded (u : ℕ → ℕ) : Prop := ∃ M, ∀ n, M ≤ u n
+-- The colleagues' code, to read (the referee uses its own copy).
+def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
+def ConvergesB (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ n, |u n - a| < ε
 
--- accepted by HasPositiveRoot, but no root other than 0
-def noRoot : ℕ → ℕ := sorry
+-- converges to limA, but ConvergesA rejects it
+def seqA : ℕ → ℝ := sorry
+def limA : ℝ := sorry
 
--- accepted by EventuallyZero, but not eventually 0
-def notEventuallyZero : ℕ → ℕ := sorry
+-- does not converge to limB, but ConvergesB accepts it
+def seqB : ℕ → ℝ := sorry
+def limB : ℝ := sorry
 
--- accepted by Unbounded, but bounded
-def bounded : ℕ → ℕ := sorry
-
-end L26
+end L29

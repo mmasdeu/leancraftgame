@@ -1,29 +1,26 @@
-/- Hidden test battery for Level Spot the bug: quantifiers. -/
+/- Hidden test battery for Level Spot the bug: limits. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L26.Player
+import LeanCraftGame.L29.Player
 
-namespace L26Ref
-def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n, n > 0 → f n = 0
-def EventuallyZero (u : ℕ → ℕ) : Prop := ∀ N, ∃ n ≥ N, u n = 0
-def Unbounded (u : ℕ → ℕ) : Prop := ∃ M, ∀ n, M ≤ u n
-end L26Ref
+namespace L29Ref
+def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - a| < ε
+def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
+def ConvergesB (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ n, |u n - a| < ε
+end L29Ref
 
-#no_sorry L26.noRoot
-#no_sorry L26.notEventuallyZero
-#no_sorry L26.bounded
-#level_start "Spot the bug: quantifiers"
+#no_sorry L29.seqA
+#no_sorry L29.limA
+#no_sorry L29.seqB
+#no_sorry L29.limB
+#level_start "Spot the bug: limits"
 
-#expect_true "HasPositiveRoot accepts your function" unfolding L26Ref.HasPositiveRoot L26.noRoot :
-  L26Ref.HasPositiveRoot L26.noRoot
-#expect_true "your function has no root other than 0" unfolding L26.noRoot :
-  ¬ (∃ n > 0, L26.noRoot n = 0)
-#expect_true "EventuallyZero accepts your sequence" unfolding L26Ref.EventuallyZero L26.notEventuallyZero :
-  L26Ref.EventuallyZero L26.notEventuallyZero
-#expect_true "your sequence is not eventually 0" unfolding L26.notEventuallyZero :
-  ¬ (∃ N, ∀ n ≥ N, L26.notEventuallyZero n = 0)
-#expect_true "Unbounded accepts your sequence" unfolding L26Ref.Unbounded L26.bounded :
-  L26Ref.Unbounded L26.bounded
-#expect_true "your sequence is bounded" unfolding L26.bounded :
-  ¬ (∀ M, ∃ n, M ≤ L26.bounded n)
+#expect_true "seqA converges to limA" unfolding L29Ref.ConvergesTo L29.seqA L29.limA :
+  L29Ref.ConvergesTo L29.seqA L29.limA
+#expect_true "Alice's ConvergesA rejects seqA and limA" unfolding L29Ref.ConvergesA L29.seqA L29.limA :
+  ¬ (L29Ref.ConvergesA L29.seqA L29.limA)
+#expect_true "seqB does not converge to limB" unfolding L29Ref.ConvergesTo L29.seqB L29.limB :
+  ¬ (L29Ref.ConvergesTo L29.seqB L29.limB)
+#expect_true "Bob's ConvergesB accepts seqB and limB" unfolding L29Ref.ConvergesB L29.seqB L29.limB :
+  L29Ref.ConvergesB L29.seqB L29.limB
 
 #level_report

@@ -1,35 +1,24 @@
 /-
-# Sets
+# Going to infinity
 
-`Set ℕ` is the type of sets of natural numbers.
+{name}, write down what it means for a sequence of natural numbers `u : ℕ → ℕ`
+to tend to infinity.
 
-* `{n | n % 2 = 0}` is the set of the `n` such that `n % 2 = 0`
-  ("set-builder notation"). The `|` is the plain keyboard bar.
-* `x ∈ s` says that `x` belongs to `s` (type `\in`); `x ∉ s` is `\notin`.
-* `s ⊆ t` says that every element of `s` is in `t` (type `\sub`).
-* `∅` is the empty set (`\empty`).
-* Bounded quantifiers work with `∈`: `∀ x ∈ s, P x` means
-  `∀ x, x ∈ s → P x`, and `∃ x ∈ s, P x` means `∃ x, x ∈ s ∧ P x`.
+You never write a proof in this game. The referee is an automated prover:
+it takes a battery of hidden tests about your definition (sequences that
+should tend to infinity, sequences that should not, and lemmas a user of
+your definition will need) and tries to prove or refute each one.
 
-In Mathlib a set *is* a predicate: `x ∈ {n | P n}` is just `P x`.
+Press **Run tests** to see the report.
 
-```lean
-def evens : Set ℕ := {n | n % 2 = 0}
-```
-
-## Your task
-
-`evens` is done. Define `multiplesOf k` and `BoundedSet s`.
+Hint: think about the sequence 0, 4, 2, 6, 4, 8, … Does it tend to
+infinity? Would your definition say so?
 -/
-namespace L19
+import Mathlib.Tactic
 
--- the even numbers (already done)
-def evens : Set ℕ := {n | n % 2 = 0}
+namespace L1
 
--- the multiples of k: 0, k, 2k, 3k, …     (12 ∈ multiplesOf 3, but not 13)
-def multiplesOf (k : ℕ) : Set ℕ := sorry
+def TendsToInfinity (u : Nat → Nat) : Prop :=
+  sorry
 
--- some number B is at least as big as every element of s
-def BoundedSet (s : Set ℕ) : Prop := sorry
-
-end L19
+end L1

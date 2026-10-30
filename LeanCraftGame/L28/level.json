@@ -1,56 +1,45 @@
 {
-  "world": "Library World",
-  "title": "Spot the bug: the library",
+  "world": "Structure World",
+  "title": "A colleague's groups",
   "skill": "reading",
-  "public": "all",
   "checks": [
     {
-      "lean": "example : ℕ := L28.cdD\nexample : ℕ := L28.cdA\nexample : ℕ := L28.cdB\nexample : ℕ := L28.twin\nexample : ℕ := L28.mulK\nexample : ℕ := L28.mulN",
-      "message": "Keep `cdD`, `cdA`, `cdB`, `twin`, `mulK` and `mulN` as natural numbers (`ℕ`). Small numbers make the referee's job easier."
+      "lean": "example : Bool → Bool → Bool := L2.junkMul\nexample : Bool := L2.junkOne\nexample : Bool → Bool := L2.junkInv",
+      "message": "Keep the names and types of Part A: `junkMul : Bool → Bool → Bool`, `junkOne : Bool`, `junkInv : Bool → Bool`."
+    },
+    {
+      "lean": "example := fun (G : Type) (m : G → G → G) (o : G) (i : G → G) => L2.Group₂.mk m o i",
+      "message": "`Group₂` must keep `mul`, `one`, `inv` as its first three fields, in this order."
     }
   ],
   "hints": [
     {
-      "match": "CommonDivisor accepts",
-      "steps": [
-        "`a ∣ d` reads \"a divides d\". So the colleague's definition says that `a` and `b` both divide `d`. What kind of number is `d` then?"
-      ],
-      "hint": "The colleague defined a common *multiple*. Take `cdD := 6`, `cdA := 2`, `cdB := 3`: 2 and 3 divide 6, but 6 does not divide 2."
+      "match": "satisfies the colleague's axioms",
+      "hint": "Your three functions must satisfy associativity, `mul one a = a` and `mul a (inv a) = one`. Try an operation that ignores one of its arguments."
     },
     {
-      "match": "cdD does not divide both",
-      "steps": [
-        "Your `cdD` really is a common divisor. You need numbers where `cdA` and `cdB` divide `cdD`, but not the other way round."
-      ],
-      "hint": "`cdD := 6`, `cdA := 2`, `cdB := 3`."
+      "match": "and yet it is not a group",
+      "hint": "Your model satisfies the axioms, but it is a genuine group. Look for an operation where `one` is a left identity but not a right identity."
     },
     {
-      "match": "TwinPrime accepts",
-      "steps": [
-        "The colleague asks for `p` prime *or* `p + 2` prime. One of them is enough."
-      ],
-      "hint": "7 is prime, so `TwinPrime 7` holds, although 9 is not prime."
+      "match": "S₃",
+      "hint": "S₃ is not commutative. If you added `mul_comm` to be safe, remove it: groups need not be commutative."
     },
     {
-      "match": "both prime",
-      "steps": [
-        "Your number is a genuine twin prime. Find a prime `p` for which `p + 2` is not prime."
-      ],
-      "hint": "Take `twin := 7`: 9 = 3 · 3."
+      "match": "is a group",
+      "hint": "A genuine group fails one of your axioms, and the report names it. Is that axiom true in every group?"
     },
     {
-      "match": "multiplesOf",
-      "steps": [
-        "Read `{n | k % n = 0}`: which number is divided by which?"
-      ],
-      "hint": "`k % n = 0` says that `n` divides `k`: the colleague defined the divisors of `k`. Take `mulK := 6`, `mulN := 3`."
+      "match": "'a * b = b'",
+      "hint": "The colleague's axioms allow `a * b = b`. Add an axiom that this operation violates, such as a right identity or a left inverse."
     },
     {
-      "match": "is not a multiple of",
-      "steps": [
-        "Your `mulN` really is a multiple of `mulK`. You need an element of the colleague's set that is not one."
-      ],
-      "hint": "`mulK := 6`, `mulN := 3`: 3 divides 6, but 3 is not a multiple of 6."
+      "match": "(ℕ, +)",
+      "hint": "With `inv = id`, (ℕ, +) has no inverses: 1 + 1 ≠ 0. Do your axioms really require inverses?"
+    },
+    {
+      "match": "(Bool, and)",
+      "hint": "In (Bool, and) with identity `true`, the element `false` has no inverse. Do your axioms really require inverses?"
     }
   ]
 }

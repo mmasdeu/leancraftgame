@@ -1,8 +1,7 @@
-def middle (a b c : Nat) : Nat :=
-  if a ≤ b then (if b ≤ c then b else c)
-  else (if a ≤ c then a else c)
-def isLeap (y : Nat) : Bool := y % 4 == 0 && y % 100 != 0
-def ma : Nat := 2
-def mb : Nat := 3
-def mc : Nat := 1
-def year : Nat := 2000
+def AlwaysBelow {α : Type*} [Preorder α] (u : ℕ → α) (B : α) : Prop := ∀ n, u n ≤ B
+
+def Between {α : Type*} [Preorder α] (a b x : α) : Prop := a ≤ x ∧ x ≤ b
+
+def IsUpperBound {α : Type*} [Preorder α] (s : Set α) (B : α) : Prop := ∀ x ∈ s, x ≤ B
+
+def largest {α : Type*} [LinearOrder α] (a b : α) : α := if a ≤ b then b else a

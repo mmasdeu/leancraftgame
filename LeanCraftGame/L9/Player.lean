@@ -1,39 +1,55 @@
 /-
-# Or and not
+# Spot the bug: connectives
 
-* `p ∨ q` means "p **or** q": true when at least one of them is true,
-  possibly both. Type it `\or` (or write `\/`).
-* `¬ p` means "**not** p". Type it `\not` (or `\neg`), or write `Not p`.
+A colleague defined three predicates. Each comes with a comment saying what
+it should mean, and each says something else.
 
 ```lean
-def Odd' (n : Nat) : Prop := ¬ (n % 2 = 0)
+-- n is a teenager: from 13 to 19
+def IsTeen (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19
+
+-- day d is a weekend day (days are numbered 1 to 7, Saturday is 6, Sunday is 7)
+def IsWeekend (d : Nat) : Prop := d = 6 ∧ d = 7
+
+-- a and b are both odd
+def BothOdd (a b : Nat) : Prop := ¬ a % 2 = 0 ∧ b % 2 = 0
 ```
 
-## Which operator comes first?
+A wrong predicate can be wrong in two directions:
 
-From the strongest to the weakest binding: `¬`, then `∧`, then `∨`, then `→`
-(next level). So
+* it **accepts** something it should reject (it is *too weak*), or
+* it **rejects** something it should accept (it is *too strong*).
 
-* `¬ p ∧ q` means `(¬ p) ∧ q`, not `¬ (p ∧ q)`;
-* `p ∨ q ∧ r` means `p ∨ (q ∧ r)`.
+To prove the first, give an input that the predicate accepts, and show that it
+should not. For the second, give an input that it rejects, and show that it
+should accept it. The tests below say which direction each bug goes; your job
+is to find the input.
 
-When in doubt, add parentheses. They never hurt.
+Remember the binding strengths from "Or and not": `¬` binds tighter than `∧`,
+which binds tighter than `∨`.
 
 ## Your task
 
-A cinema gives free tickets to children under 5 and to people aged 65 or
-more. Define `FreeTicket`, then `PaysFull` using `FreeTicket`. Then define
-`NotTiny`: a number that is neither 0 nor 1.
+* `teen`: a number that `IsTeen` accepts, although it is not from 13 to 19.
+* `weekendDay`: a weekend day (6 or 7) that `IsWeekend` rejects.
+* `oddA` and `oddB`: two numbers that `BothOdd` accepts, although they are not
+  both odd.
 -/
-namespace L9
+namespace L24
 
--- under 5 or at least 65          (FreeTicket 3 is true, FreeTicket 30 is false)
-def FreeTicket (age : Nat) : Prop := sorry
+-- The colleague's code, to read (the referee uses its own copy).
+def IsTeen (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19
+def IsWeekend (d : Nat) : Prop := d = 6 ∧ d = 7
+def BothOdd (a b : Nat) : Prop := ¬ a % 2 = 0 ∧ b % 2 = 0
 
--- everybody else pays full price: the opposite of FreeTicket
-def PaysFull (age : Nat) : Prop := sorry
+-- accepted by IsTeen, but not a teenager
+def teen : Nat := sorry
 
--- n is neither 0 nor 1            (NotTiny 5 is true, NotTiny 1 is false)
-def NotTiny (n : Nat) : Prop := sorry
+-- a weekend day, but rejected by IsWeekend
+def weekendDay : Nat := sorry
 
-end L9
+-- accepted by BothOdd, but not both odd
+def oddA : Nat := sorry
+def oddB : Nat := sorry
+
+end L24

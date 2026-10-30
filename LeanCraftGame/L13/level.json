@@ -1,49 +1,49 @@
 {
   "world": "Quantifiers World",
-  "title": "Quantifiers in order",
+  "title": "For all",
   "skill": "syntax",
   "predict": [
     {
-      "test": "HitsEverything (fun n => n / 2) is true",
-      "statement": "HitsEverything (fun n => n / 2)"
+      "test": "AlwaysBelow (fun _ => 4) 4 is true",
+      "statement": "AlwaysBelow (fun _ => 4) 4"
     },
     {
-      "test": "HitsEverything (fun n => 2 * n) is false",
-      "statement": "HitsEverything (fun n => 2 * n)"
+      "test": "AlwaysBelow (fun n => n % 3) 1 is false",
+      "statement": "AlwaysBelow (fun n => n % 3) 1"
     },
     {
-      "test": "Unbounded (fun n => if n % 2 = 0 then n else 0) is true (0, 0, 2, 0, 4, …)",
-      "statement": "Unbounded (fun n => if n % 2 = 0 then n else 0)"
+      "test": "AllEven (fun _ => 0) is true",
+      "statement": "AllEven (fun _ => 0)"
     }
   ],
   "checks": [
     {
-      "lean": "example : (Nat → Nat) → Prop := L13.HitsEverything",
-      "message": "Keep `HitsEverything : (Nat → Nat) → Prop`."
+      "lean": "example : (Nat → Nat) → Nat → Prop := L10.AlwaysBelow",
+      "message": "Keep `AlwaysBelow : (Nat → Nat) → Nat → Prop`."
     },
     {
-      "lean": "example : (Nat → Nat) → Prop := L13.Unbounded",
-      "message": "Keep `Unbounded : (Nat → Nat) → Prop`."
+      "lean": "example : (Nat → Nat) → Prop := L10.AllEven",
+      "message": "Keep `AllEven : (Nat → Nat) → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "HitsEverything",
+      "match": "AlwaysBelow",
       "steps": [
-        "Which comes first: the target value, or the position that hits it?"
+        "Read the comment again: for *every* `n`, …"
       ],
-      "hint": "`∀ m, ∃ n, f n = m`: first pick the target `m`, then look for a position."
+      "hint": "`∀ n, u n ≤ B`: for every `n`, the term `u n` is at most `B`."
     },
     {
-      "match": "Unbounded",
+      "match": "AllEven",
       "steps": [
-        "Can the position `n` depend on the bound `M`? Then `M` must come first."
+        "Which quantifier says \"every term\"?"
       ],
-      "hint": "`∀ M, ∃ n, M ≤ u n`."
+      "hint": "`∀ n, u n % 2 = 0`."
     },
     {
       "match": "",
-      "hint": "Is the order of your quantifiers right? `∀ M, ∃ n, …` lets `n` depend on `M`; `∃ n, ∀ M, …` does not."
+      "hint": "Read your definition aloud: \"for every n, …\". Does it say what the comment says?"
     }
   ]
 }

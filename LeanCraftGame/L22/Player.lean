@@ -1,41 +1,53 @@
 /-
-# Limits
+# Using Mathlib
 
-Time for the definition every analysis course starts with. Some new notation:
+Mathlib, Lean's mathematical library, already defines thousands of notions.
+Real definitions are built from them rather than from scratch:
 
-* `ℝ` (type `\R`) is the real numbers. A real sequence is `u : ℕ → ℝ`.
-* `|x|` is the absolute value, written with the plain keyboard bar.
-* Casts again: in `fun n => (n : ℝ)`, the natural number `n` is turned into a
-  real number (displayed `↑n`).
-* `ε` is typed `\e` (then a space), and `∀ ε > 0, …` is a bounded quantifier.
+* `Even n`, `Odd n`;
+* `Nat.Prime p`: `p` is a prime number;
+* `a ∣ b`: `a` divides `b`. The bar is **not** the keyboard `|`: type `\|` or
+  `\mid`. (The keyboard `|` is for absolute values and set-builder notation.)
+  Read it left to right: `3 ∣ 12` is true.
+* `Function.Injective f`: `f a = f b` only when `a = b`;
+  `Function.Surjective f`: every value is reached;
+* `Monotone u`, `StrictMono u`.
 
-A real sequence `u` **converges** to `a` when: for every `ε > 0` there is an
-index `N` such that every term from `N` on is within `ε` of `a`.
+## Names and namespaces
+
+Names are grouped in *namespaces*: `Nat.Prime` is about natural numbers,
+`Function.Injective` about functions. **Dot notation** saves typing: if
+`p : ℕ`, then `p.Prime` means `Nat.Prime p`; if `f` is a function,
+`f.Injective` means `Function.Injective f`.
+
+Beware of near-misses. `Prime p` (without `Nat.`) is a different, more general
+notion, about prime elements of any ring. For natural numbers it happens to
+agree with `Nat.Prime`, but the automation treats it differently.
+
+Mathlib's definitions may be stated differently from yours: `Even n` is
+`∃ r, n = r + r`, not `n % 2 = 0`. They mean the same thing.
 
 ```lean
--- the worked example: the sequence stays within some bound
-def BoundedSeq (u : ℕ → ℝ) : Prop := ∃ M, ∀ n, |u n| ≤ M
+def BigEven (n : ℕ) : Prop := Even n ∧ 4 ≤ n
 ```
-
-## What can go wrong
-
-* Forgetting `ε > 0`: for `ε = 0` nothing is within distance 0, so no
-  sequence converges.
-* Writing `∃ n` instead of "for all `n ≥ N`": then `u` only needs to come close
-  to `a` once.
-* Putting `∃ N` before `∀ ε`: then a single `N` must work for every `ε`.
 
 ## Your task
 
-`BoundedSeq` is done. Define `ConvergesTo u a`.
+`BigEven` is done. Define `TwinPrime`, `CommonDivisor` and `OneToOne` using
+Mathlib's notions.
 -/
-namespace L22
+namespace L20
 
--- some bound M is at least every |u n| (already done)
-def BoundedSeq (u : ℕ → ℝ) : Prop := ∃ M, ∀ n, |u n| ≤ M
+-- n is even and at least 4 (already done)
+def BigEven (n : ℕ) : Prop := Even n ∧ 4 ≤ n
 
--- u converges to a: for every ε > 0, from some index N on,
--- every term u n is within ε of a
-def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := sorry
+-- p and p + 2 are both prime          (TwinPrime 5 is true: 5 and 7)
+def TwinPrime (p : ℕ) : Prop := sorry
 
-end L22
+-- d divides both a and b              (CommonDivisor 3 6 9 is true)
+def CommonDivisor (d a b : ℕ) : Prop := sorry
+
+-- f never takes the same value twice (use Mathlib's name for this)
+def OneToOne (f : ℕ → ℕ) : Prop := sorry
+
+end L20

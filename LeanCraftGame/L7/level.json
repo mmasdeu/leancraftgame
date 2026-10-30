@@ -1,60 +1,61 @@
 {
   "world": "Statements World",
-  "title": "True or false?",
+  "title": "And",
   "skill": "syntax",
   "predict": [
     {
-      "test": "IsEven 0 is true",
-      "statement": "IsEven 0"
+      "test": "InRange 10 20 10 is true",
+      "statement": "InRange 10 20 10"
     },
     {
-      "test": "IsSmall 10 is false",
-      "statement": "IsSmall 10"
+      "test": "IsTeen 19 is true",
+      "statement": "IsTeen 19"
     },
     {
-      "test": "GoesInto 1 7 is true",
-      "statement": "GoesInto 1 7"
+      "test": "EvenInRange 1 10 12 is false",
+      "statement": "EvenInRange 1 10 12"
     }
   ],
   "checks": [
     {
-      "lean": "example : Nat → Prop := L7.IsEven",
-      "message": "Keep `IsEven : Nat → Prop`."
+      "lean": "example : Nat → Prop := L8.IsTeen",
+      "message": "Keep `IsTeen : Nat → Prop`."
     },
     {
-      "lean": "example : Nat → Prop := L7.IsSmall",
-      "message": "Keep `IsSmall : Nat → Prop`."
-    },
-    {
-      "lean": "example : Nat → Nat → Prop := L7.GoesInto",
-      "message": "Keep `GoesInto : Nat → Nat → Prop`."
+      "lean": "example : Nat → Nat → Nat → Prop := L8.EvenInRange",
+      "message": "Keep `EvenInRange : Nat → Nat → Nat → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "IsEven",
-      "steps": [
-        "What is the remainder when an even number is divided by 2?"
-      ],
-      "hint": "An even number leaves remainder 0 when divided by 2: `n % 2 = 0`."
+      "match": "IsTeen 12",
+      "hint": "12 is not a teenager: the lower bound must be 13."
     },
     {
-      "match": "IsSmall 10",
-      "hint": "Off by one: 10 is not smaller than 10. Use `<`, not `≤`."
+      "match": "IsTeen 20",
+      "hint": "20 is not a teenager: the upper bound must be 19."
     },
     {
-      "match": "IsSmall",
+      "match": "IsTeen",
       "steps": [
-        "Is 10 itself below 10? Check the boundary."
+        "Check both ends: is 13 a teenager? Is 19?"
       ],
-      "hint": "`n < 10`."
+      "hint": "You can write `13 ≤ n ∧ n ≤ 19`, or reuse the definition above: `InRange 13 19 n`."
     },
     {
-      "match": "GoesInto",
+      "match": "EvenInRange 1 10 5",
+      "hint": "5 is in range but odd. You need *both* conditions: join them with `∧`."
+    },
+    {
+      "match": "EvenInRange 1 10 12",
+      "hint": "12 is even but out of range. You need *both* conditions: join them with `∧`."
+    },
+    {
+      "match": "EvenInRange",
       "steps": [
-        "`GoesInto a b` says that `a` goes into `b`. Which number is divided by which?"
+        "Two conditions must hold at once. Which connective says that?"
       ],
-      "hint": "`b % a = 0`: the remainder of `b` divided by `a` is zero. Mind the order of `a` and `b`."
+      "hint": "`n % 2 = 0 ∧ InRange lo hi n`."
     },
     {
       "match": "",

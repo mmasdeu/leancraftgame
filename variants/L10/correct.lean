@@ -1,8 +1,8 @@
--- every term is at least 10 (already done)
-def AllBig (u : Nat → Nat) : Prop := ∀ n, 10 ≤ u n
+-- a minus b, as an integer        (diff 3 5 is -2)
+def diff (a b : ℕ) : ℤ := (a : ℤ) - (b : ℤ)
 
--- every term is at most B
-def AlwaysBelow (u : Nat → Nat) (B : Nat) : Prop := ∀ n, u n ≤ B
+-- the distance between two integers, as a natural number   (distance 3 (-4) is 7)
+def distance (a b : ℤ) : ℕ := (a - b).natAbs
 
--- every term is even
-def AllEven (u : Nat → Nat) : Prop := ∀ n, u n % 2 = 0
+-- x is negative
+def IsNegative (x : ℤ) : Prop := x < 0

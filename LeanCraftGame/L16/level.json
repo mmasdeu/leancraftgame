@@ -1,68 +1,49 @@
 {
-  "world": "Numbers World",
-  "title": "Integers and casts",
+  "world": "Quantifiers World",
+  "title": "Quantifiers in order",
   "skill": "syntax",
   "predict": [
     {
-      "test": "diff 3 5 = -2",
-      "statement": "diff 3 5 = -2"
+      "test": "HitsEverything (fun n => n / 2) is true",
+      "statement": "HitsEverything (fun n => n / 2)"
     },
     {
-      "test": "IsNegative 0 is false",
-      "statement": "IsNegative 0"
+      "test": "HitsEverything (fun n => 2 * n) is false",
+      "statement": "HitsEverything (fun n => 2 * n)"
+    },
+    {
+      "test": "Unbounded (fun n => if n % 2 = 0 then n else 0) is true (0, 0, 2, 0, 4, …)",
+      "statement": "Unbounded (fun n => if n % 2 = 0 then n else 0)"
     }
   ],
   "checks": [
     {
-      "lean": "example : ℕ → ℕ → ℤ := L16.diff",
-      "message": "Keep `diff : ℕ → ℕ → ℤ`."
+      "lean": "example : (Nat → Nat) → Prop := L13.HitsEverything",
+      "message": "Keep `HitsEverything : (Nat → Nat) → Prop`."
     },
     {
-      "lean": "example : ℤ → ℤ → ℕ := L16.distance",
-      "message": "Keep `distance : ℤ → ℤ → ℕ`."
-    },
-    {
-      "lean": "example : ℤ → Prop := L16.IsNegative",
-      "message": "Keep `IsNegative : ℤ → Prop`."
+      "lean": "example : (Nat → Nat) → Prop := L13.Unbounded",
+      "message": "Keep `Unbounded : (Nat → Nat) → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "diff 3 5",
-      "hint": "If you get 0 instead of -2, the subtraction happened in ℕ before the cast. Cast first: `(a : ℤ) - (b : ℤ)`."
-    },
-    {
-      "match": "diff",
+      "match": "HitsEverything",
       "steps": [
-        "Where does your subtraction happen: in ℕ, or in ℤ?"
+        "Which comes first: the target value, or the position that hits it?"
       ],
-      "hint": "`(a : ℤ) - (b : ℤ)`."
+      "hint": "`∀ m, ∃ n, f n = m`: first pick the target `m`, then look for a position."
     },
     {
-      "match": "distance (-4) 3",
-      "hint": "`(a - b).toNat` turns the negative number -7 into 0. Use `(a - b).natAbs`."
-    },
-    {
-      "match": "distance",
+      "match": "Unbounded",
       "steps": [
-        "What does `.toNat` do to a negative number?"
+        "Can the position `n` depend on the bound `M`? Then `M` must come first."
       ],
-      "hint": "`(a - b).natAbs`."
-    },
-    {
-      "match": "IsNegative 0",
-      "hint": "0 is not negative: use `<`, not `≤`."
-    },
-    {
-      "match": "IsNegative",
-      "steps": [
-        "Is 0 negative?"
-      ],
-      "hint": "`x < 0`."
+      "hint": "`∀ M, ∃ n, M ≤ u n`."
     },
     {
       "match": "",
-      "hint": "Check the examples in the comments."
+      "hint": "Is the order of your quantifiers right? `∀ M, ∃ n, …` lets `n` depend on `M`; `∃ n, ∀ M, …` does not."
     }
   ]
 }

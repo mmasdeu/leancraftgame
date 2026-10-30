@@ -1,32 +1,41 @@
-/- Hidden test battery for Level If … then …. -/
+/- Hidden test battery for Level Division by zero. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L11.Player
+import LeanCraftGame.L17.Player
 
-open L11
+open L17
 
-#no_sorry LateBig
-#no_sorry EvenToEven
-#level_start "If … then …"
+#no_sorry average
+#no_sorry IsReciprocal
+#no_sorry HasSlope
+#level_start "Division by zero"
 
 -- the worked example
-#expect_true "BigAfter (fun n => if n < 3 then 0 else 10) is true" unfolding BigAfter :
-  BigAfter (fun n => if n < 3 then 0 else 10)
-#expect_false "BigAfter (fun n => n) is false" unfolding BigAfter :
-  BigAfter (fun n => n)
--- your predicates
-#expect_true "LateBig (fun n => n) is true" unfolding LateBig :
-  LateBig (fun n => n)
-#expect_true "LateBig (fun n => if n < 5 then 0 else 9) is true (the first terms are 0: that is fine!)" unfolding LateBig :
-  LateBig (fun n => if n < 5 then 0 else 9)
-#expect_false "LateBig (fun _ => 0) is false" unfolding LateBig :
-  LateBig (fun _ => 0)
-#expect_false "LateBig (fun n => n % 4) is false" unfolding LateBig :
-  LateBig (fun n => n % 4)
-#expect_true "EvenToEven (fun n => 2 * n) is true" unfolding EvenToEven :
-  EvenToEven (fun n => 2 * n)
-#expect_true "EvenToEven (fun n => n + 2) is true" unfolding EvenToEven :
-  EvenToEven (fun n => n + 2)
-#expect_false "EvenToEven (fun n => n + 1) is false" unfolding EvenToEven :
-  EvenToEven (fun n => n + 1)
+#expect_true "IsHalf 6 3 is true" unfolding IsHalf :
+  IsHalf 6 3
+#expect_false "IsHalf 6 2 is false" unfolding IsHalf :
+  IsHalf 6 2
+-- your definitions
+#expect_true "average 1 2 = 3 / 2" unfolding average :
+  average 1 2 = 3 / 2
+#expect_true "average (-1) 1 = 0" unfolding average :
+  average (-1) 1 = 0
+#expect_true "IsReciprocal 2 (1 / 2) is true" unfolding IsReciprocal :
+  IsReciprocal 2 (1 / 2)
+#expect_true "IsReciprocal (-4) (-1 / 4) is true" unfolding IsReciprocal :
+  IsReciprocal (-4) (-1 / 4)
+#expect_false "IsReciprocal 3 3 is false" unfolding IsReciprocal :
+  IsReciprocal 3 3
+#expect_false "IsReciprocal 0 0 is false (0 has no reciprocal)" unfolding IsReciprocal :
+  IsReciprocal 0 0
+#expect_true "HasSlope 0 0 2 6 3 is true" unfolding HasSlope :
+  HasSlope 0 0 2 6 3
+#expect_true "HasSlope 1 1 3 0 (-1 / 2) is true" unfolding HasSlope :
+  HasSlope 1 1 3 0 (-1 / 2)
+#expect_false "HasSlope 0 0 2 6 2 is false" unfolding HasSlope :
+  HasSlope 0 0 2 6 2
+#expect_false "HasSlope 1 0 1 5 0 is false (a vertical line has no slope)" unfolding HasSlope :
+  HasSlope 1 0 1 5 0
+#expect_false "HasSlope 1 2 1 2 0 is false (one point does not determine a line)" unfolding HasSlope :
+  HasSlope 1 2 1 2 0
 
 #level_report

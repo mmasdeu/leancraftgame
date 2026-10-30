@@ -1,43 +1,64 @@
 {
-  "world": "Basics World",
-  "title": "Making choices",
+  "world": "Statements World",
+  "title": "True or false?",
   "skill": "syntax",
-  "public": "all",
-  "hintsAfter": 1,
+  "predict": [
+    {
+      "test": "IsEven 0 is true",
+      "statement": "IsEven 0"
+    },
+    {
+      "test": "IsSmall 10 is false",
+      "statement": "IsSmall 10"
+    },
+    {
+      "test": "GoesInto 1 7 is true",
+      "statement": "GoesInto 1 7"
+    }
+  ],
   "checks": [
     {
-      "lean": "example : Nat → Nat → Nat := L6.smallest",
-      "message": "Keep `smallest : Nat → Nat → Nat`."
+      "lean": "example : Nat → Prop := L7.IsEven",
+      "message": "Keep `IsEven : Nat → Prop`."
     },
     {
-      "lean": "example : Nat → Nat → Nat := L6.gap",
-      "message": "Keep `gap : Nat → Nat → Nat`."
+      "lean": "example : Nat → Prop := L7.IsSmall",
+      "message": "Keep `IsSmall : Nat → Prop`."
     },
     {
-      "lean": "example : Nat → Nat := L6.zeroOrOne",
-      "message": "Keep `zeroOrOne : Nat → Nat`."
+      "lean": "example : Nat → Nat → Prop := L7.GoesInto",
+      "message": "Keep `GoesInto : Nat → Nat → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "smallest",
-      "hint": "Copy `biggest` and swap the two branches: `if a ≤ b then a else b`."
+      "match": "IsEven",
+      "steps": [
+        "What is the remainder when an even number is divided by 2?"
+      ],
+      "hint": "An even number leaves remainder 0 when divided by 2: `n % 2 = 0`."
     },
     {
-      "match": "gap 4 10",
-      "hint": "`a - b` is 0 when `a` is smaller than `b`. You need to subtract the smaller from the larger: use an `if` to decide which."
+      "match": "IsSmall 10",
+      "hint": "Off by one: 10 is not smaller than 10. Use `<`, not `≤`."
     },
     {
-      "match": "gap",
-      "hint": "`if a ≤ b then b - a else a - b`: always subtract the smaller number from the larger."
+      "match": "IsSmall",
+      "steps": [
+        "Is 10 itself below 10? Check the boundary."
+      ],
+      "hint": "`n < 10`."
     },
     {
-      "match": "zeroOrOne",
-      "hint": "`if n = 0 then 0 else 1`."
+      "match": "GoesInto",
+      "steps": [
+        "`GoesInto a b` says that `a` goes into `b`. Which number is divided by which?"
+      ],
+      "hint": "`b % a = 0`: the remainder of `b` divided by `a` is zero. Mind the order of `a` and `b`."
     },
     {
       "match": "",
-      "hint": "Re-read the examples in the comment above the function."
+      "hint": "Check the examples in the comment above the predicate."
     }
   ]
 }

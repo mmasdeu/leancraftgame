@@ -1,56 +1,44 @@
 /-
-# Making choices
+# True or false?
 
-## Several inputs
-
-Put several inputs in parentheses. Inputs of the same type can share one pair:
-
-```lean
-def add3 (a b c : Nat) : Nat := a + b + c
-```
-
-You call it by listing the inputs in order: `add3 1 2 3` is `6`.
-
-## `if … then … else …`
+So far our functions returned numbers. A mathematician's definitions are
+mostly *statements*: "n is even", "u is bounded". In Lean a statement has
+type `Prop` (a *proposition*). It is either true or false.
 
 ```lean
-def biggest (a b : Nat) : Nat :=
-  if a ≤ b then b else a
+def IsBig (n : Nat) : Prop := 100 ≤ n
 ```
 
-If the condition holds, the result is the `then` part; otherwise it is the
-`else` part. Both parts are required and must have the same type.
+`IsBig 150` is a true statement and `IsBig 5` is a false one. A function
+returning `Prop` is called a **predicate**.
 
-## Conditions
+* There is no `if`, `true` or `false` here. The body is simply the statement.
+* `a = b` is the statement "a equals b". `a % 2 = 0` says "the remainder of
+  `a` divided by 2 is 0".
+* Predicates are usually named with a capital letter, like `IsBig`.
 
-`a = b` equal · `a ≠ b` different · `a < b` less · `a ≤ b` less or equal ·
-`a > b` greater · `a ≥ b` greater or equal.
+## Off-by-one
 
-`≤`, `≥` and `≠` are not on your keyboard. In the editor, type `\le`,
-`\ge`, `\ne` and then a space. You can also write `<=` and `>=`.
-Typing `∀` and friends: click **Symbols** at the top right of the page. It lists every symbol with the keys to type it, and has typing practice.
-
-Note that `=` is not an instruction to store a value, as in many programming
-languages: it is a statement, "is equal to".
+Is it `<` or `≤`? `10 < n` is false for `n = 10`, `10 ≤ n` is true.
+The tests will check the boundary values.
 
 ## Your task
 
-`biggest` is already written, so you can read it. Define the other three
-functions in the same style.
+`IsBig` is done. Define `IsEven`, `IsSmall` (below 10) and `GoesInto`
+(`GoesInto a b` says that `a` divides `b` exactly).
 -/
-namespace L6
+namespace L7
 
--- the larger of two numbers (already done)
-def biggest (a b : Nat) : Nat :=
-  if a ≤ b then b else a
+-- n is at least 100 (already done)
+def IsBig (n : Nat) : Prop := 100 ≤ n
 
--- the smaller of two numbers           (smallest 3 8 is 3)
-def smallest (a b : Nat) : Nat := sorry
+-- n is even                        (IsEven 10 is true, IsEven 7 is false)
+def IsEven (n : Nat) : Prop := sorry
 
--- the distance between two numbers, whichever is larger   (gap 10 4 is 6, gap 4 10 is 6)
-def gap (a b : Nat) : Nat := sorry
+-- n is smaller than 10             (IsSmall 3 is true, IsSmall 10 is false)
+def IsSmall (n : Nat) : Prop := sorry
 
--- 0 for the input 0, and 1 for any other input   (zeroOrOne 0 is 0, zeroOrOne 9 is 1)
-def zeroOrOne (n : Nat) : Nat := sorry
+-- dividing b by a leaves no remainder   (GoesInto 3 12 is true, GoesInto 5 12 is false)
+def GoesInto (a b : Nat) : Prop := sorry
 
-end L6
+end L7

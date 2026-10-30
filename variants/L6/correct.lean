@@ -1,12 +1,11 @@
--- the larger of two numbers (already done)
-def biggest (a b : Nat) : Nat :=
-  if a ≤ b then b else a
+-- n is at least 100 (already done)
+def IsBig (n : Nat) : Prop := 100 ≤ n
 
--- the smaller of two numbers           (smallest 3 8 is 3)
-def smallest (a b : Nat) : Nat := if a ≤ b then a else b
+-- n is even                        (IsEven 10 is true, IsEven 7 is false)
+def IsEven (n : Nat) : Prop := n % 2 = 0
 
--- the distance between two numbers, whichever is larger   (gap 10 4 is 6, gap 4 10 is 6)
-def gap (a b : Nat) : Nat := if a ≤ b then b - a else a - b
+-- n is smaller than 10             (IsSmall 3 is true, IsSmall 10 is false)
+def IsSmall (n : Nat) : Prop := n < 10
 
--- 0 for the input 0, and 1 for any other input   (zeroOrOne 0 is 0, zeroOrOne 9 is 1)
-def zeroOrOne (n : Nat) : Nat := if n = 0 then 0 else 1
+-- dividing b by a leaves no remainder   (GoesInto 3 12 is true, GoesInto 5 12 is false)
+def GoesInto (a b : Nat) : Prop := b % a = 0

@@ -1,30 +1,32 @@
-/- Hidden test battery for Level Spot the bug: connectives. -/
+/- Hidden test battery for Level Spot the bug: the library. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L24.Player
+import LeanCraftGame.L28.Player
 
-namespace L24Ref
-def IsTeen (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19
-def IsWeekend (d : Nat) : Prop := d = 6 ∧ d = 7
-def BothOdd (a b : Nat) : Prop := ¬ a % 2 = 0 ∧ b % 2 = 0
-end L24Ref
+namespace L28Ref
+def CommonDivisor (d a b : ℕ) : Prop := a ∣ d ∧ b ∣ d
+def TwinPrime (p : ℕ) : Prop := Nat.Prime p ∨ Nat.Prime (p + 2)
+def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
+end L28Ref
 
-#no_sorry L24.teen
-#no_sorry L24.weekendDay
-#no_sorry L24.oddA
-#no_sorry L24.oddB
-#level_start "Spot the bug: connectives"
+#no_sorry L28.cdD
+#no_sorry L28.cdA
+#no_sorry L28.cdB
+#no_sorry L28.twin
+#no_sorry L28.mulK
+#no_sorry L28.mulN
+#level_start "Spot the bug: the library"
 
-#expect_true "IsTeen accepts your number" unfolding L24Ref.IsTeen L24.teen :
-  L24Ref.IsTeen L24.teen
-#expect_true "your number is not from 13 to 19" unfolding L24.teen :
-  ¬ (13 ≤ L24.teen ∧ L24.teen ≤ 19)
-#expect_true "your day is a weekend day (6 or 7)" unfolding L24.weekendDay :
-  L24.weekendDay = 6 ∨ L24.weekendDay = 7
-#expect_true "IsWeekend rejects your day" unfolding L24Ref.IsWeekend L24.weekendDay :
-  ¬ (L24Ref.IsWeekend L24.weekendDay)
-#expect_true "BothOdd accepts your two numbers" unfolding L24Ref.BothOdd L24.oddA L24.oddB :
-  L24Ref.BothOdd L24.oddA L24.oddB
-#expect_true "your two numbers are not both odd" unfolding L24.oddA L24.oddB :
-  ¬ (L24.oddA % 2 = 1 ∧ L24.oddB % 2 = 1)
+#expect_true "CommonDivisor accepts your three numbers" unfolding L28Ref.CommonDivisor L28.cdD L28.cdA L28.cdB :
+  L28Ref.CommonDivisor L28.cdD L28.cdA L28.cdB
+#expect_true "cdD does not divide both cdA and cdB" unfolding L28.cdD L28.cdA L28.cdB :
+  ¬ (L28.cdD ∣ L28.cdA ∧ L28.cdD ∣ L28.cdB)
+#expect_true "TwinPrime accepts your number" unfolding L28Ref.TwinPrime L28.twin :
+  L28Ref.TwinPrime L28.twin
+#expect_true "your number and the number 2 above it are not both prime" unfolding L28.twin :
+  ¬ (Nat.Prime L28.twin ∧ Nat.Prime (L28.twin + 2))
+#expect_true "mulN ∈ multiplesOf mulK holds" unfolding L28Ref.multiplesOf L28.mulK L28.mulN :
+  L28.mulN ∈ L28Ref.multiplesOf L28.mulK
+#expect_true "mulN is not a multiple of mulK" unfolding L28.mulK L28.mulN :
+  ¬ (L28.mulK ∣ L28.mulN)
 
 #level_report

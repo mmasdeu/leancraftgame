@@ -1,48 +1,65 @@
 /-
-# Functions
+# Spot the bug
 
-A *function* turns an input into an output. To define one, name its input in
-parentheses before the colon:
+Until now you have *written* definitions. Every world from here on ends with a
+level where you **read** someone else's definitions instead, and prove them
+wrong. This is the everyday skill of checking a formalisation: an AI or a
+colleague hands you code that compiles, and you must find out whether it means
+what it claims.
+
+How do you prove that a definition is wrong? Not by saying so: by giving a
+**counterexample**, an input on which it gives the wrong answer. The referee
+then checks your counterexample against the right answer, so it is evidence,
+not opinion.
+
+A colleague wrote the two functions below. Both compile, both look reasonable,
+and both are wrong.
 
 ```lean
-def double (n : Nat) : Nat := 2 * n
+-- the middle one of three numbers (the median): middle 1 5 3 is 3
+def middle (a b c : Nat) : Nat :=
+  if a ≤ b then (if b ≤ c then b else c)
+  else (if a ≤ c then a else c)
+
+-- is year y a leap year? A year divisible by 4 is a leap year, except the
+-- centuries, except every fourth century: 2024 and 2000 were leap years,
+-- 2023 and 1900 were not.
+def isLeap (y : Nat) : Bool := y % 4 == 0 && y % 100 != 0
 ```
 
-* `(n : Nat)` is the **input**: a natural number that we call `n`.
-* The `Nat` after the colon is the type of the **output**.
-* After `:=` comes a formula that may use `n`.
+(`==` and `!=` compare two numbers and give a `Bool`; `&&` is "and" for
+`Bool`s.)
 
-## Using a function
+## How to hunt
 
-Write the function's name, a space, then the input: `double 5` is `10`.
-There are **no brackets and no commas**. Brackets only group things:
-`double (2 + 3)` is `10`, while `double 2 + 3` is `7`.
-
-## Arithmetic
-
-`+` add, `-` subtract, `*` multiply, `/` divide, `%` remainder.
-Division on natural numbers drops the remainder: `7 / 2` is `3`, and
-`7 % 2` is `1`.
-
-**Careful:** natural numbers have no negatives. Subtraction stops at zero, so
-`3 - 5` is `0`, not `-2`.
+* **Run the code in your head on small inputs.** Try the cases the author was
+  probably thinking of, then the ones they probably were not.
+* **Walk through every branch of an `if`.** Each branch is a claim. Find inputs
+  that land in each branch, and check the claim there.
+* **Read the specification again, word by word.** Every "except" is a case
+  someone may have forgotten.
 
 ## Your task
 
-Define the four functions below. The comment above each one gives examples.
+Give three numbers on which `middle` returns the wrong number, and a year on
+which `isLeap` gives the wrong answer.
 -/
-namespace L5
+namespace L23
 
--- twice the input        (double 4 is 8)
-def double (n : Nat) : Nat := sorry
+-- The colleague's code, to read (changing it here changes nothing: the
+-- referee uses its own copy).
+def middle (a b c : Nat) : Nat :=
+  if a ≤ b then (if b ≤ c then b else c)
+  else (if a ≤ c then a else c)
 
--- the input times itself  (squared 5 is 25)
-def squared (n : Nat) : Nat := sorry
+def isLeap (y : Nat) : Bool := y % 4 == 0 && y % 100 != 0
 
--- ten more than the input (addTen 1 is 11)
-def addTen (n : Nat) : Nat := sorry
+-- Three numbers on which `middle` is wrong.
+def ma : Nat := sorry
+def mb : Nat := sorry
+def mc : Nat := sorry
 
--- one less than the input, but 0 stays 0   (minusOne 5 is 4, minusOne 0 is 0)
-def minusOne (n : Nat) : Nat := sorry
+-- A year on which `isLeap` is wrong.
+def year : Nat := sorry
 
-end L5
+end L23

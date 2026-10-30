@@ -1,43 +1,56 @@
 /-
-# The AI proved Goldbach!
+# Making choices
 
-An AI assistant was asked to formalise and prove Goldbach's conjecture:
+## Several inputs
 
-  "Every even integer greater than 2 is the sum of two primes."
+Put several inputs in parentheses. Inputs of the same type can share one pair:
 
-It came back with the statement and proof below. Both compile, and
-there is no `sorry`.
--/
-import Mathlib.Tactic
+```lean
+def add3 (a b c : Nat) : Nat := a + b + c
+```
 
-namespace L3
+You call it by listing the inputs in order: `add3 1 2 3` is `6`.
 
-def IsPrime (p : Nat) : Prop := 2 ≤ p ∧ ∀ d, d ∣ p → d = 1 ∨ d = p
+## `if … then … else …`
 
-theorem ai_goldbach :
-    ∀ n, 2 < n → n % 2 = 0 → ∃ p q, IsPrime p ∧ IsPrime q → p + q = n :=
-  fun _ _ _ => ⟨0, 0, fun h => absurd h.1.1 (by decide)⟩
+```lean
+def biggest (a b : Nat) : Nat :=
+  if a ≤ b then b else a
+```
 
-/-
-Something is off: an open problem should not have a one-line proof.
+If the condition holds, the result is the `then` part; otherwise it is the
+`else` part. Both parts are required and must have the same type.
+
+## Conditions
+
+`a = b` equal · `a ≠ b` different · `a < b` less · `a ≤ b` less or equal ·
+`a > b` greater · `a ≥ b` greater or equal.
+
+`≤`, `≥` and `≠` are not on your keyboard. In the editor, type `\le`,
+`\ge`, `\ne` and then a space. You can also write `<=` and `>=`.
+Typing `∀` and friends: click **Symbols** at the top right of the page. It lists every symbol with the keys to type it, and has typing practice.
+
+Note that `=` is not an instruction to store a value, as in many programming
+languages: it is a statement, "is equal to".
 
 ## Your task
 
-Write the faithful statement, but **parametrised by the notion of
-"prime"**: `GoldbachFor P` should say "every even integer > 2 is the sum
-of two numbers satisfying `P`". Then `GoldbachFor IsPrime` is the real
-conjecture.
-
-Why parametrise? You can't test a statement nobody can prove. You *can*
-test it in toy worlds where you know the answer: what if every number
-were "prime"? What if none were? A faithful statement has to give the
-right answer in every one of these worlds. The referee checks several
-such worlds, including the real one.
-
-(Hint: what is the precedence of `∧` versus `→` in the AI's statement?)
+`biggest` is already written, so you can read it. Define the other three
+functions in the same style.
 -/
+namespace L6
 
-def GoldbachFor (P : Nat → Prop) : Prop :=
-  sorry
+-- the larger of two numbers (already done)
+def biggest (a b : Nat) : Nat :=
+  if a ≤ b then b else a
 
-end L3
+-- the smaller of two numbers           (smallest 3 8 is 3)
+def smallest (a b : Nat) : Nat := sorry
+
+-- the distance between two numbers, whichever is larger   (gap 10 4 is 6, gap 4 10 is 6)
+def gap (a b : Nat) : Nat := sorry
+
+-- 0 for the input 0, and 1 for any other input   (zeroOrOne 0 is 0, zeroOrOne 9 is 1)
+def zeroOrOne (n : Nat) : Nat := sorry
+
+end L6

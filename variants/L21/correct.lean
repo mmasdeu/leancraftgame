@@ -1,7 +1,8 @@
-def AlwaysBelow {α : Type*} [Preorder α] (u : ℕ → α) (B : α) : Prop := ∀ n, u n ≤ B
+-- the even numbers (already done)
+def evens : Set ℕ := {n | n % 2 = 0}
 
-def Between {α : Type*} [Preorder α] (a b x : α) : Prop := a ≤ x ∧ x ≤ b
+-- the multiples of k: 0, k, 2k, 3k, …     (12 ∈ multiplesOf 3, but not 13)
+def multiplesOf (k : ℕ) : Set ℕ := {n | n % k = 0}
 
-def IsUpperBound {α : Type*} [Preorder α] (s : Set α) (B : α) : Prop := ∀ x ∈ s, x ≤ B
-
-def largest {α : Type*} [LinearOrder α] (a b : α) : α := if a ≤ b then b else a
+-- some number B is at least as big as every element of s
+def BoundedSet (s : Set ℕ) : Prop := ∃ B, ∀ n ∈ s, n ≤ B

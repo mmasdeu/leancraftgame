@@ -1,51 +1,43 @@
 /-
-# Spot the bug: limits
+# The AI proved Goldbach!
 
-Two colleagues each wrote down the limit of a real sequence, from memory.
-Both got it wrong, in opposite directions.
+An AI assistant was asked to formalise and prove Goldbach's conjecture:
 
-```lean
--- Alice: u converges to a
-def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
+  "Every even integer greater than 2 is the sum of two primes."
 
--- Bob: u converges to a
-def ConvergesB (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ n, |u n - a| < ε
-```
+It came back with the statement and proof below. Both compile, and
+there is no `sorry`.
+-/
+import Mathlib.Tactic
 
-One of them is **too strong**: it rejects sequences that do converge. The other
-is **too weak**: it accepts sequences that do not. Your first job is to work
-out which is which. Compare each with the definition you wrote in "Limits":
+namespace L3
 
-```lean
-def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - a| < ε
-```
+def IsPrime (p : Nat) : Prop := 2 ≤ p ∧ ∀ d, d ∣ p → d = 1 ∨ d = p
 
-Then find a counterexample for each: a sequence and a limit on which the
-colleague's definition and the right one disagree.
+theorem ai_goldbach :
+    ∀ n, 2 < n → n % 2 = 0 → ∃ p q, IsPrime p ∧ IsPrime q → p + q = n :=
+  fun _ _ _ => ⟨0, 0, fun h => absurd h.1.1 (by decide)⟩
 
-Keep your sequences simple, so that the referee can check them: constants,
-`if … then … else …`, and `n % 2` are all fine. Real numbers are written as
-usual: `0`, `1`, `(1 / 2 : ℝ)`.
+/-
+Something is off: an open problem should not have a one-line proof.
 
 ## Your task
 
-* `seqA`, `limA`: a sequence that converges to `limA`, but that `ConvergesA`
-  rejects.
-* `seqB`, `limB`: a sequence that does not converge to `limB`, but that
-  `ConvergesB` accepts.
+Write the faithful statement, but **parametrised by the notion of
+"prime"**: `GoldbachFor P` should say "every even integer > 2 is the sum
+of two numbers satisfying `P`". Then `GoldbachFor IsPrime` is the real
+conjecture.
+
+Why parametrise? You can't test a statement nobody can prove. You *can*
+test it in toy worlds where you know the answer: what if every number
+were "prime"? What if none were? A faithful statement has to give the
+right answer in every one of these worlds. The referee checks several
+such worlds, including the real one.
+
+(Hint: what is the precedence of `∧` versus `→` in the AI's statement?)
 -/
-namespace L29
 
--- The colleagues' code, to read (the referee uses its own copy).
-def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
-def ConvergesB (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ n, |u n - a| < ε
+def GoldbachFor (P : Nat → Prop) : Prop :=
+  sorry
 
--- converges to limA, but ConvergesA rejects it
-def seqA : ℕ → ℝ := sorry
-def limA : ℝ := sorry
-
--- does not converge to limB, but ConvergesB accepts it
-def seqB : ℕ → ℝ := sorry
-def limB : ℝ := sorry
-
-end L29
+end L3

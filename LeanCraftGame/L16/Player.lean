@@ -1,49 +1,29 @@
 /-
-# Integers and casts
+# Quantifiers in order
 
-Natural numbers have no negatives, which is why `3 - 5` is `0` in `ℕ`. The
-**integers** `ℤ` (type `\Z`, or write `Int`) are …, -2, -1, 0, 1, 2, …, and
-their subtraction is the real one. (`ℕ` is another name for `Nat`; type `\N`.)
+Quantifiers are read from left to right, and **the order matters**.
 
-* `(3 : ℤ)` means "3, as an integer". This is a *type ascription*.
-* `(3 : ℤ) - 5` is `-2`.
-
-## Casts
-
-A natural number `n : ℕ` can be used where an integer is expected: write
-`(n : ℤ)`. Lean then inserts a **cast**, displayed `↑n`. *Where* the cast goes
-changes the result:
+* `∀ m, ∃ n, f n = m`: for every `m` there is an `n` with `f n = m`.
+  The `n` may depend on `m`.
+* `∃ n, ∀ m, f n = m`: there is **one** `n` that works for every `m`.
+  This is much stronger. For `f n = n` the first is true and the second false.
 
 ```lean
-def good (a b : ℕ) : ℤ := (a : ℤ) - (b : ℤ)   -- good 3 5 = -2
-def bad  (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)   -- bad 3 5 = 0 : subtracted in ℕ, then cast
+def EveryValueIsHit (f : Nat → Nat) : Prop := ∀ m, ∃ n, f n = m
 ```
-
-`(a - b : ℤ)` also works: Lean elaborates the whole expression as an integer
-and casts `a` and `b` first.
-
-## Dot notation and two more junk values
-
-* `x.natAbs` is the absolute value of an integer `x`, as a natural number.
-  It is short for `Int.natAbs x`: since `x` is an `Int`, Lean looks for
-  `natAbs` among the functions named `Int.something`.
-* `x.toNat` turns an integer into a natural number, but every negative number
-  becomes `0`. Like `3 - 5 = 0` in `ℕ`, this is a *junk value*: a function
-  must return something, so Lean returns 0.
 
 ## Your task
 
-Define `diff`, `distance` and `IsNegative`.
+Define `HitsEverything f` (every natural number is the value of `f` at some
+position) and `Unbounded u` (however large `M` is, some term of `u` is at least
+`M`). These two are exactly the kind of definitions the next level builds on.
 -/
-namespace L16
+namespace L13
 
--- a minus b, as an integer        (diff 3 5 is -2)
-def diff (a b : ℕ) : ℤ := sorry
+-- every natural number is a value of f
+def HitsEverything (f : Nat → Nat) : Prop := sorry
 
--- the distance between two integers, as a natural number   (distance 3 (-4) is 7)
-def distance (a b : ℤ) : ℕ := sorry
+-- the sequence gets above every bound M at least once
+def Unbounded (u : Nat → Nat) : Prop := sorry
 
--- x is negative
-def IsNegative (x : ℤ) : Prop := sorry
-
-end L16
+end L13

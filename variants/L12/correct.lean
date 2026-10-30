@@ -1,8 +1,9 @@
--- some term is at least 10 (already done)
-def HasBig (u : Nat → Nat) : Prop := ∃ n, 10 ≤ u n
-
--- some term is zero
-def HasZero (u : Nat → Nat) : Prop := ∃ n, u n = 0
-
--- some single term is both even and at least 10
-def HasEvenBig (u : Nat → Nat) : Prop := ∃ n, u n % 2 = 0 ∧ 10 ≤ u n
+def diff (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)
+def IsReciprocal (x y : ℚ) : Prop := y = 1 / x
+def average (a b : ℚ) : ℚ := a + b / 2
+def diffA : ℕ := 3
+def diffB : ℕ := 5
+def recX : ℚ := 0
+def recY : ℚ := 0
+def avgA : ℚ := 2
+def avgB : ℚ := 0

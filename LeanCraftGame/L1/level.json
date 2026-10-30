@@ -1,55 +1,35 @@
 {
-  "world": "Predicate World",
-  "title": "Going to infinity",
-  "skill": "writing",
-  "predict": [
-    {
-      "test": "u n = n / 2 tends to infinity (it is not strictly increasing!)",
-      "statement": "TendsToInfinity (fun n => n / 2)"
-    },
-    {
-      "test": "0, 4, 2, 6, 4, 8, … tends to infinity (it is not monotone!)",
-      "statement": "TendsToInfinity (fun n => n + 3 * (n % 2))"
-    },
-    {
-      "test": "0, 0, 2, 0, 4, 0, … does not tend to infinity (unbounded is not enough!)",
-      "statement": "TendsToInfinity (fun n => if n % 2 = 0 then n else 0)"
-    }
-  ],
+  "world": "Basics World",
+  "title": "Naming things",
+  "skill": "syntax",
+  "public": "all",
+  "hintsAfter": 1,
   "checks": [
     {
-      "lean": "example : (Nat → Nat) → Prop := L1.TendsToInfinity",
-      "message": "Keep the name and the type: `L1.TendsToInfinity : (Nat → Nat) → Prop`."
+      "lean": "example : Nat := L4.answer",
+      "message": "Keep the name and the type: `answer : Nat`."
+    },
+    {
+      "lean": "example : String := L4.language",
+      "message": "Keep the name and the type: `language : String`."
+    },
+    {
+      "lean": "example : Bool := L4.flag",
+      "message": "Keep the name and the type: `flag : Bool`."
     }
   ],
   "hints": [
     {
-      "match": "u n = n tends",
-      "hint": "Even the identity sequence fails. Read your quantifiers from left to right: can the threshold `N` depend on `M`? With `∃ N, ∀ M, …` it cannot."
+      "match": "answer",
+      "hint": "The answer to everything is 42. Write it after `:=`, as in `def answer : Nat := 42`."
     },
     {
-      "match": "n / 2",
-      "hint": "`n / 2` is 0, 0, 1, 1, 2, 2, …. It tends to infinity, but it is not strictly increasing. Your definition should not require the sequence to increase."
+      "match": "language",
+      "hint": "Text goes in double quotes: `\"Lean\"`, with a capital L."
     },
     {
-      "match": "0, 4, 2, 6",
-      "hint": "This sequence goes up and down, and still tends to infinity. Monotonicity is not part of the notion."
-    },
-    {
-      "match": "constant",
-      "hint": "Your definition accepts a constant sequence, so it is too weak. What must eventually happen for every bound `M`?"
-    },
-    {
-      "match": "0, 1, 0, 1",
-      "hint": "Your definition accepts a bounded sequence, so it is too weak. What must eventually happen for every bound `M`?"
-    },
-    {
-      "match": "0, 0, 2, 0",
-      "hint": "This sequence is unbounded but keeps falling back to 0. Being unbounded is not enough: from some index on, every term must be at least `M`."
-    },
-    {
-      "match": "if u → ∞",
-      "hint": "A user of your definition needs this lemma. If it is ❓, the referee could not derive it from your definition: try a more standard formulation."
+      "match": "flag",
+      "hint": "`Bool` has two values, written `true` and `false` in lowercase. Which one means yes?"
     }
   ]
 }

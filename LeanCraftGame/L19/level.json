@@ -1,57 +1,55 @@
 {
-  "world": "Library World",
-  "title": "Sets",
-  "skill": "syntax",
+  "world": "Predicate World",
+  "title": "Going to infinity",
+  "skill": "writing",
   "predict": [
     {
-      "test": "0 ∈ multiplesOf 5 is true",
-      "statement": "0 ∈ multiplesOf 5"
+      "test": "u n = n / 2 tends to infinity (it is not strictly increasing!)",
+      "statement": "TendsToInfinity (fun n => n / 2)"
     },
     {
-      "test": "BoundedSet ∅ is true",
-      "statement": "BoundedSet ∅"
+      "test": "0, 4, 2, 6, 4, 8, … tends to infinity (it is not monotone!)",
+      "statement": "TendsToInfinity (fun n => n + 3 * (n % 2))"
     },
     {
-      "test": "evens ⊆ multiplesOf 4 is false",
-      "statement": "evens ⊆ multiplesOf 4"
+      "test": "0, 0, 2, 0, 4, 0, … does not tend to infinity (unbounded is not enough!)",
+      "statement": "TendsToInfinity (fun n => if n % 2 = 0 then n else 0)"
     }
   ],
   "checks": [
     {
-      "lean": "example : ℕ → Set ℕ := L19.multiplesOf",
-      "message": "Keep `multiplesOf : ℕ → Set ℕ`."
-    },
-    {
-      "lean": "example : Set ℕ → Prop := L19.BoundedSet",
-      "message": "Keep `BoundedSet : Set ℕ → Prop`."
+      "lean": "example : (Nat → Nat) → Prop := L1.TendsToInfinity",
+      "message": "Keep the name and the type: `L1.TendsToInfinity : (Nat → Nat) → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "12 ∈ multiplesOf 3",
-      "hint": "A multiple of `k` leaves remainder 0 when divided by `k`: `{n | n % k = 0}`. Mind the order of `n` and `k`."
+      "match": "u n = n tends",
+      "hint": "Even the identity sequence fails. Read your quantifiers from left to right: can the threshold `N` depend on `M`? With `∃ N, ∀ M, …` it cannot."
     },
     {
-      "match": "multiplesOf",
-      "steps": [
-        "Is `n` divided by `k`, or `k` by `n`?"
-      ],
-      "hint": "`{n | n % k = 0}`."
+      "match": "n / 2",
+      "hint": "`n / 2` is 0, 0, 1, 1, 2, 2, …. It tends to infinity, but it is not strictly increasing. Your definition should not require the sequence to increase."
     },
     {
-      "match": "no upper bound",
-      "hint": "Your definition lets `B` depend on the element. Choose `B` first: `∃ B, ∀ n ∈ s, n ≤ B`."
+      "match": "0, 4, 2, 6",
+      "hint": "This sequence goes up and down, and still tends to infinity. Monotonicity is not part of the notion."
     },
     {
-      "match": "BoundedSet",
-      "steps": [
-        "Does the bound `B` come before the element, or after it?"
-      ],
-      "hint": "`∃ B, ∀ n ∈ s, n ≤ B`."
+      "match": "constant",
+      "hint": "Your definition accepts a constant sequence, so it is too weak. What must eventually happen for every bound `M`?"
     },
     {
-      "match": "",
-      "hint": "Read your definition aloud, expanding `∈` and the bounded quantifiers."
+      "match": "0, 1, 0, 1",
+      "hint": "Your definition accepts a bounded sequence, so it is too weak. What must eventually happen for every bound `M`?"
+    },
+    {
+      "match": "0, 0, 2, 0",
+      "hint": "This sequence is unbounded but keeps falling back to 0. Being unbounded is not enough: from some index on, every term must be at least `M`."
+    },
+    {
+      "match": "if u → ∞",
+      "hint": "A user of your definition needs this lemma. If it is ❓, the referee could not derive it from your definition: try a more standard formulation."
     }
   ]
 }

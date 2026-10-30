@@ -1,65 +1,53 @@
 /-
-# Spot the bug
+# Generality
 
-Until now you have *written* definitions. Every world from here on ends with a
-level where you **read** someone else's definitions instead, and prove them
-wrong. This is the everyday skill of checking a formalisation: an AI or a
-colleague hands you code that compiles, and you must find out whether it means
-what it claims.
-
-How do you prove that a definition is wrong? Not by saying so: by giving a
-**counterexample**, an input on which it gives the wrong answer. The referee
-then checks your counterexample against the right answer, so it is evidence,
-not opinion.
-
-A colleague wrote the two functions below. Both compile, both look reasonable,
-and both are wrong.
+"Between", "upper bound" and "the larger of two numbers" make sense for ℕ, ℤ,
+ℚ, ℝ and many other types. Mathlib states such definitions **once**, for every
+suitable type:
 
 ```lean
--- the middle one of three numbers (the median): middle 1 5 3 is 3
-def middle (a b c : Nat) : Nat :=
-  if a ≤ b then (if b ≤ c then b else c)
-  else (if a ≤ c then a else c)
-
--- is year y a leap year? A year divisible by 4 is a leap year, except the
--- centuries, except every fourth century: 2024 and 2000 were leap years,
--- 2023 and 1900 were not.
-def isLeap (y : Nat) : Bool := y % 4 == 0 && y % 100 != 0
+def AlwaysBelow {α : Type*} [Preorder α] (u : ℕ → α) (B : α) : Prop :=
+  ∀ n, u n ≤ B
 ```
 
-(`==` and `!=` compare two numbers and give a `Bool`; `&&` is "and" for
-`Bool`s.)
+* `{α : Type*}` says "for any type `α`". The curly braces make it **implicit**:
+  nobody writes `α` when using `AlwaysBelow`, Lean works it out from `u` and
+  `B`. (`α` is typed `\a`; `Type*` is Mathlib's way to say "some type".)
+* `[Preorder α]` is an **instance argument**: it asks that `α` comes with a
+  `≤` that behaves like an order. Lean finds it automatically for ℕ, ℤ, ℚ, ℝ.
+  If you forget it, Lean says *failed to synthesize LE α*: it does not know what
+  `≤` means on an arbitrary type.
 
-## How to hunt
+## Choosing the class
 
-* **Run the code in your head on small inputs.** Try the cases the author was
-  probably thinking of, then the ones they probably were not.
-* **Walk through every branch of an `if`.** Each branch is a claim. Find inputs
-  that land in each branch, and check the claim there.
-* **Read the specification again, word by word.** Every "except" is a case
-  someone may have forgotten.
+* `[Preorder α]` gives `≤` and `<`.
+* `[LinearOrder α]` also says that any two elements are comparable, so that
+  `if a ≤ b then … else …` can be **computed**. With only `Preorder`, Lean
+  reports *failed to synthesize Decidable (a ≤ b)*.
+
+Ask for as little as you need: the weaker the class, the more types your
+definition applies to.
 
 ## Your task
 
-Give three numbers on which `middle` returns the wrong number, and a year on
-which `isLeap` gives the wrong answer.
+The three definitions at the bottom only work for `ℕ`. Make each of them work
+for every type with an order. The tests use them on ℕ, ℤ and ℚ.
 -/
-namespace L23
+namespace L21
 
--- The colleague's code, to read (changing it here changes nothing: the
--- referee uses its own copy).
-def middle (a b c : Nat) : Nat :=
-  if a ≤ b then (if b ≤ c then b else c)
-  else (if a ≤ c then a else c)
+-- every term of u is at most B, for any type with ≤ (already done)
+def AlwaysBelow {α : Type*} [Preorder α] (u : ℕ → α) (B : α) : Prop := ∀ n, u n ≤ B
 
-def isLeap (y : Nat) : Bool := y % 4 == 0 && y % 100 != 0
+-- Make the three definitions below work for every type with an order
+-- (ℕ, ℤ, ℚ, ℝ, …), not just for ℕ.
 
--- Three numbers on which `middle` is wrong.
-def ma : Nat := sorry
-def mb : Nat := sorry
-def mc : Nat := sorry
+-- a ≤ x ≤ b
+def Between (a b x : ℕ) : Prop := a ≤ x ∧ x ≤ b
 
--- A year on which `isLeap` is wrong.
-def year : Nat := sorry
+-- B is at least every element of s
+def IsUpperBound (s : Set ℕ) (B : ℕ) : Prop := ∀ x ∈ s, x ≤ B
 
-end L23
+-- the larger of a and b
+def largest (a b : ℕ) : ℕ := if a ≤ b then b else a
+
+end L21

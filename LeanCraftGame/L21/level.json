@@ -1,68 +1,57 @@
 {
   "world": "Library World",
-  "title": "Generality",
-  "skill": "writing",
+  "title": "Sets",
+  "skill": "syntax",
   "predict": [
     {
-      "test": "Between (2 : ℕ) 5 5 is true",
-      "statement": "Between (2 : ℕ) 5 5"
+      "test": "0 ∈ multiplesOf 5 is true",
+      "statement": "0 ∈ multiplesOf 5"
     },
     {
-      "test": "IsUpperBound {x : ℤ | x < 5} 3 is false",
-      "statement": "IsUpperBound {x : ℤ | x < 5} 3"
+      "test": "BoundedSet ∅ is true",
+      "statement": "BoundedSet ∅"
+    },
+    {
+      "test": "evens ⊆ multiplesOf 4 is false",
+      "statement": "evens ⊆ multiplesOf 4"
     }
   ],
   "checks": [
     {
-      "lean": "example : ℤ → ℤ → ℤ → Prop := L21.Between",
-      "message": "`Between` must work for any ordered type (the tests use ℤ): add `{α : Type*} [Preorder α]` and replace `ℕ` by `α`."
+      "lean": "example : ℕ → Set ℕ := L19.multiplesOf",
+      "message": "Keep `multiplesOf : ℕ → Set ℕ`."
     },
     {
-      "lean": "example : ℚ → ℚ → ℚ → Prop := L21.Between",
-      "message": "`Between` must work for any ordered type (the tests use ℚ)."
-    },
-    {
-      "lean": "example : Set ℤ → ℤ → Prop := L21.IsUpperBound",
-      "message": "`IsUpperBound` must work for any ordered type (the tests use ℤ): `(s : Set α) (B : α)`."
-    },
-    {
-      "lean": "example : ℤ → ℤ → ℤ := L21.largest",
-      "message": "`largest` must work for any linearly ordered type (the tests use ℤ)."
-    },
-    {
-      "lean": "example : ℚ → ℚ → ℚ := L21.largest",
-      "message": "`largest` must work for any linearly ordered type (the tests use ℚ)."
+      "lean": "example : Set ℕ → Prop := L19.BoundedSet",
+      "message": "Keep `BoundedSet : Set ℕ → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "Between (2 : ℕ) 5 5",
-      "hint": "The ends are included: use `≤`, not `<`."
+      "match": "12 ∈ multiplesOf 3",
+      "hint": "A multiple of `k` leaves remainder 0 when divided by `k`: `{n | n % k = 0}`. Mind the order of `n` and `k`."
     },
     {
-      "match": "Between",
+      "match": "multiplesOf",
       "steps": [
-        "Replace `ℕ` by a type variable, and ask for an order on it."
+        "Is `n` divided by `k`, or `k` by `n`?"
       ],
-      "hint": "`def Between {α : Type*} [Preorder α] (a b x : α) : Prop := a ≤ x ∧ x ≤ b`."
+      "hint": "`{n | n % k = 0}`."
     },
     {
-      "match": "IsUpperBound",
-      "steps": [
-        "Every `ℕ` must become `α`, also the one inside `Set`."
-      ],
-      "hint": "Replace `ℕ` by `α` everywhere, including in `Set α`, and add `{α : Type*} [Preorder α]`."
+      "match": "no upper bound",
+      "hint": "Your definition lets `B` depend on the element. Choose `B` first: `∃ B, ∀ n ∈ s, n ≤ B`."
     },
     {
-      "match": "largest",
+      "match": "BoundedSet",
       "steps": [
-        "An `if` has to *decide* `a ≤ b`. Which class makes that possible?"
+        "Does the bound `B` come before the element, or after it?"
       ],
-      "hint": "An `if` needs to decide `a ≤ b`: use `[LinearOrder α]`."
+      "hint": "`∃ B, ∀ n ∈ s, n ≤ B`."
     },
     {
       "match": "",
-      "hint": "Replace `ℕ` by a type variable `α`, and ask for the order with `[Preorder α]`."
+      "hint": "Read your definition aloud, expanding `∈` and the bounded quantifiers."
     }
   ]
 }

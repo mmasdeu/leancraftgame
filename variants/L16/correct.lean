@@ -1,8 +1,5 @@
--- a minus b, as an integer        (diff 3 5 is -2)
-def diff (a b : ℕ) : ℤ := (a : ℤ) - (b : ℤ)
+-- every natural number is a value of f
+def HitsEverything (f : Nat → Nat) : Prop := ∀ m, ∃ n, f n = m
 
--- the distance between two integers, as a natural number   (distance 3 (-4) is 7)
-def distance (a b : ℤ) : ℕ := (a - b).natAbs
-
--- x is negative
-def IsNegative (x : ℤ) : Prop := x < 0
+-- the sequence gets above every bound M at least once
+def Unbounded (u : Nat → Nat) : Prop := ∀ M, ∃ n, M ≤ u n

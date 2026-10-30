@@ -1,45 +1,51 @@
 {
-  "world": "Structure World",
-  "title": "A colleague's groups",
-  "skill": "reading",
+  "world": "Basics World",
+  "title": "Functions",
+  "skill": "syntax",
+  "public": "all",
+  "hintsAfter": 1,
   "checks": [
     {
-      "lean": "example : Bool → Bool → Bool := L2.junkMul\nexample : Bool := L2.junkOne\nexample : Bool → Bool := L2.junkInv",
-      "message": "Keep the names and types of Part A: `junkMul : Bool → Bool → Bool`, `junkOne : Bool`, `junkInv : Bool → Bool`."
+      "lean": "example : Nat → Nat := L5.double",
+      "message": "Keep `double : Nat → Nat`."
     },
     {
-      "lean": "example := fun (G : Type) (m : G → G → G) (o : G) (i : G → G) => L2.Group₂.mk m o i",
-      "message": "`Group₂` must keep `mul`, `one`, `inv` as its first three fields, in this order."
+      "lean": "example : Nat → Nat := L5.squared",
+      "message": "Keep `squared : Nat → Nat`."
+    },
+    {
+      "lean": "example : Nat → Nat := L5.addTen",
+      "message": "Keep `addTen : Nat → Nat`."
+    },
+    {
+      "lean": "example : Nat → Nat := L5.minusOne",
+      "message": "Keep `minusOne : Nat → Nat`."
     }
   ],
   "hints": [
     {
-      "match": "satisfies the colleague's axioms",
-      "hint": "Your three functions must satisfy associativity, `mul one a = a` and `mul a (inv a) = one`. Try an operation that ignores one of its arguments."
+      "match": "double 7",
+      "hint": "`double n` should be twice `n`: `2 * n` or `n + n`."
     },
     {
-      "match": "and yet it is not a group",
-      "hint": "Your model satisfies the axioms, but it is a genuine group. Look for an operation where `one` is a left identity but not a right identity."
+      "match": "squared",
+      "hint": "The square of `n` is `n` times `n`: write `n * n`."
     },
     {
-      "match": "S₃",
-      "hint": "S₃ is not commutative. If you added `mul_comm` to be safe, remove it: groups need not be commutative."
+      "match": "addTen",
+      "hint": "Ten more than `n` is `n + 10`."
     },
     {
-      "match": "is a group",
-      "hint": "A genuine group fails one of your axioms, and the report names it. Is that axiom true in every group?"
+      "match": "minusOne 0",
+      "hint": "Natural subtraction stops at zero, so `n - 1` already gives `0 - 1 = 0`."
     },
     {
-      "match": "'a * b = b'",
-      "hint": "The colleague's axioms allow `a * b = b`. Add an axiom that this operation violates, such as a right identity or a left inverse."
+      "match": "minusOne",
+      "hint": "One less than `n` is `n - 1`."
     },
     {
-      "match": "(ℕ, +)",
-      "hint": "With `inv = id`, (ℕ, +) has no inverses: 1 + 1 ≠ 0. Do your axioms really require inverses?"
-    },
-    {
-      "match": "(Bool, and)",
-      "hint": "In (Bool, and) with identity `true`, the element `false` has no inverse. Do your axioms really require inverses?"
+      "match": "",
+      "hint": "Re-read the examples in the comment above the function."
     }
   ]
 }

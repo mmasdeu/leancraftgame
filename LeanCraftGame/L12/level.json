@@ -1,53 +1,47 @@
 {
-  "world": "Quantifiers World",
-  "title": "There exists",
-  "skill": "syntax",
-  "predict": [
-    {
-      "test": "HasZero (fun n => n % 3) is true",
-      "statement": "HasZero (fun n => n % 3)"
-    },
-    {
-      "test": "HasEvenBig (fun n => if n = 0 then 4 else 11) is false (4 is even, 11 is big, but no term is both)",
-      "statement": "HasEvenBig (fun n => if n = 0 then 4 else 11)"
-    }
-  ],
+  "world": "Numbers World",
+  "title": "Spot the bug: numbers",
+  "skill": "reading",
+  "public": "all",
   "checks": [
     {
-      "lean": "example : (Nat → Nat) → Prop := L12.HasZero",
-      "message": "Keep `HasZero : (Nat → Nat) → Prop`."
+      "lean": "example : ℕ := L25.diffA\nexample : ℕ := L25.diffB",
+      "message": "Keep `diffA` and `diffB` as natural numbers (`ℕ`)."
     },
     {
-      "lean": "example : (Nat → Nat) → Prop := L12.HasEvenBig",
-      "message": "Keep `HasEvenBig : (Nat → Nat) → Prop`."
+      "lean": "example : ℚ := L25.recX\nexample : ℚ := L25.recY\nexample : ℚ := L25.avgA\nexample : ℚ := L25.avgB",
+      "message": "Keep `recX`, `recY`, `avgA` and `avgB` as rationals (`ℚ`)."
     }
   ],
   "hints": [
     {
-      "match": "HasZero",
+      "match": "diff gets",
       "steps": [
-        "\"Some term is 0\": which quantifier?"
+        "The subtraction inside happens in `ℕ`, before the cast. When does a subtraction in `ℕ` give a junk value?"
       ],
-      "hint": "`∃ n, u n = 0`."
+      "hint": "When `a < b`, `a - b` is 0 in `ℕ`. Take `diffA := 3`, `diffB := 5`: `diff 3 5` is 0, not -2."
     },
     {
-      "match": "no term is both",
-      "hint": "One term is even and another is big, but no single term is both. Both conditions must be about the *same* `n`: put the `∧` inside one `∃`."
-    },
-    {
-      "match": "HasEvenBig (fun n => 2 * n + 1)",
-      "hint": "Every term is odd, so no term is even *and* big. Both conditions must hold for the same `n`: `∃ n, u n % 2 = 0 ∧ 10 ≤ u n`."
-    },
-    {
-      "match": "HasEvenBig",
+      "match": "IsReciprocal accepts",
       "steps": [
-        "Both properties are about the *same* term. How many `∃` do you need?"
+        "Which `x` makes `1 / x` a junk value?"
       ],
-      "hint": "`∃ n, u n % 2 = 0 ∧ 10 ≤ u n`."
+      "hint": "`1 / 0 = 0` in Lean, so `IsReciprocal 0 0` holds. Take `recX := 0`, `recY := 0`."
     },
     {
-      "match": "",
-      "hint": "Read your definition aloud: \"there is an n such that …\"."
+      "match": "multiply to 1",
+      "steps": [
+        "Your pair is a genuine reciprocal pair. Look for a pair that `IsReciprocal` accepts *wrongly*: where is the division by zero?"
+      ],
+      "hint": "Take `recX := 0` and `recY := 0`: `0 * 0` is not 1."
+    },
+    {
+      "match": "average gets",
+      "steps": [
+        "Put in the parentheses that Lean puts in: `/` binds tighter than `+`.",
+        "`a + b / 2` is `a + (b / 2)`. For which `a` does that happen to equal `(a + b) / 2`? Avoid those."
+      ],
+      "hint": "Any `a ≠ 0` works: `average 2 0` is 2, but the average of 2 and 0 is 1."
     }
   ]
 }

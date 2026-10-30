@@ -1,5 +1,8 @@
--- every natural number is a value of f
-def HitsEverything (f : Nat → Nat) : Prop := ∀ m, ∃ n, f n = m
+-- every term is at least 10 (already done)
+def AllBig (u : Nat → Nat) : Prop := ∀ n, 10 ≤ u n
 
--- the sequence gets above every bound M at least once
-def Unbounded (u : Nat → Nat) : Prop := ∀ M, ∃ n, M ≤ u n
+-- every term is at most B
+def AlwaysBelow (u : Nat → Nat) (B : Nat) : Prop := ∀ n, u n ≤ B
+
+-- every term is even
+def AllEven (u : Nat → Nat) : Prop := ∀ n, u n % 2 = 0

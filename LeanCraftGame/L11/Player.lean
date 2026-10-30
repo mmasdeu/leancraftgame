@@ -1,41 +1,51 @@
 /-
-# If … then …
+# Division by zero
 
-Often a statement only concerns *some* positions: "from index 5 on, the terms
-are at least 3". That is a statement of the form "**if** *this*, **then**
-*that*", written `p → q`.
+The rationals `ℚ` (type `\Q`) are the fractions: `(1 / 2 : ℚ)` is one half.
 
-* Type `→` as `\to`, or write `->`.
-* `p → q` is true when `p` is false, or when `q` is true.
-* `→` binds weaker than `∧` and `∨`: `a → b ∧ c` means `a → (b ∧ c)`.
+In Lean every function is defined on **all** its inputs, so `x / 0` has to be
+*something*. Mathlib chooses `0`:
 
 ```lean
-def BigAfter (u : Nat → Nat) : Prop := ∀ n, 3 ≤ n → 10 ≤ u n
+example : (1 : ℚ) / 0 = 0 := by simp     -- a theorem!
 ```
 
-Read it as: "for every `n`, **if** `n` is at least 3 **then** `u n` is at
-least 10". It says nothing about `u 0`, `u 1` and `u 2`.
+You have already met such *junk values*: `(3 : ℕ) - 5 = 0`, `(7 : ℕ) / 0 = 0`,
+`(-3 : ℤ).toNat = 0`. Mathlib has more: `Real.sqrt (-1) = 0`, `(0 : ℚ)⁻¹ = 0`.
+They are convenient for writing proofs, but a definition that divides can be
+**silently wrong** at zero.
 
-## A classic mistake
+## The cure
 
-What about `∀ n, 3 ≤ n ∧ 10 ≤ u n`? That says that *every* `n`, even `n = 0`,
-is at least 3, which is false for every sequence. When a statement is about
-"the `n` such that …", use `→`, not `∧`.
+State definitions without dividing, or add the hypothesis you need:
+
+```lean
+-- "y is half of x"
+def IsHalf (x y : ℚ) : Prop := 2 * y = x       -- multiply instead of dividing
+```
+
+Dividing by a number that cannot be zero, like `2`, is perfectly fine.
+
+Remember the binding strengths: `a + b / 2` is `a + (b / 2)`.
 
 ## Your task
 
-`BigAfter` is done. Define `LateBig u` (from index 5 on, every term is at
-least 3) and `EvenToEven u` (whenever `n` is even, `u n` is even).
+`IsHalf` is done. Define `average`, `IsReciprocal` and `HasSlope`. The tests
+include the cases where a division by zero would hide.
 -/
-namespace L11
+namespace L17
 
--- from index 3 on, the terms are at least 10 (already done)
-def BigAfter (u : Nat → Nat) : Prop := ∀ n, 3 ≤ n → 10 ≤ u n
+-- y is half of x (already done; note: no division)
+def IsHalf (x y : ℚ) : Prop := 2 * y = x
 
--- from index 5 on, the terms are at least 3
-def LateBig (u : Nat → Nat) : Prop := sorry
+-- the average of a and b                (average 1 2 is 3/2)
+def average (a b : ℚ) : ℚ := sorry
 
--- if n is even then u n is even
-def EvenToEven (u : Nat → Nat) : Prop := sorry
+-- y is the reciprocal of x: x times y is 1.  (0 has no reciprocal!)
+def IsReciprocal (x y : ℚ) : Prop := sorry
 
-end L11
+-- the line through the points (x₁, y₁) and (x₂, y₂) has slope m.
+-- A vertical line (x₁ = x₂) has no slope at all.
+def HasSlope (x₁ y₁ x₂ y₂ m : ℚ) : Prop := sorry
+
+end L17

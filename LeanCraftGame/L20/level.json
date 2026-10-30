@@ -1,76 +1,74 @@
 {
-  "world": "Library World",
-  "title": "Using Mathlib",
-  "skill": "writing",
-  "predict": [
-    {
-      "test": "CommonDivisor 5 0 0 is true",
-      "statement": "CommonDivisor 5 0 0"
-    },
-    {
-      "test": "TwinPrime 2 is false",
-      "statement": "TwinPrime 2"
-    },
-    {
-      "test": "OneToOne (fun n => n / 2) is false",
-      "statement": "OneToOne (fun n => n / 2)"
-    }
+  "world": "Predicate World",
+  "title": "Be the referee",
+  "skill": "testing",
+  "public": [
+    "good₁ tends to infinity",
+    "good₂ tends to infinity",
+    "bad₁ does not tend to infinity",
+    "bad₂ does not tend to infinity"
   ],
   "checks": [
     {
-      "lean": "example : ℕ → Prop := L20.TwinPrime",
-      "message": "Keep `TwinPrime : ℕ → Prop`."
-    },
-    {
-      "lean": "example : ℕ → ℕ → ℕ → Prop := L20.CommonDivisor",
-      "message": "Keep `CommonDivisor : ℕ → ℕ → ℕ → Prop`."
-    },
-    {
-      "lean": "example : (ℕ → ℕ) → Prop := L20.OneToOne",
-      "message": "Keep `OneToOne : (ℕ → ℕ) → Prop`."
+      "lean": "example : ℕ → ℕ := L27.good₁\nexample : ℕ → ℕ := L27.good₂\nexample : ℕ → ℕ := L27.bad₁\nexample : ℕ → ℕ := L27.bad₂",
+      "message": "Keep `good₁`, `good₂`, `bad₁` and `bad₂` as sequences `ℕ → ℕ`, written with `fun`."
     }
   ],
   "hints": [
     {
-      "match": "TwinPrime 7",
-      "hint": "7 is prime but 9 is not: both must be prime, so use `∧`."
+      "match": "good₁ tends",
+      "hint": "`good₁` is labelled as tending to infinity, but it does not. Every label must be honest."
     },
     {
-      "match": "TwinPrime 2",
-      "hint": "2 is prime but 4 is not: both must be prime, so use `∧`."
+      "match": "good₂ tends",
+      "hint": "`good₂` is labelled as tending to infinity, but it does not. Every label must be honest."
     },
     {
-      "match": "TwinPrime",
+      "match": "bad₁ does not tend",
+      "hint": "`bad₁` is labelled as not tending to infinity, but it does. Every label must be honest."
+    },
+    {
+      "match": "bad₂ does not tend",
+      "hint": "`bad₂` is labelled as not tending to infinity, but it does. Every label must be honest."
+    },
+    {
+      "match": "quantifiers swapped",
+      "hint": "This mutant is false for every sequence, so it rejects any honest `good` sequence. If it survived, check that your `good` sequences really tend to infinity."
+    },
+    {
+      "match": "merely unbounded",
       "steps": [
-        "*Both* numbers must be prime."
+        "This mutant accepts every unbounded sequence. To catch it, one of your `bad` sequences must be unbounded, and still not tend to infinity."
       ],
-      "hint": "`Nat.Prime p ∧ Nat.Prime (p + 2)`, or `p.Prime ∧ (p + 2).Prime`."
+      "hint": "`fun n => if n % 2 = 0 then n else 0` (0, 0, 2, 0, 4, 0, …) is unbounded but keeps falling back to 0."
     },
     {
-      "match": "CommonDivisor 3 6 9",
-      "hint": "`d ∣ a` reads \"d divides a\". Check the order: `d ∣ a ∧ d ∣ b`."
-    },
-    {
-      "match": "CommonDivisor",
+      "match": "strictly increasing",
       "steps": [
-        "`d ∣ a` reads \"d divides a\"."
+        "This mutant rejects every sequence that ever stays level or goes down. Can a sequence tend to infinity while sometimes staying level?"
       ],
-      "hint": "`d ∣ a ∧ d ∣ b`, with the divides symbol `\\|`."
+      "hint": "`fun n => n / 2` (0, 0, 1, 1, 2, 2, …) tends to infinity but is not strictly increasing: use it as a `good` sequence."
     },
     {
-      "match": "OneToOne (fun n => 2 * n)",
-      "hint": "Doubling never sends two numbers to the same place. Are you using `Function.Injective`? (`Surjective` means something else.)"
-    },
-    {
-      "match": "OneToOne",
+      "match": "monotone and unbounded",
       "steps": [
-        "Which Mathlib name means \"no two inputs give the same output\"?"
+        "This mutant rejects every sequence that ever goes down. Can a sequence tend to infinity while going down now and then?"
       ],
-      "hint": "`Function.Injective f`."
+      "hint": "`fun n => n + 3 * (n % 2)` (0, 4, 2, 6, 4, 8, …) goes up and down, and tends to infinity: use it as a `good` sequence."
     },
     {
-      "match": "",
-      "hint": "Look up the name of the notion in the lesson text."
+      "match": "at least the identity",
+      "steps": [
+        "This mutant only accepts sequences with `n ≤ u n` for every `n`. Can a sequence tend to infinity while growing more slowly than `n`?"
+      ],
+      "hint": "`fun n => n / 2` tends to infinity, but `1 / 2 = 0` is smaller than 1."
+    },
+    {
+      "match": "eventually positive",
+      "steps": [
+        "This mutant accepts every sequence whose terms are eventually at least 1. To catch it, one of your `bad` sequences must be eventually positive, and still not tend to infinity."
+      ],
+      "hint": "A constant sequence such as `fun _ => 7` is positive but does not tend to infinity."
     }
   ]
 }

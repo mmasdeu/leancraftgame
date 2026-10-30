@@ -1,74 +1,55 @@
 {
-  "world": "Predicate World",
-  "title": "Be the referee",
-  "skill": "testing",
-  "public": [
-    "good₁ tends to infinity",
-    "good₂ tends to infinity",
-    "bad₁ does not tend to infinity",
-    "bad₂ does not tend to infinity"
+  "world": "Structure World",
+  "title": "Your first structure",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "Interval [5, 5] is an interval",
+      "statement": "an Interval with lo = 5 and hi = 5"
+    },
+    {
+      "test": "0 is not a positive number",
+      "statement": "a PosNat with val = 0"
+    }
   ],
   "checks": [
     {
-      "lean": "example : ℕ → ℕ := L27.good₁\nexample : ℕ → ℕ := L27.good₂\nexample : ℕ → ℕ := L27.bad₁\nexample : ℕ → ℕ := L27.bad₂",
-      "message": "Keep `good₁`, `good₂`, `bad₁` and `bad₂` as sequences `ℕ → ℕ`, written with `fun`."
+      "lean": "example := fun (a b : Nat) => L14.Interval.mk a b",
+      "message": "`Interval` needs the fields `lo`, `hi` (in this order) and then your axiom."
+    },
+    {
+      "lean": "example := fun (a : Nat) => L14.PosNat.mk a",
+      "message": "`PosNat` needs the field `val` and then your axiom."
     }
   ],
   "hints": [
     {
-      "match": "good₁ tends",
-      "hint": "`good₁` is labelled as tending to infinity, but it does not. Every label must be honest."
+      "match": "Interval [5, 2]",
+      "hint": "Your structure accepts `lo = 5`, `hi = 2`. Add an axiom field: `h : lo ≤ hi`."
     },
     {
-      "match": "good₂ tends",
-      "hint": "`good₂` is labelled as tending to infinity, but it does not. Every label must be honest."
+      "match": "Interval [1, 0]",
+      "hint": "Your structure accepts `lo = 1`, `hi = 0`. Add an axiom field: `h : lo ≤ hi`."
     },
     {
-      "match": "bad₁ does not tend",
-      "hint": "`bad₁` is labelled as not tending to infinity, but it does. Every label must be honest."
+      "match": "0 is not",
+      "hint": "Your structure accepts `val = 0`. Add an axiom field: `pos : 0 < val`."
     },
     {
-      "match": "bad₂ does not tend",
-      "hint": "`bad₂` is labelled as not tending to infinity, but it does. Every label must be honest."
+      "match": "[2, 5]",
+      "hint": "A valid interval was rejected: check the direction of your inequality (`lo ≤ hi`)."
     },
     {
-      "match": "quantifiers swapped",
-      "hint": "This mutant is false for every sequence, so it rejects any honest `good` sequence. If it survived, check that your `good` sequences really tend to infinity."
+      "match": "[5, 5]",
+      "hint": "An interval with `lo = hi` is allowed: use `≤`, not `<`."
     },
     {
-      "match": "merely unbounded",
-      "steps": [
-        "This mutant accepts every unbounded sequence. To catch it, one of your `bad` sequences must be unbounded, and still not tend to infinity."
-      ],
-      "hint": "`fun n => if n % 2 = 0 then n else 0` (0, 0, 2, 0, 4, 0, …) is unbounded but keeps falling back to 0."
+      "match": "3 is a positive",
+      "hint": "3 is positive but your axiom rejects it. Is it `0 < val`?"
     },
     {
-      "match": "strictly increasing",
-      "steps": [
-        "This mutant rejects every sequence that ever stays level or goes down. Can a sequence tend to infinity while sometimes staying level?"
-      ],
-      "hint": "`fun n => n / 2` (0, 0, 1, 1, 2, 2, …) tends to infinity but is not strictly increasing: use it as a `good` sequence."
-    },
-    {
-      "match": "monotone and unbounded",
-      "steps": [
-        "This mutant rejects every sequence that ever goes down. Can a sequence tend to infinity while going down now and then?"
-      ],
-      "hint": "`fun n => n + 3 * (n % 2)` (0, 4, 2, 6, 4, 8, …) goes up and down, and tends to infinity: use it as a `good` sequence."
-    },
-    {
-      "match": "at least the identity",
-      "steps": [
-        "This mutant only accepts sequences with `n ≤ u n` for every `n`. Can a sequence tend to infinity while growing more slowly than `n`?"
-      ],
-      "hint": "`fun n => n / 2` tends to infinity, but `1 / 2 = 0` is smaller than 1."
-    },
-    {
-      "match": "eventually positive",
-      "steps": [
-        "This mutant accepts every sequence whose terms are eventually at least 1. To catch it, one of your `bad` sequences must be eventually positive, and still not tend to infinity."
-      ],
-      "hint": "A constant sequence such as `fun _ => 7` is positive but does not tend to infinity."
+      "match": "",
+      "hint": "An axiom is a field whose type is a statement, such as `h : lo ≤ hi`."
     }
   ]
 }

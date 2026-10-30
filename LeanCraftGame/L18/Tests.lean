@@ -1,32 +1,29 @@
-/- Hidden test battery for Level Bounded quantifiers. -/
+/- Hidden test battery for Level Spot the bug: quantifiers. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L18.Player
+import LeanCraftGame.L26.Player
 
-open L18
+namespace L26Ref
+def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n, n > 0 → f n = 0
+def EventuallyZero (u : ℕ → ℕ) : Prop := ∀ N, ∃ n ≥ N, u n = 0
+def Unbounded (u : ℕ → ℕ) : Prop := ∃ M, ∀ n, M ≤ u n
+end L26Ref
 
-#no_sorry HasPositiveRoot
-#no_sorry EventuallyZero
-#level_start "Bounded quantifiers"
+#no_sorry L26.noRoot
+#no_sorry L26.notEventuallyZero
+#no_sorry L26.bounded
+#level_start "Spot the bug: quantifiers"
 
--- the worked example
-#expect_true "EventuallyBig (fun n => n) is true" unfolding EventuallyBig :
-  EventuallyBig (fun n => n)
-#expect_false "EventuallyBig (fun n => n % 2) is false" unfolding EventuallyBig :
-  EventuallyBig (fun n => n % 2)
--- your predicates
-#expect_true "HasPositiveRoot (fun n => n % 3) is true" unfolding HasPositiveRoot :
-  HasPositiveRoot (fun n => n % 3)
-#expect_false "HasPositiveRoot (fun n => n) is false (its only root is 0)" unfolding HasPositiveRoot :
-  HasPositiveRoot (fun n => n)
-#expect_false "HasPositiveRoot (fun n => n + 1) is false" unfolding HasPositiveRoot :
-  HasPositiveRoot (fun n => n + 1)
-#expect_true "EventuallyZero (fun n => if n < 5 then 7 else 0) is true" unfolding EventuallyZero :
-  EventuallyZero (fun n => if n < 5 then 7 else 0)
-#expect_true "EventuallyZero (fun _ => 0) is true" unfolding EventuallyZero :
-  EventuallyZero (fun _ => 0)
-#expect_false "EventuallyZero (fun n => n % 2) is false (0, 1, 0, 1, … keeps returning to 1)" unfolding EventuallyZero :
-  EventuallyZero (fun n => n % 2)
-#expect_false "EventuallyZero (fun n => n) is false" unfolding EventuallyZero :
-  EventuallyZero (fun n => n)
+#expect_true "HasPositiveRoot accepts your function" unfolding L26Ref.HasPositiveRoot L26.noRoot :
+  L26Ref.HasPositiveRoot L26.noRoot
+#expect_true "your function has no root other than 0" unfolding L26.noRoot :
+  ¬ (∃ n > 0, L26.noRoot n = 0)
+#expect_true "EventuallyZero accepts your sequence" unfolding L26Ref.EventuallyZero L26.notEventuallyZero :
+  L26Ref.EventuallyZero L26.notEventuallyZero
+#expect_true "your sequence is not eventually 0" unfolding L26.notEventuallyZero :
+  ¬ (∃ N, ∀ n ≥ N, L26.notEventuallyZero n = 0)
+#expect_true "Unbounded accepts your sequence" unfolding L26Ref.Unbounded L26.bounded :
+  L26Ref.Unbounded L26.bounded
+#expect_true "your sequence is bounded" unfolding L26.bounded :
+  ¬ (∀ M, ∃ n, M ≤ L26.bounded n)
 
 #level_report

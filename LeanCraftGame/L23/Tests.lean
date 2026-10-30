@@ -1,26 +1,36 @@
-/- Hidden test battery for Level Spot the bug (Basics). -/
+/- Hidden test battery for Level Generality. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L23.Player
+import LeanCraftGame.L21.Player
 
--- the referee's own copies: the colleague's code, and the right answers
-namespace L23Ref
-def middle (a b c : Nat) : Nat :=
-  if a ≤ b then (if b ≤ c then b else c)
-  else (if a ≤ c then a else c)
-def median (a b c : Nat) : Nat := max (min a b) (min (max a b) c)
-def isLeap (y : Nat) : Bool := y % 4 == 0 && y % 100 != 0
-def isLeapRight (y : Nat) : Bool := y % 4 == 0 && (y % 100 != 0 || y % 400 == 0)
-end L23Ref
+open L21
 
-#no_sorry L23.ma
-#no_sorry L23.mb
-#no_sorry L23.mc
-#no_sorry L23.year
-#level_start "Spot the bug"
+#level_start "Generality"
 
-#expect_true "middle gives the wrong answer on your three numbers" :
-  L23Ref.middle L23.ma L23.mb L23.mc ≠ L23Ref.median L23.ma L23.mb L23.mc
-#expect_true "isLeap gives the wrong answer on your year" :
-  L23Ref.isLeap L23.year ≠ L23Ref.isLeapRight L23.year
+-- the worked example
+#expect_true "AlwaysBelow (fun n : ℕ => -(n : ℤ)) 0 is true" unfolding AlwaysBelow :
+  AlwaysBelow (fun n : ℕ => -(n : ℤ)) 0
+-- your definitions, on three types
+#expect_true "Between (2 : ℕ) 5 5 is true" unfolding Between :
+  Between (2 : ℕ) 5 5
+#expect_true "Between (-3 : ℤ) 3 0 is true" unfolding Between :
+  Between (-3 : ℤ) 3 0
+#expect_false "Between (-3 : ℤ) 3 4 is false" unfolding Between :
+  Between (-3 : ℤ) 3 4
+#expect_true "Between (0 : ℚ) 1 (1 / 2) is true" unfolding Between :
+  Between (0 : ℚ) 1 (1 / 2)
+#expect_false "Between (0 : ℚ) 1 2 is false" unfolding Between :
+  Between (0 : ℚ) 1 2
+#expect_true "IsUpperBound {x : ℤ | x < 0} 0 is true" unfolding IsUpperBound :
+  IsUpperBound {x : ℤ | x < 0} 0
+#expect_false "IsUpperBound {x : ℤ | x < 5} 3 is false" unfolding IsUpperBound :
+  IsUpperBound {x : ℤ | x < 5} 3
+#expect_true "IsUpperBound {x : ℚ | x ≤ 1 / 2} 1 is true" unfolding IsUpperBound :
+  IsUpperBound {x : ℚ | x ≤ 1 / 2} 1
+#expect_true "largest (2 : ℕ) 9 = 9" unfolding largest :
+  largest (2 : ℕ) 9 = 9
+#expect_true "largest (-3 : ℤ) 2 = 2" unfolding largest :
+  largest (-3 : ℤ) 2 = 2
+#expect_true "largest (7 : ℤ) (-1) = 7" unfolding largest :
+  largest (7 : ℤ) (-1) = 7
 
 #level_report

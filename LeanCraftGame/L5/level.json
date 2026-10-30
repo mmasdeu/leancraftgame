@@ -1,51 +1,34 @@
 {
   "world": "Basics World",
-  "title": "Functions",
-  "skill": "syntax",
+  "title": "Spot the bug",
+  "skill": "reading",
   "public": "all",
-  "hintsAfter": 1,
   "checks": [
     {
-      "lean": "example : Nat → Nat := L5.double",
-      "message": "Keep `double : Nat → Nat`."
+      "lean": "example : Nat := L23.ma\nexample : Nat := L23.mb\nexample : Nat := L23.mc",
+      "message": "Keep `ma`, `mb` and `mc` as three natural numbers (`Nat`)."
     },
     {
-      "lean": "example : Nat → Nat := L5.squared",
-      "message": "Keep `squared : Nat → Nat`."
-    },
-    {
-      "lean": "example : Nat → Nat := L5.addTen",
-      "message": "Keep `addTen : Nat → Nat`."
-    },
-    {
-      "lean": "example : Nat → Nat := L5.minusOne",
-      "message": "Keep `minusOne : Nat → Nat`."
+      "lean": "example : Nat := L23.year",
+      "message": "Keep `year : Nat`."
     }
   ],
   "hints": [
     {
-      "match": "double 7",
-      "hint": "`double n` should be twice `n`: `2 * n` or `n + n`."
+      "match": "middle",
+      "steps": [
+        "Did you try inputs in every order? The colleague probably tested `1 2 3`. What about the same three numbers in other orders?",
+        "Look at the first branch: when `a ≤ b` but not `b ≤ c`, `middle` returns `c`. Is the median always `c` then?"
+      ],
+      "hint": "`middle 2 3 1` is 1, but the median of 2, 3 and 1 is 2. So `ma = 2`, `mb = 3`, `mc = 1` works."
     },
     {
-      "match": "squared",
-      "hint": "The square of `n` is `n` times `n`: write `n * n`."
-    },
-    {
-      "match": "addTen",
-      "hint": "Ten more than `n` is `n + 10`."
-    },
-    {
-      "match": "minusOne 0",
-      "hint": "Natural subtraction stops at zero, so `n - 1` already gives `0 - 1 = 0`."
-    },
-    {
-      "match": "minusOne",
-      "hint": "One less than `n` is `n - 1`."
-    },
-    {
-      "match": "",
-      "hint": "Re-read the examples in the comment above the function."
+      "match": "isLeap",
+      "steps": [
+        "The specification has *two* exceptions. Does the code handle both?",
+        "The code handles \"except the centuries\". What about \"except every fourth century\"?"
+      ],
+      "hint": "2000 is divisible by 400, so it was a leap year, but `isLeap 2000` is `false`."
     }
   ]
 }

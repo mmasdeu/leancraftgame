@@ -1,55 +1,57 @@
 {
-  "world": "Structure World",
-  "title": "Your first structure",
-  "skill": "writing",
+  "world": "Quantifiers World",
+  "title": "If … then …",
+  "skill": "syntax",
   "predict": [
     {
-      "test": "Interval [5, 5] is an interval",
-      "statement": "an Interval with lo = 5 and hi = 5"
+      "test": "LateBig (fun n => if n < 5 then 0 else 9) is true (the first terms are 0: that is fine!)",
+      "statement": "LateBig (fun n => if n < 5 then 0 else 9)"
     },
     {
-      "test": "0 is not a positive number",
-      "statement": "a PosNat with val = 0"
+      "test": "LateBig (fun n => n % 4) is false",
+      "statement": "LateBig (fun n => n % 4)"
+    },
+    {
+      "test": "EvenToEven (fun n => n + 2) is true",
+      "statement": "EvenToEven (fun n => n + 2)"
     }
   ],
   "checks": [
     {
-      "lean": "example := fun (a b : Nat) => L14.Interval.mk a b",
-      "message": "`Interval` needs the fields `lo`, `hi` (in this order) and then your axiom."
+      "lean": "example : (Nat → Nat) → Prop := L11.LateBig",
+      "message": "Keep `LateBig : (Nat → Nat) → Prop`."
     },
     {
-      "lean": "example := fun (a : Nat) => L14.PosNat.mk a",
-      "message": "`PosNat` needs the field `val` and then your axiom."
+      "lean": "example : (Nat → Nat) → Prop := L11.EvenToEven",
+      "message": "Keep `EvenToEven : (Nat → Nat) → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "Interval [5, 2]",
-      "hint": "Your structure accepts `lo = 5`, `hi = 2`. Add an axiom field: `h : lo ≤ hi`."
+      "match": "first terms are 0",
+      "hint": "Your definition rejects a sequence that starts with small values. Did you write `∧` where `→` belongs?"
     },
     {
-      "match": "Interval [1, 0]",
-      "hint": "Your structure accepts `lo = 1`, `hi = 0`. Add an axiom field: `h : lo ≤ hi`."
+      "match": "LateBig (fun n => n) is true",
+      "hint": "This should hold: if you used `∧`, you claimed *all* `n` are at least 5. Use `→`."
     },
     {
-      "match": "0 is not",
-      "hint": "Your structure accepts `val = 0`. Add an axiom field: `pos : 0 < val`."
+      "match": "LateBig",
+      "steps": [
+        "Read it as \"for every `n`, if `n` is at least 5, then …\"."
+      ],
+      "hint": "`∀ n, 5 ≤ n → 3 ≤ u n`."
     },
     {
-      "match": "[2, 5]",
-      "hint": "A valid interval was rejected: check the direction of your inequality (`lo ≤ hi`)."
-    },
-    {
-      "match": "[5, 5]",
-      "hint": "An interval with `lo = hi` is allowed: use `≤`, not `<`."
-    },
-    {
-      "match": "3 is a positive",
-      "hint": "3 is positive but your axiom rejects it. Is it `0 < val`?"
+      "match": "EvenToEven",
+      "steps": [
+        "\"Whenever `n` is even\" is an *if*. Which arrow says that?"
+      ],
+      "hint": "`∀ n, n % 2 = 0 → u n % 2 = 0`."
     },
     {
       "match": "",
-      "hint": "An axiom is a field whose type is a statement, such as `h : lo ≤ hi`."
+      "hint": "Read your definition aloud: \"for every n, if …, then …\"."
     }
   ]
 }

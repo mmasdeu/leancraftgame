@@ -1,37 +1,32 @@
-/- Hidden test battery for Level Recursion. -/
+/- Hidden test battery for Level There exists. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L15.Player
+import LeanCraftGame.L12.Player
 
-open L15
+open L12
 
-#no_sorry sumTo
-#no_sorry pow2
-#no_sorry fib
-#level_start "Recursion"
+#no_sorry HasZero
+#no_sorry HasEvenBig
+#level_start "There exists"
 
 -- the worked example
-#expect_true "factorial 5 = 120" :
-  factorial 5 = 120
--- your functions
-#expect_true "sumTo 0 = 0" :
-  sumTo 0 = 0
-#expect_true "sumTo 4 = 10" :
-  sumTo 4 = 10
-#expect_true "sumTo 100 = 5050" :
-  sumTo 100 = 5050
-#expect_true "pow2 0 = 1" :
-  pow2 0 = 1
-#expect_true "pow2 3 = 8" :
-  pow2 3 = 8
-#expect_true "pow2 10 = 1024" :
-  pow2 10 = 1024
-#expect_true "fib 0 = 0" :
-  fib 0 = 0
-#expect_true "fib 1 = 1" :
-  fib 1 = 1
-#expect_true "fib 2 = 1" :
-  fib 2 = 1
-#expect_true "fib 10 = 55" :
-  fib 10 = 55
+#expect_true "HasBig (fun n => n) is true" unfolding HasBig :
+  HasBig (fun n => n)
+#expect_false "HasBig (fun n => n % 5) is false" unfolding HasBig :
+  HasBig (fun n => n % 5)
+-- your predicates
+#expect_true "HasZero (fun n => n) is true" unfolding HasZero :
+  HasZero (fun n => n)
+#expect_true "HasZero (fun n => n % 3) is true" unfolding HasZero :
+  HasZero (fun n => n % 3)
+#expect_false "HasZero (fun n => n + 1) is false" unfolding HasZero :
+  HasZero (fun n => n + 1)
+#expect_true "HasEvenBig (fun n => n) is true" unfolding HasEvenBig :
+  HasEvenBig (fun n => n)
+#expect_false "HasEvenBig (fun n => 2 * n + 1) is false" unfolding HasEvenBig :
+  HasEvenBig (fun n => 2 * n + 1)
+#expect_false "HasEvenBig (fun n => n % 5) is false" unfolding HasEvenBig :
+  HasEvenBig (fun n => n % 5)
+#expect_false "HasEvenBig (fun n => if n = 0 then 4 else 11) is false (4 is even, 11 is big, but no term is both)" unfolding HasEvenBig :
+  HasEvenBig (fun n => if n = 0 then 4 else 11)
 
 #level_report

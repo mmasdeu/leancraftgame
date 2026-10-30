@@ -1,57 +1,56 @@
 {
   "world": "Quantifiers World",
-  "title": "Bounded quantifiers",
-  "skill": "syntax",
-  "predict": [
-    {
-      "test": "HasPositiveRoot (fun n => n) is false (its only root is 0)",
-      "statement": "HasPositiveRoot (fun n => n)"
-    },
-    {
-      "test": "EventuallyZero (fun n => if n < 5 then 7 else 0) is true",
-      "statement": "EventuallyZero (fun n => if n < 5 then 7 else 0)"
-    },
-    {
-      "test": "EventuallyZero (fun n => n % 2) is false (0, 1, 0, 1, … keeps returning to 1)",
-      "statement": "EventuallyZero (fun n => n % 2)"
-    }
-  ],
+  "title": "Spot the bug: quantifiers",
+  "skill": "reading",
+  "public": "all",
   "checks": [
     {
-      "lean": "example : (ℕ → ℕ) → Prop := L18.HasPositiveRoot",
-      "message": "Keep `HasPositiveRoot : (ℕ → ℕ) → Prop`."
-    },
-    {
-      "lean": "example : (ℕ → ℕ) → Prop := L18.EventuallyZero",
-      "message": "Keep `EventuallyZero : (ℕ → ℕ) → Prop`."
+      "lean": "example : ℕ → ℕ := L26.noRoot\nexample : ℕ → ℕ := L26.notEventuallyZero\nexample : ℕ → ℕ := L26.bounded",
+      "message": "Keep `noRoot`, `notEventuallyZero` and `bounded` as sequences `ℕ → ℕ`, written with `fun`."
     }
   ],
   "hints": [
     {
-      "match": "only root is 0",
-      "hint": "Your definition accepts a function whose only root is 0. Under `∃`, the bound needs `∧`: `∃ n > 0, f n = 0` means `∃ n, n > 0 ∧ f n = 0`."
-    },
-    {
-      "match": "HasPositiveRoot",
+      "match": "HasPositiveRoot accepts",
       "steps": [
-        "Under `∃`, a bound such as `n > 0` hides an `∧`, not an `→`."
+        "An implication `p → q` is true whenever `p` is false. Is there an `n` for which `n > 0` is false?"
       ],
-      "hint": "`∃ n > 0, f n = 0`."
+      "hint": "Take `n = 0`: `0 > 0` is false, so the implication holds whatever `f` is. `HasPositiveRoot` accepts *every* function."
     },
     {
-      "match": "keeps returning",
-      "hint": "Your definition accepts a sequence that is 0 infinitely often but not from some point on. The `∃ N` must come first: `∃ N, ∀ n ≥ N, u n = 0`."
-    },
-    {
-      "match": "EventuallyZero",
+      "match": "root other than 0",
       "steps": [
-        "\"From some index on\": first the index `N`, then every `n` after it."
+        "The colleague's definition accepts everything, so you only need a function with no root other than 0. Does yours have one?"
       ],
-      "hint": "`∃ N, ∀ n ≥ N, u n = 0`."
+      "hint": "`fun n => n + 1` is never 0."
     },
     {
-      "match": "",
-      "hint": "Expand the shorthand: `∀ n ≥ N` hides an `→`, `∃ n > 0` hides an `∧`."
+      "match": "EventuallyZero accepts",
+      "steps": [
+        "The colleague's definition asks for a 0 after *every* index. Does your sequence keep coming back to 0?"
+      ],
+      "hint": "`fun n => n % 2` is 0 at every even index."
+    },
+    {
+      "match": "eventually 0",
+      "steps": [
+        "Your sequence is 0 from some index on, so it does not show the bug. You need one that returns to 0 again and again, and also leaves it again and again."
+      ],
+      "hint": "`fun n => n % 2`: 0, 1, 0, 1, …."
+    },
+    {
+      "match": "Unbounded accepts",
+      "steps": [
+        "`∃ M, ∀ n, M ≤ u n` says that the sequence is bounded *below*. Which `M` makes `M ≤ u n` true for every sequence of natural numbers?"
+      ],
+      "hint": "`M = 0` works for every sequence, so the colleague's `Unbounded` accepts everything."
+    },
+    {
+      "match": "is bounded",
+      "steps": [
+        "Your sequence really is unbounded. Pick one that stays below some bound."
+      ],
+      "hint": "`fun _ => 7`."
     }
   ]
 }

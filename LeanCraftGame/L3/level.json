@@ -1,47 +1,43 @@
 {
-  "world": "Faithfulness World",
-  "title": "The AI proved Goldbach!",
-  "skill": "auditing",
-  "predict": [
-    {
-      "test": "World 3: the 'primes' are the numbers ≥ 2 (TRUE: n = 2 + (n-2))",
-      "statement": "GoldbachFor (fun p => 2 ≤ p): Goldbach, if the 'primes' were the numbers ≥ 2"
-    },
-    {
-      "test": "World 4: no number is 'prime' (Goldbach is FALSE)",
-      "statement": "GoldbachFor (fun _ => False): Goldbach, if no number were prime"
-    }
-  ],
+  "world": "Basics World",
+  "title": "Making choices",
+  "skill": "syntax",
+  "public": "all",
+  "hintsAfter": 1,
   "checks": [
     {
-      "lean": "example : (Nat → Prop) → Prop := L3.GoldbachFor",
-      "message": "Keep the name and the type: `L3.GoldbachFor : (Nat → Prop) → Prop`."
+      "lean": "example : Nat → Nat → Nat := L6.smallest",
+      "message": "Keep `smallest : Nat → Nat → Nat`."
+    },
+    {
+      "lean": "example : Nat → Nat → Nat := L6.gap",
+      "message": "Keep `gap : Nat → Nat → Nat`."
+    },
+    {
+      "lean": "example : Nat → Nat := L6.zeroOrOne",
+      "message": "Keep `zeroOrOne : Nat → Nat`."
     }
   ],
   "hints": [
     {
-      "match": "World 1",
-      "hint": "If every number is 'prime', every even n > 2 is trivially a sum of two of them. Check how you combined the hypotheses: `2 < n ∧ n % 2 = 0 ∧ …` claims that every n is even, instead of assuming it."
+      "match": "smallest",
+      "hint": "Copy `biggest` and swap the two branches: `if a ≤ b then a else b`."
     },
     {
-      "match": "World 2",
-      "hint": "Here the 'primes' are the odd numbers. Every even n > 2 is 1 + (n − 1), but an odd n is never a sum of two odd numbers. Did you forget to assume that n is even?"
+      "match": "gap 4 10",
+      "hint": "`a - b` is 0 when `a` is smaller than `b`. You need to subtract the smaller from the larger: use an `if` to decide which."
     },
     {
-      "match": "World 3",
-      "hint": "Here the 'primes' are the numbers ≥ 2. Every n > 2 that is even is 2 + (n − 2), but 2 is not a sum of two such numbers. Check `2 < n` against `2 ≤ n`."
+      "match": "gap",
+      "hint": "`if a ≤ b then b - a else a - b`: always subtract the smaller number from the larger."
     },
     {
-      "match": "World 4",
-      "hint": "If nothing is 'prime', Goldbach must be false. If your statement still holds, the `∃ p q` is satisfied for a silly reason: check the precedence of `∧` and `→`."
+      "match": "zeroOrOne",
+      "hint": "`if n = 0 then 0 else 1`."
     },
     {
-      "match": "World 5",
-      "hint": "If 2 is the only 'prime', 6 is not a sum of two of them, so Goldbach must be false. If your statement still holds, check the precedence of `∧` and `→`."
-    },
-    {
-      "match": "real world",
-      "hint": "A simple search settled your statement of an open problem. It is probably vacuous, or false for a silly reason. Compare with the toy worlds above."
+      "match": "",
+      "hint": "Re-read the examples in the comment above the function."
     }
   ]
 }

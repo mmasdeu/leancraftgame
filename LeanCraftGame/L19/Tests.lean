@@ -1,34 +1,34 @@
-/- Hidden test battery for Level Sets. -/
+/- Hidden test battery for Level 1. Players don't edit (or ideally see) this file. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L19.Player
+import LeanCraftGame.L1.Player
 
-open L19
+open L1
 
-#no_sorry multiplesOf
-#no_sorry BoundedSet
-#level_start "Sets"
+#no_sorry TendsToInfinity
+#level_start "Level 1 · Going to infinity"
 
--- the worked example
-#expect_true "4 ∈ evens is true" unfolding evens :
-  4 ∈ evens
-#expect_false "3 ∈ evens is false" unfolding evens :
-  3 ∈ evens
--- your definitions
-#expect_true "12 ∈ multiplesOf 3 is true" unfolding multiplesOf :
-  12 ∈ multiplesOf 3
-#expect_false "13 ∈ multiplesOf 3 is false" unfolding multiplesOf :
-  13 ∈ multiplesOf 3
-#expect_true "0 ∈ multiplesOf 5 is true" unfolding multiplesOf :
-  0 ∈ multiplesOf 5
-#expect_true "multiplesOf 4 ⊆ evens is true" unfolding multiplesOf evens :
-  multiplesOf 4 ⊆ evens
-#expect_false "evens ⊆ multiplesOf 4 is false" unfolding multiplesOf evens :
-  evens ⊆ multiplesOf 4
-#expect_true "BoundedSet {n | n < 10} is true" unfolding BoundedSet :
-  BoundedSet {n | n < 10}
-#expect_true "BoundedSet ∅ is true" unfolding BoundedSet :
-  BoundedSet ∅
-#expect_false "BoundedSet {n | 5 ≤ n} is false (5, 6, 7, … has no upper bound)" unfolding BoundedSet :
-  BoundedSet {n | 5 ≤ n}
+-- Sanity: things that should tend to infinity
+#expect_true "u n = n tends to infinity" unfolding TendsToInfinity :
+  TendsToInfinity (fun n => n)
+#expect_true "u n = n / 2 tends to infinity (it is not strictly increasing!)" unfolding TendsToInfinity :
+  TendsToInfinity (fun n => n / 2)
+#expect_true "0, 4, 2, 6, 4, 8, … tends to infinity (it is not monotone!)" unfolding TendsToInfinity :
+  TendsToInfinity (fun n => n + 3 * (n % 2))
+
+-- Anti-theorems: things that should NOT tend to infinity
+#expect_false "a constant sequence does not tend to infinity" unfolding TendsToInfinity :
+  TendsToInfinity (fun _ => 7)
+#expect_false "0, 1, 0, 1, … does not tend to infinity" unfolding TendsToInfinity :
+  TendsToInfinity (fun n => n % 2)
+#expect_false "0, 0, 2, 0, 4, 0, … does not tend to infinity (unbounded is not enough!)" unfolding TendsToInfinity :
+  TendsToInfinity (fun n => if n % 2 = 0 then n else 0)
+
+-- Downstream lemmas: what users of your definition will need
+#expect_true "if u → ∞ then u is unbounded" unfolding TendsToInfinity :
+  ∀ u : Nat → Nat, TendsToInfinity u → ∀ M, ∃ n, M ≤ u n
+#expect_true "if u → ∞ then (u n + 1) → ∞" unfolding TendsToInfinity :
+  ∀ u : Nat → Nat, TendsToInfinity u → TendsToInfinity (fun n => u n + 1)
+#expect_true "if u → ∞ then the shifted sequence u (n+1) → ∞" unfolding TendsToInfinity :
+  ∀ u : Nat → Nat, TendsToInfinity u → TendsToInfinity (fun n => u (n + 1))
 
 #level_report

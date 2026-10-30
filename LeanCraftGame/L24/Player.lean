@@ -1,55 +1,55 @@
 /-
-# Spot the bug: connectives
+# Spot the bug: the library
 
-A colleague defined three predicates. Each comes with a comment saying what
-it should mean, and each says something else.
+A colleague used Mathlib's notions, but not quite as Mathlib means them.
 
 ```lean
--- n is a teenager: from 13 to 19
-def IsTeen (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19
+-- d is a common divisor of a and b
+def CommonDivisor (d a b : ℕ) : Prop := a ∣ d ∧ b ∣ d
 
--- day d is a weekend day (days are numbered 1 to 7, Saturday is 6, Sunday is 7)
-def IsWeekend (d : Nat) : Prop := d = 6 ∧ d = 7
+-- p and p + 2 are both prime (a twin prime)
+def TwinPrime (p : ℕ) : Prop := Nat.Prime p ∨ Nat.Prime (p + 2)
 
--- a and b are both odd
-def BothOdd (a b : Nat) : Prop := ¬ a % 2 = 0 ∧ b % 2 = 0
+-- the multiples of k: 0, k, 2k, 3k, …
+def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
 ```
 
-A wrong predicate can be wrong in two directions:
+Library notions have fixed meanings and fixed argument orders, and a
+definition that uses them can still say the wrong thing:
 
-* it **accepts** something it should reject (it is *too weak*), or
-* it **rejects** something it should accept (it is *too strong*).
-
-To prove the first, give an input that the predicate accepts, and show that it
-should not. For the second, give an input that it rejects, and show that it
-should accept it. The tests below say which direction each bug goes; your job
-is to find the input.
-
-Remember the binding strengths from "Or and not": `¬` binds tighter than `∧`,
-which binds tighter than `∨`.
+* `a ∣ b` reads "a divides b": the *small* number comes first.
+* `∨` and `∧` matter as much as ever.
+* In a set-builder `{n | …}`, check which variable is the element and which is
+  the parameter.
 
 ## Your task
 
-* `teen`: a number that `IsTeen` accepts, although it is not from 13 to 19.
-* `weekendDay`: a weekend day (6 or 7) that `IsWeekend` rejects.
-* `oddA` and `oddB`: two numbers that `BothOdd` accepts, although they are not
-  both odd.
+Each counterexample must be **accepted** by the colleague's definition,
+although it does not have the property in the comment:
+
+* `cdD`, `cdA`, `cdB`: `CommonDivisor cdD cdA cdB` holds, but `cdD` does not
+  divide both `cdA` and `cdB`.
+* `twin`: `TwinPrime twin` holds, but `twin` and `twin + 2` are not both prime.
+* `mulK`, `mulN`: `mulN ∈ multiplesOf mulK` holds, but `mulN` is not a multiple
+  of `mulK`.
 -/
-namespace L24
+namespace L28
 
 -- The colleague's code, to read (the referee uses its own copy).
-def IsTeen (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19
-def IsWeekend (d : Nat) : Prop := d = 6 ∧ d = 7
-def BothOdd (a b : Nat) : Prop := ¬ a % 2 = 0 ∧ b % 2 = 0
+def CommonDivisor (d a b : ℕ) : Prop := a ∣ d ∧ b ∣ d
+def TwinPrime (p : ℕ) : Prop := Nat.Prime p ∨ Nat.Prime (p + 2)
+def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
 
--- accepted by IsTeen, but not a teenager
-def teen : Nat := sorry
+-- accepted by CommonDivisor, but cdD is not a common divisor
+def cdD : ℕ := sorry
+def cdA : ℕ := sorry
+def cdB : ℕ := sorry
 
--- a weekend day, but rejected by IsWeekend
-def weekendDay : Nat := sorry
+-- accepted by TwinPrime, but not a twin prime
+def twin : ℕ := sorry
 
--- accepted by BothOdd, but not both odd
-def oddA : Nat := sorry
-def oddB : Nat := sorry
+-- mulN ∈ multiplesOf mulK, but mulN is not a multiple of mulK
+def mulK : ℕ := sorry
+def mulN : ℕ := sorry
 
-end L24
+end L28

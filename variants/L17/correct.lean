@@ -1,12 +1,8 @@
--- y is half of x (already done; note: no division)
-def IsHalf (x y : ℚ) : Prop := 2 * y = x
+-- from some index on, every term is at least 10 (already done)
+def EventuallyBig (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 10 ≤ u n
 
--- the average of a and b                (average 1 2 is 3/2)
-def average (a b : ℚ) : ℚ := (a + b) / 2
+-- f is zero at some n other than 0
+def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n > 0, f n = 0
 
--- y is the reciprocal of x: x times y is 1.  (0 has no reciprocal!)
-def IsReciprocal (x y : ℚ) : Prop := x * y = 1
-
--- the line through the points (x₁, y₁) and (x₂, y₂) has slope m.
--- A vertical line (x₁ = x₂) has no slope at all.
-def HasSlope (x₁ y₁ x₂ y₂ m : ℚ) : Prop := x₁ ≠ x₂ ∧ m * (x₂ - x₁) = y₂ - y₁
+-- from some index on, every term is 0
+def EventuallyZero (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, u n = 0

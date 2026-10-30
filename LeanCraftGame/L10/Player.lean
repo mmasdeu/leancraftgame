@@ -1,44 +1,49 @@
 /-
-# For all
+# Integers and casts
 
-A *sequence* of natural numbers is a function `u : Nat → Nat`: for every
-position `n`, it gives a value `u n`. Think of the list `u 0, u 1, u 2, …`
+Natural numbers have no negatives, which is why `3 - 5` is `0` in `ℕ`. The
+**integers** `ℤ` (type `\Z`, or write `Int`) are …, -2, -1, 0, 1, 2, …, and
+their subtraction is the real one. (`ℕ` is another name for `Nat`; type `\N`.)
 
-* `Nat → Nat` is the type of functions from `Nat` to `Nat`.
-  Type the arrow `→` as `\to`, or write `->`.
-* `fun n => n + 1` is a function written without a name: the input `n`
-  goes to `n + 1`. The referee uses such functions to test your definitions:
-  `(fun n => n % 3) 7` is `1`.
+* `(3 : ℤ)` means "3, as an integer". This is a *type ascription*.
+* `(3 : ℤ) - 5` is `-2`.
 
-## The quantifier `∀`
+## Casts
 
-`∀ n, P n` means "for **every** natural number `n`, the statement `P n` holds".
-Type `∀` as `\forall`, or write `forall`.
+A natural number `n : ℕ` can be used where an integer is expected: write
+`(n : ℤ)`. Lean then inserts a **cast**, displayed `↑n`. *Where* the cast goes
+changes the result:
 
 ```lean
-def AllBig (u : Nat → Nat) : Prop := ∀ n, 10 ≤ u n
+def good (a b : ℕ) : ℤ := (a : ℤ) - (b : ℤ)   -- good 3 5 = -2
+def bad  (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)   -- bad 3 5 = 0 : subtracted in ℕ, then cast
 ```
 
-This says that *every* term of the sequence `u` is at least 10. The `n` after
-`∀` is a name you choose for the position. The comma separates the quantifier
-from the statement.
+`(a - b : ℤ)` also works: Lean elaborates the whole expression as an integer
+and casts `a` and `b` first.
 
-Typing `∀` and friends: click **Symbols** at the top right of the page. It lists every symbol with the keys to type it, and has typing practice.
+## Dot notation and two more junk values
+
+* `x.natAbs` is the absolute value of an integer `x`, as a natural number.
+  It is short for `Int.natAbs x`: since `x` is an `Int`, Lean looks for
+  `natAbs` among the functions named `Int.something`.
+* `x.toNat` turns an integer into a natural number, but every negative number
+  becomes `0`. Like `3 - 5 = 0` in `ℕ`, this is a *junk value*: a function
+  must return something, so Lean returns 0.
 
 ## Your task
 
-`AllBig` is done. Define `AlwaysBelow u B` (every term is at most `B`) and
-`AllEven u` (every term is even).
+Define `diff`, `distance` and `IsNegative`.
 -/
-namespace L10
+namespace L16
 
--- every term is at least 10 (already done)
-def AllBig (u : Nat → Nat) : Prop := ∀ n, 10 ≤ u n
+-- a minus b, as an integer        (diff 3 5 is -2)
+def diff (a b : ℕ) : ℤ := sorry
 
--- every term is at most B
-def AlwaysBelow (u : Nat → Nat) (B : Nat) : Prop := sorry
+-- the distance between two integers, as a natural number   (distance 3 (-4) is 7)
+def distance (a b : ℤ) : ℕ := sorry
 
--- every term is even
-def AllEven (u : Nat → Nat) : Prop := sorry
+-- x is negative
+def IsNegative (x : ℤ) : Prop := sorry
 
-end L10
+end L16

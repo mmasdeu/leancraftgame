@@ -1,35 +1,47 @@
 {
   "world": "Basics World",
-  "title": "Naming things",
+  "title": "Recursion",
   "skill": "syntax",
   "public": "all",
   "hintsAfter": 1,
   "checks": [
     {
-      "lean": "example : Nat := L4.answer",
-      "message": "Keep the name and the type: `answer : Nat`."
+      "lean": "example : Nat → Nat := L15.sumTo",
+      "message": "Keep `sumTo : Nat → Nat`."
     },
     {
-      "lean": "example : String := L4.language",
-      "message": "Keep the name and the type: `language : String`."
+      "lean": "example : Nat → Nat := L15.pow2",
+      "message": "Keep `pow2 : Nat → Nat`."
     },
     {
-      "lean": "example : Bool := L4.flag",
-      "message": "Keep the name and the type: `flag : Bool`."
+      "lean": "example : Nat → Nat := L15.fib",
+      "message": "Keep `fib : Nat → Nat`."
     }
   ],
   "hints": [
     {
-      "match": "answer",
-      "hint": "The answer to everything is 42. Write it after `:=`, as in `def answer : Nat := 42`."
+      "match": "sumTo 0",
+      "hint": "Adding no numbers at all (0 + … up to 0) gives 0."
     },
     {
-      "match": "language",
-      "hint": "Text goes in double quotes: `\"Lean\"`, with a capital L."
+      "match": "sumTo",
+      "hint": "`sumTo (n + 1)` is `sumTo n` plus the new number, which is `n + 1`."
     },
     {
-      "match": "flag",
-      "hint": "`Bool` has two values, written `true` and `false` in lowercase. Which one means yes?"
+      "match": "pow2 0",
+      "hint": "2 multiplied by itself zero times is 1, like `factorial 0`."
+    },
+    {
+      "match": "pow2",
+      "hint": "`pow2 (n + 1)` is twice `pow2 n`."
+    },
+    {
+      "match": "fib",
+      "hint": "`fib 0` is 0, `fib 1` is 1, and `fib (n + 2)` is `fib n + fib (n + 1)`."
+    },
+    {
+      "match": "",
+      "hint": "Compute a few small values by hand and compare with your cases."
     }
   ]
 }

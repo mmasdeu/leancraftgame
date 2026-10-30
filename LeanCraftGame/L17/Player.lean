@@ -1,51 +1,40 @@
 /-
-# Division by zero
+# Bounded quantifiers
 
-The rationals `ℚ` (type `\Q`) are the fractions: `(1 / 2 : ℚ)` is one half.
+Mathematicians write "for all n ≥ N" and "there is an n > 0". Lean (with
+Mathlib) has the same shorthand:
 
-In Lean every function is defined on **all** its inputs, so `x / 0` has to be
-*something*. Mathlib chooses `0`:
+* `∀ n ≥ N, P n` means `∀ n, n ≥ N → P n`;
+* `∃ n > 0, P n` means `∃ n, n > 0 ∧ P n`.
+
+Notice the difference: the bound becomes an **implication** under `∀` and a
+**conjunction** under `∃`. This is exactly the `→` versus `∧` lesson from
+"If … then …". Writing the long form by hand with the wrong connective is a
+classic mistake:
+
+* `∃ n, n > 0 → f n = 0` is true for *every* `f`: take `n = 0`, then `0 > 0`
+  is false, and an implication with a false premise is true.
+
+The same shorthand exists for `≤`, `<`, `≠` and, as you will see with sets,
+for `∈`. Several variables can share a quantifier: `∀ a b, …`.
 
 ```lean
-example : (1 : ℚ) / 0 = 0 := by simp     -- a theorem!
+def EventuallyBig (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 10 ≤ u n
 ```
-
-You have already met such *junk values*: `(3 : ℕ) - 5 = 0`, `(7 : ℕ) / 0 = 0`,
-`(-3 : ℤ).toNat = 0`. Mathlib has more: `Real.sqrt (-1) = 0`, `(0 : ℚ)⁻¹ = 0`.
-They are convenient for writing proofs, but a definition that divides can be
-**silently wrong** at zero.
-
-## The cure
-
-State definitions without dividing, or add the hypothesis you need:
-
-```lean
--- "y is half of x"
-def IsHalf (x y : ℚ) : Prop := 2 * y = x       -- multiply instead of dividing
-```
-
-Dividing by a number that cannot be zero, like `2`, is perfectly fine.
-
-Remember the binding strengths: `a + b / 2` is `a + (b / 2)`.
 
 ## Your task
 
-`IsHalf` is done. Define `average`, `IsReciprocal` and `HasSlope`. The tests
-include the cases where a division by zero would hide.
+`EventuallyBig` is done. Define `HasPositiveRoot f` and `EventuallyZero u`.
 -/
-namespace L17
+namespace L18
 
--- y is half of x (already done; note: no division)
-def IsHalf (x y : ℚ) : Prop := 2 * y = x
+-- from some index on, every term is at least 10 (already done)
+def EventuallyBig (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 10 ≤ u n
 
--- the average of a and b                (average 1 2 is 3/2)
-def average (a b : ℚ) : ℚ := sorry
+-- f is zero at some n other than 0
+def HasPositiveRoot (f : ℕ → ℕ) : Prop := sorry
 
--- y is the reciprocal of x: x times y is 1.  (0 has no reciprocal!)
-def IsReciprocal (x y : ℚ) : Prop := sorry
+-- from some index on, every term is 0
+def EventuallyZero (u : ℕ → ℕ) : Prop := sorry
 
--- the line through the points (x₁, y₁) and (x₂, y₂) has slope m.
--- A vertical line (x₁ = x₂) has no slope at all.
-def HasSlope (x₁ y₁ x₂ y₂ m : ℚ) : Prop := sorry
-
-end L17
+end L18

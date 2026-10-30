@@ -1,7 +1,9 @@
-def IsTeen (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19
-def IsWeekend (d : Nat) : Prop := d = 6 ∧ d = 7
-def BothOdd (a b : Nat) : Prop := ¬ a % 2 = 0 ∧ b % 2 = 0
-def teen : Nat := 5
-def weekendDay : Nat := 7
-def oddA : Nat := 1
-def oddB : Nat := 2
+def CommonDivisor (d a b : ℕ) : Prop := a ∣ d ∧ b ∣ d
+def TwinPrime (p : ℕ) : Prop := Nat.Prime p ∨ Nat.Prime (p + 2)
+def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
+def cdD : ℕ := 6
+def cdA : ℕ := 2
+def cdB : ℕ := 3
+def twin : ℕ := 7
+def mulK : ℕ := 6
+def mulN : ℕ := 3

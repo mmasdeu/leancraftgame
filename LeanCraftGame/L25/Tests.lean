@@ -1,28 +1,25 @@
-/- Hidden test battery for Level Spot the bug: numbers. -/
+/- Hidden test battery for Level Limits. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L25.Player
+import LeanCraftGame.L22.Player
 
-namespace L25Ref
-def diff (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)
-def IsReciprocal (x y : ℚ) : Prop := y = 1 / x
-def average (a b : ℚ) : ℚ := a + b / 2
-end L25Ref
+open L22
 
-#no_sorry L25.diffA
-#no_sorry L25.diffB
-#no_sorry L25.recX
-#no_sorry L25.recY
-#no_sorry L25.avgA
-#no_sorry L25.avgB
-#level_start "Spot the bug: numbers"
+#no_sorry ConvergesTo
+#level_start "Limits"
 
-#expect_true "diff gets your two numbers wrong" unfolding L25Ref.diff L25.diffA L25.diffB :
-  L25Ref.diff L25.diffA L25.diffB ≠ (L25.diffA : ℤ) - (L25.diffB : ℤ)
-#expect_true "IsReciprocal accepts your two numbers" unfolding L25Ref.IsReciprocal L25.recX L25.recY :
-  L25Ref.IsReciprocal L25.recX L25.recY
-#expect_true "your two numbers do not multiply to 1" unfolding L25.recX L25.recY :
-  ¬ (L25.recX * L25.recY = 1)
-#expect_true "average gets your two numbers wrong" unfolding L25Ref.average L25.avgA L25.avgB :
-  L25Ref.average L25.avgA L25.avgB ≠ (L25.avgA + L25.avgB) / 2
+-- the worked example
+#expect_true "BoundedSeq (fun _ => 3) is true" unfolding BoundedSeq :
+  BoundedSeq (fun _ => 3)
+-- your definition
+#expect_true "the constant sequence 3 converges to 3" unfolding ConvergesTo :
+  ConvergesTo (fun _ => 3) 3
+#expect_true "7, 7, 7, 7, 7, 0, 0, 0, … converges to 0" unfolding ConvergesTo :
+  ConvergesTo (fun n => if n < 5 then 7 else 0) 0
+#expect_false "the constant sequence 3 does not converge to 4" unfolding ConvergesTo :
+  ConvergesTo (fun _ => 3) 4
+#expect_false "0, 1, 2, 3, … does not converge to 0" unfolding ConvergesTo :
+  ConvergesTo (fun n => (n : ℝ)) 0
+#expect_false "0, 1, 0, 1, … does not converge to 0" unfolding ConvergesTo :
+  ConvergesTo (fun n => if n % 2 = 0 then 0 else 1) 0
 
 #level_report

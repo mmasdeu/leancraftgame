@@ -1,36 +1,39 @@
 /-
-# And
+# Or and not
 
-Two statements can be combined. `p ∧ q` means "p **and** q": it is true when
-both are true.
+* `p ∨ q` means "p **or** q": true when at least one of them is true,
+  possibly both. Type it `\or` (or write `\/`).
+* `¬ p` means "**not** p". Type it `\not` (or `\neg`), or write `Not p`.
 
 ```lean
-def InRange (lo hi n : Nat) : Prop := lo ≤ n ∧ n ≤ hi
+def Odd' (n : Nat) : Prop := ¬ (n % 2 = 0)
 ```
 
-`InRange 10 20 15` is true. `InRange 10 20 25` is false.
+## Which operator comes first?
 
-* Type `∧` as `\and` (or write `/\`).
-* You cannot write `lo ≤ n ≤ hi` as in school mathematics. Write the two
-  comparisons and join them with `∧`.
-* A definition may use the ones written above it, as `EvenInRange` below can
-  use `InRange`.
+From the strongest to the weakest binding: `¬`, then `∧`, then `∨`, then `→`
+(next level). So
 
-Typing `∀` and friends: click **Symbols** at the top right of the page. It lists every symbol with the keys to type it, and has typing practice.
+* `¬ p ∧ q` means `(¬ p) ∧ q`, not `¬ (p ∧ q)`;
+* `p ∨ q ∧ r` means `p ∨ (q ∧ r)`.
+
+When in doubt, add parentheses. They never hurt.
 
 ## Your task
 
-`InRange` is done. Define `IsTeen` (13 to 19 inclusive) and `EvenInRange`.
+A cinema gives free tickets to children under 5 and to people aged 65 or
+more. Define `FreeTicket`, then `PaysFull` using `FreeTicket`. Then define
+`NotTiny`: a number that is neither 0 nor 1.
 -/
-namespace L8
+namespace L9
 
--- lo ≤ n ≤ hi (already done)
-def InRange (lo hi n : Nat) : Prop := lo ≤ n ∧ n ≤ hi
+-- under 5 or at least 65          (FreeTicket 3 is true, FreeTicket 30 is false)
+def FreeTicket (age : Nat) : Prop := sorry
 
--- n is between 13 and 19, both included      (IsTeen 19 is true, IsTeen 20 is false)
-def IsTeen (n : Nat) : Prop := sorry
+-- everybody else pays full price: the opposite of FreeTicket
+def PaysFull (age : Nat) : Prop := sorry
 
--- n is even and lies between lo and hi        (EvenInRange 1 10 4 is true, EvenInRange 1 10 5 is false)
-def EvenInRange (lo hi n : Nat) : Prop := sorry
+-- n is neither 0 nor 1            (NotTiny 5 is true, NotTiny 1 is false)
+def NotTiny (n : Nat) : Prop := sorry
 
-end L8
+end L9

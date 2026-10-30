@@ -1,34 +1,68 @@
 {
-  "world": "Basics World",
-  "title": "Spot the bug",
-  "skill": "reading",
-  "public": "all",
-  "checks": [
+  "world": "Library World",
+  "title": "Generality",
+  "skill": "writing",
+  "predict": [
     {
-      "lean": "example : Nat := L23.ma\nexample : Nat := L23.mb\nexample : Nat := L23.mc",
-      "message": "Keep `ma`, `mb` and `mc` as three natural numbers (`Nat`)."
+      "test": "Between (2 : ℕ) 5 5 is true",
+      "statement": "Between (2 : ℕ) 5 5"
     },
     {
-      "lean": "example : Nat := L23.year",
-      "message": "Keep `year : Nat`."
+      "test": "IsUpperBound {x : ℤ | x < 5} 3 is false",
+      "statement": "IsUpperBound {x : ℤ | x < 5} 3"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : ℤ → ℤ → ℤ → Prop := L21.Between",
+      "message": "`Between` must work for any ordered type (the tests use ℤ): add `{α : Type*} [Preorder α]` and replace `ℕ` by `α`."
+    },
+    {
+      "lean": "example : ℚ → ℚ → ℚ → Prop := L21.Between",
+      "message": "`Between` must work for any ordered type (the tests use ℚ)."
+    },
+    {
+      "lean": "example : Set ℤ → ℤ → Prop := L21.IsUpperBound",
+      "message": "`IsUpperBound` must work for any ordered type (the tests use ℤ): `(s : Set α) (B : α)`."
+    },
+    {
+      "lean": "example : ℤ → ℤ → ℤ := L21.largest",
+      "message": "`largest` must work for any linearly ordered type (the tests use ℤ)."
+    },
+    {
+      "lean": "example : ℚ → ℚ → ℚ := L21.largest",
+      "message": "`largest` must work for any linearly ordered type (the tests use ℚ)."
     }
   ],
   "hints": [
     {
-      "match": "middle",
-      "steps": [
-        "Did you try inputs in every order? The colleague probably tested `1 2 3`. What about the same three numbers in other orders?",
-        "Look at the first branch: when `a ≤ b` but not `b ≤ c`, `middle` returns `c`. Is the median always `c` then?"
-      ],
-      "hint": "`middle 2 3 1` is 1, but the median of 2, 3 and 1 is 2. So `ma = 2`, `mb = 3`, `mc = 1` works."
+      "match": "Between (2 : ℕ) 5 5",
+      "hint": "The ends are included: use `≤`, not `<`."
     },
     {
-      "match": "isLeap",
+      "match": "Between",
       "steps": [
-        "The specification has *two* exceptions. Does the code handle both?",
-        "The code handles \"except the centuries\". What about \"except every fourth century\"?"
+        "Replace `ℕ` by a type variable, and ask for an order on it."
       ],
-      "hint": "2000 is divisible by 400, so it was a leap year, but `isLeap 2000` is `false`."
+      "hint": "`def Between {α : Type*} [Preorder α] (a b x : α) : Prop := a ≤ x ∧ x ≤ b`."
+    },
+    {
+      "match": "IsUpperBound",
+      "steps": [
+        "Every `ℕ` must become `α`, also the one inside `Set`."
+      ],
+      "hint": "Replace `ℕ` by `α` everywhere, including in `Set α`, and add `{α : Type*} [Preorder α]`."
+    },
+    {
+      "match": "largest",
+      "steps": [
+        "An `if` has to *decide* `a ≤ b`. Which class makes that possible?"
+      ],
+      "hint": "An `if` needs to decide `a ≤ b`: use `[LinearOrder α]`."
+    },
+    {
+      "match": "",
+      "hint": "Replace `ℕ` by a type variable `α`, and ask for the order with `[Preorder α]`."
     }
   ]
 }

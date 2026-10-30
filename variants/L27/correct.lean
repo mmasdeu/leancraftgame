@@ -1,5 +1,10 @@
-def TendsToInfinity (u : ℕ → ℕ) : Prop := ∀ M, ∃ N, ∀ n ≥ N, M ≤ u n
-def good₁ : ℕ → ℕ := fun n => n / 2
-def good₂ : ℕ → ℕ := fun n => n + 3 * (n % 2)
-def bad₁ : ℕ → ℕ := fun n => if n % 2 = 0 then n else 0
-def bad₂ : ℕ → ℕ := fun _ => 7
+-- two numbers `lo` and `hi`, in this order, with an axiom `lo ≤ hi`
+structure Interval where
+  lo : Nat
+  hi : Nat
+  h : lo ≤ hi
+
+-- a number `val` with an axiom saying that it is positive
+structure PosNat where
+  val : Nat
+  pos : 0 < val

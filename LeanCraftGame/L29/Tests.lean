@@ -1,26 +1,26 @@
-/- Hidden test battery for Level Spot the bug: limits. -/
+/- Hidden test battery for Level 3. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L29.Player
+import LeanCraftGame.L3.Player
 
-namespace L29Ref
-def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - a| < ε
-def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
-def ConvergesB (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ n, |u n - a| < ε
-end L29Ref
+open L3
 
-#no_sorry L29.seqA
-#no_sorry L29.limA
-#no_sorry L29.seqB
-#no_sorry L29.limB
-#level_start "Spot the bug: limits"
+#no_sorry GoldbachFor
+#level_start "Level 3 · The AI proved Goldbach!"
 
-#expect_true "seqA converges to limA" unfolding L29Ref.ConvergesTo L29.seqA L29.limA :
-  L29Ref.ConvergesTo L29.seqA L29.limA
-#expect_true "Alice's ConvergesA rejects seqA and limA" unfolding L29Ref.ConvergesA L29.seqA L29.limA :
-  ¬ (L29Ref.ConvergesA L29.seqA L29.limA)
-#expect_true "seqB does not converge to limB" unfolding L29Ref.ConvergesTo L29.seqB L29.limB :
-  ¬ (L29Ref.ConvergesTo L29.seqB L29.limB)
-#expect_true "Bob's ConvergesB accepts seqB and limB" unfolding L29Ref.ConvergesB L29.seqB L29.limB :
-  L29Ref.ConvergesB L29.seqB L29.limB
+-- Toy worlds where the answer is known
+#expect_true "World 1: every number is 'prime' (Goldbach is trivially TRUE)" unfolding GoldbachFor :
+  GoldbachFor (fun _ => True)
+#expect_true "World 2: the 'primes' are the odd numbers (TRUE: n = 1 + (n-1))" unfolding GoldbachFor :
+  GoldbachFor (fun p => p % 2 = 1)
+#expect_true "World 3: the 'primes' are the numbers ≥ 2 (TRUE: n = 2 + (n-2))" unfolding GoldbachFor :
+  GoldbachFor (fun p => 2 ≤ p)
+#expect_false "World 4: no number is 'prime' (Goldbach is FALSE)" unfolding GoldbachFor :
+  GoldbachFor (fun _ => False)
+#expect_false "World 5: the only 'prime' is 2 (FALSE: 6 ≠ 2 + 2)" unfolding GoldbachFor :
+  GoldbachFor (fun p => p = 2)
+
+-- The real world
+#expect_open "The real world: Goldbach's conjecture itself" unfolding GoldbachFor IsPrime :
+  GoldbachFor IsPrime
 
 #level_report

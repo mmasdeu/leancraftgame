@@ -1,54 +1,41 @@
 /-
-# Spot the bug: numbers
+# Limits
 
-Junk values are where definitions go wrong without anybody noticing: `3 - 5`
-is `0` in `ℕ`, and `x / 0` is `0` in `ℚ`. A colleague, who has not played the
-Numbers world, wrote:
+Time for the definition every analysis course starts with. Some new notation:
+
+* `ℝ` (type `\R`) is the real numbers. A real sequence is `u : ℕ → ℝ`.
+* `|x|` is the absolute value, written with the plain keyboard bar.
+* Casts again: in `fun n => (n : ℝ)`, the natural number `n` is turned into a
+  real number (displayed `↑n`).
+* `ε` is typed `\e` (then a space), and `∀ ε > 0, …` is a bounded quantifier.
+
+A real sequence `u` **converges** to `a` when: for every `ε > 0` there is an
+index `N` such that every term from `N` on is within `ε` of `a`.
 
 ```lean
--- the difference a - b, as an integer: diff 3 5 is -2
-def diff (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)
-
--- y is the reciprocal of x: x * y = 1
-def IsReciprocal (x y : ℚ) : Prop := y = 1 / x
-
--- the average of a and b
-def average (a b : ℚ) : ℚ := a + b / 2
+-- the worked example: the sequence stays within some bound
+def BoundedSeq (u : ℕ → ℝ) : Prop := ∃ M, ∀ n, |u n| ≤ M
 ```
 
-Each definition agrees with the intended meaning on *many* inputs. That is
-what makes these bugs dangerous: a few random checks will not find them. Ask
-instead: **where is the junk value?** Which subtraction can go below zero,
-which division can be by zero, and where would the parentheses go?
+## What can go wrong
+
+* Forgetting `ε > 0`: for `ε = 0` nothing is within distance 0, so no
+  sequence converges.
+* Writing `∃ n` instead of "for all `n ≥ N`": then `u` only needs to come close
+  to `a` once.
+* Putting `∃ N` before `∀ ε`: then a single `N` must work for every `ε`.
 
 ## Your task
 
-* `diffA`, `diffB`: two natural numbers with `diff diffA diffB ≠ diffA - diffB`
-  (the second subtraction in `ℤ`).
-* `recX`, `recY`: two rationals that `IsReciprocal` accepts, although
-  `recX * recY ≠ 1`.
-* `avgA`, `avgB`: two rationals with `average avgA avgB ≠ (avgA + avgB) / 2`.
-
-A rational number is written like an integer, or as a fraction: `3`, `-2`,
-`(1 / 2 : ℚ)`.
+`BoundedSeq` is done. Define `ConvergesTo u a`.
 -/
-namespace L25
+namespace L22
 
--- The colleague's code, to read (the referee uses its own copy).
-def diff (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)
-def IsReciprocal (x y : ℚ) : Prop := y = 1 / x
-def average (a b : ℚ) : ℚ := a + b / 2
+-- some bound M is at least every |u n| (already done)
+def BoundedSeq (u : ℕ → ℝ) : Prop := ∃ M, ∀ n, |u n| ≤ M
 
--- diff gets these wrong
-def diffA : ℕ := sorry
-def diffB : ℕ := sorry
+-- u converges to a: for every ε > 0, from some index N on,
+-- every term u n is within ε of a
+def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := sorry
 
--- IsReciprocal accepts these, but recX * recY ≠ 1
-def recX : ℚ := sorry
-def recY : ℚ := sorry
-
--- average gets these wrong
-def avgA : ℚ := sorry
-def avgB : ℚ := sorry
-
-end L25
+end L22

@@ -1,6 +1,6 @@
-def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n, n > 0 → f n = 0
-def EventuallyZero (u : ℕ → ℕ) : Prop := ∀ N, ∃ n ≥ N, u n = 0
-def Unbounded (u : ℕ → ℕ) : Prop := ∃ M, ∀ n, M ≤ u n
-def noRoot : ℕ → ℕ := fun n => n + 1
-def notEventuallyZero : ℕ → ℕ := fun n => n % 2
-def bounded : ℕ → ℕ := fun _ => 7
+def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
+def ConvergesB (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ n, |u n - a| < ε
+def seqA : ℕ → ℝ := fun _ => 0
+def limA : ℝ := 0
+def seqB : ℕ → ℝ := fun n => if n % 2 = 0 then 0 else 1
+def limB : ℝ := 0

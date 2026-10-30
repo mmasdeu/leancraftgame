@@ -1,32 +1,45 @@
-/- Hidden test battery for Level Spot the bug: the library. -/
+/- Hidden test battery for Level 2. -/
 import LeanCraftGame.Referee
-import LeanCraftGame.L28.Player
+import LeanCraftGame.L2.Player
 
-namespace L28Ref
-def CommonDivisor (d a b : ℕ) : Prop := a ∣ d ∧ b ∣ d
-def TwinPrime (p : ℕ) : Prop := Nat.Prime p ∨ Nat.Prime (p + 2)
-def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
-end L28Ref
+open L2
 
-#no_sorry L28.cdD
-#no_sorry L28.cdA
-#no_sorry L28.cdB
-#no_sorry L28.twin
-#no_sorry L28.mulK
-#no_sorry L28.mulN
-#level_start "Spot the bug: the library"
+/-! A non-commutative group: S₃ ≅ ℤ/3 ⋊ ℤ/2, encoded on `Fin 6` as `a + 3s`. -/
+def S3.mul (x y : Fin 6) : Fin 6 :=
+  let a := x.val % 3; let s := x.val / 3; let b := y.val % 3; let t := y.val / 3
+  Fin.ofNat 6 ((a + (if s = 0 then b else 3 - b)) % 3 + 3 * ((s + t) % 2))
+def S3.inv (x : Fin 6) : Fin 6 :=
+  let a := x.val % 3; let s := x.val / 3
+  Fin.ofNat 6 ((if s = 0 then (3 - a) % 3 else a) + 3 * s)
 
-#expect_true "CommonDivisor accepts your three numbers" unfolding L28Ref.CommonDivisor L28.cdD L28.cdA L28.cdB :
-  L28Ref.CommonDivisor L28.cdD L28.cdA L28.cdB
-#expect_true "cdD does not divide both cdA and cdB" unfolding L28.cdD L28.cdA L28.cdB :
-  ¬ (L28.cdD ∣ L28.cdA ∧ L28.cdD ∣ L28.cdB)
-#expect_true "TwinPrime accepts your number" unfolding L28Ref.TwinPrime L28.twin :
-  L28Ref.TwinPrime L28.twin
-#expect_true "your number and the number 2 above it are not both prime" unfolding L28.twin :
-  ¬ (Nat.Prime L28.twin ∧ Nat.Prime (L28.twin + 2))
-#expect_true "mulN ∈ multiplesOf mulK holds" unfolding L28Ref.multiplesOf L28.mulK L28.mulN :
-  L28.mulN ∈ L28Ref.multiplesOf L28.mulK
-#expect_true "mulN is not a multiple of mulK" unfolding L28.mulK L28.mulN :
-  ¬ (L28.mulK ∣ L28.mulN)
+#level_start "Level 2 · A colleague's groups"
+
+/-! ### Part A: your junk model -/
+#expect_model "Part A: your junk model satisfies the colleague's axioms" :
+  Group'.mk junkMul junkOne junkInv
+#expect_true "Part A: …and yet it is not a group" :
+  (∃ a, junkMul a junkOne ≠ a) ∨ (∃ a, junkMul (junkInv a) a ≠ junkOne)
+
+/-! ### Part B: real groups must be models -/
+#expect_model "Part B: (ℤ, +) is a group" :
+  Group₂.mk (G := Int) (· + ·) 0 (- ·)
+#expect_model "Part B: (Bool, xor) is a group" :
+  Group₂.mk (G := Bool) xor false id
+#expect_model "Part B: ℤ/3 is a group" :
+  Group₂.mk (G := Fin 3) (· + ·) 0 (- ·)
+#expect_model "Part B: S₃ (non-commutative!) is a group" :
+  Group₂.mk (G := Fin 6) S3.mul 0 S3.inv
+
+/-! ### Part B: junk models must be ruled out -/
+#expect_not_model "Part B: 'a * b = b' on Bool is not a group" :
+  Group₂.mk (G := Bool) (fun _ b => b) false (fun _ => false)
+#expect_not_model "Part B: 'a * b = b' on ℤ/3 is not a group" :
+  Group₂.mk (G := Fin 3) (fun _ b => b) 0 (fun _ => 0)
+#expect_not_model "Part B: 'a * b = b' on ℤ is not a group" :
+  Group₂.mk (G := Int) (fun _ b => b) 0 (fun _ => 0)
+#expect_not_model "Part B: (ℕ, +) is not a group" :
+  Group₂.mk (G := Nat) (· + ·) 0 id
+#expect_not_model "Part B: (Bool, and) is not a group" :
+  Group₂.mk (G := Bool) and true id
 
 #level_report

@@ -1,53 +1,41 @@
 /-
-# Your first structure
+# If … then …
 
-A **structure** bundles several values (and, as we will see, facts about them)
-into one new type.
+Often a statement only concerns *some* positions: "from index 5 on, the terms
+are at least 3". That is a statement of the form "**if** *this*, **then**
+*that*", written `p → q`.
 
-```lean
-structure Point where
-  x : Nat
-  y : Nat
-```
-
-* `structure Point where` starts the definition of a new type `Point`.
-* Each following indented line is a **field**: a name, a colon and a type.
-* `Point.mk 3 4` builds a point with `x = 3` and `y = 4`.
-
-## Fields that are statements
-
-The type of a field can also be a *statement*. Such a field is an **axiom**:
-whoever builds the structure must supply a reason why the statement is true.
+* Type `→` as `\to`, or write `->`.
+* `p → q` is true when `p` is false, or when `q` is true.
+* `→` binds weaker than `∧` and `∨`: `a → b ∧ c` means `a → (b ∧ c)`.
 
 ```lean
-structure Even' where
-  val : Nat
-  even : val % 2 = 0
+def BigAfter (u : Nat → Nat) : Prop := ∀ n, 3 ≤ n → 10 ≤ u n
 ```
 
-`Even'.mk 4 _` can be built (4 is even), but nobody can build `Even'.mk 3 _`.
+Read it as: "for every `n`, **if** `n` is at least 3 **then** `u n` is at
+least 10". It says nothing about `u 0`, `u 1` and `u 2`.
 
-The referee tests a structure with *models*: it feeds it data that **should**
-be accepted (✅ if all axioms are true) and junk data that **should** be
-rejected (✅ if some axiom fails).
+## A classic mistake
+
+What about `∀ n, 3 ≤ n ∧ 10 ≤ u n`? That says that *every* `n`, even `n = 0`,
+is at least 3, which is false for every sequence. When a statement is about
+"the `n` such that …", use `→`, not `∧`.
 
 ## Your task
 
-Define `Interval` with two numbers `lo` and `hi` and an axiom saying that
-`lo ≤ hi`. Then define `PosNat`, a number `val` that is positive.
-Keep the fields in the order they are listed.
+`BigAfter` is done. Define `LateBig u` (from index 5 on, every term is at
+least 3) and `EvenToEven u` (whenever `n` is even, `u n` is even).
 -/
-namespace L14
+namespace L11
 
--- two numbers `lo` and `hi`, in this order, with an axiom `lo ≤ hi`
-structure Interval where
-  lo : Nat
-  hi : Nat
-  -- your axiom here
+-- from index 3 on, the terms are at least 10 (already done)
+def BigAfter (u : Nat → Nat) : Prop := ∀ n, 3 ≤ n → 10 ≤ u n
 
--- a number `val` with an axiom saying that it is positive
-structure PosNat where
-  val : Nat
-  -- your axiom here
+-- from index 5 on, the terms are at least 3
+def LateBig (u : Nat → Nat) : Prop := sorry
 
-end L14
+-- if n is even then u n is even
+def EvenToEven (u : Nat → Nat) : Prop := sorry
+
+end L11
