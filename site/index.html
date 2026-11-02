@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lean Craft Game: a Lean game about definitions, not proofs</title>
+  <title>Learn Lean without sorries · Lean Craft Game</title>
   <meta name="description" content="Learn to write Lean definitions that mean what you intend. Download Lean Craft Game for Windows, macOS or Linux.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text x='4' y='25' font-size='24' font-family='serif'>∀</text></svg>">
   <style>
@@ -45,8 +45,10 @@
 
     /* hero */
     .hero { padding: 56px 0 24px; }
-    .logo { font: 700 15px var(--mono); letter-spacing: .04em; color: var(--muted); }
+    .logo { font: 700 20px var(--mono); letter-spacing: .04em; color: var(--muted); }
     .hero h1 { font-size: clamp(32px, 6vw, 52px); letter-spacing: -.02em; margin: 8px 0 14px; }
+    .hero h1 .squiggle { text-decoration: underline wavy #d62728; text-decoration-thickness: 3px; text-underline-offset: 8px; }
+    .hero h1 .sorry { color: #d62728; }
     .hero h1 .sym { font-family: var(--mono); color: var(--accent); }
     .lead { font-size: 19px; max-width: 40em; color: var(--fg); margin: 0 0 24px; }
 
@@ -90,7 +92,7 @@
 <main>
   <header class="hero">
     <div class="logo">LEAN CRAFT GAME</div>
-    <h1>Write <span class="sym">∀</span> definitions that mean what you intend</h1>
+    <h1>Learn <span class="squiggle">Lean</span> without <span class="sorry">sorries</span></h1>
     <p class="lead">
       A Lean game about <b>definitions, not proofs</b>. You write a definition; a hidden
       referee tries to prove or refute dozens of facts about it, and shows you what your
