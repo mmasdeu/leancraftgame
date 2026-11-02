@@ -154,7 +154,9 @@ know the answer.**
 
 Both versions count, anonymously, how often each level is run and cleared (GoatCounter; only the level
 number is sent, never code, no cookies). The Welcome page says so and has a checkbox to switch it off.
-The site code is in `web/static/config.js` (local) and `online/build.py` (online); remove it to disable
+Events are kept per mode (`/online/…`, `/windows/…`, `/mac/…`, `/linux/…`) and aggregated (`/all/level/<n>/…`,
+`/all/run`, `/all/cleared`); the landing page shows the last two (enable *public counters* in GoatCounter's
+settings for this). The site code is in `web/static/config.js` (local) and `online/build.py` (online); remove it to disable
 counting altogether.
 
 ## Online version

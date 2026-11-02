@@ -346,11 +346,16 @@ function loadCounter() {
   document.head.appendChild(s);
 }
 loadCounter();
+/* Where the game runs: "online", or the operating system of an installed app. */
+const MODE = ONLINE ? "online"
+  : /Win/i.test(navigator.userAgent) ? "windows" : /Mac/i.test(navigator.userAgent) ? "mac" : "linux";
 function track(event, id) {
   if (!countingOn()) return;
+  const count = (path) => window.goatcounter?.count({ path, title: path, event: true });
   try {
-    window.goatcounter?.count({ path: `${ONLINE ? "online" : "local"}/level/${id}/${event}`,
-      title: `Level ${id} ${event}`, event: true });
+    count(`/${MODE}/level/${id}/${event}`);   // per mode and level
+    count(`/all/level/${id}/${event}`);       // all modes, per level
+    count(`/all/${event}`);                   // everything: the totals on the landing page
   } catch { /* counting must never break the game */ }
 }
 let hosted = null;                     // online: { levels: every level with its tests, prelude }
