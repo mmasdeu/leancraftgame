@@ -1,11 +1,6 @@
--- n is even and at least 4 (already done)
-def BigEven (n : ℕ) : Prop := Even n ∧ 4 ≤ n
-
--- p and p + 2 are both prime          (TwinPrime 5 is true: 5 and 7)
-def TwinPrime (p : ℕ) : Prop := Nat.Prime p ∧ Nat.Prime (p + 2)
-
--- d divides both a and b              (CommonDivisor 3 6 9 is true)
-def CommonDivisor (d a b : ℕ) : Prop := d ∣ a ∧ d ∣ b
-
--- f never takes the same value twice (use Mathlib's name for this)
-def OneToOne (f : ℕ → ℕ) : Prop := Function.Injective f
+def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n, n > 0 → f n = 0
+def EventuallyZero (u : ℕ → ℕ) : Prop := ∀ N, ∃ n ≥ N, u n = 0
+def Unbounded (u : ℕ → ℕ) : Prop := ∃ M, ∀ n, M ≤ u n
+def noRoot : ℕ → ℕ := fun n => n + 1
+def notEventuallyZero : ℕ → ℕ := fun n => n % 2
+def bounded : ℕ → ℕ := fun _ => 7

@@ -1,49 +1,32 @@
 /-
-# Integers and casts
+# Challenge: calendars and triangles
 
-Natural numbers have no negatives, which is why `3 - 5` is `0` in `ℕ`. The
-**integers** `ℤ` (type `\Z`, or write `Int`) are …, -2, -1, 0, 1, 2, …, and
-their subtraction is the real one. (`ℕ` is another name for `Nat`; type `\N`.)
+Three definitions from everyday life, each with a trap or two. Combine what
+you know: `∧`, `∨`, `¬`, `=`, `≠`, `<`, `≤`, `%`, and parentheses wherever
+you are unsure (remember: `∧` binds tighter than `∨`).
 
-* `(3 : ℤ)` means "3, as an integer". This is a *type ascription*.
-* `(3 : ℤ) - 5` is `-2`.
+* **Leap years** (Gregorian calendar): a year is a leap year if it is
+  divisible by 4, *except* that years divisible by 100 are not, *except*
+  that years divisible by 400 are. So 2024 and 2000 are leap years; 1900
+  and 2023 are not.
+* **Triangles**: three lengths `a b c` (natural numbers) are the sides of a
+  triangle when each side is **strictly** shorter than the other two put
+  together. A "flat triangle" with sides 1, 2, 3 does not count. Do not use
+  subtraction.
+* **Exactly one even**: of the three numbers `a b c`, exactly one is even.
+  (Not "at least one", and not "all of them".)
 
-## Casts
-
-A natural number `n : ℕ` can be used where an integer is expected: write
-`(n : ℤ)`. Lean then inserts a **cast**, displayed `↑n`. *Where* the cast goes
-changes the result:
-
-```lean
-def good (a b : ℕ) : ℤ := (a : ℤ) - (b : ℤ)   -- good 3 5 = -2
-def bad  (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)   -- bad 3 5 = 0 : subtracted in ℕ, then cast
-```
-
-`(a - b : ℤ)` also works: Lean elaborates the whole expression as an integer
-and casts `a` and `b` first.
-
-## Dot notation and two more junk values
-
-* `x.natAbs` is the absolute value of an integer `x`, as a natural number.
-  It is short for `Int.natAbs x`: since `x` is an `Int`, Lean looks for
-  `natAbs` among the functions named `Int.something`.
-* `x.toNat` turns an integer into a natural number, but every negative number
-  becomes `0`. Like `3 - 5 = 0` in `ℕ`, this is a *junk value*: a function
-  must return something, so Lean returns 0.
-
-## Your task
-
-Define `diff`, `distance` and `IsNegative`.
+The tests are hidden: think about the edge cases before you run.
 -/
 namespace L10
 
--- a minus b, as an integer        (diff 3 5 is -2)
-def diff (a b : ℕ) : ℤ := sorry
+-- the Gregorian rule                (LeapYear 2024 is true, LeapYear 1900 is false)
+def LeapYear (y : Nat) : Prop := sorry
 
--- the distance between two integers, as a natural number   (distance 3 (-4) is 7)
-def distance (a b : ℤ) : ℕ := sorry
+-- a, b, c are the sides of a (non-flat) triangle      (IsTriangle 3 4 5 is true)
+def IsTriangle (a b c : Nat) : Prop := sorry
 
--- x is negative
-def IsNegative (x : ℤ) : Prop := sorry
+-- exactly one of a, b, c is even       (ExactlyOneEven 2 3 5 is true, ExactlyOneEven 2 4 5 is false)
+def ExactlyOneEven (a b c : Nat) : Prop := sorry
 
 end L10

@@ -1,65 +1,76 @@
 {
-  "world": "Faithfulness World",
-  "title": "The AI proved Goldbach!",
-  "skill": "auditing",
+  "world": "Library World",
+  "title": "Using Mathlib",
+  "skill": "writing",
   "predict": [
     {
-      "test": "World 3: the 'primes' are the numbers ≥ 2 (TRUE: n = 2 + (n-2))",
-      "statement": "GoldbachFor (fun p => 2 ≤ p): Goldbach, if the 'primes' were the numbers ≥ 2"
+      "test": "CommonDivisor 5 0 0 is true",
+      "statement": "CommonDivisor 5 0 0"
     },
     {
-      "test": "World 4: no number is 'prime' (Goldbach is FALSE)",
-      "statement": "GoldbachFor (fun _ => False): Goldbach, if no number were prime"
+      "test": "TwinPrime 2 is false",
+      "statement": "TwinPrime 2"
+    },
+    {
+      "test": "OneToOne (fun n => n / 2) is false",
+      "statement": "OneToOne (fun n => n / 2)"
     }
   ],
   "checks": [
     {
-      "lean": "example : (Nat → Prop) → Prop := L29.GoldbachFor",
-      "message": "Keep the name and the type: `L29.GoldbachFor : (Nat → Prop) → Prop`."
+      "lean": "example : ℕ → Prop := L29.TwinPrime",
+      "message": "Keep `TwinPrime : ℕ → Prop`."
+    },
+    {
+      "lean": "example : ℕ → ℕ → ℕ → Prop := L29.CommonDivisor",
+      "message": "Keep `CommonDivisor : ℕ → ℕ → ℕ → Prop`."
+    },
+    {
+      "lean": "example : (ℕ → ℕ) → Prop := L29.OneToOne",
+      "message": "Keep `OneToOne : (ℕ → ℕ) → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "World 1",
-      "hint": "If every number is 'prime', every even n > 2 is trivially a sum of two of them. Check how you combined the hypotheses: `2 < n ∧ n % 2 = 0 ∧ …` claims that every n is even, instead of assuming it.",
-      "steps": [
-        "If every number is 'prime', what should Goldbach's conjecture say? Is your statement true for the right reason?"
-      ]
+      "match": "TwinPrime 7",
+      "hint": "7 is prime but 9 is not: both must be prime, so use `∧`."
     },
     {
-      "match": "World 2",
-      "hint": "Here the 'primes' are the odd numbers. Every even n > 2 is 1 + (n − 1), but an odd n is never a sum of two odd numbers. Did you forget to assume that n is even?",
-      "steps": [
-        "The 'primes' are the odd numbers here. Is every even n > 2 a sum of two of them? And what about an odd n?"
-      ]
+      "match": "TwinPrime 2",
+      "hint": "2 is prime but 4 is not: both must be prime, so use `∧`."
     },
     {
-      "match": "World 3",
-      "hint": "Here the 'primes' are the numbers ≥ 2. Every n > 2 that is even is 2 + (n − 2), but 2 is not a sum of two such numbers. Check `2 < n` against `2 ≤ n`.",
+      "match": "TwinPrime",
       "steps": [
-        "Here every n ≥ 2 is 'prime'. Which n > 2 would your statement have to cover? Try n = 2 and n = 3."
-      ]
+        "*Both* numbers must be prime."
+      ],
+      "hint": "`Nat.Prime p ∧ Nat.Prime (p + 2)`, or `p.Prime ∧ (p + 2).Prime`."
     },
     {
-      "match": "World 4",
-      "hint": "If nothing is 'prime', Goldbach must be false. If your statement still holds, the `∃ p q` is satisfied for a silly reason: check the precedence of `∧` and `→`.",
-      "steps": [
-        "If nothing is 'prime', can any number be a sum of two primes? So what should Goldbach say in this world?"
-      ]
+      "match": "CommonDivisor 3 6 9",
+      "hint": "`d ∣ a` reads \"d divides a\". Check the order: `d ∣ a ∧ d ∣ b`."
     },
     {
-      "match": "World 5",
-      "hint": "If 2 is the only 'prime', 6 is not a sum of two of them, so Goldbach must be false. If your statement still holds, check the precedence of `∧` and `→`.",
+      "match": "CommonDivisor",
       "steps": [
-        "Only 2 is 'prime'. Which even numbers are a sum of two 2s, and which are not?"
-      ]
+        "`d ∣ a` reads \"d divides a\"."
+      ],
+      "hint": "`d ∣ a ∧ d ∣ b`, with the divides symbol `\\|`."
     },
     {
-      "match": "real world",
-      "hint": "A simple search settled your statement of an open problem. It is probably vacuous, or false for a silly reason. Compare with the toy worlds above.",
+      "match": "OneToOne (fun n => 2 * n)",
+      "hint": "Doubling never sends two numbers to the same place. Are you using `Function.Injective`? (`Surjective` means something else.)"
+    },
+    {
+      "match": "OneToOne",
       "steps": [
-        "Compare how your statement behaves in the toy worlds above. Which of them did it get wrong?"
-      ]
+        "Which Mathlib name means \"no two inputs give the same output\"?"
+      ],
+      "hint": "`Function.Injective f`."
+    },
+    {
+      "match": "",
+      "hint": "Look up the name of the notion in the lesson text."
     }
   ]
 }

@@ -1,53 +1,27 @@
 /-
-# Generality
+# Going to infinity
 
-"Between", "upper bound" and "the larger of two numbers" make sense for ℕ, ℤ,
-ℚ, ℝ and many other types. Mathlib states such definitions **once**, for every
-suitable type:
+You now have all the words of logic: `∀`, `∃`, `→`, `∧`, and shorthands such as
+`∀ n ≥ N`. The Predicate world uses them for what mathematicians do all day:
+turning an idea they have in their head into a definition that says exactly that.
 
-```lean
-def AlwaysBelow {α : Type*} [Preorder α] (u : ℕ → α) (B : α) : Prop :=
-  ∀ n, u n ≤ B
-```
+A sequence of natural numbers is a function `u : ℕ → ℕ`: `u n` is its term
+number `n`. Write down what it means for `u` to **tend to infinity**.
 
-* `{α : Type*}` says "for any type `α`". The curly braces make it **implicit**:
-  nobody writes `α` when using `AlwaysBelow`, Lean works it out from `u` and
-  `B`. (`α` is typed `\a`; `Type*` is Mathlib's way to say "some type".)
-* `[Preorder α]` is an **instance argument**: it asks that `α` comes with a
-  `≤` that behaves like an order. Lean finds it automatically for ℕ, ℤ, ℚ, ℝ.
-  If you forget it, Lean says *failed to synthesize LE α*: it does not know what
-  `≤` means on an arbitrary type.
-
-## Choosing the class
-
-* `[Preorder α]` gives `≤` and `<`.
-* `[LinearOrder α]` also says that any two elements are comparable, so that
-  `if a ≤ b then … else …` can be **computed**. With only `Preorder`, Lean
-  reports *failed to synthesize Decidable (a ≤ b)*.
-
-Ask for as little as you need: the weaker the class, the more types your
-definition applies to.
-
-## Your task
-
-The three definitions at the bottom only work for `ℕ`. Make each of them work
-for every type with an order. The tests use them on ℕ, ℤ and ℚ.
+* Start from words, not symbols: "however large a bound `M` you choose, …".
+  Then translate, and keep the quantifiers in the order the sentence has them.
+  You saw in "Quantifiers in order" that the order changes the meaning.
+* Only the meaning matters: the referee does not care how you write it, but it
+  tests your definition on sequences that should tend to infinity, on sequences
+  that should not, and on facts that anybody who *uses* the notion would need.
+* Before your first run you will be asked to predict a few verdicts. Take your
+  time with them: they are where the traps of the level are.
 -/
+import Mathlib.Tactic
+
 namespace L23
 
--- every term of u is at most B, for any type with ≤ (already done)
-def AlwaysBelow {α : Type*} [Preorder α] (u : ℕ → α) (B : α) : Prop := ∀ n, u n ≤ B
-
--- Make the three definitions below work for every type with an order
--- (ℕ, ℤ, ℚ, ℝ, …), not just for ℕ.
-
--- a ≤ x ≤ b
-def Between (a b x : ℕ) : Prop := a ≤ x ∧ x ≤ b
-
--- B is at least every element of s
-def IsUpperBound (s : Set ℕ) (B : ℕ) : Prop := ∀ x ∈ s, x ≤ B
-
--- the larger of a and b
-def largest (a b : ℕ) : ℕ := if a ≤ b then b else a
+def TendsToInfinity (u : Nat → Nat) : Prop :=
+  sorry
 
 end L23

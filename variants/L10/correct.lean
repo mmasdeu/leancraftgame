@@ -1,8 +1,8 @@
--- a minus b, as an integer        (diff 3 5 is -2)
-def diff (a b : ℕ) : ℤ := (a : ℤ) - (b : ℤ)
+def LeapYear (y : Nat) : Prop := (y % 4 = 0 ∧ y % 100 ≠ 0) ∨ y % 400 = 0
 
--- the distance between two integers, as a natural number   (distance 3 (-4) is 7)
-def distance (a b : ℤ) : ℕ := (a - b).natAbs
+def IsTriangle (a b c : Nat) : Prop := a < b + c ∧ b < a + c ∧ c < a + b
 
--- x is negative
-def IsNegative (x : ℤ) : Prop := x < 0
+def ExactlyOneEven (a b c : Nat) : Prop :=
+  (a % 2 = 0 ∧ b % 2 ≠ 0 ∧ c % 2 ≠ 0) ∨
+  (a % 2 ≠ 0 ∧ b % 2 = 0 ∧ c % 2 ≠ 0) ∨
+  (a % 2 ≠ 0 ∧ b % 2 ≠ 0 ∧ c % 2 = 0)

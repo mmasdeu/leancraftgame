@@ -1,51 +1,50 @@
 /-
-# Spot the bug: limits
+# Sequences that come back
 
-Two colleagues each wrote down the limit of a real sequence, from memory.
-Both got it wrong, in opposite directions.
+Sequences of natural numbers `u : ℕ → ℕ`, and the difference between two
+small words: **eventually** and **infinitely often**.
 
-```lean
--- Alice: u converges to a
-def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
-
--- Bob: u converges to a
-def ConvergesB (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ n, |u n - a| < ε
-```
-
-One of them is **too strong**: it rejects sequences that do converge. The other
-is **too weak**: it accepts sequences that do not. Your first job is to work
-out which is which. Compare each with the definition you wrote in "Limits":
+* `EventuallyEqual u a`: from some index on, every term is `a`.
+  The shape is `∃ N, ∀ n ≥ N, …`.
+* `InfinitelyOften u a`: the value `a` appears again and again: however far
+  you walk, you meet it later. The shape is `∀ N, ∃ n ≥ N, …`.
+* `OnlyFinitelyOften u a`: the value `a` stops appearing at some point
+  (write it *without* a negation in front of a quantifier, by pushing the
+  `¬` inside).
+* `Recurrent u`: the sequence comes back to its **starting value** `u 0`
+  infinitely often.
 
 ```lean
-def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - a| < ε
+def Positive (u : ℕ → ℕ) : Prop := ∀ n, 0 < u n
+def EventuallyPositive (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 0 < u n
 ```
 
-Then find a counterexample for each: a sequence and a limit on which the
-colleague's definition and the right one disagree.
+`∀ n ≥ N, P n` is short for `∀ n, n ≥ N → P n`, and `∃ n ≥ N, P n` for
+`∃ n, n ≥ N ∧ P n`. Type `≥` as `\ge`.
 
-Keep your sequences simple, so that the referee can check them: constants,
-`if … then … else …`, and `n % 2` are all fine. Real numbers are written as
-usual: `0`, `1`, `(1 / 2 : ℝ)`.
+The referee will try your definitions on sequences such as `fun n => n % 2`
+(0, 1, 0, 1, …), `fun n => if n < 5 then 7 else 0` (7, 7, 7, 7, 7, 0, 0, …)
+and `fun n => if n % 2 = 0 then 0 else n` (0, 1, 0, 3, 0, 5, …).
+Press **Run tests** to see the report.
 
-## Your task
-
-* `seqA`, `limA`: a sequence that converges to `limA`, but that `ConvergesA`
-  rejects.
-* `seqB`, `limB`: a sequence that does not converge to `limB`, but that
-  `ConvergesB` accepts.
+Hint: a value met *once*, a value met *infinitely often* and a value the
+sequence *ends up equal to* are three different things. Which of the
+sequences above shows each of them?
 -/
+import Mathlib.Tactic
+
 namespace L26
 
--- The colleagues' code, to read (the referee uses its own copy).
-def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
-def ConvergesB (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ n, |u n - a| < ε
+def EventuallyEqual (u : ℕ → ℕ) (a : ℕ) : Prop :=
+  sorry
 
--- converges to limA, but ConvergesA rejects it
-def seqA : ℕ → ℝ := sorry
-def limA : ℝ := sorry
+def InfinitelyOften (u : ℕ → ℕ) (a : ℕ) : Prop :=
+  sorry
 
--- does not converge to limB, but ConvergesB accepts it
-def seqB : ℕ → ℝ := sorry
-def limB : ℝ := sorry
+def OnlyFinitelyOften (u : ℕ → ℕ) (a : ℕ) : Prop :=
+  sorry
+
+def Recurrent (u : ℕ → ℕ) : Prop :=
+  sorry
 
 end L26

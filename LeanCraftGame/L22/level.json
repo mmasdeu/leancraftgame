@@ -1,76 +1,56 @@
 {
-  "world": "Library World",
-  "title": "Using Mathlib",
-  "skill": "writing",
-  "predict": [
-    {
-      "test": "CommonDivisor 5 0 0 is true",
-      "statement": "CommonDivisor 5 0 0"
-    },
-    {
-      "test": "TwinPrime 2 is false",
-      "statement": "TwinPrime 2"
-    },
-    {
-      "test": "OneToOne (fun n => n / 2) is false",
-      "statement": "OneToOne (fun n => n / 2)"
-    }
-  ],
+  "world": "Quantifiers World",
+  "title": "Spot the bug: quantifiers",
+  "skill": "reading",
+  "public": "all",
   "checks": [
     {
-      "lean": "example : ℕ → Prop := L22.TwinPrime",
-      "message": "Keep `TwinPrime : ℕ → Prop`."
-    },
-    {
-      "lean": "example : ℕ → ℕ → ℕ → Prop := L22.CommonDivisor",
-      "message": "Keep `CommonDivisor : ℕ → ℕ → ℕ → Prop`."
-    },
-    {
-      "lean": "example : (ℕ → ℕ) → Prop := L22.OneToOne",
-      "message": "Keep `OneToOne : (ℕ → ℕ) → Prop`."
+      "lean": "example : ℕ → ℕ := L22.noRoot\nexample : ℕ → ℕ := L22.notEventuallyZero\nexample : ℕ → ℕ := L22.bounded",
+      "message": "Keep `noRoot`, `notEventuallyZero` and `bounded` as sequences `ℕ → ℕ`, written with `fun`."
     }
   ],
   "hints": [
     {
-      "match": "TwinPrime 7",
-      "hint": "7 is prime but 9 is not: both must be prime, so use `∧`."
-    },
-    {
-      "match": "TwinPrime 2",
-      "hint": "2 is prime but 4 is not: both must be prime, so use `∧`."
-    },
-    {
-      "match": "TwinPrime",
+      "match": "HasPositiveRoot accepts",
       "steps": [
-        "*Both* numbers must be prime."
+        "An implication `p → q` is true whenever `p` is false. Is there an `n` for which `n > 0` is false?"
       ],
-      "hint": "`Nat.Prime p ∧ Nat.Prime (p + 2)`, or `p.Prime ∧ (p + 2).Prime`."
+      "hint": "Take `n = 0`: `0 > 0` is false, so the implication holds whatever `f` is. `HasPositiveRoot` accepts *every* function."
     },
     {
-      "match": "CommonDivisor 3 6 9",
-      "hint": "`d ∣ a` reads \"d divides a\". Check the order: `d ∣ a ∧ d ∣ b`."
-    },
-    {
-      "match": "CommonDivisor",
+      "match": "root other than 0",
       "steps": [
-        "`d ∣ a` reads \"d divides a\"."
+        "The colleague's definition accepts everything, so you only need a function with no root other than 0. Does yours have one?"
       ],
-      "hint": "`d ∣ a ∧ d ∣ b`, with the divides symbol `\\|`."
+      "hint": "`fun n => n + 1` is never 0."
     },
     {
-      "match": "OneToOne (fun n => 2 * n)",
-      "hint": "Doubling never sends two numbers to the same place. Are you using `Function.Injective`? (`Surjective` means something else.)"
-    },
-    {
-      "match": "OneToOne",
+      "match": "EventuallyZero accepts",
       "steps": [
-        "Which Mathlib name means \"no two inputs give the same output\"?"
+        "The colleague's definition asks for a 0 after *every* index. Does your sequence keep coming back to 0?"
       ],
-      "hint": "`Function.Injective f`."
+      "hint": "`fun n => n % 2` is 0 at every even index."
     },
     {
-      "match": "",
-      "hint": "Look up the name of the notion in the lesson text."
+      "match": "eventually 0",
+      "steps": [
+        "Your sequence is 0 from some index on, so it does not show the bug. You need one that returns to 0 again and again, and also leaves it again and again."
+      ],
+      "hint": "`fun n => n % 2`: 0, 1, 0, 1, …."
+    },
+    {
+      "match": "Unbounded accepts",
+      "steps": [
+        "`∃ M, ∀ n, M ≤ u n` says that the sequence is bounded *below*. Which `M` makes `M ≤ u n` true for every sequence of natural numbers?"
+      ],
+      "hint": "`M = 0` works for every sequence, so the colleague's `Unbounded` accepts everything."
+    },
+    {
+      "match": "is bounded",
+      "steps": [
+        "Your sequence really is unbounded. Pick one that stays below some bound."
+      ],
+      "hint": "`fun _ => 7`."
     }
   ]
 }

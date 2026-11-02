@@ -1,27 +1,29 @@
 /-
-# Going to infinity
+# Quantifiers in order
 
-You now have all the words of logic: `∀`, `∃`, `→`, `∧`, and shorthands such as
-`∀ n ≥ N`. The Predicate world uses them for what mathematicians do all day:
-turning an idea they have in their head into a definition that says exactly that.
+Quantifiers are read from left to right, and **the order matters**.
 
-A sequence of natural numbers is a function `u : ℕ → ℕ`: `u n` is its term
-number `n`. Write down what it means for `u` to **tend to infinity**.
+* `∀ m, ∃ n, f n = m`: for every `m` there is an `n` with `f n = m`.
+  The `n` may depend on `m`.
+* `∃ n, ∀ m, f n = m`: there is **one** `n` that works for every `m`.
+  This is much stronger. For `f n = n` the first is true and the second false.
 
-* Start from words, not symbols: "however large a bound `M` you choose, …".
-  Then translate, and keep the quantifiers in the order the sentence has them.
-  You saw in "Quantifiers in order" that the order changes the meaning.
-* Only the meaning matters: the referee does not care how you write it, but it
-  tests your definition on sequences that should tend to infinity, on sequences
-  that should not, and on facts that anybody who *uses* the notion would need.
-* Before your first run you will be asked to predict a few verdicts. Take your
-  time with them: they are where the traps of the level are.
+```lean
+def EveryValueIsHit (f : Nat → Nat) : Prop := ∀ m, ∃ n, f n = m
+```
+
+## Your task
+
+Define `HitsEverything f` (every natural number is the value of `f` at some
+position) and `Unbounded u` (however large `M` is, some term of `u` is at least
+`M`). These two are exactly the kind of definitions the next level builds on.
 -/
-import Mathlib.Tactic
-
 namespace L19
 
-def TendsToInfinity (u : Nat → Nat) : Prop :=
-  sorry
+-- every natural number is a value of f
+def HitsEverything (f : Nat → Nat) : Prop := sorry
+
+-- the sequence gets above every bound M at least once
+def Unbounded (u : Nat → Nat) : Prop := sorry
 
 end L19

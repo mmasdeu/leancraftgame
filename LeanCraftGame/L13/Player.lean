@@ -1,44 +1,51 @@
 /-
-# For all
+# Division by zero
 
-A *sequence* of natural numbers is a function `u : Nat → Nat`: for every
-position `n`, it gives a value `u n`. Think of the list `u 0, u 1, u 2, …`
+The rationals `ℚ` (type `\Q`) are the fractions: `(1 / 2 : ℚ)` is one half.
 
-* `Nat → Nat` is the type of functions from `Nat` to `Nat`.
-  Type the arrow `→` as `\to`, or write `->`.
-* `fun n => n + 1` is a function written without a name: the input `n`
-  goes to `n + 1`. The referee uses such functions to test your definitions:
-  `(fun n => n % 3) 7` is `1`.
-
-## The quantifier `∀`
-
-`∀ n, P n` means "for **every** natural number `n`, the statement `P n` holds".
-Type `∀` as `\forall`, or write `forall`.
+In Lean every function is defined on **all** its inputs, so `x / 0` has to be
+*something*. Mathlib chooses `0`:
 
 ```lean
-def AllBig (u : Nat → Nat) : Prop := ∀ n, 10 ≤ u n
+example : (1 : ℚ) / 0 = 0 := by simp     -- a theorem!
 ```
 
-This says that *every* term of the sequence `u` is at least 10. The `n` after
-`∀` is a name you choose for the position. The comma separates the quantifier
-from the statement.
+You have already met such *junk values*: `(3 : ℕ) - 5 = 0`, `(7 : ℕ) / 0 = 0`,
+`(-3 : ℤ).toNat = 0`. Mathlib has more: `Real.sqrt (-1) = 0`, `(0 : ℚ)⁻¹ = 0`.
+They are convenient for writing proofs, but a definition that divides can be
+**silently wrong** at zero.
 
-Typing `∀` and friends: click **Symbols** at the top right of the page. It lists every symbol with the keys to type it, and has typing practice.
+## The cure
+
+State definitions without dividing, or add the hypothesis you need:
+
+```lean
+-- "y is half of x"
+def IsHalf (x y : ℚ) : Prop := 2 * y = x       -- multiply instead of dividing
+```
+
+Dividing by a number that cannot be zero, like `2`, is perfectly fine.
+
+Remember the binding strengths: `a + b / 2` is `a + (b / 2)`.
 
 ## Your task
 
-`AllBig` is done. Define `AlwaysBelow u B` (every term is at most `B`) and
-`AllEven u` (every term is even).
+`IsHalf` is done. Define `average`, `IsReciprocal` and `HasSlope`. The tests
+include the cases where a division by zero would hide.
 -/
 namespace L13
 
--- every term is at least 10 (already done)
-def AllBig (u : Nat → Nat) : Prop := ∀ n, 10 ≤ u n
+-- y is half of x (already done; note: no division)
+def IsHalf (x y : ℚ) : Prop := 2 * y = x
 
--- every term is at most B
-def AlwaysBelow (u : Nat → Nat) (B : Nat) : Prop := sorry
+-- the average of a and b                (average 1 2 is 3/2)
+def average (a b : ℚ) : ℚ := sorry
 
--- every term is even
-def AllEven (u : Nat → Nat) : Prop := sorry
+-- y is the reciprocal of x: x times y is 1.  (0 has no reciprocal!)
+def IsReciprocal (x y : ℚ) : Prop := sorry
+
+-- the line through the points (x₁, y₁) and (x₂, y₂) has slope m.
+-- A vertical line (x₁ = x₂) has no slope at all.
+def HasSlope (x₁ y₁ x₂ y₂ m : ℚ) : Prop := sorry
 
 end L13

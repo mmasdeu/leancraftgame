@@ -1,50 +1,53 @@
 /-
-# The AI proved Goldbach!
+# Using Mathlib
 
-The last world asks the hardest question about formalisation: does the formal
-statement **say what it claims to say**? Lean checks that a proof proves the
-statement it is attached to, nothing more. If the statement is wrong, a flawless
-proof is worth nothing. The levels before this one showed you how such flaws
-look: junk values, a missing hypothesis, a notion that is too permissive.
+Mathlib, Lean's mathematical library, already defines thousands of notions.
+Real definitions are built from them rather than from scratch:
 
-An AI assistant was asked to formalise and prove Goldbach's conjecture:
+* `Even n`, `Odd n`;
+* `Nat.Prime p`: `p` is a prime number;
+* `a ∣ b`: `a` divides `b`. The bar is **not** the keyboard `|`: type `\|` or
+  `\mid`. (The keyboard `|` is for absolute values and set-builder notation.)
+  Read it left to right: `3 ∣ 12` is true.
+* `Function.Injective f`: `f a = f b` only when `a = b`;
+  `Function.Surjective f`: every value is reached;
+* `Monotone u`, `StrictMono u`.
 
-  "Every even integer greater than 2 is the sum of two primes."
+## Names and namespaces
 
-It came back with the statement and proof below. Both compile, and
-there is no `sorry`.
--/
-import Mathlib.Tactic
+Names are grouped in *namespaces*: `Nat.Prime` is about natural numbers,
+`Function.Injective` about functions. **Dot notation** saves typing: if
+`p : ℕ`, then `p.Prime` means `Nat.Prime p`; if `f` is a function,
+`f.Injective` means `Function.Injective f`.
 
-namespace L29
+Beware of near-misses. `Prime p` (without `Nat.`) is a different, more general
+notion, about prime elements of any ring. For natural numbers it happens to
+agree with `Nat.Prime`, but the automation treats it differently.
 
-def IsPrime (p : Nat) : Prop := 2 ≤ p ∧ ∀ d, d ∣ p → d = 1 ∨ d = p
+Mathlib's definitions may be stated differently from yours: `Even n` is
+`∃ r, n = r + r`, not `n % 2 = 0`. They mean the same thing.
 
-theorem ai_goldbach :
-    ∀ n, 2 < n → n % 2 = 0 → ∃ p q, IsPrime p ∧ IsPrime q → p + q = n :=
-  fun _ _ _ => ⟨0, 0, fun h => absurd h.1.1 (by decide)⟩
-
-/-
-Something is off: an open problem should not have a one-line proof.
+```lean
+def BigEven (n : ℕ) : Prop := Even n ∧ 4 ≤ n
+```
 
 ## Your task
 
-Write the faithful statement, but **parametrised by the notion of
-"prime"**: `GoldbachFor P` should say "every even integer > 2 is the sum
-of two numbers satisfying `P`". Then `GoldbachFor IsPrime` is the real
-conjecture.
-
-Why parametrise? You can't test a statement nobody can prove. You *can*
-test it in toy worlds where you know the answer: what if every number
-were "prime"? What if none were? A faithful statement has to give the
-right answer in every one of these worlds. The referee checks several
-such worlds, including the real one.
-
-Start by reading the AI's statement the way Lean does: which parts do `∃`,
-`∧` and `→` group together?
+`BigEven` is done. Define `TwinPrime`, `CommonDivisor` and `OneToOne` using
+Mathlib's notions.
 -/
+namespace L29
 
-def GoldbachFor (P : Nat → Prop) : Prop :=
-  sorry
+-- n is even and at least 4 (already done)
+def BigEven (n : ℕ) : Prop := Even n ∧ 4 ≤ n
+
+-- p and p + 2 are both prime          (TwinPrime 5 is true: 5 and 7)
+def TwinPrime (p : ℕ) : Prop := sorry
+
+-- d divides both a and b              (CommonDivisor 3 6 9 is true)
+def CommonDivisor (d a b : ℕ) : Prop := sorry
+
+-- f never takes the same value twice (use Mathlib's name for this)
+def OneToOne (f : ℕ → ℕ) : Prop := sorry
 
 end L29

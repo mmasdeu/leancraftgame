@@ -1,8 +1,7 @@
--- the even numbers (already done)
-def evens : Set ℕ := {n | n % 2 = 0}
+def Periodic (u : ℕ → ℕ) : Prop := ∃ p > 0, ∀ n, u (n + p) = u n
 
--- the multiples of k: 0, k, 2k, 3k, …     (12 ∈ multiplesOf 3, but not 13)
-def multiplesOf (k : ℕ) : Set ℕ := {n | n % k = 0}
+def EventuallyConstant (u : ℕ → ℕ) : Prop := ∃ N c, ∀ n ≥ N, u n = c
 
--- some number B is at least as big as every element of s
-def BoundedSet (s : Set ℕ) : Prop := ∃ B, ∀ n ∈ s, n ≤ B
+def HasMaximum (u : ℕ → ℕ) : Prop := ∃ m, ∀ n, u n ≤ u m
+
+def EventuallyPeriodic (u : ℕ → ℕ) : Prop := ∃ p > 0, ∃ N, ∀ n ≥ N, u (n + p) = u n

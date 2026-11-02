@@ -1,0 +1,100 @@
+{
+  "world": "Analysis World",
+  "title": "Cluster values",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "7 is not a cluster value of 7, 7, 7, 7, 7, 0, 0, 0, …",
+      "statement": "ClusterValue (fun n => if n < 5 then 7 else 0) 7"
+    },
+    {
+      "test": "0 is a cluster value of 0, 1, 0, 1, …",
+      "statement": "ClusterValue (fun n => if n % 2 = 0 then 0 else 1) 0"
+    },
+    {
+      "test": "φ n = 0 is not a subsequence: it is not strictly increasing",
+      "statement": "IsSubseqLimit (fun n => if n % 2 = 0 then 0 else 1) (fun _ => 0) 0"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : (ℕ → ℝ) → ℝ → Prop := L42.ClusterValue",
+      "message": "Keep `ClusterValue : (ℕ → ℝ) → ℝ → Prop`."
+    },
+    {
+      "lean": "example : (ℕ → ℝ) → (ℕ → ℕ) → ℝ → Prop := L42.IsSubseqLimit",
+      "message": "Keep `IsSubseqLimit : (ℕ → ℝ) → (ℕ → ℕ) → ℝ → Prop` (arguments `u φ a`)."
+    }
+  ],
+  "hints": [
+    {
+      "match": "3 is a cluster value",
+      "hint": "Did you forget `ε > 0`? With `ε = 0` nothing is within distance 0 of `a`."
+    },
+    {
+      "match": "4 is not a cluster value",
+      "hint": "A cluster value must be approached: `|u n - a| < ε` for some `n ≥ N`, for every `ε > 0` and every `N`."
+    },
+    {
+      "match": "0 is a cluster value",
+      "steps": [
+        "Your definition rejects `0, 1, 0, 1, …`, which comes back to 0 forever. Is it the definition of a *limit*?"
+      ],
+      "hint": "Only *some* late terms have to be close, not all of them: `∀ ε > 0, ∀ N, ∃ n ≥ N, |u n - a| < ε`."
+    },
+    {
+      "match": "1 is a cluster value",
+      "hint": "Only *some* late terms have to be close, not all of them: `∀ ε > 0, ∀ N, ∃ n ≥ N, |u n - a| < ε`."
+    },
+    {
+      "match": "2 is not a cluster value",
+      "hint": "A cluster value must be approached: `|u n - a| < ε` for some `n ≥ N`, for every `ε > 0` and every `N`."
+    },
+    {
+      "match": "7 is not a cluster value",
+      "steps": [
+        "In `7, 7, 7, 7, 7, 0, 0, 0, …` after index 5 every term is 0. Is there a term beyond index 5 that is close to 7?"
+      ],
+      "hint": "The index must be beyond `N` and `N` is chosen first: `∀ ε > 0, ∀ N, ∃ n ≥ N, |u n - a| < ε`. If `n` is not bounded below by `N` (or if you pick `N` yourself with `∃ N`), the early terms count."
+    },
+    {
+      "match": "no cluster value",
+      "hint": "Beyond `N = 1` every term of `0, 1, 2, 3, …` is at distance at least 1 from 0. Is your `N` universally quantified, with `n ≥ N`?"
+    },
+    {
+      "match": "even terms of 0, 1, 0, 1, … converge",
+      "hint": "Check what converges: the sequence `fun n => u (φ n)`, not `u`. And `φ n = 2 * n` is strictly increasing."
+    },
+    {
+      "match": "odd terms",
+      "hint": "Check what converges: the sequence `fun n => u (φ n)`, not `u`. And `φ n = 2 * n + 1` is strictly increasing."
+    },
+    {
+      "match": "do not converge to 1",
+      "hint": "The subsequence `u (φ n)` is what must converge to `a`: here it is `0, 0, 0, …`. Do you compare `u n`, or `u (φ n)`, with `a`?"
+    },
+    {
+      "match": "φ n = 0",
+      "steps": [
+        "The sequence `u (φ n)` with `φ n = 0` is `u 0, u 0, u 0, …`, which converges to `0`. Should it count as a subsequence?"
+      ],
+      "hint": "Add the condition that `φ` is strictly increasing: `∀ m n, m < n → φ m < φ n`."
+    },
+    {
+      "match": "φ n = n / 2",
+      "hint": "`φ` must be *strictly* increasing: `m < n → φ m < φ n`, not `φ m ≤ φ n`."
+    },
+    {
+      "match": "from index 1 on",
+      "hint": "Remember that `φ` selects the indices: the subsequence is `fun n => u (φ n)`, here `u 1, u 2, u 3, …`."
+    },
+    {
+      "match": "",
+      "steps": [
+        "Read your definitions aloud, and compare them with the sentences in the lesson, clause by clause.",
+        "Check the mistakes listed under \"What can go wrong\" in the lesson."
+      ],
+      "hint": "`ClusterValue u a := ∀ ε > 0, ∀ N, ∃ n ≥ N, |u n - a| < ε`, and `IsSubseqLimit u φ a := (∀ m n, m < n → φ m < φ n) ∧ ConvergesTo (fun n => u (φ n)) a`."
+    }
+  ]
+}

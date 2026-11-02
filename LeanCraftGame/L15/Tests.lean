@@ -1,32 +1,28 @@
-/- Hidden test battery for Level There exists. -/
+/- Hidden test battery for Level Spot the bug: numbers. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L15.Player
 
-open L15
+namespace L15Ref
+def diff (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)
+def IsReciprocal (x y : ℚ) : Prop := y = 1 / x
+def average (a b : ℚ) : ℚ := a + b / 2
+end L15Ref
 
-#no_sorry HasZero
-#no_sorry HasEvenBig
-#level_start "There exists"
+#no_sorry L15.diffA
+#no_sorry L15.diffB
+#no_sorry L15.recX
+#no_sorry L15.recY
+#no_sorry L15.avgA
+#no_sorry L15.avgB
+#level_start "Spot the bug: numbers"
 
--- the worked example
-#expect_true "HasBig (fun n => n) is true" unfolding HasBig :
-  HasBig (fun n => n)
-#expect_false "HasBig (fun n => n % 5) is false" unfolding HasBig :
-  HasBig (fun n => n % 5)
--- your predicates
-#expect_true "HasZero (fun n => n) is true" unfolding HasZero :
-  HasZero (fun n => n)
-#expect_true "HasZero (fun n => n % 3) is true" unfolding HasZero :
-  HasZero (fun n => n % 3)
-#expect_false "HasZero (fun n => n + 1) is false" unfolding HasZero :
-  HasZero (fun n => n + 1)
-#expect_true "HasEvenBig (fun n => n) is true" unfolding HasEvenBig :
-  HasEvenBig (fun n => n)
-#expect_false "HasEvenBig (fun n => 2 * n + 1) is false" unfolding HasEvenBig :
-  HasEvenBig (fun n => 2 * n + 1)
-#expect_false "HasEvenBig (fun n => n % 5) is false" unfolding HasEvenBig :
-  HasEvenBig (fun n => n % 5)
-#expect_false "HasEvenBig (fun n => if n = 0 then 4 else 11) is false (4 is even, 11 is big, but no term is both)" unfolding HasEvenBig :
-  HasEvenBig (fun n => if n = 0 then 4 else 11)
+#expect_true "diff gets your two numbers wrong" unfolding L15Ref.diff L15.diffA L15.diffB :
+  L15Ref.diff L15.diffA L15.diffB ≠ (L15.diffA : ℤ) - (L15.diffB : ℤ)
+#expect_true "IsReciprocal accepts your two numbers" unfolding L15Ref.IsReciprocal L15.recX L15.recY :
+  L15Ref.IsReciprocal L15.recX L15.recY
+#expect_true "your two numbers do not multiply to 1" unfolding L15.recX L15.recY :
+  ¬ (L15.recX * L15.recY = 1)
+#expect_true "average gets your two numbers wrong" unfolding L15Ref.average L15.avgA L15.avgB :
+  L15Ref.average L15.avgA L15.avgB ≠ (L15.avgA + L15.avgB) / 2
 
 #level_report

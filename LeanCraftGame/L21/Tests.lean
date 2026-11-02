@@ -1,34 +1,49 @@
-/- Hidden test battery for Level Sets. -/
+/- Hidden test battery for Level Challenge: patterns in sequences. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L21.Player
 
 open L21
 
-#no_sorry multiplesOf
-#no_sorry BoundedSet
-#level_start "Sets"
+#no_sorry Periodic
+#no_sorry EventuallyConstant
+#no_sorry HasMaximum
+#no_sorry EventuallyPeriodic
+#level_start "Challenge: patterns in sequences"
 
--- the worked example
-#expect_true "4 ∈ evens is true" unfolding evens :
-  4 ∈ evens
-#expect_false "3 ∈ evens is false" unfolding evens :
-  3 ∈ evens
--- your definitions
-#expect_true "12 ∈ multiplesOf 3 is true" unfolding multiplesOf :
-  12 ∈ multiplesOf 3
-#expect_false "13 ∈ multiplesOf 3 is false" unfolding multiplesOf :
-  13 ∈ multiplesOf 3
-#expect_true "0 ∈ multiplesOf 5 is true" unfolding multiplesOf :
-  0 ∈ multiplesOf 5
-#expect_true "multiplesOf 4 ⊆ evens is true" unfolding multiplesOf evens :
-  multiplesOf 4 ⊆ evens
-#expect_false "evens ⊆ multiplesOf 4 is false" unfolding multiplesOf evens :
-  evens ⊆ multiplesOf 4
-#expect_true "BoundedSet {n | n < 10} is true" unfolding BoundedSet :
-  BoundedSet {n | n < 10}
-#expect_true "BoundedSet ∅ is true" unfolding BoundedSet :
-  BoundedSet ∅
-#expect_false "BoundedSet {n | 5 ≤ n} is false (5, 6, 7, … has no upper bound)" unfolding BoundedSet :
-  BoundedSet {n | 5 ≤ n}
+#expect_true "Periodic (fun n => n % 3) is true" unfolding Periodic :
+  Periodic (fun n => n % 3)
+#expect_true "Periodic (fun _ => 5) is true" unfolding Periodic :
+  Periodic (fun _ => 5)
+#expect_false "Periodic (fun n => n) is false (p = 0 is not a period)" unfolding Periodic :
+  Periodic (fun n => n)
+#expect_false "Periodic (fun n => if n < 5 then 7 else 0) is false (irregular start)" unfolding Periodic :
+  Periodic (fun n => if n < 5 then 7 else 0)
+
+#expect_true "EventuallyConstant (fun n => if n < 5 then 7 else 0) is true" unfolding EventuallyConstant :
+  EventuallyConstant (fun n => if n < 5 then 7 else 0)
+#expect_true "EventuallyConstant (fun n => if n < 5 then 0 else 6) is true (the constant is not 0)" unfolding EventuallyConstant :
+  EventuallyConstant (fun n => if n < 5 then 0 else 6)
+#expect_false "EventuallyConstant (fun n => n) is false" unfolding EventuallyConstant :
+  EventuallyConstant (fun n => n)
+#expect_false "EventuallyConstant (fun n => n % 2) is false (keeps changing)" unfolding EventuallyConstant :
+  EventuallyConstant (fun n => n % 2)
+
+#expect_true "HasMaximum (fun n => n % 3) is true" unfolding HasMaximum :
+  HasMaximum (fun n => n % 3)
+#expect_true "HasMaximum (fun _ => 5) is true (the maximum may be reached many times)" unfolding HasMaximum :
+  HasMaximum (fun _ => 5)
+#expect_true "HasMaximum (fun n => if n < 5 then 7 else 0) is true" unfolding HasMaximum :
+  HasMaximum (fun n => if n < 5 then 7 else 0)
+#expect_false "HasMaximum (fun n => n) is false (every term is beaten by a later one)" unfolding HasMaximum :
+  HasMaximum (fun n => n)
+#expect_false "HasMaximum (fun n => n + 1) is false" unfolding HasMaximum :
+  HasMaximum (fun n => n + 1)
+
+#expect_true "EventuallyPeriodic (fun n => if n < 5 then 7 else 0) is true" unfolding EventuallyPeriodic :
+  EventuallyPeriodic (fun n => if n < 5 then 7 else 0)
+#expect_true "EventuallyPeriodic (fun n => n % 3) is true" unfolding EventuallyPeriodic :
+  EventuallyPeriodic (fun n => n % 3)
+#expect_false "EventuallyPeriodic (fun n => n) is false (p = 0 is not a period)" unfolding EventuallyPeriodic :
+  EventuallyPeriodic (fun n => n)
 
 #level_report

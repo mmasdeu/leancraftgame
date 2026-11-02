@@ -1,29 +1,32 @@
-/- Hidden test battery for Level Spot the bug: quantifiers. -/
+/- Hidden test battery for Level There exists. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L18.Player
 
-namespace L18Ref
-def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n, n > 0 → f n = 0
-def EventuallyZero (u : ℕ → ℕ) : Prop := ∀ N, ∃ n ≥ N, u n = 0
-def Unbounded (u : ℕ → ℕ) : Prop := ∃ M, ∀ n, M ≤ u n
-end L18Ref
+open L18
 
-#no_sorry L18.noRoot
-#no_sorry L18.notEventuallyZero
-#no_sorry L18.bounded
-#level_start "Spot the bug: quantifiers"
+#no_sorry HasZero
+#no_sorry HasEvenBig
+#level_start "There exists"
 
-#expect_true "HasPositiveRoot accepts your function" unfolding L18Ref.HasPositiveRoot L18.noRoot :
-  L18Ref.HasPositiveRoot L18.noRoot
-#expect_true "your function has no root other than 0" unfolding L18.noRoot :
-  ¬ (∃ n > 0, L18.noRoot n = 0)
-#expect_true "EventuallyZero accepts your sequence" unfolding L18Ref.EventuallyZero L18.notEventuallyZero :
-  L18Ref.EventuallyZero L18.notEventuallyZero
-#expect_true "your sequence is not eventually 0" unfolding L18.notEventuallyZero :
-  ¬ (∃ N, ∀ n ≥ N, L18.notEventuallyZero n = 0)
-#expect_true "Unbounded accepts your sequence" unfolding L18Ref.Unbounded L18.bounded :
-  L18Ref.Unbounded L18.bounded
-#expect_true "your sequence is bounded" unfolding L18.bounded :
-  ¬ (∀ M, ∃ n, M ≤ L18.bounded n)
+-- the worked example
+#expect_true "HasBig (fun n => n) is true" unfolding HasBig :
+  HasBig (fun n => n)
+#expect_false "HasBig (fun n => n % 5) is false" unfolding HasBig :
+  HasBig (fun n => n % 5)
+-- your predicates
+#expect_true "HasZero (fun n => n) is true" unfolding HasZero :
+  HasZero (fun n => n)
+#expect_true "HasZero (fun n => n % 3) is true" unfolding HasZero :
+  HasZero (fun n => n % 3)
+#expect_false "HasZero (fun n => n + 1) is false" unfolding HasZero :
+  HasZero (fun n => n + 1)
+#expect_true "HasEvenBig (fun n => n) is true" unfolding HasEvenBig :
+  HasEvenBig (fun n => n)
+#expect_false "HasEvenBig (fun n => 2 * n + 1) is false" unfolding HasEvenBig :
+  HasEvenBig (fun n => 2 * n + 1)
+#expect_false "HasEvenBig (fun n => n % 5) is false" unfolding HasEvenBig :
+  HasEvenBig (fun n => n % 5)
+#expect_false "HasEvenBig (fun n => if n = 0 then 4 else 11) is false (4 is even, 11 is big, but no term is both)" unfolding HasEvenBig :
+  HasEvenBig (fun n => if n = 0 then 4 else 11)
 
 #level_report

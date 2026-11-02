@@ -1,51 +1,55 @@
 /-
-# Division by zero
+# Spot the bug: connectives
 
-The rationals `ℚ` (type `\Q`) are the fractions: `(1 / 2 : ℚ)` is one half.
-
-In Lean every function is defined on **all** its inputs, so `x / 0` has to be
-*something*. Mathlib chooses `0`:
+A colleague defined three predicates. Each comes with a comment saying what
+it should mean, and each says something else.
 
 ```lean
-example : (1 : ℚ) / 0 = 0 := by simp     -- a theorem!
+-- n is a teenager: from 13 to 19
+def IsTeen (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19
+
+-- day d is a weekend day (days are numbered 1 to 7, Saturday is 6, Sunday is 7)
+def IsWeekend (d : Nat) : Prop := d = 6 ∧ d = 7
+
+-- a and b are both odd
+def BothOdd (a b : Nat) : Prop := ¬ a % 2 = 0 ∧ b % 2 = 0
 ```
 
-You have already met such *junk values*: `(3 : ℕ) - 5 = 0`, `(7 : ℕ) / 0 = 0`,
-`(-3 : ℤ).toNat = 0`. Mathlib has more: `Real.sqrt (-1) = 0`, `(0 : ℚ)⁻¹ = 0`.
-They are convenient for writing proofs, but a definition that divides can be
-**silently wrong** at zero.
+A wrong predicate can be wrong in two directions:
 
-## The cure
+* it **accepts** something it should reject (it is *too weak*), or
+* it **rejects** something it should accept (it is *too strong*).
 
-State definitions without dividing, or add the hypothesis you need:
+To prove the first, give an input that the predicate accepts, and show that it
+should not. For the second, give an input that it rejects, and show that it
+should accept it. The tests below say which direction each bug goes; your job
+is to find the input.
 
-```lean
--- "y is half of x"
-def IsHalf (x y : ℚ) : Prop := 2 * y = x       -- multiply instead of dividing
-```
-
-Dividing by a number that cannot be zero, like `2`, is perfectly fine.
-
-Remember the binding strengths: `a + b / 2` is `a + (b / 2)`.
+Remember the binding strengths from "Or and not": `¬` binds tighter than `∧`,
+which binds tighter than `∨`.
 
 ## Your task
 
-`IsHalf` is done. Define `average`, `IsReciprocal` and `HasSlope`. The tests
-include the cases where a division by zero would hide.
+* `teen`: a number that `IsTeen` accepts, although it is not from 13 to 19.
+* `weekendDay`: a weekend day (6 or 7) that `IsWeekend` rejects.
+* `oddA` and `oddB`: two numbers that `BothOdd` accepts, although they are not
+  both odd.
 -/
 namespace L11
 
--- y is half of x (already done; note: no division)
-def IsHalf (x y : ℚ) : Prop := 2 * y = x
+-- The colleague's code, to read (the referee uses its own copy).
+def IsTeen (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19
+def IsWeekend (d : Nat) : Prop := d = 6 ∧ d = 7
+def BothOdd (a b : Nat) : Prop := ¬ a % 2 = 0 ∧ b % 2 = 0
 
--- the average of a and b                (average 1 2 is 3/2)
-def average (a b : ℚ) : ℚ := sorry
+-- accepted by IsTeen, but not a teenager
+def teen : Nat := sorry
 
--- y is the reciprocal of x: x times y is 1.  (0 has no reciprocal!)
-def IsReciprocal (x y : ℚ) : Prop := sorry
+-- a weekend day, but rejected by IsWeekend
+def weekendDay : Nat := sorry
 
--- the line through the points (x₁, y₁) and (x₂, y₂) has slope m.
--- A vertical line (x₁ = x₂) has no slope at all.
-def HasSlope (x₁ y₁ x₂ y₂ m : ℚ) : Prop := sorry
+-- accepted by BothOdd, but not both odd
+def oddA : Nat := sorry
+def oddB : Nat := sorry
 
 end L11

@@ -1,37 +1,28 @@
-/- Hidden test battery for Level True or false?. -/
+/- Hidden test battery for Level Spot the bug (Basics). -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L6.Player
 
-open L6
+-- the referee's own copies: the colleague's code, and the right answers
+namespace L6Ref
+def middle (a b c : Nat) : Nat :=
+  if a ≤ b then (if b ≤ c then b else c)
+  else (if a ≤ c then a else c)
+def median (a b c : Nat) : Nat := max (min a b) (min (max a b) c)
+def daysInYear (y : Nat) : Nat :=
+  if y % 4 = 0 then (if y % 100 = 0 then 365 else 366) else 365
+def daysInYearRight (y : Nat) : Nat :=
+  if y % 4 = 0 then (if y % 100 = 0 then (if y % 400 = 0 then 366 else 365) else 366) else 365
+end L6Ref
 
-#no_sorry IsEven
-#no_sorry IsSmall
-#no_sorry GoesInto
-#level_start "True or false?"
+#no_sorry L6.ma
+#no_sorry L6.mb
+#no_sorry L6.mc
+#no_sorry L6.year
+#level_start "Spot the bug"
 
--- the worked example
-#expect_true "IsBig 150 is true" unfolding IsBig :
-  IsBig 150
-#expect_false "IsBig 99 is false" unfolding IsBig :
-  IsBig 99
--- your predicates
-#expect_true "IsEven 10 is true" unfolding IsEven :
-  IsEven 10
-#expect_true "IsEven 0 is true" unfolding IsEven :
-  IsEven 0
-#expect_false "IsEven 7 is false" unfolding IsEven :
-  IsEven 7
-#expect_true "IsSmall 3 is true" unfolding IsSmall :
-  IsSmall 3
-#expect_true "IsSmall 9 is true" unfolding IsSmall :
-  IsSmall 9
-#expect_false "IsSmall 10 is false" unfolding IsSmall :
-  IsSmall 10
-#expect_true "GoesInto 3 12 is true" unfolding GoesInto :
-  GoesInto 3 12
-#expect_true "GoesInto 1 7 is true" unfolding GoesInto :
-  GoesInto 1 7
-#expect_false "GoesInto 5 12 is false" unfolding GoesInto :
-  GoesInto 5 12
+#expect_true "middle gives the wrong answer on your three numbers" :
+  L6Ref.middle L6.ma L6.mb L6.mc ≠ L6Ref.median L6.ma L6.mb L6.mc
+#expect_true "daysInYear gives the wrong answer on your year" :
+  L6Ref.daysInYear L6.year ≠ L6Ref.daysInYearRight L6.year
 
 #level_report

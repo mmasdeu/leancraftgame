@@ -1,8 +1,8 @@
--- from some index on, every term is at least 10 (already done)
-def EventuallyBig (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 10 ≤ u n
+-- from index 3 on, the terms are at least 10 (already done)
+def BigAfter (u : Nat → Nat) : Prop := ∀ n, 3 ≤ n → 10 ≤ u n
 
--- f is zero at some n other than 0
-def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n > 0, f n = 0
+-- from index 5 on, the terms are at least 3
+def LateBig (u : Nat → Nat) : Prop := ∀ n, 5 ≤ n → 3 ≤ u n
 
--- from some index on, every term is 0
-def EventuallyZero (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, u n = 0
+-- if n is even then u n is even
+def EvenToEven (u : Nat → Nat) : Prop := ∀ n, n % 2 = 0 → u n % 2 = 0

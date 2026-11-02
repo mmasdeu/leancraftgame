@@ -1,6 +1,8 @@
-def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n, n > 0 → f n = 0
-def EventuallyZero (u : ℕ → ℕ) : Prop := ∀ N, ∃ n ≥ N, u n = 0
-def Unbounded (u : ℕ → ℕ) : Prop := ∃ M, ∀ n, M ≤ u n
-def noRoot : ℕ → ℕ := fun n => n + 1
-def notEventuallyZero : ℕ → ℕ := fun n => n % 2
-def bounded : ℕ → ℕ := fun _ => 7
+-- some term is at least 10 (already done)
+def HasBig (u : Nat → Nat) : Prop := ∃ n, 10 ≤ u n
+
+-- some term is zero
+def HasZero (u : Nat → Nat) : Prop := ∃ n, u n = 0
+
+-- some single term is both even and at least 10
+def HasEvenBig (u : Nat → Nat) : Prop := ∃ n, u n % 2 = 0 ∧ 10 ≤ u n

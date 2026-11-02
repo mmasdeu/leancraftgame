@@ -1,54 +1,49 @@
 /-
-# Spot the bug: numbers
+# Integers and casts
 
-Junk values are where definitions go wrong without anybody noticing: `3 - 5`
-is `0` in `ℕ`, and `x / 0` is `0` in `ℚ`. A colleague, who has not played the
-Numbers world, wrote:
+Natural numbers have no negatives, which is why `3 - 5` is `0` in `ℕ`. The
+**integers** `ℤ` (type `\Z`, or write `Int`) are …, -2, -1, 0, 1, 2, …, and
+their subtraction is the real one. (`ℕ` is another name for `Nat`; type `\N`.)
+
+* `(3 : ℤ)` means "3, as an integer". This is a *type ascription*.
+* `(3 : ℤ) - 5` is `-2`.
+
+## Casts
+
+A natural number `n : ℕ` can be used where an integer is expected: write
+`(n : ℤ)`. Lean then inserts a **cast**, displayed `↑n`. *Where* the cast goes
+changes the result:
 
 ```lean
--- the difference a - b, as an integer: diff 3 5 is -2
-def diff (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)
-
--- y is the reciprocal of x: x * y = 1
-def IsReciprocal (x y : ℚ) : Prop := y = 1 / x
-
--- the average of a and b
-def average (a b : ℚ) : ℚ := a + b / 2
+def good (a b : ℕ) : ℤ := (a : ℤ) - (b : ℤ)   -- good 3 5 = -2
+def bad  (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)   -- bad 3 5 = 0 : subtracted in ℕ, then cast
 ```
 
-Each definition agrees with the intended meaning on *many* inputs. That is
-what makes these bugs dangerous: a few random checks will not find them. Ask
-instead: **where is the junk value?** Which subtraction can go below zero,
-which division can be by zero, and where would the parentheses go?
+`(a - b : ℤ)` also works: Lean elaborates the whole expression as an integer
+and casts `a` and `b` first.
+
+## Dot notation and two more junk values
+
+* `x.natAbs` is the absolute value of an integer `x`, as a natural number.
+  It is short for `Int.natAbs x`: since `x` is an `Int`, Lean looks for
+  `natAbs` among the functions named `Int.something`.
+* `x.toNat` turns an integer into a natural number, but every negative number
+  becomes `0`. Like `3 - 5 = 0` in `ℕ`, this is a *junk value*: a function
+  must return something, so Lean returns 0.
 
 ## Your task
 
-* `diffA`, `diffB`: two natural numbers with `diff diffA diffB ≠ diffA - diffB`
-  (the second subtraction in `ℤ`).
-* `recX`, `recY`: two rationals that `IsReciprocal` accepts, although
-  `recX * recY ≠ 1`.
-* `avgA`, `avgB`: two rationals with `average avgA avgB ≠ (avgA + avgB) / 2`.
-
-A rational number is written like an integer, or as a fraction: `3`, `-2`,
-`(1 / 2 : ℚ)`.
+Define `diff`, `distance` and `IsNegative`.
 -/
 namespace L12
 
--- The colleague's code, to read (the referee uses its own copy).
-def diff (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)
-def IsReciprocal (x y : ℚ) : Prop := y = 1 / x
-def average (a b : ℚ) : ℚ := a + b / 2
+-- a minus b, as an integer        (diff 3 5 is -2)
+def diff (a b : ℕ) : ℤ := sorry
 
--- diff gets these wrong
-def diffA : ℕ := sorry
-def diffB : ℕ := sorry
+-- the distance between two integers, as a natural number   (distance 3 (-4) is 7)
+def distance (a b : ℤ) : ℕ := sorry
 
--- IsReciprocal accepts these, but recX * recY ≠ 1
-def recX : ℚ := sorry
-def recY : ℚ := sorry
-
--- average gets these wrong
-def avgA : ℚ := sorry
-def avgB : ℚ := sorry
+-- x is negative
+def IsNegative (x : ℤ) : Prop := sorry
 
 end L12

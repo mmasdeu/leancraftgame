@@ -1,64 +1,34 @@
 {
-  "world": "Statements World",
-  "title": "True or false?",
-  "skill": "syntax",
-  "predict": [
-    {
-      "test": "IsEven 0 is true",
-      "statement": "IsEven 0"
-    },
-    {
-      "test": "IsSmall 10 is false",
-      "statement": "IsSmall 10"
-    },
-    {
-      "test": "GoesInto 1 7 is true",
-      "statement": "GoesInto 1 7"
-    }
-  ],
+  "world": "Basics World",
+  "title": "Spot the bug",
+  "skill": "reading",
+  "public": "all",
   "checks": [
     {
-      "lean": "example : Nat → Prop := L6.IsEven",
-      "message": "Keep `IsEven : Nat → Prop`."
+      "lean": "example : Nat := L6.ma\nexample : Nat := L6.mb\nexample : Nat := L6.mc",
+      "message": "Keep `ma`, `mb` and `mc` as three natural numbers (`Nat`)."
     },
     {
-      "lean": "example : Nat → Prop := L6.IsSmall",
-      "message": "Keep `IsSmall : Nat → Prop`."
-    },
-    {
-      "lean": "example : Nat → Nat → Prop := L6.GoesInto",
-      "message": "Keep `GoesInto : Nat → Nat → Prop`."
+      "lean": "example : Nat := L6.year",
+      "message": "Keep `year : Nat`."
     }
   ],
   "hints": [
     {
-      "match": "IsEven",
+      "match": "middle",
       "steps": [
-        "What is the remainder when an even number is divided by 2?"
+        "Did you try inputs in every order? The colleague probably tested `1 2 3`. What about the same three numbers in other orders?",
+        "Look at the first branch: when `a ≤ b` but not `b ≤ c`, `middle` returns `c`. Is the median always `c` then?"
       ],
-      "hint": "An even number leaves remainder 0 when divided by 2: `n % 2 = 0`."
+      "hint": "`middle 2 3 1` is 1, but the median of 2, 3 and 1 is 2. So `ma = 2`, `mb = 3`, `mc = 1` works."
     },
     {
-      "match": "IsSmall 10",
-      "hint": "Off by one: 10 is not smaller than 10. Use `<`, not `≤`."
-    },
-    {
-      "match": "IsSmall",
+      "match": "daysInYear",
       "steps": [
-        "Is 10 itself below 10? Check the boundary."
+        "The specification has *two* exceptions. Does the code handle both?",
+        "The code handles \"except the centuries\". What about \"except every fourth century\"?"
       ],
-      "hint": "`n < 10`."
-    },
-    {
-      "match": "GoesInto",
-      "steps": [
-        "`GoesInto a b` says that `a` goes into `b`. Which number is divided by which?"
-      ],
-      "hint": "`b % a = 0`: the remainder of `b` divided by `a` is zero. Mind the order of `a` and `b`."
-    },
-    {
-      "match": "",
-      "hint": "Check the examples in the comment above the predicate."
+      "hint": "2000 is divisible by 400, so it had 366 days, but `daysInYear 2000` is 365, not 366."
     }
   ]
 }

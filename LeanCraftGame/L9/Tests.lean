@@ -1,30 +1,39 @@
-/- Hidden test battery for Level Spot the bug: connectives. -/
+/- Hidden test battery for Level Or and not. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L9.Player
 
-namespace L9Ref
-def IsTeen (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19
-def IsWeekend (d : Nat) : Prop := d = 6 ∧ d = 7
-def BothOdd (a b : Nat) : Prop := ¬ a % 2 = 0 ∧ b % 2 = 0
-end L9Ref
+open L9
 
-#no_sorry L9.teen
-#no_sorry L9.weekendDay
-#no_sorry L9.oddA
-#no_sorry L9.oddB
-#level_start "Spot the bug: connectives"
+#no_sorry FreeTicket
+#no_sorry PaysFull
+#no_sorry NotTiny
+#level_start "Or and not"
 
-#expect_true "IsTeen accepts your number" unfolding L9Ref.IsTeen L9.teen :
-  L9Ref.IsTeen L9.teen
-#expect_true "your number is not from 13 to 19" unfolding L9.teen :
-  ¬ (13 ≤ L9.teen ∧ L9.teen ≤ 19)
-#expect_true "your day is a weekend day (6 or 7)" unfolding L9.weekendDay :
-  L9.weekendDay = 6 ∨ L9.weekendDay = 7
-#expect_true "IsWeekend rejects your day" unfolding L9Ref.IsWeekend L9.weekendDay :
-  ¬ (L9Ref.IsWeekend L9.weekendDay)
-#expect_true "BothOdd accepts your two numbers" unfolding L9Ref.BothOdd L9.oddA L9.oddB :
-  L9Ref.BothOdd L9.oddA L9.oddB
-#expect_true "your two numbers are not both odd" unfolding L9.oddA L9.oddB :
-  ¬ (L9.oddA % 2 = 1 ∧ L9.oddB % 2 = 1)
+#expect_true "FreeTicket 3 is true" unfolding FreeTicket :
+  FreeTicket 3
+#expect_true "FreeTicket 70 is true" unfolding FreeTicket :
+  FreeTicket 70
+#expect_true "FreeTicket 65 is true" unfolding FreeTicket :
+  FreeTicket 65
+#expect_false "FreeTicket 30 is false" unfolding FreeTicket :
+  FreeTicket 30
+#expect_false "FreeTicket 5 is false" unfolding FreeTicket :
+  FreeTicket 5
+#expect_true "PaysFull 30 is true" unfolding PaysFull FreeTicket :
+  PaysFull 30
+#expect_true "PaysFull 5 is true" unfolding PaysFull FreeTicket :
+  PaysFull 5
+#expect_false "PaysFull 3 is false" unfolding PaysFull FreeTicket :
+  PaysFull 3
+#expect_false "PaysFull 65 is false" unfolding PaysFull FreeTicket :
+  PaysFull 65
+#expect_true "NotTiny 5 is true" unfolding NotTiny :
+  NotTiny 5
+#expect_true "NotTiny 2 is true" unfolding NotTiny :
+  NotTiny 2
+#expect_false "NotTiny 0 is false" unfolding NotTiny :
+  NotTiny 0
+#expect_false "NotTiny 1 is false" unfolding NotTiny :
+  NotTiny 1
 
 #level_report

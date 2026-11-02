@@ -295,27 +295,33 @@ function jumpTo(d) {
   src.setSelectionRange(offset(d.line, d.col), offset(d.endLine, d.endCol));
 }
 
-/* Saved progress is keyed by level number. Before the folders were renumbered to follow the
-   play order, a level's number was its position in an older, scattered numbering: move what
-   a returning player saved to the new numbers, once. */
+/* Saved progress is keyed by level number, and the numbers have changed twice: the folders
+   were first renumbered to follow the play order, and then new levels and worlds were
+   inserted between the old ones. Move what a returning player saved to the current numbers,
+   one step at a time. (`numbering` is the version of the numbers the saved data uses.) */
 (function migrateLevelNumbers() {
-  if (store.get("numbering", 1) >= 2) return;
-  const NEW = { 4: 1, 5: 2, 6: 3, 15: 4, 23: 5, 7: 6, 8: 7, 9: 8, 24: 9, 16: 10, 17: 11, 25: 12, 10: 13, 11: 14,
-    12: 15, 13: 16, 18: 17, 26: 18, 1: 19, 27: 20, 19: 21, 20: 22, 21: 23, 28: 24, 22: 25, 29: 26, 14: 27, 2: 28, 3: 29 };
+  const STEPS = [
+    { to: 2, map: { 4: 1, 5: 2, 6: 3, 15: 4, 23: 5, 7: 6, 8: 7, 9: 8, 24: 9, 16: 10, 17: 11, 25: 12, 10: 13, 11: 14,
+      12: 15, 13: 16, 18: 17, 26: 18, 1: 19, 27: 20, 19: 21, 20: 22, 21: 23, 28: 24, 22: 25, 29: 26, 14: 27, 2: 28, 3: 29 } },
+    { to: 3, map: { 1: 1, 2: 2, 3: 3, 4: 4, 5: 6, 6: 7, 7: 8, 8: 9, 9: 11, 10: 12, 11: 13, 12: 15, 13: 16, 14: 17, 15: 18, 16: 19, 17: 20, 18: 22, 19: 23, 20: 27, 21: 28, 22: 29, 23: 30, 24: 33, 25: 39, 26: 43, 27: 49, 28: 52, 29: 60 } },
+  ];
   const PER_LEVEL = ["draft", "results", "predict", "revealed", "failedRuns", "hintsOpened", "stars"];
-  const moved = {};
-  for (const [o, n] of Object.entries(NEW)) for (const what of PER_LEVEL) {
-    const v = store.get(`${what}.${o}`, undefined);
-    if (v !== undefined) moved[`${what}.${n}`] = v;
+  for (const { to, map } of STEPS) {
+    if (store.get("numbering", 1) >= to) continue;
+    const moved = {};
+    for (const [o, n] of Object.entries(map)) for (const what of PER_LEVEL) {
+      const v = store.get(`${what}.${o}`, undefined);
+      if (v !== undefined) moved[`${what}.${n}`] = v;
+    }
+    for (const o of Object.keys(map)) for (const what of PER_LEVEL) {
+      try { localStorage.removeItem(`leancraftgame.${what}.${o}`); } catch { /* private mode */ }
+    }
+    for (const [k, v] of Object.entries(moved)) store.set(k, v);
+    store.set("cleared", store.get("cleared", []).map((id) => map[id] ?? id));
+    const at = store.get("level", "intro");
+    if (at !== "intro") store.set("level", map[at] ?? at);
+    store.set("numbering", to);
   }
-  for (const [o] of Object.entries(NEW)) for (const what of PER_LEVEL) {
-    try { localStorage.removeItem(`leancraftgame.${what}.${o}`); } catch { /* private mode */ }
-  }
-  for (const [k, v] of Object.entries(moved)) store.set(k, v);
-  store.set("cleared", store.get("cleared", []).map((id) => NEW[id] ?? id));
-  const at = store.get("level", "intro");
-  if (at !== "intro") store.set("level", NEW[at] ?? at);
-  store.set("numbering", 2);
 })();
 
 /* ------------------------------------------------------------ levels */

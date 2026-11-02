@@ -1,67 +1,35 @@
 /-
-# A colleague's groups
+# Sets
 
-In this world you have written the axioms of a structure yourself, and the
-referee judged them on models: real examples that must be accepted and junk
-that must be rejected. Now the roles are reversed. Someone else wrote the
-axioms, for a structure every mathematician knows.
+`Set ℕ` is the type of sets of natural numbers.
 
-A **group** is a type `G` with a multiplication `mul`, a special element `one`
-and a function `inv` that gives every element its inverse. A colleague has
-formalised groups as follows. It compiles, and every group you can think of is
-an instance. Is it right?
+* `{n | n % 2 = 0}` is the set of the `n` such that `n % 2 = 0`
+  ("set-builder notation"). The `|` is the plain keyboard bar.
+* `x ∈ s` says that `x` belongs to `s` (type `\in`); `x ∉ s` is `\notin`.
+* `s ⊆ t` says that every element of `s` is in `t` (type `\sub`).
+* `∅` is the empty set (`\empty`).
+* Bounded quantifiers work with `∈`: `∀ x ∈ s, P x` means
+  `∀ x, x ∈ s → P x`, and `∃ x ∈ s, P x` means `∃ x, x ∈ s ∧ P x`.
 
-An axiom system can fail in two ways:
+In Mathlib a set *is* a predicate: `x ∈ {n | P n}` is just `P x`.
 
-* it asks for **too much**: a real group is rejected;
-* it asks for **too little**: a junk structure is accepted.
+```lean
+def evens : Set ℕ := {n | n % 2 = 0}
+```
 
-Part A looks for the second kind of failure, Part B repairs it.
+## Your task
+
+`evens` is done. Define `multiplesOf k` and `BoundedSet s`.
 -/
-import Mathlib.Tactic
-
 namespace L28
 
-structure Group' (G : Type) where
-  mul : G → G → G
-  one : G
-  inv : G → G
-  mul_assoc : ∀ a b c, mul (mul a b) c = mul a (mul b c)
-  one_mul   : ∀ a, mul one a = a
-  mul_inv   : ∀ a, mul a (inv a) = one
+-- the even numbers (already done)
+def evens : Set ℕ := {n | n % 2 = 0}
 
-/-
-## Part A: Break it
+-- the multiples of k: 0, k, 2k, 3k, …     (12 ∈ multiplesOf 3, but not 13)
+def multiplesOf (k : ℕ) : Set ℕ := sorry
 
-Find a *junk model*: an operation on `Bool` (the type with the two values `true`
-and `false`) that satisfies every axiom of
-`Group'` but is NOT a group. Only give the data; the referee checks the
-axioms for you.
-
-Hint: is `mul a one = a` a consequence of the axioms above?
--/
-
-def junkMul : Bool → Bool → Bool := sorry
-def junkOne : Bool := sorry
-def junkInv : Bool → Bool := sorry
-
-/-
-## Part B: Fix it
-
-Write a correct definition. Keep `mul`, `one`, `inv` as the first three
-fields, in this order; the axioms are up to you.
-
-The referee checks your structure against a zoo of models: real groups
-(which must satisfy all your axioms) and junk models (each of which must
-violate at least one). Some of the groups are not commutative.
--/
-
-structure Group₂ (G : Type) where
-  mul : G → G → G
-  one : G
-  inv : G → G
-  mul_assoc : ∀ a b c, mul (mul a b) c = mul a (mul b c)
-  one_mul   : ∀ a, mul one a = a
-  mul_inv   : ∀ a, mul a (inv a) = one
+-- some number B is at least as big as every element of s
+def BoundedSet (s : Set ℕ) : Prop := sorry
 
 end L28

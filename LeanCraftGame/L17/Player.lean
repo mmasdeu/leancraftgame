@@ -1,40 +1,41 @@
 /-
-# Bounded quantifiers
+# If … then …
 
-Mathematicians write "for all n ≥ N" and "there is an n > 0". Lean (with
-Mathlib) has the same shorthand:
+Often a statement only concerns *some* positions: "from index 5 on, the terms
+are at least 3". That is a statement of the form "**if** *this*, **then**
+*that*", written `p → q`.
 
-* `∀ n ≥ N, P n` means `∀ n, n ≥ N → P n`;
-* `∃ n > 0, P n` means `∃ n, n > 0 ∧ P n`.
-
-Notice the difference: the bound becomes an **implication** under `∀` and a
-**conjunction** under `∃`. This is exactly the `→` versus `∧` lesson from
-"If … then …". Writing the long form by hand with the wrong connective is a
-classic mistake:
-
-* `∃ n, n > 0 → f n = 0` is true for *every* `f`: take `n = 0`, then `0 > 0`
-  is false, and an implication with a false premise is true.
-
-The same shorthand exists for `≤`, `<`, `≠` and, as you will see with sets,
-for `∈`. Several variables can share a quantifier: `∀ a b, …`.
+* Type `→` as `\to`, or write `->`.
+* `p → q` is true when `p` is false, or when `q` is true.
+* `→` binds weaker than `∧` and `∨`: `a → b ∧ c` means `a → (b ∧ c)`.
 
 ```lean
-def EventuallyBig (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 10 ≤ u n
+def BigAfter (u : Nat → Nat) : Prop := ∀ n, 3 ≤ n → 10 ≤ u n
 ```
+
+Read it as: "for every `n`, **if** `n` is at least 3 **then** `u n` is at
+least 10". It says nothing about `u 0`, `u 1` and `u 2`.
+
+## A classic mistake
+
+What about `∀ n, 3 ≤ n ∧ 10 ≤ u n`? That says that *every* `n`, even `n = 0`,
+is at least 3, which is false for every sequence. When a statement is about
+"the `n` such that …", use `→`, not `∧`.
 
 ## Your task
 
-`EventuallyBig` is done. Define `HasPositiveRoot f` and `EventuallyZero u`.
+`BigAfter` is done. Define `LateBig u` (from index 5 on, every term is at
+least 3) and `EvenToEven u` (whenever `n` is even, `u n` is even).
 -/
 namespace L17
 
--- from some index on, every term is at least 10 (already done)
-def EventuallyBig (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 10 ≤ u n
+-- from index 3 on, the terms are at least 10 (already done)
+def BigAfter (u : Nat → Nat) : Prop := ∀ n, 3 ≤ n → 10 ≤ u n
 
--- f is zero at some n other than 0
-def HasPositiveRoot (f : ℕ → ℕ) : Prop := sorry
+-- from index 5 on, the terms are at least 3
+def LateBig (u : Nat → Nat) : Prop := sorry
 
--- from some index on, every term is 0
-def EventuallyZero (u : ℕ → ℕ) : Prop := sorry
+-- if n is even then u n is even
+def EvenToEven (u : Nat → Nat) : Prop := sorry
 
 end L17

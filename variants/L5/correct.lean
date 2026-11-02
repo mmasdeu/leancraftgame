@@ -1,9 +1,13 @@
-def middle (a b c : Nat) : Nat :=
-  if a ≤ b then (if b ≤ c then b else c)
-  else (if a ≤ c then a else c)
-def daysInYear (y : Nat) : Nat :=
-  if y % 4 = 0 then (if y % 100 = 0 then 365 else 366) else 365
-def ma : Nat := 2
-def mb : Nat := 3
-def mc : Nat := 1
-def year : Nat := 2000
+def stairs : Nat → Nat
+  | 0 => 1
+  | 1 => 1
+  | n + 2 => stairs n + stairs (n + 1)
+
+def choose : Nat → Nat → Nat
+  | _, 0 => 1
+  | 0, _ + 1 => 0
+  | n + 1, k + 1 => choose n k + choose n (k + 1)
+
+def countEven : Nat → Nat
+  | 0 => 1
+  | n + 1 => if (n + 1) % 2 = 0 then countEven n + 1 else countEven n

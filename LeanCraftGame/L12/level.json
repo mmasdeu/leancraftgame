@@ -1,47 +1,68 @@
 {
   "world": "Numbers World",
-  "title": "Spot the bug: numbers",
-  "skill": "reading",
-  "public": "all",
-  "checks": [
+  "title": "Integers and casts",
+  "skill": "syntax",
+  "predict": [
     {
-      "lean": "example : ℕ := L12.diffA\nexample : ℕ := L12.diffB",
-      "message": "Keep `diffA` and `diffB` as natural numbers (`ℕ`)."
+      "test": "diff 3 5 = -2",
+      "statement": "diff 3 5 = -2"
     },
     {
-      "lean": "example : ℚ := L12.recX\nexample : ℚ := L12.recY\nexample : ℚ := L12.avgA\nexample : ℚ := L12.avgB",
-      "message": "Keep `recX`, `recY`, `avgA` and `avgB` as rationals (`ℚ`)."
+      "test": "IsNegative 0 is false",
+      "statement": "IsNegative 0"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : ℕ → ℕ → ℤ := L12.diff",
+      "message": "Keep `diff : ℕ → ℕ → ℤ`."
+    },
+    {
+      "lean": "example : ℤ → ℤ → ℕ := L12.distance",
+      "message": "Keep `distance : ℤ → ℤ → ℕ`."
+    },
+    {
+      "lean": "example : ℤ → Prop := L12.IsNegative",
+      "message": "Keep `IsNegative : ℤ → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "diff gets",
-      "steps": [
-        "The subtraction inside happens in `ℕ`, before the cast. When does a subtraction in `ℕ` give a junk value?"
-      ],
-      "hint": "When `a < b`, `a - b` is 0 in `ℕ`. Take `diffA := 3`, `diffB := 5`: `diff 3 5` is 0, not -2."
+      "match": "diff 3 5",
+      "hint": "If you get 0 instead of -2, the subtraction happened in ℕ before the cast. Cast first: `(a : ℤ) - (b : ℤ)`."
     },
     {
-      "match": "IsReciprocal accepts",
+      "match": "diff",
       "steps": [
-        "Which `x` makes `1 / x` a junk value?"
+        "Where does your subtraction happen: in ℕ, or in ℤ?"
       ],
-      "hint": "`1 / 0 = 0` in Lean, so `IsReciprocal 0 0` holds. Take `recX := 0`, `recY := 0`."
+      "hint": "`(a : ℤ) - (b : ℤ)`."
     },
     {
-      "match": "multiply to 1",
-      "steps": [
-        "Your pair is a genuine reciprocal pair. Look for a pair that `IsReciprocal` accepts *wrongly*: where is the division by zero?"
-      ],
-      "hint": "Take `recX := 0` and `recY := 0`: `0 * 0` is not 1."
+      "match": "distance (-4) 3",
+      "hint": "`(a - b).toNat` turns the negative number -7 into 0. Use `(a - b).natAbs`."
     },
     {
-      "match": "average gets",
+      "match": "distance",
       "steps": [
-        "Put in the parentheses that Lean puts in: `/` binds tighter than `+`.",
-        "`a + b / 2` is `a + (b / 2)`. For which `a` does that happen to equal `(a + b) / 2`? Avoid those."
+        "What does `.toNat` do to a negative number?"
       ],
-      "hint": "Any `a ≠ 0` works: `average 2 0` is 2, but the average of 2 and 0 is 1."
+      "hint": "`(a - b).natAbs`."
+    },
+    {
+      "match": "IsNegative 0",
+      "hint": "0 is not negative: use `<`, not `≤`."
+    },
+    {
+      "match": "IsNegative",
+      "steps": [
+        "Is 0 negative?"
+      ],
+      "hint": "`x < 0`."
+    },
+    {
+      "match": "",
+      "hint": "Check the examples in the comments."
     }
   ]
 }

@@ -1,36 +1,44 @@
 /-
-# And
+# True or false?
 
-Two statements can be combined. `p ∧ q` means "p **and** q": it is true when
-both are true.
+So far our functions returned numbers. A mathematician's definitions are
+mostly *statements*: "n is even", "u is bounded". In Lean a statement has
+type `Prop` (a *proposition*). It is either true or false.
 
 ```lean
-def InRange (lo hi n : Nat) : Prop := lo ≤ n ∧ n ≤ hi
+def IsBig (n : Nat) : Prop := 100 ≤ n
 ```
 
-`InRange 10 20 15` is true. `InRange 10 20 25` is false.
+`IsBig 150` is a true statement and `IsBig 5` is a false one. A function
+returning `Prop` is called a **predicate**.
 
-* Type `∧` as `\and` (or write `/\`).
-* You cannot write `lo ≤ n ≤ hi` as in school mathematics. Write the two
-  comparisons and join them with `∧`.
-* A definition may use the ones written above it, as `EvenInRange` below can
-  use `InRange`.
+* There is no `if`, `true` or `false` here. The body is simply the statement.
+* `a = b` is the statement "a equals b". `a % 2 = 0` says "the remainder of
+  `a` divided by 2 is 0".
+* Predicates are usually named with a capital letter, like `IsBig`.
 
-Typing `∀` and friends: click **Symbols** at the top right of the page. It lists every symbol with the keys to type it, and has typing practice.
+## Off-by-one
+
+Is it `<` or `≤`? `10 < n` is false for `n = 10`, `10 ≤ n` is true.
+The tests will check the boundary values.
 
 ## Your task
 
-`InRange` is done. Define `IsTeen` (13 to 19 inclusive) and `EvenInRange`.
+`IsBig` is done. Define `IsEven`, `IsSmall` (below 10) and `GoesInto`
+(`GoesInto a b` says that `a` divides `b` exactly).
 -/
 namespace L7
 
--- lo ≤ n ≤ hi (already done)
-def InRange (lo hi n : Nat) : Prop := lo ≤ n ∧ n ≤ hi
+-- n is at least 100 (already done)
+def IsBig (n : Nat) : Prop := 100 ≤ n
 
--- n is between 13 and 19, both included      (IsTeen 19 is true, IsTeen 20 is false)
-def IsTeen (n : Nat) : Prop := sorry
+-- n is even                        (IsEven 10 is true, IsEven 7 is false)
+def IsEven (n : Nat) : Prop := sorry
 
--- n is even and lies between lo and hi        (EvenInRange 1 10 4 is true, EvenInRange 1 10 5 is false)
-def EvenInRange (lo hi n : Nat) : Prop := sorry
+-- n is smaller than 10             (IsSmall 3 is true, IsSmall 10 is false)
+def IsSmall (n : Nat) : Prop := sorry
+
+-- dividing b by a leaves no remainder   (GoesInto 3 12 is true, GoesInto 5 12 is false)
+def GoesInto (a b : Nat) : Prop := sorry
 
 end L7

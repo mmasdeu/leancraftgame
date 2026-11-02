@@ -1,28 +1,31 @@
-/- Hidden test battery for Level Spot the bug: numbers. -/
+/- Hidden test battery for Level Integers and casts. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L12.Player
 
-namespace L12Ref
-def diff (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)
-def IsReciprocal (x y : ℚ) : Prop := y = 1 / x
-def average (a b : ℚ) : ℚ := a + b / 2
-end L12Ref
+open L12
 
-#no_sorry L12.diffA
-#no_sorry L12.diffB
-#no_sorry L12.recX
-#no_sorry L12.recY
-#no_sorry L12.avgA
-#no_sorry L12.avgB
-#level_start "Spot the bug: numbers"
+#no_sorry diff
+#no_sorry distance
+#no_sorry IsNegative
+#level_start "Integers and casts"
 
-#expect_true "diff gets your two numbers wrong" unfolding L12Ref.diff L12.diffA L12.diffB :
-  L12Ref.diff L12.diffA L12.diffB ≠ (L12.diffA : ℤ) - (L12.diffB : ℤ)
-#expect_true "IsReciprocal accepts your two numbers" unfolding L12Ref.IsReciprocal L12.recX L12.recY :
-  L12Ref.IsReciprocal L12.recX L12.recY
-#expect_true "your two numbers do not multiply to 1" unfolding L12.recX L12.recY :
-  ¬ (L12.recX * L12.recY = 1)
-#expect_true "average gets your two numbers wrong" unfolding L12Ref.average L12.avgA L12.avgB :
-  L12Ref.average L12.avgA L12.avgB ≠ (L12.avgA + L12.avgB) / 2
+#expect_true "diff 3 5 = -2" unfolding diff :
+  diff 3 5 = -2
+#expect_true "diff 5 3 = 2" unfolding diff :
+  diff 5 3 = 2
+#expect_true "diff 0 0 = 0" unfolding diff :
+  diff 0 0 = 0
+#expect_true "distance 3 (-4) = 7" unfolding distance :
+  distance 3 (-4) = 7
+#expect_true "distance (-4) 3 = 7" unfolding distance :
+  distance (-4) 3 = 7
+#expect_true "distance 2 2 = 0" unfolding distance :
+  distance 2 2 = 0
+#expect_true "IsNegative (-1) is true" unfolding IsNegative :
+  IsNegative (-1)
+#expect_false "IsNegative 0 is false" unfolding IsNegative :
+  IsNegative 0
+#expect_false "IsNegative 5 is false" unfolding IsNegative :
+  IsNegative 5
 
 #level_report

@@ -1,5 +1,8 @@
-def TendsToInfinity (u : ℕ → ℕ) : Prop := ∀ M, ∃ N, ∀ n ≥ N, M ≤ u n
-def good₁ : ℕ → ℕ := fun n => n / 2
-def good₂ : ℕ → ℕ := fun n => n + 3 * (n % 2)
-def bad₁ : ℕ → ℕ := fun n => if n % 2 = 0 then n else 0
-def bad₂ : ℕ → ℕ := fun _ => 7
+-- from some index on, every term is at least 10 (already done)
+def EventuallyBig (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 10 ≤ u n
+
+-- f is zero at some n other than 0
+def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n > 0, f n = 0
+
+-- from some index on, every term is 0
+def EventuallyZero (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, u n = 0

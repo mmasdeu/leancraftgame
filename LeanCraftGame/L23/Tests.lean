@@ -1,36 +1,34 @@
-/- Hidden test battery for Level Generality. -/
+/- Hidden test battery for Level 23. Players don't edit (or ideally see) this file. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L23.Player
 
 open L23
 
-#level_start "Generality"
+#no_sorry TendsToInfinity
+#level_start "Level 23 · Going to infinity"
 
--- the worked example
-#expect_true "AlwaysBelow (fun n : ℕ => -(n : ℤ)) 0 is true" unfolding AlwaysBelow :
-  AlwaysBelow (fun n : ℕ => -(n : ℤ)) 0
--- your definitions, on three types
-#expect_true "Between (2 : ℕ) 5 5 is true" unfolding Between :
-  Between (2 : ℕ) 5 5
-#expect_true "Between (-3 : ℤ) 3 0 is true" unfolding Between :
-  Between (-3 : ℤ) 3 0
-#expect_false "Between (-3 : ℤ) 3 4 is false" unfolding Between :
-  Between (-3 : ℤ) 3 4
-#expect_true "Between (0 : ℚ) 1 (1 / 2) is true" unfolding Between :
-  Between (0 : ℚ) 1 (1 / 2)
-#expect_false "Between (0 : ℚ) 1 2 is false" unfolding Between :
-  Between (0 : ℚ) 1 2
-#expect_true "IsUpperBound {x : ℤ | x < 0} 0 is true" unfolding IsUpperBound :
-  IsUpperBound {x : ℤ | x < 0} 0
-#expect_false "IsUpperBound {x : ℤ | x < 5} 3 is false" unfolding IsUpperBound :
-  IsUpperBound {x : ℤ | x < 5} 3
-#expect_true "IsUpperBound {x : ℚ | x ≤ 1 / 2} 1 is true" unfolding IsUpperBound :
-  IsUpperBound {x : ℚ | x ≤ 1 / 2} 1
-#expect_true "largest (2 : ℕ) 9 = 9" unfolding largest :
-  largest (2 : ℕ) 9 = 9
-#expect_true "largest (-3 : ℤ) 2 = 2" unfolding largest :
-  largest (-3 : ℤ) 2 = 2
-#expect_true "largest (7 : ℤ) (-1) = 7" unfolding largest :
-  largest (7 : ℤ) (-1) = 7
+-- Sanity: things that should tend to infinity
+#expect_true "u n = n tends to infinity" unfolding TendsToInfinity :
+  TendsToInfinity (fun n => n)
+#expect_true "u n = n / 2 tends to infinity (it is not strictly increasing!)" unfolding TendsToInfinity :
+  TendsToInfinity (fun n => n / 2)
+#expect_true "0, 4, 2, 6, 4, 8, … tends to infinity (it is not monotone!)" unfolding TendsToInfinity :
+  TendsToInfinity (fun n => n + 3 * (n % 2))
+
+-- Anti-theorems: things that should NOT tend to infinity
+#expect_false "a constant sequence does not tend to infinity" unfolding TendsToInfinity :
+  TendsToInfinity (fun _ => 7)
+#expect_false "0, 1, 0, 1, … does not tend to infinity" unfolding TendsToInfinity :
+  TendsToInfinity (fun n => n % 2)
+#expect_false "0, 0, 2, 0, 4, 0, … does not tend to infinity (unbounded is not enough!)" unfolding TendsToInfinity :
+  TendsToInfinity (fun n => if n % 2 = 0 then n else 0)
+
+-- Downstream lemmas: what users of your definition will need
+#expect_true "if u → ∞ then u is unbounded" unfolding TendsToInfinity :
+  ∀ u : Nat → Nat, TendsToInfinity u → ∀ M, ∃ n, M ≤ u n
+#expect_true "if u → ∞ then (u n + 1) → ∞" unfolding TendsToInfinity :
+  ∀ u : Nat → Nat, TendsToInfinity u → TendsToInfinity (fun n => u n + 1)
+#expect_true "if u → ∞ then the shifted sequence u (n+1) → ∞" unfolding TendsToInfinity :
+  ∀ u : Nat → Nat, TendsToInfinity u → TendsToInfinity (fun n => u (n + 1))
 
 #level_report

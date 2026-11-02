@@ -119,23 +119,33 @@ with the keys to type it, and a short typing drill. You can try it right now.
 
 ## The road ahead
 
-Every world ends with a **Spot the bug** level: a colleague's definitions compile
-but are wrong, and you prove it with a counterexample.
+Most worlds end with a **Spot the bug** level: a colleague's definitions compile
+but are wrong, and you prove it with a counterexample. The first four worlds also
+have a **Challenge** level, a harder task with traps, just before it.
 
 * **Basics:** values, functions, choices and recursion.
 * **Statements:** true or false, and the connectives *and*, *or*, *not*.
 * **Numbers:** integers, casts, and what happens when you divide by zero.
 * **Quantifiers:** *for all*, *there exists*, *if … then …*, and why their order
   matters.
-* **Predicate:** your first real definition, of a sequence going to infinity. Then
-  you swap roles with the referee: you write the tests, and it tries to slip wrong
+* **Predicate:** your first real definitions, about sequences and functions: tending
+  to infinity, bounded, monotone, injective, coming back infinitely often. Then you
+  swap roles with the referee: you write the tests, and it tries to slip wrong
   definitions past them.
-* **Library:** sets, the definitions that Mathlib already has, and generality.
-* **Analysis:** the limit of a sequence of real numbers.
-* **Structure:** bundling data and axioms; finding the mistake in a colleague's
-  definition of a group.
-* **Faithfulness:** an AI claims to have proved Goldbach's conjecture in one line.
-  What did it really prove?
+* **Library:** sets, the definitions that Mathlib already has, generality, divisibility
+  and relations.
+* **Finite Sums:** adding up and counting over finite sets with `∑`, `∏`,
+  `Finset.range` and `Finset.filter`, and seeing exactly which numbers a sum runs through.
+* **Analysis:** limits, continuity, Cauchy sequences and cluster values of real
+  sequences.
+* **Structure Syntax:** declaring structures, building values with `⟨ , ⟩`, `.mk` and
+  `{ x := … }`, writing functions on them, and updating, extending and parameterising them.
+* **Structure:** bundling data with axioms: order relations, metric spaces, and finding
+  the mistake in a colleague's definition of a group.
+* **Classes:** how one notation (`+`, `max`, `size`) gets a meaning on many types: you
+  declare classes, write instances, and learn why an instance that compiles can still be wrong.
+* **Faithfulness:** an AI claims to have proved the infinitude of the primes, the Collatz
+  conjecture, and Goldbach's conjecture, in a few lines each. What did it really prove?
 
 ## Good to know
 

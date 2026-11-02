@@ -1,56 +1,111 @@
 {
-  "world": "Library World",
-  "title": "Spot the bug: the library",
-  "skill": "reading",
-  "public": "all",
+  "world": "Predicate World",
+  "title": "Bounded and monotone",
+  "skill": "writing",
+  "predict": [
+    {
+      "test": "Bounded (-n) is false (0, -1, -2, … falls forever: bounded means on both sides)",
+      "statement": "Bounded (fun n => -(n : ℤ))"
+    },
+    {
+      "test": "StrictlyIncreasing (n / 2) is false (0, 0, 1, 1, …)",
+      "statement": "StrictlyIncreasing (fun n => (n : ℤ) / 2)"
+    },
+    {
+      "test": "NonDecreasing (0, 1, 2, 0, 0, …) is false (up at first, then it falls back)",
+      "statement": "NonDecreasing (fun n => if n < 3 then (n : ℤ) else 0)"
+    }
+  ],
   "checks": [
     {
-      "lean": "example : ℕ := L24.cdD\nexample : ℕ := L24.cdA\nexample : ℕ := L24.cdB\nexample : ℕ := L24.twin\nexample : ℕ := L24.mulK\nexample : ℕ := L24.mulN",
-      "message": "Keep `cdD`, `cdA`, `cdB`, `twin`, `mulK` and `mulN` as natural numbers (`ℕ`). Small numbers make the referee's job easier."
+      "lean": "example : (ℕ → ℤ) → Prop := L24.BoundedAbove\nexample : (ℕ → ℤ) → Prop := L24.Bounded\nexample : (ℕ → ℤ) → Prop := L24.NonDecreasing\nexample : (ℕ → ℤ) → Prop := L24.StrictlyIncreasing",
+      "message": "Keep the names and the types: each of `BoundedAbove`, `Bounded`, `NonDecreasing`, `StrictlyIncreasing` has type `(ℕ → ℤ) → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "CommonDivisor accepts",
+      "match": "BoundedAbove (-n)",
       "steps": [
-        "`a ∣ d` reads \"a divides d\". So the colleague's definition says that `a` and `b` both divide `d`. What kind of number is `d` then?"
+        "Which `M` is at least every term of 0, -1, -2, …?"
       ],
-      "hint": "The colleague defined a common *multiple*. Take `cdD := 6`, `cdA := 2`, `cdB := 3`: 2 and 3 divide 6, but 6 does not divide 2."
+      "hint": "`M = 0` works. If this fails, look at the order of your quantifiers: `∃ M, ∀ n, u n ≤ M`, with the `∃` first."
     },
     {
-      "match": "cdD does not divide both",
-      "steps": [
-        "Your `cdD` really is a common divisor. You need numbers where `cdA` and `cdB` divide `cdD`, but not the other way round."
-      ],
-      "hint": "`cdD := 6`, `cdA := 2`, `cdB := 3`."
+      "match": "BoundedAbove n is false",
+      "hint": "Your definition accepts a sequence that goes up forever. With `∀ n, ∃ M, u n ≤ M` every sequence qualifies (take `M = u n`): the `M` must be chosen before `n`."
     },
     {
-      "match": "TwinPrime accepts",
+      "match": "Bounded (-n)",
       "steps": [
-        "The colleague asks for `p` prime *or* `p + 2` prime. One of them is enough."
+        "Is 0, -1, -2, … bounded above? Is it bounded below?"
       ],
-      "hint": "7 is prime, so `TwinPrime 7` holds, although 9 is not prime."
+      "hint": "Bounded means both sides: use `|u n| ≤ M` (or `-M ≤ u n ∧ u n ≤ M`). A one-sided bound accepts a sequence that falls forever."
     },
     {
-      "match": "both prime",
-      "steps": [
-        "Your number is a genuine twin prime. Find a prime `p` for which `p + 2` is not prime."
-      ],
-      "hint": "Take `twin := 7`: 9 = 3 · 3."
+      "match": "Bounded n is false",
+      "hint": "Your definition accepts a sequence that goes up forever. The bound `M` must not depend on `n`."
     },
     {
-      "match": "multiplesOf",
-      "steps": [
-        "Read `{n | k % n = 0}`: which number is divided by which?"
-      ],
-      "hint": "`k % n = 0` says that `n` divides `k`: the colleague defined the divisors of `k`. Take `mulK := 6`, `mulN := 3`."
+      "match": "1, -1, 1",
+      "hint": "This sequence is bounded: `M = 1` works. Check that you use the absolute value (or both inequalities), and that `M` is bounding `|u n|`, not `u n` alone in the wrong direction."
     },
     {
-      "match": "is not a multiple of",
+      "match": "a constant) is true",
+      "hint": "A constant sequence is bounded, even a negative one such as -5: `|-5| = 5`. Do you bound `u n` itself by a nonnegative `M`?"
+    },
+    {
+      "match": "Bounded u implies",
+      "hint": "A user of your definition needs this lemma. If it is ❓, the referee could not derive it: try the standard formulation `∃ M, ∀ n, |u n| ≤ M`."
+    },
+    {
+      "match": "NonDecreasing (n / 2) is true",
+      "hint": "0, 0, 1, 1, 2, … never goes down, so it is non-decreasing even though it stays level. Do you use `≤` between `u m` and `u n`?"
+    },
+    {
+      "match": "StrictlyIncreasing (n / 2)",
+      "hint": "0, 0, 1, 1, … repeats a value, so it is not strictly increasing. Your definition accepts it: do you compare with `<` (and `m < n`)?"
+    },
+    {
+      "match": "StrictlyIncreasing (n) is true",
       "steps": [
-        "Your `mulN` really is a multiple of `mulK`. You need an element of the colleague's set that is not one."
+        "For `StrictlyIncreasing`, what should the hypothesis on `m` and `n` be?"
       ],
-      "hint": "`mulK := 6`, `mulN := 3`: 3 divides 6, but 3 is not a multiple of 6."
+      "hint": "With `m ≤ n` you would compare `u m < u m` when `m = n`, which is false. The hypothesis must be `m < n`."
+    },
+    {
+      "match": "2n - 7",
+      "hint": "The sequence -7, -5, -3, … is strictly increasing. Nothing in the definition should depend on the sign of the terms."
+    },
+    {
+      "match": "NonDecreasing (a constant)",
+      "hint": "A constant sequence never goes down. Your definition should use `≤`, not `<`, for `NonDecreasing`."
+    },
+    {
+      "match": "StrictlyIncreasing (a constant)",
+      "hint": "A constant sequence does not strictly increase. For `StrictlyIncreasing` you need `<`."
+    },
+    {
+      "match": "NonDecreasing (-n)",
+      "hint": "-n goes down: 0 then -1. Check the direction of the inequality: `m ≤ n` should give `u m ≤ u n`, not `u n ≤ u m`, and the hypothesis `m ≤ n` must be there."
+    },
+    {
+      "match": "0, 1, 2, 0, 0",
+      "steps": [
+        "Which two positions `m ≤ n` show that 0, 1, 2, 0, 0, … goes down?"
+      ],
+      "hint": "`m = 2`, `n = 3`: `u 2 = 2` but `u 3 = 0`. If your definition accepts this sequence, it only looks at positions from some point on, or only at part of the pairs."
+    },
+    {
+      "match": "0, 1, 0, 1",
+      "hint": "This sequence goes down at every other step. Your definition is too weak: it should look at all pairs `m ≤ n` (or all consecutive terms) from the very start."
+    },
+    {
+      "match": "u n < u (n + 1)",
+      "hint": "A user of your definition needs this lemma. If it is ❓, try the standard formulation `∀ m n, m < n → u m < u n`."
+    },
+    {
+      "match": "u n ≤ u (n + 1)",
+      "hint": "A user of your definition needs this lemma. If it is ❓, try the standard formulation `∀ m n, m ≤ n → u m ≤ u n`."
     }
   ]
 }

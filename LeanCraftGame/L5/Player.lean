@@ -1,67 +1,43 @@
 /-
-# Spot the bug
+# Challenge: counting
 
-Until now you have *written* definitions. Every world from here on ends with a
-level where you **read** someone else's definitions instead, and prove them
-wrong. This is the everyday skill of checking a formalisation: an AI or a
-colleague hands you code that compiles, and you must find out whether it means
-what it claims.
+Time to turn word problems into cases and recursion. Nothing new to learn,
+but you must decide the base cases yourself, and the tests are hidden.
 
-How do you prove that a definition is wrong? Not by saying so: by giving a
-**counterexample**, an input on which it gives the wrong answer. The referee
-then checks your counterexample against the right answer, so it is evidence,
-not opinion.
-
-A colleague wrote the two functions below. Both compile, both look reasonable,
-and both are wrong.
+* **Several inputs.** A function may match on two inputs at once:
 
 ```lean
--- the middle one of three numbers (the median): middle 1 5 3 is 3
-def middle (a b c : Nat) : Nat :=
-  if a ≤ b then (if b ≤ c then b else c)
-  else (if a ≤ c then a else c)
-
--- how many days has year y? A year divisible by 4 is a leap year (366 days),
--- except the centuries, except every fourth century: 2024 and 2000 had 366
--- days, 2023 and 1900 had 365.
-def daysInYear (y : Nat) : Nat :=
-  if y % 4 = 0 then (if y % 100 = 0 then 365 else 366) else 365
+def both : Nat → Nat → Nat
+  | 0, _ => 1
+  | n + 1, k => both n k + k
 ```
 
-(`y % 4` is the remainder of `y` divided by 4, and `=` tests whether two
-numbers are equal. Level 6 explains both.)
-
-## How to hunt
-
-* **Run the code in your head on small inputs.** Try the cases the author was
-  probably thinking of, then the ones they probably were not.
-* **Walk through every branch of an `if`.** Each branch is a claim. Find inputs
-  that land in each branch, and check the claim there.
-* **Read the specification again, word by word.** Every "except" is a case
-  someone may have forgotten.
+  (`match n, k with` followed by the same `|` lines works too.) Lines are
+  tried from the top, so put the special cases first.
+* A recursive call may be on **any** smaller input, and a function may call
+  itself several times. `if … then … else …` can be used inside a case.
 
 ## Your task
 
-Give three numbers on which `middle` returns the wrong number, and a year on
-which `daysInYear` gives the wrong answer.
+* `stairs n`: in how many ways can you climb `n` steps, taking 1 or 2 steps
+  at a time? (`stairs 3` is 3: 1+1+1, 1+2, 2+1.)
+* `choose n k`: in how many ways can you pick `k` of `n` different objects?
+  The first object is either in your pick (then pick `k - 1` of the other
+  `n - 1`) or it is not (pick `k` of the other `n - 1`). `choose 4 2` is 6.
+* `countEven n`: how many even numbers are there among 0, 1, …, n?
+
+Think about the smallest inputs first: what does the story say about 0 steps,
+about picking 0 objects, about picking more objects than there are?
 -/
 namespace L5
 
--- The colleague's code, to read (changing it here changes nothing: the
--- referee uses its own copy).
-def middle (a b c : Nat) : Nat :=
-  if a ≤ b then (if b ≤ c then b else c)
-  else (if a ≤ c then a else c)
+-- the number of ways to climb n steps, 1 or 2 at a time   (stairs 3 is 3)
+def stairs (n : Nat) : Nat := sorry
 
-def daysInYear (y : Nat) : Nat :=
-  if y % 4 = 0 then (if y % 100 = 0 then 365 else 366) else 365
+-- the number of ways to choose k objects out of n          (choose 4 2 is 6)
+def choose (n k : Nat) : Nat := sorry
 
--- Three numbers on which `middle` is wrong.
-def ma : Nat := sorry
-def mb : Nat := sorry
-def mc : Nat := sorry
-
--- A year on which `daysInYear` is wrong.
-def year : Nat := sorry
+-- how many even numbers lie among 0, 1, …, n               (countEven 4 is 3)
+def countEven (n : Nat) : Nat := sorry
 
 end L5

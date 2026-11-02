@@ -1,41 +1,39 @@
 /-
-# Limits
+# Injective and surjective
 
-Time for the definition every analysis course starts with. Some new notation:
+Two properties of a function `f : ℕ → ℕ`, and a third that combines them.
 
-* `ℝ` (type `\R`) is the real numbers. A real sequence is `u : ℕ → ℝ`.
-* `|x|` is the absolute value, written with the plain keyboard bar.
-* Casts again: in `fun n => (n : ℝ)`, the natural number `n` is turned into a
-  real number (displayed `↑n`).
-* `ε` is typed `\e` (then a space), and `∀ ε > 0, …` is a bounded quantifier.
-
-A real sequence `u` **converges** to `a` when: for every `ε > 0` there is an
-index `N` such that every term from `N` on is within `ε` of `a`.
+* `Injective f`: different inputs give different outputs. Said without
+  negations: whenever `f a = f b`, then `a = b`.
+* `Surjective f`: every number `y` is hit: there is some `x` with `f x = y`.
+* `Bijective f`: both at once.
 
 ```lean
--- the worked example: the sequence stays within some bound
-def BoundedSeq (u : ℕ → ℝ) : Prop := ∃ M, ∀ n, |u n| ≤ M
+def NeverZero (f : ℕ → ℕ) : Prop := ∀ x, f x ≠ 0
 ```
 
-## What can go wrong
+Mind the direction of the arrow in injectivity (`f a = f b → a = b` is not
+the same as `a = b → f a = f b`, which is true for every function), and mind
+the order of the quantifiers in surjectivity.
 
-* Forgetting `ε > 0`: for `ε = 0` nothing is within distance 0, so no
-  sequence converges.
-* Writing `∃ n` instead of "for all `n ≥ N`": then `u` only needs to come close
-  to `a` once.
-* Putting `∃ N` before `∀ ε`: then a single `N` must work for every `ε`.
+The referee will try your definitions on functions such as `fun n => n + 1`,
+`fun n => n - 1` (remember that subtraction in `ℕ` stops at 0), `fun n => n % 3`
+and `fun n => 2 * n`. Press **Run tests** to see the report.
 
-## Your task
-
-`BoundedSeq` is done. Define `ConvergesTo u a`.
+Hint: for each of the four functions above, decide *by hand* whether it is
+injective and whether it is surjective before you press the button.
 -/
+import Mathlib.Tactic
+
 namespace L25
 
--- some bound M is at least every |u n| (already done)
-def BoundedSeq (u : ℕ → ℝ) : Prop := ∃ M, ∀ n, |u n| ≤ M
+def Injective (f : ℕ → ℕ) : Prop :=
+  sorry
 
--- u converges to a: for every ε > 0, from some index N on,
--- every term u n is within ε of a
-def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := sorry
+def Surjective (f : ℕ → ℕ) : Prop :=
+  sorry
+
+def Bijective (f : ℕ → ℕ) : Prop :=
+  sorry
 
 end L25

@@ -1,66 +1,57 @@
 {
-  "world": "Structure World",
-  "title": "A colleague's groups",
-  "skill": "reading",
-  "checks": [
+  "world": "Library World",
+  "title": "Sets",
+  "skill": "syntax",
+  "predict": [
     {
-      "lean": "example : Bool → Bool → Bool := L28.junkMul\nexample : Bool := L28.junkOne\nexample : Bool → Bool := L28.junkInv",
-      "message": "Keep the names and types of Part A: `junkMul : Bool → Bool → Bool`, `junkOne : Bool`, `junkInv : Bool → Bool`."
+      "test": "0 ∈ multiplesOf 5 is true",
+      "statement": "0 ∈ multiplesOf 5"
     },
     {
-      "lean": "example := fun (G : Type) (m : G → G → G) (o : G) (i : G → G) => L28.Group₂.mk m o i",
-      "message": "`Group₂` must keep `mul`, `one`, `inv` as its first three fields, in this order."
+      "test": "BoundedSet ∅ is true",
+      "statement": "BoundedSet ∅"
+    },
+    {
+      "test": "evens ⊆ multiplesOf 4 is false",
+      "statement": "evens ⊆ multiplesOf 4"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : ℕ → Set ℕ := L28.multiplesOf",
+      "message": "Keep `multiplesOf : ℕ → Set ℕ`."
+    },
+    {
+      "lean": "example : Set ℕ → Prop := L28.BoundedSet",
+      "message": "Keep `BoundedSet : Set ℕ → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "satisfies the colleague's axioms",
-      "hint": "Your three functions must satisfy associativity, `mul one a = a` and `mul a (inv a) = one`. Try an operation that ignores one of its arguments.",
-      "steps": [
-        "Three functions on `Bool`. Which axioms constrain them, and could `mul` simply ignore one of its arguments?"
-      ]
+      "match": "12 ∈ multiplesOf 3",
+      "hint": "A multiple of `k` leaves remainder 0 when divided by `k`: `{n | n % k = 0}`. Mind the order of `n` and `k`."
     },
     {
-      "match": "and yet it is not a group",
-      "hint": "Your model satisfies the axioms, but it is a genuine group. Look for an operation where `one` is a left identity but not a right identity.",
+      "match": "multiplesOf",
       "steps": [
-        "Compare the colleague's axioms with the textbook definition of a group. What does a group need that the axioms never say?"
-      ]
+        "Is `n` divided by `k`, or `k` by `n`?"
+      ],
+      "hint": "`{n | n % k = 0}`."
     },
     {
-      "match": "S₃",
-      "hint": "S₃ is not commutative. If you added `mul_comm` to be safe, remove it: groups need not be commutative.",
-      "steps": [
-        "Is multiplication in S₃ commutative? Do your axioms ask for it?"
-      ]
+      "match": "no upper bound",
+      "hint": "Your definition lets `B` depend on the element. Choose `B` first: `∃ B, ∀ n ∈ s, n ≤ B`."
     },
     {
-      "match": "is a group",
-      "hint": "A genuine group fails one of your axioms, and the report names it. Is that axiom true in every group?",
+      "match": "BoundedSet",
       "steps": [
-        "The report names the axiom that a genuine group fails. Is that axiom true in *every* group?"
-      ]
+        "Does the bound `B` come before the element, or after it?"
+      ],
+      "hint": "`∃ B, ∀ n ∈ s, n ≤ B`."
     },
     {
-      "match": "'a * b = b'",
-      "hint": "The colleague's axioms allow `a * b = b`. Add an axiom that this operation violates, such as a right identity or a left inverse.",
-      "steps": [
-        "This operation passes the colleague's axioms. Which familiar group axiom does it violate?"
-      ]
-    },
-    {
-      "match": "(ℕ, +)",
-      "hint": "With `inv = id`, (ℕ, +) has no inverses: 1 + 1 ≠ 0. Do your axioms really require inverses?",
-      "steps": [
-        "Does every element of (ℕ, +) have an inverse? Do your axioms need that?"
-      ]
-    },
-    {
-      "match": "(Bool, and)",
-      "hint": "In (Bool, and) with identity `true`, the element `false` has no inverse. Do your axioms really require inverses?",
-      "steps": [
-        "Does every element of (Bool, and) have an inverse? Do your axioms need that?"
-      ]
+      "match": "",
+      "hint": "Read your definition aloud, expanding `∈` and the bounded quantifiers."
     }
   ]
 }

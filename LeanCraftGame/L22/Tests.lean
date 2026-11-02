@@ -1,43 +1,29 @@
-/- Hidden test battery for Level Using Mathlib. -/
+/- Hidden test battery for Level Spot the bug: quantifiers. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L22.Player
 
-open L22
+namespace L22Ref
+def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n, n > 0 → f n = 0
+def EventuallyZero (u : ℕ → ℕ) : Prop := ∀ N, ∃ n ≥ N, u n = 0
+def Unbounded (u : ℕ → ℕ) : Prop := ∃ M, ∀ n, M ≤ u n
+end L22Ref
 
-#no_sorry TwinPrime
-#no_sorry CommonDivisor
-#no_sorry OneToOne
-#level_start "Using Mathlib"
+#no_sorry L22.noRoot
+#no_sorry L22.notEventuallyZero
+#no_sorry L22.bounded
+#level_start "Spot the bug: quantifiers"
 
--- the worked example
-#expect_true "BigEven 6 is true" unfolding BigEven :
-  BigEven 6
-#expect_false "BigEven 2 is false" unfolding BigEven :
-  BigEven 2
-#expect_false "BigEven 7 is false" unfolding BigEven :
-  BigEven 7
--- your definitions
-#expect_true "TwinPrime 5 is true" unfolding TwinPrime :
-  TwinPrime 5
-#expect_true "TwinPrime 11 is true" unfolding TwinPrime :
-  TwinPrime 11
-#expect_false "TwinPrime 7 is false" unfolding TwinPrime :
-  TwinPrime 7
-#expect_false "TwinPrime 2 is false" unfolding TwinPrime :
-  TwinPrime 2
-#expect_true "CommonDivisor 3 6 9 is true" unfolding CommonDivisor :
-  CommonDivisor 3 6 9
-#expect_true "CommonDivisor 5 0 0 is true" unfolding CommonDivisor :
-  CommonDivisor 5 0 0
-#expect_false "CommonDivisor 2 6 9 is false" unfolding CommonDivisor :
-  CommonDivisor 2 6 9
-#expect_true "OneToOne (fun n => 2 * n) is true" unfolding OneToOne Function.Injective Function.Surjective :
-  OneToOne (fun n => 2 * n)
-#expect_true "OneToOne (fun n => n + 3) is true" unfolding OneToOne Function.Injective Function.Surjective :
-  OneToOne (fun n => n + 3)
-#expect_false "OneToOne (fun n => n / 2) is false" unfolding OneToOne Function.Injective Function.Surjective :
-  OneToOne (fun n => n / 2)
-#expect_false "OneToOne (fun _ => 0) is false" unfolding OneToOne Function.Injective Function.Surjective :
-  OneToOne (fun _ => 0)
+#expect_true "HasPositiveRoot accepts your function" unfolding L22Ref.HasPositiveRoot L22.noRoot :
+  L22Ref.HasPositiveRoot L22.noRoot
+#expect_true "your function has no root other than 0" unfolding L22.noRoot :
+  ¬ (∃ n > 0, L22.noRoot n = 0)
+#expect_true "EventuallyZero accepts your sequence" unfolding L22Ref.EventuallyZero L22.notEventuallyZero :
+  L22Ref.EventuallyZero L22.notEventuallyZero
+#expect_true "your sequence is not eventually 0" unfolding L22.notEventuallyZero :
+  ¬ (∃ N, ∀ n ≥ N, L22.notEventuallyZero n = 0)
+#expect_true "Unbounded accepts your sequence" unfolding L22Ref.Unbounded L22.bounded :
+  L22Ref.Unbounded L22.bounded
+#expect_true "your sequence is bounded" unfolding L22.bounded :
+  ¬ (∀ M, ∃ n, M ≤ L22.bounded n)
 
 #level_report

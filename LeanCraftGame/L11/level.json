@@ -1,76 +1,53 @@
 {
-  "world": "Numbers World",
-  "title": "Division by zero",
-  "skill": "writing",
-  "predict": [
-    {
-      "test": "IsHalf 6 3 is true",
-      "statement": "IsHalf 6 3"
-    },
-    {
-      "test": "IsReciprocal 0 0 is false (0 has no reciprocal)",
-      "statement": "IsReciprocal 0 0"
-    },
-    {
-      "test": "HasSlope 1 2 1 2 0 is false (one point does not determine a line)",
-      "statement": "HasSlope 1 2 1 2 0"
-    }
-  ],
+  "world": "Statements World",
+  "title": "Spot the bug: connectives",
+  "skill": "reading",
+  "public": "all",
   "checks": [
     {
-      "lean": "example : ℚ → ℚ → ℚ := L11.average",
-      "message": "Keep `average : ℚ → ℚ → ℚ`."
-    },
-    {
-      "lean": "example : ℚ → ℚ → Prop := L11.IsReciprocal",
-      "message": "Keep `IsReciprocal : ℚ → ℚ → Prop`."
-    },
-    {
-      "lean": "example : ℚ → ℚ → ℚ → ℚ → ℚ → Prop := L11.HasSlope",
-      "message": "Keep `HasSlope` with five rational inputs."
+      "lean": "example : Nat := L11.teen\nexample : Nat := L11.weekendDay\nexample : Nat := L11.oddA\nexample : Nat := L11.oddB",
+      "message": "Keep `teen`, `weekendDay`, `oddA` and `oddB` as natural numbers (`Nat`)."
     }
   ],
   "hints": [
     {
-      "match": "average 1 2",
-      "hint": "`a + b / 2` means `a + (b / 2)`. Add parentheses: `(a + b) / 2`."
-    },
-    {
-      "match": "average",
+      "match": "IsTeen accepts",
       "steps": [
-        "Which binds tighter, `/` or `+`?"
+        "Read `13 ≤ n ∨ n ≤ 19` aloud. Which numbers satisfy at least one of the two sides?"
       ],
-      "hint": "`(a + b) / 2`."
+      "hint": "Every number is either at least 13 or at most 19, so `IsTeen` accepts everything. Take `teen := 5`."
     },
     {
-      "match": "0 has no reciprocal",
-      "hint": "With `y = 1 / x`, 0 is its own reciprocal, because `1 / 0 = 0` in Lean. Say it without dividing: `x * y = 1`."
-    },
-    {
-      "match": "IsReciprocal",
+      "match": "from 13 to 19",
       "steps": [
-        "What is `1 / 0` in Lean?"
+        "Your number is a genuine teenager. You need one that `IsTeen` accepts *and* that is outside 13 to 19."
       ],
-      "hint": "`x * y = 1`."
+      "hint": "Take a child, such as `5`, or an adult, such as `40`."
     },
     {
-      "match": "vertical line",
-      "hint": "With a division, the vertical line gets slope `5 / 0 = 0`. Multiply instead, and require `x₁ ≠ x₂`."
+      "match": "weekend day (6 or 7)",
+      "hint": "The weekend days are 6 and 7: `weekendDay` must be one of them."
     },
     {
-      "match": "one point",
-      "hint": "Through a single point, every slope fits `m * 0 = 0`. Require `x₁ ≠ x₂`."
-    },
-    {
-      "match": "HasSlope",
+      "match": "IsWeekend rejects",
       "steps": [
-        "What happens to your definition when `x₁ = x₂`?"
+        "Can a day be equal to 6 *and* to 7?"
       ],
-      "hint": "`x₁ ≠ x₂ ∧ m * (x₂ - x₁) = y₂ - y₁`."
+      "hint": "`d = 6 ∧ d = 7` is false for every `d`, so `IsWeekend` rejects every day. Both 6 and 7 work."
     },
     {
-      "match": "",
-      "hint": "Is there a division that could be by zero?"
+      "match": "BothOdd accepts",
+      "steps": [
+        "Put in the parentheses that Lean puts in: `¬` binds tighter than `∧`. What does the right-hand side `b % 2 = 0` say about `b`?"
+      ],
+      "hint": "`BothOdd a b` means `(¬ a % 2 = 0) ∧ (b % 2 = 0)`: `a` odd and `b` *even*. Take `oddA := 1`, `oddB := 2`."
+    },
+    {
+      "match": "both odd",
+      "steps": [
+        "Your two numbers are both odd, so they do not show the bug. Which pairs does `BothOdd` accept?"
+      ],
+      "hint": "Take `a` odd and `b` even, such as 1 and 2."
     }
   ]
 }

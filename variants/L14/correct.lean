@@ -1,8 +1,7 @@
--- from index 3 on, the terms are at least 10 (already done)
-def BigAfter (u : Nat → Nat) : Prop := ∀ n, 3 ≤ n → 10 ≤ u n
+def absDiff (a b : ℕ) : ℕ := if a ≤ b then b - a else a - b
 
--- from index 5 on, the terms are at least 3
-def LateBig (u : Nat → Nat) : Prop := ∀ n, 5 ≤ n → 3 ≤ u n
+def signum (x : ℤ) : ℤ := if x < 0 then -1 else if x = 0 then 0 else 1
 
--- if n is even then u n is even
-def EvenToEven (u : Nat → Nat) : Prop := ∀ n, n % 2 = 0 → u n % 2 = 0
+def ratio (a b : ℕ) : ℚ := (a : ℚ) / b
+
+def percent (a b : ℕ) : ℕ := (200 * a + b) / (2 * b)

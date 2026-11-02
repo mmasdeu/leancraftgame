@@ -1,44 +1,67 @@
 /-
-# True or false?
+# Spot the bug
 
-So far our functions returned numbers. A mathematician's definitions are
-mostly *statements*: "n is even", "u is bounded". In Lean a statement has
-type `Prop` (a *proposition*). It is either true or false.
+Until now you have *written* definitions. Every world from here on ends with a
+level where you **read** someone else's definitions instead, and prove them
+wrong. This is the everyday skill of checking a formalisation: an AI or a
+colleague hands you code that compiles, and you must find out whether it means
+what it claims.
+
+How do you prove that a definition is wrong? Not by saying so: by giving a
+**counterexample**, an input on which it gives the wrong answer. The referee
+then checks your counterexample against the right answer, so it is evidence,
+not opinion.
+
+A colleague wrote the two functions below. Both compile, both look reasonable,
+and both are wrong.
 
 ```lean
-def IsBig (n : Nat) : Prop := 100 ≤ n
+-- the middle one of three numbers (the median): middle 1 5 3 is 3
+def middle (a b c : Nat) : Nat :=
+  if a ≤ b then (if b ≤ c then b else c)
+  else (if a ≤ c then a else c)
+
+-- how many days has year y? A year divisible by 4 is a leap year (366 days),
+-- except the centuries, except every fourth century: 2024 and 2000 had 366
+-- days, 2023 and 1900 had 365.
+def daysInYear (y : Nat) : Nat :=
+  if y % 4 = 0 then (if y % 100 = 0 then 365 else 366) else 365
 ```
 
-`IsBig 150` is a true statement and `IsBig 5` is a false one. A function
-returning `Prop` is called a **predicate**.
+(`y % 4` is the remainder of `y` divided by 4, and `=` tests whether two
+numbers are equal. The next world, Statements, explains both.)
 
-* There is no `if`, `true` or `false` here. The body is simply the statement.
-* `a = b` is the statement "a equals b". `a % 2 = 0` says "the remainder of
-  `a` divided by 2 is 0".
-* Predicates are usually named with a capital letter, like `IsBig`.
+## How to hunt
 
-## Off-by-one
-
-Is it `<` or `≤`? `10 < n` is false for `n = 10`, `10 ≤ n` is true.
-The tests will check the boundary values.
+* **Run the code in your head on small inputs.** Try the cases the author was
+  probably thinking of, then the ones they probably were not.
+* **Walk through every branch of an `if`.** Each branch is a claim. Find inputs
+  that land in each branch, and check the claim there.
+* **Read the specification again, word by word.** Every "except" is a case
+  someone may have forgotten.
 
 ## Your task
 
-`IsBig` is done. Define `IsEven`, `IsSmall` (below 10) and `GoesInto`
-(`GoesInto a b` says that `a` divides `b` exactly).
+Give three numbers on which `middle` returns the wrong number, and a year on
+which `daysInYear` gives the wrong answer.
 -/
 namespace L6
 
--- n is at least 100 (already done)
-def IsBig (n : Nat) : Prop := 100 ≤ n
+-- The colleague's code, to read (changing it here changes nothing: the
+-- referee uses its own copy).
+def middle (a b c : Nat) : Nat :=
+  if a ≤ b then (if b ≤ c then b else c)
+  else (if a ≤ c then a else c)
 
--- n is even                        (IsEven 10 is true, IsEven 7 is false)
-def IsEven (n : Nat) : Prop := sorry
+def daysInYear (y : Nat) : Nat :=
+  if y % 4 = 0 then (if y % 100 = 0 then 365 else 366) else 365
 
--- n is smaller than 10             (IsSmall 3 is true, IsSmall 10 is false)
-def IsSmall (n : Nat) : Prop := sorry
+-- Three numbers on which `middle` is wrong.
+def ma : Nat := sorry
+def mb : Nat := sorry
+def mc : Nat := sorry
 
--- dividing b by a leaves no remainder   (GoesInto 3 12 is true, GoesInto 5 12 is false)
-def GoesInto (a b : Nat) : Prop := sorry
+-- A year on which `daysInYear` is wrong.
+def year : Nat := sorry
 
 end L6

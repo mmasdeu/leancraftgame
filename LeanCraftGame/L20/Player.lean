@@ -1,62 +1,40 @@
 /-
-# Be the referee
+# Bounded quantifiers
 
-In "Going to infinity" the referee tested *your* definition. Now you write
-the tests, and the referee tries to slip wrong definitions past them.
+Mathematicians write "for all n ≥ N" and "there is an n > 0". Lean (with
+Mathlib) has the same shorthand:
 
-Here is the right definition, from that level:
+* `∀ n ≥ N, P n` means `∀ n, n ≥ N → P n`;
+* `∃ n > 0, P n` means `∃ n, n > 0 ∧ P n`.
+
+Notice the difference: the bound becomes an **implication** under `∀` and a
+**conjunction** under `∃`. This is exactly the `→` versus `∧` lesson from
+"If … then …". Writing the long form by hand with the wrong connective is a
+classic mistake:
+
+* `∃ n, n > 0 → f n = 0` is true for *every* `f`: take `n = 0`, then `0 > 0`
+  is false, and an implication with a false premise is true.
+
+The same shorthand exists for `≤`, `<`, `≠` and, as you will see with sets,
+for `∈`. Several variables can share a quantifier: `∀ a b, …`.
 
 ```lean
-def TendsToInfinity (u : ℕ → ℕ) : Prop := ∀ M, ∃ N, ∀ n ≥ N, M ≤ u n
+def EventuallyBig (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 10 ≤ u n
 ```
-
-Your test suite is four sequences:
-
-* two that **do** tend to infinity (`good₁`, `good₂`), and
-* two that do **not** (`bad₁`, `bad₂`).
-
-The referee first checks that your labels are honest: each `good` sequence
-must really tend to infinity, and each `bad` one must really not.
-
-Then it brings out the **mutants**: hidden *wrong* definitions of
-`TendsToInfinity`, like the ones players write by mistake. A mutant is
-**caught** when it gets at least one of your four sequences wrong: it rejects a
-`good` one, or accepts a `bad` one. A mutant that gets all four right
-**survives**: your tests cannot tell it apart from the right definition, so a
-wrong definition would have cleared your level.
-
-Software testers call this *mutation testing*. It is also how the levels of
-this game were made: every test you have met was chosen to catch a mistake.
-
-## Choosing good tests
-
-A test suite of obvious examples (`fun n => n` and `fun _ => 0`) catches very
-little. Each probe should sit **on the boundary** of the notion:
-
-* a sequence that tends to infinity *despite* lacking a property that people
-  confuse with it;
-* a sequence that does not, *despite* having such a property.
-
-Think back to "Going to infinity": which properties are *not* part of the
-notion, but are easy to mistake for it?
 
 ## Your task
 
-Fill in the four sequences so that every mutant is caught. The report shows
-how many mutants are hidden. A mutant that survives is revealed, with its
-definition, so that you can see what your suite missed.
+`EventuallyBig` is done. Define `HasPositiveRoot f` and `EventuallyZero u`.
 -/
 namespace L20
 
--- the right definition (already done)
-def TendsToInfinity (u : ℕ → ℕ) : Prop := ∀ M, ∃ N, ∀ n ≥ N, M ≤ u n
+-- from some index on, every term is at least 10 (already done)
+def EventuallyBig (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 10 ≤ u n
 
--- two sequences that tend to infinity
-def good₁ : ℕ → ℕ := sorry
-def good₂ : ℕ → ℕ := sorry
+-- f is zero at some n other than 0
+def HasPositiveRoot (f : ℕ → ℕ) : Prop := sorry
 
--- two sequences that do not
-def bad₁ : ℕ → ℕ := sorry
-def bad₂ : ℕ → ℕ := sorry
+-- from some index on, every term is 0
+def EventuallyZero (u : ℕ → ℕ) : Prop := sorry
 
 end L20

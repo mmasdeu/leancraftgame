@@ -1,11 +1,9 @@
--- n is at least 100 (already done)
-def IsBig (n : Nat) : Prop := 100 ≤ n
-
--- n is even                        (IsEven 10 is true, IsEven 7 is false)
-def IsEven (n : Nat) : Prop := n % 2 = 0
-
--- n is smaller than 10             (IsSmall 3 is true, IsSmall 10 is false)
-def IsSmall (n : Nat) : Prop := n < 10
-
--- dividing b by a leaves no remainder   (GoesInto 3 12 is true, GoesInto 5 12 is false)
-def GoesInto (a b : Nat) : Prop := b % a = 0
+def middle (a b c : Nat) : Nat :=
+  if a ≤ b then (if b ≤ c then b else c)
+  else (if a ≤ c then a else c)
+def daysInYear (y : Nat) : Nat :=
+  if y % 4 = 0 then (if y % 100 = 0 then 365 else 366) else 365
+def ma : Nat := 2
+def mb : Nat := 3
+def mc : Nat := 1
+def year : Nat := 2000

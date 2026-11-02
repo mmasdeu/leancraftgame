@@ -1,9 +1,8 @@
-def diff (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)
-def IsReciprocal (x y : ℚ) : Prop := y = 1 / x
-def average (a b : ℚ) : ℚ := a + b / 2
-def diffA : ℕ := 3
-def diffB : ℕ := 5
-def recX : ℚ := 0
-def recY : ℚ := 0
-def avgA : ℚ := 2
-def avgB : ℚ := 0
+-- a minus b, as an integer        (diff 3 5 is -2)
+def diff (a b : ℕ) : ℤ := (a : ℤ) - (b : ℤ)
+
+-- the distance between two integers, as a natural number   (distance 3 (-4) is 7)
+def distance (a b : ℤ) : ℕ := (a - b).natAbs
+
+-- x is negative
+def IsNegative (x : ℤ) : Prop := x < 0

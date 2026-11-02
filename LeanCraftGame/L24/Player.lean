@@ -1,55 +1,46 @@
 /-
-# Spot the bug: the library
+# Bounded and monotone
 
-A colleague used Mathlib's notions, but not quite as Mathlib means them.
+Sequences of integers `u : ℕ → ℤ`. Four properties to define, and each has
+a plausible-looking wrong version.
+
+* `BoundedAbove u`: some number `M` is at least every term.
+* `Bounded u`: the terms stay in a band, **on both sides**. Use the absolute
+  value `|x|` (type `|`, then `x`, then `|`).
+* `NonDecreasing u`: the sequence never goes down, **between any two
+  positions**: if `m ≤ n` then `u m ≤ u n`.
+* `StrictlyIncreasing u`: the same with `<` everywhere: if `m < n` then
+  `u m < u n`.
+
+Take `M` to be a natural number (`∃ M : ℕ, …`); Lean inserts the cast
+`(M : ℤ)` for you, so you can write `u n ≤ M`. Remember that quantifier order
+matters: `∃ M, ∀ n, …` says one `M` works for every `n`.
 
 ```lean
--- d is a common divisor of a and b
-def CommonDivisor (d a b : ℕ) : Prop := a ∣ d ∧ b ∣ d
-
--- p and p + 2 are both prime (a twin prime)
-def TwinPrime (p : ℕ) : Prop := Nat.Prime p ∨ Nat.Prime (p + 2)
-
--- the multiples of k: 0, k, 2k, 3k, …
-def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
+def Constant (u : ℕ → ℤ) : Prop := ∀ m n, u m = u n
 ```
 
-Library notions have fixed meanings and fixed argument orders, and a
-definition that uses them can still say the wrong thing:
+The referee will try your definitions on sequences such as `fun n => -(n : ℤ)`
+(0, -1, -2, …) and `fun n => if n < 3 then (n : ℤ) else 0` (0, 1, 2, 0, 0, …).
+Press **Run tests** to see the report.
 
-* `a ∣ b` reads "a divides b": the *small* number comes first.
-* `∨` and `∧` matter as much as ever.
-* In a set-builder `{n | …}`, check which variable is the element and which is
-  the parameter.
-
-## Your task
-
-Each counterexample must be **accepted** by the colleague's definition,
-although it does not have the property in the comment:
-
-* `cdD`, `cdA`, `cdB`: `CommonDivisor cdD cdA cdB` holds, but `cdD` does not
-  divide both `cdA` and `cdB`.
-* `twin`: `TwinPrime twin` holds, but `twin` and `twin + 2` are not both prime.
-* `mulK`, `mulN`: `mulN ∈ multiplesOf mulK` holds, but `mulN` is not a multiple
-  of `mulK`.
+Hint: check each definition on a sequence that goes down forever, on one
+that stays level, and on one that goes up at first and then falls back.
 -/
+import Mathlib.Tactic
+
 namespace L24
 
--- The colleague's code, to read (the referee uses its own copy).
-def CommonDivisor (d a b : ℕ) : Prop := a ∣ d ∧ b ∣ d
-def TwinPrime (p : ℕ) : Prop := Nat.Prime p ∨ Nat.Prime (p + 2)
-def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
+def BoundedAbove (u : ℕ → ℤ) : Prop :=
+  sorry
 
--- accepted by CommonDivisor, but cdD is not a common divisor
-def cdD : ℕ := sorry
-def cdA : ℕ := sorry
-def cdB : ℕ := sorry
+def Bounded (u : ℕ → ℤ) : Prop :=
+  sorry
 
--- accepted by TwinPrime, but not a twin prime
-def twin : ℕ := sorry
+def NonDecreasing (u : ℕ → ℤ) : Prop :=
+  sorry
 
--- mulN ∈ multiplesOf mulK, but mulN is not a multiple of mulK
-def mulK : ℕ := sorry
-def mulN : ℕ := sorry
+def StrictlyIncreasing (u : ℕ → ℤ) : Prop :=
+  sorry
 
 end L24

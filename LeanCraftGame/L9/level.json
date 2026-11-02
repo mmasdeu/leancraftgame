@@ -1,53 +1,80 @@
 {
   "world": "Statements World",
-  "title": "Spot the bug: connectives",
-  "skill": "reading",
-  "public": "all",
+  "title": "Or and not",
+  "skill": "syntax",
+  "predict": [
+    {
+      "test": "FreeTicket 65 is true",
+      "statement": "FreeTicket 65"
+    },
+    {
+      "test": "FreeTicket 5 is false",
+      "statement": "FreeTicket 5"
+    },
+    {
+      "test": "NotTiny 1 is false",
+      "statement": "NotTiny 1"
+    }
+  ],
   "checks": [
     {
-      "lean": "example : Nat := L9.teen\nexample : Nat := L9.weekendDay\nexample : Nat := L9.oddA\nexample : Nat := L9.oddB",
-      "message": "Keep `teen`, `weekendDay`, `oddA` and `oddB` as natural numbers (`Nat`)."
+      "lean": "example : Nat → Prop := L9.FreeTicket",
+      "message": "Keep `FreeTicket : Nat → Prop`."
+    },
+    {
+      "lean": "example : Nat → Prop := L9.PaysFull",
+      "message": "Keep `PaysFull : Nat → Prop`."
+    },
+    {
+      "lean": "example : Nat → Prop := L9.NotTiny",
+      "message": "Keep `NotTiny : Nat → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "IsTeen accepts",
-      "steps": [
-        "Read `13 ≤ n ∨ n ≤ 19` aloud. Which numbers satisfy at least one of the two sides?"
-      ],
-      "hint": "Every number is either at least 13 or at most 19, so `IsTeen` accepts everything. Take `teen := 5`."
+      "match": "FreeTicket 30",
+      "hint": "30 pays. Check that you used `∨` and not `∧`, and that the bounds are right."
     },
     {
-      "match": "from 13 to 19",
-      "steps": [
-        "Your number is a genuine teenager. You need one that `IsTeen` accepts *and* that is outside 13 to 19."
-      ],
-      "hint": "Take a child, such as `5`, or an adult, such as `40`."
+      "match": "FreeTicket 3",
+      "hint": "A child of 3 is under 5: the first part should be `age < 5`."
     },
     {
-      "match": "weekend day (6 or 7)",
-      "hint": "The weekend days are 6 and 7: `weekendDay` must be one of them."
+      "match": "FreeTicket 70",
+      "hint": "70 is at least 65: the second part should be `65 ≤ age`."
     },
     {
-      "match": "IsWeekend rejects",
-      "steps": [
-        "Can a day be equal to 6 *and* to 7?"
-      ],
-      "hint": "`d = 6 ∧ d = 7` is false for every `d`, so `IsWeekend` rejects every day. Both 6 and 7 work."
+      "match": "FreeTicket 65",
+      "hint": "65 gets a free ticket: use `≤`, not `<`."
     },
     {
-      "match": "BothOdd accepts",
-      "steps": [
-        "Put in the parentheses that Lean puts in: `¬` binds tighter than `∧`. What does the right-hand side `b % 2 = 0` say about `b`?"
-      ],
-      "hint": "`BothOdd a b` means `(¬ a % 2 = 0) ∧ (b % 2 = 0)`: `a` odd and `b` *even*. Take `oddA := 1`, `oddB := 2`."
+      "match": "FreeTicket 5",
+      "hint": "5 is not under 5, so it pays: use `<`, not `≤`."
     },
     {
-      "match": "both odd",
+      "match": "FreeTicket",
       "steps": [
-        "Your two numbers are both odd, so they do not show the bug. Which pairs does `BothOdd` accept?"
+        "Who gets a free ticket: children, *or* seniors? Which connective is that?"
       ],
-      "hint": "Take `a` odd and `b` even, such as 1 and 2."
+      "hint": "`age < 5 ∨ 65 ≤ age`."
+    },
+    {
+      "match": "PaysFull",
+      "steps": [
+        "Paying full is the opposite of a free ticket. Can you reuse `FreeTicket`?"
+      ],
+      "hint": "`¬ FreeTicket age`."
+    },
+    {
+      "match": "NotTiny",
+      "steps": [
+        "Is `n ≠ 0 ∨ n ≠ 1` ever false? Try `n = 0` and `n = 1`."
+      ],
+      "hint": "`¬ (n = 0 ∨ n = 1)`, or `n ≠ 0 ∧ n ≠ 1`. Careful with the parentheses and with `∧` versus `∨`."
+    },
+    {
+      "match": "",
+      "hint": "Check the examples in the comment above the predicate."
     }
   ]
 }
