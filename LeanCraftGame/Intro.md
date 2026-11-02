@@ -150,8 +150,12 @@ have a **Challenge** level, a harder task with traps, just before it.
 ## Good to know
 
 * Your code and progress are saved in your browser, so you can close the page and
-  come back. Nothing is sent anywhere, and the **Report a problem** button at the top
+  come back. Your code never leaves your computer, and the **Report a problem** button at the top
   only opens a prefilled page on GitHub, which you send yourself.
+* To learn which levels are too hard or too easy, the game counts, anonymously, how often
+  each level is run and cleared. Only the level number is sent (through GoatCounter: no
+  cookies, no personal data, never your code). It is on by default; untick the box at the
+  bottom of this page to switch it off.
 * Some tests take several seconds, and the hardest up to a minute, because the referee
   really is searching for proofs. A spinner shows which tests are running, and
   **Stop** cancels the run.

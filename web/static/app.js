@@ -329,6 +329,30 @@ function jumpTo(d) {
 /* Online (a static site, see online/build.py) the levels are files, and the tests run on the
    Lean Playground through live.js; locally they come from, and run on, web/server.py. */
 const ONLINE = Boolean(window.LEANCRAFT?.online);
+
+/* Anonymous usage counts: which levels are run and cleared, in the online and in the local version.
+   Nothing but the level number is sent, never the code. The player can switch it off on the Welcome
+   page (stored as "analytics", on by default). See https://www.goatcounter.com/ */
+const GOATCOUNTER = window.LEANCRAFT?.goatcounter;
+const countingOn = () => Boolean(GOATCOUNTER) && store.get("analytics", true);
+function loadCounter() {
+  if (!countingOn() || window.goatcounter?.count || document.getElementById("goatcounter")) return;
+  const s = document.createElement("script");
+  s.id = "goatcounter";
+  s.async = true;
+  s.src = "https://gc.zgo.at/count.js";
+  s.dataset.goatcounter = `https://${GOATCOUNTER}.goatcounter.com/count`;
+  s.dataset.goatcounterSettings = JSON.stringify({ no_onload: true });
+  document.head.appendChild(s);
+}
+loadCounter();
+function track(event, id) {
+  if (!countingOn()) return;
+  try {
+    window.goatcounter?.count({ path: `${ONLINE ? "online" : "local"}/level/${id}/${event}`,
+      title: `Level ${id} ${event}`, event: true });
+  } catch { /* counting must never break the game */ }
+}
 let hosted = null;                     // online: { levels: every level with its tests, prelude }
 
 let levels = [], level = null;
@@ -396,6 +420,12 @@ async function openIntro() {
   $("intro").innerHTML = markdown(text) + `<p class="start"><button class="primary" id="start">
     Start with level 1: ${esc(levels[0].title)} →</button></p>`;
   $("start").onclick = () => openLevel(levels[0].id);
+  if (GOATCOUNTER) {
+    $("start").parentElement.insertAdjacentHTML("beforebegin", `<p class="counting"><label>
+      <input type="checkbox" id="analytics"${countingOn() ? " checked" : ""}>
+      Share anonymous usage counts (which levels are run and cleared; never your code)</label></p>`);
+    $("analytics").onchange = (ev) => { store.set("analytics", ev.target.checked); loadCounter(); };
+  }
   window.scrollTo(0, 0);
 }
 
@@ -688,7 +718,7 @@ function updateSummary(note = "") {
   if (passed === total) {
     const cleared = store.get("cleared", []), n = starsNow();
     const wasHidden = tests.some((t) => !isVisible(t));
-    if (!cleared.includes(level.id)) store.set("cleared", [...cleared, level.id]);
+    if (!cleared.includes(level.id)) { store.set("cleared", [...cleared, level.id]); track("cleared", level.id); }
     if (n > store.get(levelKey("stars"), 0)) store.set(levelKey("stars"), n);
     renderTabs();
     if (wasHidden) renderTests();          // a cleared level shows every test
@@ -738,6 +768,7 @@ async function runTests(ids = null) {
     return;
   }
   stopRun();
+  track("run", level.id);
   const code = src.value, ctl = (controller = new AbortController());
   let run = [], outcome = null, failedThisRun = false;
   $("run").hidden = true;

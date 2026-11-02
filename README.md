@@ -1,5 +1,7 @@
 # Lean Craft Game: a Lean game about definitions, not proofs
 
+[![Downloads](https://img.shields.io/github/downloads/mmasdeu/leancraftgame/total?label=downloads)](https://github.com/mmasdeu/leancraftgame/releases) [![Latest release](https://img.shields.io/github/downloads/mmasdeu/leancraftgame/latest/total?label=latest%20release)](https://github.com/mmasdeu/leancraftgame/releases/latest)
+
 LLMs now write many Lean proofs well, so the scarce skill has moved upstream:
 **saying what you mean**. A definition can compile and still be wrong, vacuous,
 or unusable, and no proof checker will warn you. Lean Craft Game teaches that skill.
@@ -147,6 +149,13 @@ know the answer.**
 | nothing is prime | false | the AI's precedence bug |
 | only 2 is prime | false | the AI's precedence bug |
 | real primes | **open** | "proved an open problem: probably vacuous" |
+
+## Usage counts
+
+Both versions count, anonymously, how often each level is run and cleared (GoatCounter; only the level
+number is sent, never code, no cookies). The Welcome page says so and has a checkbox to switch it off.
+The site code is in `web/static/config.js` (local) and `online/build.py` (online); remove it to disable
+counting altogether.
 
 ## Online version
 

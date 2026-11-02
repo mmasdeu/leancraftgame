@@ -28,7 +28,7 @@ import server  # noqa: E402  (its level loading is reused as it is)
 INITIALIZE = re.compile(r"^initialize (\w+) : (.+?) ← (.+)$", re.M)
 
 # What the Welcome page says about saving and privacy, locally and online.
-LOCAL_NOTE = re.compile(r"Nothing is sent anywhere,.*?which you send yourself\.", re.S)
+LOCAL_NOTE = re.compile(r"Your code never leaves your computer,.*?which you send yourself\.", re.S)
 ONLINE_NOTE = ("When you run the tests, your code is sent to the Lean Playground (live.lean-lang.org), "
                "a public server of the Lean community, which checks it: do not put anything private in it. "
                "The **Report a problem** button at the top only opens a prefilled page on GitHub, "
@@ -83,7 +83,7 @@ def main():
     shutil.rmtree(out, ignore_errors=True)
     shutil.copytree(ROOT / "web" / "static", out)
     (out / "data").mkdir()
-    (out / "config.js").write_text('window.LEANCRAFT = { online: true };\n', encoding="utf-8")
+    (out / "config.js").write_text('window.LEANCRAFT = { online: true, goatcounter: "mmasdeu" };\n', encoding="utf-8")
     (out / "data" / "levels.json").write_text(json.dumps(levels(), ensure_ascii=False), encoding="utf-8")
     (out / "data" / "intro.md").write_text(intro(), encoding="utf-8")
     (out / "data" / "prelude.lean").write_text(prelude() + "\n", encoding="utf-8")
