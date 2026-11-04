@@ -29,7 +29,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT = Path(os.environ.get("LEANCRAFT_ROOT") or Path(__file__).resolve().parent.parent)
-STATIC = ROOT / "web" / "static"
+STATIC = (ROOT / "web" / "static").resolve()   # resolved: f.resolve() below must compare equal (macOS /var -> /private/var)
 WORK = Path(os.environ.get("LEANCRAFT_WORK") or ROOT / ".lake" / "leancraftgame-web")
 RUNS = WORK / "runs"
 CACHE_FILE = WORK / "cache.json"
