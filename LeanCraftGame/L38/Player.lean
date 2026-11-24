@@ -1,5 +1,10 @@
 /-
-# Spot the bug: sums
+# Audit finite accumulations
+
+**ACT II — LIMITS**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **reject incorrect summation and counting claims by checking the actual index set and boundary values.**
 
 A colleague wrote four sums and counts. They compile, they look reasonable,
 and each one is wrong.
@@ -33,6 +38,11 @@ def evenSquares (n : ℕ) : ℕ := (∑ i ∈ Finset.filter (fun i => i % 2 = 0)
 
 Give one input on which each function is wrong. Small numbers are best: they
 make the referee's job easy.
+
+## The road from here
+
+Begin the second act with convergence.
+
 -/
 namespace L38
 

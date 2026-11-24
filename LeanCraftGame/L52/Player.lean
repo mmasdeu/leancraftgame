@@ -1,5 +1,10 @@
 /-
-# A colleague's groups
+# Audit axioms and models
+
+**ACT III — TOPOLOGY**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use accepted and rejected models to reveal missing or excessive axioms in a colleague's group-like structure, exactly the method used for MyTopology in T4.**
 
 In this world you have written the axioms of a structure yourself, and the
 referee judged them on models: real examples that must be accepted and junk
@@ -17,6 +22,11 @@ An axiom system can fail in two ways:
 * it asks for **too little**: a junk structure is accepted.
 
 Part A looks for the second kind of failure, Part B repairs it.
+
+## The road from here
+
+Let Lean infer common structure through classes.
+
 -/
 import Mathlib.Tactic
 

@@ -1,5 +1,5 @@
 {
-  "world": "Topology World",
+  "world": "Topology",
   "title": "Neighbourhoods, filters and convergence",
   "skill": "connect",
   "public": "all",
@@ -79,5 +79,7 @@
       "match": "dual-limit",
       "hint": "Use `fun _ => true`. Every open set containing false is `univ`, so false is a second limit."
     }
-  ]
+  ],
+  "order": 115,
+  "chapter": "III · Convergence"
 }

@@ -1,6 +1,6 @@
 {
-  "world": "Structure Syntax World",
-  "title": "Extending and updating",
+  "world": "Topology",
+  "title": "Extend and update structures",
   "skill": "syntax",
   "public": "all",
   "hintsAfter": 1,
@@ -100,5 +100,8 @@
       "match": "",
       "hint": "Re-read the part of the introduction about the syntax you are using: `with`, `:=` defaults, `extends`, or `(α : Type)`."
     }
-  ]
+  ],
+  "order": 46,
+  "chapter": "III · Language for spaces",
+  "learningObjective": "Use extension, update and parameterisation to enrich the description of mathematical objects."
 }

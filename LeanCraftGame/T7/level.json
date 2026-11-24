@@ -1,5 +1,5 @@
 {
-  "world": "Topology World",
+  "world": "Topology",
   "title": "Bases and generated topologies",
   "skill": "construct",
   "public": "all",
@@ -78,5 +78,7 @@
       "match": "exactly the singletons",
       "hint": "Use `{{true}, {false}}`; do not add `univ` to the basis itself."
     }
-  ]
+  ],
+  "order": 107,
+  "chapter": "III · Examples and maps"
 }

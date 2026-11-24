@@ -1,5 +1,5 @@
 {
-  "world": "Topology World",
+  "world": "Topology",
   "title": "Continuous maps",
   "skill": "construct",
   "public": [
@@ -68,5 +68,7 @@
       "match": "open maps use",
       "hint": "Use direct images: `∀ s, τs.IsOpen s → τt.IsOpen (f '' s)`. The concrete map is `fun _ => false`."
     }
-  ]
+  ],
+  "order": 108,
+  "chapter": "III · Examples and maps"
 }

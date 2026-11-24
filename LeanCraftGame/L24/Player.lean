@@ -1,5 +1,10 @@
 /-
-# Bounded and monotone
+# Bounded and monotone sequences
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **separate boundedness from monotonicity and increasing from nondecreasing behaviour.**
 
 Sequences of integers `u : ℕ → ℤ`. Four properties to define, and each has
 a plausible-looking wrong version.
@@ -26,6 +31,11 @@ Press **Run tests** to see the report.
 
 Hint: check each definition on a sequence that goes down forever, on one
 that stays level, and on one that goes up at first and then falls back.
+
+## The road from here
+
+Relate a sampling function to its range.
+
 -/
 import Mathlib.Tactic
 

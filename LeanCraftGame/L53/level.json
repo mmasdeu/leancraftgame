@@ -1,5 +1,5 @@
 {
-  "world": "Classes World",
+  "world": "Topology",
   "title": "Classes and instances",
   "skill": "syntax",
   "public": "all",
@@ -21,7 +21,9 @@
   "hints": [
     {
       "match": "bigger [1, 2, 3]",
-      "steps": ["`bigger` compares two sizes. Which size does each list have under your instance?"],
+      "steps": [
+        "`bigger` compares two sizes. Which size does each list have under your instance?"
+      ],
       "hint": "The size of `[1, 2, 3]` must be 3 (its length), and that of `[100]` must be 1. Your instance for lists does not count entries."
     },
     {
@@ -34,7 +36,9 @@
     },
     {
       "match": "[10, 20]",
-      "steps": ["Does the instance for lists count how many entries there are, or add the entries up?"],
+      "steps": [
+        "Does the instance for lists count how many entries there are, or add the entries up?"
+      ],
       "hint": "The size of a list is its number of entries: `size xs := xs.length`."
     },
     {
@@ -47,7 +51,9 @@
     },
     {
       "match": "Rect",
-      "steps": ["Unit squares in a rectangle: how many in each row, how many rows?"],
+      "steps": [
+        "Unit squares in a rectangle: how many in each row, how many rows?"
+      ],
       "hint": "`size r := r.w * r.h`. The area, not the sum or the perimeter."
     },
     {
@@ -58,5 +64,8 @@
       "match": "",
       "hint": "Each instance gives the field `size` for one type: `instance sizeString : Size String where size s := s.length`."
     }
-  ]
+  ],
+  "order": 53,
+  "chapter": "III · Language for spaces",
+  "learningObjective": "Give notation a meaning on new types through classes and instances, the mechanism behind TopologicalSpace and filters."
 }

@@ -1,5 +1,10 @@
 /-
-# And
+# Join observations
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **express simultaneous properties with conjunctions and intervals of admissible readings.**
 
 Two statements can be combined. `p ∧ q` means "p **and** q": it is true when
 both are true.
@@ -21,6 +26,11 @@ Typing `∀` and friends: click **Symbols** at the top right of the page. It lis
 ## Your task
 
 `InRange` is done. Define `IsTeen` (13 to 19 inclusive) and `EvenInRange`.
+
+## The road from here
+
+Describe alternatives and exclusions.
+
 -/
 namespace L8
 

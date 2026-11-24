@@ -1,5 +1,10 @@
 /-
-# Integers and casts
+# Indices and integer arithmetic
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **work with casts and integer distances when positions and readings no longer have the same type.**
 
 Natural numbers have no negatives, which is why `3 - 5` is `0` in `ℕ`. The
 **integers** `ℤ` (type `\Z`, or write `Int`) are …, -2, -1, 0, 1, 2, …, and
@@ -34,6 +39,11 @@ and casts `a` and `b` first.
 ## Your task
 
 Define `diff`, `distance` and `IsNegative`.
+
+## The road from here
+
+Normalise readings with division.
+
 -/
 namespace L12
 

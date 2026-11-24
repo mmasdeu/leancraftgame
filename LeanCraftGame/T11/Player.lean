@@ -1,4 +1,5 @@
 /-
+
 # Product topology
 
 For two spaces, the product topology makes both coordinate projections continuous
@@ -9,6 +10,17 @@ For a product of functions `ι → α`, a **cylinder** restricts just one coordi
 Finite intersections of cylinders restrict finitely many coordinates; these
 finite restrictions are essential for arbitrary products. The box topology,
 which allows infinitely many independent restrictions, can be strictly larger.
+
+**ACT III — TOPOLOGY**
+
+The earlier acts gave you the vocabulary needed here: functions and quantifiers from
+**sequences**, inverse images and local approximation from **limits**, and packaged
+axioms from **structures**. This level turns those tools toward general spaces.
+
+## The road from here
+
+Move from coordinates to the global properties of compactness and connectedness.
+
 
 ## Your tasks
 

@@ -1,5 +1,10 @@
 /-
-# Challenge: finite sums
+# Telescoping and partial sums
+
+**ACT II — LIMITS**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **recognise when successive differences telescope and how endpoints determine the whole sum.**
 
 Five sums, each with a trap. Nothing new to learn, but nothing to take for
 granted either. Before you type, write out the first few terms **by hand**:
@@ -18,6 +23,11 @@ Things that have caught people before:
 
 Define the five functions below. The comments give examples; the tests also
 look at other cases.
+
+## The road from here
+
+Audit finite-sum reports.
+
 -/
 namespace L37
 

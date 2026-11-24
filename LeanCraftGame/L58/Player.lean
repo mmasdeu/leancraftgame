@@ -1,5 +1,10 @@
 /-
-# The AI proved the infinitude of primes!
+# Audit a proof of infinity
+
+**ACT III — TOPOLOGY · CODA**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **examine how a vacuous or mis-stated prime predicate can make an 'infinitude proof' compile, and use toy predicates to expose the flaw.**
 
 An AI assistant was asked to formalise and prove Euclid's theorem:
 
@@ -30,6 +35,11 @@ answer it. Before you trust a formalisation, go through this list:
 
 The AI's `AIClaim` below is stated for *any* notion of "prime" `P`, which
 makes it easy to run step 5. `AIClaim IsPrime` is the AI's theorem.
+
+## The road from here
+
+Test an actual sequence dynamics conjecture with the same scepticism.
+
 -/
 import Mathlib.Tactic
 

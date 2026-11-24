@@ -1,4 +1,5 @@
 /-
+
 # Continuous maps
 
 A function `f : α → β` is continuous when the inverse image of every open set
@@ -15,6 +16,17 @@ Mathlib's `Continuous`.
 Constant maps show the distinction: `false` from discrete `Bool` to Sierpiński
 space is continuous, but not open, because it sends the open singleton `{true}`
 to the non-open singleton `{false}`.
+
+**ACT III — TOPOLOGY**
+
+The earlier acts gave you the vocabulary needed here: functions and quantifiers from
+**sequences**, inverse images and local approximation from **limits**, and packaged
+axioms from **structures**. This level turns those tools toward general spaces.
+
+## The road from here
+
+Upgrade continuity with inverse maps to homeomorphisms, subspaces and products.
+
 
 ## Your tasks
 

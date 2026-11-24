@@ -1,6 +1,6 @@
 {
-  "world": "Basics World",
-  "title": "Making choices",
+  "world": "Sequences",
+  "title": "Sample according to cases",
   "skill": "syntax",
   "public": "all",
   "hintsAfter": 1,
@@ -39,5 +39,8 @@
       "match": "",
       "hint": "Re-read the examples in the comment above the function."
     }
-  ]
+  ],
+  "order": 3,
+  "chapter": "I · First observations",
+  "learningObjective": "Define a piecewise observation rule and inspect its boundary behaviour."
 }

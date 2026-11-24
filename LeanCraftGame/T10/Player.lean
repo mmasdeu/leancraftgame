@@ -1,4 +1,5 @@
 /-
+
 # Subspace topology
 
 The subspace topology on `A : Set α` is the topology induced by the inclusion
@@ -10,6 +11,17 @@ Mathlib calls this `TopologicalSpace.induced`; its theorem `continuous_induced_d
 proves that the inclusion is continuous. A subset can be open in a larger space
 without being closed. In Sierpiński space `{true}` is open but its complement
 `{false}` is not open.
+
+**ACT III — TOPOLOGY**
+
+The earlier acts gave you the vocabulary needed here: functions and quantifiers from
+**sequences**, inverse images and local approximation from **limits**, and packaged
+axioms from **structures**. This level turns those tools toward general spaces.
+
+## The road from here
+
+Use those constructions to compare products and prepare global properties.
+
 
 ## Your tasks
 

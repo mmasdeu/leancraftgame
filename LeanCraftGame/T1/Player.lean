@@ -1,4 +1,5 @@
 /-
+
 # Sets and operations
 
 A subset of `α` has type `Set α`, and `x ∈ s` says that `x` belongs to `s`.
@@ -8,6 +9,17 @@ Two sets are **disjoint** when no element belongs to both. A family `C : Set (Se
 Inverse images respect both unions and intersections. Direct images respect
 unions, but need not respect intersections: a constant map is already enough
 to see the problem.
+
+**ACT III — TOPOLOGY**
+
+The earlier acts gave you the vocabulary needed here: functions and quantifiers from
+**sequences**, inverse images and local approximation from **limits**, and packaged
+axioms from **structures**. This level turns those tools toward general spaces.
+
+## The road from here
+
+Apply families and relations to define a topology, then test standard examples.
+
 
 ## Your tasks
 

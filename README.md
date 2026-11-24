@@ -69,42 +69,29 @@ python3 web/server.py --run 1 LeanCraftGame/L1/Player.lean
 The game starts from zero: no Lean knowledge is assumed. A Welcome page (`LeanCraftGame/Intro.md`)
 introduces Lean and the game to first-time visitors, and then each level teaches one
 construct, with a worked example in the lesson text. There are 75 levels
-in thirteen worlds; [CURRICULUM.md](CURRICULUM.md) lists what each one teaches and
+in three acts; [CURRICULUM.md](CURRICULUM.md) lists what each one teaches and
 which mistakes its tests catch, and how predictions, hidden tests and hints are
 set in `level.json`.
 
-* **Basics, Statements, Quantifiers:** the syntax of definitions (`def`,
-  functions, recursion, `Prop`, `∧ ∨ ¬ →`, `∀ ∃` and their order, bounded
-  quantifiers).
-* **Numbers, Library, Finite Sums, Analysis:** the idiosyncrasies of Lean and Mathlib
-  (casts, junk values like `x / 0 = 0`, sets, divisibility and relations, `∑` and
-  `Finset`, the library's own names, implicit and instance arguments, ε-δ definitions
-  in ℝ).
-* **Structure Syntax, Structure, Classes:** `structure` (declaring, building, updating,
-  extending), axioms and models, and `class` and `instance`.
-* **Predicate, Faithfulness:** writing definitions about sequences and functions, and
-  auditing a formal statement (the three original levels are described below).
-* **Topology:** T1–T15 form a coherent course from sets and topology axioms through
-  examples, continuity, homeomorphisms, subspaces, products, compactness, connectedness,
-  separation and neighbourhood-filter convergence. The detailed curriculum is in
-  [docs/topology-curriculum.md](docs/topology-curriculum.md).
-* **Spot the bug** (the last level of most worlds) and **Be the referee**: reading a
-  colleague's definitions and proving them wrong with counterexamples, and writing a
-  test suite that catches hidden wrong definitions.
+* **Act I — Sequences:** values, functions, recursion, propositions, quantifiers and
+  predicates become tools for defining observations, divergence, boundedness, monotonicity,
+  recurrence, sampling and relations. Sets and library definitions are introduced as ways
+  of organising those sequence properties.
+* **Act II — Limits:** finite sums and filtered index sets lead into finite observations,
+  `ε`-convergence, continuity as error control, Cauchy sequences and cluster values.
+* **Act III — Topology:** structures and type classes prepare players to package topology
+  axioms and let Lean infer them. T1–T15 then define topologies, examples, continuous maps,
+  homeomorphisms, subspaces, products, compactness, connectedness, separation and filters.
+  A final three-level mathematical-auditing coda tests prime, iteration and Goldbach claims
+  without turning a formal compilation result into evidence of an open theorem.
 
-Original numeric levels live in `LeanCraftGame/L<n>` and `variants/L<n>`. Later worlds
-can use stable prefixed IDs: topology levels are `T1`–`T15`. Original IDs remain numeric
-for saved-game compatibility. `LEVELS` in `web/server.py` discovers the directories in
-play order, and the server, browser, CLI, online export and desktop packer share those IDs.
-
-The browser has a **Symbols** drawer that lists every symbol with the keys to
-type it (`\forall`, `\to`, `\le`, …) and its plain-ASCII spelling, with a
-typing drill. Clicking a symbol inserts it into the editor.
+See [CURRICULUM.md](CURRICULUM.md) for the complete level-by-level progression and
+[docs/narrative-redesign.md](docs/narrative-redesign.md) for the redesign principles.
 
 The last levels, in more detail, exercise three different skills:
 **writing**, **reading**, and **auditing**.
 
-### Going to infinity (Predicate World, level 23, writing)
+### Going to infinity (Sequences, level 23, writing)
 
 *Define `TendsToInfinity (u : ℕ → ℕ) : Prop`.*
 
@@ -119,7 +106,7 @@ specific, readable test:
 | `∃ N, ∀ M, ∀ n ≥ N, M ≤ u n` (quantifier swap) | ❌ "u n = n tends to infinity". The downstream lemmas still pass, but only *vacuously*: nothing satisfies the definition. |
 | monotone ∧ unbounded | ❌ "0, 4, 2, 6, 4, 8, … tends to infinity (it is not monotone!)" |
 
-### A colleague's groups (Structure World, level 52, reading, then fixing)
+### Auditing axioms and models (Topology, level 52, reading, then fixing)
 
 A colleague's `Group'` has associativity, a **left** identity and a **right**
 inverse. It compiles, and every group is an instance, but it is not the theory
@@ -134,7 +121,7 @@ of groups.
   some axiom. Adding `mul_comm` "to be safe" fails on S₃, and the report names
   `mul_comm` as the axiom that fails.
 
-### The AI proved Goldbach! (Faithfulness World, level 60, auditing)
+### The AI proved Goldbach! (Topology coda, level 60, auditing)
 
 An "AI" formalises Goldbach as
 `∀ n, 2 < n → n % 2 = 0 → ∃ p q, IsPrime p ∧ IsPrime q → p + q = n`

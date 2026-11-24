@@ -1,4 +1,5 @@
 /-
+
 # Families of sets
 
 An **indexed family** of subsets of `α` is a function `ι → Set α`: each index
@@ -8,6 +9,17 @@ a set whose elements are themselves sets.
 For unindexed families, `⋃₀ D` is the union of every set in `D`. Closure under
 arbitrary unions says that whenever `D ⊆ C`, we also have `⋃₀ D ∈ C`.
 Closure under binary intersections is a different condition.
+
+**ACT III — TOPOLOGY**
+
+The earlier acts gave you the vocabulary needed here: functions and quantifiers from
+**sequences**, inverse images and local approximation from **limits**, and packaged
+axioms from **structures**. This level turns those tools toward general spaces.
+
+## The road from here
+
+Use relations to state the topology axioms without confusing intersections and unions.
+
 
 ## Your tasks
 

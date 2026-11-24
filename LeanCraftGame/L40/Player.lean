@@ -1,5 +1,10 @@
 /-
-# Continuity
+# Continuity as error control
+
+**ACT II — LIMITS**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **define ContAt f a using δ for every ε, relating a targeted error in output to an allowed error in input.**
 
 "Limits" gave you the shape `∀ ε > 0, ∃ N, …`. Continuity of a function has the
 same shape, but the second quantifier is a real number `δ` (type `\delta`) that
@@ -34,6 +39,11 @@ def BoundedBy (f : ℝ → ℝ) (M : ℝ) : Prop := ∀ x, |f x| ≤ M
 ## Your task
 
 `BoundedBy` is done. Define `IsDeltaFor f a ε δ`, then `ContAt f a`.
+
+## The road from here
+
+Define convergence without knowing the candidate limit.
+
 -/
 namespace L40
 

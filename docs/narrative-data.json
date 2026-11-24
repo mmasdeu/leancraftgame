@@ -1,0 +1,302 @@
+[
+  [
+    "Record a first reading",
+    "Define values and a successor: a sequence begins as data with a next step.",
+    "Transform every reading pointwise."
+  ],
+  [
+    "Transform a sequence pointwise",
+    "Use functions as transformations u n ↦ f(u n), the simplest way to make a new sequence.",
+    "Sample according to cases."
+  ],
+  [
+    "Sample according to cases",
+    "Define a piecewise observation rule and inspect its boundary behaviour.",
+    "Build a sequence from its previous terms."
+  ],
+  [
+    "Recursive sequences",
+    "Give base cases and recursive steps for factorials, powers and Fibonacci-style sequences.",
+    "Count what happens in a finite prefix."
+  ],
+  [
+    "Counting finite prefixes",
+    "Use recursive counts and finite arithmetic to describe the beginning of a sequence.",
+    "Audit a sampling report rather than trusting its presentation."
+  ],
+  [
+    "Audit a sampling report",
+    "Find boundary-case mistakes in packaged functions whose definitions compile but misreport observations.",
+    "Turn observations into mathematical claims."
+  ],
+  [
+    "Claims about readings",
+    "Write predicates—true/false statements about individual values in a sequence.",
+    "Combine two claims about the same reading."
+  ],
+  [
+    "Join observations",
+    "Express simultaneous properties with conjunctions and intervals of admissible readings.",
+    "Describe alternatives and exclusions."
+  ],
+  [
+    "Alternatives and exclusions",
+    "Use disjunction and negation to separate types of observations and rules.",
+    "Handle definitions with interacting constraints."
+  ],
+  [
+    "Interacting constraints",
+    "Translate compound conditions into precise definitions instead of relying on a plausible reading.",
+    "Audit the connectives in those translations."
+  ],
+  [
+    "Audit connective readings",
+    "Use concrete values to refute definitions that swap a connective or draw an invalid conclusion.",
+    "Keep index arithmetic and value arithmetic distinct."
+  ],
+  [
+    "Indices and integer arithmetic",
+    "Work with casts and integer distances when positions and readings no longer have the same type.",
+    "Normalise readings with division."
+  ],
+  [
+    "Normalising readings",
+    "Define ratios and reciprocal relations while explicitly controlling division by zero.",
+    "Compare exact and truncated measurements."
+  ],
+  [
+    "Truncated measurements",
+    "Use integer sign, absolute difference, ratio and percent without confusing rounded data with exact data.",
+    "Audit those numerical normalisations."
+  ],
+  [
+    "Audit numerical claims",
+    "Reject a convincing value or definition using a counterexample at a boundary case.",
+    "Make a claim about every position."
+  ],
+  [
+    "Every position",
+    "Use ∀ to express a property of an entire sequence rather than a finite sample.",
+    "Relate one position's property to another's."
+  ],
+  [
+    "From premise to observation",
+    "Use implication to state when a property at one index constrains another observation.",
+    "Require an observation to exist."
+  ],
+  [
+    "Existence of a witness",
+    "Use ∃ for a zero, a large reading or another special observation, and distinguish naming a witness from proving universality.",
+    "Control the order in which witnesses are chosen."
+  ],
+  [
+    "Uniform thresholds and dependent choices",
+    "Compare ∀ x, ∃ y with ∃ y, ∀ x: for sequences this is the difference between a uniform threshold and one depending on the observation.",
+    "Move from now to eventually."
+  ],
+  [
+    "Eventually and bounded quantifiers",
+    "Restrict claims to indices beyond a threshold N, separating finite bad behaviour from long-run behaviour.",
+    "Describe long-run patterns."
+  ],
+  [
+    "Patterns in the long run",
+    "Define periodicity, eventual constancy, maxima and eventual recurrence without confusing repeated and permanent behaviour.",
+    "Audit candidate long-run definitions."
+  ],
+  [
+    "Audit long-run claims",
+    "Choose the counterexample that exposes swapped or misplaced quantifiers in sequence claims.",
+    "State divergence precisely."
+  ],
+  [
+    "Divergence to infinity",
+    "Define TendsToInfinity with thresholds N and lower bounds M, distinguishing unboundedness from monotone divergence.",
+    "Describe bounded and monotone sequences."
+  ],
+  [
+    "Bounded and monotone sequences",
+    "Separate boundedness from monotonicity and increasing from nondecreasing behaviour.",
+    "Relate a sampling function to its range."
+  ],
+  [
+    "Injective and surjective sampling",
+    "Distinguish distinct-index distinct-output sampling from covering the output type and from bijectivity.",
+    "Study repeated visits instead of one-time coverage."
+  ],
+  [
+    "Recurrent behaviour",
+    "Express eventually positive, eventually equal, infinitely often and recurrent behaviour with precise quantifiers.",
+    "Test a definition rather than only writing one."
+  ],
+  [
+    "Be the referee for sequences",
+    "Design examples that reject unbounded but non-divergent sequences, not just examples matching your intuition.",
+    "Organise sequence properties as sets and relations."
+  ],
+  [
+    "Sets of indices",
+    "Describe even indices, multiples and bounded index sets, so conditions can be treated as set membership.",
+    "Use Mathlib's existing vocabulary carefully."
+  ],
+  [
+    "Library facts about observations",
+    "Use established definitions while distinguishing a satisfactory statement from the library statement you intended.",
+    "State those properties over an arbitrary type."
+  ],
+  [
+    "Generic bounds and comparisons",
+    "Generalise bounds, intervals and maxima from a numerical example to the right ordered type.",
+    "Use divisibility to structure the indices themselves."
+  ],
+  [
+    "Divisibility of indices",
+    "Define common divisors, coprimality, gcd and primality as predicates on sequence indices.",
+    "Express order and equivalence relations on those indices."
+  ],
+  [
+    "Relations on indices",
+    "Build reflexivity, symmetry, transitivity, equivalence and partial order without conflating their roles.",
+    "Audit the resulting library definitions."
+  ],
+  [
+    "Audit relations and number claims",
+    "Refute plausible library-style predicates with a concrete counterexample.",
+    "Aggregate a finite segment of observations."
+  ],
+  [
+    "Finite sums of observations",
+    "Sum values over an exactly specified finite set of indices, learning how range endpoints affect every sample.",
+    "Select which observations contribute."
+  ],
+  [
+    "Filtering finite samples",
+    "Use Finset.filter to sum, count or multiply only the observations satisfying a predicate—this is not the convergence filter Filter.",
+    "Find closed forms for finite accumulations."
+  ],
+  [
+    "Closed forms for accumulations",
+    "Compare sums of powers and other finite sums with formulas rather than guessing a closed form from a few values.",
+    "Exploit cancellation across a sequence segment."
+  ],
+  [
+    "Telescoping and partial sums",
+    "Recognise when successive differences telescope and how endpoints determine the whole sum.",
+    "Audit finite-sum reports."
+  ],
+  [
+    "Audit finite accumulations",
+    "Reject incorrect summation and counting claims by checking the actual index set and boundary values.",
+    "Begin the second act with convergence."
+  ],
+  [
+    "Convergent sequences",
+    "Define ConvergesTo u a with ∀ ε > 0, ∃ N, every later term lying within ε of a—quantifying over all positive errors, not just a convenient one.",
+    "Move from limiting values to continuity of transformations."
+  ],
+  [
+    "Continuity as error control",
+    "Define ContAt f a using δ for every ε, relating a targeted error in output to an allowed error in input.",
+    "Define convergence without knowing the candidate limit."
+  ],
+  [
+    "Cauchy sequences",
+    "Separate Cauchy closeness of terms from convergence to a named limit, using eventual indices and positive errors.",
+    "Approach a value through a subsequence rather than the whole sequence."
+  ],
+  [
+    "Cluster values and subsequences",
+    "Define a cluster value through a convergent subsequence, distinguishing recurrence at arbitrary distance from eventual convergence.",
+    "Audit claimed limits before constructing spaces."
+  ],
+  [
+    "Audit limit claims",
+    "Use explicit sequences to disprove an incorrect proposed limit or convergence claim.",
+    "Prepare the language needed for general topological spaces."
+  ],
+  [
+    "Package a point as data",
+    "Use structures to package coordinates and other observational data, learning the syntax later used to package axioms.",
+    "Write transformations on those packages."
+  ],
+  [
+    "Functions on packaged data",
+    "Define operations on structures by reading, transforming and returning their fields.",
+    "Extend an existing data package without rebuilding it."
+  ],
+  [
+    "Extend and update structures",
+    "Use extension, update and parameterisation to enrich the description of mathematical objects.",
+    "Audit compound data definitions before adding axioms."
+  ],
+  [
+    "Compound structural calibrations",
+    "Practise building richer structures whose fields fit together correctly, so that packaging a future topological object is routine rather than mysterious.",
+    "Audit compound data declarations before attaching mathematical axioms."
+  ],
+  [
+    "Audit compound structures",
+    "Identify where a structure declaration stops recording the intended information even though it compiles.",
+    "Add requirements to data rather than only storing values."
+  ],
+  [
+    "Predicates and small structures",
+    "Bundle values with evidence such as positivity or interval bounds—the first step from syntax to mathematical structure.",
+    "Learn which relation axioms a structure needs."
+  ],
+  [
+    "Structures of order",
+    "Package reflexivity, antisymmetry and transitivity as independent requirements instead of assuming an order from its name.",
+    "Use distance as a source of topology."
+  ],
+  [
+    "Metric spaces",
+    "Package a distance with nonnegativity, identity, symmetry and triangle inequality—the named structure behind familiar open-ball examples.",
+    "Audit the hidden assumptions inside a related algebraic structure."
+  ],
+  [
+    "Audit axioms and models",
+    "Use accepted and rejected models to reveal missing or excessive axioms in a colleague's group-like structure, exactly the method used for MyTopology in T4.",
+    "Let Lean infer common structure through classes."
+  ],
+  [
+    "Classes and instances",
+    "Give notation a meaning on new types through classes and instances, the mechanism behind TopologicalSpace and filters.",
+    "Reuse standard instances rather than rebuilding them."
+  ],
+  [
+    "Standard instances",
+    "Interpret arithmetic operations on custom structures through coherent instances, checking the resulting expressions against intended semantics.",
+    "Build instances that depend on earlier ones."
+  ],
+  [
+    "Dependent instances",
+    "Use parameters and existing instances to define reusable behaviour generically—the basis for subspaces, products and induced structure.",
+    "Compare definitions whose instances encode different choices."
+  ],
+  [
+    "Comparing instance-based definitions",
+    "A deeper construction exercise in generic operations and instance composition, preparing you for packaged topology and predicates.",
+    "Audit whether an instance preserves the intended meaning."
+  ],
+  [
+    "Audit class instances",
+    "Reject a compiling but unsuitable instance with an expression whose value contradicts its description.",
+    "Use mathematical auditing to test claims after building the theory."
+  ],
+  [
+    "Audit a proof of infinity",
+    "Examine how a vacuous or mis-stated prime predicate can make an 'infinitude proof' compile, and use toy predicates to expose the flaw.",
+    "Test an actual sequence dynamics conjecture with the same scepticism."
+  ],
+  [
+    "Audit an orbit conjecture",
+    "Define a Collatz step and orbit with explicit finite behaviour, separating unbounded iteration from successfully reaching a target.",
+    "Distinguish finite toy-world validation from an open general claim."
+  ],
+  [
+    "Audit a famous conjecture",
+    "Use several prime predicates to reveal precedence and hidden-assumption errors in the AI's Goldbach statement, while leaving actual Goldbach open.",
+    "Finish with the same discipline used throughout: definitions first, evidence before confidence."
+  ]
+]

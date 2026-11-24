@@ -1,5 +1,10 @@
 /-
-# Sequences that come back
+# Recurrent behaviour
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **express eventually positive, eventually equal, infinitely often and recurrent behaviour with precise quantifiers.**
 
 Sequences of natural numbers `u : ℕ → ℕ`, and the difference between two
 small words: **eventually** and **infinitely often**.
@@ -30,6 +35,11 @@ Press **Run tests** to see the report.
 Hint: a value met *once*, a value met *infinitely often* and a value the
 sequence *ends up equal to* are three different things. Which of the
 sequences above shows each of them?
+
+## The road from here
+
+Test a definition rather than only writing one.
+
 -/
 import Mathlib.Tactic
 

@@ -1,6 +1,6 @@
 {
-  "world": "Predicate World",
-  "title": "Be the referee",
+  "world": "Sequences",
+  "title": "Be the referee for sequences",
   "skill": "testing",
   "public": [
     "good₁ tends to infinity",
@@ -70,5 +70,8 @@
       ],
       "hint": "A constant sequence such as `fun _ => 7` is positive but does not tend to infinity."
     }
-  ]
+  ],
+  "order": 27,
+  "chapter": "I · Sequence behaviour",
+  "learningObjective": "Design examples that reject unbounded but non-divergent sequences, not just examples matching your intuition."
 }

@@ -1,6 +1,6 @@
 {
-  "world": "Library World",
-  "title": "Sets",
+  "world": "Sequences",
+  "title": "Sets of indices",
   "skill": "syntax",
   "predict": [
     {
@@ -53,5 +53,8 @@
       "match": "",
       "hint": "Read your definition aloud, expanding `∈` and the bounded quantifiers."
     }
-  ]
+  ],
+  "order": 28,
+  "chapter": "I · Sequence behaviour",
+  "learningObjective": "Describe even indices, multiples and bounded index sets, so conditions can be treated as set membership."
 }

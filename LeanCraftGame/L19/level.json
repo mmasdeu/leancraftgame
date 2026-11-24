@@ -1,6 +1,6 @@
 {
-  "world": "Quantifiers World",
-  "title": "Quantifiers in order",
+  "world": "Sequences",
+  "title": "Uniform thresholds and dependent choices",
   "skill": "syntax",
   "predict": [
     {
@@ -45,5 +45,8 @@
       "match": "",
       "hint": "Is the order of your quantifiers right? `∀ M, ∃ n, …` lets `n` depend on `M`; `∃ n, ∀ M, …` does not."
     }
-  ]
+  ],
+  "order": 19,
+  "chapter": "I · Mathematical language",
+  "learningObjective": "Compare ∀ x, ∃ y with ∃ y, ∀ x: for sequences this is the difference between a uniform threshold and one depending on the observation."
 }

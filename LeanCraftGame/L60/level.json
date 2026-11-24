@@ -1,6 +1,6 @@
 {
-  "world": "Faithfulness World",
-  "title": "The AI proved Goldbach!",
+  "world": "Topology",
+  "title": "Audit a famous conjecture",
   "skill": "auditing",
   "predict": [
     {
@@ -61,5 +61,8 @@
         "Compare how your statement behaves in the toy worlds above. Which of them did it get wrong?"
       ]
     }
-  ]
+  ],
+  "order": 118,
+  "chapter": "III · Auditing the journey",
+  "learningObjective": "Use several prime predicates to reveal precedence and hidden-assumption errors in the AI's Goldbach statement, while leaving actual Goldbach open."
 }

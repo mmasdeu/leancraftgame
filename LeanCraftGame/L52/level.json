@@ -1,6 +1,6 @@
 {
-  "world": "Structure World",
-  "title": "A colleague's groups",
+  "world": "Topology",
+  "title": "Audit axioms and models",
   "skill": "reading",
   "checks": [
     {
@@ -62,5 +62,8 @@
         "Does every element of (Bool, and) have an inverse? Do your axioms need that?"
       ]
     }
-  ]
+  ],
+  "order": 52,
+  "chapter": "III · Language for spaces",
+  "learningObjective": "Use accepted and rejected models to reveal missing or excessive axioms in a colleague's group-like structure, exactly the method used for MyTopology in T4."
 }

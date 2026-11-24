@@ -1,5 +1,5 @@
 {
-  "world": "Topology World",
+  "world": "Topology",
   "title": "Sets and operations",
   "skill": "construct",
   "public": "all",
@@ -75,5 +75,7 @@
       "match": "counterexample map",
       "hint": "Use the constant map `fun _ => true`. The direct images of `{true}` and `{false}` meet, but the sets do not."
     }
-  ]
+  ],
+  "order": 101,
+  "chapter": "III · Foundations"
 }

@@ -1,6 +1,6 @@
 {
-  "world": "Quantifiers World",
-  "title": "If … then …",
+  "world": "Sequences",
+  "title": "From premise to observation",
   "skill": "syntax",
   "predict": [
     {
@@ -53,5 +53,8 @@
       "match": "",
       "hint": "Read your definition aloud: \"for every n, if …, then …\"."
     }
-  ]
+  ],
+  "order": 17,
+  "chapter": "I · Mathematical language",
+  "learningObjective": "Use implication to state when a property at one index constrains another observation."
 }

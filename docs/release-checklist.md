@@ -12,7 +12,7 @@ Mathlib, not the repository's pinned Lean 4.35.0.
 | Reused standard spaces | Passed | Shared discrete, indiscrete, particular-point, Sierpiński and cofinite definitions; Mathlib usual topology on `ℝ`. |
 | Mathlib relationship documented and checked | Passed (supplementary) | `Topology/Maps.lean`, induced/product APIs, `Filter.Tendsto`, `nhds`, and proper/bottom-filter warning in T15. |
 | Mathematical distinctions and strict examples | Passed (supplementary) | Continuous/open, bijective/homeomorphic, T0/T1/T2, compact/cofinite, connected/Sierpiński, two limits checked. |
-| Original 60 levels remain registered and metadata-valid | Passed | 75-level static check and online export. Only L35 title/lesson wording changed. |
+| Original 60 levels remain registered and metadata-valid | Passed with new narrative | All original lessons have new act, objective and bridge metadata and texts; all 75 levels pass static checks and render in the three-act order. |
 | Complete current-game solution/mutant regression | Passed (pinned) | All 75 levels covered; zero unexpected results across the initial run and resumed L47–T15 run. |
 | Clean pinned Lean 4.35.0 build | Passed | Installed elan and Lean 4.35.0 in project home; `lake build` completed all 3143 jobs. |
 | JavaScript syntax check | Passed | Official Node v22.23.5 archive SHA-256 verified; both app.js and live.js pass `node --check`. |

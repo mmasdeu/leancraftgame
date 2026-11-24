@@ -1,5 +1,10 @@
 /-
-# Spot the bug: connectives
+# Audit connective readings
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use concrete values to refute definitions that swap a connective or draw an invalid conclusion.**
 
 A colleague defined three predicates. Each comes with a comment saying what
 it should mean, and each says something else.
@@ -34,6 +39,11 @@ which binds tighter than `∨`.
 * `weekendDay`: a weekend day (6 or 7) that `IsWeekend` rejects.
 * `oddA` and `oddB`: two numbers that `BothOdd` accepts, although they are not
   both odd.
+
+## The road from here
+
+Keep index arithmetic and value arithmetic distinct.
+
 -/
 namespace L11
 

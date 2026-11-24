@@ -1,6 +1,6 @@
 {
-  "world": "Predicate World",
-  "title": "Going to infinity",
+  "world": "Sequences",
+  "title": "Divergence to infinity",
   "skill": "writing",
   "predict": [
     {
@@ -69,5 +69,8 @@
       "match": "if u → ∞",
       "hint": "A user of your definition needs this lemma. If it is ❓, the referee could not derive it from your definition: try a more standard formulation."
     }
-  ]
+  ],
+  "order": 23,
+  "chapter": "I · Sequence behaviour",
+  "learningObjective": "Define TendsToInfinity with thresholds N and lower bounds M, distinguishing unboundedness from monotone divergence."
 }

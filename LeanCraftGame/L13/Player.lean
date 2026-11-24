@@ -1,5 +1,10 @@
 /-
-# Division by zero
+# Normalising readings
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **define ratios and reciprocal relations while explicitly controlling division by zero.**
 
 The rationals `ℚ` (type `\Q`) are the fractions: `(1 / 2 : ℚ)` is one half.
 
@@ -32,6 +37,11 @@ Remember the binding strengths: `a + b / 2` is `a + (b / 2)`.
 
 `IsHalf` is done. Define `average`, `IsReciprocal` and `HasSlope`. The tests
 include the cases where a division by zero would hide.
+
+## The road from here
+
+Compare exact and truncated measurements.
+
 -/
 namespace L13
 

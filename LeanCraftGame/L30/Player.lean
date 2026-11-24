@@ -1,5 +1,10 @@
 /-
-# Generality
+# Generic bounds and comparisons
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **generalise bounds, intervals and maxima from a numerical example to the right ordered type.**
 
 "Between", "upper bound" and "the larger of two numbers" make sense for ℕ, ℤ,
 ℚ, ℝ and many other types. Mathlib states such definitions **once**, for every
@@ -32,6 +37,11 @@ definition applies to.
 
 The three definitions at the bottom only work for `ℕ`. Make each of them work
 for every type with an order. The tests use them on ℕ, ℤ and ℚ.
+
+## The road from here
+
+Use divisibility to structure the indices themselves.
+
 -/
 namespace L30
 

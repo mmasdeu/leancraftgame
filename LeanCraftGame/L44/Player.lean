@@ -1,5 +1,10 @@
 /-
-# Declaring a structure
+# Package a point as data
+
+**ACT III — TOPOLOGY**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use structures to package coordinates and other observational data, learning the syntax later used to package axioms.**
 
 Sometimes one number is not enough to describe a thing. A point in the plane
 needs *two* numbers. A **structure** bundles several values into one new type.
@@ -54,6 +59,11 @@ Every field is a function: `Point.x : Point → ℕ`. And `(Point.mk 3 4).y` is 
 (the suit is a number: 0 clubs, 1 diamonds, 2 hearts, 3 spades). Then build
 the values described in the comments, and read fields to write the two
 functions at the end.
+
+## The road from here
+
+Write transformations on those packages.
+
 -/
 namespace L44
 

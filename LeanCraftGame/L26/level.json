@@ -1,6 +1,6 @@
 {
-  "world": "Predicate World",
-  "title": "Sequences that come back",
+  "world": "Sequences",
+  "title": "Recurrent behaviour",
   "skill": "writing",
   "predict": [
     {
@@ -136,5 +136,8 @@
       "match": "implies",
       "hint": "A user of your definitions needs this lemma. If it is ❓, the referee could not derive it: check the quantifiers and try the standard formulations."
     }
-  ]
+  ],
+  "order": 26,
+  "chapter": "I · Sequence behaviour",
+  "learningObjective": "Express eventually positive, eventually equal, infinitely often and recurrent behaviour with precise quantifiers."
 }

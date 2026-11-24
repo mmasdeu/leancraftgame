@@ -1,6 +1,6 @@
 {
-  "world": "Statements World",
-  "title": "True or false?",
+  "world": "Sequences",
+  "title": "Claims about readings",
   "skill": "syntax",
   "predict": [
     {
@@ -60,5 +60,8 @@
       "match": "",
       "hint": "Check the examples in the comment above the predicate."
     }
-  ]
+  ],
+  "order": 7,
+  "chapter": "I · First observations",
+  "learningObjective": "Write predicates—true/false statements about individual values in a sequence."
 }

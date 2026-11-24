@@ -1,6 +1,6 @@
 {
-  "world": "Quantifiers World",
-  "title": "For all",
+  "world": "Sequences",
+  "title": "Every position",
   "skill": "syntax",
   "predict": [
     {
@@ -45,5 +45,8 @@
       "match": "",
       "hint": "Read your definition aloud: \"for every n, …\". Does it say what the comment says?"
     }
-  ]
+  ],
+  "order": 16,
+  "chapter": "I · Mathematical language",
+  "learningObjective": "Use ∀ to express a property of an entire sequence rather than a finite sample."
 }

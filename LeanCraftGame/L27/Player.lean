@@ -1,5 +1,10 @@
 /-
-# Be the referee
+# Be the referee for sequences
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **design examples that reject unbounded but non-divergent sequences, not just examples matching your intuition.**
 
 In "Going to infinity" the referee tested *your* definition. Now you write
 the tests, and the referee tries to slip wrong definitions past them.
@@ -45,6 +50,11 @@ notion, but are easy to mistake for it?
 Fill in the four sequences so that every mutant is caught. The report shows
 how many mutants are hidden. A mutant that survives is revealed, with its
 definition, so that you can see what your suite missed.
+
+## The road from here
+
+Organise sequence properties as sets and relations.
+
 -/
 namespace L27
 

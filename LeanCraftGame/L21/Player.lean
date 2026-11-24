@@ -1,5 +1,10 @@
 /-
-# Challenge: patterns in sequences
+# Patterns in the long run
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **define periodicity, eventual constancy, maxima and eventual recurrence without confusing repeated and permanent behaviour.**
 
 Four properties of a sequence `u : ℕ → ℕ` that mathematicians use all the
 time. Each one needs **nested** quantifiers, and the order and the bounds are
@@ -18,6 +23,11 @@ the whole point.
 
 The tests are hidden: ask yourself which sequence would fool a definition with
 the wrong order of quantifiers, a missing bound, or a fixed constant.
+
+## The road from here
+
+Audit candidate long-run definitions.
+
 -/
 namespace L21
 

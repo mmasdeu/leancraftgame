@@ -1,6 +1,6 @@
 {
-  "world": "Predicate World",
-  "title": "Injective and surjective",
+  "world": "Sequences",
+  "title": "Injective and surjective sampling",
   "skill": "writing",
   "predict": [
     {
@@ -84,5 +84,8 @@
       ],
       "hint": "A user of your definition needs this lemma. If it is ❌ or ❓, your `Injective` does not say `f a = f b → a = b` (or `Bijective` does not contain it)."
     }
-  ]
+  ],
+  "order": 25,
+  "chapter": "I · Sequence behaviour",
+  "learningObjective": "Distinguish distinct-index distinct-output sampling from covering the output type and from bijectivity."
 }

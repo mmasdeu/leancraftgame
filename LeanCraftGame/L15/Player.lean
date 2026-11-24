@@ -1,5 +1,10 @@
 /-
-# Spot the bug: numbers
+# Audit numerical claims
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **reject a convincing value or definition using a counterexample at a boundary case.**
 
 Junk values are where definitions go wrong without anybody noticing: `3 - 5`
 is `0` in `ℕ`, and `x / 0` is `0` in `ℚ`. A colleague, who has not played the
@@ -31,6 +36,11 @@ which division can be by zero, and where would the parentheses go?
 
 A rational number is written like an integer, or as a fraction: `3`, `-2`,
 `(1 / 2 : ℚ)`.
+
+## The road from here
+
+Make a claim about every position.
+
 -/
 namespace L15
 

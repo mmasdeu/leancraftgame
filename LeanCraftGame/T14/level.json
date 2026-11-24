@@ -1,5 +1,5 @@
 {
-  "world": "Topology World",
+  "world": "Topology",
   "title": "Separation axioms",
   "skill": "construct",
   "public": "all",
@@ -70,5 +70,7 @@
       "match": "Hausdorff gives",
       "hint": "Return two opens `U,V`, membership proofs `x ∈ U`, `y ∈ V`, and `U ∩ V = ∅`."
     }
-  ]
+  ],
+  "order": 114,
+  "chapter": "III · Global properties"
 }

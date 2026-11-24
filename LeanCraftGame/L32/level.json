@@ -1,6 +1,6 @@
 {
-  "world": "Library World",
-  "title": "Relations",
+  "world": "Sequences",
+  "title": "Relations on indices",
   "skill": "writing",
   "predict": [
     {
@@ -98,5 +98,8 @@
       "match": "",
       "hint": "Write each law as \"for all …, if … then …\" and check the order of the variables and the conclusion."
     }
-  ]
+  ],
+  "order": 32,
+  "chapter": "I · Sequence behaviour",
+  "learningObjective": "Build reflexivity, symmetry, transitivity, equivalence and partial order without conflating their roles."
 }

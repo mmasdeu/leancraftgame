@@ -1,5 +1,10 @@
 /-
-# Quantifiers in order
+# Uniform thresholds and dependent choices
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **compare ∀ x, ∃ y with ∃ y, ∀ x: for sequences this is the difference between a uniform threshold and one depending on the observation.**
 
 Quantifiers are read from left to right, and **the order matters**.
 
@@ -17,6 +22,11 @@ def EveryValueIsHit (f : Nat → Nat) : Prop := ∀ m, ∃ n, f n = m
 Define `HitsEverything f` (every natural number is the value of `f` at some
 position) and `Unbounded u` (however large `M` is, some term of `u` is at least
 `M`). These two are exactly the kind of definitions the next level builds on.
+
+## The road from here
+
+Move from now to eventually.
+
 -/
 namespace L19
 

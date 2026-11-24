@@ -1,5 +1,5 @@
 {
-  "world": "Topology World",
+  "world": "Topology",
   "title": "Compactness",
   "skill": "construct",
   "public": "all",
@@ -64,5 +64,7 @@
       "match": "finite covers",
       "hint": "Reuse the same finite-subcover conclusion; the extra premises simply appear in a different order."
     }
-  ]
+  ],
+  "order": 112,
+  "chapter": "III · Global properties"
 }

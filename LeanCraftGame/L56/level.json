@@ -1,6 +1,6 @@
 {
-  "world": "Classes World",
-  "title": "Challenge: classes",
+  "world": "Topology",
+  "title": "Comparing instance-based definitions",
   "skill": "writing",
   "predict": [
     {
@@ -99,5 +99,8 @@
       "match": "",
       "hint": "Decide the ranking once, in `compare`, and define `max`, `min` by it."
     }
-  ]
+  ],
+  "order": 56,
+  "chapter": "III · Language for spaces",
+  "learningObjective": "A deeper construction exercise in generic operations and instance composition, preparing you for packaged topology and predicates."
 }

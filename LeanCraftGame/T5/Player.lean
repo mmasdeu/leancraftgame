@@ -1,4 +1,5 @@
 /-
+
 # Standard examples of topologies
 
 I will reuse five examples throughout this world:
@@ -13,6 +14,17 @@ The shared module `LeanCraftGame.Topology` proves these constructions once. The
 finite module also enumerates the discrete, indiscrete and Sierpiński opens for
 finite exhaustive checks. Cofinite facts about infinite sets require proofs,
 not finite enumeration.
+
+**ACT III — TOPOLOGY**
+
+The earlier acts gave you the vocabulary needed here: functions and quantifiers from
+**sequences**, inverse images and local approximation from **limits**, and packaged
+axioms from **structures**. This level turns those tools toward general spaces.
+
+## The road from here
+
+Describe closed sets, interiors and closures inside those examples; then generate opens from a basis.
+
 
 ## Your tasks
 

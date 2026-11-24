@@ -1,5 +1,10 @@
 /-
-# Making choices
+# Sample according to cases
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **define a piecewise observation rule and inspect its boundary behaviour.**
 
 ## Several inputs
 
@@ -37,6 +42,11 @@ languages: it is a statement, "is equal to".
 
 `biggest` is already written, so you can read it. Define the other three
 functions in the same style.
+
+## The road from here
+
+Build a sequence from its previous terms.
+
 -/
 namespace L3
 

@@ -1,6 +1,6 @@
 {
-  "world": "Library World",
-  "title": "Spot the bug: the library",
+  "world": "Sequences",
+  "title": "Audit relations and number claims",
   "skill": "reading",
   "public": "all",
   "checks": [
@@ -52,5 +52,8 @@
       ],
       "hint": "`mulK := 6`, `mulN := 3`: 3 divides 6, but 3 is not a multiple of 6."
     }
-  ]
+  ],
+  "order": 33,
+  "chapter": "I · Sequence behaviour",
+  "learningObjective": "Refute plausible library-style predicates with a concrete counterexample."
 }

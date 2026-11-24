@@ -1,5 +1,10 @@
 /-
-# Spot the bug: quantifiers
+# Audit long-run claims
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **choose the counterexample that exposes swapped or misplaced quantifiers in sequence claims.**
 
 A colleague wrote three predicates about sequences. Each one compiles and
 each one is wrong, in the way you learned to avoid in this world.
@@ -38,6 +43,11 @@ it does **not** have the property the comment describes:
 * `noRoot`: no root other than 0, yet `HasPositiveRoot` accepts it.
 * `notEventuallyZero`: not eventually 0, yet `EventuallyZero` accepts it.
 * `bounded`: bounded, yet `Unbounded` accepts it.
+
+## The road from here
+
+State divergence precisely.
+
 -/
 namespace L22
 

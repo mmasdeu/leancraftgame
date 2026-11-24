@@ -1,5 +1,5 @@
 {
-  "world": "Topology World",
+  "world": "Topology",
   "title": "Standard examples of topologies",
   "skill": "construct",
   "public": "all",
@@ -60,5 +60,7 @@
       "match": "singleton false",
       "hint": "Use the particular-point topology at `true`, not at `false` and not the discrete topology."
     }
-  ]
+  ],
+  "order": 105,
+  "chapter": "III · Examples and maps"
 }

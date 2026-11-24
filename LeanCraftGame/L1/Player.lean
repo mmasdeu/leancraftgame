@@ -1,5 +1,10 @@
 /-
-# Naming things
+# Record a first reading
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **define values and a successor: a sequence begins as data with a next step.**
 
 Welcome! In this game you write **definitions** in Lean, a language for
 mathematics. You never write proofs: a hidden *referee* tests your definitions
@@ -44,6 +49,11 @@ If you are stuck, a **Hint** appears under a failed test after a failed run.
 ## Your task
 
 Give the three definitions below their right values.
+
+## The road from here
+
+Transform every reading pointwise.
+
 -/
 namespace L1
 

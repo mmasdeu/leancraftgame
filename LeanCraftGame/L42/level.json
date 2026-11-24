@@ -1,6 +1,6 @@
 {
-  "world": "Analysis World",
-  "title": "Cluster values",
+  "world": "Limits",
+  "title": "Cluster values and subsequences",
   "skill": "writing",
   "predict": [
     {
@@ -96,5 +96,8 @@
       ],
       "hint": "`ClusterValue u a := ∀ ε > 0, ∀ N, ∃ n ≥ N, |u n - a| < ε`, and `IsSubseqLimit u φ a := (∀ m n, m < n → φ m < φ n) ∧ ConvergesTo (fun n => u (φ n)) a`."
     }
-  ]
+  ],
+  "order": 42,
+  "chapter": "II · Convergence",
+  "learningObjective": "Define a cluster value through a convergent subsequence, distinguishing recurrence at arbitrary distance from eventual convergence."
 }

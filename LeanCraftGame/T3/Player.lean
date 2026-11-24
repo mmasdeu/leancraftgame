@@ -1,4 +1,5 @@
 /-
+
 # Relations, classes and fibres
 
 A relation on `α` has type `α → α → Prop`. Reflexivity, symmetry and transitivity
@@ -9,6 +10,17 @@ is a partition, “belong to the same block” has exactly these three propertie
 coverage gives reflexivity and disjoint blocks prevent unwanted transitivity.
 A special case is already available without partitions: for `f : α → β`, the
 relation `f x = f y` has classes given by the fibres `f ⁻¹' {b}`.
+
+**ACT III — TOPOLOGY**
+
+The earlier acts gave you the vocabulary needed here: functions and quantifiers from
+**sequences**, inverse images and local approximation from **limits**, and packaged
+axioms from **structures**. This level turns those tools toward general spaces.
+
+## The road from here
+
+Turn equivalence and fibre language toward sets that carry topological structure.
+
 
 ## Your tasks
 

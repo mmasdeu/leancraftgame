@@ -1,5 +1,5 @@
 {
-  "world": "Topology World",
+  "world": "Topology",
   "title": "Closed sets and closure",
   "skill": "construct",
   "public": "all",
@@ -72,5 +72,7 @@
       "match": "clopen",
       "hint": "Conjoin `τ.IsOpen s` and `MyClosed τ s`."
     }
-  ]
+  ],
+  "order": 106,
+  "chapter": "III · Examples and maps"
 }

@@ -1,5 +1,10 @@
 /-
-# The AI proved Goldbach!
+# Audit a famous conjecture
+
+**ACT III — TOPOLOGY · CODA**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use several prime predicates to reveal precedence and hidden-assumption errors in the AI's Goldbach statement, while leaving actual Goldbach open.**
 
 The last world asks the hardest question about formalisation: does the formal
 statement **say what it claims to say**? Lean checks that a proof proves the
@@ -13,6 +18,11 @@ An AI assistant was asked to formalise and prove Goldbach's conjecture:
 
 It came back with the statement and proof below. Both compile, and
 there is no `sorry`.
+
+## The road from here
+
+Finish with the same discipline used throughout: definitions first, evidence before confidence.
+
 -/
 import Mathlib.Tactic
 

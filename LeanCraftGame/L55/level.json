@@ -1,6 +1,6 @@
 {
-  "world": "Classes World",
-  "title": "Instances that depend on instances",
+  "world": "Topology",
+  "title": "Dependent instances",
   "skill": "writing",
   "predict": [
     {
@@ -56,12 +56,16 @@
     },
     {
       "match": "Size.size (Pair.mk",
-      "steps": ["The size of a pair involves both values. Which function measures a value of type `α`?"],
+      "steps": [
+        "The size of a pair involves both values. Which function measures a value of type `α`?"
+      ],
       "hint": "`size p := Size.size p.fst + Size.size p.snd`."
     },
     {
       "match": "Size.size [",
-      "steps": ["Is the size of a list its length, or the sum of the sizes of its entries?"],
+      "steps": [
+        "Is the size of a list its length, or the sum of the sizes of its entries?"
+      ],
       "hint": "`size xs := (xs.map Size.size).sum`: measure every entry with `Size.size`, then add."
     },
     {
@@ -70,17 +74,25 @@
     },
     {
       "match": "largest",
-      "steps": ["The answer is a *size*, not an entry: measure every entry with `Size.size`.", "What should `largest` give for the empty list, and how do you start a maximum?"],
+      "steps": [
+        "The answer is a *size*, not an entry: measure every entry with `Size.size`.",
+        "What should `largest` give for the empty list, and how do you start a maximum?"
+      ],
       "hint": "`(xs.map Size.size).foldr max 0`, or `xs.foldr (fun a m => max (Size.size a) m) 0`."
     },
     {
       "match": "heavy",
-      "steps": ["`weight` is a field of `Weighted`; `size` is a field of the `Size` that `Weighted` extends."],
+      "steps": [
+        "`weight` is a field of `Weighted`; `size` is a field of the `Size` that `Weighted` extends."
+      ],
       "hint": "`heavy a := Size.size a + Weighted.weight a`."
     },
     {
       "match": "",
       "hint": "An instance with a condition `[Size α]` may use `Size.size` on values of type `α` in its body."
     }
-  ]
+  ],
+  "order": 55,
+  "chapter": "III · Language for spaces",
+  "learningObjective": "Use parameters and existing instances to define reusable behaviour generically—the basis for subspaces, products and induced structure."
 }

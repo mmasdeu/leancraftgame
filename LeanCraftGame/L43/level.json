@@ -1,6 +1,6 @@
 {
-  "world": "Analysis World",
-  "title": "Spot the bug: limits",
+  "world": "Limits",
+  "title": "Audit limit claims",
   "skill": "reading",
   "public": "all",
   "checks": [
@@ -39,5 +39,8 @@
       ],
       "hint": "Any sequence that hits the limit exactly at some index is accepted: `fun n => if n % 2 = 0 then 0 else 1` with limit 0."
     }
-  ]
+  ],
+  "order": 43,
+  "chapter": "II · Convergence",
+  "learningObjective": "Use explicit sequences to disprove an incorrect proposed limit or convergence claim."
 }

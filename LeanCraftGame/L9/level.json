@@ -1,6 +1,6 @@
 {
-  "world": "Statements World",
-  "title": "Or and not",
+  "world": "Sequences",
+  "title": "Alternatives and exclusions",
   "skill": "syntax",
   "predict": [
     {
@@ -76,5 +76,8 @@
       "match": "",
       "hint": "Check the examples in the comment above the predicate."
     }
-  ]
+  ],
+  "order": 9,
+  "chapter": "I · First observations",
+  "learningObjective": "Use disjunction and negation to separate types of observations and rules."
 }

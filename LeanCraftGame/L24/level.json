@@ -1,6 +1,6 @@
 {
-  "world": "Predicate World",
-  "title": "Bounded and monotone",
+  "world": "Sequences",
+  "title": "Bounded and monotone sequences",
   "skill": "writing",
   "predict": [
     {
@@ -107,5 +107,8 @@
       "match": "u n ≤ u (n + 1)",
       "hint": "A user of your definition needs this lemma. If it is ❓, try the standard formulation `∀ m n, m ≤ n → u m ≤ u n`."
     }
-  ]
+  ],
+  "order": 24,
+  "chapter": "I · Sequence behaviour",
+  "learningObjective": "Separate boundedness from monotonicity and increasing from nondecreasing behaviour."
 }

@@ -1,5 +1,10 @@
 /-
-# Challenge: structures
+# Compound structural calibrations
+
+**ACT III — TOPOLOGY**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **practise building richer structures whose fields fit together correctly, so that packaging a future topological object is routine rather than mysterious.**
 
 No new syntax here: put together everything from the three previous levels.
 You build a small calendar. To keep it simple, the Lean calendar has **12
@@ -25,6 +30,11 @@ copies the fields you do not mention.
 
 Declare `Date` (with defaults, see the comment) and `Moment`, then write the
 functions. Each comment has an example.
+
+## The road from here
+
+Audit compound data declarations before attaching mathematical axioms.
+
 -/
 namespace L47
 

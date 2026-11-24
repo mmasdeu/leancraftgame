@@ -1,6 +1,11 @@
 /-
 # Cauchy sequences
 
+**ACT II — LIMITS**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **separate Cauchy closeness of terms from convergence to a named limit, using eventual indices and positive errors.**
+
 In "Limits" a sequence converged to a number `a` that you named in advance.
 Sometimes you cannot name it, and you only know that the terms **crowd together**:
 a real sequence `u : ℕ → ℝ` is a **Cauchy sequence** when for every `ε > 0` there
@@ -30,6 +35,11 @@ Note the difference: here `ε` is compared with the distance between *two terms*
 
 `ConvergesTo` is done. First a warm-up: `IsEventuallyConstant u` says that from
 some index on, `u` takes one single value. Then `IsCauchy u`.
+
+## The road from here
+
+Approach a value through a subsequence rather than the whole sequence.
+
 -/
 namespace L41
 

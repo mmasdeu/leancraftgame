@@ -1,6 +1,6 @@
 {
-  "world": "Library World",
-  "title": "Generality",
+  "world": "Sequences",
+  "title": "Generic bounds and comparisons",
   "skill": "writing",
   "predict": [
     {
@@ -64,5 +64,8 @@
       "match": "",
       "hint": "Replace `ℕ` by a type variable `α`, and ask for the order with `[Preorder α]`."
     }
-  ]
+  ],
+  "order": 30,
+  "chapter": "I · Sequence behaviour",
+  "learningObjective": "Generalise bounds, intervals and maxima from a numerical example to the right ordered type."
 }

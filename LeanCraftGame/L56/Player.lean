@@ -1,5 +1,10 @@
 /-
-# Challenge: classes
+# Comparing instance-based definitions
+
+**ACT III — TOPOLOGY**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **a deeper construction exercise in generic operations and instance composition, preparing you for packaged topology and predicates.**
 
 An instance is accepted by Lean as soon as its fields have the right *types*.
 Whether they do the right *thing* is up to you, and a wrong instance is worse
@@ -43,6 +48,11 @@ Write `Score.value`, the three instances, and `best`: the highest-ranking score
 of a list, with `best [] = Score.mk 0 0`. The tests check the instances on
 awkward pairs; two of them are only *wrong in a corner*, so test your own code
 in your head on ties and on negative values.
+
+## The road from here
+
+Audit whether an instance preserves the intended meaning.
+
 -/
 namespace L56
 

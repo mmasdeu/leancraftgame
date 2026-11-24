@@ -1,6 +1,6 @@
 {
-  "world": "Quantifiers World",
-  "title": "There exists",
+  "world": "Sequences",
+  "title": "Existence of a witness",
   "skill": "syntax",
   "predict": [
     {
@@ -49,5 +49,8 @@
       "match": "",
       "hint": "Read your definition aloud: \"there is an n such that …\"."
     }
-  ]
+  ],
+  "order": 18,
+  "chapter": "I · Mathematical language",
+  "learningObjective": "Use ∃ for a zero, a large reading or another special observation, and distinguish naming a witness from proving universality."
 }

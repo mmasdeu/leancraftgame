@@ -1,6 +1,6 @@
 {
-  "world": "Basics World",
-  "title": "Recursion",
+  "world": "Sequences",
+  "title": "Recursive sequences",
   "skill": "syntax",
   "public": "all",
   "hintsAfter": 1,
@@ -43,5 +43,8 @@
       "match": "",
       "hint": "Compute a few small values by hand and compare with your cases."
     }
-  ]
+  ],
+  "order": 4,
+  "chapter": "I · First observations",
+  "learningObjective": "Give base cases and recursive steps for factorials, powers and Fibonacci-style sequences."
 }

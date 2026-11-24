@@ -1,4 +1,5 @@
 /-
+
 # Neighbourhoods, filters and convergence
 
 A **neighbourhood** of `x` is a set containing an open set containing `x`; the
@@ -13,6 +14,17 @@ In a discrete space convergence implies eventual equality to the limit. In
 Sierpiński space the constant-`true` sequence converges both to `true` and to
 `false`: the only open set containing `false` is `univ`. Hausdorffness prevents
 such non-uniqueness; `tendsto_nhds_unique` is the Mathlib theorem.
+
+**ACT III — TOPOLOGY**
+
+The earlier acts gave you the vocabulary needed here: functions and quantifiers from
+**sequences**, inverse images and local approximation from **limits**, and packaged
+axioms from **structures**. This level turns those tools toward general spaces.
+
+## The road from here
+
+The coda returns to mathematical auditing: test whether a purported theorem and its definitions deserve confidence.
+
 
 ## Your tasks
 

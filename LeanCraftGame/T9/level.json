@@ -1,5 +1,5 @@
 {
-  "world": "Topology World",
+  "world": "Topology",
   "title": "Homeomorphisms",
   "skill": "refute",
   "public": "all",
@@ -74,5 +74,7 @@
       "match": "identity",
       "hint": "Use `id`, not a constant map and not `not`."
     }
-  ]
+  ],
+  "order": 109,
+  "chapter": "III · New spaces"
 }

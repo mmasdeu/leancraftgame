@@ -1,5 +1,10 @@
 /-
-# Order relations
+# Structures of order
+
+**ACT III — TOPOLOGY**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **package reflexivity, antisymmetry and transitivity as independent requirements instead of assuming an order from its name.**
 
 A **partial order** is a way of saying "`a` comes before `b`" that need not
 compare everything: `3 ∣ 6`, but neither `2 ∣ 3` nor `3 ∣ 2`.
@@ -28,6 +33,11 @@ Keep `le` as the first field and the axioms in the order listed. The referee
 tests your structure on relations that are partial orders (`≤` and `≥` on
 numbers, divisibility, equality...) and on relations that are not. Careful:
 each of your axioms must be true for the first kind and false for the second.
+
+## The road from here
+
+Use distance as a source of topology.
+
 -/
 namespace L50
 

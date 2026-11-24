@@ -1,6 +1,6 @@
 {
-  "world": "Classes World",
-  "title": "Spot the bug: classes",
+  "world": "Topology",
+  "title": "Audit class instances",
   "skill": "reading",
   "public": "all",
   "checks": [
@@ -42,5 +42,8 @@
       ],
       "hint": "`version1 = (2, 0)`, `version2 = (1, 5)`: `max` compares the minors 0 ≤ 5 and returns `(1, 5)`, but `compare` says `(1, 5)` is lower than `(2, 0)`."
     }
-  ]
+  ],
+  "order": 57,
+  "chapter": "III · Language for spaces",
+  "learningObjective": "Reject a compiling but unsuitable instance with an expression whose value contradicts its description."
 }

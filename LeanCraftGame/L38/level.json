@@ -1,6 +1,6 @@
 {
-  "world": "Finite Sums World",
-  "title": "Spot the bug: sums",
+  "world": "Limits",
+  "title": "Audit finite accumulations",
   "skill": "reading",
   "public": "all",
   "checks": [
@@ -12,17 +12,23 @@
   "hints": [
     {
       "match": "triangle",
-      "steps": ["Which numbers does `Finset.range n` contain? Does it contain `n`? Compute `triangle 3` by hand and compare with 1 + 2 + 3."],
+      "steps": [
+        "Which numbers does `Finset.range n` contain? Does it contain `n`? Compute `triangle 3` by hand and compare with 1 + 2 + 3."
+      ],
       "hint": "`Finset.range n` stops at `n - 1`, so the colleague adds `0 + 1 + … + (n - 1)`. Take `tn := 3`: the sum is 3, but 1 + 2 + 3 = 6."
     },
     {
       "match": "numDivisors",
-      "steps": ["`Finset.Ico 1 n` leaves out its right end. Which divisor of `n` is always missing?"],
+      "steps": [
+        "`Finset.Ico 1 n` leaves out its right end. Which divisor of `n` is always missing?"
+      ],
       "hint": "`n` divides itself but is not in `Finset.Ico 1 n`. Take `dn := 6`: the colleague counts 1, 2, 3 (three), the right answer is four. (`dn := 0` does not work: both counts are 0.)"
     },
     {
       "match": "primesUpTo",
-      "steps": ["\"At most `n`\" includes `n`. Does `Finset.range n` include `n`? For which `n` does this matter?"],
+      "steps": [
+        "\"At most `n`\" includes `n`. Does `Finset.range n` include `n`? For which `n` does this matter?"
+      ],
       "hint": "It matters when `n` itself is prime. Take `pn := 2`: `Finset.range 2` is `{0, 1}`: no prime, but 2 is prime."
     },
     {
@@ -33,5 +39,8 @@
       ],
       "hint": "The colleague squares the *sum* of the even numbers: `(2 + 4)² = 36`, not `2² + 4² = 20`. Take `en := 5`."
     }
-  ]
+  ],
+  "order": 38,
+  "chapter": "II · Accumulation",
+  "learningObjective": "Reject incorrect summation and counting claims by checking the actual index set and boundary values."
 }

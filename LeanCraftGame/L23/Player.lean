@@ -1,5 +1,10 @@
 /-
-# Going to infinity
+# Divergence to infinity
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **define TendsToInfinity with thresholds N and lower bounds M, distinguishing unboundedness from monotone divergence.**
 
 You now have all the words of logic: `∀`, `∃`, `→`, `∧`, and shorthands such as
 `∀ n ≥ N`. The Predicate world uses them for what mathematicians do all day:
@@ -16,6 +21,11 @@ number `n`. Write down what it means for `u` to **tend to infinity**.
   that should not, and on facts that anybody who *uses* the notion would need.
 * Before your first run you will be asked to predict a few verdicts. Take your
   time with them: they are where the traps of the level are.
+
+## The road from here
+
+Describe bounded and monotone sequences.
+
 -/
 import Mathlib.Tactic
 

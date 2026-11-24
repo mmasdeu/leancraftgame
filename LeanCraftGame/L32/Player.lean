@@ -1,5 +1,10 @@
 /-
-# Relations
+# Relations on indices
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **build reflexivity, symmetry, transitivity, equivalence and partial order without conflating their roles.**
 
 A **relation** on `ℕ` is a statement about two numbers, `r : ℕ → ℕ → Prop`.
 `r a b` reads "`a` is related to `b`". Examples: `(· ≤ ·)`, `(· ∣ ·)`, or
@@ -24,6 +29,11 @@ antisymmetric and transitive. Reuse your own definitions with `∧`.
 
 Fill in the six definitions. The referee tests them on relations such as `≤`, "differ by at most 1",
 `<`, `∣`, "same remainder mod 3", `≠`, the empty relation and the full one.
+
+## The road from here
+
+Audit the resulting library definitions.
+
 -/
 namespace L32
 
