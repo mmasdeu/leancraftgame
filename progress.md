@@ -9,10 +9,13 @@ iteration; do not mark a milestone complete when its verification has not run.
   levels, source maps, validation, reusable UI, replacement candidates and the toolchain blocker.
 - [x] **M1 — curriculum and exercise format.** [Topology curriculum](docs/topology-curriculum.md)
   specifies T1–T15, dependencies, typed exercises, success conditions and the vertical slice.
-- [ ] **M2 — targeted refinement of existing levels.** Rename L35's finite-sum “Filters” title;
-  otherwise preserve the already aligned curriculum unless regression evidence supports edits.
-- [ ] **M3 — topology model and finite referee.** Shared `MyTopology`, standard finite examples,
-  axiom-specific diagnostics and automated tests are not implemented yet.
+- [ ] **M2 — targeted refinement of existing levels.** Content edits are done: L35 is now
+  “Finset filters and counting”, with an explicit distinction from convergence filters. The
+  original curriculum otherwise stays intact. Full playthrough verification awaits Lean 4.35.0.
+- [x] **M3 — topology model and finite referee.** `Topology/Basic.lean` defines `MyTopology`,
+  discrete, indiscrete, particular-point and Sierpiński examples. `Topology/Finite.lean`
+  exhaustively checks finite candidates and returns stable axiom codes plus concrete witnesses.
+  Automated general/finite tests pass in the supplementary 4.33.1 environment.
 - [ ] **M4 — T1–T4 foundations.** T1 is only a one-exercise architecture placeholder, not a
   completed level; T2–T4 are not implemented.
 - [ ] **M5 — T5–T8 examples/continuity.**
@@ -58,3 +61,20 @@ Next iteration:
 Release blocker: install/use Lean 4.35.0 in the verification environment, run every original
 and topology solution/mutant, and perform a clean browser playthrough. An external topology
 reviewer is still required by M9.
+
+## Iteration 2 — shared topology model and finite referee
+
+Implemented general `MyTopology` with arbitrary unions via `sUnion`, derived empty-set and
+indexed-union laws, reusable standard examples, and an executable finite checker. The finite
+checker tests `∅`, `univ`, every binary intersection and every subfamily union, returning
+`axiom_violation/...` plus offending sets. Regression tests accept discrete, indiscrete and
+Sierpiński families and independently reject all four axiom failures. They also verify the
+missing union `{0,1}` witness. L35 was renamed and its lesson now distinguishes `Finset.filter`
+from mathematical filters.
+
+Verification: direct Lean compilation of `Topology/Basic.lean`, `Topology/Finite.lean`, and
+`Topology/Tests.lean` **passed** with the VM's prebuilt 4.33.1 Mathlib. This supplements, but
+does not replace, the pending pinned 4.35.0 build.
+
+Next iteration: complete T2 and T4, connect the finite referee to their exercises, and add the
+Sierpiński exercise in T5 for the first vertical slice.

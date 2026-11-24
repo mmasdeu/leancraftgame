@@ -69,7 +69,7 @@ classification in `level.json`.
 | 32 | Library World | Relations | writing | 35 |
 | 33 | Library World | Spot the bug: the library | reading | 6 |
 | 34 | Finite Sums World | Sums | syntax | 17 |
-| 35 | Finite Sums World | Filters and counting | writing | 24 |
+| 35 | Finite Sums World | Finset filters and counting | writing | 24 |
 | 36 | Finite Sums World | Closed forms | writing | 25 |
 | 37 | Finite Sums World | Challenge: finite sums | writing | 21 |
 | 38 | Finite Sums World | Spot the bug: sums | reading | 4 |
@@ -104,7 +104,7 @@ mathematical auditing are already present, with both construction and counterexa
 There is no evidence for replacing the 60 levels wholesale. M2 should make targeted edits
 only after running their existing mutants and solutions.
 
-* **L35, “Filters and counting”**: rename to **“Finset filters and counting”**. Its exercises
+* **L35, “Finset filters and counting”**: rename to **“Finset filters and counting”**. Its exercises
   use finite-sum/filter notation, not mathematical filters; topology T15 will introduce
   neighbourhood filters.
 * Spot-the-bug levels (6, 11, 15, 22, 33, 38, 43, 48, 57) are the existing repair/refute

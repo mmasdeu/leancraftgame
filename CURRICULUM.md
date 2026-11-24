@@ -100,7 +100,7 @@ directories in that order. Inserting a level means renumbering the ones after it
 | 32 | L32 | Library | Relations | writing |
 | 33 | L33 | Library | Spot the bug: the library | reading |
 | 34 | L34 | Finite Sums | Sums | syntax |
-| 35 | L35 | Finite Sums | Filters and counting | writing |
+| 35 | L35 | Finite Sums | Finset filters and counting | writing |
 | 36 | L36 | Finite Sums | Closed forms | writing |
 | 37 | L37 | Finite Sums | Challenge: finite sums | writing |
 | 38 | L38 | Finite Sums | Spot the bug: sums | reading |
@@ -477,7 +477,7 @@ of them with the keys to type them, and has a typing drill.
 * **Task:** one worked sum (`sumOfDoubles`) and four to write: `squares` (1² + … + n²), `oddSum` (first n odd numbers), `sumBelow`, `sumBetween a b` (Ico). Tests are public.
 * **Tests catch:** `range` where `Icc 1 n` is needed (`squares 4`), `Icc` where `Ico` is needed (`sumBetween 4 4`), `2 * i - 1` over `range n` (first term truncated), `range (b - a)` instead of a shifted set, empty and reversed ranges.
 
-### 35. Filters and counting (L35) · writing
+### 35. Finset filters and counting (L35) · writing
 
 * **Teaches:** `Finset.filter (fun i => …) s`, `.card`, sums over a filter or with `if` inside, `∏` and the empty product 1.
 * **Task:** `numDivisors`, `countPrimes` (below n), `fact` as a product, `multiples3or5` (below n, "or" counted once), `IsPerfect`.

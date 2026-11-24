@@ -1,5 +1,5 @@
 /-
-# Filters and counting
+# Finset filters and counting
 
 Last time you added up *all* the numbers of a `Finset`. Often you want only
 some of them, or you want to *count* them.
@@ -7,6 +7,8 @@ some of them, or you want to *count* them.
 ## Keeping some elements: `Finset.filter`
 
 `Finset.filter p s` keeps the elements of `s` that satisfy the condition `p`.
+Here “filter” means **selecting elements from a finite set**. It is not the
+mathematical `Filter` used for convergence; that notion is introduced in T15.
 The condition is written as a little function, `fun i => …`, read "the `i` such
 that …":
 

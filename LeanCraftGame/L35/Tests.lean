@@ -1,4 +1,4 @@
-/- Hidden test battery for Level Filters and counting. -/
+/- Hidden test battery for Level Finset filters and counting. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L35.Player
 
@@ -9,7 +9,7 @@ open L35
 #no_sorry fact
 #no_sorry multiples3or5
 #no_sorry IsPerfect
-#level_start "Filters and counting"
+#level_start "Finset filters and counting"
 
 -- the worked examples
 #expect_true "(evenSet 7).card = 4 (the worked example)" unfolding evenSet :
