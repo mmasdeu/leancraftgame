@@ -20,7 +20,10 @@ iteration; do not mark a milestone complete when its verification has not run.
   operations, equivalence classes and fibres, topology structures, concrete bad candidates,
   hints and solutions. T3 explains partitions and proves the fibre connection; the detailed
   arbitrary-partition construction is a possible later enrichment.
-- [ ] **M5 — T5–T8 examples/continuity.**
+- [ ] **M5 — T5–T8 examples/continuity.** The standard examples, closed/interior/closure,
+  bases and continuity exercises are playable and tested. Pending enrichment: a formal proof
+  for rational-endpoint intervals on `ℝ` and a separate direct open-map counterexample in T8
+  (the intended inverse-image distinction is already checked).
 - [ ] **M6 — T9–T11 constructions.**
 - [ ] **M7 — T12–T14 global properties.**
 - [ ] **M8 — T15 filters/convergence.**
@@ -130,3 +133,15 @@ exercise uses two incorrect candidates. All have full-player solutions and delib
 Supplementary 4.33.1 verification: T1 **10/10**, T3 **9/9**, T4 **3/3**, with all relevant
 semantic gates and tested mutants behaving as expected. `check_levels.py --static` and the
 online export pass. Next: expand M5 standard examples, closure and bases.
+
+## Iteration 6 — M5 standard examples, closure and bases
+
+T5 now constructs discrete, indiscrete, Sierpiński, particular-point and cofinite topologies.
+The general cofinite construction is proved in the shared library. T6 implements closed sets,
+interior, closure, density and clopen predicates with monotonicity and concrete example checks.
+T7 implements both basis axioms, generated opens and a two-point basis not closed under unions.
+T8 remains the verified continuity construction from the vertical slice.
+
+Supplementary 4.33.1 verification: T5 **8/8**, T6 **6/6**, T7 **4/4**, all semantic gates and
+mutants behaving as intended. Static validation and the online export pass. Full M5 remains open
+because the formal rational-endpoint basis proof and a distinct T8 open-map exercise are pending.

@@ -1,0 +1,76 @@
+{
+  "world": "Topology World",
+  "title": "Closed sets and closure",
+  "skill": "construct",
+  "public": "all",
+  "hintsAfter": 1,
+  "exercises": [
+    {
+      "title": "Define closed sets",
+      "type": "construct",
+      "objective": "Use openness of the complement.",
+      "success": [
+        "closed means open complement",
+        "false is closed in Sierpinski"
+      ]
+    },
+    {
+      "title": "Define interior and closure",
+      "type": "construct",
+      "objective": "Use open subsets and closed supersets respectively.",
+      "success": [
+        "interior contains every open subset",
+        "closure contains the original set"
+      ]
+    },
+    {
+      "title": "Define density and clopen sets",
+      "type": "construct",
+      "objective": "Connect universal closure and simultaneous openness/closedness.",
+      "success": [
+        "dense means closure universal",
+        "clopen requires open and closed"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : T6.MyClosed LeanCraftGame.Topology.sierpinski {false} := by\n  have h : LeanCraftGame.Topology.sierpinski.IsOpen {true} := Or.inr rfl\n  unfold T6.MyClosed\n  convert h using 1 <;> ext b <;> cases b <;> simp",
+      "message": "In Sierpiński space `{false}` must be closed because its complement is `{true}`, which is open."
+    },
+    {
+      "lean": "example : T6.Dense (LeanCraftGame.Topology.indiscrete Nat) {0} := by\n  unfold T6.Dense\n  apply Set.eq_univ_of_forall\n  intro x C hC\n  rcases hC with ⟨hclosed, hsub⟩\n  change (LeanCraftGame.Topology.indiscrete Nat).IsOpen Cᶜ at hclosed\n  rcases hclosed with h | h\n  · have hc : C = Set.univ := by rw [← compl_compl C, h]; simp\n    rw [hc]\n    exact Set.mem_univ x\n  · have hc : C = ∅ := by rw [← compl_compl C, h]; simp\n    have hz : (0 : Nat) ∈ C := hsub rfl\n    rw [hc] at hz\n    exact hz.elim",
+      "message": "In an indiscrete space, every nonempty set is dense: only `univ` is a closed superset."
+    },
+    {
+      "lean": "example {α : Type*} (τ : LeanCraftGame.Topology.MyTopology α) (s : Set α) : T6.MyInterior τ s ⊆ s := by intro x hx; rcases Set.mem_sUnion.mp hx with ⟨U, hU, hxU⟩; exact hU.2 hxU",
+      "message": "The interior is a union only of open sets contained in `s`, so it must be contained in `s`."
+    },
+    {
+      "lean": "example {α : Type*} (τ : LeanCraftGame.Topology.MyTopology α) (s t : Set α) (hst : s ⊆ t) : T6.MyClosure τ s ⊆ T6.MyClosure τ t := by intro x hx C hC; exact hx C ⟨hC.1, hst.trans hC.2⟩",
+      "message": "Closure must be monotone: every closed superset of `t` is also a closed superset of `s`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "closed means",
+      "hint": "Use `τ.IsOpen sᶜ`."
+    },
+    {
+      "match": "interior contains",
+      "hint": "Use `⋃₀ {U | τ.IsOpen U ∧ U ⊆ s}`."
+    },
+    {
+      "match": "closure contains",
+      "hint": "Use `⋂₀ {C | MyClosed τ C ∧ s ⊆ C}`, not the interior formula."
+    },
+    {
+      "match": "dense means",
+      "hint": "Dense means `MyClosure τ s = Set.univ`."
+    },
+    {
+      "match": "clopen",
+      "hint": "Conjoin `τ.IsOpen s` and `MyClosed τ s`."
+    }
+  ]
+}

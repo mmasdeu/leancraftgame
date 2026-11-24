@@ -2,20 +2,57 @@
   "world": "Topology World",
   "title": "Standard examples of topologies",
   "skill": "construct",
-  "public": ["the singleton true is open", "the singleton false is not open"],
+  "public": "all",
   "hintsAfter": 1,
   "exercises": [
     {
-      "title": "Construct the Sierpiński topology",
+      "title": "Construct discrete and indiscrete spaces",
+      "type": "construct",
+      "objective": "Compare the largest and smallest topologies.",
+      "success": [
+        "discrete opens every set",
+        "indiscrete opens the empty set",
+        "indiscrete opens the universal set"
+      ]
+    },
+    {
+      "title": "Construct Sierpinski space",
       "type": "construct",
       "objective": "Use the particular-point construction at true on Bool.",
-      "success": ["the singleton true is open", "the singleton false is not open"]
+      "success": [
+        "the singleton true is open",
+        "the singleton false is not open"
+      ]
+    },
+    {
+      "title": "Construct a particular-point topology",
+      "type": "construct",
+      "objective": "Keep exactly empty sets and sets containing zero open.",
+      "success": [
+        "a particular point set is open"
+      ]
+    },
+    {
+      "title": "Construct the cofinite topology",
+      "type": "construct",
+      "objective": "Use finite complements and reserve infinite claims for general proofs.",
+      "success": [
+        "a cofinite complement is open"
+      ]
     }
   ],
   "checks": [
     {
       "lean": "example : LeanCraftGame.Topology.MyTopology Bool := T5.sierpinskiSpace",
       "message": "Keep `sierpinskiSpace : MyTopology Bool`."
+    },
+    {
+      "lean": "example : ¬ T5.indiscreteOnNat.IsOpen {0} := by\n  simp [T5.indiscreteOnNat, LeanCraftGame.Topology.indiscrete, Set.ext_iff]\n  exact ⟨1, Nat.one_ne_zero⟩",
+      "message": "The natural-number indiscrete space must not open singleton `{0}`."
+    },
+    {
+      "lean": "example : ¬ T5.particularPointAtZero.IsOpen {1} := by simp [T5.particularPointAtZero, LeanCraftGame.Topology.particularPoint]",
+      "message": "At zero, singleton `{1}` is nonempty and does not contain the particular point."
     }
   ],
   "hints": [

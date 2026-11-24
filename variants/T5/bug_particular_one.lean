@@ -1,0 +1,11 @@
+open LeanCraftGame.Topology
+
+def discreteOnNat : MyTopology Nat := discrete Nat
+
+def indiscreteOnNat : MyTopology Nat := indiscrete Nat
+
+def sierpinskiSpace : MyTopology Bool := particularPoint true
+
+def particularPointAtZero : MyTopology Nat := particularPoint 1
+
+def cofiniteOnNat : MyTopology Nat := cofinite Nat

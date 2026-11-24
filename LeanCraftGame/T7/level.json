@@ -1,0 +1,70 @@
+{
+  "world": "Topology World",
+  "title": "Bases and generated topologies",
+  "skill": "construct",
+  "public": "all",
+  "hintsAfter": 1,
+  "exercises": [
+    {
+      "title": "Define the two basis axioms",
+      "type": "construct",
+      "objective": "Separate covering from intersection refinement.",
+      "success": [
+        "a basis covers every point",
+        "basis pairs have local intersection refinements"
+      ]
+    },
+    {
+      "title": "Construct generated opens",
+      "type": "construct",
+      "objective": "Allow unions of arbitrary subfamilies of the basis.",
+      "success": [
+        "generated opens are unions of a subfamily"
+      ]
+    },
+    {
+      "title": "Distinguish a basis from a topology",
+      "type": "referee",
+      "objective": "Use two singleton sets that do not contain their own union.",
+      "success": [
+        "the two point basis has exactly the singletons"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : T7.CoversBy T7.twoPointBasis := by\n  intro b\n  cases b\n  · exact ⟨{false}, by simp [T7.twoPointBasis], rfl⟩\n  · exact ⟨{true}, by simp [T7.twoPointBasis], rfl⟩",
+      "message": "The singleton basis must cover both Boolean points."
+    },
+    {
+      "lean": "example : T7.IntersectionRefines T7.twoPointBasis := by\n  intro U hU V hV x hx\n  simp [T7.twoPointBasis] at hU hV\n  rcases hU with rfl | rfl <;> rcases hV with rfl | rfl <;> simp_all [T7.twoPointBasis]",
+      "message": "Whenever two basis singletons share a point, that same singleton must refine their intersection."
+    },
+    {
+      "lean": "example : T7.GeneratedOpen T7.twoPointBasis Set.univ := by\n  refine ⟨T7.twoPointBasis, Set.Subset.rfl, ?_⟩\n  ext b\n  cases b <;> simp [T7.twoPointBasis]",
+      "message": "The basis generates `univ` as the union of its two singleton sets; it is not required to contain `univ`."
+    },
+    {
+      "lean": "example : Set.univ ∉ T7.twoPointBasis := by simp [T7.twoPointBasis, Set.ext_iff]",
+      "message": "The singleton-only basis must not itself be a topology: added sets violate union closure."
+    }
+  ],
+  "hints": [
+    {
+      "match": "covers every point",
+      "hint": "Use `∀ x, ∃ U ∈ B, x ∈ U`."
+    },
+    {
+      "match": "intersection refinements",
+      "hint": "Quantify `U,V` and `x ∈ U ∩ V`, then return `∃ W ∈ B, x ∈ W ∧ W ⊆ U ∩ V`."
+    },
+    {
+      "match": "generated opens",
+      "hint": "Use `∃ C : Set (Set α), C ⊆ B ∧ s = ⋃₀ C`."
+    },
+    {
+      "match": "exactly the singletons",
+      "hint": "Use `{{true}, {false}}`; do not add `univ` to the basis itself."
+    }
+  ]
+}

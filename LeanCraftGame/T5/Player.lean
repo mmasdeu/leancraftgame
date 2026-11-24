@@ -1,24 +1,36 @@
 /-
-# Standard examples: Sierpiński space
+# Standard examples of topologies
 
-For a point `p`, the **particular-point topology** declares a set open when it
-is empty or contains `p`. Sierpiński space is this topology on `Bool` at `true`.
+I will reuse five examples throughout this world:
 
-Thus its open sets are exactly `∅`, `{true}`, and `univ`. The singleton
-`{false}` is **not** open. This tiny space will distinguish separation and
-convergence properties later.
+* **discrete**: every set is open;
+* **indiscrete**: only `∅` and `univ` are open;
+* **Sierpiński**: the particular-point topology on `Bool` at `true`;
+* **particular point**: a set is open when empty or containing the chosen point;
+* **cofinite**: a set is open when empty or its complement is finite.
 
-The shared module already provides `LeanCraftGame.Topology.MyTopology` and
-`particularPoint`; you may use them or write the structure explicitly.
+The shared module `LeanCraftGame.Topology` proves these constructions once. The
+finite module also enumerates the discrete, indiscrete and Sierpiński opens for
+finite exhaustive checks. Cofinite facts about infinite sets require proofs,
+not finite enumeration.
 
-## Your task
+## Your tasks
 
-Construct `sierpinskiSpace : MyTopology Bool` with precisely those open sets.
+Construct the five named spaces. `particularPointAtZero` is on `Nat` at `0`;
+`cofiniteOnNat` uses the cofinite topology on `Nat`.
 -/
 namespace T5
 
 open LeanCraftGame.Topology
 
+def discreteOnNat : MyTopology Nat := sorry
+
+def indiscreteOnNat : MyTopology Nat := sorry
+
 def sierpinskiSpace : MyTopology Bool := sorry
+
+def particularPointAtZero : MyTopology Nat := sorry
+
+def cofiniteOnNat : MyTopology Nat := sorry
 
 end T5

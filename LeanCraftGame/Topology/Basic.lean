@@ -86,6 +86,31 @@ def particularPoint {α : Type*} (p : α) : MyTopology α where
     · exact Or.inl (Set.inter_empty s)
     · exact Or.inr ⟨hs, ht⟩
 
+/-- The cofinite topology: a set is open when it is empty or its complement
+is finite. This general construction is reused for compactness and separation. -/
+def cofinite (α : Type*) : MyTopology α where
+  IsOpen := fun s => s = ∅ ∨ sᶜ.Finite
+  isOpen_univ := Or.inr (by simp)
+  isOpen_sUnion C hC := by
+    classical
+    by_cases h : ∃ s ∈ C, s ≠ ∅
+    · obtain ⟨s, hs, hne⟩ := h
+      right
+      apply Set.Finite.subset ((hC s hs).resolve_left hne)
+      exact Set.compl_subset_compl.mpr (Set.subset_sUnion_of_mem hs)
+    · left
+      apply Set.sUnion_eq_empty.mpr
+      intro s hs
+      exact not_not.mp (fun hne => h ⟨s, hs, hne⟩)
+  isOpen_inter s t hs ht := by
+    rcases hs with rfl | hs
+    · exact Or.inl (Set.empty_inter t)
+    rcases ht with rfl | ht
+    · exact Or.inl (Set.inter_empty s)
+    · right
+      rw [Set.compl_inter]
+      exact hs.union ht
+
 /-- Sierpiński space on `Bool`, with `{true}` open but `{false}` not open. -/
 def sierpinski : MyTopology Bool := particularPoint true
 
