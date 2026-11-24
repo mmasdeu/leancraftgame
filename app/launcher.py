@@ -285,7 +285,8 @@ def self_test(setup):
             elif ev[0] == "result" and ev[1]["status"] == "error":
                 problems.append(ev[1]["detail"])
         cleared = bool(done) and done["passed"] == done["total"]
-        ok = cleared if should_clear else bool(done) and done["failed"] > 0
+        ok = cleared if should_clear else ((bool(done) and done["failed"] > 0) or
+                                           (done is None and bool(problems)))
         failures += not ok
         log(f"{'ok  ' if ok else 'FAIL'} level {n} {name}: {done} ({time.time() - t0:.0f} s)")
         for p in problems[:3]:

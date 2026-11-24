@@ -15,10 +15,11 @@ Mathlib, not the repository's pinned Lean 4.35.0.
 | Original 60 levels remain registered and metadata-valid | Passed | 75-level static check and online export. Only L35 title/lesson wording changed. |
 | Complete current-game solution/mutant regression | Passed (pinned) | All 75 levels covered; zero unexpected results across the initial run and resumed L47–T15 run. |
 | Clean pinned Lean 4.35.0 build | Passed | Installed elan and Lean 4.35.0 in project home; `lake build` completed all 3143 jobs. |
-| JavaScript syntax check | Not run | `node` is unavailable. Static page code and generated data were exercised through the Python server/export only. |
-| Complete browser playthrough | Not run | Run local and online games with supported toolchains and pass every level through the UI. |
-| Desktop package and app self-test | Not run | Import collection and T9 self-test data updated; actual pinned package was not built. |
-| Deployment | Not run | Requires preceding build/playthrough checks and normal release authorisation. |
+| JavaScript syntax check | Passed | Official Node v22.23.5 archive SHA-256 verified; both app.js and live.js pass `node --check`. |
+| Complete topology browser playthrough | Passed locally | Headless Chromium cleared T1–T15 through the real UI with no page errors; Next navigation and final completion passed. Original levels were covered by the full automated regression. |
+| Desktop package and app self-test | Passed on Linux | 486 MB Mathlib pack and 24.1 MB app archive built; packaged self-test passed after fixing compile-rejection handling. Windows/macOS remain unverified. |
+| Hosted online execution | **Blocked externally** | Static page loaded, but the public Lean Playground WebSocket returned HTTP 403 before running T7. No workaround; T15 hosted run not attempted. |
+| Deployment | Not run | Requires normal release authorisation and the remaining external review/hosting checks. |
 | External mathematical review | **Required** | At least one external mathematician or advanced mathematics student must play and report feedback. |
 
 Recommended gate order:
@@ -39,3 +40,12 @@ limit: the first run covered L1 through part of L47 with no unexpected result, a
 L47–T15 run used the verdict cache and ended **“All answers behave as expected.”** Thus the
 automated build/regression gate passes. This does not replace the remaining UI, packaging and
 external-review gates above.
+
+
+## Iteration 11 verification result
+
+The local UI and desktop gates now pass. A packaged-app harness bug was found and fixed:
+compile-rejected negative cases are now accepted consistently with the main regression runner.
+The browser regression script is `tests/browser_topology.py`; it cleared all 15 topology levels.
+Hosted execution remains blocked by the public service’s 403 WebSocket handshake response,
+and Windows/macOS, deployment and external mathematical review are not claimed complete.

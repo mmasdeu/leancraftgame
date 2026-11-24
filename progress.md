@@ -35,9 +35,10 @@ iteration; do not mark a milestone complete when its verification has not run.
   Lean/Mathlib theorems where required.
 - [x] **M8 — T15 filters/convergence.** Neighbourhoods, `nhds`, `Filter.Tendsto`, discrete
   eventual equality, two distinct Sierpiński limits and Hausdorff uniqueness are implemented.
-- [ ] **M9 — integration and release.** Pinned build and complete automated regression now
-  pass. Remaining gates are browser playthrough, desktop packaging, JS syntax check, deployment,
-  and external mathematical review.
+- [ ] **M9 — integration and release.** Pinned build/regression, JS syntax, local full-topology
+  browser playthrough, and Linux desktop package/self-test now pass. Hosted execution was blocked
+  by the public Lean Playground's 403 WebSocket response. Windows/macOS packages, deployment
+  and external mathematical review remain open.
 
 ## Iteration 1 — audit, specification, and stable topology IDs
 
@@ -210,3 +211,24 @@ then downloaded the matching Mathlib cache with `lake exe cache get`. With
   **“All answers behave as expected.”** Together the two runs cover the whole game.
 * This closes the pinned clean build and complete automated original/topology regression gates.
   Browser playthrough, packaging, JS syntax check, deployment and external review remain open.
+
+## Iteration 11 — M9 UI and desktop release checks
+
+Completed the local release checks and tested the hosted path:
+
+* JavaScript: official Node v22.23.5 archive SHA-256 verified; both `web/static/app.js` and
+  `web/static/live.js` pass `node --check`.
+* Desktop pack: `app/make_pack.py --out dist --url-base file:///unused` succeeded (15,615 files,
+  486 MB); `app/build_app.py` produced the 24.1 MB Linux archive. The initial packaged self-test
+  exposed an app-harness bug: a compile-rejected T9 mutant was reported as a harness failure.
+  Updated `app/launcher.py` to accept compile rejection consistently with `check_levels.py`.
+  Rebuilt package and **packaged app self-test passed**, covering L1, L13 and T9 positive/negative.
+* Browser: pinned local server plus headless Chromium cleared **all 15 topology levels through the
+  real UI**, with no page errors. T1→T2 Next navigation and the final T15 completion state passed.
+  Reproducible test: [tests/browser_topology.py](tests/browser_topology.py).
+* Hosted backend: the static online page loaded and started T7, but the public Lean Playground
+  WebSocket returned **HTTP 403 during handshake** (`Could not connect`). No code executed remotely.
+  The same backend for T15 was not run; no workaround was attempted and no hosted pass is claimed.
+
+M9 remains open only for Windows/macOS packaging, deployment and the required external
+mathematician/student playthrough, plus any hosted-backend retest when the public service permits it.
