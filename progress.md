@@ -271,3 +271,13 @@ also present on remote `topology`; the local permission-boundary note is preserv
 Root site and `/play` remain separate from `/beta`, all published branches use the same shared
 registry and current 75-level storyline. Merge conflict in this file is resolved by preserving
 both records. Static and browser verification below precedes the publication check.
+
+
+## Publication check — beta is updated
+
+Merged `narrative-redesign` into `topology` as `20cb28e` and pushed it. GitHub Actions
+[run 45440289153](https://github.com/mmasdeu/leancraftgame/actions/runs/45440289153) completed
+successfully, including the Pages publication step. The raw published file
+`gh-pages/beta/data/levels.json` contains 75 levels, beginning with `Sequences / Record a first
+reading` and ending with `Topology / Audit a famous conjecture`. The CDN may briefly continue to
+serve the earlier build; the underlying beta artifact is confirmed updated for review.
