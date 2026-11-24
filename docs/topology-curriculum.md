@@ -197,8 +197,9 @@ cofinite topologies.
 
 **Objective:** use open covers and finite subcovers, separating finite computation from proof.
 
-1. **Construct — compactness:** define finite-subcover compactness and bridge it to
-   `IsCompact`/`CompactSpace`.
+1. **Construct — compactness:** define finite-subcover compactness using unindexed covers
+   and `Finset (Set α)` subcovers; general examples are checked against `IsCompact`/`CompactSpace`.
+   The unindexed form is equivalent to indexed covers and avoids irrelevant universe constraints.
 2. **Connect — finite spaces:** prove arbitrary finite spaces compact.
 3. **Refute — infinite discrete:** give the singleton open cover on `ℕ` and prove it has no
    finite subcover.

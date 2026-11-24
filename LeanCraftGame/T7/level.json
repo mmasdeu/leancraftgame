@@ -29,6 +29,14 @@
       "success": [
         "the two point basis has exactly the singletons"
       ]
+    },
+    {
+      "title": "Connect rational intervals to Mathlib",
+      "type": "connect",
+      "objective": "Identify the standard rational-endpoint interval basis on the reals.",
+      "success": [
+        "generated opens are unions of a subfamily"
+      ]
     }
   ],
   "checks": [
@@ -47,6 +55,10 @@
     {
       "lean": "example : Set.univ ∉ T7.twoPointBasis := by simp [T7.twoPointBasis, Set.ext_iff]",
       "message": "The singleton-only basis must not itself be a topology: added sets violate union closure."
+    },
+    {
+      "lean": "example : TopologicalSpace.IsTopologicalBasis (⋃ (a : ℚ) (b : ℚ) (_ : a < b), {Set.Ioo (a : ℝ) (b : ℝ)}) := Real.isTopologicalBasis_Ioo_rat",
+      "message": "Mathlib proves that open intervals with rational endpoints form a basis for the usual topology on ℝ."
     }
   ],
   "hints": [

@@ -1,0 +1,83 @@
+{
+  "world": "Topology World",
+  "title": "Neighbourhoods, filters and convergence",
+  "skill": "connect",
+  "public": "all",
+  "hintsAfter": 1,
+  "exercises": [
+    {
+      "title": "Define neighbourhoods and their filter",
+      "type": "construct",
+      "objective": "Contain an open set containing the point and bridge to `nhds`.",
+      "success": [
+        "a neighbourhood contains an open neighbourhood",
+        "neighbourhood filter is nhds"
+      ]
+    },
+    {
+      "title": "Express convergence with neighbourhoods and Tendsto",
+      "type": "connect",
+      "objective": "Use eventual membership and identify the Mathlib formulation.",
+      "success": [
+        "convergence is eventual membership in every neighbourhood",
+        "Mathlib convergence is Tendsto atTop nhds"
+      ]
+    },
+    {
+      "title": "Exhibit non-unique Sierpiński limits",
+      "type": "refute",
+      "objective": "Verify that constant true converges to both Boolean points.",
+      "success": [
+        "the dual-limit sequence is constant true"
+      ]
+    },
+    {
+      "title": "Connect discrete limits and Hausdorff uniqueness",
+      "type": "connect",
+      "objective": "Use singleton neighbourhoods for eventual equality and Hausdorffness for uniqueness.",
+      "success": [
+        "convergence is eventual membership in every neighbourhood"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example (u : ℕ → Bool) (x : Bool) (h : T15.MyConverges (LeanCraftGame.Topology.discrete Bool) u x) : ∃ N, ∀ n ≥ N, u n = x := by\n  obtain ⟨N, hN⟩ := h {x} ⟨{x}, trivial, rfl, Set.Subset.rfl⟩\n  exact ⟨N, hN⟩",
+      "message": "Convergence in discrete Bool must imply eventual equality to the limit."
+    },
+    {
+      "lean": "example : T15.MyConverges LeanCraftGame.Topology.sierpinski T15.dualLimitSequence true := by\n  intro s hs\n  obtain ⟨U, hU, htU, hUs⟩ := hs\n  refine ⟨0, fun n hn => ?_⟩\n  simpa [T15.dualLimitSequence] using hUs htU",
+      "message": "Constant true converges trivially to true: every neighbourhood of true contains true."
+    },
+    {
+      "lean": "example : T15.MyConverges LeanCraftGame.Topology.sierpinski T15.dualLimitSequence false := by\n  intro s hs\n  obtain ⟨U, hU, hfU, hUs⟩ := hs\n  rw [LeanCraftGame.Topology.sierpinski_isOpen_iff] at hU\n  rcases hU with rfl | rfl | rfl\n  · simp at hfU\n  · simp at hfU\n  · exact ⟨0, fun n hn => hUs (Set.mem_univ (T15.dualLimitSequence n))⟩",
+      "message": "Constant true also converges to false: any open set containing false must be `univ`."
+    },
+    {
+      "lean": "example : (false : Bool) ≠ true := by decide",
+      "message": "The two Sierpiński limits are genuinely distinct."
+    },
+    {
+      "lean": "example {α : Type*} [TopologicalSpace α] [T2Space α] (u : ℕ → α) (x y : α) (hx : Filter.Tendsto u Filter.atTop (nhds x)) (hy : Filter.Tendsto u Filter.atTop (nhds y)) : x = y := tendsto_nhds_unique hx hy",
+      "message": "Mathlib's Hausdorff uniqueness theorem applies to sequence limits at `atTop`, which is nontrivial."
+    }
+  ],
+  "hints": [
+    {
+      "match": "neighbourhood contains",
+      "hint": "Use `∃ U, τ.IsOpen U ∧ x ∈ U ∧ U ⊆ s`; `s` itself need not be open."
+    },
+    {
+      "match": "convergence is eventual",
+      "hint": "Use `∀ s, IsNeighbourhood τ x s → ∃ N, ∀ n ≥ N, u n ∈ s`."
+    },
+    {
+      "match": "Tendsto",
+      "hint": "Use `Filter.Tendsto u Filter.atTop (nhds x)`; `NeighbourhoodFilter` is simply `nhds x`."
+    },
+    {
+      "match": "dual-limit",
+      "hint": "Use `fun _ => true`. Every open set containing false is `univ`, so false is a second limit."
+    }
+  ]
+}

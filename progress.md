@@ -20,10 +20,9 @@ iteration; do not mark a milestone complete when its verification has not run.
   operations, equivalence classes and fibres, topology structures, concrete bad candidates,
   hints and solutions. T3 explains partitions and proves the fibre connection; the detailed
   arbitrary-partition construction is a possible later enrichment.
-- [ ] **M5 — T5–T8 examples/continuity.** The standard examples, closed/interior/closure,
-  bases and continuity exercises are playable and tested. Pending enrichment: a formal proof
-  for rational-endpoint intervals on `ℝ` and a separate direct open-map counterexample in T8
-  (the intended inverse-image distinction is already checked).
+- [x] **M5 — T5–T8 examples/continuity.** Standard examples, closure, bases and continuity
+  are implemented. T7 checks `Real.isTopologicalBasis_Ioo_rat`; T8 distinguishes continuous
+  from open maps with a constant-false discrete-to-Sierpiński example.
 - [x] **M6 — T9–T11 constructions.** All three levels are playable: two-sided
   homeomorphisms and counterexamples, induced subspaces and continuous inclusions,
   coordinate-generated products/projections and finite-coordinate cylinders. Box versus
@@ -33,7 +32,8 @@ iteration; do not mark a milestone complete when its verification has not run.
   connectedness and T0/T1/Hausdorff are implemented. Finite, infinite-discrete,
   infinite-cofinite, Sierpiński and continuous-image examples are verified by general
   Lean/Mathlib theorems where required.
-- [ ] **M8 — T15 filters/convergence.**
+- [x] **M8 — T15 filters/convergence.** Neighbourhoods, `nhds`, `Filter.Tendsto`, discrete
+  eventual equality, two distinct Sierpiński limits and Hausdorff uniqueness are implemented.
 - [ ] **M9 — integration and release.** Requires the pinned build, full regression/playthrough,
   and external mathematical review.
 
@@ -176,3 +176,20 @@ All distinguish infinite general proofs from finite checks.
 Supplementary 4.33.1 verification: T12 **2/2**, T13 **2/2**, T14 **3/3**, all semantic gates
 and included mutants behaving as expected. Static metadata and online export pass.
 Next: T15 neighbourhoods, filters and convergence, then full integration/regression accounting.
+
+## Iteration 9 — all 15 topology levels and final integration
+
+Completed T15 neighbourhoods, filters and convergence. The constant-true Sierpiński sequence is
+proved to converge to both distinct Boolean points; discrete convergence gives eventual equality
+and `tendsto_nhds_unique` supplies Hausdorff uniqueness. Completed M5's remaining items with the
+Mathlib rational-endpoint basis theorem and T8's continuous-but-not-open map.
+
+Full topology regression using the supplementary Lean 4.33.1 environment:
+
+* 15 correct answers and 43 deliberate mutants: **58 non-start answers, 0 unexpected results**;
+* every starting file rejected, every correct answer passes all checks, every listed mutant is
+  rejected or produces a proved failure;
+* `python3 check_levels.py --static`: **passed**;
+* online export: **75 levels**, with T1–T15 ordered and at least three typed exercises each;
+* pinned 4.35.0 build, browser playthrough, deployment and external mathematical review remain
+  open under M9 (see [Release checklist](docs/release-checklist.md)).

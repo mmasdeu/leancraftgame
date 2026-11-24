@@ -26,9 +26,11 @@ unsettled outcomes remain distinct, and no timeout is described as a counterexam
 * Desktop import collection now includes shared modules imported by tests and copies every
   compiled game `.olean`; app self-test cases include T9.
 
-## Not yet complete
+## Later status
 
-This is the requested early checkpoint, not all of M4–M6. T1 remains a placeholder, T3 and
-most content in T5–T9 are pending. There is no complete 15-level playthrough yet. The VM has
-Lean 4.33.1 while the project pins 4.35.0, so clean Lake builds, online execution against its
-current Mathlib and desktop packaging still require verification with supported toolchains.
+This was the requested early checkpoint, completed at iteration 4. All T1–T15 levels are now
+implemented; this file is retained as a vertical-slice acceptance record, not a current list of
+remaining work. The complete regression is **58 non-start answers with zero unexpected results**
+in the supplementary 4.33.1 environment. Clean pinned builds, browser playthrough and external
+mathematical review remain release requirements, tracked in `progress.md` and
+`docs/release-checklist.md`.

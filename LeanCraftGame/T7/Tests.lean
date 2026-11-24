@@ -1,5 +1,6 @@
 /- Hidden test battery for T7 Bases and generated topologies. -/
 import LeanCraftGame.Referee
+import Mathlib.Topology.Instances.Real.Lemmas
 import LeanCraftGame.T7.Player
 
 #no_sorry T7.CoversBy

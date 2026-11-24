@@ -68,8 +68,8 @@ python3 web/server.py --run 1 LeanCraftGame/L1/Player.lean
 
 The game starts from zero: no Lean knowledge is assumed. A Welcome page (`LeanCraftGame/Intro.md`)
 introduces Lean and the game to first-time visitors, and then each level teaches one
-construct, with a worked example in the lesson text. There are 60 levels
-in twelve worlds; [CURRICULUM.md](CURRICULUM.md) lists what each one teaches and
+construct, with a worked example in the lesson text. There are 75 levels
+in thirteen worlds; [CURRICULUM.md](CURRICULUM.md) lists what each one teaches and
 which mistakes its tests catch, and how predictions, hidden tests and hints are
 set in `level.json`.
 
@@ -84,6 +84,10 @@ set in `level.json`.
   extending), axioms and models, and `class` and `instance`.
 * **Predicate, Faithfulness:** writing definitions about sequences and functions, and
   auditing a formal statement (the three original levels are described below).
+* **Topology:** T1–T15 form a coherent course from sets and topology axioms through
+  examples, continuity, homeomorphisms, subspaces, products, compactness, connectedness,
+  separation and neighbourhood-filter convergence. The detailed curriculum is in
+  [docs/topology-curriculum.md](docs/topology-curriculum.md).
 * **Spot the bug** (the last level of most worlds) and **Be the referee**: reading a
   colleague's definitions and proving them wrong with counterexamples, and writing a
   test suite that catches hidden wrong definitions.
@@ -196,6 +200,7 @@ levels' metadata (predictions, public tests, hints) against their tests, without
 
 ```
 LeanCraftGame/Referee.lean     the referee: witness search + core tactics, and the test commands
+LeanCraftGame/Topology/     shared pedagogical topology, finite referee, continuity and tests
 LeanCraftGame/L<n>/Player.lean       what the player edits; its first comment is the lesson text; the `namespace`/`end` lines
                                      around the code are never shown, and are added back when the tests run
 LeanCraftGame/L<n>/Tests.lean        hidden test battery (the level designer's real work)

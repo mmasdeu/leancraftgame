@@ -23,6 +23,15 @@
         "the identity map is continuous",
         "discrete to indiscrete identity is continuous"
       ]
+    },
+    {
+      "title": "Distinguish continuous and open maps",
+      "type": "refute",
+      "objective": "Use constant false from discrete Bool to Sierpiński space.",
+      "success": [
+        "open maps use direct images",
+        "continuous not open map is constant false"
+      ]
     }
   ],
   "checks": [
@@ -37,6 +46,14 @@
     {
       "lean": "example : ¬ T8.MyContinuous (LeanCraftGame.Topology.indiscrete Bool) (LeanCraftGame.Topology.discrete Bool) id := by\n  intro h\n  have ho := h {true} (by trivial)\n  have hn : ¬ (LeanCraftGame.Topology.indiscrete Bool).IsOpen {true} := by\n    simp [LeanCraftGame.Topology.indiscrete, Set.ext_iff]\n  exact hn (by simpa using ho)",
       "message": "The identity is not continuous from indiscrete to discrete: apply your definition to the codomain's singleton `{true}`."
+    },
+    {
+      "lean": "example : T8.MyContinuous (LeanCraftGame.Topology.discrete Bool) LeanCraftGame.Topology.sierpinski T8.continuousNotOpenMap := by\n  intro s hs\n  by_cases hb : T8.continuousNotOpenMap false ∈ s\n  · have h : T8.continuousNotOpenMap ⁻¹' s = Set.univ := Set.preimage_const_of_mem hb\n    rw [h]\n    trivial\n  · have h : T8.continuousNotOpenMap ⁻¹' s = ∅ := Set.preimage_const_of_notMem hb\n    rw [h]\n    trivial",
+      "message": "Every map from a discrete space is continuous, including this constant false map."
+    },
+    {
+      "lean": "example : ¬ T8.MyOpenMap (LeanCraftGame.Topology.discrete Bool) LeanCraftGame.Topology.sierpinski T8.continuousNotOpenMap := by\n  intro h\n  have hi := h {true} trivial\n  have him : T8.continuousNotOpenMap '' {true} = {false} := by\n    ext b\n    simp [T8.continuousNotOpenMap]\n  rw [him] at hi\n  simp [LeanCraftGame.Topology.sierpinski, LeanCraftGame.Topology.particularPoint] at hi",
+      "message": "This map is not open: the open singleton `{true}` has image `{false}`, which is not open in Sierpiński space."
     }
   ],
   "hints": [
@@ -46,6 +63,10 @@
         "Given an open `s` in the codomain, which set in the domain must be open?"
       ],
       "hint": "Use `∀ s, τt.IsOpen s → τs.IsOpen (f ⁻¹' s)`."
+    },
+    {
+      "match": "open maps use",
+      "hint": "Use direct images: `∀ s, τs.IsOpen s → τt.IsOpen (f '' s)`. The concrete map is `fun _ => false`."
     }
   ]
 }

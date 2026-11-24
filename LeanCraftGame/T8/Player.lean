@@ -12,11 +12,15 @@ The shared `MyTopology` layer converts to Mathlib's `TopologicalSpace`; after
 this lesson, `myContinuous_iff_continuous` identifies your predicate with
 Mathlib's `Continuous`.
 
-## Your task
+Constant maps show the distinction: `false` from discrete `Bool` to Sierpiński
+space is continuous, but not open, because it sends the open singleton `{true}`
+to the non-open singleton `{false}`.
 
-Define `MyContinuous τs τt f` using inverse images of open sets. The hidden
-checks include identity maps, constant maps, and both finite topologies from
-the earlier levels.
+## Your tasks
+
+Define `MyContinuous τs τt f` using inverse images of open sets. Also define
+`MyOpenMap` using direct images, and set `continuousNotOpenMap` to be constantly
+`false` on `Bool`.
 -/
 namespace T8
 
@@ -24,5 +28,10 @@ open LeanCraftGame.Topology
 
 def MyContinuous {α β : Type*} (τs : MyTopology α) (τt : MyTopology β)
     (f : α → β) : Prop := sorry
+
+def MyOpenMap {α β : Type*} (τs : MyTopology α) (τt : MyTopology β)
+    (f : α → β) : Prop := sorry
+
+def continuousNotOpenMap : Bool → Bool := sorry
 
 end T8
