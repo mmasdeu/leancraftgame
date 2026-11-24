@@ -1,0 +1,27 @@
+{
+  "world": "Topology World",
+  "title": "Sets and operations",
+  "skill": "construct",
+  "public": "all",
+  "hintsAfter": 1,
+  "exercises": [
+    {
+      "title": "Define disjointness",
+      "type": "construct",
+      "objective": "Express that two sets have no common element.",
+      "success": ["disjoint means no common element"]
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example {α : Type*} : Set α → Set α → Prop := T1.MyDisjoint",
+      "message": "Keep the name and type: `MyDisjoint (s t : Set α) : Prop`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "no common element",
+      "hint": "Use a universal statement: for every `x`, membership in both sets is impossible."
+    }
+  ]
+}

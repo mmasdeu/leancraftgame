@@ -49,7 +49,8 @@ def run(n, code, jobs, timeout, cache):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("levels", nargs="*", type=int, help="level directories to check (default: all)")
+    ap.add_argument("levels", nargs="*", type=server.level_id,
+                    help="level IDs to check, such as 1, 60 or T1 (default: all)")
     ap.add_argument("--jobs", type=int, default=8, help="Lean processes run in parallel")
     ap.add_argument("--timeout", type=int, default=60, help="seconds allowed per test")
     ap.add_argument("--static", action="store_true", help="only check the levels' metadata")
@@ -58,10 +59,10 @@ def main():
     for n in opts.levels or server.LEVELS:
         lv = server.load_level(n)
         for p in server.validate_level(lv):
-            print(f"!! L{n:<3}{p}")
+            print(f"!! {server.level_dir(n):<4}{p}")
             problems += 1
-        if not (ROOT / f"variants/L{n}").is_dir():
-            print(f"!! L{n:<3}has no sample answers in variants/L{n}")
+        if not (ROOT / "variants" / server.level_dir(n)).is_dir():
+            print(f"!! {server.level_dir(n):<4}has no sample answers in variants/{server.level_dir(n)}")
             problems += 1
     if opts.static:
         print("All level metadata is consistent." if not problems else f"{problems} problem(s).")
@@ -74,7 +75,7 @@ def main():
     for n in opts.levels or server.LEVELS:
         lv = server.load_level(n)
         names = [t["name"] for t in lv["tests"]]
-        answers = [None] + sorted((ROOT / f"variants/L{n}").glob("*.lean"))
+        answers = [None] + sorted((ROOT / "variants" / server.level_dir(n)).glob("*.lean"))
         for f in answers:
             label = "(start)" if f is None else f.stem
             code = lv["template"] if f is None else f.read_text()
@@ -94,7 +95,7 @@ def main():
                 ok = not cleared and (failed is None or failed > 0)
             else:
                 ok = not cleared
-            print(f"{'  ' if ok else '!!'} L{n:<3}{label:22s}{line}  ({time.time() - t0:.0f} s)", flush=True)
+            print(f"{'  ' if ok else '!!'} {server.level_dir(n):<4}{label:22s}{line}  ({time.time() - t0:.0f} s)", flush=True)
             if not ok:
                 unexpected += 1
                 for i in sorted(results):

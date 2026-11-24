@@ -33,10 +33,28 @@ STATIC = (ROOT / "web" / "static").resolve()   # resolved: f.resolve() below mus
 WORK = Path(os.environ.get("LEANCRAFT_WORK") or ROOT / ".lake" / "leancraftgame-web")
 RUNS = WORK / "runs"
 CACHE_FILE = WORK / "cache.json"
-# Levels in the order they are played. The number of a level is the name of its directory
-# (LeanCraftGame/L<n>, variants/L<n>), and also the number shown to the player. A world is a
-# run of consecutive levels (see "world" in level.json).
-LEVELS = sorted(int(d.name[1:]) for d in (ROOT / "LeanCraftGame").glob("L[0-9]*") if d.is_dir())
+# Levels in the order they are played. Original levels keep their numeric IDs so saved games
+# stay compatible; later worlds may use prefixed IDs such as T1. The ID is the directory name,
+# the URL segment and the player's stable storage key. A world is a run of consecutive levels.
+def level_id(text):
+    """Parse an API/CLI level ID without turning the existing numeric IDs into strings."""
+    text = str(text)
+    if re.fullmatch(r"[1-9]\d*", text):
+        return int(text)
+    if re.fullmatch(r"[A-Z]+[1-9]\d*", text):
+        return text
+    raise ValueError(f"invalid level ID: {text!r}")
+
+
+def level_dir(n):
+    return f"L{n}" if isinstance(n, int) else n
+
+
+LEVELS = ([n for n in sorted(int(d.name[1:]) for d in (ROOT / "LeanCraftGame").glob("L[0-9]*")
+                           if d.is_dir() and d.name[1:].isdigit())] +
+          sorted((d.name for d in (ROOT / "LeanCraftGame").iterdir()
+                  if d.is_dir() and re.fullmatch(r"(?!L\d+$)[A-Z]+[1-9]\d*", d.name)),
+                 key=lambda s: (re.match(r"[A-Z]+", s).group(), int(re.search(r"\d+", s).group()))))
 LEAN_ENV = {}       # environment for running Lean (LEAN, LEAN_PATH, …), see prepare_lean()
 # The app's first-launch setup (an object with status() and retry()), or None when the
 # server runs from a checkout and Lean is ready from the start.
@@ -70,7 +88,7 @@ def split_tests(src):
     out = {"imports": [], "preamble": [], "gates": [], "tests": []}
     for c in cmds:
         if c.startswith("import "):
-            if not re.match(r"import LeanCraftGame\.L\d+\.Player\s*$", c):
+            if not re.match(r"import LeanCraftGame\.(?:L\d+|[A-Z]+\d+)\.Player\s*$", c):
                 out["imports"].append(c)
         elif c.startswith("#no_sorry"):
             out["gates"].append(c)
@@ -103,10 +121,11 @@ def has_namespace(code, ns):
 
 
 def load_level(n):
-    d = ROOT / "LeanCraftGame" / f"L{n}"
+    n = level_id(n)
+    d = ROOT / "LeanCraftGame" / level_dir(n)
     meta = json.loads((d / "level.json").read_text(encoding="utf-8"))
     intro, template = split_intro((d / "Player.lean").read_text(encoding="utf-8"))
-    ns = f"L{n}"
+    ns = level_dir(n)
     return {**meta, "id": n, "num": LEVELS.index(n) + 1, "intro": intro, "namespace": ns,
             "template": strip_namespace(template, ns),
             **split_tests((d / "Tests.lean").read_text(encoding="utf-8"))}
@@ -116,7 +135,7 @@ def load_level(n):
 # `hintsAfter` drive the predictions, the hidden tests and the hint gates (see
 # validate_level and web/static/app.js).
 PUBLIC_KEYS = ("id", "num", "world", "title", "skill", "intro", "template", "hints",
-               "predict", "public", "hintsAfter", "namespace")
+               "predict", "public", "hintsAfter", "namespace", "exercises")
 
 
 def public_level(lv):
@@ -149,6 +168,19 @@ def validate_level(lv):
             out.append('public must be "all" or a list of test names')
         else:
             out += [f"public: no test is called {n!r}" for n in public if n not in names]
+    exercise_types = {"construct", "repair", "classify", "refute", "referee", "connect"}
+    for i, ex in enumerate(lv.get("exercises", []), 1):
+        missing = {"title", "type", "objective", "success"} - set(ex)
+        if missing:
+            out.append(f"exercise {i} is missing {', '.join(sorted(missing))}")
+            continue
+        if ex["type"] not in exercise_types:
+            out.append(f"exercise {i}: unknown type {ex['type']!r}")
+        if not isinstance(ex["success"], list) or not ex["success"]:
+            out.append(f"exercise {i}: success must be a nonempty list of test names")
+        else:
+            out += [f"exercise {i}: no test is called {name!r}"
+                    for name in ex["success"] if name not in names]
     if not isinstance(lv.get("hintsAfter", 0), int) or lv.get("hintsAfter", 0) < 0:
         out.append("hintsAfter must be a natural number")
     for h in lv.get("hints", []):
@@ -441,9 +473,9 @@ class Handler(BaseHTTPRequestHandler):
                 lv = load_level(n)
                 out.append({k: lv[k] for k in ("id", "num", "world", "title", "skill")})
             return self.send(200, out)
-        m = re.fullmatch(r"/api/levels/(\d+)", path)
-        if m and int(m.group(1)) in LEVELS:
-            return self.send(200, public_level(load_level(int(m.group(1)))))
+        m = re.fullmatch(r"/api/levels/([A-Z]*\d+)", path)
+        if m and level_id(m.group(1)) in LEVELS:
+            return self.send(200, public_level(load_level(m.group(1))))
         name = "index.html" if path == "/" else path.lstrip("/")
         f = (STATIC / name).resolve()
         if STATIC in f.parents and f.is_file():
@@ -463,8 +495,8 @@ class Handler(BaseHTTPRequestHandler):
             self.send(200, {"ok": True})
             threading.Thread(target=self.server.shutdown, daemon=True).start()
             return
-        m = re.fullmatch(r"/api/levels/(\d+)/run", self.path)
-        if not m or int(m.group(1)) not in LEVELS:
+        m = re.fullmatch(r"/api/levels/([A-Z]*\d+)/run", self.path)
+        if not m or level_id(m.group(1)) not in LEVELS:
             return self.send(404, {"error": "not found"})
         if SETUP and not SETUP.status()["ready"]:
             return self.send(503, {"error": "Lean and Mathlib are still being set up."})
@@ -475,7 +507,7 @@ class Handler(BaseHTTPRequestHandler):
                 Handler.current.cancel()
             Handler.current = run
         threading.Thread(target=run_level, daemon=True,
-                         args=(run, int(m.group(1)), body.get("code", ""), events,
+                         args=(run, level_id(m.group(1)), body.get("code", ""), events,
                                self.opts.jobs, self.opts.timeout, self.cache,
                                body.get("tests"), bool(body.get("stopOnFail")))).start()
         self.send_response(200)
@@ -545,9 +577,10 @@ def serve(port, jobs, timeout, open_browser=False):
 def cli_run(opts):
     """Run one level on a file and print the report."""
     code = Path(opts.run[1]).read_text(encoding="utf-8")
-    events, lv = queue.Queue(), load_level(int(opts.run[0]))
+    n = level_id(opts.run[0])
+    events, lv = queue.Queue(), load_level(n)
     threading.Thread(target=run_level, daemon=True,
-                     args=(Run(), int(opts.run[0]), code, events, opts.jobs, opts.timeout, Cache())).start()
+                     args=(Run(), n, code, events, opts.jobs, opts.timeout, Cache())).start()
     names = [t["name"] for t in lv["tests"]]
     icon = {"pass": "✅", "fail": "❌", "unknown": "❓", "error": "⚠️"}
     while (ev := events.get()) is not None:

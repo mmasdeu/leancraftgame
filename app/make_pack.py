@@ -43,7 +43,7 @@ CLOSURE = """{imports}
 def game_imports():
     """`import LeanCraftGame.Referee` and the imports of every level's Player.lean."""
     imports = {"import LeanCraftGame.Referee"}
-    for player in sorted(ROOT.glob("LeanCraftGame/L*/Player.lean")):
+    for player in sorted(ROOT.glob("LeanCraftGame/*/Player.lean")):
         imports |= {l.strip() for l in player.read_text(encoding="utf-8").splitlines() if re.match(r"import\s", l)}
     return sorted(imports)
 
