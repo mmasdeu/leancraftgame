@@ -1,6 +1,10 @@
 # Publishes the landing page (site/) and the online version of the game (built by
-# online/build.py into play/) to the gh-pages branch, which GitHub Pages serves at
-# https://mmasdeu.github.io/leancraftgame/ and .../play/. Runs when either changes, or by hand.
+# online/build.py) to the gh-pages branch:
+#
+#   main      -> https://mmasdeu.github.io/leancraftgame/ and .../play/
+#   topology  -> https://mmasdeu.github.io/leancraftgame/beta/
+#
+# Runs when either deployment's inputs change, or by hand.
 #
 # One-time setup: Settings → Pages → Build and deployment → Source: "Deploy from a branch",
 # Branch: gh-pages, folder: / (root). The branch is created by the first run of this workflow.
@@ -9,7 +13,7 @@ name: Landing page and online game
 
 on:
   push:
-    branches: [main]
+    branches: [main, topology]
     paths: ["site/**", "web/**", "LeanCraftGame/**", "online/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
@@ -26,15 +30,43 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Publish site/ to the gh-pages branch
+      - name: Publish site and online game to gh-pages
+        env:
+          DEPLOY_BRANCH: ${{ github.ref_name }}
         run: |
-          cp -r site "$RUNNER_TEMP/pages"
-          python3 online/build.py --out "$RUNNER_TEMP/pages/play"
-          touch "$RUNNER_TEMP/pages/.nojekyll"        # serve the files as they are
-          cd "$RUNNER_TEMP/pages"
-          git init -q -b gh-pages
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -q -m "Site from ${GITHUB_SHA::7}"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
+          PAGES="$RUNNER_TEMP/pages"
+          ORIGIN="https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+
+          # Preserve the existing published branch, so topology never replaces the main site.
+          git init -q "$PAGES"
+          if git ls-remote --exit-code --heads "$ORIGIN" gh-pages >/dev/null 2>&1; then
+            git -C "$PAGES" fetch -q --depth 1 "$ORIGIN" gh-pages
+            git -C "$PAGES" checkout -q -b gh-pages FETCH_HEAD
+          else
+            git -C "$PAGES" checkout -q -b gh-pages
+          fi
+
+          if [ "$DEPLOY_BRANCH" = main ]; then
+            # main owns the root site and /play, but leaves /beta intact.
+            find "$PAGES" -mindepth 1 -maxdepth 1 \
+              ! -name .git ! -name beta -exec rm -rf {} +
+            cp -r site/. "$PAGES/"
+            python3 online/build.py --out "$PAGES/play"
+          elif [ "$DEPLOY_BRANCH" = topology ]; then
+            # The beta game lives directly at /beta, not /beta/play.
+            python3 online/build.py --out "$PAGES/beta"
+          else
+            echo "Unexpected deployment branch: $DEPLOY_BRANCH" >&2
+            exit 1
+          fi
+
+          touch "$PAGES/.nojekyll"                 # serve the files as they are
+          git -C "$PAGES" config user.name "github-actions[bot]"
+          git -C "$PAGES" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "$PAGES" add -A
+          if git -C "$PAGES" diff --cached --quiet; then
+            echo "No published files changed."
+            exit 0
+          fi
+          git -C "$PAGES" commit -q -m "${DEPLOY_BRANCH} site from ${GITHUB_SHA::7}"
+          git -C "$PAGES" push "$ORIGIN" gh-pages

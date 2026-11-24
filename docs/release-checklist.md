@@ -19,7 +19,7 @@ Mathlib, not the repository's pinned Lean 4.35.0.
 | Complete topology browser playthrough | Passed locally | Headless Chromium cleared T1–T15 through the real UI with no page errors; Next navigation and final completion passed. Original levels were covered by the full automated regression. |
 | Desktop package and app self-test | Passed on Linux | 486 MB Mathlib pack and 24.1 MB app archive built; packaged self-test passed after fixing compile-rejection handling. Windows/macOS remain unverified. |
 | Hosted online execution | **Blocked externally** | Static page loaded, but the public Lean Playground WebSocket returned HTTP 403 before running T7. No workaround; T15 hosted run not attempted. |
-| Deployment | Not run | Requires normal release authorisation and the remaining external review/hosting checks. |
+| Beta deployment configuration | Pushed, serving not yet verified | `pages.yml` publishes `topology` directly to `/beta`, preserving the main site. GitHub Actions/Pages status must still be checked. |
 | External mathematical review | **Required** | At least one external mathematician or advanced mathematics student must play and report feedback. |
 
 Recommended gate order:

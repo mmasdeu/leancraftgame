@@ -232,3 +232,12 @@ Completed the local release checks and tested the hosted path:
 
 M9 remains open only for Windows/macOS packaging, deployment and the required external
 mathematician/student playthrough, plus any hosted-backend retest when the public service permits it.
+
+## Iteration 12 — `/beta` Pages deployment
+
+Updated `.github/workflows/pages.yml` so changes to the shared publication inputs on `topology`
+trigger GitHub Pages. The workflow deploys the online game directly to `/beta` while preserving
+main's root site and `/play`; main-site jobs now also preserve `/beta`. Existing gh-pages content
+is fetched and updated with a normal commit, not a forced branch replacement. YAML parsing and
+the local 75-level beta build/preservation check pass. Actual GitHub Actions and Pages serving
+must be confirmed after pushing the workflow change.
