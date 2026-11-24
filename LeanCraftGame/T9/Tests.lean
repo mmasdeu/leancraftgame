@@ -3,6 +3,7 @@ import LeanCraftGame.Referee
 import LeanCraftGame.Topology.Maps
 import LeanCraftGame.T9.Player
 
+#no_sorry T9.MyHomeomorph
 #no_sorry T9.sourceTopology
 #no_sorry T9.targetTopology
 #no_sorry T9.bijection
@@ -16,5 +17,8 @@ import LeanCraftGame.T9.Player
 
 #expect_true "the proposed map is the identity" unfolding T9.bijection :
   ∀ x, T9.bijection x = x
+
+#expect_model "the discrete identity is a homeomorphism" :
+  T9.MyHomeomorph.mk (τs := LeanCraftGame.Topology.discrete Bool) (τt := LeanCraftGame.Topology.discrete Bool) id id
 
 #level_report

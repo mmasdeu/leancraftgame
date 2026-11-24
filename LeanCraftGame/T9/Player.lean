@@ -10,14 +10,29 @@ open set is either `∅` or `univ`, whose inverse images are open everywhere.
 Its inverse is again the identity, but now `{true}` is open in the discrete
 codomain while its inverse image is not open in the indiscrete domain.
 
-## Your task
+A homeomorphism also has an inverse function, two inverse laws, and continuity
+in both directions. Homeomorphism is an equivalence relation: the identity works,
+inverses swap the directions, and composition preserves all the fields. Open and
+closed sets correspond under either direction because continuity uses preimages.
 
-Supply the two topologies and the map that realise this counterexample.
-The intended answer is `discrete Bool`, `indiscrete Bool`, and `id`.
+## Your tasks
+
+First complete `MyHomeomorph`, whose data contains both maps and whose axioms
+contain both inverse laws and both continuity conditions. Then supply the two
+topologies and the map that realise the counterexample. The intended spaces are
+`discrete Bool`, `indiscrete Bool`, and `id`.
 -/
 namespace T9
 
 open LeanCraftGame.Topology
+
+structure MyHomeomorph {α β : Type*} (τs : MyTopology α) (τt : MyTopology β) where
+  toFun : α → β
+  invFun : β → α
+  left_inv : sorry
+  right_inv : sorry
+  continuous_toFun : sorry
+  continuous_invFun : sorry
 
 def sourceTopology : MyTopology Bool := sorry
 

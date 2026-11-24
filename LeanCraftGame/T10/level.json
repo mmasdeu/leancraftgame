@@ -1,0 +1,65 @@
+{
+  "world": "Topology World",
+  "title": "Subspace topology",
+  "skill": "construct",
+  "public": "all",
+  "hintsAfter": 1,
+  "exercises": [
+    {
+      "title": "Construct the induced topology",
+      "type": "construct",
+      "objective": "Use the inclusion from a subtype into the ambient space.",
+      "success": [
+        "subspace topology is induced"
+      ]
+    },
+    {
+      "title": "Characterise subspace opens",
+      "type": "construct",
+      "objective": "Express every relative open as an ambient open preimage.",
+      "success": [
+        "subspace opens are ambient open preimages"
+      ]
+    },
+    {
+      "title": "Exhibit open but not closed",
+      "type": "classify",
+      "objective": "Use singleton true and its non-open Boolean complement in Sierpiński space.",
+      "success": [
+        "open not closed example is singleton true"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example {α : Type*} (τ : TopologicalSpace α) (A : Set α) (s : Set A) (h : T10.SubspaceOpen τ A s) : ∃ U : Set α, @IsOpen α τ U ∧ s = (fun x : A => x.1) ⁻¹' U := h",
+      "message": "A predicate for relative opens must return an ambient open preimage, not merely say the direct image is open."
+    },
+    {
+      "lean": "example {α : Type*} (τ : TopologicalSpace α) (A : Set α) : @Continuous A α (T10.subspaceTopology τ A) τ (fun x : A => x.1) := continuous_induced_dom",
+      "message": "The subtype inclusion must be continuous for the topology you constructed."
+    },
+    {
+      "lean": "example : LeanCraftGame.Topology.sierpinski.IsOpen T10.openNotClosedSet := by simpa [T10.openNotClosedSet, LeanCraftGame.Topology.sierpinski, LeanCraftGame.Topology.particularPoint]",
+      "message": "`openNotClosedSet` must actually be open in Sierpiński space."
+    },
+    {
+      "lean": "example : ¬ LeanCraftGame.Topology.sierpinski.IsOpen T10.openNotClosedSetᶜ := by\n  have ht : T10.openNotClosedSet = {true} := by ext b; simp [T10.openNotClosedSet]\n  rw [ht]\n  have hc : ({true} : Set Bool)ᶜ = {false} := by ext b; cases b <;> simp\n  rw [hc]\n  simp [LeanCraftGame.Topology.sierpinski, LeanCraftGame.Topology.particularPoint]",
+      "message": "The example's complement must not be open; singleton true is open but not closed."
+    }
+  ],
+  "hints": [
+    {
+      "match": "induced",
+      "hint": "Use `TopologicalSpace.induced (fun x : A => x.1) τ`."
+    },
+    {
+      "match": "ambient open preimages",
+      "hint": "Return `∃ U : Set α, @IsOpen α τ U ∧ s = (fun x : A => x.1) ⁻¹' U`."
+    },
+    {
+      "match": "singleton true",
+      "hint": "Both concrete sets should be `{true}`."
+    }
+  ]
+}

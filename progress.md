@@ -24,7 +24,11 @@ iteration; do not mark a milestone complete when its verification has not run.
   bases and continuity exercises are playable and tested. Pending enrichment: a formal proof
   for rational-endpoint intervals on `ℝ` and a separate direct open-map counterexample in T8
   (the intended inverse-image distinction is already checked).
-- [ ] **M6 — T9–T11 constructions.**
+- [x] **M6 — T9–T11 constructions.** All three levels are playable: two-sided
+  homeomorphisms and counterexamples, induced subspaces and continuous inclusions,
+  coordinate-generated products/projections and finite-coordinate cylinders. Box versus
+  product is distinguished mathematically by the exercises; a formal non-openness proof
+  for `allTrue` is optional enrichment.
 - [ ] **M7 — T12–T14 global properties.**
 - [ ] **M8 — T15 filters/convergence.**
 - [ ] **M9 — integration and release.** Requires the pinned build, full regression/playthrough,
@@ -145,3 +149,14 @@ T8 remains the verified continuity construction from the vertical slice.
 Supplementary 4.33.1 verification: T5 **8/8**, T6 **6/6**, T7 **4/4**, all semantic gates and
 mutants behaving as intended. Static validation and the online export pass. Full M5 remains open
 because the formal rational-endpoint basis proof and a distinct T8 open-map exercise are pending.
+
+## Iteration 7 — topological constructions T9–T11
+
+Expanded T9 with the full homeomorphism structure and inverse-field checks. Added T10's
+Mathlib `induced` subspace construction and continuous inclusion, plus the Sierpiński
+open-not-closed example. Added T11's coordinate-generated product, open rectangles,
+continuous projections, one-coordinate cylinders and infinite box-style `allTrue` example.
+
+Supplementary 4.33.1 verification: T9 **4/4**, T10 **4/4**, T11 **4/4**, with all semantic
+checks and included mutants behaving as intended. Static metadata and online export pass.
+Next: global properties T12–T14 and the infinite cofinite proofs they require.

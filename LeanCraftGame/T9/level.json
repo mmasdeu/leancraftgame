@@ -6,6 +6,14 @@
   "hintsAfter": 1,
   "exercises": [
     {
+      "title": "Define homeomorphisms",
+      "type": "construct",
+      "objective": "Package bijection data and continuity in both directions.",
+      "success": [
+        "the discrete identity is a homeomorphism"
+      ]
+    },
+    {
       "title": "Construct the counterexample data",
       "type": "construct",
       "objective": "Choose discrete and indiscrete topologies and the identity map.",
@@ -33,6 +41,10 @@
   ],
   "checks": [
     {
+      "lean": "example {α β : Type*} {τs : LeanCraftGame.Topology.MyTopology α} {τt : LeanCraftGame.Topology.MyTopology β} (h : T9.MyHomeomorph τs τt) : LeanCraftGame.Topology.MyContinuous τt τs h.invFun := h.continuous_invFun",
+      "message": "The inverse-continuity field must concern `invFun` from the target topology back to the source."
+    },
+    {
       "lean": "example : Function.Bijective T9.bijection := Function.bijective_id",
       "message": "The proposed map must be bijective; the identity is the intended witness."
     },
@@ -46,6 +58,10 @@
     }
   ],
   "hints": [
+    {
+      "match": "discrete identity",
+      "hint": "Use `Function.LeftInverse invFun toFun`, `Function.RightInverse invFun toFun`, and `MyContinuous` in both directions."
+    },
     {
       "match": "source is discrete",
       "hint": "Every set is open in `LeanCraftGame.Topology.discrete Bool`."
