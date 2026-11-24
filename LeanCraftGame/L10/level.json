@@ -1,67 +1,43 @@
 {
-  "world": "Statements World",
-  "title": "Challenge: calendars and triangles",
+  "world": "Logic World",
+  "title": "Challenge: triangles",
   "skill": "writing",
-  "hintsAfter": 2,
+  "exercise": "Define",
   "predict": [
-    { "test": "LeapYear 1900 is false (century year, not divisible by 400)", "statement": "LeapYear 1900" },
-    { "test": "IsTriangle 1 2 3 is false (flat)", "statement": "IsTriangle 1 2 3" },
-    { "test": "ExactlyOneEven 2 4 6 is false (all even)", "statement": "ExactlyOneEven 2 4 6" }
+    {
+      "test": "1, 2, 3 is flat, not a triangle",
+      "statement": "IsTriangle 1 2 3"
+    },
+    {
+      "test": "IsRight 0 5 5 is false (no side of length 0)",
+      "statement": "IsRight 0 5 5"
+    }
   ],
   "checks": [
-    { "lean": "example : Nat → Prop := L10.LeapYear", "message": "Keep `LeapYear : Nat → Prop`." },
-    { "lean": "example : Nat → Nat → Nat → Prop := L10.IsTriangle", "message": "Keep `IsTriangle : Nat → Nat → Nat → Prop`." },
-    { "lean": "example : Nat → Nat → Nat → Prop := L10.ExactlyOneEven", "message": "Keep `ExactlyOneEven : Nat → Nat → Nat → Prop`." }
+    {
+      "lean": "example : Nat → Nat → Nat → Prop := L10.IsTriangle\nexample : Nat → Nat → Nat → Prop := L10.IsRight\nexample : Nat → Nat → Nat → Prop := L10.ExactlyOneEven",
+      "message": "Keep the three predicates, each with three natural-number inputs."
+    }
   ],
   "hints": [
     {
-      "match": "century year",
-      "steps": ["Which rule is the exception to the exception? Does your definition let 1900 or 2100 through?"],
-      "hint": "Divisible by 4 and not by 100, *or* divisible by 400: `(y % 4 = 0 ∧ y % 100 ≠ 0) ∨ y % 400 = 0`."
-    },
-    {
-      "match": "LeapYear 400",
-      "hint": "400 is a century year, but divisible by 400: the last part `y % 400 = 0` is an extra way to be a leap year (`∨`)."
-    },
-    {
-      "match": "LeapYear",
+      "match": "triangle",
       "steps": [
-        "Write the rule as three conditions: divisible by 4, not divisible by 100, divisible by 400. Which are joined by `∧`, which by `∨`?"
+        "Each side must be shorter than the other two together. How many inequalities is that?"
       ],
-      "hint": "`(y % 4 = 0 ∧ y % 100 ≠ 0) ∨ y % 400 = 0`."
-    },
-    {
-      "match": "flat",
-      "steps": ["Does a side equal to the sum of the other two make a triangle? Which of `<` and `≤` do you need?"],
-      "hint": "Use strict inequalities: `a < b + c`."
-    },
-    {
-      "match": "side too long",
-      "steps": ["Your definition accepts a triangle whose long side is longer than the other two together. Which of the three inequalities is missing?"],
-      "hint": "All three are needed: `a < b + c ∧ b < a + c ∧ c < a + b`."
-    },
-    {
-      "match": "IsTriangle",
-      "steps": ["Any of the three sides could be the longest one. How many inequalities does that make?"],
       "hint": "`a < b + c ∧ b < a + c ∧ c < a + b`."
     },
     {
-      "match": "two even",
-      "steps": ["Is your definition \"at least one is even\"? How many even numbers are allowed?"],
-      "hint": "Exactly one: list the three ways (a alone, b alone, c alone) and join them with `∨`."
-    },
-    {
-      "match": "all even",
-      "hint": "If you only say \"one of them is even\", you accept 2 4 6. Say also that the other two are odd (`% 2 ≠ 0`)."
+      "match": "IsRight",
+      "hint": "Positive sides, and one of `a² + b² = c²`, `a² + c² = b²`, `b² + c² = a²`."
     },
     {
       "match": "ExactlyOneEven",
-      "steps": ["Case by case: a is even and b, c are odd; or b is even and a, c are odd; or ..."],
-      "hint": "`(a % 2 = 0 ∧ b % 2 ≠ 0 ∧ c % 2 ≠ 0) ∨ (a % 2 ≠ 0 ∧ b % 2 = 0 ∧ c % 2 ≠ 0) ∨ (a % 2 ≠ 0 ∧ b % 2 ≠ 0 ∧ c % 2 = 0)`."
+      "hint": "Three cases joined by `∨`: `(a % 2 = 0 ∧ b % 2 = 1 ∧ c % 2 = 1) ∨ …`."
     },
     {
       "match": "",
-      "hint": "Check the boundary cases, and add parentheses around every `∧` group."
+      "hint": "List the cases explicitly."
     }
   ]
 }

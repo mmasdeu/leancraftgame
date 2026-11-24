@@ -1,39 +1,49 @@
 /-
-# Or and not
+# If, then
 
-* `p ∨ q` means "p **or** q": true when at least one of them is true,
-  possibly both. Type it `\or` (or write `\/`).
-* `¬ p` means "**not** p". Type it `\not` (or `\neg`), or write `Not p`.
+`P → Q` reads "if `P` then `Q`" (type `\to`). It is false in exactly one
+situation: `P` true and `Q` false. In particular **a false hypothesis makes
+an implication true**: "if 3 is divisible by 4, then 3 is even" is true,
+vacuously. This convention is what makes "every element of the empty set is
+green" true, and what lets a theorem with hypotheses be applied to the
+cases it covers without worrying about the others.
 
-```lean
-def Odd' (n : Nat) : Prop := ¬ (n % 2 = 0)
-```
+The **converse** of `P → Q` is `Q → P`, a different statement: "4 ∣ n
+implies 2 ∣ n" is true for every `n`, its converse is not. To refute a
+statement about all `n`, one counterexample suffices.
 
-## Which operator comes first?
+`P ↔ Q` ("if and only if", type `\iff`) says that both directions hold.
+Many theorems are equivalences: "`n²` is even iff `n` is even" (the
+direction ← is the interesting one, and is the heart of the proof that
+`√2` is irrational).
 
-From the strongest to the weakest binding: `¬`, then `∧`, then `∨`, then `→`
-(next level). So
-
-* `¬ p ∧ q` means `(¬ p) ∧ q`, not `¬ (p ∧ q)`;
-* `p ∨ q ∧ r` means `p ∨ (q ∧ r)`.
-
-When in doubt, add parentheses. They never hurt.
+Precedence: `→` binds more loosely than `∧`, `∨` and `↔`... except that `↔`
+is looser still: when in doubt, use brackets.
 
 ## Your task
 
-A cinema gives free tickets to children under 5 and to people aged 65 or
-more. Define `FreeTicket`, then `PaysFull` using `FreeTicket`. Then define
-`NotTiny`: a number that is neither 0 nor 1.
+Define the implications and the equivalence `SameParity`, and give a
+counterexample to each false general claim.
 -/
+
 namespace L9
 
--- under 5 or at least 65          (FreeTicket 3 is true, FreeTicket 30 is false)
-def FreeTicket (age : Nat) : Prop := sorry
+-- if 4 divides n then 2 divides n
+def FourThenTwo (n : Nat) : Prop := sorry
 
--- everybody else pays full price: the opposite of FreeTicket
-def PaysFull (age : Nat) : Prop := sorry
+-- the converse: if 2 divides n then 4 divides n
+def TwoThenFour (n : Nat) : Prop := sorry
 
--- n is neither 0 nor 1            (NotTiny 5 is true, NotTiny 1 is false)
-def NotTiny (n : Nat) : Prop := sorry
+-- a number for which the converse fails
+def breaksConverse : Nat := sorry
+
+-- "a prime is odd": if p is prime then p is odd
+def PrimeThenOdd (p : Nat) : Prop := sorry
+
+-- the only number that breaks it
+def breaksPrimeOdd : Nat := sorry
+
+-- a and b have the same parity: a is even if and only if b is even
+def SameParity (a b : Nat) : Prop := sorry
 
 end L9

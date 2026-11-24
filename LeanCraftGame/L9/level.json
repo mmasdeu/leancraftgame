@@ -1,80 +1,51 @@
 {
-  "world": "Statements World",
-  "title": "Or and not",
-  "skill": "syntax",
+  "world": "Logic World",
+  "title": "If, then",
+  "skill": "writing",
+  "exercise": "Refute",
   "predict": [
     {
-      "test": "FreeTicket 65 is true",
-      "statement": "FreeTicket 65"
+      "test": "FourThenTwo 3 is true (vacuously: 4 does not divide 3)",
+      "statement": "FourThenTwo 3"
     },
     {
-      "test": "FreeTicket 5 is false",
-      "statement": "FreeTicket 5"
+      "test": "TwoThenFour 7 is true (vacuously)",
+      "statement": "TwoThenFour 7"
     },
     {
-      "test": "NotTiny 1 is false",
-      "statement": "NotTiny 1"
+      "test": "SameParity 3 5 is true (both sides of ↔ are false)",
+      "statement": "SameParity 3 5"
     }
   ],
   "checks": [
     {
-      "lean": "example : Nat → Prop := L9.FreeTicket",
-      "message": "Keep `FreeTicket : Nat → Prop`."
+      "lean": "example : Nat → Prop := L9.FourThenTwo\nexample : Nat → Prop := L9.TwoThenFour\nexample : Nat → Prop := L9.PrimeThenOdd\nexample : Nat → Nat → Prop := L9.SameParity",
+      "message": "Keep the predicates of type `Nat → Prop`."
     },
     {
-      "lean": "example : Nat → Prop := L9.PaysFull",
-      "message": "Keep `PaysFull : Nat → Prop`."
-    },
-    {
-      "lean": "example : Nat → Prop := L9.NotTiny",
-      "message": "Keep `NotTiny : Nat → Prop`."
+      "lean": "example : Nat := L9.breaksConverse\nexample : Nat := L9.breaksPrimeOdd",
+      "message": "Keep `breaksConverse` and `breaksPrimeOdd : Nat`."
     }
   ],
   "hints": [
     {
-      "match": "FreeTicket 30",
-      "hint": "30 pays. Check that you used `∨` and not `∧`, and that the bounds are right."
+      "match": "breaksConverse",
+      "hint": "Any multiple of 2 that is not a multiple of 4: `6`."
     },
     {
-      "match": "FreeTicket 3",
-      "hint": "A child of 3 is under 5: the first part should be `age < 5`."
+      "match": "breaksPrimeOdd",
+      "hint": "The only even prime: `2`."
     },
     {
-      "match": "FreeTicket 70",
-      "hint": "70 is at least 65: the second part should be `65 ≤ age`."
-    },
-    {
-      "match": "FreeTicket 65",
-      "hint": "65 gets a free ticket: use `≤`, not `<`."
-    },
-    {
-      "match": "FreeTicket 5",
-      "hint": "5 is not under 5, so it pays: use `<`, not `≤`."
-    },
-    {
-      "match": "FreeTicket",
-      "steps": [
-        "Who gets a free ticket: children, *or* seniors? Which connective is that?"
-      ],
-      "hint": "`age < 5 ∨ 65 ≤ age`."
-    },
-    {
-      "match": "PaysFull",
-      "steps": [
-        "Paying full is the opposite of a free ticket. Can you reuse `FreeTicket`?"
-      ],
-      "hint": "`¬ FreeTicket age`."
-    },
-    {
-      "match": "NotTiny",
-      "steps": [
-        "Is `n ≠ 0 ∨ n ≠ 1` ever false? Try `n = 0` and `n = 1`."
-      ],
-      "hint": "`¬ (n = 0 ∨ n = 1)`, or `n ≠ 0 ∧ n ≠ 1`. Careful with the parentheses and with `∧` versus `∨`."
+      "match": "SameParity",
+      "hint": "`a % 2 = 0 ↔ b % 2 = 0`."
     },
     {
       "match": "",
-      "hint": "Check the examples in the comment above the predicate."
+      "steps": [
+        "Which part is the hypothesis, which the conclusion?"
+      ],
+      "hint": "`4 ∣ n → 2 ∣ n`: the hypothesis on the left of the arrow."
     }
   ]
 }

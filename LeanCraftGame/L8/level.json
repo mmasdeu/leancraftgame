@@ -1,65 +1,54 @@
 {
-  "world": "Statements World",
-  "title": "And",
+  "world": "Logic World",
+  "title": "And, or, not",
   "skill": "syntax",
+  "exercise": "Define",
   "predict": [
     {
-      "test": "InRange 10 20 10 is true",
-      "statement": "InRange 10 20 10"
+      "test": "1 is not composite",
+      "statement": "IsComposite 1"
     },
     {
-      "test": "IsTeen 19 is true",
-      "statement": "IsTeen 19"
+      "test": "9 is not a Sophie Germain prime (19 is prime, but 9 is not)",
+      "statement": "IsSophieGermain 9"
     },
     {
-      "test": "EvenInRange 1 10 12 is false",
-      "statement": "EvenInRange 1 10 12"
+      "test": "ExactlyOneOf23 12 (divisible by both)",
+      "statement": "ExactlyOneOf23 12"
     }
   ],
   "checks": [
     {
-      "lean": "example : Nat → Prop := L8.IsTeen",
-      "message": "Keep `IsTeen : Nat → Prop`."
-    },
-    {
-      "lean": "example : Nat → Nat → Nat → Prop := L8.EvenInRange",
-      "message": "Keep `EvenInRange : Nat → Nat → Nat → Prop`."
+      "lean": "example : Nat → Prop := L8.IsSophieGermain\nexample : Nat → Prop := L8.IsTwinPrime\nexample : Nat → Prop := L8.IsComposite\nexample : Nat → Prop := L8.ExactlyOneOf23",
+      "message": "Keep the four predicates of type `Nat → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "IsTeen 12",
-      "hint": "12 is not a teenager: the lower bound must be 13."
+      "match": "Sophie",
+      "hint": "`Nat.Prime p ∧ Nat.Prime (2 * p + 1)`."
     },
     {
-      "match": "IsTeen 20",
-      "hint": "20 is not a teenager: the upper bound must be 19."
+      "match": "twin",
+      "hint": "`Nat.Prime p ∧ Nat.Prime (p + 2)`."
     },
     {
-      "match": "IsTeen",
+      "match": "composite",
       "steps": [
-        "Check both ends: is 13 a teenager? Is 19?"
+        "Is 1 prime? Is it composite? What does `¬ Nat.Prime n` say about `1`?"
       ],
-      "hint": "You can write `13 ≤ n ∧ n ≤ 19`, or reuse the definition above: `InRange 13 19 n`."
+      "hint": "`1 < n ∧ ¬ Nat.Prime n`."
     },
     {
-      "match": "EvenInRange 1 10 5",
-      "hint": "5 is in range but odd. You need *both* conditions: join them with `∧`."
-    },
-    {
-      "match": "EvenInRange 1 10 12",
-      "hint": "12 is even but out of range. You need *both* conditions: join them with `∧`."
-    },
-    {
-      "match": "EvenInRange",
+      "match": "ExactlyOneOf23",
       "steps": [
-        "Two conditions must hold at once. Which connective says that?"
+        "\"Exactly one\" is \"at least one\" and \"not both\"."
       ],
-      "hint": "`n % 2 = 0 ∧ InRange lo hi n`."
+      "hint": "`(2 ∣ n ∨ 3 ∣ n) ∧ ¬ (2 ∣ n ∧ 3 ∣ n)`."
     },
     {
       "match": "",
-      "hint": "Check the examples in the comment above the predicate."
+      "hint": "Combine the pieces with `∧`, `∨` and `¬`, with brackets."
     }
   ]
 }

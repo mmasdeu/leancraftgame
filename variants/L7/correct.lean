@@ -1,11 +1,14 @@
--- n is at least 100 (already done)
-def IsBig (n : Nat) : Prop := 100 ≤ n
+-- the Collatz map (from the Foundations world)
+def collatz (n : Nat) : Nat := if n % 2 = 0 then n / 2 else 3 * n + 1
 
--- n is even                        (IsEven 10 is true, IsEven 7 is false)
+-- n is even (already done)
 def IsEven (n : Nat) : Prop := n % 2 = 0
 
--- n is smaller than 10             (IsSmall 3 is true, IsSmall 10 is false)
-def IsSmall (n : Nat) : Prop := n < 10
+-- a divides b: b is a multiple of a (write it with %, not with ∣)
+def Divides (a b : Nat) : Prop := b % a = 0
 
--- dividing b by a leaves no remainder   (GoesInto 3 12 is true, GoesInto 5 12 is false)
-def GoesInto (a b : Nat) : Prop := b % a = 0
+-- (a, b, c) is a Pythagorean triple: a² + b² = c²
+def IsPythagorean (a b c : Nat) : Prop := a ^ 2 + b ^ 2 = c ^ 2
+
+-- n is a fixed point of the Collatz map
+def IsFixed (n : Nat) : Prop := collatz n = n

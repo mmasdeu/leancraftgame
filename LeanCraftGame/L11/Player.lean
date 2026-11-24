@@ -1,55 +1,50 @@
 /-
 # Spot the bug: connectives
 
-A colleague defined three predicates. Each comes with a comment saying what
-it should mean, and each says something else.
+A colleague translated four definitions into Lean. Each compiles; each says
+something other than what was meant. Your job is to prove it, the way a
+referee proves a paper wrong: with a **counterexample**, an input on which
+the definition and its intended meaning disagree.
 
-```lean
--- n is a teenager: from 13 to 19
-def IsTeen (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19
+Read each definition aloud, literally, connective by connective:
 
--- day d is a weekend day (days are numbered 1 to 7, Saturday is 6, Sunday is 7)
-def IsWeekend (d : Nat) : Prop := d = 6 ∧ d = 7
+* `13 ≤ n ∨ n ≤ 19`: "at least 13, *or* at most 19". Which numbers fail
+  that?
+* `¬ Nat.Prime n`: what about the numbers that are neither prime nor
+  composite?
+* `¬ (2 ∣ a ∧ 2 ∣ b)` only looks at the prime 2.
+* `¬ a % 2 = 0 ∧ b % 2 = 0`: where does the `¬` stop? (`¬` binds tighter
+  than `∧`.)
 
--- a and b are both odd
-def BothOdd (a b : Nat) : Prop := ¬ a % 2 = 0 ∧ b % 2 = 0
-```
-
-A wrong predicate can be wrong in two directions:
-
-* it **accepts** something it should reject (it is *too weak*), or
-* it **rejects** something it should accept (it is *too strong*).
-
-To prove the first, give an input that the predicate accepts, and show that it
-should not. For the second, give an input that it rejects, and show that it
-should accept it. The tests below say which direction each bug goes; your job
-is to find the input.
-
-Remember the binding strengths from "Or and not": `¬` binds tighter than `∧`,
-which binds tighter than `∨`.
+Some definitions are **too weak** (they accept things they should reject)
+and some are **too strong** (they reject things they should accept). Decide
+which before hunting.
 
 ## Your task
 
-* `teen`: a number that `IsTeen` accepts, although it is not from 13 to 19.
-* `weekendDay`: a weekend day (6 or 7) that `IsWeekend` rejects.
-* `oddA` and `oddB`: two numbers that `BothOdd` accepts, although they are not
-  both odd.
+For each definition, give an input where it gives the wrong answer. The
+referee evaluates the colleague's definitions on your inputs (its own copy:
+editing the definitions above changes nothing) and checks that your inputs
+really are counterexamples.
 -/
+
 namespace L11
 
--- The colleague's code, to read (the referee uses its own copy).
-def IsTeen (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19
-def IsWeekend (d : Nat) : Prop := d = 6 ∧ d = 7
-def BothOdd (a b : Nat) : Prop := ¬ a % 2 = 0 ∧ b % 2 = 0
+-- A colleague's definitions (to read: the referee uses its own copy).
+def InRange (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19              -- meant: 13 ≤ n ≤ 19
+def IsComposite (n : Nat) : Prop := ¬ Nat.Prime n               -- meant: composite
+def Coprime (a b : Nat) : Prop := ¬ (2 ∣ a ∧ 2 ∣ b)            -- meant: gcd a b = 1
+def BothOdd (a b : Nat) : Prop := ¬ a % 2 = 0 ∧ b % 2 = 0      -- meant: a and b odd
 
--- accepted by IsTeen, but not a teenager
-def teen : Nat := sorry
-
--- a weekend day, but rejected by IsWeekend
-def weekendDay : Nat := sorry
-
--- accepted by BothOdd, but not both odd
-def oddA : Nat := sorry
-def oddB : Nat := sorry
+-- accepted by InRange, but not between 13 and 19
+def r : Nat := sorry
+-- accepted by IsComposite, but not composite
+def c : Nat := sorry
+-- accepted by Coprime, but with a common factor
+def ca : Nat := sorry
+def cb : Nat := sorry
+-- two odd numbers that BothOdd rejects
+def oa : Nat := sorry
+def ob : Nat := sorry
 
 end L11

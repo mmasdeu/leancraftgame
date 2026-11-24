@@ -1,8 +1,17 @@
--- under 5 or at least 65          (FreeTicket 3 is true, FreeTicket 30 is false)
-def FreeTicket (age : Nat) : Prop := age < 5 ∧ 65 ≤ age
+-- if 4 divides n then 2 divides n
+def FourThenTwo (n : Nat) : Prop := 4 ∣ n ∧ 2 ∣ n
 
--- everybody else pays full price: the opposite of FreeTicket
-def PaysFull (age : Nat) : Prop := ¬ FreeTicket age
+-- the converse: if 2 divides n then 4 divides n
+def TwoThenFour (n : Nat) : Prop := 2 ∣ n → 4 ∣ n
 
--- n is neither 0 nor 1            (NotTiny 5 is true, NotTiny 1 is false)
-def NotTiny (n : Nat) : Prop := ¬ (n = 0 ∨ n = 1)
+-- a number for which the converse fails
+def breaksConverse : Nat := 6
+
+-- "a prime is odd": if p is prime then p is odd
+def PrimeThenOdd (p : Nat) : Prop := Nat.Prime p → p % 2 = 1
+
+-- the only number that breaks it
+def breaksPrimeOdd : Nat := 2
+
+-- a and b have the same parity: a is even if and only if b is even
+def SameParity (a b : Nat) : Prop := a % 2 = 0 ↔ b % 2 = 0
