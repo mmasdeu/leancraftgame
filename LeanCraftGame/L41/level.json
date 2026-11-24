@@ -2,6 +2,7 @@
   "world": "Analysis World",
   "title": "Cauchy sequences",
   "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
       "test": "1, 0, 0, 0, … is Cauchy: the first terms never matter",

@@ -4,9 +4,9 @@ import LeanCraftGame.L73.Player
 
 open L73
 
-namespace L58Ref
+namespace L73Ref
 def Real (P : Nat → Prop) : Prop := ∀ n, ∃ p, n < p ∧ P p
-end L58Ref
+end L73Ref
 
 #no_sorry Unbounded
 #no_sorry smallWorld
@@ -36,8 +36,8 @@ end L58Ref
   ∀ p, smallWorld p → p ≤ 100
 #expect_true "Your world: the AI's claim holds there (for every n there is a 'prime' other than n; your world needs at least two numbers)" unfolding AIClaim smallWorld :
   AIClaim smallWorld
-#expect_false "Your world: there should NOT be infinitely many 'primes' there (the real claim must fail)" unfolding L58Ref.Real smallWorld :
-  L58Ref.Real smallWorld
+#expect_false "Your world: there should NOT be infinitely many 'primes' there (the real claim must fail)" unfolding L73Ref.Real smallWorld :
+  L73Ref.Real smallWorld
 
 -- Your fake prime
 #expect_true "Your fakePrime: the AI's IsPrime accepts it" unfolding IsPrime fakePrime :

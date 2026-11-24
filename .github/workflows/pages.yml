@@ -1,16 +1,14 @@
-# Publishes the landing page (site/) and the online version of the game (built by
-# online/build.py into play/) to the gh-pages branch, which GitHub Pages serves at
-# https://mmasdeu.github.io/leancraftgame/ and .../play/. Runs when either changes, or by hand.
-#
-# One-time setup: Settings → Pages → Build and deployment → Source: "Deploy from a branch",
-# Branch: gh-pages, folder: / (root). The branch is created by the first run of this workflow.
+# Publishes version 2 of the online game (built by online/build.py) to the v2/ folder of
+# the gh-pages branch, which GitHub Pages serves at https://mmasdeu.github.io/leancraftgame/v2/.
+# Only v2/ is replaced: the rest of gh-pages (the landing page, play/, beta/, …) is kept.
+# Runs on every push to the v2 branch that touches the game, or by hand.
 
-name: Landing page and online game
+name: Online game, version 2
 
 on:
   push:
-    branches: [main]
-    paths: ["site/**", "web/**", "LeanCraftGame/**", "online/**", ".github/workflows/pages.yml"]
+    branches: [v2]
+    paths: ["web/**", "LeanCraftGame/**", "online/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
 permissions:
@@ -18,7 +16,7 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -26,15 +24,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Publish site/ to the gh-pages branch
+      - name: Build the online game
+        run: python3 online/build.py --out "$RUNNER_TEMP/v2"
+
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Replace v2/ on the gh-pages branch
         run: |
-          cp -r site "$RUNNER_TEMP/pages"
-          python3 online/build.py --out "$RUNNER_TEMP/pages/play"
-          touch "$RUNNER_TEMP/pages/.nojekyll"        # serve the files as they are
-          cd "$RUNNER_TEMP/pages"
-          git init -q -b gh-pages
+          cd gh-pages
+          rm -rf v2
+          cp -r "$RUNNER_TEMP/v2" v2
+          touch .nojekyll                      # serve the files as they are
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -q -m "Site from ${GITHUB_SHA::7}"
-          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" gh-pages
+          if git diff --cached --quiet; then echo "Nothing to publish."; exit 0; fi
+          git commit -q -m "v2 from ${GITHUB_SHA::7}"
+          git push origin gh-pages

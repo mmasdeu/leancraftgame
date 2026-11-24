@@ -79,7 +79,7 @@ counterexample.
    for the referee: ask yourself which inputs could break your definition.
 6. A run **stops at the first ❌**. The ▶ button next to a test runs only that test,
    which is handy once you have fixed a definition.
-7. **Hints unlock as you go.** After two failed runs (one in the Basics world), a failing
+7. **Hints unlock as you go.** After two failed runs (one in the Foundations world), a failing
    test offers the first step of its hint: usually a question. Each further failed run
    unlocks the next step, and the last step gives the answer away. A failed run is one
    with a ❌. A ❓ (the referee could not decide) is not held against you: it does not
@@ -119,33 +119,38 @@ with the keys to type it, and a short typing drill. You can try it right now.
 
 ## The road ahead
 
-Most worlds end with a **Spot the bug** level: a colleague's definitions compile
-but are wrong, and you prove it with a counterexample. The first four worlds also
-have a **Challenge** level, a harder task with traps, just before it.
+The game is one mathematical story. Each world prepares the next, and a few
+objects come back again and again: the Collatz map, the Fibonacci numbers, the
+Gaussian integers, and above all **Sierpiński space**, the two-point space that is
+the hero of the Topology world. Most worlds end with a **Spot the bug** level: a
+colleague's definitions compile but are wrong, and you prove it with a
+counterexample. Each level is tagged with its kind of exercise: *Define*,
+*Construct* (build an example), *Repair*, *Classify*, *Refute* (give a
+counterexample), *Referee* (choose the examples that tell right from wrong),
+*Connect* or *Audit*.
 
-* **Basics:** values, functions, choices and recursion.
-* **Statements:** true or false, and the connectives *and*, *or*, *not*.
-* **Numbers:** integers, casts, and what happens when you divide by zero.
-* **Quantifiers:** *for all*, *there exists*, *if … then …*, and why their order
-  matters.
-* **Predicate:** your first real definitions, about sequences and functions: tending
-  to infinity, bounded, monotone, injective, coming back infinitely often. Then you
-  swap roles with the referee: you write the tests, and it tries to slip wrong
-  definitions past them.
-* **Library:** sets, the definitions that Mathlib already has, generality, divisibility
-  and relations.
-* **Finite Sums:** adding up and counting over finite sets with `∑`, `∏`,
-  `Finset.range` and `Finset.filter`, and seeing exactly which numbers a sum runs through.
-* **Analysis:** limits, continuity, Cauchy sequences and cluster values of real
-  sequences.
-* **Structure Syntax:** declaring structures, building values with `⟨ , ⟩`, `.mk` and
-  `{ x := … }`, writing functions on them, and updating, extending and parameterising them.
-* **Structure:** bundling data with axioms: order relations, metric spaces, and finding
-  the mistake in a colleague's definition of a group.
-* **Classes:** how one notation (`+`, `max`, `size`) gets a meaning on many types: you
-  declare classes, write instances, and learn why an instance that compiles can still be wrong.
-* **Faithfulness:** an AI claims to have proved the infinitude of the primes, the Collatz
-  conjecture, and Goldbach's conjecture, in a few lines each. What did it really prove?
+* **Foundations:** naming numbers and functions, definitions by cases and by
+  recursion, the Collatz map, and witnesses for existence statements.
+* **Logic:** statements, the connectives, implication and its converse, vacuous truth.
+* **Numbers:** ℕ, ℤ and ℚ, casts, junk values such as `1 / 0 = 0`, Egyptian fractions.
+* **Quantifiers:** *for all*, *there exists*, *eventually*, and why their order matters.
+* **Sequences:** tending to infinity, monotone and bounded sequences, injective and
+  surjective maps, recurrence. Then you swap roles with the referee: you write the
+  tests, and it tries to slip wrong definitions past them.
+* **Sets and relations:** sets as predicates, Mathlib's definitions, generality,
+  divisibility and gcd, equivalence relations and orders.
+* **Finite constructions:** sums and products over finite sets, counting, closed forms.
+* **Analysis:** limits, continuity, Cauchy sequences and cluster values.
+* **Structures:** Gaussian integers, 2×2 matrices, morphisms, and structures with axioms:
+  orders, metric spaces, and a colleague's flawed definition of a group.
+* **Classes:** one definition for every monoid, standard notation, instances built from
+  instances.
+* **Topology:** finite topological spaces that the referee checks exhaustively: the
+  axioms, a gallery of examples, closure, bases, continuity, homeomorphisms,
+  subspaces, products, compactness, connectedness, separation, and convergence with
+  filters.
+* **Audit:** an AI claims to have proved the infinitude of the primes, the Collatz
+  conjecture and Goldbach's conjecture, in a few lines each. What did it really prove?
 
 ## Good to know
 

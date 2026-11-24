@@ -1,86 +1,46 @@
 /-
-# Spot the bug: structures
+# Morphisms
 
-Back to reading a colleague's code, as in the earlier "Spot the bug" levels:
-the code compiles, it looks reasonable, and you must prove it wrong with
-**counterexamples**. This time the code is full of structures. Good places to
-look:
+A structure is only half of the story; the other half is the maps that
+**preserve** it. A homomorphism of monoids `(M, ·, 1) → (N, ·, 1)` is a map
+with `f(1) = 1` and `f(xy) = f(x) f(y)`. Continuous maps preserve
+topologies, linear maps preserve linear combinations, monotone maps preserve
+order.
 
-* **`⟨ , , ⟩` and the order of fields.** Is every value in the field it was
-  meant for? Compare with the declaration of the structure.
-* **`{ v with ... }`.** Does it update the field that its name says, and does
-  it use the right field on the right-hand side? Every field it does *not*
-  mention is copied unchanged: is that really what should happen?
-* **Combining fields.** A comparison that checks the fields one by one may
-  not be the comparison that was specified.
+Two of the commonest confusions:
 
-A colleague handles software version numbers `major.minor.patch`, such as
-`1.4.7`. The first four functions below must do what their comments say; each
-one is wrong.
+* **Preserving the operation is not the same as being bijective.** The map
+  `n ↦ 2n` preserves addition and misses every odd number. Swapping `0` and
+  `1` is a bijection of `ℕ` that preserves nothing.
+* **A morphism goes between two structures, which may differ.** The
+  exponential `n ↦ 2ⁿ` is a homomorphism from `(ℕ, +, 0)` to `(ℕ, ·, 1)`:
+  `2^(a+b) = 2^a · 2^b`, and `2⁰ = 1`. This is the whole point of
+  logarithms, and of the exponential map of a Lie group.
 
-```lean
-structure Version where
-  major : ℕ
-  minor : ℕ
-  patch : ℕ
-
--- next patch release: bumpPatch 1.4.7 is 1.4.8
-def Version.bumpPatch (v : Version) : Version :=
-  { v with patch := v.minor + 1 }
-
--- next minor release: the patch number starts again. bumpMinor 1.4.7 is 1.5.0
-def Version.bumpMinor (v : Version) : Version :=
-  { v with minor := v.minor + 1 }
-
--- put in a new patch number: setPatch 1.4.7 9 is 1.4.9
-def Version.setPatch (v : Version) (p : ℕ) : Version :=
-  ⟨v.major, p, v.patch⟩
-
--- the more recent of two versions: compare the major numbers first, if they
--- are equal the minor numbers, if those are equal the patch numbers.
--- newer 1.5.0 2.0.0 is 2.0.0
-def Version.newer (a b : Version) : Version :=
-  if a.major ≤ b.major ∧ a.minor ≤ b.minor ∧ a.patch ≤ b.patch then b else a
-```
+An **isomorphism** is a morphism with an inverse morphism. For groups, a
+bijective homomorphism is automatically an isomorphism; for topological
+spaces a continuous bijection need not be a homeomorphism (the Topology
+world has the counterexample). Which structures have this property is a
+real question.
 
 ## Your task
 
-For each function, give input values on which it gives the wrong answer. The
-referee compares the colleague's answer with the right one on your inputs.
+Define the two kinds of homomorphism, and construct the two
+counterexamples.
 -/
+
 namespace L48
 
--- The colleague's code, to read (changing it here changes nothing: the
--- referee uses its own copy).
-structure Version where
-  major : ℕ
-  minor : ℕ
-  patch : ℕ
+-- f is a homomorphism of (ℕ, +, 0) to itself: f 0 = 0 and f (a + b) = f a + f b
+def IsAddHom (f : ℕ → ℕ) : Prop := sorry
 
-def Version.bumpPatch (v : Version) : Version :=
-  { v with patch := v.minor + 1 }
+-- f is a homomorphism of (ℕ, +, 0) to (ℕ, ·, 1): f 0 = 1 and f (a + b) = f a · f b
+def IsExpHom (f : ℕ → ℕ) : Prop := sorry
 
-def Version.bumpMinor (v : Version) : Version :=
-  { v with minor := v.minor + 1 }
+-- an additive homomorphism that is not surjective
+def homNotOnto : ℕ → ℕ := sorry
 
-def Version.setPatch (v : Version) (p : ℕ) : Version :=
-  ⟨v.major, p, v.patch⟩
-
-def Version.newer (a b : Version) : Version :=
-  if a.major ≤ b.major ∧ a.minor ≤ b.minor ∧ a.patch ≤ b.patch then b else a
-
--- A version on which `bumpPatch` is wrong.
-def vPatch : Version := sorry
-
--- A version on which `bumpMinor` is wrong.
-def vMinor : Version := sorry
-
--- A version `vSet` and a patch number `pSet` on which `setPatch` is wrong.
-def vSet : Version := sorry
-def pSet : ℕ := sorry
-
--- Two versions on which `newer` is wrong.
-def vA : Version := sorry
-def vB : Version := sorry
+-- a bijection of ℕ that is its own inverse and is not an additive homomorphism
+def bijNotHom : ℕ → ℕ := sorry
 
 end L48

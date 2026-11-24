@@ -5,13 +5,16 @@
 const $ = (id) => document.getElementById(id);
 const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
+/* Version 2 has its own levels and numbering, and is served from the same site as version 1
+   (…/play/ and …/v2/ share the browser's storage), so it keeps its progress under its own prefix. */
+const STORE = "leancraftgame.v2.";
 const store = {
   get(key, fallback) {
-    try { const v = localStorage.getItem("leancraftgame." + key); return v === null ? fallback : JSON.parse(v); }
+    try { const v = localStorage.getItem(STORE + key); return v === null ? fallback : JSON.parse(v); }
     catch { return fallback; }
   },
   set(key, value) {
-    try { localStorage.setItem("leancraftgame." + key, JSON.stringify(value)); } catch { /* private mode */ }
+    try { localStorage.setItem(STORE + key, JSON.stringify(value)); } catch { /* private mode */ }
   },
 };
 
@@ -295,34 +298,8 @@ function jumpTo(d) {
   src.setSelectionRange(offset(d.line, d.col), offset(d.endLine, d.endCol));
 }
 
-/* Saved progress is keyed by level number, and the numbers have changed twice: the folders
-   were first renumbered to follow the play order, and then new levels and worlds were
-   inserted between the old ones. Move what a returning player saved to the current numbers,
-   one step at a time. (`numbering` is the version of the numbers the saved data uses.) */
-(function migrateLevelNumbers() {
-  const STEPS = [
-    { to: 2, map: { 4: 1, 5: 2, 6: 3, 15: 4, 23: 5, 7: 6, 8: 7, 9: 8, 24: 9, 16: 10, 17: 11, 25: 12, 10: 13, 11: 14,
-      12: 15, 13: 16, 18: 17, 26: 18, 1: 19, 27: 20, 19: 21, 20: 22, 21: 23, 28: 24, 22: 25, 29: 26, 14: 27, 2: 28, 3: 29 } },
-    { to: 3, map: { 1: 1, 2: 2, 3: 3, 4: 4, 5: 6, 6: 7, 7: 8, 8: 9, 9: 11, 10: 12, 11: 13, 12: 15, 13: 16, 14: 17, 15: 18, 16: 19, 17: 20, 18: 22, 19: 23, 20: 27, 21: 28, 22: 29, 23: 30, 24: 33, 25: 39, 26: 43, 27: 49, 28: 52, 29: 60 } },
-  ];
-  const PER_LEVEL = ["draft", "results", "predict", "revealed", "failedRuns", "hintsOpened", "stars"];
-  for (const { to, map } of STEPS) {
-    if (store.get("numbering", 1) >= to) continue;
-    const moved = {};
-    for (const [o, n] of Object.entries(map)) for (const what of PER_LEVEL) {
-      const v = store.get(`${what}.${o}`, undefined);
-      if (v !== undefined) moved[`${what}.${n}`] = v;
-    }
-    for (const o of Object.keys(map)) for (const what of PER_LEVEL) {
-      try { localStorage.removeItem(`leancraftgame.${what}.${o}`); } catch { /* private mode */ }
-    }
-    for (const [k, v] of Object.entries(moved)) store.set(k, v);
-    store.set("cleared", store.get("cleared", []).map((id) => map[id] ?? id));
-    const at = store.get("level", "intro");
-    if (at !== "intro") store.set("level", map[at] ?? at);
-    store.set("numbering", to);
-  }
-})();
+/* Version 1 migrated saved progress between its level numberings here. Version 2 starts
+   with its own numbering (and its own storage prefix, STORE), so there is nothing to move. */
 
 /* ------------------------------------------------------------ levels */
 
@@ -418,7 +395,7 @@ async function openIntro() {
   level = null;
   store.set("level", "intro");
   history.replaceState(null, "", "?level=intro");
-  document.title = "Lean Craft Game · Welcome";
+  document.title = "Lean Craft Game v2 · Welcome";
   document.body.classList.add("intro-mode");
   worldToggled = {};
   renderTabs();
@@ -443,7 +420,7 @@ async function openLevel(id) {
   } else level = await (await fetch(`/api/levels/${id}`)).json();
   store.set("level", id);
   history.replaceState(null, "", `?level=${id}`);
-  document.title = `Lean Craft Game · ${level.title}`;
+  document.title = `Lean Craft Game v2 · ${level.title}`;
   worldToggled = {};
   renderTabs();
   // the kind of exercise (level.json "exercise"), as a tag above the lesson

@@ -1,33 +1,34 @@
 /-
 # Limits
 
-Time for the definition every analysis course starts with. Some new notation:
+The definition that took the nineteenth century to get right:
 
-* `ℝ` (type `\R`) is the real numbers. A real sequence is `u : ℕ → ℝ`.
-* `|x|` is the absolute value, written with the plain keyboard bar.
-* Casts again: in `fun n => (n : ℝ)`, the natural number `n` is turned into a
-  real number (displayed `↑n`).
-* `ε` is typed `\e` (then a space), and `∀ ε > 0, …` is a bounded quantifier.
+> `u n → a` when for every `ε > 0` there is an `N` such that
+> `|u n - a| < ε` for every `n ≥ N`.
 
-A real sequence `u` **converges** to `a` when: for every `ε > 0` there is an
-index `N` such that every term from `N` on is within `ε` of `a`.
+Everything from the previous worlds is in it: three quantifiers in a fixed
+order, a restricted `∀ ε > 0` (an implication) and a restricted `∀ n ≥ N`
+(the "eventually" of the Quantifier world). The sequences now take real
+values, `u : ℕ → ℝ`, and `|x|` is the absolute value (type `|` twice).
 
-```lean
--- the worked example: the sequence stays within some bound
-def BoundedSeq (u : ℕ → ℝ) : Prop := ∃ M, ∀ n, |u n| ≤ M
-```
+Every part is load-bearing:
 
-## What can go wrong
+* without `ε > 0`, taking `ε = 0` (or `ε < 0`) makes every sequence fail;
+* with `∃ n` instead of `∀ n ≥ N`, a sequence that merely comes close once
+  would converge;
+* with `∃ N` before `∀ ε`, only eventually constant sequences would converge.
 
-* Forgetting `ε > 0`: for `ε = 0` nothing is within distance 0, so no
-  sequence converges.
-* Writing `∃ n` instead of "for all `n ≥ N`": then `u` only needs to come close
-  to `a` once.
-* Putting `∃ N` before `∀ ε`: then a single `N` must work for every `ε`.
+The definition is a special case of convergence in a topological space
+(the Topology world): the sets `{x | |x - a| < ε}` are a basis of
+neighbourhoods of `a`.
+
+`ℝ` is not computable, so the referee proves these statements: it chooses
+`N` from `ε` like a student would, and closes the inequalities with
+`linarith` and friends.
 
 ## Your task
 
-`BoundedSeq` is done. Define `ConvergesTo u a`.
+Define `ConvergesTo u a`.
 -/
 namespace L39
 

@@ -1,18 +1,26 @@
 /-
 # The AI proved Goldbach!
 
-The last world asks the hardest question about formalisation: does the formal
-statement **say what it claims to say**? Lean checks that a proof proves the
-statement it is attached to, nothing more. If the statement is wrong, a flawless
-proof is worth nothing. The levels before this one showed you how such flaws
-look: junk values, a missing hypothesis, a notion that is too permissive.
+Goldbach's conjecture: every even number greater than `2` is a sum of two
+primes. Checked up to `4·10¹⁸`, unproved. The AI's statement is accepted by
+Lean with a three-line proof. Read it the way Lean parses it:
 
-An AI assistant was asked to formalise and prove Goldbach's conjecture:
+`∃ p q, IsPrime p ∧ IsPrime q → p + q = n`
 
-  "Every even integer greater than 2 is the sum of two primes."
+The arrow binds more loosely than `∧`, so this is "there are `p`, `q` such
+that, *if* both are prime, *then* `p + q = n`": choose `p = q = 0`, which
+are not prime, and the implication is vacuously true. The Logic world's
+lesson about `∃ n, P n → Q n`, at the scale of a famous conjecture.
 
-It came back with the statement and proof below. Both compile, and
-there is no `sorry`.
+The final test of a statement is not whether it is proved; it is whether it
+gives the right answer in every world where you know the answer. A
+statement parametrised by the notion of "prime" can be checked in worlds
+where everything is prime, where nothing is, where only `2` is, … and only
+then trusted in the real one.
+
+You have now written definitions for numbers, sequences, sets, structures
+and spaces, and you have learned to break other people's. That is the
+skill that remains valuable when proofs are free.
 -/
 import Mathlib.Tactic
 

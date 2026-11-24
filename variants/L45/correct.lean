@@ -1,25 +1,18 @@
-structure Point where
-  x : ℕ
-  y : ℕ
+-- the Gaussian integers (already done)
+structure GaussInt where
+  re : ℤ
+  im : ℤ
 
-structure Rectangle where
-  width : ℕ
-  height : ℕ
+def GaussInt.normSq (z : GaussInt) : ℤ := z.re ^ 2 + z.im ^ 2
 
-namespace Point
+-- (a + bi) + (c + di)
+def GaussInt.add (z w : GaussInt) : GaussInt := ⟨z.re + w.re, z.im + w.im⟩
 
-def add (p q : Point) : Point := ⟨p.x + q.x, p.y + q.y⟩
+-- (a + bi)(c + di) = (ac - bd) + (ad + bc)i
+def GaussInt.mul (z w : GaussInt) : GaussInt :=
+  ⟨z.re * w.re - z.im * w.im, z.re * w.im + z.im * w.re⟩
 
-def dist2 (p q : Point) : ℕ := (p.x - q.x)^2 + (q.x - p.x)^2 + (p.y - q.y)^2 + (q.y - p.y)^2
-
-end Point
-
-namespace Rectangle
-
-def area (r : Rectangle) : ℕ := r.width * r.height
-
-def grow (r : Rectangle) (k : ℕ) : Rectangle := ⟨r.width + 2 * k, r.height + 2 * k⟩
-
-def topRight (r : Rectangle) : Point := ⟨r.width, r.height⟩
-
-end Rectangle
+-- z multiplied by itself n times (z⁰ = 1)
+def GaussInt.pow (z : GaussInt) : ℕ → GaussInt
+  | 0 => ⟨1, 0⟩
+  | n + 1 => (z.pow n).mul z

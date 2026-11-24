@@ -1,22 +1,23 @@
 /-
 # A colleague's groups
 
-In this world you have written the axioms of a structure yourself, and the
-referee judged them on models: real examples that must be accepted and junk
-that must be rejected. Now the roles are reversed. Someone else wrote the
-axioms, for a structure every mathematician knows.
+A colleague formalised groups with a *left* identity and a *right* inverse:
 
-A **group** is a type `G` with a multiplication `mul`, a special element `one`
-and a function `inv` that gives every element its inverse. A colleague has
-formalised groups as follows. It compiles, and every group you can think of is
-an instance. Is it right?
+```lean
+mul_assoc : ∀ a b c, mul (mul a b) c = mul a (mul b c)
+one_mul   : ∀ a, mul one a = a
+mul_inv   : ∀ a, mul a (inv a) = one
+```
 
-An axiom system can fail in two ways:
+Textbooks often give one-sided axioms, and with the *same* side they are
+enough: a left identity and left inverses imply a group. With mixed sides
+they are not. The axioms are satisfied by structures that are not groups,
+for instance some operations on a two-element set where `mul a one ≠ a`.
 
-* it asks for **too much**: a real group is rejected;
-* it asks for **too little**: a junk structure is accepted.
-
-Part A looks for the second kind of failure, Part B repairs it.
+This is the auditor's question about any set of axioms: **does it admit
+junk models?** The way to answer it is not to stare at the axioms, but to
+look for a small model that satisfies them and fails a property every group
+has.
 -/
 import Mathlib.Tactic
 

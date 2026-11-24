@@ -1,39 +1,29 @@
 /-
 # Continuity
 
-"Limits" gave you the shape `∀ ε > 0, ∃ N, …`. Continuity of a function has the
-same shape, but the second quantifier is a real number `δ` (type `\delta`) that
-measures how close `x` must be to a point `a`.
+Continuity of `f : ℝ → ℝ` at `a`, Weierstrass's way:
 
-* A real function is `f : ℝ → ℝ`. You will see `fun x => 2 * x`, and also step
-  functions such as `fun x => if x ≤ 0 then 0 else 1`.
-* `|x - a| < δ` says that `x` is within `δ` of `a`.
+> for every `ε > 0` there is `δ > 0` such that `|x - a| < δ` implies
+> `|f x - f a| < ε`.
 
-A function `f` is **continuous at** `a` when: for every `ε > 0` there is a
-`δ > 0` such that every `x` within `δ` of `a` has `f x` within `ε` of `f a`.
+It is clearer to split the definition in two, as you would in a proof:
+first say what it means for a given `δ` to *work* for a given `ε`, then
+quantify. Splitting a long definition into named pieces is good practice
+in Lean as on paper: each piece can be tested on its own, and the pieces
+are reused.
 
-The level has two definitions. First the *inner* part of the sentence, for one
-fixed `ε` and one fixed `δ`: "`δ` is a good choice for `ε`". Then continuity
-itself, built on top of it. The referee tests the first one on concrete numbers,
-so it also checks the details that make the second one right.
+The step function (`0` for `x < 0`, `1` for `x ≥ 0`) is the test case: at
+`a = 0`, for `ε = 1/2` no `δ` works, since points just left of `0` jump.
+At every other point it is continuous.
 
-```lean
--- the worked example: f never leaves the interval from -M to M
-def BoundedBy (f : ℝ → ℝ) (M : ℝ) : Prop := ∀ x, |f x| ≤ M
-```
-
-## What can go wrong
-
-* A `δ` that is `0` (or negative) is not allowed: nothing is within distance
-  `0`, so the condition would hold for free.
-* The distance is `|x - a|`, from `a`, not `|x|`; and `f x` is compared with
-  `f a`, not with `a`.
-* `<` is not `≤`: a jump of exactly `ε` is not "within `ε`".
-* `ε` ranges over positive numbers only, and `δ` may depend on `ε`.
+In the Topology world the same notion will be defined with no `ε` at all:
+inverse images of open sets are open. That the two agree for maps `ℝ → ℝ`
+is a theorem, and the reason the topological definition is the right
+generalisation.
 
 ## Your task
 
-`BoundedBy` is done. Define `IsDeltaFor f a ε δ`, then `ContAt f a`.
+Define `IsDeltaFor f a ε δ` and then `ContAt f a` using it.
 -/
 namespace L40
 

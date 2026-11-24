@@ -2,6 +2,7 @@
   "world": "Analysis World",
   "title": "Limits",
   "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
       "test": "7, 7, 7, 7, 7, 0, 0, 0, … converges to 0",

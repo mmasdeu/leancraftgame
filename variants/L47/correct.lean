@@ -1,26 +1,25 @@
-structure Time where
-  hour : ℕ
-  minute : ℕ
+-- 2×2 integer matrices and their product (already done)
+structure Matrix2 where
+  a : ℤ
+  b : ℤ
+  c : ℤ
+  d : ℤ
 
-structure Date where
-  year : ℕ
-  month : ℕ := 1
-  day : ℕ := 1
+def mul (M N : Matrix2) : Matrix2 :=
+  ⟨M.a * N.a + M.b * N.c, M.a * N.b + M.b * N.d, M.c * N.a + M.d * N.c, M.c * N.b + M.d * N.d⟩
 
-def newYear (y : ℕ) : Date := { year := y }
+def det (M : Matrix2) : ℤ := M.a * M.d - M.b * M.c
 
-def Date.nextDay (d : Date) : Date :=
-  if d.day < 30 then { d with day := d.day + 1 }
-  else if d.month < 12 then { d with month := d.month + 1, day := 1 }
-  else { year := d.year + 1, month := 1, day := 1 }
+-- M multiplied by itself n times (M⁰ is the identity)
+def pow (M : Matrix2) : ℕ → Matrix2
+  | 0 => ⟨1, 0, 0, 1⟩
+  | n + 1 => mul (pow M n) M
 
-def Date.addDays (d : Date) : ℕ → Date
-  | 0 => d
-  | n + 1 => (Date.addDays d n).nextDay
+-- the Fibonacci matrix (1 1 / 1 0)
+def fibMatrix : Matrix2 := ⟨1, 1, 1, 0⟩
 
-structure Moment extends Date where
-  time : Time
+-- the n-th Fibonacci number, read off the matrix fibMatrix ^ n (it is the entry b)
+def fibM (n : ℕ) : ℤ := (pow fibMatrix n).b
 
-def Moment.addMinutes (m : Moment) (k : ℕ) : Moment :=
-  let total := 60 * m.time.hour + m.time.minute + k
-  { toDate := m.toDate.addDays (total / 1440), time := ⟨(total / 60) % 24, total % 60⟩ }
+-- a matrix of order exactly 6: R⁶ is the identity, and no smaller positive power is
+def order6 : Matrix2 := ⟨1, -1, 1, 0⟩

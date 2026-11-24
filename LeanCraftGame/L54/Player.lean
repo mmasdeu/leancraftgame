@@ -1,38 +1,20 @@
 /-
 # Standard instances
 
-In "Classes and instances" you wrote instances of a class that we invented.
-Lean and Mathlib come with many classes of their own, and each one is the
-reason a certain piece of notation works:
+Mathlib's notation is itself a family of type classes: `a + b` is
+`Add.add a b`, `0` is `Zero.zero`, `-a` is `Neg.neg a`, `a - b` is
+`Sub.sub a b`. Give a type these instances and the usual notation works
+for it; more importantly, every theorem stated with that notation applies.
 
-* `Add α` makes `a + b` mean something for `a b : α`; its one field is `add`.
-* `Neg α` does the same for `-a` (field `neg`), `Sub α` for `a - b` (`sub`).
-* `Zero α` explains the numeral `0 : α` (field `zero`).
-* `HAdd α β γ` is the *general* `+`: it adds an `α` to a `β` and returns a
-  `γ`. `Add α` is the special case where all three types are the same.
+`ℤ²` with componentwise addition is the free abelian group of rank 2, the
+lattice of a torus, the group of translations of the square grid. Its
+elements are written here as a structure `Vec`.
 
-Without an instance, `p + q` is an error: *failed to synthesize HAdd Point
-Point ?γ*. With one, Lean rewrites `p + q` to your function, and everything
-you know about `+` (reading it, writing it) works for your own type.
-
-```lean
-structure Point where
-  x : ℤ
-  y : ℤ
-  deriving DecidableEq
-
-instance : Add Point where
-  add p q := ⟨p.x + q.x, p.y + q.y⟩
-
-instance : Zero Point where
-  zero := ⟨0, 0⟩
-```
-
-* `deriving DecidableEq` lets Lean decide whether two points are equal (the
-  referee needs it to run its tests).
-* `⟨a, b⟩` is short for `Point.mk a b`.
-* After this, `Point.mk 1 2 + Point.mk 3 4` is `Point.mk 4 6`, and
-  `(0 : Point)` is the origin.
+The heterogeneous `HAdd α β γ` allows `a + b` with `a : α`, `b : β`: here,
+adding an integer to both coordinates. Mathlib uses heterogeneous
+operations for scalar multiplication `c • v` and for the action of a group
+on a set. Use them sparingly: `v + 3` reading as "shift both coordinates by
+3" is a convention you now have to remember.
 
 ## Your task
 

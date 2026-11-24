@@ -2,6 +2,7 @@
   "world": "Structure World",
   "title": "A colleague's groups",
   "skill": "reading",
+  "exercise": "Repair",
   "checks": [
     {
       "lean": "example : Bool → Bool → Bool := L52.junkMul\nexample : Bool := L52.junkOne\nexample : Bool → Bool := L52.junkInv",

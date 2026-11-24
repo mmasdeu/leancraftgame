@@ -1,38 +1,26 @@
 /-
 # The AI proved the Collatz conjecture!
 
-An AI assistant was asked to formalise and prove the Collatz conjecture:
+The Collatz map has followed us since the Foundations world: `27` takes
+111 steps to reach `1`, and nobody knows whether every start does. Now an
+AI claims a proof, and Lean accepts it.
 
-  "Start from any positive number. If it is even, halve it; if it is
-   odd, multiply it by 3 and add 1. Repeat. You always reach 1."
+The proof is one line, `fun n => ⟨0, le_refl n⟩`. A one-line proof of a
+famous open problem is not a breakthrough; it is evidence that the
+statement is not the problem. Read it: "for every `n` there is `k` with
+`orbit n k ≤ n`". Take `k = 0`.
 
-It came back with the code below. Everything compiles, there is no
-`sorry`, and the proof is one line long. An open problem with a one-line
-proof is a smell, but *where* exactly does it smell?
+Two auditor's tools:
 
-## Auditing, round two
+* **Parametrise the statement** by the process, so that it can be
+  evaluated in toy processes where you know the answer: a faithful
+  statement must be false in a process that gets stuck, and the AI's
+  statement is true in it.
+* **Check the boundary**: does the conjecture hold for `n = 0`? The
+  Collatz map fixes `0` (you found that in the Logic world), so the real
+  statement must say "positive".
 
-The checklist from "The AI proved the infinitude of primes!" still
-applies. These items matter most here:
-
-1. **Cheapest witness.** In `∃ k, …`, what happens at `k = 0`, the
-   laziest choice? A statement that a do-nothing step already satisfies
-   says nothing.
-2. **Compare the relation, not just the shape.** `=`, `≤` and `<` look alike
-   and are not alike. Replace the relation by a silly one and see who
-   still agrees.
-3. **Junk values.** Lean never says "undefined": `0 - 5 = 0`,
-   `7 / 0 = 0`. Ask which input makes the *real* process get stuck on
-   such a value, and whether the claim has to exclude it.
-4. **Side conditions.** Is each hypothesis of the claim ("positive",
-   "even", ...) still there in the formula? Which input would break
-   the formula if the hypothesis were dropped?
-5. **Toy worlds.** The claim speaks about one particular process. Let
-   `o n k` be the number you are at after `k` steps starting from `n`
-   (`o n 0 = n`), and let the process be *anything*: counting up,
-   counting down, jumping to 0. A faithful statement must be right in
-   all of them. (`Collatz o` below means: from every positive start
-   the process reaches exactly 1.)
+Your task is in the comments of the file below.
 -/
 import Mathlib.Tactic
 

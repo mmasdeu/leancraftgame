@@ -1,5 +1,5 @@
 /-
-# Bounded quantifiers and "eventually"
+# Bounded quantifiers
 
 Lean writes restricted quantifiers in short form:
 

@@ -1,10 +1,11 @@
 /-
-# Challenge: classes
+# Challenge: orders from classes
 
-An instance is accepted by Lean as soon as its fields have the right *types*.
-Whether they do the right *thing* is up to you, and a wrong instance is worse
-than a wrong function: every `max`, `min`, `compare` and sort that uses it
-silently inherits the mistake.
+Pairs of natural numbers ordered **lexicographically** (compare the first
+coordinates; if equal, compare the second) form a well-order of type
+`ω²`: every decreasing sequence is finite, although there are infinitely
+many pairs below `(1, 0)`. Lexicographic orders are how ordinals are built,
+and how dictionaries are sorted.
 
 A competition scores each team with points and penalties:
 

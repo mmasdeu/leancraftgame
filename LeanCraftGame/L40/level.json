@@ -2,6 +2,7 @@
   "world": "Analysis World",
   "title": "Continuity",
   "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
       "test": "a jump of exactly ε is not within ε",

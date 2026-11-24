@@ -1,35 +1,29 @@
 /-
 # The AI proved the infinitude of primes!
 
-An AI assistant was asked to formalise and prove Euclid's theorem:
+The last world is the one the game was built for. Proofs are cheap now:
+an automatic prover, human or not, can produce a Lean proof of almost any
+true statement you hand it. What it cannot guarantee is that the statement
+says what you meant. Lean checks the proof; **nobody checks the statement
+but you**.
 
-  "There are infinitely many primes."
+An AI announces a Lean proof that there are infinitely many primes. Lean
+accepts it. Read the statement, not the proof:
 
-It came back with the statement and proof below. Both compile, there is
-no `sorry`, and this time the theorem is even *true*. So what is the
-problem?
+* its `IsPrime` forgets something you met in the Logic world (what about
+  `1`?);
+* its "infinitely many" is `∀ n, ∃ p, P p ∧ p ≠ n`: "for every `n` there is
+  a prime *different from* `n`". Two primes are enough for that.
 
-## How to audit a formalisation
+The method of the auditor is the method of this whole game: build a **toy
+world** (a predicate `P`) in which the claimed statement holds and the
+intended one fails. If such a world exists, the statement does not
+capture the theorem, whatever the proof.
 
-A proof only shows that the statement is true. Whether the statement
-*says what the claim says* is a separate question, and no proof can
-answer it. Before you trust a formalisation, go through this list:
+The real statement, "for every `n` there is a prime `p ≥ n`", is Euclid's
+theorem, and the "unbounded" pattern is the one from the Quantifier world.
 
-1. **Say the formal statement out loud in plain words**, quantifier by
-   quantifier, and compare with the claim. Do not read what the AI
-   *meant*, read what it wrote.
-2. **Look for the missing ingredient.** Which word of the claim has no
-   counterpart in the formula? ("infinitely many" needs a size or a bound
-   somewhere.)
-3. **Look for the cheapest witness.** For a `∃`, what is the laziest thing
-   that could satisfy it? For a `∀`, what is the smallest input?
-4. **Check every definition on its borders**: `0`, `1`, `2`.
-5. **Test in toy worlds.** Replace the notion ("prime") by a made-up one
-   whose answer you know, finite, empty, everything, and see whether the
-   statement still gives the right answer.
-
-The AI's `AIClaim` below is stated for *any* notion of "prime" `P`, which
-makes it easy to run step 5. `AIClaim IsPrime` is the AI's theorem.
+Your task is in the comments of the file below.
 -/
 import Mathlib.Tactic
 

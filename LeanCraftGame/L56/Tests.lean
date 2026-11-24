@@ -1,4 +1,4 @@
-/- Hidden test battery for Level Challenge: classes. -/
+/- Hidden test battery for Level Challenge: orders from classes. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L56.Player
 
@@ -9,7 +9,7 @@ open L56
 #no_sorry L56.maxScore
 #no_sorry L56.minScore
 #no_sorry L56.best
-#level_start "Challenge: classes"
+#level_start "Challenge: orders from classes"
 
 -- value
 #expect_true "Score.value (Score.mk 7 2) = 5" unfolding Score.value :

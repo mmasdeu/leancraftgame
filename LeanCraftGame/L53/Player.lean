@@ -1,83 +1,75 @@
 /-
 # Classes and instances
 
-Many things in Lean can be "measured": a string has a length, a list has a
-number of entries, a rectangle has an area. We would like one word, `size`,
-that works for all of them, and does the right thing for each. That is what a
-**class** is for.
+`x ^ n` means repeated multiplication in `ℕ`, in `ℤ`, in a group of
+matrices, in the monoid of words: the *same* definition, read in different
+structures. Lean expresses this with **type classes**.
 
 ```lean
-class Size (α : Type) where
-  size : α → ℕ
+class Monoid' (α : Type) where
+  op : α → α → α
+  unit : α
 ```
 
-* `class Size (α : Type) where` starts a new class. It is declared like a
-  structure (the field `size` is a function giving a number for every `α`),
-  and `α` is the type that is being measured.
-* On its own the class says nothing about any particular type. For that you
-  write an **instance**: the recipe for one type.
+declares the *kind* of structure; an **instance** says that a particular
+type has one:
 
 ```lean
-instance : Size ℕ where
-  size n := n
+instance natMul : Monoid' ℕ where
+  op a b := a * b
+  unit := 1
 ```
 
-* `instance : Size ℕ where` reads "here is how `ℕ` is a `Size`". Below it you
-  give each field, here `size n := n` ("the size of a number is the number").
-* From now on `Size.size (7 : ℕ)` is `7`. Lean found the right recipe *by
-  itself*: it saw that the argument has type `ℕ` and looked through the
-  instances it knows for one of the form `Size ℕ`. This search is called
-  **instance resolution**.
-* Writing `instance name : Size ℕ where …` gives the instance a name. It is
-  optional; the referee needs the names below to find your instances.
-* If no instance exists, Lean complains *failed to synthesize Size Foo*. You can
-  ask it directly: `example : Size ℕ := inferInstance` works, and the same line
-  for a type with no instance is an error.
+A definition can then ask for "any type with a monoid structure" with a
+square-bracket argument `[Monoid' α]`, and Lean **finds** the instance by
+itself whenever the definition is used: `mpow 2 10` uses `natMul`,
+`mpow true 3` uses the instance on `Bool`. This automatic search is how
+Mathlib knows that `ℝ` is a field, `ℤ` a ring, and `ℕ → ℕ` a monoid under
+composition, and why one theorem about monoids applies to all of them.
 
-## A function that uses the class
-
-```lean
-def bigger {α : Type} [Size α] (a b : α) : Prop := Size.size b < Size.size a
-```
-
-`[Size α]` is an instance argument (you met it in "Generality" as
-`[Preorder α]`): `bigger` works for every type that has a `Size`, and Lean
-supplies the instance when you use it.
+The same type can carry several structures (`ℕ` under `+` and under `·`);
+a class allows only one canonical instance per type, which is why Mathlib
+has `Additive` and `Multiplicative` wrappers.
 
 ## Your task
 
-Three instances are missing. The sizes mean:
-
-* a `String`: the number of characters (`String.length`);
-* a `List ℕ`: the number of entries (not their sum!);
-* a `Rect` (a rectangle with width `w` and height `h`): the number of unit
-  squares in it.
+Write the three instances. Powers then come for free: in `(Bool, xor)`,
+`mpow true n` computes the parity of `n`; in `(ℕ → ℕ, ∘)`, `mpow f n` is
+the `n`-th iterate of `f`.
 -/
+
 namespace L53
 
-class Size (α : Type) where
-  size : α → ℕ
+-- a set with an associative operation and a unit (the axioms are left out here)
+class Monoid' (α : Type) where
+  op : α → α → α
+  unit : α
 
-instance sizeNat : Size ℕ where
-  size n := n
+open Monoid'
 
--- the worked example
-def bigger {α : Type} [Size α] (a b : α) : Prop := Size.size b < Size.size a
+-- x · x · ⋯ · x (n times) in ANY monoid: one definition for all of them (done)
+def mpow {α : Type} [Monoid' α] (x : α) : ℕ → α
+  | 0 => unit
+  | n + 1 => op (mpow x n) x
 
-structure Rect where
-  w : ℕ
-  h : ℕ
+-- (ℕ, ·, 1) (done)
+instance natMul : Monoid' ℕ where
+  op a b := a * b
+  unit := 1
 
--- the number of characters
-instance sizeString : Size String where
-  size s := sorry
+-- (Bool, xor, false): `a != b` is "exclusive or"
+instance boolXor : Monoid' Bool where
+  op a b := sorry
+  unit := sorry
 
--- the number of entries
-instance sizeList : Size (List ℕ) where
-  size xs := sorry
+-- lists of numbers with concatenation `xs ++ ys`
+instance listAppend : Monoid' (List ℕ) where
+  op xs ys := sorry
+  unit := sorry
 
--- the number of unit squares
-instance sizeRect : Size Rect where
-  size r := sorry
+-- maps ℕ → ℕ with composition: op f g is "first g, then f"
+instance endo : Monoid' (ℕ → ℕ) where
+  op f g := sorry
+  unit := sorry
 
 end L53

@@ -1,48 +1,38 @@
-/- Hidden test battery for Level Spot the bug: structures. -/
+/- Hidden test battery for Level Morphisms. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L48.Player
 
--- the referee's own copies: the colleague's code, and the right answers
-namespace L48Ref
-structure Version where
-  major : ℕ
-  minor : ℕ
-  patch : ℕ
-  deriving DecidableEq
+open L48
 
-def ofV (v : L48.Version) : Version := ⟨v.major, v.minor, v.patch⟩
+#no_sorry IsAddHom
+#no_sorry IsExpHom
+#no_sorry homNotOnto
+#no_sorry bijNotHom
+#level_start "Morphisms"
 
-def bumpPatch (v : Version) : Version := { v with patch := v.minor + 1 }
-def bumpPatchRight (v : Version) : Version := { v with patch := v.patch + 1 }
-
-def bumpMinor (v : Version) : Version := { v with minor := v.minor + 1 }
-def bumpMinorRight (v : Version) : Version := { v with minor := v.minor + 1, patch := 0 }
-
-def setPatch (v : Version) (p : ℕ) : Version := ⟨v.major, p, v.patch⟩
-def setPatchRight (v : Version) (p : ℕ) : Version := ⟨v.major, v.minor, p⟩
-
-def newer (a b : Version) : Version :=
-  if a.major ≤ b.major ∧ a.minor ≤ b.minor ∧ a.patch ≤ b.patch then b else a
-def newerRight (a b : Version) : Version :=
-  if a.major < b.major ∨ (a.major = b.major ∧ (a.minor < b.minor ∨ (a.minor = b.minor ∧ a.patch ≤ b.patch)))
-  then b else a
-end L48Ref
-
-#no_sorry L48.vPatch
-#no_sorry L48.vMinor
-#no_sorry L48.vSet
-#no_sorry L48.pSet
-#no_sorry L48.vA
-#no_sorry L48.vB
-#level_start "Spot the bug: structures"
-
-#expect_true "bumpPatch gives the wrong answer on your version" :
-  L48Ref.bumpPatch (L48Ref.ofV L48.vPatch) ≠ L48Ref.bumpPatchRight (L48Ref.ofV L48.vPatch)
-#expect_true "bumpMinor gives the wrong answer on your version" :
-  L48Ref.bumpMinor (L48Ref.ofV L48.vMinor) ≠ L48Ref.bumpMinorRight (L48Ref.ofV L48.vMinor)
-#expect_true "setPatch gives the wrong answer on your version and patch number" :
-  L48Ref.setPatch (L48Ref.ofV L48.vSet) L48.pSet ≠ L48Ref.setPatchRight (L48Ref.ofV L48.vSet) L48.pSet
-#expect_true "newer gives the wrong answer on your two versions" :
-  L48Ref.newer (L48Ref.ofV L48.vA) (L48Ref.ofV L48.vB) ≠ L48Ref.newerRight (L48Ref.ofV L48.vA) (L48Ref.ofV L48.vB)
+#expect_true "n ↦ 3n is an additive homomorphism" unfolding IsAddHom :
+  IsAddHom (fun n => 3 * n)
+#expect_false "n ↦ n + 1 is an additive homomorphism" unfolding IsAddHom :
+  IsAddHom (fun n => n + 1)
+#expect_false "n ↦ n² is an additive homomorphism" unfolding IsAddHom :
+  IsAddHom (fun n => n * n)
+#expect_true "The zero map is an additive homomorphism" unfolding IsAddHom :
+  IsAddHom (fun _ => 0)
+#expect_true "n ↦ 2ⁿ is a homomorphism from (ℕ, +) to (ℕ, ·)" unfolding IsExpHom :
+  IsExpHom (fun n => 2 ^ n)
+#expect_false "n ↦ 2n is a homomorphism from (ℕ, +) to (ℕ, ·)" unfolding IsExpHom :
+  IsExpHom (fun n => 2 * n)
+#expect_true "The constant map 1 is a homomorphism from (ℕ, +) to (ℕ, ·)" unfolding IsExpHom :
+  IsExpHom (fun _ => 1)
+#expect_false "The constant map 0 is a homomorphism from (ℕ, +) to (ℕ, ·)" unfolding IsExpHom :
+  IsExpHom (fun _ => 0)
+#expect_true "homNotOnto preserves 0 and addition" unfolding homNotOnto :
+  homNotOnto 0 = 0 ∧ ∀ a b, homNotOnto (a + b) = homNotOnto a + homNotOnto b
+#expect_true "homNotOnto misses some number" unfolding homNotOnto :
+  ∃ m, ∀ n, homNotOnto n ≠ m
+#expect_true "bijNotHom is its own inverse (so it is a bijection)" unfolding bijNotHom :
+  ∀ n, bijNotHom (bijNotHom n) = n
+#expect_false "bijNotHom preserves 0 and addition" unfolding bijNotHom :
+  bijNotHom 0 = 0 ∧ ∀ a b, bijNotHom (a + b) = bijNotHom a + bijNotHom b
 
 #level_report

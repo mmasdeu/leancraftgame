@@ -1,10 +1,10 @@
-/- Hidden test battery for Level Your first structure. -/
+/- Hidden test battery for Level Axioms in a structure. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L49.Player
 
 open L49
 
-#level_start "Your first structure"
+#level_start "Axioms in a structure"
 
 -- things that should be accepted
 #expect_model "Interval [2, 5] is an interval" :

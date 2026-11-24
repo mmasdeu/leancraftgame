@@ -1,100 +1,54 @@
 /-
 # Functions on structures
 
-A structure is a type like any other, so a function can take structures as
-inputs and give a structure as its output.
+Functions on a structure read the fields of their inputs and build a new
+value with `⟨_, _⟩`:
 
 ```lean
-structure Point where
-  x : ℕ
-  y : ℕ
-
-def Point.add (p q : Point) : Point :=
-  ⟨p.x + q.x, p.y + q.y⟩
+def GaussInt.normSq (z : GaussInt) : ℤ := z.re ^ 2 + z.im ^ 2
 ```
 
-* `(p q : Point)` declares two inputs of the same type `Point`.
-* The output is a new `Point`, built with `⟨ , ⟩`: first the new `x`, then the
-  new `y`. The fields of the inputs are read with `p.x`, `q.y`, …
-* The function is called `Point.add`, **inside the name `Point`**. This is not
-  just a habit: it enables *dot notation*. For a point `p` and a point `q`,
-  `p.add q` means `Point.add p q`.
+Naming a function `GaussInt.normSq` puts it in the **namespace** of the
+type, and unlocks **dot notation**: for `z : GaussInt`, `z.normSq` means
+`GaussInt.normSq z`, and `z.mul w` means `GaussInt.mul z w`. This is how
+Mathlib names everything: `Nat.Prime`, `Finset.card`, `Function.Injective`.
 
-## Grouping with `namespace`
+Multiplication in `ℤ[i]` comes from `i² = -1`:
+`(a + bi)(c + di) = (ac - bd) + (ad + bc)i`. The norm is multiplicative,
+`N(zw) = N(z) N(w)`, which written out is the
+**Brahmagupta–Fibonacci identity**
 
-Instead of writing `Point.` in front of every name, open a `namespace`:
+`(a² + b²)(c² + d²) = (ac - bd)² + (ad + bc)²`.
 
-```lean
-namespace Point
+Remember `65 = 1² + 8² = 4² + 7²` from the Foundations world? It is
+`(1² + 2²)(2² + 3²)`, and the two representations come from
+`(1 + 2i)(2 + 3i)` and `(1 + 2i)(2 - 3i)`.
 
-def add (p q : Point) : Point := ⟨p.x + q.x, p.y + q.y⟩
-
-def double (p : Point) : Point := p.add p
-
-end Point
-```
-
-Inside the namespace, `add` and `double` are really called `Point.add` and
-`Point.double`, and `double` can use `add` by its short name.
-
-## Pattern matching on a structure
-
-Instead of reading the fields with `p.x`, a function may *take the structure
-apart* in its patterns, as `Recursion` did with numbers:
-
-```lean
-def Point.add : Point → Point → Point
-  | ⟨a, b⟩, ⟨c, d⟩ => ⟨a + c, b + d⟩
-```
-
-The pattern `⟨a, b⟩` matches a point and names its two fields `a` and `b`.
-Two inputs, two patterns, separated by a comma. Both styles are equally good.
-
-## Take care
-
-* The fields of the *output* `⟨_, _⟩` must come in the declared order.
-* Natural numbers still stop at zero: `3 - 5` is `0`.
+Powers are defined by recursion on the exponent, as for numbers.
 
 ## Your task
 
-`Point` and `Rectangle` are declared for you (a `Rectangle` has a `width` and
-a `height`; it sits with one corner at the point `⟨0, 0⟩`). Fill in the five
-functions. The comments give examples.
+Define `add`, `mul` and `pow` on Gaussian integers.
 -/
+
 namespace L45
 
-structure Point where
-  x : ℕ
-  y : ℕ
+-- the Gaussian integers (already done)
+structure GaussInt where
+  re : ℤ
+  im : ℤ
 
-structure Rectangle where
-  width : ℕ
-  height : ℕ
+def GaussInt.normSq (z : GaussInt) : ℤ := z.re ^ 2 + z.im ^ 2
 
-namespace Point
+-- (a + bi) + (c + di)
+def GaussInt.add (z w : GaussInt) : GaussInt := sorry
 
--- add the two coordinates separately    (add ⟨1, 2⟩ ⟨3, 4⟩ is ⟨4, 6⟩)
-def add (p q : Point) : Point := sorry
+-- (a + bi)(c + di) = (ac - bd) + (ad + bc)i
+def GaussInt.mul (z w : GaussInt) : GaussInt := sorry
 
--- the squared distance between two points: (difference of the x's)² plus
--- (difference of the y's)², where a difference is never negative
---   (dist2 ⟨0, 0⟩ ⟨3, 4⟩ is 25, and so is dist2 ⟨3, 4⟩ ⟨0, 0⟩)
-def dist2 (p q : Point) : ℕ := sorry
-
-end Point
-
-namespace Rectangle
-
--- width times height
-def area (r : Rectangle) : ℕ := sorry
-
--- the rectangle with a margin of `k` added on every side: both the width and
--- the height grow by 2 * k     (grow ⟨7, 2⟩ 1 is ⟨9, 4⟩)
-def grow (r : Rectangle) (k : ℕ) : Rectangle := sorry
-
--- the corner opposite to the origin, as a point    (topRight ⟨7, 2⟩ is ⟨7, 2⟩)
-def topRight (r : Rectangle) : Point := sorry
-
-end Rectangle
+-- z multiplied by itself n times (z⁰ = 1)
+def GaussInt.pow (z : GaussInt) : ℕ → GaussInt
+  | 0 => sorry
+  | n + 1 => sorry
 
 end L45

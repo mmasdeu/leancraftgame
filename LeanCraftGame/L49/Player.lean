@@ -1,37 +1,32 @@
 /-
-# Your first structure
+# Axioms in a structure
 
-In the Structure Syntax world a structure bundled *data*: a point is two
-numbers, a rectangle a width and a height. Mathematicians use structures for
-more: they bundle data with the **facts** that must hold about it. A group is
-some data (an operation, an identity, inverses) together with laws. That is
-what this world is about, and what you will check, write and audit here.
-
-You already know how to declare fields and to build values (`Point.mk 3 4`,
-`⟨3, 4⟩`, `{ x := 3, y := 4 }`). Nothing of that changes.
-
-## Fields that are statements
-
-The type of a field can also be a *statement*. Such a field is an **axiom**:
-whoever builds the structure must supply a reason why the statement is true.
+A field of a structure can be a **proof**: a structure can carry, beside its
+data, the axioms the data must satisfy.
 
 ```lean
-structure Even' where
-  val : Nat
-  even : val % 2 = 0
+structure Interval where
+  lo : ℕ
+  hi : ℕ
+  le : lo ≤ hi
 ```
 
-`Even'.mk 4 _` can be built (4 is even), but nobody can build `Even'.mk 3 _`.
+A value of `Interval` is then a pair of numbers *together with* a proof
+that the first is at most the second; `⟨5, 2, _⟩` cannot be built, because
+no proof of `5 ≤ 2` exists. This is how Mathlib defines `ℚ` (numerator,
+positive denominator, coprimality), the units of a monoid, and every
+algebraic structure: the axioms are fields.
 
-The referee tests a structure with *models*: it feeds it data that **should**
-be accepted (✅ if all axioms are true) and junk data that **should** be
-rejected (✅ if some axiom fails).
+You never write the proofs: the referee checks, for each example, whether
+the axioms hold (*a model*) or some axiom fails (*ruled out*). Your job is
+to choose axioms that accept exactly the intended objects: an axiom too
+weak lets junk in, an axiom too strong excludes the examples that matter
+(such as the one-point interval `[5, 5]`).
 
 ## Your task
 
-Define `Interval` with two numbers `lo` and `hi` and an axiom saying that
-`lo ≤ hi`. Then define `PosNat`, a number `val` that is positive.
-Keep the fields in the order they are listed.
+Add the axiom to `Interval` (`lo ≤ hi`) and to `PosNat` (`val` is positive).
+Keep the data fields in the order they are listed.
 -/
 namespace L49
 

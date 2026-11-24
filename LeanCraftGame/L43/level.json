@@ -2,6 +2,7 @@
   "world": "Analysis World",
   "title": "Spot the bug: limits",
   "skill": "reading",
+  "exercise": "Refute",
   "public": "all",
   "checks": [
     {

@@ -1,60 +1,56 @@
 /-
-# Challenge: structures
+# Challenge: matrices
 
-No new syntax here: put together everything from the three previous levels.
-You build a small calendar. To keep it simple, the Lean calendar has **12
-months of exactly 30 days** each, so the day of the month is between 1 and 30
-and the month between 1 and 12.
+The Fibonacci recursion is linear, so it is a matrix power:
 
-A date is a structure `Date` with the fields `year`, `month` and `day`, in
-this order. A *moment* is a date together with a time of day; the time of day
-`Time` (declared for you) has an `hour` from 0 to 23 and a `minute` from 0 to
-59. A `Moment` *extends* `Date` with one more field called `time`.
+`(F(n+1) F(n) / F(n) F(n-1)) = (1 1 / 1 0)ⁿ`.
 
-Think about what the functions must do at the edges:
+Two consequences, for free. Taking determinants gives **Cassini's
+identity** `F(n+1)F(n-1) - F(n)² = (-1)ⁿ` (you checked it by brute force
+in the Foundations world). And the power can be computed by repeated
+squaring in `O(log n)` multiplications, which is how large Fibonacci
+numbers are computed in practice.
 
-* the day after the 30th of a month is the 1st of the next month;
-* after the 12th month comes the 1st month of the next year;
-* 23:59 plus one minute is 0:00 of the next day, and the date must follow;
-* a minute count may be huge: a whole day is 1440 minutes.
+Matrix powers are defined by recursion, like powers of numbers and of
+Gaussian integers: `M⁰` is the identity and `Mⁿ⁺¹ = Mⁿ · M`.
 
-Remember how a structure is built, in the order of its fields, and how `with`
-copies the fields you do not mention.
+**Torsion in `SL₂(ℤ)`**: an integer matrix of finite order has order
+`1, 2, 3, 4` or `6`; the characteristic polynomial of a matrix of order
+`6` is `x² - x + 1`, the sixth cyclotomic polynomial, so its trace is `1`
+and its determinant `1`. Find one.
 
 ## Your task
 
-Declare `Date` (with defaults, see the comment) and `Moment`, then write the
-functions. Each comment has an example.
+Define `pow`, `fibMatrix`, `fibM`, and construct a matrix of order exactly
+`6`.
 -/
+
 namespace L47
 
-structure Time where
-  hour : ℕ
-  minute : ℕ
+-- 2×2 integer matrices and their product (already done)
+structure Matrix2 where
+  a : ℤ
+  b : ℤ
+  c : ℤ
+  d : ℤ
 
--- fields `year`, `month`, `day`, in this order, natural numbers;
--- the month and the day have the default value 1
-structure Date where
-  -- your fields here
+def mul (M N : Matrix2) : Matrix2 :=
+  ⟨M.a * N.a + M.b * N.c, M.a * N.b + M.b * N.d, M.c * N.a + M.d * N.c, M.c * N.b + M.d * N.d⟩
 
--- January the 1st of the given year     (use the defaults)
-def newYear (y : ℕ) : Date := sorry
+def det (M : Matrix2) : ℤ := M.a * M.d - M.b * M.c
 
--- the following day      (nextDay ⟨2024, 3, 30⟩ is ⟨2024, 4, 1⟩, nextDay ⟨2024, 12, 30⟩ is ⟨2025, 1, 1⟩)
-def Date.nextDay (d : Date) : Date := sorry
-
--- the date `n` days later   (addDays ⟨2024, 3, 28⟩ 5 is ⟨2024, 4, 3⟩)
--- Use the cases `0` and `n + 1` and the function `nextDay`.
-def Date.addDays (d : Date) : ℕ → Date
+-- M multiplied by itself n times (M⁰ is the identity)
+def pow (M : Matrix2) : ℕ → Matrix2
   | 0 => sorry
   | n + 1 => sorry
 
--- a date together with a time, in this order
-structure Moment extends Date where
-  -- your field here
+-- the Fibonacci matrix (1 1 / 1 0)
+def fibMatrix : Matrix2 := sorry
 
--- the moment `k` minutes later; the date moves on when midnight is passed
---   (23:30 on 2024-3-14, plus 45 minutes, is 0:15 on 2024-3-15)
-def Moment.addMinutes (m : Moment) (k : ℕ) : Moment := sorry
+-- the n-th Fibonacci number, read off the matrix fibMatrix ^ n (it is the entry b)
+def fibM (n : ℕ) : ℤ := sorry
+
+-- a matrix of order exactly 6: R⁶ is the identity, and no smaller positive power is
+def order6 : Matrix2 := sorry
 
 end L47

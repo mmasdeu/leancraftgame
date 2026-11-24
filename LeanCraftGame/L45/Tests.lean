@@ -2,61 +2,32 @@
 import LeanCraftGame.Referee
 import LeanCraftGame.L45.Player
 
-open L45
+open L45 L45.GaussInt
 
-#no_sorry Point.add
-#no_sorry Point.dist2
-#no_sorry Rectangle.area
-#no_sorry Rectangle.grow
-#no_sorry Rectangle.topRight
+#no_sorry GaussInt.add
+#no_sorry GaussInt.mul
+#no_sorry GaussInt.pow
 #level_start "Functions on structures"
 
--- Point.add
-#expect_true "add ⟨1, 2⟩ ⟨3, 4⟩ has x = 4" :
-  (Point.add ⟨1, 2⟩ ⟨3, 4⟩).x = 4
-#expect_true "add ⟨1, 2⟩ ⟨3, 4⟩ has y = 6" :
-  (Point.add ⟨1, 2⟩ ⟨3, 4⟩).y = 6
-#expect_true "add ⟨5, 0⟩ ⟨0, 9⟩ has x = 5 and y = 9" :
-  (Point.add ⟨5, 0⟩ ⟨0, 9⟩).x = 5 ∧ (Point.add ⟨5, 0⟩ ⟨0, 9⟩).y = 9
-#expect_true "add ⟨2, 7⟩ ⟨0, 0⟩ gives ⟨2, 7⟩" :
-  (Point.add ⟨2, 7⟩ ⟨0, 0⟩).x = 2 ∧ (Point.add ⟨2, 7⟩ ⟨0, 0⟩).y = 7
--- Point.dist2
-#expect_true "dist2 ⟨0, 0⟩ ⟨3, 4⟩ = 25" :
-  Point.dist2 ⟨0, 0⟩ ⟨3, 4⟩ = 25
-#expect_true "dist2 ⟨3, 4⟩ ⟨0, 0⟩ = 25" :
-  Point.dist2 ⟨3, 4⟩ ⟨0, 0⟩ = 25
-#expect_true "dist2 ⟨1, 1⟩ ⟨4, 5⟩ = 25" :
-  Point.dist2 ⟨1, 1⟩ ⟨4, 5⟩ = 25
-#expect_true "dist2 ⟨4, 1⟩ ⟨1, 5⟩ = 25" :
-  Point.dist2 ⟨4, 1⟩ ⟨1, 5⟩ = 25
-#expect_true "dist2 ⟨1, 5⟩ ⟨4, 1⟩ = 25" :
-  Point.dist2 ⟨1, 5⟩ ⟨4, 1⟩ = 25
-#expect_true "dist2 ⟨2, 2⟩ ⟨2, 2⟩ = 0" :
-  Point.dist2 ⟨2, 2⟩ ⟨2, 2⟩ = 0
-#expect_true "dist2 ⟨7, 2⟩ ⟨2, 7⟩ = 50" :
-  Point.dist2 ⟨7, 2⟩ ⟨2, 7⟩ = 50
--- Rectangle.area
-#expect_true "area of a 7 by 2 rectangle is 14" :
-  Rectangle.area ⟨7, 2⟩ = 14
-#expect_true "area of a 3 by 0 rectangle is 0" :
-  Rectangle.area ⟨3, 0⟩ = 0
-#expect_true "area of a 4 by 4 rectangle is 16" :
-  Rectangle.area ⟨4, 4⟩ = 16
--- Rectangle.grow
-#expect_true "grow ⟨7, 2⟩ 1 has width 9" :
-  (Rectangle.grow ⟨7, 2⟩ 1).width = 9
-#expect_true "grow ⟨7, 2⟩ 1 has height 4" :
-  (Rectangle.grow ⟨7, 2⟩ 1).height = 4
-#expect_true "grow ⟨3, 5⟩ 0 is unchanged" :
-  (Rectangle.grow ⟨3, 5⟩ 0).width = 3 ∧ (Rectangle.grow ⟨3, 5⟩ 0).height = 5
-#expect_true "grow ⟨1, 6⟩ 3 has width 7 and height 12" :
-  (Rectangle.grow ⟨1, 6⟩ 3).width = 7 ∧ (Rectangle.grow ⟨1, 6⟩ 3).height = 12
--- Rectangle.topRight
-#expect_true "topRight ⟨7, 2⟩ has x = 7" :
-  (Rectangle.topRight ⟨7, 2⟩).x = 7
-#expect_true "topRight ⟨7, 2⟩ has y = 2" :
-  (Rectangle.topRight ⟨7, 2⟩).y = 2
-#expect_true "topRight ⟨1, 9⟩ has x = 1 and y = 9" :
-  (Rectangle.topRight ⟨1, 9⟩).x = 1 ∧ (Rectangle.topRight ⟨1, 9⟩).y = 9
+#expect_true "(1 + 2i) + (3 - i) = 4 + i" unfolding GaussInt.add :
+  (GaussInt.add ⟨1, 2⟩ ⟨3, -1⟩).re = 4 ∧ (GaussInt.add ⟨1, 2⟩ ⟨3, -1⟩).im = 1
+#expect_true "i · i = -1" unfolding GaussInt.mul :
+  (GaussInt.mul ⟨0, 1⟩ ⟨0, 1⟩).re = -1 ∧ (GaussInt.mul ⟨0, 1⟩ ⟨0, 1⟩).im = 0
+#expect_true "(2 + i)(2 - i) = 5: the prime 5 splits" unfolding GaussInt.mul :
+  (GaussInt.mul ⟨2, 1⟩ ⟨2, -1⟩).re = 5 ∧ (GaussInt.mul ⟨2, 1⟩ ⟨2, -1⟩).im = 0
+#expect_true "(1 + 2i)(2 + 3i) = -4 + 7i, and 65 = 4² + 7²" unfolding GaussInt.mul GaussInt.normSq :
+  (GaussInt.mul ⟨1, 2⟩ ⟨2, 3⟩).re = -4 ∧ (GaussInt.mul ⟨1, 2⟩ ⟨2, 3⟩).im = 7 ∧ (GaussInt.mul ⟨1, 2⟩ ⟨2, 3⟩).normSq = 65
+#expect_true "(1 + 2i)(2 - 3i) = 8 + i, and 65 = 8² + 1²" unfolding GaussInt.mul :
+  (GaussInt.mul ⟨1, 2⟩ ⟨2, -3⟩).re = 8 ∧ (GaussInt.mul ⟨1, 2⟩ ⟨2, -3⟩).im = 1
+#expect_true "mul is commutative (all coordinates in [-2, 2])" unfolding GaussInt.mul :
+  ∀ a ∈ Finset.Icc (-2 : ℤ) 2, ∀ b ∈ Finset.Icc (-2 : ℤ) 2, ∀ c ∈ Finset.Icc (-2 : ℤ) 2, ∀ d ∈ Finset.Icc (-2 : ℤ) 2, (GaussInt.mul ⟨a, b⟩ ⟨c, d⟩).re = (GaussInt.mul ⟨c, d⟩ ⟨a, b⟩).re ∧ (GaussInt.mul ⟨a, b⟩ ⟨c, d⟩).im = (GaussInt.mul ⟨c, d⟩ ⟨a, b⟩).im
+#expect_true "The norm is multiplicative (all coordinates in [-2, 2])" unfolding GaussInt.mul GaussInt.normSq :
+  ∀ a ∈ Finset.Icc (-2 : ℤ) 2, ∀ b ∈ Finset.Icc (-2 : ℤ) 2, ∀ c ∈ Finset.Icc (-2 : ℤ) 2, ∀ d ∈ Finset.Icc (-2 : ℤ) 2, (GaussInt.mul ⟨a, b⟩ ⟨c, d⟩).normSq = (GaussInt.normSq ⟨a, b⟩) * (GaussInt.normSq ⟨c, d⟩)
+#expect_true "z⁰ = 1" unfolding GaussInt.pow :
+  (GaussInt.pow ⟨5, 7⟩ 0).re = 1 ∧ (GaussInt.pow ⟨5, 7⟩ 0).im = 0
+#expect_true "i⁴ = 1" unfolding GaussInt.pow GaussInt.mul :
+  (GaussInt.pow ⟨0, 1⟩ 4).re = 1 ∧ (GaussInt.pow ⟨0, 1⟩ 4).im = 0
+#expect_true "(1 + i)⁴ = -4" unfolding GaussInt.pow GaussInt.mul :
+  (GaussInt.pow ⟨1, 1⟩ 4).re = -4 ∧ (GaussInt.pow ⟨1, 1⟩ 4).im = 0
 
 #level_report

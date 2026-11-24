@@ -2,41 +2,30 @@
 import LeanCraftGame.Referee
 import LeanCraftGame.L53.Player
 
-open L53
+open L53 L53.Monoid'
 
-#no_sorry L53.sizeString
-#no_sorry L53.sizeList
-#no_sorry L53.sizeRect
+#no_sorry boolXor
+#no_sorry listAppend
+#no_sorry endo
 #level_start "Classes and instances"
 
--- the worked example
-#expect_true "Size.size (7 : ℕ) = 7" :
-  Size.size (7 : ℕ) = 7
--- strings
-#expect_true "Size.size \"abc\" = 3" :
-  Size.size "abc" = 3
-#expect_true "Size.size \"\" = 0" :
-  Size.size "" = 0
--- lists: the number of entries, not their sum
-#expect_true "Size.size [10, 20] = 2" :
-  Size.size [10, 20] = 2
-#expect_true "Size.size [7] = 1" :
-  Size.size [7] = 1
-#expect_true "Size.size ([] : List ℕ) = 0" :
-  Size.size ([] : List ℕ) = 0
--- rectangles: area, not perimeter or sum
-#expect_true "Size.size (Rect.mk 3 4) = 12" :
-  Size.size (Rect.mk 3 4) = 12
-#expect_true "Size.size (Rect.mk 0 5) = 0" :
-  Size.size (Rect.mk 0 5) = 0
-#expect_true "Size.size (Rect.mk 1 1) = 1" :
-  Size.size (Rect.mk 1 1) = 1
--- the function from the worked example uses your instances
-#expect_true "bigger [1, 2, 3] [100] holds" unfolding bigger :
-  bigger [1, 2, 3] [100]
-#expect_false "bigger (Rect.mk 1 9) (Rect.mk 3 3) is true" unfolding bigger :
-  bigger (Rect.mk 1 9) (Rect.mk 3 3)
-#expect_true "bigger \"hello\" \"abc\" holds" unfolding bigger :
-  bigger "hello" "abc"
+#expect_true "mpow 2 10 = 1024 in (ℕ, ·)" :
+  mpow (2 : ℕ) 10 = 1024
+#expect_true "In (Bool, xor): mpow true 3 = true and mpow true 4 = false (parity)" :
+  mpow true 3 = true ∧ mpow true 4 = false
+#expect_true "(Bool, xor) is associative, with unit false" :
+  ∀ a b c : Bool, op (op a b) c = op a (op b c) ∧ op unit a = a ∧ op a unit = a
+#expect_true "In (Bool, xor) every element is its own inverse" :
+  ∀ a : Bool, op a a = unit
+#expect_true "mpow [1, 2] 3 = [1, 2, 1, 2, 1, 2]" :
+  mpow ([1, 2] : List ℕ) 3 = [1, 2, 1, 2, 1, 2]
+#expect_true "mpow [] 5 = [] and mpow [7] 0 = []" :
+  mpow ([] : List ℕ) 5 = [] ∧ mpow ([7] : List ℕ) 0 = []
+#expect_true "In (ℕ → ℕ, ∘): mpow (fun n => n + 3) 4 sends 0 to 12" :
+  mpow (fun n : ℕ => n + 3) 4 0 = 12
+#expect_true "op f g is \"first g, then f\": op (· * 2) (· + 1) sends 5 to 12" :
+  op (fun n : ℕ => n * 2) (fun n => n + 1) 5 = 12
+#expect_true "The unit of (ℕ → ℕ, ∘) is the identity" :
+  (unit : ℕ → ℕ) 7 = 7 ∧ (unit : ℕ → ℕ) 0 = 0
 
 #level_report

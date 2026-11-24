@@ -1,38 +1,24 @@
 /-
 # Spot the bug: limits
 
-Two colleagues each wrote down the limit of a real sequence, from memory.
-Both got it wrong, in opposite directions.
+Two colleagues wrote the definition of convergence from memory.
 
-```lean
--- Alice: u converges to a
-def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
+* Alice wrote `∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε`: she forgot `ε > 0`. Is her
+  definition too strong or too weak? Try `ε = 0`.
+* Bob wrote `∀ ε > 0, ∃ n, |u n - a| < ε`: one close term suffices for him.
+  Too strong or too weak?
 
--- Bob: u converges to a
-def ConvergesB (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ n, |u n - a| < ε
-```
+A definition that is too strong rejects some convergent sequence; to refute
+it, give a sequence that converges, and the referee shows that Alice's
+definition rejects it. A definition that is too weak accepts a sequence that
+does not converge; give one that Bob accepts.
 
-One of them is **too strong**: it rejects sequences that do converge. The other
-is **too weak**: it accepts sequences that do not. Your first job is to work
-out which is which. Compare each with the definition you wrote in "Limits":
-
-```lean
-def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - a| < ε
-```
-
-Then find a counterexample for each: a sequence and a limit on which the
-colleague's definition and the right one disagree.
-
-Keep your sequences simple, so that the referee can check them: constants,
-`if … then … else …`, and `n % 2` are all fine. Real numbers are written as
-usual: `0`, `1`, `(1 / 2 : ℝ)`.
+Real sequences are written with `fun n => …`; `(n : ℝ)` casts the index,
+and `if … then … else …` works as for ℕ.
 
 ## Your task
 
-* `seqA`, `limA`: a sequence that converges to `limA`, but that `ConvergesA`
-  rejects.
-* `seqB`, `limB`: a sequence that does not converge to `limB`, but that
-  `ConvergesB` accepts.
+Give a sequence and a limit for each colleague.
 -/
 namespace L43
 

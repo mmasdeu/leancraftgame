@@ -1,25 +1,22 @@
-structure Point where
-  x : ℕ
-  y : ℕ
+-- a 2×2 integer matrix (a b / c d); every field has a default: the identity matrix
+structure Matrix2 where
+  a : ℤ := 1
+  b : ℤ := 0
+  c : ℤ := 0
+  d : ℤ := 1
 
-def moveRight (p : Point) (n : ℕ) : Point := { p with x := p.x + n }
+-- the identity matrix, written with the defaults only: `{}`
+def identity : Matrix2 := {}
 
-structure Settings where
-  volume : ℕ := 5
-  brightness : ℕ := 7
-  muted : ℕ := 0
+-- the shear (1 k / 0 1): the identity with b changed, written `{ b := k }`
+def shear (k : ℤ) : Matrix2 := { b := k }
 
-def quiet : Settings := { volume := 0 }
+-- the transpose: M with b and c exchanged, written `{ M with … }`
+def transpose (M : Matrix2) : Matrix2 := { M with b := M.c, c := M.b }
 
-structure Point3 extends Point where
-  z : ℕ
+-- the determinant ad - bc
+def det (M : Matrix2) : ℤ := M.a * M.d - M.b * M.c
 
-def raise (q : Point3) (h : ℕ) : Point3 := { q with z := q.z + h }
-
-structure Pair (α : Type) where
-  fst : α
-  snd : α
-
-def Pair.swap {α : Type} (p : Pair α) : Pair α := ⟨p.snd, p.fst⟩
-
-def Pair.dup {α : Type} (a : α) : Pair α := ⟨a, a⟩
+-- the product of two matrices (rows of M times columns of N)
+def mul (M N : Matrix2) : Matrix2 :=
+  ⟨M.a * N.a + M.b * N.c, M.a * N.b + M.b * N.d, M.c * N.a + M.d * N.c, M.c * N.b + M.d * N.d⟩

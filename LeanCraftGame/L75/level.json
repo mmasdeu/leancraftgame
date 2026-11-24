@@ -1,7 +1,8 @@
 {
-  "world": "Faithfulness World",
+  "world": "Audit World",
   "title": "The AI proved Goldbach!",
   "skill": "auditing",
+  "exercise": "Audit",
   "predict": [
     {
       "test": "World 3: the 'primes' are the numbers ≥ 2 (TRUE: n = 2 + (n-2))",

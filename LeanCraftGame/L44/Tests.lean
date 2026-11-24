@@ -4,55 +4,32 @@ import LeanCraftGame.L44.Player
 
 open L44
 
-#no_sorry origin
-#no_sorry p34
-#no_sorry wide
-#no_sorry queenOfHearts
-#no_sorry perimeter
-#no_sorry swapPoint
+#no_sorry I
+#no_sorry z34
+#no_sorry normSq
+#no_sorry conjugate
+#no_sorry toPoint
 #level_start "Declaring a structure"
 
--- the worked example
-#expect_true "(Point.mk 3 4).y = 4" :
-  (Point.mk 3 4).y = 4
--- the fields, in the order they are declared
-#expect_true "the first field of a Rectangle is its width" :
-  (Rectangle.mk 7 2).width = 7
-#expect_true "the second field of a Rectangle is its height" :
-  (Rectangle.mk 7 2).height = 2
-#expect_true "the first field of a Card is its rank" :
-  (Card.mk 12 2).rank = 12
-#expect_true "the second field of a Card is its suit" :
-  (Card.mk 12 2).suit = 2
--- the values
-#expect_true "origin has x = 0" :
-  origin.x = 0
-#expect_true "origin has y = 0" :
-  origin.y = 0
-#expect_true "p34 has x = 3" :
-  p34.x = 3
-#expect_true "p34 has y = 4" :
-  p34.y = 4
-#expect_true "wide has width 7" :
-  wide.width = 7
-#expect_true "wide has height 2" :
-  wide.height = 2
-#expect_true "queenOfHearts has rank 12" :
-  queenOfHearts.rank = 12
-#expect_true "queenOfHearts has suit 2" :
-  queenOfHearts.suit = 2
--- the functions
-#expect_true "perimeter of a 7 by 2 rectangle is 18" :
-  perimeter ⟨7, 2⟩ = 18
-#expect_true "perimeter of a 3 by 5 rectangle is 16" :
-  perimeter ⟨3, 5⟩ = 16
-#expect_true "perimeter of a 0 by 5 rectangle is 10" :
-  perimeter ⟨0, 5⟩ = 10
-#expect_true "swapPoint ⟨3, 4⟩ has x = 4" :
-  (swapPoint ⟨3, 4⟩).x = 4
-#expect_true "swapPoint ⟨3, 4⟩ has y = 3" :
-  (swapPoint ⟨3, 4⟩).y = 3
-#expect_true "swapPoint ⟨0, 9⟩ has x = 9" :
-  (swapPoint ⟨0, 9⟩).x = 9
+#expect_true "the first field of a GaussInt is re, the second im" :
+  (GaussInt.mk 3 4).re = 3 ∧ (GaussInt.mk 3 4).im = 4
+#expect_true "I = 0 + 1·i" unfolding I :
+  I.re = 0 ∧ I.im = 1
+#expect_true "z34 = 3 + 4i" unfolding z34 :
+  z34.re = 3 ∧ z34.im = 4
+#expect_true "normSq z34 = 25" unfolding normSq z34 :
+  normSq z34 = 25
+#expect_true "normSq I = 1" unfolding normSq I :
+  normSq I = 1
+#expect_true "normSq (2 - 3i) = 13" unfolding normSq :
+  normSq ⟨2, -3⟩ = 13
+#expect_true "conjugate z34 = 3 - 4i" unfolding conjugate z34 :
+  (conjugate z34).re = 3 ∧ (conjugate z34).im = -4
+#expect_true "conjugating twice gives back z (all |a|, |b| ≤ 3)" unfolding conjugate :
+  ∀ a ∈ Finset.Icc (-3 : ℤ) 3, ∀ b ∈ Finset.Icc (-3 : ℤ) 3, (conjugate (conjugate ⟨a, b⟩)).re = a ∧ (conjugate (conjugate ⟨a, b⟩)).im = b
+#expect_true "normSq (conjugate z) = normSq z (all |a|, |b| ≤ 3)" unfolding normSq conjugate :
+  ∀ a ∈ Finset.Icc (-3 : ℤ) 3, ∀ b ∈ Finset.Icc (-3 : ℤ) 3, normSq (conjugate ⟨a, b⟩) = normSq ⟨a, b⟩
+#expect_true "toPoint z34 is the point (3, 4)" unfolding toPoint z34 :
+  (toPoint z34).x = 3 ∧ (toPoint z34).y = 4
 
 #level_report

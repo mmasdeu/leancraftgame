@@ -1,20 +1,20 @@
 /-
 # Order relations
 
-A **partial order** is a way of saying "`a` comes before `b`" that need not
-compare everything: `3 ∣ 6`, but neither `2 ∣ 3` nor `3 ∣ 2`.
+A **partial order** on `α` is a relation `≤` that is reflexive,
+antisymmetric and transitive. Some examples, each a test of your axioms:
 
-Here a structure with one *data* field (the relation) and some *axiom* fields
-(the laws it must obey). Remember that `le a b` is a statement, so the relation
-has type `α → α → Prop`.
+* `≤` on `ℕ` (a total order);
+* divisibility on `ℕ`, in which `0` is the largest element and `1` the
+  smallest, and `2`, `3` are incomparable;
+* inclusion of sets;
+* *not* `<` (not reflexive), and *not* "`a % 3 ≤ b % 3`" (a preorder: `0`
+  and `3` are below each other without being equal).
 
-```lean
-structure Equivalence' (α : Type) where
-  rel   : α → α → Prop
-  refl  : ∀ a, rel a a
-```
-
-You can use `\forall` for `∀`, `\to` for `→`, `\le` for `≤` and `\mid` for `∣`.
+In the Topology world, a finite topology is the same thing as a preorder on
+its points (`x ≤ y` when every open set containing `x` contains `y`), and
+it is T0 exactly when that preorder is a partial order. Sierpiński space is
+the two-element order `0 < 1`.
 
 ## Your task
 

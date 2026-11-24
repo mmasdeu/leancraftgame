@@ -1,5 +1,5 @@
 /-
-# If, then, for all
+# If … then …
 
 Most universal statements in mathematics are **restricted**: "for every
 `n ≥ 3`, …", "for every even `n`, …". In Lean the restriction is an

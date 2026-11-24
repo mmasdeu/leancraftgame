@@ -1,24 +1,11 @@
+-- f is a homomorphism of (ℕ, +, 0) to itself: f 0 = 0 and f (a + b) = f a + f b
+def IsAddHom (f : ℕ → ℕ) : Prop := f 0 = 0 ∧ ∀ a b, f (a + b) = f a + f b
 
-structure Version where
-  major : ℕ
-  minor : ℕ
-  patch : ℕ
+-- f is a homomorphism of (ℕ, +, 0) to (ℕ, ·, 1): f 0 = 1 and f (a + b) = f a · f b
+def IsExpHom (f : ℕ → ℕ) : Prop := f 0 = 1 ∧ ∀ a b, f (a + b) = f a * f b
 
-def Version.bumpPatch (v : Version) : Version :=
-  { v with patch := v.minor + 1 }
+-- an additive homomorphism that is not surjective
+def homNotOnto : ℕ → ℕ := fun n => 2 * n
 
-def Version.bumpMinor (v : Version) : Version :=
-  { v with minor := v.minor + 1 }
-
-def Version.setPatch (v : Version) (p : ℕ) : Version :=
-  ⟨v.major, p, v.patch⟩
-
-def Version.newer (a b : Version) : Version :=
-  if a.major ≤ b.major ∧ a.minor ≤ b.minor ∧ a.patch ≤ b.patch then b else a
-
-def vPatch : Version := ⟨1, 4, 7⟩
-def vMinor : Version := ⟨1, 4, 7⟩
-def vSet : Version := ⟨1, 4, 7⟩
-def pSet : ℕ := 9
-def vA : Version := ⟨1, 5, 0⟩
-def vB : Version := ⟨2, 0, 0⟩
+-- a bijection of ℕ that is its own inverse and is not an additive homomorphism
+def bijNotHom : ℕ → ℕ := fun n => if n = 0 then 1 else if n = 1 then 0 else n

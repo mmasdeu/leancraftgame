@@ -1,7 +1,8 @@
 {
   "world": "Structure World",
-  "title": "Your first structure",
+  "title": "Axioms in a structure",
   "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
       "test": "Interval [5, 5] is an interval",

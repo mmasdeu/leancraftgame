@@ -1,90 +1,59 @@
 /-
 # Declaring a structure
 
-Sometimes one number is not enough to describe a thing. A point in the plane
-needs *two* numbers. A **structure** bundles several values into one new type.
+A complex number is a pair of reals, a rational is a pair of integers, a
+point of the plane is a pair of coordinates. Mathematics bundles data
+constantly, and Lean does it with **structures**:
 
 ```lean
 structure Point where
-  x : ℕ
-  y : ℕ
+  x : ℤ
+  y : ℤ
 ```
 
-(`ℕ` is typed `\N`; it is the same type as `Nat`.) Read it piece by piece:
+This declares a new type `Point` whose values have two **fields**. A value
+is built with the constructor, `Point.mk 3 4`, or with the anonymous
+constructor `⟨3, 4⟩` when the type is known. The fields are read with a dot:
+`p.x`, `p.y`. The order of the fields is the order of the arguments.
 
-* `structure Point where` starts the definition of a new type called `Point`.
-* Each following indented line is a **field**: a name, a colon, and the type of
-  that field. Here `Point` has two fields, `x` and `y`, both natural numbers.
-* The *order* of the fields matters, as you will see in a moment.
+The **Gaussian integers** `ℤ[i] = {a + b·i | a, b ∈ ℤ}` are the integer
+points of the complex plane. They have a norm `N(a + bi) = a² + b²`, which is
+multiplicative, and this is why a product of sums of two squares is a sum of
+two squares (we will use that in the next level). A prime `p` is a sum of
+two squares exactly when it splits in `ℤ[i]`: `5 = (2 + i)(2 - i)`.
 
-## Building a value
-
-There are three ways to write down a point with `x = 3` and `y = 4`:
-
-```lean
-def p1 : Point := Point.mk 3 4
-def p2 : Point := ⟨3, 4⟩
-def p3 : Point := { x := 3, y := 4 }
-```
-
-* `Point.mk` is the **constructor**: a function that takes the fields in the
-  order they were declared. `Point.mk 3 4` has `x = 3` and `y = 4`;
-  `Point.mk 4 3` is a different point.
-* `⟨3, 4⟩` (type `\<` and `\>`) is the same thing, shorter: Lean knows from
-  the type `Point` after the colon what the brackets build.
-* `{ x := 3, y := 4 }` names every field, so the order does not matter, and
-  nobody can mix the fields up.
-
-## Reading a field
-
-Write the value, a dot, and the name of the field:
-
-```lean
-p1.x      -- is 3
-p1.y      -- is 4
-Point.x p1  -- the same as p1.x
-```
-
-Every field is a function: `Point.x : Point → ℕ`. And `(Point.mk 3 4).y` is 4.
+The same data, a pair of integers, can mean a point or a Gaussian integer:
+the type records the intended meaning, and `toPoint` translates.
 
 ## Your task
 
-`Point` is declared for you. Declare a `Rectangle` with a `width` and then a
-`height`, and a `Card` with a `rank` and then a `suit`, all natural numbers
-(the suit is a number: 0 clubs, 1 diamonds, 2 hearts, 3 spades). Then build
-the values described in the comments, and read fields to write the two
-functions at the end.
+Declare the fields of `GaussInt`, then define the values and functions.
 -/
+
 namespace L44
 
+-- a point of the plane with integer coordinates (already done)
 structure Point where
-  x : ℕ
-  y : ℕ
+  x : ℤ
+  y : ℤ
 
--- fields `width` and `height`, in this order, natural numbers
-structure Rectangle where
+-- a Gaussian integer a + b·i: two integer fields `re` and `im`, in this order
+structure GaussInt where
   -- your fields here
 
--- fields `rank` and `suit`, in this order, natural numbers
-structure Card where
-  -- your fields here
+-- the imaginary unit i = 0 + 1·i
+def I : GaussInt := sorry
 
--- the point with x = 0 and y = 0
-def origin : Point := sorry
+-- 3 + 4i
+def z34 : GaussInt := sorry
 
--- the point with x = 3 and y = 4
-def p34 : Point := sorry
+-- the norm a² + b² of a + b·i
+def normSq (z : GaussInt) : ℤ := sorry
 
--- the rectangle with width 7 and height 2
-def wide : Rectangle := sorry
+-- the conjugate a - b·i of a + b·i
+def conjugate (z : GaussInt) : GaussInt := sorry
 
--- the queen (rank 12) of hearts (suit 2)
-def queenOfHearts : Card := sorry
-
--- the perimeter of a rectangle: twice (width + height)
-def perimeter (r : Rectangle) : ℕ := sorry
-
--- the point with its two coordinates exchanged    (swapPoint ⟨3, 4⟩ is ⟨4, 3⟩)
-def swapPoint (p : Point) : Point := sorry
+-- the point (a, b) of the plane
+def toPoint (z : GaussInt) : Point := sorry
 
 end L44

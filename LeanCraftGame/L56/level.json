@@ -1,7 +1,8 @@
 {
-  "world": "Classes World",
-  "title": "Challenge: classes",
+  "world": "Class World",
+  "title": "Challenge: orders from classes",
   "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
       "test": "max (Score.mk 2 0) (Score.mk 9 8) = Score.mk 2 0 (value 2 beats value 1)",

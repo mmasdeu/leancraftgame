@@ -1,50 +1,24 @@
 /-
 # Instances that depend on instances
 
-Sizes of strings, numbers and rectangles are fine, but what is the size of a
-*list* of strings, or of a *pair* of rectangles? The answer depends on what the
-entries are, so an instance for lists cannot be written once and for all: it
-must say "**if** `α` has a `Size`, **then** so does `List α`".
+If `A` and `B` are groups, so is `A × B`; if `R` is a ring, so is `R[X]`;
+if `X` is a topological space, so is `X × X`. Constructions on structures
+are instances **with hypotheses**:
 
 ```lean
-instance {α : Type} [Size α] : Size (List α) where
-  size xs := (xs.map Size.size).sum
+instance addPair {α : Type} [Add α] : Add (Pair α) where
+  add p q := ⟨p.fst + q.fst, p.snd + q.snd⟩
 ```
 
-* `{α : Type}` says "for every type `α`" (curly braces: Lean finds `α` itself).
-* `[Size α]` is the **condition**, an instance argument exactly as in a
-  function. Inside the instance it gives you `Size.size : α → ℕ`, which is how
-  the code above measures each entry.
-* `xs.map Size.size` is the list of the sizes of the entries, `.sum` adds them.
+reads "for every `α` with an addition, `Pair α` has one". Lean chains such
+instances automatically: `Pair (Pair ℤ)` gets an addition from `Pair ℤ`,
+which gets one from `ℤ`. This is how Mathlib knows that `ℝ × ℝ` is a vector
+space, a metric space and a topological space without being told.
 
-Lean uses such instances like pieces of a puzzle. To find `Size (List String)`
-it matches the instance above, which asks for `Size String`, which is another
-instance. For `Size (List (List String))` it uses the list instance *twice*.
-If a piece is missing, Lean says *failed to synthesize* and names it.
-
-## Why `[Size α]` must be written
-
-The same holds for functions. This does **not** compile:
-
-```lean
-def total {α : Type} (xs : List α) : ℕ := (xs.map Size.size).sum
-```
-
-Lean cannot know that `α` can be measured: `α` might be any type at all.
-Writing `[Size α]` in the signature is the promise "whoever calls `total` will
-pass a type that has a `Size`". The instance itself is passed along silently.
-
-## A class built on another
-
-```lean
-class Weighted (α : Type) extends Size α where
-  weight : α → ℕ
-```
-
-`extends Size α` says that every `Weighted` type is in particular a `Size`
-type: a `Weighted α` contains the field `size` and also the new field `weight`.
-So in a function with `[Weighted α]` you may use `Size.size` as well:
-Lean gets the `Size α` out of the `Weighted α`.
+Classes can also **extend** each other, as structures do: a `Weighted α` is
+a `Size α` with an extra field, and an instance of the first provides one of
+the second. Mathlib's hierarchy (`Monoid → Group → CommGroup`, `Ring →
+Field`) is built this way.
 
 ## Your task
 

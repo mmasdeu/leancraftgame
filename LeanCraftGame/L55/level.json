@@ -1,7 +1,8 @@
 {
-  "world": "Classes World",
+  "world": "Class World",
   "title": "Instances that depend on instances",
   "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
       "test": "Size.size [[1, 2], [3]] = 6",
@@ -56,12 +57,16 @@
     },
     {
       "match": "Size.size (Pair.mk",
-      "steps": ["The size of a pair involves both values. Which function measures a value of type `α`?"],
+      "steps": [
+        "The size of a pair involves both values. Which function measures a value of type `α`?"
+      ],
       "hint": "`size p := Size.size p.fst + Size.size p.snd`."
     },
     {
       "match": "Size.size [",
-      "steps": ["Is the size of a list its length, or the sum of the sizes of its entries?"],
+      "steps": [
+        "Is the size of a list its length, or the sum of the sizes of its entries?"
+      ],
       "hint": "`size xs := (xs.map Size.size).sum`: measure every entry with `Size.size`, then add."
     },
     {
@@ -70,12 +75,17 @@
     },
     {
       "match": "largest",
-      "steps": ["The answer is a *size*, not an entry: measure every entry with `Size.size`.", "What should `largest` give for the empty list, and how do you start a maximum?"],
+      "steps": [
+        "The answer is a *size*, not an entry: measure every entry with `Size.size`.",
+        "What should `largest` give for the empty list, and how do you start a maximum?"
+      ],
       "hint": "`(xs.map Size.size).foldr max 0`, or `xs.foldr (fun a m => max (Size.size a) m) 0`."
     },
     {
       "match": "heavy",
-      "steps": ["`weight` is a field of `Weighted`; `size` is a field of the `Size` that `Weighted` extends."],
+      "steps": [
+        "`weight` is a field of `Weighted`; `size` is a field of the `Size` that `Weighted` extends."
+      ],
       "hint": "`heavy a := Size.size a + Weighted.weight a`."
     },
     {

@@ -4,9 +4,9 @@ import LeanCraftGame.L74.Player
 
 open L74
 
-namespace L59Ref
+namespace L74Ref
 def Collatz (o : Nat → Nat → Nat) : Prop := ∀ n, 0 < n → ∃ k, o n k = 1
-end L59Ref
+end L74Ref
 
 #no_sorry Collatz
 #no_sorry lazyWorld
@@ -32,8 +32,8 @@ end L59Ref
   ∀ n, lazyWorld n 0 = n
 #expect_true "Your lazyWorld: the AI's claim holds there" unfolding AIClaim lazyWorld :
   AIClaim lazyWorld
-#expect_false "Your lazyWorld: the real claim (every positive start reaches 1) must FAIL there" unfolding L59Ref.Collatz lazyWorld :
-  L59Ref.Collatz lazyWorld
+#expect_false "Your lazyWorld: the real claim (every positive start reaches 1) must FAIL there" unfolding L74Ref.Collatz lazyWorld :
+  L74Ref.Collatz lazyWorld
 
 -- Your stuck start
 #expect_true "Your stuckStart: the AI's step leaves it where it is" unfolding step stuckStart :

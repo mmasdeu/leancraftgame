@@ -1,63 +1,35 @@
-/- Hidden test battery for Level Extending and updating. -/
+/- Hidden test battery for Level Defaults and updates. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L46.Player
 
 open L46
 
-#no_sorry moveRight
-#no_sorry quiet
-#no_sorry raise
-#no_sorry Pair.swap
-#no_sorry Pair.dup
-#level_start "Extending and updating"
+#no_sorry identity
+#no_sorry shear
+#no_sorry transpose
+#no_sorry det
+#no_sorry mul
+#level_start "Defaults and updates"
 
--- updating with `with`
-#expect_true "moveRight ⟨3, 4⟩ 2 has x = 5" :
-  (moveRight ⟨3, 4⟩ 2).x = 5
-#expect_true "moveRight ⟨3, 4⟩ 2 has y = 4" :
-  (moveRight ⟨3, 4⟩ 2).y = 4
-#expect_true "moveRight ⟨0, 7⟩ 0 is ⟨0, 7⟩" :
-  (moveRight ⟨0, 7⟩ 0).x = 0 ∧ (moveRight ⟨0, 7⟩ 0).y = 7
--- default values
-#expect_true "the default volume is 5" :
-  ({} : Settings).volume = 5
-#expect_true "the default brightness is 7" :
-  ({} : Settings).brightness = 7
-#expect_true "the default muted is 0" :
-  ({} : Settings).muted = 0
-#expect_true "the second field of Settings is the brightness" :
-  (Settings.mk 1 2 3).brightness = 2
-#expect_true "the third field of Settings is muted" :
-  (Settings.mk 1 2 3).muted = 3
-#expect_true "quiet has volume 0" :
-  quiet.volume = 0
-#expect_true "quiet keeps the default brightness 7" :
-  quiet.brightness = 7
-#expect_true "quiet keeps the default muted 0" :
-  quiet.muted = 0
--- extends
-#expect_true "Point3.mk ⟨1, 2⟩ 3 has z = 3" :
-  (Point3.mk ⟨1, 2⟩ 3).z = 3
-#expect_true "Point3.mk ⟨1, 2⟩ 3 has x = 1" :
-  (Point3.mk ⟨1, 2⟩ 3).x = 1
-#expect_true "Point3.mk ⟨1, 2⟩ 3 has y = 2" :
-  (Point3.mk ⟨1, 2⟩ 3).y = 2
-#expect_true "raise (Point3.mk ⟨1, 2⟩ 3) 10 has z = 13" :
-  (raise (Point3.mk ⟨1, 2⟩ 3) 10).z = 13
-#expect_true "raise (Point3.mk ⟨1, 2⟩ 3) 10 keeps x = 1" :
-  (raise (Point3.mk ⟨1, 2⟩ 3) 10).x = 1
-#expect_true "raise (Point3.mk ⟨1, 2⟩ 3) 10 keeps y = 2" :
-  (raise (Point3.mk ⟨1, 2⟩ 3) 10).y = 2
--- Pair
-#expect_true "the first field of a Pair is fst" :
-  (Pair.mk 1 2 : Pair ℕ).fst = 1
-#expect_true "swap ⟨1, 2⟩ has fst = 2" :
-  (Pair.swap (Pair.mk 1 2 : Pair ℕ)).fst = 2
-#expect_true "swap ⟨1, 2⟩ has snd = 1" :
-  (Pair.swap (Pair.mk 1 2 : Pair ℕ)).snd = 1
-#expect_true "dup 4 has fst = 4" :
-  (Pair.dup 4 : Pair ℕ).fst = 4
-#expect_true "dup 4 has snd = 4" :
-  (Pair.dup 4 : Pair ℕ).snd = 4
+#expect_true "identity = (1 0 / 0 1)" unfolding identity :
+  identity.a = 1 ∧ identity.b = 0 ∧ identity.c = 0 ∧ identity.d = 1
+#expect_true "shear 5 = (1 5 / 0 1)" unfolding shear :
+  (shear 5).a = 1 ∧ (shear 5).b = 5 ∧ (shear 5).c = 0 ∧ (shear 5).d = 1
+#expect_true "transpose (1 2 / 3 4) = (1 3 / 2 4)" unfolding transpose :
+  (transpose ⟨1, 2, 3, 4⟩).a = 1 ∧ (transpose ⟨1, 2, 3, 4⟩).b = 3 ∧ (transpose ⟨1, 2, 3, 4⟩).c = 2 ∧ (transpose ⟨1, 2, 3, 4⟩).d = 4
+#expect_true "det (1 2 / 3 4) = -2" unfolding det :
+  det ⟨1, 2, 3, 4⟩ = -2
+#expect_true "det (shear k) = 1 for -3 ≤ k ≤ 3" unfolding det shear :
+  ∀ k ∈ Finset.Icc (-3 : ℤ) 3, det (shear k) = 1
+#expect_true "det (transpose M) = det M on sample matrices" unfolding det transpose :
+  ∀ M ∈ [(⟨1, 2, 3, 4⟩ : Matrix2), ⟨0, 1, -1, 0⟩, ⟨2, 0, 1, 3⟩, ⟨1, 1, 1, 0⟩, ⟨-2, 5, 1, -3⟩], det (transpose M) = det M
+#expect_true "(1 2 / 3 4)(0 1 / 1 0) = (2 1 / 4 3)" unfolding mul :
+  (mul ⟨1, 2, 3, 4⟩ ⟨0, 1, 1, 0⟩).a = 2 ∧ (mul ⟨1, 2, 3, 4⟩ ⟨0, 1, 1, 0⟩).b = 1 ∧ (mul ⟨1, 2, 3, 4⟩ ⟨0, 1, 1, 0⟩).c = 4 ∧ (mul ⟨1, 2, 3, 4⟩ ⟨0, 1, 1, 0⟩).d = 3
+#expect_true "shear k · shear l = shear (k + l)" unfolding mul shear :
+  ∀ k ∈ Finset.Icc (-3 : ℤ) 3, ∀ l ∈ Finset.Icc (-3 : ℤ) 3, (mul (shear k) (shear l)).b = k + l ∧ (mul (shear k) (shear l)).a = 1 ∧ (mul (shear k) (shear l)).c = 0
+#expect_true "det (M N) = det M · det N on sample matrices" unfolding det mul :
+  ∀ M ∈ [(⟨1, 2, 3, 4⟩ : Matrix2), ⟨0, 1, -1, 0⟩, ⟨2, 0, 1, 3⟩, ⟨1, 1, 1, 0⟩, ⟨-2, 5, 1, -3⟩], ∀ N ∈ [(⟨1, 2, 3, 4⟩ : Matrix2), ⟨0, 1, -1, 0⟩, ⟨2, 0, 1, 3⟩, ⟨1, 1, 1, 0⟩, ⟨-2, 5, 1, -3⟩], det (mul M N) = det M * det N
+#expect_false "M N = N M for all sample matrices (matrices do not commute)" unfolding mul :
+  ∀ M ∈ [(⟨1, 2, 3, 4⟩ : Matrix2), ⟨0, 1, -1, 0⟩, ⟨2, 0, 1, 3⟩, ⟨1, 1, 1, 0⟩, ⟨-2, 5, 1, -3⟩], ∀ N ∈ [(⟨1, 2, 3, 4⟩ : Matrix2), ⟨0, 1, -1, 0⟩, ⟨2, 0, 1, 3⟩, ⟨1, 1, 1, 0⟩, ⟨-2, 5, 1, -3⟩], (mul M N).a = (mul N M).a ∧ (mul M N).b = (mul N M).b
 
 #level_report
