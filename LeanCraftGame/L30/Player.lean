@@ -1,37 +1,31 @@
 /-
 # Generality
 
-"Between", "upper bound" and "the larger of two numbers" make sense for ℕ, ℤ,
-ℚ, ℝ and many other types. Mathlib states such definitions **once**, for every
-suitable type:
+"Let `x ≤ y` in an ordered set." Mathematicians state definitions once, for
+every structure that supports them, and Lean does the same with **type
+variables** and **type classes**:
 
 ```lean
-def AlwaysBelow {α : Type*} [Preorder α] (u : ℕ → α) (B : α) : Prop :=
-  ∀ n, u n ≤ B
+def AlwaysBelow {α : Type*} [Preorder α] (u : ℕ → α) (B : α) : Prop := ∀ n, u n ≤ B
 ```
 
-* `{α : Type*}` says "for any type `α`". The curly braces make it **implicit**:
-  nobody writes `α` when using `AlwaysBelow`, Lean works it out from `u` and
-  `B`. (`α` is typed `\a`; `Type*` is Mathlib's way to say "some type".)
-* `[Preorder α]` is an **instance argument**: it asks that `α` comes with a
-  `≤` that behaves like an order. Lean finds it automatically for ℕ, ℤ, ℚ, ℝ.
-  If you forget it, Lean says *failed to synthesize LE α*: it does not know what
-  `≤` means on an arbitrary type.
+* `{α : Type*}`: for every type `α` (implicit: Lean infers it from `u`);
+* `[Preorder α]`: provided `α` carries a preorder, i.e. a reflexive and
+  transitive `≤`. Lean finds the order of `ℕ`, `ℤ`, `ℚ`, `ℝ`, `Set X`, … by
+  itself.
 
-## Choosing the class
+The same definition then applies to sequences of naturals, of reals, of
+sets ordered by inclusion. Choose the **weakest** structure the definition
+needs: `≤` needs `Preorder` (or `LE`); `max` needs a `LinearOrder`
+(on a partial order such as sets, two elements need not be comparable).
 
-* `[Preorder α]` gives `≤` and `<`.
-* `[LinearOrder α]` also says that any two elements are comparable, so that
-  `if a ≤ b then … else …` can be **computed**. With only `Preorder`, Lean
-  reports *failed to synthesize Decidable (a ≤ b)*.
-
-Ask for as little as you need: the weaker the class, the more types your
-definition applies to.
+The general version is not just more reusable; it is more honest about what
+the definition depends on.
 
 ## Your task
 
-The three definitions at the bottom only work for `ℕ`. Make each of them work
-for every type with an order. The tests use them on ℕ, ℤ and ℚ.
+Generalise `Between`, `IsUpperBound` and `largest` from `ℕ` to an arbitrary
+ordered type. The referee tests them on `ℕ`, `ℤ` and `ℚ`.
 -/
 namespace L30
 

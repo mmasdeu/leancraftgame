@@ -1,7 +1,8 @@
 {
-  "world": "Predicate World",
+  "world": "Sequence World",
   "title": "Sequences that come back",
   "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
       "test": "InfinitelyOften (7, 7, 7, 7, 7, 0, 0, …) 7 is false (met five times, not infinitely often)",

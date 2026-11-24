@@ -1,37 +1,33 @@
 /-
 # Divisibility and gcd
 
-Time to define real number theory. Everything is built from `a ∣ b` ("`a`
-divides `b`", typed `\|`), quantifiers and the Mathlib notions you already know.
+The greatest common divisor is usually defined as "the largest common
+divisor". The better definition, which is the one that generalises to
+polynomials, Gaussian integers and every principal ideal domain, does not
+mention size:
 
-Two things to keep in mind about `∣` on `ℕ`:
+> `d` is a gcd of `a` and `b` when `d` is a common divisor, and every
+> common divisor divides `d`.
 
-* `1 ∣ n` and `n ∣ n` always hold, and `n ∣ 0` for **every** `n` (including
-  `0 ∣ 0`);
-* `0 ∣ n` holds only for `n = 0`.
+With it, `gcd(0, 0) = 0`: every number divides `0`, and `0` is the greatest
+element for divisibility, although it is the least for `≤`.
 
-So a statement like "`∀ e, e ∣ a → e ∣ b → …`" quantifies over *all* common
-divisors, and for `a = b = 0` every number is one.
+Related notions, all defined by divisibility:
 
-A **greatest common divisor** of `a` and `b` can be described in two ways. The
-algebraist's way: `d` is a common divisor, and **every** common divisor
-divides `d`. The schoolbook way: `d` is a common divisor and it is the
-largest one. On `ℕ` they usually agree, but not always: check the corner cases
-before you trust a definition.
+* `a`, `b` **coprime**: their only common divisor is `1`;
+* `p` **prime**: `p ≥ 2` and its only divisors are `1` and `p`
+  (with the boundary cases `0` and `1` excluded explicitly);
+* `n` **squarefree**: no square `d²` with `d ≠ 1` divides `n`
+  (`12 = 2² · 3` is not, `30` is).
 
-```lean
--- d divides both a and b (already done, from "Using Mathlib")
-def CommonDiv (d a b : ℕ) : Prop := d ∣ a ∧ d ∣ b
-```
+Write the quantifiers so that the referee can check them: a divisor of a
+positive `n` is at most `n`, so `∀ d, d ∣ n → …` is a finite check in
+disguise.
 
 ## Your task
 
-`CommonDiv` is done. Define `Coprime'` (no common divisor except 1), `IsGcd`
-(`d` is *the* greatest common divisor, in the algebraist's way), `IsPrime'`
-(a prime is a number greater than 1 whose only divisors are 1 and itself)
-and `Squarefree'` (no square `d * d` other than `1` divides `n`). Do not use
-Mathlib's `Nat.gcd`, `Nat.Coprime`, `Nat.Prime` or `Squarefree`: the referee
-compares your definitions to them.
+Define `Coprime'`, `IsGcd`, `IsPrime'` and `Squarefree'` (with a prime to
+avoid clashing with Mathlib's names).
 -/
 namespace L31
 

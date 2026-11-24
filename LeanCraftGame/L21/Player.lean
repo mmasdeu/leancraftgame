@@ -1,23 +1,27 @@
 /-
-# Challenge: patterns in sequences
+# Challenge: periodicity
 
-Four properties of a sequence `u : ℕ → ℕ` that mathematicians use all the
-time. Each one needs **nested** quantifiers, and the order and the bounds are
-the whole point.
+The decimal expansion of a rational number is **eventually periodic**:
+`1/6 = 0.1666…`, `1/7 = 0.142857142857…`. The orbit of every number under
+the Collatz map (as far as anyone has checked) ends in the cycle `4, 2, 1`.
+Periodicity is a statement with several quantifiers, and the order and the
+side conditions decide everything.
 
-* `Periodic u`: the sequence repeats itself exactly, after some fixed
-  number of steps `p`. (`n % 3` is periodic, with period 3.) Careful: what
-  would `p = 0` say?
-* `EventuallyConstant u`: from some index on, the sequence stays at one
-  single value. That value is not given in advance: it may depend on `u`.
-* `HasMaximum u`: some term of the sequence is at least as large as every
-  term (not "every term is below some larger term").
-* `EventuallyPeriodic u`: the sequence repeats itself from some index on,
-  after a preliminary stretch that may be irregular.
-  (`if n < 5 then 7 else 0` is not periodic, but is eventually periodic.)
+* `u` is **periodic** when there is a period `p > 0` with `u (n + p) = u n`
+  for every `n`. Without `p > 0`, every sequence would be periodic with
+  period `0`.
+* `u` is **eventually constant** when from some index on it equals one
+  fixed value.
+* `u` **has a maximum** when some term is at least as large as every term.
+  `n % 3` has one, `n` has none. For sequences of natural numbers, bounded
+  implies a maximum (there are finitely many possible values); for rational
+  sequences such as `1 - 1/(n + 1)` it does not.
+* `u` is **eventually periodic** when it becomes periodic from some index on.
 
-The tests are hidden: ask yourself which sequence would fool a definition with
-the wrong order of quantifiers, a missing bound, or a fixed constant.
+## Your task
+
+Define the four predicates. Count the quantifiers in each before you write
+it, and decide where the conditions `p > 0` and `n ≥ N` go.
 -/
 namespace L21
 

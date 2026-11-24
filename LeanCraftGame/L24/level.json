@@ -1,7 +1,8 @@
 {
-  "world": "Predicate World",
+  "world": "Sequence World",
   "title": "Bounded and monotone",
   "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
       "test": "Bounded (-n) is false (0, -1, -2, … falls forever: bounded means on both sides)",

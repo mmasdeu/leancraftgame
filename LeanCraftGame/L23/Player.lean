@@ -1,21 +1,31 @@
 /-
 # Going to infinity
 
-You now have all the words of logic: `∀`, `∃`, `→`, `∧`, and shorthands such as
-`∀ n ≥ N`. The Predicate world uses them for what mathematicians do all day:
-turning an idea they have in their head into a definition that says exactly that.
+"`u n` tends to infinity" is the first genuine definition of analysis, and
+it already has three quantifiers:
 
-A sequence of natural numbers is a function `u : ℕ → ℕ`: `u n` is its term
-number `n`. Write down what it means for `u` to **tend to infinity**.
+> for every bound `M`, from some index `N` on, every term is at least `M`.
 
-* Start from words, not symbols: "however large a bound `M` you choose, …".
-  Then translate, and keep the quantifiers in the order the sentence has them.
-  You saw in "Quantifiers in order" that the order changes the meaning.
-* Only the meaning matters: the referee does not care how you write it, but it
-  tests your definition on sequences that should tend to infinity, on sequences
-  that should not, and on facts that anybody who *uses* the notion would need.
-* Before your first run you will be asked to predict a few verdicts. Take your
-  time with them: they are where the traps of the level are.
+Compare it with its neighbours:
+
+* **unbounded**: for every `M`, *some* term is at least `M`. The sequence
+  `0, 1, 0, 2, 0, 3, …` is unbounded but does not tend to infinity: it
+  keeps coming back to `0`.
+* **increasing and unbounded**: this implies tending to infinity, but not
+  conversely (`0, 2, 1, 3, 2, 4, …` tends to infinity and is not monotone).
+* **`u n ≥ n`**: sufficient, not necessary (`n / 2` tends to infinity).
+
+A definition must capture exactly the intended class: neither a
+sufficient condition nor a necessary one. The referee tests your
+definition on sequences that separate these notions.
+
+The Collatz map is a test case for intuition: does the orbit of `n` tend
+to infinity for some `n`? Nobody knows; but `fun n => iter n 27` certainly
+does not, since it ends in the cycle `4, 2, 1`.
+
+## Your task
+
+Define `TendsToInfinity u`.
 -/
 import Mathlib.Tactic
 

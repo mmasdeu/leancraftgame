@@ -1,4 +1,4 @@
-/- Hidden test battery for Level Challenge: patterns in sequences. -/
+/- Hidden test battery for Level Challenge: periodicity. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L21.Player
 
@@ -8,7 +8,7 @@ open L21
 #no_sorry EventuallyConstant
 #no_sorry HasMaximum
 #no_sorry EventuallyPeriodic
-#level_start "Challenge: patterns in sequences"
+#level_start "Challenge: periodicity"
 
 #expect_true "Periodic (fun n => n % 3) is true" unfolding Periodic :
   Periodic (fun n => n % 3)

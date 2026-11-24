@@ -1,29 +1,31 @@
 /-
 # Relations
 
-A **relation** on `ℕ` is a statement about two numbers, `r : ℕ → ℕ → Prop`.
-`r a b` reads "`a` is related to `b`". Examples: `(· ≤ ·)`, `(· ∣ ·)`, or
-`fun a b => a % 3 = b % 3` ("same remainder mod 3"). (`(· ≤ ·)` is a short way
-to write `fun a b => a ≤ b`.)
+A binary relation on `ℕ` is a function `r : ℕ → ℕ → Prop`: `r a b` is the
+statement "`a` is related to `b`". Relations are classified by a handful of
+properties:
 
-Mathematicians sort relations by the *laws* they obey: reflexive, symmetric,
-transitive, antisymmetric. Each law is a statement about **all** numbers, and
-laws of the form "if … then …" are **vacuously true** when the "if" never
-happens: the relation that relates nothing is symmetric, transitive and
-antisymmetric, without relating anything to anything.
+* **reflexive**: `r a a` for every `a`;
+* **symmetric**: `r a b → r b a`;
+* **transitive**: `r a b → r b c → r a c`;
+* **antisymmetric**: `r a b → r b a → a = b`.
 
-Mathlib has all these notions (`Std.Refl`, `IsSymm`, `IsTrans`, `IsAntisymm`,
-`Equivalence`, `PartialOrder`), but they are stated for typeclasses, so here you
-write your own versions. The primes `'` keep the names apart from Mathlib's.
+An **equivalence relation** (reflexive, symmetric, transitive) is what you
+quotient by: congruence mod `n` gives `ℤ/nℤ`. A **partial order**
+(reflexive, antisymmetric, transitive) is what you compare with:
+divisibility on `ℕ` is one, and `0` is its largest element.
 
-Write the laws, then the two classical bundles: an **equivalence relation** is
-reflexive, symmetric and transitive; a **partial order** is reflexive,
-antisymmetric and transitive. Reuse your own definitions with `∧`.
+Each property is independent of the others: "`|a - b| ≤ 1`" is reflexive
+and symmetric but not transitive; `<` is transitive and antisymmetric
+(vacuously!) but not reflexive. The referee tests your definitions on such
+examples.
+
+In the Topology world you will meet the same properties on finite sets,
+with equivalence classes and the partitions they form.
 
 ## Your task
 
-Fill in the six definitions. The referee tests them on relations such as `≤`, "differ by at most 1",
-`<`, `∣`, "same remainder mod 3", `≠`, the empty relation and the full one.
+Define the four properties, then equivalence relations and partial orders.
 -/
 namespace L32
 

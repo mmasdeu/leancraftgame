@@ -1,15 +1,16 @@
 {
-  "world": "Library World",
+  "world": "Set World",
   "title": "Using Mathlib",
   "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
       "test": "CommonDivisor 5 0 0 is true",
       "statement": "CommonDivisor 5 0 0"
     },
     {
-      "test": "TwinPrime 2 is false",
-      "statement": "TwinPrime 2"
+      "test": "1 is not perfect (its proper divisors sum to 0)",
+      "statement": "IsPerfect 1"
     },
     {
       "test": "OneToOne (fun n => n / 2) is false",
@@ -18,37 +19,17 @@
   ],
   "checks": [
     {
-      "lean": "example : ℕ → Prop := L29.TwinPrime",
-      "message": "Keep `TwinPrime : ℕ → Prop`."
-    },
-    {
-      "lean": "example : ℕ → ℕ → ℕ → Prop := L29.CommonDivisor",
-      "message": "Keep `CommonDivisor : ℕ → ℕ → ℕ → Prop`."
-    },
-    {
-      "lean": "example : (ℕ → ℕ) → Prop := L29.OneToOne",
-      "message": "Keep `OneToOne : (ℕ → ℕ) → Prop`."
+      "lean": "example : ℕ → Prop := L29.IsPerfect\nexample : ℕ → ℕ → ℕ → Prop := L29.CommonDivisor\nexample : (ℕ → ℕ) → Prop := L29.OneToOne",
+      "message": "Keep `IsPerfect : ℕ → Prop`, `CommonDivisor : ℕ → ℕ → ℕ → Prop` and `OneToOne : (ℕ → ℕ) → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "TwinPrime 7",
-      "hint": "7 is prime but 9 is not: both must be prime, so use `∧`."
-    },
-    {
-      "match": "TwinPrime 2",
-      "hint": "2 is prime but 4 is not: both must be prime, so use `∧`."
-    },
-    {
-      "match": "TwinPrime",
+      "match": "perfect",
       "steps": [
-        "*Both* numbers must be prime."
+        "Mathlib's `n.properDivisors` is the finite set of divisors smaller than `n`."
       ],
-      "hint": "`Nat.Prime p ∧ Nat.Prime (p + 2)`, or `p.Prime ∧ (p + 2).Prime`."
-    },
-    {
-      "match": "CommonDivisor 3 6 9",
-      "hint": "`d ∣ a` reads \"d divides a\". Check the order: `d ∣ a ∧ d ∣ b`."
+      "hint": "`∑ d ∈ n.properDivisors, d = n`."
     },
     {
       "match": "CommonDivisor",
@@ -58,19 +39,15 @@
       "hint": "`d ∣ a ∧ d ∣ b`, with the divides symbol `\\|`."
     },
     {
-      "match": "OneToOne (fun n => 2 * n)",
-      "hint": "Doubling never sends two numbers to the same place. Are you using `Function.Injective`? (`Surjective` means something else.)"
-    },
-    {
       "match": "OneToOne",
       "steps": [
-        "Which Mathlib name means \"no two inputs give the same output\"?"
+        "Mathlib's properties of functions live in the namespace `Function`."
       ],
       "hint": "`Function.Injective f`."
     },
     {
       "match": "",
-      "hint": "Look up the name of the notion in the lesson text."
+      "hint": "Use Mathlib's names: `Nat.properDivisors`, `∣`, `Function.Injective`."
     }
   ]
 }

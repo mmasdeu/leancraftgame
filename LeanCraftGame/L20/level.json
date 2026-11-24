@@ -1,7 +1,8 @@
 {
-  "world": "Quantifiers World",
+  "world": "Quantifier World",
   "title": "Bounded quantifiers",
   "skill": "syntax",
+  "exercise": "Define",
   "predict": [
     {
       "test": "HasPositiveRoot (fun n => n) is false (its only root is 0)",

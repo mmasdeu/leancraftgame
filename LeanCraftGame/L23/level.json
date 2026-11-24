@@ -1,7 +1,8 @@
 {
-  "world": "Predicate World",
+  "world": "Sequence World",
   "title": "Going to infinity",
   "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
       "test": "u n = n / 2 tends to infinity (it is not strictly increasing!)",

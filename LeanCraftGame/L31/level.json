@@ -1,7 +1,8 @@
 {
-  "world": "Library World",
+  "world": "Set World",
   "title": "Divisibility and gcd",
   "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
       "test": "IsGcd 0 0 0 is true",

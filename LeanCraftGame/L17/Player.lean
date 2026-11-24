@@ -1,31 +1,28 @@
 /-
-# If … then …
+# If, then, for all
 
-Often a statement only concerns *some* positions: "from index 5 on, the terms
-are at least 3". That is a statement of the form "**if** *this*, **then**
-*that*", written `p → q`.
-
-* Type `→` as `\to`, or write `->`.
-* `p → q` is true when `p` is false, or when `q` is true.
-* `→` binds weaker than `∧` and `∨`: `a → b ∧ c` means `a → (b ∧ c)`.
+Most universal statements in mathematics are **restricted**: "for every
+`n ≥ 3`, …", "for every even `n`, …". In Lean the restriction is an
+implication inside the quantifier:
 
 ```lean
-def BigAfter (u : Nat → Nat) : Prop := ∀ n, 3 ≤ n → 10 ≤ u n
+def BigAfter (u : ℕ → ℕ) : Prop := ∀ n, 3 ≤ n → 10 ≤ u n
 ```
 
-Read it as: "for every `n`, **if** `n` is at least 3 **then** `u n` is at
-least 10". It says nothing about `u 0`, `u 1` and `u 2`.
+"for every `n`, if `3 ≤ n` then `10 ≤ u n`". For `n < 3` the implication is
+vacuously true, so the early terms are unconstrained, which is exactly what
+"from index 3 on" means. (Lean also accepts the shorthand `∀ n ≥ 3, …`.)
 
-## A classic mistake
-
-What about `∀ n, 3 ≤ n ∧ 10 ≤ u n`? That says that *every* `n`, even `n = 0`,
-is at least 3, which is false for every sequence. When a statement is about
-"the `n` such that …", use `→`, not `∧`.
+This is the shape of the definition of convergence ("for every `n ≥ N`"),
+of continuity, and of most of the analysis to come. The `→` inside a `∀`
+is not optional: `∀ n, 3 ≤ n ∧ 10 ≤ u n` claims that *every* `n` is at
+least 3, which is false.
 
 ## Your task
 
-`BigAfter` is done. Define `LateBig u` (from index 5 on, every term is at
-least 3) and `EvenToEven u` (whenever `n` is even, `u n` is even).
+Define `LateBig u` (from index 5 on, the terms are at least 3) and
+`EvenToEven u` (`u` sends even indices to even values: for every `n`, if `n`
+is even then `u n` is even).
 -/
 namespace L17
 

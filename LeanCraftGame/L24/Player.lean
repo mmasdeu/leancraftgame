@@ -1,31 +1,26 @@
 /-
 # Bounded and monotone
 
-Sequences of integers `u : ℕ → ℤ`. Four properties to define, and each has
-a plausible-looking wrong version.
+The monotone convergence theorem says that a bounded monotone sequence of
+reals converges. Both hypotheses are definitions, and both come in
+variants that are easy to confuse. We use integer-valued sequences
+`u : ℕ → ℤ`, so that "bounded below" is a real condition.
 
-* `BoundedAbove u`: some number `M` is at least every term.
-* `Bounded u`: the terms stay in a band, **on both sides**. Use the absolute
-  value `|x|` (type `|`, then `x`, then `|`).
-* `NonDecreasing u`: the sequence never goes down, **between any two
-  positions**: if `m ≤ n` then `u m ≤ u n`.
-* `StrictlyIncreasing u`: the same with `<` everywhere: if `m < n` then
-  `u m < u n`.
+* **bounded above**: some `M` is at least every term (`∃ M, ∀ n, u n ≤ M`:
+  one `M` for all `n`, so `∃` comes first).
+* **bounded**: bounded above *and* below. With integers, "`|u n| ≤ M` for
+  some `M`" is equivalent.
+* **non-decreasing**: `m ≤ n → u m ≤ u n` for all `m`, `n`. Comparing
+  consecutive terms, `u n ≤ u (n + 1)`, is equivalent (by induction), and
+  the referee accepts either.
+* **strictly increasing**: `m < n → u m < u n`.
 
-Take `M` to be a natural number (`∃ M : ℕ, …`); Lean inserts the cast
-`(M : ℤ)` for you, so you can write `u n ≤ M`. Remember that quantifier order
-matters: `∃ M, ∀ n, …` says one `M` works for every `n`.
+Constant sequences are non-decreasing and not strictly increasing: a
+boundary case worth predicting.
 
-```lean
-def Constant (u : ℕ → ℤ) : Prop := ∀ m n, u m = u n
-```
+## Your task
 
-The referee will try your definitions on sequences such as `fun n => -(n : ℤ)`
-(0, -1, -2, …) and `fun n => if n < 3 then (n : ℤ) else 0` (0, 1, 2, 0, 0, …).
-Press **Run tests** to see the report.
-
-Hint: check each definition on a sequence that goes down forever, on one
-that stays level, and on one that goes up at first and then falls back.
+Define `BoundedAbove`, `Bounded`, `NonDecreasing` and `StrictlyIncreasing`.
 -/
 import Mathlib.Tactic
 

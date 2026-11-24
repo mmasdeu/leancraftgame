@@ -1,25 +1,30 @@
 /-
 # Sets
 
-`Set ℕ` is the type of sets of natural numbers.
-
-* `{n | n % 2 = 0}` is the set of the `n` such that `n % 2 = 0`
-  ("set-builder notation"). The `|` is the plain keyboard bar.
-* `x ∈ s` says that `x` belongs to `s` (type `\in`); `x ∉ s` is `\notin`.
-* `s ⊆ t` says that every element of `s` is in `t` (type `\sub`).
-* `∅` is the empty set (`\empty`).
-* Bounded quantifiers work with `∈`: `∀ x ∈ s, P x` means
-  `∀ x, x ∈ s → P x`, and `∃ x ∈ s, P x` means `∃ x, x ∈ s ∧ P x`.
-
-In Mathlib a set *is* a predicate: `x ∈ {n | P n}` is just `P x`.
+A **set** of natural numbers is written `Set ℕ`, and the set of the `n`
+satisfying a property is `{n | P n}`:
 
 ```lean
 def evens : Set ℕ := {n | n % 2 = 0}
 ```
 
+Membership `x ∈ s` (type `\in`) is then *by definition* the property:
+`4 ∈ evens` is the statement `4 % 2 = 0`. In Lean, as in most of modern
+mathematics, a subset is nothing but a predicate; `Set ℕ` is `ℕ → Prop` in
+disguise. Everything else is defined through membership:
+
+* `s ⊆ t` is `∀ x, x ∈ s → x ∈ t`;
+* `s ∩ t = {x | x ∈ s ∧ x ∈ t}`, `s ∪ t = {x | x ∈ s ∨ x ∈ t}`;
+* `s = t` means the same members (extensionality).
+
+A set of numbers is **bounded** when one number is at least all of its
+elements. Note the order of the quantifiers once more: `∃ B, ∀ x ∈ s, x ≤
+B`. The set of primes is not bounded (Euclid); every finite set is.
+
 ## Your task
 
-`evens` is done. Define `multiplesOf k` and `BoundedSet s`.
+Define `multiplesOf k` (the multiples of `k`: `0, k, 2k, …`) and
+`BoundedSet s`. What is `multiplesOf 0`?
 -/
 namespace L28
 

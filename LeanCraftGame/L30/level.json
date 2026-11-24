@@ -1,7 +1,8 @@
 {
-  "world": "Library World",
+  "world": "Set World",
   "title": "Generality",
   "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
       "test": "Between (2 : ℕ) 5 5 is true",

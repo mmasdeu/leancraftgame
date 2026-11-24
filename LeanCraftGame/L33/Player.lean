@@ -1,37 +1,23 @@
 /-
 # Spot the bug: the library
 
-A colleague used Mathlib's notions, but not quite as Mathlib means them.
+Three definitions from a colleague who used Mathlib's notation without
+checking which way round it goes.
 
-```lean
--- d is a common divisor of a and b
-def CommonDivisor (d a b : ℕ) : Prop := a ∣ d ∧ b ∣ d
+* `a ∣ d ∧ b ∣ d` reads "`a` divides `d` and `b` divides `d`": a common
+  **multiple**, not a common divisor. Which is too weak, which too strong?
+* `Nat.Prime p ∨ Nat.Prime (p + 2)`: one prime suffices.
+* `{n | k % n = 0}` is the set of **divisors** of `k`, not of its
+  multiples. The two sets meet (both contain `k`, when `k > 0`), so the
+  definition is right on some inputs: you need one where it is wrong.
 
--- p and p + 2 are both prime (a twin prime)
-def TwinPrime (p : ℕ) : Prop := Nat.Prime p ∨ Nat.Prime (p + 2)
-
--- the multiples of k: 0, k, 2k, 3k, …
-def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
-```
-
-Library notions have fixed meanings and fixed argument orders, and a
-definition that uses them can still say the wrong thing:
-
-* `a ∣ b` reads "a divides b": the *small* number comes first.
-* `∨` and `∧` matter as much as ever.
-* In a set-builder `{n | …}`, check which variable is the element and which is
-  the parameter.
+For `∣`, the mnemonic: `a ∣ b` is "a divides b", the small number on the
+left, like `a ≤ b` (for positive numbers).
 
 ## Your task
 
-Each counterexample must be **accepted** by the colleague's definition,
-although it does not have the property in the comment:
-
-* `cdD`, `cdA`, `cdB`: `CommonDivisor cdD cdA cdB` holds, but `cdD` does not
-  divide both `cdA` and `cdB`.
-* `twin`: `TwinPrime twin` holds, but `twin` and `twin + 2` are not both prime.
-* `mulK`, `mulN`: `mulN ∈ multiplesOf mulK` holds, but `mulN` is not a multiple
-  of `mulK`.
+For each definition, give an input on which it is wrong. Small numbers help
+the referee.
 -/
 namespace L33
 

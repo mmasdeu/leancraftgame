@@ -1,7 +1,8 @@
 {
-  "world": "Predicate World",
+  "world": "Sequence World",
   "title": "Injective and surjective",
   "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
       "test": "Surjective (n + 1) is false (nothing is sent to 0)",

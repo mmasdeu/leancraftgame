@@ -1,10 +1,10 @@
--- n is even and at least 4 (already done)
+-- n is even and at least 4 (already done, with Mathlib's `Even`)
 def BigEven (n : ℕ) : Prop := Even n ∧ 4 ≤ n
 
--- p and p + 2 are both prime          (TwinPrime 5 is true: 5 and 7)
-def TwinPrime (p : ℕ) : Prop := Nat.Prime p ∧ Nat.Prime (p + 2)
+-- n is perfect: the sum of its proper divisors is n   (6 = 1 + 2 + 3)
+def IsPerfect (n : ℕ) : Prop := ∑ d ∈ n.properDivisors, d = n
 
--- d divides both a and b              (CommonDivisor 3 6 9 is true)
+-- d divides both a and b                               (CommonDivisor 3 6 9)
 def CommonDivisor (d a b : ℕ) : Prop := a ∣ d ∧ b ∣ d
 
 -- f never takes the same value twice (use Mathlib's name for this)

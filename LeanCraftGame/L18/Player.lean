@@ -1,24 +1,34 @@
 /-
 # There exists
 
-`∃ n, P n` means "there **exists** a natural number `n` such that `P n`
-holds". Type `∃` as `\exists`, or write `exists`.
+The existential quantifier `∃ n, P n` (type `\exists`) says that **some**
+`n` satisfies `P`:
 
 ```lean
-def HasBig (u : Nat → Nat) : Prop := ∃ n, 10 ≤ u n
+def HasBig (u : ℕ → ℕ) : Prop := ∃ n, 10 ≤ u n
 ```
 
-This says that **at least one** term of `u` is at least 10.
+An existential statement is proved by a **witness**: `HasBig (fun n => n)`
+holds because `n = 10` works. The referee searches for witnesses among
+small numbers and among expressions built from the variables in sight.
 
-* `∀` and `∃` are opposites: the opposite of "all terms are big" is "some term
-  is small", not "all terms are small".
-* To say that a position has *two* properties, join them inside the `∃`:
-  `∃ n, P n ∧ Q n`.
+Mind the scope. "Some term is even and some term is at least 10" is
+
+```lean
+(∃ n, u n % 2 = 0) ∧ (∃ m, 10 ≤ u m)
+```
+
+with two possibly different witnesses, while "some term is both" is
+`∃ n, u n % 2 = 0 ∧ 10 ≤ u n`, with a single one. The sequence `4, 11, 11,
+11, …` satisfies the first and not the second.
+
+And the restricted form: "some `n` with `P n` has `Q n`" is
+`∃ n, P n ∧ Q n`, with `∧`, not `→` (see the last level of this world).
 
 ## Your task
 
-`HasBig` is done. Define `HasZero u` (some term is zero) and `HasEvenBig u`
-(some term is even **and** at least 10, both for the same `n`).
+Define `HasZero u` (some term is zero) and `HasEvenBig u` (some single term is
+both even and at least 10).
 -/
 namespace L18
 

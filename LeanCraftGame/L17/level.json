@@ -1,7 +1,8 @@
 {
-  "world": "Quantifiers World",
+  "world": "Quantifier World",
   "title": "If … then …",
   "skill": "syntax",
+  "exercise": "Define",
   "predict": [
     {
       "test": "LateBig (fun n => if n < 5 then 0 else 9) is true (the first terms are 0: that is fine!)",

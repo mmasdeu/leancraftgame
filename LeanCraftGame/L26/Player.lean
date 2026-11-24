@@ -1,35 +1,27 @@
 /-
 # Sequences that come back
 
-Sequences of natural numbers `u : ℕ → ℕ`, and the difference between two
-small words: **eventually** and **infinitely often**.
+How often does a sequence take the value `a`?
 
-* `EventuallyEqual u a`: from some index on, every term is `a`.
-  The shape is `∃ N, ∀ n ≥ N, …`.
-* `InfinitelyOften u a`: the value `a` appears again and again: however far
-  you walk, you meet it later. The shape is `∀ N, ∃ n ≥ N, …`.
-* `OnlyFinitelyOften u a`: the value `a` stops appearing at some point
-  (write it *without* a negation in front of a quantifier, by pushing the
-  `¬` inside).
-* `Recurrent u`: the sequence comes back to its **starting value** `u 0`
-  infinitely often.
+* **eventually equal** to `a`: from some index on, always `a`.
+* **infinitely often** `a`: for every `N`, some later index has value `a`
+  (`∀ N, ∃ n ≥ N, u n = a`). Equivalently, the set of indices is
+  infinite.
+* **only finitely often**: the negation of infinitely often. Write it as
+  "from some index on, never `a`".
 
-```lean
-def Positive (u : ℕ → ℕ) : Prop := ∀ n, 0 < u n
-def EventuallyPositive (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 0 < u n
-```
+These are the two basic "sizes" of a set of indices, and they are dual:
+"eventually `P`" is "not infinitely often not `P`". The pair reappears in
+probability (Borel–Cantelli: `lim sup` and `lim inf` of events), in dynamics
+(Poincaré recurrence), and in topology as two filters on `ℕ`.
 
-`∀ n ≥ N, P n` is short for `∀ n, n ≥ N → P n`, and `∃ n ≥ N, P n` for
-`∃ n, n ≥ N ∧ P n`. Type `≥` as `\ge`.
+A sequence is **recurrent** when every value it takes, it takes infinitely
+often: `0, 1, 0, 1, …` is recurrent, `0, 1, 1, 1, …` is not.
 
-The referee will try your definitions on sequences such as `fun n => n % 2`
-(0, 1, 0, 1, …), `fun n => if n < 5 then 7 else 0` (7, 7, 7, 7, 7, 0, 0, …)
-and `fun n => if n % 2 = 0 then 0 else n` (0, 1, 0, 3, 0, 5, …).
-Press **Run tests** to see the report.
+## Your task
 
-Hint: a value met *once*, a value met *infinitely often* and a value the
-sequence *ends up equal to* are three different things. Which of the
-sequences above shows each of them?
+Define `EventuallyEqual`, `InfinitelyOften`, `OnlyFinitelyOften` and
+`Recurrent`.
 -/
 import Mathlib.Tactic
 

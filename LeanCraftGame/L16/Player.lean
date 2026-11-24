@@ -1,34 +1,31 @@
 /-
 # For all
 
-A *sequence* of natural numbers is a function `u : Nat → Nat`: for every
-position `n`, it gives a value `u n`. Think of the list `u 0, u 1, u 2, …`
+A **sequence** of natural numbers is a function `u : ℕ → ℕ`: the term of
+index `n` is `u n`. Sequences are written with `fun`: `fun n => 2 * n` is
+`0, 2, 4, 6, …`, and `fun n => n % 3` is `0, 1, 2, 0, 1, 2, …`. The referee
+uses such sequences to test your definitions.
 
-* `Nat → Nat` is the type of functions from `Nat` to `Nat`.
-  Type the arrow `→` as `\to`, or write `->`.
-* `fun n => n + 1` is a function written without a name: the input `n`
-  goes to `n + 1`. The referee uses such functions to test your definitions:
-  `(fun n => n % 3) 7` is `1`.
-
-## The quantifier `∀`
-
-`∀ n, P n` means "for **every** natural number `n`, the statement `P n` holds".
-Type `∀` as `\forall`, or write `forall`.
+Statements about *all* terms use the universal quantifier:
 
 ```lean
-def AllBig (u : Nat → Nat) : Prop := ∀ n, 10 ≤ u n
+def AllBig (u : ℕ → ℕ) : Prop := ∀ n, 10 ≤ u n
 ```
 
-This says that *every* term of the sequence `u` is at least 10. The `n` after
-`∀` is a name you choose for the position. The comma separates the quantifier
-from the statement.
+reads "for every `n`, `10 ≤ u n`" (type `∀` as `\forall`). The variable
+after `∀` is bound: renaming it changes nothing.
 
-Typing `∀` and friends: click **Symbols** at the top right of the page. It lists every symbol with the keys to type it, and has typing practice.
+A universal statement is refuted by **one** counterexample, and confirmed
+by no number of examples: `n² + n + 41` is prime for `n = 0, 1, …, 39`, and
+not for `n = 40`. The referee proves universal statements by reasoning, not
+by trying cases.
+
+Typing symbols: the **Symbols** button at the top right lists them all.
 
 ## Your task
 
-`AllBig` is done. Define `AlwaysBelow u B` (every term is at most `B`) and
-`AllEven u` (every term is even).
+`AllBig` is done. Define `AlwaysBelow u B` (every term is at most `B`: the
+sequence is bounded by `B`) and `AllEven u` (every term is even).
 -/
 namespace L16
 

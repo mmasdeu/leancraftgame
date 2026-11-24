@@ -1,7 +1,8 @@
 {
-  "world": "Quantifiers World",
+  "world": "Quantifier World",
   "title": "There exists",
   "skill": "syntax",
+  "exercise": "Define",
   "predict": [
     {
       "test": "HasZero (fun n => n % 3) is true",

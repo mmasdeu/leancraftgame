@@ -1,50 +1,41 @@
 /-
 # Using Mathlib
 
-Mathlib, Lean's mathematical library, already defines thousands of notions.
-Real definitions are built from them rather than from scratch:
+Mathlib, Lean's mathematical library, already defines a large part of
+undergraduate mathematics, and the right move is usually to use its
+definitions rather than write your own: theorems are proved about *its*
+`Even`, *its* `Nat.Prime`, *its* `Function.Injective`, and a home-made
+variant, however correct, is cut off from them.
 
-* `Even n`, `Odd n`;
-* `Nat.Prime p`: `p` is a prime number;
-* `a ∣ b`: `a` divides `b`. The bar is **not** the keyboard `|`: type `\|` or
-  `\mid`. (The keyboard `|` is for absolute values and set-builder notation.)
-  Read it left to right: `3 ∣ 12` is true.
-* `Function.Injective f`: `f a = f b` only when `a = b`;
-  `Function.Surjective f`: every value is reached;
-* `Monotone u`, `StrictMono u`.
+Mathlib's names follow conventions you can guess:
 
-## Names and namespaces
+* predicates on numbers: `Even n`, `Odd n`, `Nat.Prime p` (or `p.Prime`);
+* divisibility `a ∣ b`, divisors: `n.divisors`, `n.properDivisors` (the
+  divisors smaller than `n`), as finite sets;
+* properties of functions live in `Function`: `Function.Injective f`,
+  `Function.Surjective f`, `Function.Bijective f`;
+* big operators: `∑ d ∈ s, f d` is the sum of `f d` over the finite set `s`
+  (type `\sum`).
 
-Names are grouped in *namespaces*: `Nat.Prime` is about natural numbers,
-`Function.Injective` about functions. **Dot notation** saves typing: if
-`p : ℕ`, then `p.Prime` means `Nat.Prime p`; if `f` is a function,
-`f.Injective` means `Function.Injective f`.
-
-Beware of near-misses. `Prime p` (without `Nat.`) is a different, more general
-notion, about prime elements of any ring. For natural numbers it happens to
-agree with `Nat.Prime`, but the automation treats it differently.
-
-Mathlib's definitions may be stated differently from yours: `Even n` is
-`∃ r, n = r + r`, not `n % 2 = 0`. They mean the same thing.
-
-```lean
-def BigEven (n : ℕ) : Prop := Even n ∧ 4 ≤ n
-```
+A **perfect number** equals the sum of its proper divisors: `6 = 1 + 2 + 3`,
+`28 = 1 + 2 + 4 + 7 + 14`. Euclid proved that `2^(p-1)(2^p - 1)` is perfect
+when `2^p - 1` is prime, Euler that every even perfect number is of this
+form. Whether an odd perfect number exists is open.
 
 ## Your task
 
-`BigEven` is done. Define `TwinPrime`, `CommonDivisor` and `OneToOne` using
-Mathlib's notions.
+Define `IsPerfect`, `CommonDivisor` and `OneToOne` with Mathlib's notions.
 -/
+
 namespace L29
 
--- n is even and at least 4 (already done)
+-- n is even and at least 4 (already done, with Mathlib's `Even`)
 def BigEven (n : ℕ) : Prop := Even n ∧ 4 ≤ n
 
--- p and p + 2 are both prime          (TwinPrime 5 is true: 5 and 7)
-def TwinPrime (p : ℕ) : Prop := sorry
+-- n is perfect: the sum of its proper divisors is n   (6 = 1 + 2 + 3)
+def IsPerfect (n : ℕ) : Prop := sorry
 
--- d divides both a and b              (CommonDivisor 3 6 9 is true)
+-- d divides both a and b                               (CommonDivisor 3 6 9)
 def CommonDivisor (d a b : ℕ) : Prop := sorry
 
 -- f never takes the same value twice (use Mathlib's name for this)

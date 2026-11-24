@@ -1,7 +1,8 @@
 {
-  "world": "Quantifiers World",
+  "world": "Quantifier World",
   "title": "Spot the bug: quantifiers",
   "skill": "reading",
+  "exercise": "Refute",
   "public": "all",
   "checks": [
     {

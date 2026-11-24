@@ -1,30 +1,29 @@
 /-
-# Bounded quantifiers
+# Bounded quantifiers and "eventually"
 
-Mathematicians write "for all n ≥ N" and "there is an n > 0". Lean (with
-Mathlib) has the same shorthand:
+Lean writes restricted quantifiers in short form:
 
-* `∀ n ≥ N, P n` means `∀ n, n ≥ N → P n`;
-* `∃ n > 0, P n` means `∃ n, n > 0 ∧ P n`.
+* `∀ n ≥ N, P n` means `∀ n, n ≥ N → P n` (an implication);
+* `∃ n > 0, P n` means `∃ n, n > 0 ∧ P n` (a conjunction).
 
-Notice the difference: the bound becomes an **implication** under `∀` and a
-**conjunction** under `∃`. This is exactly the `→` versus `∧` lesson from
-"If … then …". Writing the long form by hand with the wrong connective is a
-classic mistake:
+The asymmetry is forced: "some positive `n` has `P`" is not `∃ n, n > 0 →
+P n`, which is true as soon as `n = 0` is plugged in (the hypothesis is
+false). The short forms are there so that you do not have to remember.
 
-* `∃ n, n > 0 → f n = 0` is true for *every* `f`: take `n = 0`, then `0 > 0`
-  is false, and an implication with a false premise is true.
-
-The same shorthand exists for `≤`, `<`, `≠` and, as you will see with sets,
-for `∈`. Several variables can share a quantifier: `∀ a b, …`.
+"**Eventually**" combines the two quantifiers: from some index on, always.
 
 ```lean
 def EventuallyBig (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 10 ≤ u n
 ```
 
+This `∃ N, ∀ n ≥ N` pattern is the heart of every limit in analysis, and in
+the Topology world it becomes a *filter*: the family of sets that contain a
+tail `{N, N + 1, …}`.
+
 ## Your task
 
-`EventuallyBig` is done. Define `HasPositiveRoot f` and `EventuallyZero u`.
+Define `HasPositiveRoot f` (`f` vanishes at some `n` other than `0`) and
+`EventuallyZero u` (from some index on, every term is `0`).
 -/
 namespace L20
 
