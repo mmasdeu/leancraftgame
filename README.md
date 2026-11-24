@@ -1,5 +1,10 @@
 # Lean Craft Game: a Lean game about definitions, not proofs
 
+> **This is the `v2` branch**, published at <https://mmasdeu.github.io/leancraftgame/v2/>.
+> Version 2 rewrites every level as one mathematical arc, from naming numbers to finite
+> topological spaces, and adds a Topology world (15 levels) before the final Audit world:
+> 75 levels in twelve worlds. See [CURRICULUM.md](CURRICULUM.md).
+
 [![Downloads](https://img.shields.io/github/downloads/mmasdeu/leancraftgame/total?label=downloads)](https://github.com/mmasdeu/leancraftgame/releases) [![Latest release](https://img.shields.io/github/downloads/mmasdeu/leancraftgame/latest/total?label=latest%20release)](https://github.com/mmasdeu/leancraftgame/releases/latest)
 
 LLMs now write many Lean proofs well, so the scarce skill has moved upstream:
@@ -68,22 +73,25 @@ python3 web/server.py --run 1 LeanCraftGame/L1/Player.lean
 
 The game starts from zero: no Lean knowledge is assumed. A Welcome page (`LeanCraftGame/Intro.md`)
 introduces Lean and the game to first-time visitors, and then each level teaches one
-construct, with a worked example in the lesson text. There are 60 levels
-in twelve worlds; [CURRICULUM.md](CURRICULUM.md) lists what each one teaches and
-which mistakes its tests catch, and how predictions, hidden tests and hints are
-set in `level.json`.
+idea, with a worked example in the lesson text. There are 75 levels in twelve worlds,
+which form one mathematical arc; [CURRICULUM.md](CURRICULUM.md) lists them with their
+exercise types (Define, Construct, Repair, Classify, Refute, Referee, Connect, Audit),
+and explains how predictions, hidden tests and hints are set in `level.json`.
 
-* **Basics, Statements, Quantifiers:** the syntax of definitions (`def`,
-  functions, recursion, `Prop`, `∧ ∨ ¬ →`, `∀ ∃` and their order, bounded
-  quantifiers).
-* **Numbers, Library, Finite Sums, Analysis:** the idiosyncrasies of Lean and Mathlib
-  (casts, junk values like `x / 0 = 0`, sets, divisibility and relations, `∑` and
-  `Finset`, the library's own names, implicit and instance arguments, ε-δ definitions
-  in ℝ).
-* **Structure Syntax, Structure, Classes:** `structure` (declaring, building, updating,
-  extending), axioms and models, and `class` and `instance`.
-* **Predicate, Faithfulness:** writing definitions about sequences and functions, and
-  auditing a formal statement (the three original levels are described below).
+* **Foundations, Logic, Numbers, Quantifiers:** `def`, functions, cases, recursion,
+  `Prop`, the connectives, casts and junk values, `∀ ∃` and their order (with the
+  Collatz map, Fibonacci numbers, Pythagorean triples, Egyptian fractions).
+* **Sequences, Sets, Finite, Analysis:** tending to infinity, monotone and bounded
+  sequences, injectivity, Mathlib's names, divisibility, relations, `∑` and `Finset`,
+  ε-δ limits, continuity, Cauchy sequences.
+* **Structures, Classes:** Gaussian integers, 2×2 matrices, morphisms, structures with
+  axioms (orders, metrics, groups), type classes and instances.
+* **Topology:** finite topological spaces built from `Finset`s, which the referee checks
+  exhaustively: the axioms, a gallery of examples (Sierpiński space throughout),
+  closure, bases, continuity, homeomorphisms, subspaces, products, compactness,
+  connectedness, separation, neighbourhoods, filters and convergence. The shared
+  examples are in `LeanCraftGame/Lib/Topology.lean`.
+* **Audit:** an AI's "proofs" of the infinitude of primes, Collatz and Goldbach.
 * **Spot the bug** (the last level of most worlds) and **Be the referee**: reading a
   colleague's definitions and proving them wrong with counterexamples, and writing a
   test suite that catches hidden wrong definitions.
@@ -99,7 +107,7 @@ typing drill. Clicking a symbol inserts it into the editor.
 The last levels, in more detail, exercise three different skills:
 **writing**, **reading**, and **auditing**.
 
-### Going to infinity (Predicate World, level 23, writing)
+### Going to infinity (Sequence World, level 23, writing)
 
 *Define `TendsToInfinity (u : ℕ → ℕ) : Prop`.*
 
@@ -129,7 +137,7 @@ of groups.
   some axiom. Adding `mul_comm` "to be safe" fails on S₃, and the report names
   `mul_comm` as the axiom that fails.
 
-### The AI proved Goldbach! (Faithfulness World, level 60, auditing)
+### The AI proved Goldbach! (Audit World, level 75, auditing)
 
 An "AI" formalises Goldbach as
 `∀ n, 2 < n → n % 2 = 0 → ∃ p q, IsPrime p ∧ IsPrime q → p + q = n`
@@ -195,6 +203,8 @@ levels' metadata (predictions, public tests, hints) against their tests, without
 
 ```
 LeanCraftGame/Referee.lean     the referee: witness search + core tactics, and the test commands
+LeanCraftGame/Lib/*.lean       shared library (finite topological spaces), imported by the tests; online it is
+                               pasted into the prelude, before the player's code
 LeanCraftGame/L<n>/Player.lean       what the player edits; its first comment is the lesson text; the `namespace`/`end` lines
                                      around the code are never shown, and are added back when the tests run
 LeanCraftGame/L<n>/Tests.lean        hidden test battery (the level designer's real work)
@@ -208,7 +218,7 @@ app/launcher.py          the desktop app: installs Lean and the Mathlib pack on 
 app/make_pack.py         builds the Mathlib pack (the modules the game loads) and deps.json
 app/build_app.py         freezes the app with PyInstaller for the current OS
 .github/workflows/release.yml   builds, smoke-tests and publishes the apps for Windows, macOS and Linux
-site/                    the landing page with the download links (published to gh-pages by .github/workflows/pages.yml)
+.github/workflows/pages.yml     on this branch: publishes the online game to the v2/ folder of gh-pages
 ```
 
 **The referee** (`Referee.lean`) is deliberately simple: iterative
