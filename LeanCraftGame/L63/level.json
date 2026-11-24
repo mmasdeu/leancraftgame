@@ -1,0 +1,21 @@
+{
+  "world": "Topology World",
+  "title": "Closed sets and closure",
+  "skill": "writing",
+  "exercise": "Define",
+  "predict": [
+    {"test": "Closure of {1} in Sierpiński space is everything", "statement": "closure sierpinski {1} = {0, 1}"},
+    {"test": "Closure of {1} in the chain is {1, 2}", "statement": "closure chain3 {1} = {1, 2}, where chain3 = {∅, {0}, {0, 1}, {0, 1, 2}}"},
+    {"test": "Particular point at 0: the point {0} is dense", "statement": "{0} is dense in the particular-point topology at 0 on 3 points"}
+  ],
+  "checks": [
+    {"lean": "example : Family 3 → Finset (Fin 3) → Prop := L63.IsClosed\nexample : Family 3 → Finset (Fin 3) → Prop := L63.IsDense", "message": "Keep `IsClosed T A` and `IsDense T A` as propositions."},
+    {"lean": "example : Family 3 → Finset (Fin 3) → Finset (Fin 3) := L63.interior\nexample : Family 3 → Finset (Fin 3) → Finset (Fin 3) := L63.closure", "message": "Keep `interior T A` and `closure T A : Finset (Fin n)`."}
+  ],
+  "hints": [
+    {"match": "Interior", "hint": "`Finset.univ.filter (fun x => ∃ U ∈ T, x ∈ U ∧ U ⊆ A)`."},
+    {"match": "losure", "steps": ["Every open `U` with `x ∈ U` must meet `A`: `U ∩ A` is not empty."], "hint": "`Finset.univ.filter (fun x => ∀ U ∈ T, x ∈ U → (U ∩ A).Nonempty)`."},
+    {"match": "dense", "hint": "`closure T A = Finset.univ`."},
+    {"match": "", "hint": "`IsClosed T A := Aᶜ ∈ T`."}
+  ]
+}

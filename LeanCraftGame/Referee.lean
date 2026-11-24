@@ -168,6 +168,39 @@ def candidates (ty : Expr) : TacticM (Array Expr × Array Expr) := do
   if isField then nums := nums.push (← mkAppM ``HDiv.hDiv #[← lit 1, ← lit 2])
   return (out, nums)
 
+/-- The elements of an explicit set or finset `{a, b, …}` (nested `insert`s and a `singleton`). -/
+partial def literalElems (s : Expr) : MetaM (Array Expr) := do
+  let s ← whnfR (← instantiateMVars s)
+  if s.isAppOfArity ``Insert.insert 5 then
+    return #[s.getArg! 3] ++ (← literalElems (s.getArg! 4))
+  if s.isAppOfArity ``Singleton.singleton 4 then return #[s.getArg! 3]
+  return #[]
+
+/-- Candidate witnesses for `∃ x, x ∈ s ∧ …` when `s` is an explicit `{a, b, …}`. -/
+def memberCandidates (p : Expr) : MetaM (Array Expr) := do
+  let .lam n ty body bi := p | return #[]
+  withLocalDecl n bi ty fun x => do
+    let b ← whnfR (body.instantiate1 x)
+    unless b.isAppOfArity ``And 2 do return #[]
+    let m ← whnfR (b.getArg! 0)
+    -- `x ∈ s` is `Membership.mem s x`
+    unless m.isAppOfArity ``Membership.mem 5 do return #[]
+    unless m.getArg! 4 == x do return #[]
+    let es ← literalElems (m.getArg! 3)
+    return es.filter (fun e => !e.hasLooseBVars && !e.containsFVar x.fvarId!)
+
+/-- Candidate instances for a hypothesis `∀ x, x ∈ s → …` when `s` is an explicit `{a, b, …}`. -/
+def forallMemberCandidates (ty : Expr) : MetaM (Array Expr) := do
+  let .forallE n dom body bi := ty | return #[]
+  withLocalDecl n bi dom fun x => do
+    let b ← whnfR (body.instantiate1 x)
+    let .forallE _ hyp _ _ := b | return #[]
+    let m ← whnfR hyp
+    unless m.isAppOfArity ``Membership.mem 5 do return #[]
+    unless m.getArg! 4 == x do return #[]
+    let es ← literalElems (m.getArg! 3)
+    return es.filter (fun e => !e.hasLooseBVars && !e.containsFVar x.fvarId!)
+
 /-- Depth-limited search. `fuel` bounds the number of witness choices on a branch.
 With `strong`, negations in the goal are pushed inwards first (so that `¬ ∀ x, P x`
 becomes `∃ x, ¬ P x` and the witness search applies), and Mathlib's heavier tactics
@@ -203,6 +236,8 @@ partial def solve (fuel : Nat) (strong : Bool := false) : TacticM Unit := do
       let α := tgt.getArg! 0
       let p := tgt.getArg! 1
       let (ls, ns) ← candidates α
+      -- a bounded `∃ U ∈ s, …` over an explicit finite set `s = {a, b, …}`: its elements
+      let ls := (← memberCandidates p) ++ ls
       for c in (if useNums then ns else ls) do
         let s ← saveState
         try
@@ -221,9 +256,11 @@ partial def solve (fuel : Nat) (strong : Bool := false) : TacticM Unit := do
         if let .forallE _ dom _ _ := ty then
           if (← inferType dom).isProp then continue
           let (ls, ns) ← candidates dom
+          -- the members of an explicit `{a, b, …}` in `∀ x ∈ {a, b, …}, …`
+          let ms ← forallMemberCandidates ty
           -- from local variables: x, x + 1, 2x and 2x + 1 (the doubles reach the even and
           -- odd terms of sequences defined by parity, such as `n % 2 * n`)
-          for c in (if useNums then ns else ls.filter (fun e => e.isFVar || e.isAppOfArity ``HAdd.hAdd 6
+          for c in (if useNums then ns else ms ++ ls.filter (fun e => e.isFVar || e.isAppOfArity ``HAdd.hAdd 6
               || e.isAppOfArity ``HMul.hMul 6)) do
             let s ← saveState
             try
@@ -275,7 +312,11 @@ partial def solve (fuel : Nat) (strong : Bool := false) : TacticM Unit := do
 /-- One attempt: prove `P` after unfolding the given definitions (throws on failure). -/
 def proveCore (P : Expr) (unfolds : Array Ident) (fuel : Nat) (strong : Bool) : TermElabM Bool := do
   let m ← mkFreshExprSyntheticOpaqueMVar P
-  let rest ← withTheReader Core.Context (fun c => { c with maxHeartbeats := 400000 * 1000 }) <|
+  -- `synthInstance.maxSize`: deciding a statement about finite families of finite sets
+  -- (bounded quantifiers nested four deep) needs a bigger `Decidable` instance than the default
+  let rest ← withTheReader Core.Context (fun c => { c with
+      maxHeartbeats := 400000 * 1000
+      options := synthInstance.maxSize.set c.options 1024 }) <|
     withCurrHeartbeats <| Tactic.run m.mvarId! (do
       for id in unfolds do
         try evalTactic (← `(tactic| unfold $id:ident)) catch _ => pure ()

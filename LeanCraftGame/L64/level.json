@@ -1,0 +1,18 @@
+{
+  "world": "Topology World",
+  "title": "Bases",
+  "skill": "writing",
+  "exercise": "Construct",
+  "predict": [
+    {"test": "{{0, 1}, {1}, {1, 2}} is a basis (and is not closed under unions)", "statement": "IsBasis {{0, 1}, {1}, {1, 2}} on {0, 1, 2}"},
+    {"test": "{{0, 1}, {1, 2}} is not a basis: no member around 1 inside {1}", "statement": "IsBasis {{0, 1}, {1, 2}} on {0, 1, 2}"}
+  ],
+  "checks": [
+    {"lean": "example : Family 3 → Prop := L64.IsBasis\nexample : Family 3 → Family 3 := L64.generated\nexample : Family 3 := L64.subbasic", "message": "Keep `IsBasis B : Prop`, `generated B : Family n` and `subbasic : Family 3`."}
+  ],
+  "hints": [
+    {"match": "subbasic", "steps": ["Two members that overlap in a point, with nothing smaller around that point."], "hint": "`{{0, 1}, {1, 2}}`: around `1` inside `{0, 1} ∩ {1, 2} = {1}` there is no member."},
+    {"match": "generate", "hint": "`Finset.univ.powerset.filter (fun A => ∀ x ∈ A, ∃ U ∈ B, x ∈ U ∧ U ⊆ A)`."},
+    {"match": "", "hint": "`(∀ x, ∃ U ∈ B, x ∈ U) ∧ ∀ U ∈ B, ∀ V ∈ B, ∀ x ∈ U ∩ V, ∃ W ∈ B, x ∈ W ∧ W ⊆ U ∩ V`."}
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "world": "Topology World",
+  "title": "Sets and maps",
+  "skill": "writing",
+  "exercise": "Refute",
+  "predict": [
+    {"test": "∅ is disjoint from itself", "statement": "Disj ∅ ∅"},
+    {"test": "pre ![1, 1, 0] {0, 1} is everything, pre ![1, 1, 0] ∅ is empty", "statement": "pre ![1, 1, 0] {0, 1} = {0, 1, 2} and pre ![1, 1, 0] ∅ = ∅"}
+  ],
+  "checks": [
+    {"lean": "example : Finset (Fin 3) → Finset (Fin 3) → Prop := L58.Disj", "message": "Keep `Disj A B : Prop`."},
+    {"lean": "example : (Fin 3 → Fin 2) → Finset (Fin 2) → Finset (Fin 3) := L58.pre", "message": "Keep `pre f V : Finset (Fin m)` for `f : Fin m → Fin n`."},
+    {"lean": "example : Fin 2 → Fin 2 := L58.f0\nexample : Finset (Fin 2) := L58.A0\nexample : Finset (Fin 2) := L58.B0", "message": "Keep `f0 : Fin 2 → Fin 2` and `A0 B0 : Finset (Fin 2)`."}
+  ],
+  "hints": [
+    {"match": "counterexample", "steps": ["The intersection `A0 ∩ B0` should be small, but its two parts should land on the same point."], "hint": "A constant map `![0, 0]` with `A0 = {0}` and `B0 = {1}`: `A0 ∩ B0 = ∅`, but both images are `{0}`."},
+    {"match": "pre", "hint": "`Finset.univ.filter (fun x => f x ∈ V)`."},
+    {"match": "", "hint": "`A ∩ B = ∅`, or `∀ x, x ∈ A → x ∉ B`."}
+  ]
+}
