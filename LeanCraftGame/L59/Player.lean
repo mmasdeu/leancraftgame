@@ -1,74 +1,53 @@
 /-
-# The AI proved the Collatz conjecture!
+# Families of sets
 
-An AI assistant was asked to formalise and prove the Collatz conjecture:
+A topology is not a property of a set: it is a *family* of subsets with good
+closure properties. Before the axioms, we need a precise vocabulary for
+families.
 
-  "Start from any positive number. If it is even, halve it; if it is
-   odd, multiply it by 3 and add 1. Repeat. You always reach 1."
+In this world the spaces are finite: the points are `Fin n = {0, 1, …, n-1}`,
+a subset is a `Finset (Fin n)`, and a family of subsets has the type
 
-It came back with the code below. Everything compiles, there is no
-`sorry`, and the proof is one line long. An open problem with a one-line
-proof is a smell, but *where* exactly does it smell?
+```lean
+Family n   -- an abbreviation for Finset (Finset (Fin n))
+```
 
-## Auditing, round two
+You write a family by listing its members: `({∅, {1}, {0, 1}} : Family 2)`.
+Membership is `U ∈ F`; union, intersection and complement are `U ∪ V`,
+`U ∩ V` and `Uᶜ`, and `Finset.univ` is the whole space. Everything here is
+finite, so the referee checks your definitions *exhaustively*: it does not
+search for a proof, it computes.
 
-The checklist from "The AI proved the infinitude of primes!" still
-applies. These items matter most here:
+## Binary is enough (with a caveat)
 
-1. **Cheapest witness.** In `∃ k, …`, what happens at `k = 0`, the
-   laziest choice? A statement that a do-nothing step already satisfies
-   says nothing.
-2. **Compare the relation, not just the shape.** `=`, `≤` and `<` look alike
-   and are not alike. Replace the relation by a silly one and see who
-   still agrees.
-3. **Junk values.** Lean never says "undefined": `0 - 5 = 0`,
-   `7 / 0 = 0`. Ask which input makes the *real* process get stuck on
-   such a value, and whether the claim has to exclude it.
-4. **Side conditions.** Is each hypothesis of the claim ("positive",
-   "even", ...) still there in the formula? Which input would break
-   the formula if the hypothesis were dropped?
-5. **Toy worlds.** The claim speaks about one particular process. Let
-   `o n k` be the number you are at after `k` steps starting from `n`
-   (`o n 0 = n`), and let the process be *anything*: counting up,
-   counting down, jumping to 0. A faithful statement must be right in
-   all of them. (`Collatz o` below means: from every positive start
-   the process reaches exactly 1.)
+A family closed under binary intersections is closed under every *nonempty*
+finite intersection, by induction: `U₁ ∩ U₂ ∩ U₃ = (U₁ ∩ U₂) ∩ U₃`. The
+*empty* intersection is the whole space, which induction never produces; this
+is why a topology asks for the whole space separately. On a finite set every
+union is a finite union, so the same remark applies to unions and `∅`.
+
+The bounded quantifier `∀ U ∈ F, …` reads "for every member `U` of `F`, …".
+
+## Your task
+
+1. Define `UnionClosed F`: the union of any two members of `F` is a member.
+2. Define `InterClosed F`: the intersection of any two members is a member.
+3. Construct `lopsided`, a family on `{0, 1, 2}` that is closed under
+   intersections but **not** under unions.
+
+Before you run: is the empty family closed under unions?
 -/
-import Mathlib.Tactic
+import LeanCraftGame.Lib.Topology
 
 namespace L59
 
-def step (n : Nat) : Nat := if n % 2 = 0 then n / 2 else 3 * n + 1
+-- the union of any two members of F is a member of F
+def UnionClosed {n : Nat} (F : Family n) : Prop := sorry
 
-/-- The number reached after `k` steps from `n`. -/
-def orbit (n k : Nat) : Nat := step^[k] n
+-- the intersection of any two members of F is a member of F
+def InterClosed {n : Nat} (F : Family n) : Prop := sorry
 
-/-- The AI's claim, for any process `o`. -/
-def AIClaim (o : Nat → Nat → Nat) : Prop := ∀ n, ∃ k, o n k ≤ n
-
-theorem ai_collatz : AIClaim orbit := fun n => ⟨0, le_refl n⟩
-
-/-
-Your task has three parts.
-
-1. `Collatz o`: the faithful statement, for any process `o`: *from every
-   positive start `n`, some step `k` has `o n k` exactly equal to 1.*
-   (`Collatz orbit` is then the real conjecture.)
-2. `lazyWorld : Nat → Nat → Nat`: a process in which the AI's claim holds
-   but the real claim fails. It must be a process: `lazyWorld n 0 = n`.
-   Keep it simple (sums, differences, `if`): the referee has to be able
-   to check it.
-3. `stuckStart : Nat`: a starting number, *not* 1, that the AI's `step`
-   leaves exactly where it is, which is why the claim must say "positive".
--/
-
-def Collatz (o : Nat → Nat → Nat) : Prop :=
-  sorry
-
-def lazyWorld : Nat → Nat → Nat :=
-  sorry
-
-def stuckStart : Nat :=
-  sorry
+-- a family on {0, 1, 2}, closed under intersections but not under unions
+def lopsided : Family 3 := sorry
 
 end L59

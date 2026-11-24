@@ -1,0 +1,20 @@
+{
+  "world": "Topology World",
+  "title": "A gallery of spaces",
+  "skill": "writing",
+  "exercise": "Construct",
+  "predict": [
+    {"test": "In Sierpiński space {0} is open", "statement": "{0} is open in Sierpiński space"},
+    {"test": "Particular point at 0 on 3 points: 5 open sets (∅ and the four sets containing 0)", "statement": "the particular-point topology at 0 on 3 points has 5 open sets"},
+    {"test": "Sierpiński space is the particular-point topology at 1 on 2 points", "statement": "Sierpiński space equals the particular-point topology at 1 on 2 points"}
+  ],
+  "checks": [
+    {"lean": "example : (n : Nat) → Family n := L62.myDiscrete\nexample : (n : Nat) → Family n := L62.myIndiscrete\nexample : Family 2 := L62.mySierpinski\nexample : (n : Nat) → Fin n → Family n := L62.myParticular", "message": "Keep the types: `myDiscrete n : Family n`, `myIndiscrete n : Family n`, `mySierpinski : Family 2`, `myParticular n p : Family n`."}
+  ],
+  "hints": [
+    {"match": "discrete family", "hint": "`Finset.univ.powerset`: the family of all subsets of the whole space."},
+    {"match": "indiscrete", "hint": "`{∅, Finset.univ}`."},
+    {"match": "Sierpiński", "hint": "`{∅, {1}, Finset.univ}`."},
+    {"match": "articular", "steps": ["Start from all subsets, keep those that contain `p`, then add `∅`."], "hint": "`insert ∅ (Finset.univ.powerset.filter (fun U => p ∈ U))`."}
+  ]
+}

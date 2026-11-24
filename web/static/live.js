@@ -23,17 +23,19 @@ const LiveRunner = (() => {
     const lines = code.replace(/\n+$/, "").split("\n");
     const imports = lines.filter((l) => /^import\s/.test(l)).map((l) => l.trim());
     const body = lines.map((l) => (/^import\s/.test(l) ? "" : l)).join("\n");
-    const head = [...new Set(["import Mathlib.Tactic", ...level.imports, ...imports])].join("\n");
+    // the referee and the shared library (LeanCraftGame.*) are pasted in as the prelude
+    const head = [...new Set(["import Mathlib.Tactic", ...level.imports, ...imports])]
+      .filter((l) => !/^import LeanCraftGame\./.test(l)).join("\n");
     // the level's namespace wraps the player's code (the editor never shows those lines),
     // unless the code opens it itself (a draft saved before they were hidden)
     const ns = level.namespace;
     const wrap = ns && !new RegExp(`^\\s*namespace\\s+${ns}\\s*$`, "m").test(body);
     const segs = [
       ["head", head, null],
-      ...(wrap ? [["namespace", `namespace ${ns}`, null]] : []),
+      ["prelude", prelude, null],      // before the player's code, which may use the library
+      ...(wrap ? [["namespace", `namespace ${ns} noncomputable section`, null]] : []),
       ["player", body, null],
-      ...(wrap ? [["namespace", `end ${ns}`, null]] : []),
-      ["prelude", prelude, null],
+      ...(wrap ? [["namespace", `end\nend ${ns}`, null]] : []),
       ["preamble", level.preamble.join("\n"), null],
       ...level.gates.map((g) => ["gate", g, null]),
       ...level.checks.map((c) => ["check", c.lean, c.message]),
@@ -49,6 +51,9 @@ const LiveRunner = (() => {
     return { text: segs.map((s) => s[1]).join("\n") + "\n", ranges };
   }
 
+  /* A Lean message as the player should read it: without the hidden `L<n>.` namespace. */
+  const tidy = (text) => text.replace(/(?<![\w.])L\d+\./g, "");
+
   const locate = (ranges, line) =>   // `line` is 1-based
     ranges.find((r) => r.lo <= line && line <= r.hi) || { kind: "unknown", lo: 1, hi: 1, info: null };
 
@@ -58,9 +63,9 @@ const LiveRunner = (() => {
     const col = (line, ch) => Array.from((textLines[line] || "").slice(0, ch)).length;
     const [a, b] = [d.range.start, d.range.end];
     return {
-      severity: SEVERITY[d.severity] || "error", data: d.message, line1: a.line + 1,
+      severity: SEVERITY[d.severity] || "error", data: tidy(d.message), line1: a.line + 1,
       shown: {
-        severity: SEVERITY[d.severity] || "error", text: d.message,
+        severity: SEVERITY[d.severity] || "error", text: tidy(d.message),
         line: a.line + 1 - range.lo + 1, col: col(a.line, a.character),
         endLine: b.line + 1 - range.lo + 1, endCol: col(b.line, b.character),
       },
@@ -93,11 +98,11 @@ const LiveRunner = (() => {
     for (const d of mine) {
       if (ICONS[d.message[0]]) {
         const [, ...rest] = d.message.split("\n");
-        return { status: ICONS[d.message[0]], detail: rest.map((l) => l.trim()).join("\n") };
+        return { status: ICONS[d.message[0]], detail: tidy(rest.map((l) => l.trim()).join("\n")) };
       }
     }
     const errors = mine.filter((d) => d.severity === 1).map((d) => d.message);
-    return errors.length ? { status: "error", detail: errors.join("\n") } : null;
+    return errors.length ? { status: "error", detail: tidy(errors.join("\n")) } : null;
   }
 
   /* One Lean session on `file`. Calls `onUpdate({diags, upTo, done})` whenever Lean publishes
@@ -240,7 +245,7 @@ const LiveRunner = (() => {
     emit("done", { total: chosen.length, ...summary, stopped });
   }
 
-  return { run, assemble, compileReport, verdict, locate };
+  return { run, assemble, compileReport, verdict, locate, tidy };
 })();
 
 if (typeof module !== "undefined") module.exports = LiveRunner;

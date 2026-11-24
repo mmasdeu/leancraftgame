@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the Mathlib pack for the app: the compiled Lean files the game loads, outside Lean's core.
 
-Run in a checkout, after `lake exe cache get` and `lake build LeanCraftGame.Referee`:
+Run in a checkout, after `lake exe cache get` and `lake build LeanCraftGame`:
 
     python3 app/make_pack.py --out dist --url-base https://github.com/OWNER/REPO/releases/download/TAG
 
@@ -42,7 +42,8 @@ CLOSURE = """{imports}
 
 def game_imports():
     """`import LeanCraftGame.Referee` and the imports of every level's Player.lean."""
-    imports = {"import LeanCraftGame.Referee"}
+    imports = {"import LeanCraftGame.Referee"} | {
+        f"import LeanCraftGame.Lib.{f.stem}" for f in sorted(ROOT.glob("LeanCraftGame/Lib/*.lean"))}
     for player in sorted(ROOT.glob("LeanCraftGame/L*/Player.lean")):
         imports |= {l.strip() for l in player.read_text(encoding="utf-8").splitlines() if re.match(r"import\s", l)}
     return sorted(imports)
@@ -120,9 +121,12 @@ def main():
             "url": f"{opts.url_base.rstrip('/')}/{name}",
             "sha256": h.hexdigest(), "size": (out / name).stat().st_size}
     (out / "deps.json").write_text(json.dumps(deps, indent=2) + "\n", encoding="utf-8")
-    referee = out / "olean" / "LeanCraftGame" / "Referee.olean"
-    referee.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(own / "lib" / "lean" / "LeanCraftGame" / "Referee.olean", referee)
+    # the referee and the shared library (LeanCraftGame/Lib) go inside the app
+    src = own / "lib" / "lean" / "LeanCraftGame"
+    for f in [src / "Referee.olean", *sorted((src / "Lib").glob("*.olean"))]:
+        dst = out / "olean" / "LeanCraftGame" / f.relative_to(src)
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(f, dst)
     print(json.dumps(deps, indent=2))
 
 

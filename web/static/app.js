@@ -446,7 +446,19 @@ async function openLevel(id) {
   document.title = `Lean Craft Game · ${level.title}`;
   worldToggled = {};
   renderTabs();
-  $("intro").innerHTML = markdown(level.intro);
+  // the kind of exercise (level.json "exercise"), as a tag above the lesson
+  const EXERCISE_TIPS = {
+    Define: "Write a definition that matches the description.",
+    Construct: "Build an example: a witness, a function, a structure.",
+    Repair: "A colleague's definition is wrong: fix it.",
+    Classify: "Decide which objects have the property, and say so in Lean.",
+    Refute: "A claim is false: give the counterexample.",
+    Referee: "Choose the examples that tell right definitions from wrong ones.",
+    Connect: "Relate two definitions: one is a special case of the other.",
+    Audit: "Check whether a formal statement says what it claims to say.",
+  };
+  const tag = level.exercise ? `<p class="exercise-tag" title="${esc(EXERCISE_TIPS[level.exercise] || "")}">${esc(level.exercise)}</p>` : "";
+  $("intro").innerHTML = tag + markdown(level.intro);
   src.value = store.get(`draft.${id}`, level.template);
   diagnostics = [];
   render();

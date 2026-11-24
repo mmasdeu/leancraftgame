@@ -316,9 +316,10 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
 .predict .predict-buttons { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
 .predict.flash { animation: flash 0.9s ease-out 2; }
 @keyframes flash { 50% { box-shadow: 0 0 0 4px var(--accent); } }
-.test .prediction { margin: 4px 0 0 2.1em; font-size: 14px; }
-.test .prediction.right { color: var(--pass); }
-.test .prediction.wrong { color: var(--fail); }
+/* a prediction is a record of what the player said, not a second verdict: muted */
+.test .prediction { margin: 4px 0 0 2.1em; font-size: 13px; color: var(--muted); padding-left: 8px; border-left: 2px solid var(--border, var(--muted)); }
+.test .prediction.right { border-left-color: var(--pass); }
+.test .prediction.wrong { border-left-color: var(--fail); }
 
 /* hidden tests and gated hints */
 .test.hidden-tests .name { color: var(--muted); }
@@ -333,3 +334,10 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
 
 .counting { margin: 1.5rem 0 .5rem; font-size: .9rem; color: var(--muted, inherit); }
 .counting input { margin-right: .4rem; }
+
+/* the kind of exercise, above the lesson */
+.exercise-tag {
+  display: inline-block; margin: 0 0 6px; padding: 1px 8px; border: 1px solid var(--accent);
+  border-radius: 999px; font-size: 11px; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--accent); cursor: help;
+}

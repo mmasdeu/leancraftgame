@@ -107,6 +107,8 @@ def load_level(n):
     meta = json.loads((d / "level.json").read_text(encoding="utf-8"))
     intro, template = split_intro((d / "Player.lean").read_text(encoding="utf-8"))
     ns = f"L{n}"
+    # the shared library (LeanCraftGame.Lib.*) is imported by Tests.lean; the player never sees it
+    template = re.sub(r"^import LeanCraftGame\.\S*[ \t]*\n", "", template, flags=re.M).lstrip("\n")
     return {**meta, "id": n, "num": LEVELS.index(n) + 1, "intro": intro, "namespace": ns,
             "template": strip_namespace(template, ns),
             **split_tests((d / "Tests.lean").read_text(encoding="utf-8"))}
@@ -115,8 +117,16 @@ def load_level(n):
 # What the browser needs to know about a level, besides its tests. `predict`, `public` and
 # `hintsAfter` drive the predictions, the hidden tests and the hint gates (see
 # validate_level and web/static/app.js).
-PUBLIC_KEYS = ("id", "num", "world", "title", "skill", "intro", "template", "hints",
+PUBLIC_KEYS = ("id", "num", "world", "title", "skill", "exercise", "intro", "template", "hints",
                "predict", "public", "hintsAfter", "namespace")
+
+# The kinds of exercise a level can be (level.json "exercise"), shown as a tag above the lesson.
+EXERCISES = ("Define", "Construct", "Repair", "Classify", "Refute", "Referee", "Connect", "Audit")
+
+
+def tidy(text):
+    """A Lean message as the player should read it: without the hidden `L<n>.` namespace."""
+    return re.sub(r"(?<![\w.])L\d+\.", "", text)
 
 
 def public_level(lv):
@@ -136,6 +146,8 @@ def validate_level(lv):
       failed run, and the `hint` itself last."""
     names = {t["name"]: t["kind"] for t in lv["tests"]}
     out = []
+    if "exercise" in lv and lv["exercise"] not in EXERCISES:
+        out.append(f"exercise must be one of {', '.join(EXERCISES)}")
     for p in lv.get("predict", []):
         if set(p) != {"test", "statement"}:
             out.append(f"predict entry {p} needs exactly the keys `test` and `statement`")
@@ -172,9 +184,11 @@ def assemble(lv, code, extra):
     ns = lv["namespace"]
     wrap = not has_namespace(code, ns)
     segs = [("head", "\n".join(["import LeanCraftGame.Referee"] + lv["imports"] + imports), None)]
-    segs += [("namespace", f"namespace {ns}", None)] if wrap else []
+    # `noncomputable section`: a definition over ℝ (with `/`, `Real.sqrt`, …) is accepted
+    # as it is; the player is writing specifications, not programs
+    segs += [("namespace", f"namespace {ns} noncomputable section", None)] if wrap else []
     segs += [("player", code, None)]
-    segs += [("namespace", f"end {ns}", None)] if wrap else []
+    segs += [("namespace", f"end\nend {ns}", None)] if wrap else []
     segs += [("preamble", "\n".join(lv["preamble"]), None)] + extra
     lines, ranges, cur = [], [], 1
     for kind, text, info in segs:
@@ -301,10 +315,11 @@ def compile_check(run, lv, code, timeout):
         sev = m.get("severity", "error")
         if kind == "player":
             pos, end = m.get("pos") or {}, m.get("endPos") or m.get("pos") or {}
-            diags.append({"severity": sev, "text": m["data"],
+            diags.append({"severity": sev, "text": tidy(m["data"]),
                           "line": pos.get("line", lo) - lo + 1, "col": pos.get("column", 0),
                           "endLine": end.get("line", lo) - lo + 1, "endCol": end.get("column", 0)})
         elif sev == "error":
+            m = {**m, "data": tidy(m["data"])}
             problems.append(f"{info}\n\nLean says: {m['data']}" if kind == "check" else
                             m["data"] if kind == "gate" else
                             f"Your imports could not be loaded:\n{m['data']}" if kind == "head" else
@@ -322,10 +337,10 @@ def interpret(msgs, ranges):
         data = m.get("data", "")
         if kind == "test" and data[:1] in ICONS:
             first, _, rest = data.partition("\n")
-            return {"status": ICONS[data[0]], "detail": "\n".join(l.strip() for l in rest.splitlines())}
+            return {"status": ICONS[data[0]], "detail": tidy("\n".join(l.strip() for l in rest.splitlines()))}
         if m.get("severity") == "error" and kind != "player":
             errors.append(data)
-    return {"status": "error", "detail": "\n".join(errors) or "The referee produced no verdict."}
+    return {"status": "error", "detail": tidy("\n".join(errors)) or "The referee produced no verdict."}
 
 
 def run_level(run, n, code, events, jobs, timeout, cache, only=None, stop_on_fail=False):
@@ -502,10 +517,10 @@ class Handler(BaseHTTPRequestHandler):
 
 def prepare_lean():
     """From a checkout: build the referee with lake and ask lake for Lean's environment."""
-    print("Building the referee (lake build LeanCraftGame.Referee)…", flush=True)
-    r = subprocess.run(["lake", "build", "LeanCraftGame.Referee"], cwd=ROOT, capture_output=True, **UTF8)
+    print("Building the referee and the shared library (lake build LeanCraftGame)…", flush=True)
+    r = subprocess.run(["lake", "build", "LeanCraftGame"], cwd=ROOT, capture_output=True, **UTF8)
     if r.returncode != 0:
-        sys.exit(f"`lake build LeanCraftGame.Referee` failed:\n{r.stdout}{r.stderr}")
+        sys.exit(f"`lake build LeanCraftGame` failed:\n{r.stdout}{r.stderr}")
     # Ask lake once for LEAN, LEAN_PATH, …: running `lake env` for every test would be
     # slower, and parallel calls can contend for lake's lock.
     r = subprocess.run(["lake", "env"], cwd=ROOT, capture_output=True, check=True, **UTF8)

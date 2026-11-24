@@ -346,16 +346,16 @@ def runTest (name : String) (t : Term) (unfolds : Array Ident) (mode : Nat) : Co
   match mode, pos, neg with
   -- should be true
   | 0, true, _ => bump 0; logInfo m!"✅ {name}"
-  | 0, false, true => bump 1; logWarning m!"❌ {name}\n   The referee PROVED THE NEGATION under your definition."
-  | 0, false, false => bump 2; logWarning m!"❓ {name}\n   The referee could not settle this (neither proved nor refuted)."
+  | 0, false, true => bump 1; logWarning m!"❌ {name}\n   Under your definition this is FALSE, but it should be TRUE. The referee has a Lean proof that it fails, so this is a genuine counterexample to your definition."
+  | 0, false, false => bump 2; logWarning m!"❓ {name}\n   Inconclusive: the referee could neither prove nor refute this. This is not evidence against your definition."
   -- should be false
   | 1, false, true => bump 0; logInfo m!"✅ {name}"
-  | 1, true, _ => bump 1; logWarning m!"❌ {name}\n   This should be FALSE, but the referee PROVED it under your definition."
-  | 1, false, false => bump 2; logWarning m!"❓ {name}\n   The referee could not settle this (neither proved nor refuted)."
+  | 1, true, _ => bump 1; logWarning m!"❌ {name}\n   Under your definition this is TRUE, but it should be FALSE. The referee has a Lean proof that it holds, so your definition accepts something it should reject."
+  | 1, false, false => bump 2; logWarning m!"❓ {name}\n   Inconclusive: the referee could neither prove nor refute this. This is not evidence against your definition."
   -- a mutant should be caught (`P`, "the mutant agrees with every probe", is false)
   | 3, false, true => bump 0; logInfo m!"✅ {name}\n   (one of your probes tells it apart from the right definition)"
-  | 3, true, _ => bump 1; logWarning m!"❌ {name}\n   This wrong definition SURVIVES: it gives the right verdict on every one of your probes, so your tests cannot tell it apart from the right definition."
-  | 3, false, false => bump 2; logWarning m!"❓ {name}\n   The referee could not settle whether one of your probes catches this mutant."
+  | 3, true, _ => bump 1; logWarning m!"❌ {name}\n   This wrong definition survives: it gives the right verdict on every one of your examples, so they cannot tell it apart from the right definition."
+  | 3, false, false => bump 2; logWarning m!"❓ {name}\n   Inconclusive: the referee could not decide whether one of your probes catches this wrong definition."
   -- should be open
   | _, false, false => bump 0; logInfo m!"✅ {name}\n   (the referee could not settle it, as expected)"
   | _, true, _ => bump 1; logWarning m!"❌ {name}\n   The referee PROVED this. A famous open problem should not be this easy: your statement is probably vacuous."
@@ -403,10 +403,10 @@ elab_rules : command
     let unk := rs.filter (fun r => !r.2.1 && !r.2.2)
     if !bad.isEmpty then
       bump 1
-      logWarning m!"❌ {n.getString}\n   This SHOULD be a model, but your axiom(s) {bad.map (·.1)} FAIL here."
+      logWarning m!"❌ {n.getString}\n   This should satisfy your axioms, but the referee proved that {bad.map (·.1)} fail(s) here: a violated axiom."
     else if !unk.isEmpty then
       bump 2
-      logWarning m!"❓ {n.getString}\n   Could not settle axiom(s) {unk.map (·.1)} in this model."
+      logWarning m!"❓ {n.getString}\n   Inconclusive: the referee could not decide {unk.map (·.1)} in this example. This is not evidence against your definition."
     else
       bump 0; logInfo m!"✅ {n.getString}"
   | `(#expect_not_model $n:str : $t) => do
@@ -418,10 +418,10 @@ elab_rules : command
       bump 0; logInfo m!"✅ {n.getString}\n   (ruled out by {bad.map (·.1)})"
     else if !unk.isEmpty then
       bump 2
-      logWarning m!"❓ {n.getString}\n   Could not settle axiom(s) {unk.map (·.1)} in this model."
+      logWarning m!"❓ {n.getString}\n   Inconclusive: the referee could not decide {unk.map (·.1)} in this example. This is not evidence against your definition."
     else
       bump 1
-      logWarning m!"❌ {n.getString}\n   This junk model satisfies ALL your axioms, so your structure does not rule it out."
+      logWarning m!"❌ {n.getString}\n   This example should violate one of your axioms, but the referee proved that it satisfies all of them."
 
 /-- `#no_sorry foo` — reject definitions that use `sorry`. -/
 elab "#no_sorry " id:ident : command => do

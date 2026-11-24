@@ -11,8 +11,9 @@ It contains the game's web page (web/static), plus
     config.js           turns the online mode on
     data/levels.json    every level: text, template, hints and the hidden tests
     data/intro.md       the Welcome page
-    data/prelude.lean   the referee as one self-contained piece of Lean, pasted into every
-                        submission (the live editor cannot import LeanCraftGame.Referee)
+    data/prelude.lean   the referee and the shared library (LeanCraftGame/Lib) as one
+                        self-contained piece of Lean, pasted into every submission before
+                        the player's code (the live editor cannot import LeanCraftGame.*)
 """
 import argparse
 import json
@@ -54,7 +55,28 @@ def prelude():
 
     src, n = INITIALIZE.subn(ref, src)
     assert n == 4, f"expected 4 `initialize` lines in Referee.lean, found {n}"
-    return "section\n" + src.strip() + "\nend"
+    return "section\n" + src.strip() + "\nend\n" + "\n".join(library())
+
+
+def library():
+    """The shared library (LeanCraftGame/Lib/*.lean), each module as a section, in an order
+    where every module comes after the modules it imports."""
+    mods = {f.stem: f.read_text(encoding="utf-8") for f in sorted((ROOT / "LeanCraftGame" / "Lib").glob("*.lean"))}
+    done, out = set(), []
+
+    def visit(name):
+        if name in done:
+            return
+        done.add(name)
+        src = mods[name]
+        for dep in re.findall(r"^import LeanCraftGame\.Lib\.(\w+)\s*$", src, re.M):
+            visit(dep)
+        body = re.sub(r"^import .*$", "", src, flags=re.M).strip()
+        out.append(f"section -- LeanCraftGame.Lib.{name}\n{body}\nend")
+
+    for name in mods:
+        visit(name)
+    return out
 
 
 def intro():
@@ -69,7 +91,7 @@ def levels():
     for n in server.LEVELS:
         lv = server.load_level(n)
         # the referee is pasted into the file (prelude.lean), not imported
-        imports = [i for i in lv["imports"] if i.strip() != "import LeanCraftGame.Referee"]
+        imports = [i for i in lv["imports"] if not i.strip().startswith("import LeanCraftGame.")]
         out.append({k: lv[k] for k in server.PUBLIC_KEYS + ("preamble", "gates", "tests") if k in lv}
                    | {"imports": imports} | {"checks": lv.get("checks", [])})
     return out

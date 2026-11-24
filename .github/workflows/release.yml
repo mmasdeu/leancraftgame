@@ -31,7 +31,7 @@ jobs:
         run: lake exe cache get
 
       - name: Build the referee
-        run: lake build LeanCraftGame.Referee
+        run: lake build LeanCraftGame
 
       - name: Build the pack
         run: >
