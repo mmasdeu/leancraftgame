@@ -1,54 +1,27 @@
 /-
 # Sums
 
-How do you add up a long list of numbers in Lean? With a **big sum**, written
-with the symbol `∑` (type `\sum`):
+Recursion (the Foundations world) defines sums one term at a time. Mathlib
+has big operators instead:
 
 ```lean
 def sumOfDoubles (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, 2 * i
 ```
 
-Read it piece by piece:
+`Finset.range n` is the finite set `{0, 1, …, n - 1}`, **without `n`**, and
+`∑ i ∈ s, f i` is the sum of `f i` over the finite set `s` (type `\sum`).
+Intervals come in four flavours: `Finset.Icc a b = [a, b]`,
+`Finset.Ico a b = [a, b)`, `Finset.Ioc`, `Finset.Ioo`. The commonest bug in
+finite sums is an off-by-one error in the range, and the cure is to test
+the boundary: what is the sum for `n = 0`? (The empty sum is `0`.)
 
-* `∑` says "add up".
-* `i ∈ Finset.range n` says "let `i` run through the numbers of
-  `Finset.range n`" (`∈` is typed `\in`, as in "Sets"). The name `i` is yours.
-* After the comma comes the formula to add up, for each `i`.
-
-So `sumOfDoubles 4` is `2 * 0 + 2 * 1 + 2 * 2 + 2 * 3`, which is `12`.
-
-## Finite sets: `Finset`
-
-A `Set ℕ` can be infinite, so there is no way to add up its elements. A
-**`Finset ℕ`** is a *finite* set of natural numbers, and its elements can be
-added up. Three ways to build one:
-
-* `Finset.range n` is `{0, 1, …, n - 1}`. It has `n` elements and does **not**
-  contain `n`. This is the classic off-by-one trap: `Finset.range 4` stops at 3.
-* `Finset.Icc a b` is `{a, a + 1, …, b}`: **both** ends are included
-  (`Icc` is "interval, closed, closed").
-* `Finset.Ico a b` is `{a, …, b - 1}`: `a` is included, `b` is not
-  (`Ico` is "closed, open"). `Finset.range n` is the same as `Finset.Ico 0 n`.
-
-If `b < a` the set `Finset.Icc a b` is empty, and so is `Finset.Ico a b` when
-`b ≤ a`.
-
-## The empty sum
-
-Adding up *nothing* gives `0`. So `∑ i ∈ Finset.range 0, 2 * i` is `0`. This is
-not a special case you have to code: it is what the notation means.
-
-## Careful
-
-* The formula after the comma reaches over `*` and `^`, but it **stops at `+`
-  and `-`**: `∑ i ∈ Finset.range n, 2 * i + 1` means `(∑ i ∈ Finset.range n, 2 * i) + 1`,
-  one `1` added at the end. To add up `2 * i + 1` for each `i`, put brackets
-  around the formula: `∑ i ∈ Finset.range n, (2 * i + 1)`.
-* Natural subtraction and division still behave as in "Functions".
+A `Finset` is a *finite* set, with a computable list of elements underneath;
+this is what lets the referee evaluate your sums. In the Topology world,
+finite spaces are built from `Finset`s for the same reason.
 
 ## Your task
 
-`sumOfDoubles` is done. Define the other four sums. The comments give examples.
+Define the four sums. Read the comments carefully: which ends are included?
 -/
 namespace L34
 

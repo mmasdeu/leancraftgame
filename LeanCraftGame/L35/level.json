@@ -1,24 +1,51 @@
 {
-  "world": "Finite Sums World",
-  "title": "Filters and counting",
+  "world": "Finite World",
+  "title": "Counting",
   "skill": "writing",
+  "exercise": "Define",
   "hintsAfter": 2,
   "predict": [
-    { "test": "numDivisors 0 = 0 (0 has no positive divisor)", "statement": "numDivisors 0 = 0" },
-    { "test": "countPrimes 11 = 4 (11 itself is not below 11)", "statement": "countPrimes 11 = 4" },
-    { "test": "IsPerfect 0 is false (the empty sum is 0, but 0 is not positive)", "statement": "IsPerfect 0" }
+    {
+      "test": "numDivisors 0 = 0 (0 has no positive divisor)",
+      "statement": "numDivisors 0 = 0"
+    },
+    {
+      "test": "countPrimes 11 = 4 (11 itself is not below 11)",
+      "statement": "countPrimes 11 = 4"
+    },
+    {
+      "test": "IsPerfect 0 is false (the empty sum is 0, but 0 is not positive)",
+      "statement": "IsPerfect 0"
+    }
   ],
   "checks": [
-    { "lean": "example : ℕ → ℕ := L35.numDivisors", "message": "Keep `numDivisors : ℕ → ℕ`." },
-    { "lean": "example : ℕ → ℕ := L35.countPrimes", "message": "Keep `countPrimes : ℕ → ℕ`." },
-    { "lean": "example : ℕ → ℕ := L35.fact", "message": "Keep `fact : ℕ → ℕ`." },
-    { "lean": "example : ℕ → ℕ := L35.multiples3or5", "message": "Keep `multiples3or5 : ℕ → ℕ`." },
-    { "lean": "example : ℕ → Prop := L35.IsPerfect", "message": "Keep `IsPerfect : ℕ → Prop`." }
+    {
+      "lean": "example : ℕ → ℕ := L35.numDivisors",
+      "message": "Keep `numDivisors : ℕ → ℕ`."
+    },
+    {
+      "lean": "example : ℕ → ℕ := L35.countPrimes",
+      "message": "Keep `countPrimes : ℕ → ℕ`."
+    },
+    {
+      "lean": "example : ℕ → ℕ := L35.fact",
+      "message": "Keep `fact : ℕ → ℕ`."
+    },
+    {
+      "lean": "example : ℕ → ℕ := L35.multiples3or5",
+      "message": "Keep `multiples3or5 : ℕ → ℕ`."
+    },
+    {
+      "lean": "example : ℕ → Prop := L35.IsPerfect",
+      "message": "Keep `IsPerfect : ℕ → Prop`."
+    }
   ],
   "hints": [
     {
       "match": "numDivisors 0",
-      "steps": ["Which numbers could divide `n`? Is `0` among the candidates you ask about? What does `0 ∣ 0` say?"],
+      "steps": [
+        "Which numbers could divide `n`? Is `0` among the candidates you ask about? What does `0 ∣ 0` say?"
+      ],
       "hint": "Only positive numbers up to `n` can divide `n`: `Finset.Icc 1 n`. With `Finset.range (n + 1)` the number `0` is a candidate, and `0 ∣ 0` is true."
     },
     {
@@ -35,12 +62,16 @@
     },
     {
       "match": "countPrimes",
-      "steps": ["Filter `Finset.range n` with the condition `Nat.Prime`, then count."],
+      "steps": [
+        "Filter `Finset.range n` with the condition `Nat.Prime`, then count."
+      ],
       "hint": "`(Finset.filter (fun p => Nat.Prime p) (Finset.range n)).card`."
     },
     {
       "match": "fact",
-      "steps": ["Which numbers do you multiply? Does your set contain `0`? A single `0` makes the whole product `0`."],
+      "steps": [
+        "Which numbers do you multiply? Does your set contain `0`? A single `0` makes the whole product `0`."
+      ],
       "hint": "`∏ i ∈ Finset.Icc 1 n, i`. The empty product, for `n = 0`, is `1` by itself."
     },
     {
@@ -49,7 +80,9 @@
     },
     {
       "match": "multiples3or5",
-      "steps": ["\"Below n\" means `Finset.range n`. The condition is: `i % 3 = 0` *or* `i % 5 = 0`."],
+      "steps": [
+        "\"Below n\" means `Finset.range n`. The condition is: `i % 3 = 0` *or* `i % 5 = 0`."
+      ],
       "hint": "`∑ i ∈ Finset.filter (fun i => i % 3 = 0 ∨ i % 5 = 0) (Finset.range n), i`."
     },
     {
@@ -62,9 +95,14 @@
     },
     {
       "match": "IsPerfect",
-      "steps": ["The divisors of `n` that are smaller than `n`: filter `Finset.Ico 1 n` by `d ∣ n`, and add them up."],
+      "steps": [
+        "The divisors of `n` that are smaller than `n`: filter `Finset.Ico 1 n` by `d ∣ n`, and add them up."
+      ],
       "hint": "`0 < n ∧ ∑ d ∈ Finset.filter (fun d => d ∣ n) (Finset.Ico 1 n), d = n`."
     },
-    { "match": "", "hint": "Check the two ends of your set against the examples in the comments." }
+    {
+      "match": "",
+      "hint": "Check the two ends of your set against the examples in the comments."
+    }
   ]
 }

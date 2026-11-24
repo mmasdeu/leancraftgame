@@ -9,8 +9,8 @@
       "statement": "CommonDivisor 5 0 0"
     },
     {
-      "test": "1 is not perfect (its proper divisors sum to 0)",
-      "statement": "IsPerfect 1"
+      "test": "6 is not abundant (it is perfect)",
+      "statement": "IsAbundant 6"
     },
     {
       "test": "OneToOne (fun n => n / 2) is false",
@@ -19,17 +19,17 @@
   ],
   "checks": [
     {
-      "lean": "example : ℕ → Prop := L29.IsPerfect\nexample : ℕ → ℕ → ℕ → Prop := L29.CommonDivisor\nexample : (ℕ → ℕ) → Prop := L29.OneToOne",
-      "message": "Keep `IsPerfect : ℕ → Prop`, `CommonDivisor : ℕ → ℕ → ℕ → Prop` and `OneToOne : (ℕ → ℕ) → Prop`."
+      "lean": "example : ℕ → Prop := L29.IsAbundant\nexample : ℕ → ℕ → ℕ → Prop := L29.CommonDivisor\nexample : (ℕ → ℕ) → Prop := L29.OneToOne",
+      "message": "Keep `IsAbundant : ℕ → Prop`, `CommonDivisor : ℕ → ℕ → ℕ → Prop` and `OneToOne : (ℕ → ℕ) → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "perfect",
+      "match": "abundant",
       "steps": [
         "Mathlib's `n.properDivisors` is the finite set of divisors smaller than `n`."
       ],
-      "hint": "`∑ d ∈ n.properDivisors, d = n`."
+      "hint": "`n < ∑ d ∈ n.properDivisors, d`."
     },
     {
       "match": "CommonDivisor",

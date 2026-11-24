@@ -1,23 +1,22 @@
 /-
 # Challenge: finite sums
 
-Five sums, each with a trap. Nothing new to learn, but nothing to take for
-granted either. Before you type, write out the first few terms **by hand**:
-which numbers does the sum run through, and what is the first and last term?
+Five sums with traps.
 
-Things that have caught people before:
-
-* `Finset.range n`, `Finset.Icc a b`, `Finset.Ico a b`: which end points belong?
-* A sum over an empty set is `0`. What should your definition say there?
-* In `ℕ`, subtraction stops at `0` and `/` rounds down. Both can happen
-  *inside* the formula of a sum.
-* Where the formula of `∑ i ∈ s, …` stops: it reaches over `*`, but not over `+` or `-`.
-* A rational number built from natural numbers must be cast *before* dividing.
+* A **telescoping** sum: `1/(i(i+1)) = 1/i - 1/(i+1)`, so
+  `∑_{i=1}^n 1/(i(i+1)) = 1 - 1/(n+1)`. Mind where `i` starts: at `0` the
+  first term would be `1/0 = 0` in Lean, silently.
+* Shifting an index: `∑_{i<n} (i + 1) = 1 + 2 + ⋯ + n`.
+* An interval with both ends included, which must be empty when `b < a`.
+* **Total variation**: the sum of `|a(i+1) - a(i)|`. On `ℕ`, `|x - y|`
+  needs care (truncated subtraction).
+* `∑_{i=1}^n ⌊n/i⌋` counts the pairs `(i, k)` with `i·k ≤ n`, which is
+  also `∑_{k ≤ n} τ(k)`: Dirichlet's divisor problem in miniature.
 
 ## Your task
 
-Define the five functions below. The comments give examples; the tests also
-look at other cases.
+Define the five sums. For each, check the first two values by hand before
+you run the tests.
 -/
 namespace L37
 

@@ -17,14 +17,16 @@ Mathlib's names follow conventions you can guess:
 * big operators: `∑ d ∈ s, f d` is the sum of `f d` over the finite set `s`
   (type `\sum`).
 
-A **perfect number** equals the sum of its proper divisors: `6 = 1 + 2 + 3`,
-`28 = 1 + 2 + 4 + 7 + 14`. Euclid proved that `2^(p-1)(2^p - 1)` is perfect
-when `2^p - 1` is prime, Euler that every even perfect number is of this
-form. Whether an odd perfect number exists is open.
+The Greeks sorted numbers by comparing `n` with the sum of its proper
+divisors: **perfect** when they are equal (`6 = 1 + 2 + 3`), **abundant**
+when the sum is larger (`12 < 1 + 2 + 3 + 4 + 6 = 16`), deficient
+otherwise (every prime). Euclid and Euler described the even perfect
+numbers; whether an odd one exists is open. You will build perfect numbers
+from scratch in the Finite world.
 
 ## Your task
 
-Define `IsPerfect`, `CommonDivisor` and `OneToOne` with Mathlib's notions.
+Define `IsAbundant`, `CommonDivisor` and `OneToOne` with Mathlib's notions.
 -/
 
 namespace L29
@@ -32,8 +34,8 @@ namespace L29
 -- n is even and at least 4 (already done, with Mathlib's `Even`)
 def BigEven (n : ℕ) : Prop := Even n ∧ 4 ≤ n
 
--- n is perfect: the sum of its proper divisors is n   (6 = 1 + 2 + 3)
-def IsPerfect (n : ℕ) : Prop := sorry
+-- n is abundant: the sum of its proper divisors exceeds n   (12 < 1 + 2 + 3 + 4 + 6)
+def IsAbundant (n : ℕ) : Prop := sorry
 
 -- d divides both a and b                               (CommonDivisor 3 6 9)
 def CommonDivisor (d a b : ℕ) : Prop := sorry

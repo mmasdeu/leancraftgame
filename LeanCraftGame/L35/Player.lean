@@ -1,53 +1,30 @@
 /-
-# Filters and counting
+# Counting
 
-Last time you added up *all* the numbers of a `Finset`. Often you want only
-some of them, or you want to *count* them.
-
-## Keeping some elements: `Finset.filter`
-
-`Finset.filter p s` keeps the elements of `s` that satisfy the condition `p`.
-The condition is written as a little function, `fun i => …`, read "the `i` such
-that …":
+To count the elements of a finite set with a property, select them and
+take the cardinality:
 
 ```lean
--- the even numbers below n:  {0, 2, 4, …}
 def evenSet (n : ℕ) : Finset ℕ := Finset.filter (fun i => i % 2 = 0) (Finset.range n)
 ```
 
-The result is again a `Finset`, so you can add it up, or count it.
+`Finset.filter p s` keeps the elements of `s` that satisfy `p`, and
+`s.card` is the number of elements. (This is "filter" in the sense of
+selecting; the *filters* of topology, families of sets closed upwards and
+under intersections, are something else and come in the Topology world.)
 
-## Counting: `.card`
+Arithmetic functions are counts and sums over divisors and primes:
 
-`s.card` is the number of elements of `s` (dot notation, as in "Using
-Mathlib": it means `Finset.card s`). With the set above, `(evenSet 7).card` is
-`4`, for `0, 2, 4, 6`.
-
-## Sums over a filter
-
-```lean
--- the sum of the odd numbers below n
-def sumOdds (n : ℕ) : ℕ := ∑ i ∈ Finset.filter (fun i => i % 2 = 1) (Finset.range n), i
-```
-
-Another way to say the same thing is to put an `if` *inside* the sum, with the
-value `0` for the elements you skip:
-`∑ i ∈ Finset.range n, if i % 2 = 1 then i else 0`. The `0`s add nothing.
-
-## Products: `∏`
-
-`∏` (type `\prod`) multiplies instead of adding. The empty product is `1`
-(the number that multiplies nothing), just as the empty sum is `0`:
-
-```lean
--- 2 * 3 * … * n  (and 1 for n = 0 and n = 1)
-def prodFrom2 (n : ℕ) : ℕ := ∏ i ∈ Finset.Icc 2 n, i
-```
+* the number of divisors `τ(n)`: `τ(12) = 6`; and `τ(0)`? Every number
+  divides `0`, so the formula you write must decide what to do with it;
+* the prime-counting function `π(n)`, here the number of primes below `n`;
+* `n!` as a product `∏ i ∈ Finset.Icc 1 n, i` (type `\prod`);
+* **perfect numbers**, from scratch: `n` is the sum of its divisors smaller
+  than `n`.
 
 ## Your task
 
-`evenSet` and `sumOdds` are done. Define the five functions below. Remember
-the end points: does your set contain `0`? Does it contain `n`?
+Define the five functions. Each comment says which numbers are included.
 -/
 namespace L35
 

@@ -25,7 +25,7 @@ the definition depends on.
 ## Your task
 
 Generalise `Between`, `IsUpperBound` and `largest` from `ℕ` to an arbitrary
-ordered type. The referee tests them on `ℕ`, `ℤ` and `ℚ`.
+ordered type. The referee tests them on `ℕ`, `ℤ`, `ℚ` and on sets.
 -/
 namespace L30
 

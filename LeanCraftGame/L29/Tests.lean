@@ -4,7 +4,7 @@ import LeanCraftGame.L29.Player
 
 open L29
 
-#no_sorry IsPerfect
+#no_sorry IsAbundant
 #no_sorry CommonDivisor
 #no_sorry OneToOne
 #level_start "Using Mathlib"
@@ -13,14 +13,16 @@ open L29
   BigEven 6
 #expect_false "BigEven 7 is false" unfolding BigEven :
   BigEven 7
-#expect_true "6 is perfect" unfolding IsPerfect :
-  IsPerfect 6
-#expect_true "28 is perfect" unfolding IsPerfect :
-  IsPerfect 28
-#expect_false "12 is not perfect (1 + 2 + 3 + 4 + 6 = 16)" unfolding IsPerfect :
-  IsPerfect 12
-#expect_false "1 is not perfect (its proper divisors sum to 0)" unfolding IsPerfect :
-  IsPerfect 1
+#expect_true "12 is abundant (1 + 2 + 3 + 4 + 6 = 16)" unfolding IsAbundant :
+  IsAbundant 12
+#expect_true "18 and 20 are abundant" unfolding IsAbundant :
+  IsAbundant 18 ∧ IsAbundant 20
+#expect_false "6 is not abundant (it is perfect)" unfolding IsAbundant :
+  IsAbundant 6
+#expect_false "13 is not abundant (a prime: its proper divisors sum to 1)" unfolding IsAbundant :
+  IsAbundant 13
+#expect_true "No odd number below 100 is abundant" unfolding IsAbundant :
+  ∀ n < 100, n % 2 = 1 → ¬ IsAbundant n
 #expect_true "CommonDivisor 3 6 9 is true" unfolding CommonDivisor :
   CommonDivisor 3 6 9
 #expect_true "CommonDivisor 5 0 0 is true" unfolding CommonDivisor :

@@ -1,44 +1,27 @@
 /-
 # Closed forms
 
-A sum such as `1 + 2 + … + n` has a **closed form**: a formula with no sum in
-it, like `n * (n + 1) / 2`. Both define a function of `n`, and the two
-functions agree. The referee cannot prove that for *all* `n`, but it can check
-it for every `n` below 10, and any mistake shows up there.
+A **closed form** replaces a sum by a formula: `0 + 1 + ⋯ + n = n(n+1)/2`.
+Proving such an identity is an induction; *finding* it is experiment, and
+checking a candidate on many values is how one finds out whether it is worth
+proving. Here the referee compares your sum and your formula.
 
-```lean
-def triSum (n : ℕ) : ℕ := ∑ i ∈ Finset.range (n + 1), i      -- 0 + 1 + … + n
-def triFormula (n : ℕ) : ℕ := n * (n + 1) / 2                -- the closed form
-```
+Nicomachus's theorem, `1³ + 2³ + ⋯ + n³ = (1 + 2 + ⋯ + n)²`, is the kind of
+identity that looks like a coincidence until one sees the picture.
 
-Division in `ℕ` rounds down, but here `n * (n + 1)` is always even, so no
-rounding happens. The order of operations does matter, though: `n * (n + 1) / 2`
-is not `n * ((n + 1) / 2)`. Try `n = 2`.
+Over `ℚ` the geometric series `1 + 1/2 + ⋯ + 1/2^(n-1) = 2 - 1/2^(n-1)`
+needs fractions: write `(1/2 : ℚ) ^ i`, so that Lean does not divide in
+`ℕ` (where `1 / 2 = 0`). A **mean** is a sum divided by a count, and the
+count must be cast to `ℚ` before dividing.
 
-## Double sums
-
-The formula of a sum may be a sum itself. The inner set may depend on the outer
-variable:
-
-```lean
--- one for each pair j < i < n
-def pairs (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, ∑ j ∈ Finset.range i, 1
-```
-
-Read it from the outside in: for each `i` below `n`, add up (one `1` for each
-`j` below `i`). That is `0 + 1 + 2 + … + (n - 1)`.
-
-## Sums of rational numbers
-
-`ℚ` is the type of fractions (type `\Q`). Division in `ℚ` is exact:
-`(1 / 2 : ℚ)` really is one half. Write the type next to a number to say which
-kind it is, as in `(1 / 2 : ℚ) ^ i`. To use a natural number `i` as a rational,
-write `(i : ℚ)`: this is a *cast*, as in "Integers and casts". The cast must
-happen *before* the division, not after it.
+Double sums count pairs: `∑ i ∈ range n, ∑ j ∈ range i, 1` is the number of
+pairs `j < i < n`, i.e. `n(n-1)/2`.
 
 ## Your task
 
-`triSum`, `triFormula` and `pairs` are done. Define the other six functions.
+Define the sums and their closed forms as asked. Use a sum where the comment
+asks for a sum and a formula where it asks for a formula: the referee checks
+that they agree.
 -/
 namespace L36
 

@@ -1,8 +1,8 @@
 -- n is even and at least 4 (already done, with Mathlib's `Even`)
 def BigEven (n : ℕ) : Prop := Even n ∧ 4 ≤ n
 
--- n is perfect: the sum of its proper divisors is n   (6 = 1 + 2 + 3)
-def IsPerfect (n : ℕ) : Prop := ∑ d ∈ n.divisors, d = 2 * n ∧ 0 < n
+-- n is abundant: the sum of its proper divisors exceeds n   (12 < 1 + 2 + 3 + 4 + 6)
+def IsAbundant (n : ℕ) : Prop := 2 * n < ∑ d ∈ n.divisors, d
 
 -- d divides both a and b                               (CommonDivisor 3 6 9)
 def CommonDivisor (d a b : ℕ) : Prop := d ∣ a ∧ d ∣ b

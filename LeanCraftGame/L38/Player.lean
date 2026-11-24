@@ -1,38 +1,23 @@
 /-
 # Spot the bug: sums
 
-A colleague wrote four sums and counts. They compile, they look reasonable,
-and each one is wrong.
+Four functions from a colleague, each off by a little: a range that stops
+one short, a divisor count that forgets a divisor, a prime count that stops
+before `n`, a sum of squares that squares the sum.
 
-```lean
--- 1 + 2 + … + n
-def triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, i
+For each one, find an `n` on which it is wrong. The fastest way is to
+evaluate the two sides on small inputs (`0`, `1`, `2`, …) in your head or
+with `#eval`, and stop at the first disagreement. The boundary cases `0` and
+`1`, and the inputs that are themselves divisors or primes, are where
+off-by-one errors live.
 
--- the number of positive divisors of n
-def numDivisors (n : ℕ) : ℕ := (Finset.filter (fun d => d ∣ n) (Finset.Ico 1 n)).card
-
--- the number of primes that are at most n
-def primesUpTo (n : ℕ) : ℕ := (Finset.filter (fun p => Nat.Prime p) (Finset.range n)).card
-
--- the sum of the squares of the even numbers below n
-def evenSquares (n : ℕ) : ℕ := (∑ i ∈ Finset.filter (fun i => i % 2 = 0) (Finset.range n), i) ^ 2
-```
-
-## How to hunt
-
-* **Write out the set.** For a small `n`, list the elements of the `Finset`
-  (`range`, `Icc`, `Ico`) and compare them with what the comment asks for.
-* **Check both ends.** Is the first element included? Is the last?
-* **Compute by hand** the right answer and the colleague's answer on the same
-  small `n`.
-* **Look at the brackets.** Is the filter, the power or the sum applied to the
-  right thing? A bug that needs two nonzero terms to appear will not show on
-  `n = 1`, or even `n = 3`.
+`(∑ i, a i)² ≠ ∑ i, (a i)²` in general: the cross terms are missing. That
+inequality is the starting point of the Cauchy–Schwarz inequality.
 
 ## Your task
 
-Give one input on which each function is wrong. Small numbers are best: they
-make the referee's job easy.
+Give one input per function. Each test checks that the colleague's function
+and the right one disagree there.
 -/
 namespace L38
 

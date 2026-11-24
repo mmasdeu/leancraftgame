@@ -1,7 +1,8 @@
 {
-  "world": "Finite Sums World",
+  "world": "Finite World",
   "title": "Challenge: finite sums",
   "skill": "writing",
+  "exercise": "Define",
   "hintsAfter": 2,
   "predict": [
     {
