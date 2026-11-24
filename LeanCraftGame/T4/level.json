@@ -29,7 +29,8 @@
       "type": "referee",
       "objective": "Identify concrete topologies and axiom violations.",
       "success": [
-        "candidate with only the empty set is rejected"
+        "candidate with only the empty set is rejected",
+        "the empty family of opens is rejected"
       ]
     }
   ],

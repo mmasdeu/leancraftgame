@@ -9,19 +9,71 @@
       "title": "Define disjointness",
       "type": "construct",
       "objective": "Express that two sets have no common element.",
-      "success": ["disjoint means no common element"]
+      "success": [
+        "disjoint means no common element",
+        "no common element implies disjoint"
+      ]
+    },
+    {
+      "title": "Define a cover",
+      "type": "construct",
+      "objective": "Supply a family member containing each point of the covered set.",
+      "success": [
+        "a cover supplies a family member for each point"
+      ]
+    },
+    {
+      "title": "Connect inverse images to set operations",
+      "type": "connect",
+      "objective": "Require both union and intersection preservation for every pair of sets.",
+      "success": [
+        "preimages preserve unions",
+        "preimages preserve intersections"
+      ]
+    },
+    {
+      "title": "Refute direct-image intersection preservation",
+      "type": "refute",
+      "objective": "Use a constant map and disjoint nonempty sets.",
+      "success": [
+        "the counterexample map is constant true"
+      ]
     }
   ],
   "checks": [
     {
+      "lean": "example {α β : Type*} (f : α → β) (h : T1.PreimagesPreserveOperations f) (s t : Set β) : f ⁻¹' (s ∪ t) = (f ⁻¹' s) ∪ (f ⁻¹' t) := h.1 s t",
+      "message": "The preimage specification must include union preservation."
+    },
+    {
+      "lean": "example {α β : Type*} (f : α → β) (h : T1.PreimagesPreserveOperations f) (s t : Set β) : f ⁻¹' (s ∩ t) = (f ⁻¹' s) ∩ (f ⁻¹' t) := h.2 s t",
+      "message": "The preimage specification must include intersection preservation."
+    },
+    {
       "lean": "example {α : Type*} : Set α → Set α → Prop := T1.MyDisjoint",
-      "message": "Keep the name and type: `MyDisjoint (s t : Set α) : Prop`."
+      "message": "Keep `MyDisjoint (s t : Set α) : Prop`."
+    },
+    {
+      "lean": "example : ¬ T1.DirectImagesPreserveIntersections T1.counterexampleMap := by\n  intro h\n  have eq := h {true} {false}\n  have hm : true ∈ (T1.counterexampleMap '' {true}) ∩ (T1.counterexampleMap '' {false}) := by\n    constructor\n    · exact ⟨true, rfl, rfl⟩\n    · exact ⟨false, rfl, rfl⟩\n  rw [← eq] at hm\n  simpa [T1.counterexampleMap] using hm",
+      "message": "The map and the two singleton sets must refute direct-image preservation of intersections."
     }
   ],
   "hints": [
     {
       "match": "no common element",
-      "hint": "Use a universal statement: for every `x`, membership in both sets is impossible."
+      "hint": "Use `∀ x, x ∈ s → x ∈ t → False`."
+    },
+    {
+      "match": "cover supplies",
+      "hint": "Use `∀ x ∈ s, ∃ U ∈ C, x ∈ U`."
+    },
+    {
+      "match": "preimages preserve",
+      "hint": "Conjoin two universally quantified equalities, one for `s ∪ t` and one for `s ∩ t`."
+    },
+    {
+      "match": "counterexample map",
+      "hint": "Use the constant map `fun _ => true`. The direct images of `{true}` and `{false}` meet, but the sets do not."
     }
   ]
 }

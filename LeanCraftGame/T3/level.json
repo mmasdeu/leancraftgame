@@ -1,0 +1,75 @@
+{
+  "world": "Topology World",
+  "title": "Relations and partitions",
+  "skill": "construct",
+  "public": "all",
+  "hintsAfter": 1,
+  "exercises": [
+    {
+      "title": "Define the three equivalence axioms",
+      "type": "construct",
+      "objective": "Separate reflexivity, symmetry and transitivity.",
+      "success": [
+        "less than or equal is reflexive",
+        "equality is symmetric",
+        "less than or equal is transitive"
+      ]
+    },
+    {
+      "title": "Package an equivalence relation",
+      "type": "construct",
+      "objective": "Use the three predicates as independent structure fields.",
+      "success": [
+        "equality is symmetric"
+      ]
+    },
+    {
+      "title": "Define equivalence classes",
+      "type": "construct",
+      "objective": "Collect exactly the elements related to the chosen point.",
+      "success": [
+        "an equivalence class collects related elements"
+      ]
+    },
+    {
+      "title": "Connect classes and fibres",
+      "type": "connect",
+      "objective": "Use equality of function values as the kernel relation.",
+      "success": [
+        "same fibre means equal values"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : T3.MyEquivalence (fun a b : Nat => a = b) where\n  reflexive := by\n    intro x\n    rfl\n  symmetric := by\n    intro x y h\n    exact h.symm\n  transitive := by\n    intro x y z hxy hyz\n    exact hxy.trans hyz",
+      "message": "Equality must be a model with all three independent fields."
+    },
+    {
+      "lean": "example {α β : Type*} (f : α → β) (x : α) : T3.EquivClass (T3.SameFiber f) x = f ⁻¹' {f x} := by ext y; simp [T3.EquivClass, T3.SameFiber, eq_comm]",
+      "message": "A fibre must be precisely the equivalence class of the kernel relation."
+    }
+  ],
+  "hints": [
+    {
+      "match": "reflexive",
+      "hint": "Use `∀ x, R x x`. Do not quantify the two arguments independently."
+    },
+    {
+      "match": "symmetric",
+      "hint": "Use `∀ x y, R x y → R y x`."
+    },
+    {
+      "match": "transitive",
+      "hint": "Use `∀ x y z, R x y → R y z → R x z`."
+    },
+    {
+      "match": "equivalence class collects",
+      "hint": "Use the set builder `{y | R x y}`."
+    },
+    {
+      "match": "same fibre means",
+      "hint": "Define `f x = f y`; then `{y | SameFiber f x y}` is `f ⁻¹' {f x}`."
+    }
+  ]
+}

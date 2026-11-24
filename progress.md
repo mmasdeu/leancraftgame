@@ -16,8 +16,10 @@ iteration; do not mark a milestone complete when its verification has not run.
   discrete, indiscrete, particular-point and Sierpiński examples. `Topology/Finite.lean`
   exhaustively checks finite candidates and returns stable axiom codes plus concrete witnesses.
   Automated general/finite tests pass in the supplementary 4.33.1 environment.
-- [ ] **M4 — T1–T4 foundations.** T1 is only a one-exercise architecture placeholder, not a
-  completed level; T2–T4 are not implemented.
+- [x] **M4 — T1–T4 foundations.** Four playable levels include constructions, set/family
+  operations, equivalence classes and fibres, topology structures, concrete bad candidates,
+  hints and solutions. T3 explains partitions and proves the fibre connection; the detailed
+  arbitrary-partition construction is a possible later enrichment.
 - [ ] **M5 — T5–T8 examples/continuity.**
 - [ ] **M6 — T9–T11 constructions.**
 - [ ] **M7 — T12–T14 global properties.**
@@ -117,3 +119,14 @@ Python compilation and import-collection assertions pass, but a desktop package 
 `python3 check_levels.py --static` and `python3 online/build.py` **pass for 66 levels**;
 ordered topology registry/deep-link export checks pass. Node remains unavailable for a JS
 syntax-only check, and the pinned toolchain remains the release blocker.
+
+## Iteration 5 — completed foundations T1–T4
+
+T1 now covers disjointness, covers, both preimage operations and a constant-map direct-image
+counterexample. T3 adds independent relation axioms, equivalence structures, equivalence
+classes and kernel/fibre connections. T4 has a second rejected open family, so its diagnosis
+exercise uses two incorrect candidates. All have full-player solutions and deliberate mutants.
+
+Supplementary 4.33.1 verification: T1 **10/10**, T3 **9/9**, T4 **3/3**, with all relevant
+semantic gates and tested mutants behaving as expected. `check_levels.py --static` and the
+online export pass. Next: expand M5 standard examples, closure and bases.
