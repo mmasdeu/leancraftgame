@@ -1,5 +1,6 @@
 /- Automated mathematical and finite-model regression tests. -/
 import LeanCraftGame.Topology.Finite
+import LeanCraftGame.Topology.Maps
 
 namespace LeanCraftGame.Topology.Tests
 
@@ -11,6 +12,17 @@ example : (indiscrete Nat).IsOpen ∅ := Or.inl rfl
 example : ¬ (indiscrete Nat).IsOpen {1} := by simp [indiscrete]
 example : sierpinski.IsOpen {true} := Or.inr rfl
 example : ¬ sierpinski.IsOpen {false} := by simp [sierpinski, particularPoint]
+
+/-- Identity and constant maps are continuous in the pedagogical layer. -/
+example (τ : MyTopology Nat) : MyContinuous τ τ id := myContinuous_id τ
+example (τs : MyTopology Nat) (τt : MyTopology Bool) :
+    MyContinuous τs τt (fun _ => true) := myContinuous_const τs τt true
+
+/-- The pedagogical and Mathlib definitions of continuity agree. -/
+example (τs : MyTopology Nat) (τt : MyTopology Bool) (f : Nat → Bool) :
+    MyContinuous τs τt f ↔
+      @Continuous Nat Bool τs.toTopologicalSpace τt.toTopologicalSpace f :=
+  myContinuous_iff_continuous τs τt f
 
 /-- The empty axiom is derived, not separately assumed. -/
 example (τ : MyTopology Nat) : τ.IsOpen ∅ := τ.isOpen_empty

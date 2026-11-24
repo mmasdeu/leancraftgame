@@ -11,7 +11,7 @@ Writes to the output folder:
                                   that the referee or a level imports, directly or not
     deps.json                     what the app needs: the toolchain, and the pack's id, URL,
                                   sha256 and size
-    olean/LeanCraftGame/Referee.olean   the compiled referee, which goes inside the app
+    olean/LeanCraftGame/       the compiled referee and shared game modules for the app
 
 The id names the Mathlib revision, the toolchain and a hash of the module list, so the app
 downloads a new pack only when its content changes.
@@ -41,10 +41,24 @@ CLOSURE = """{imports}
 
 
 def game_imports():
-    """`import LeanCraftGame.Referee` and the imports of every level's Player.lean."""
+    """The referee plus every import needed when player and test files are assembled.
+
+    Most levels import from `Player.lean`; shared mathematical layers can instead be
+    imported by `Tests.lean`, because the server inserts those imports before the
+    player's code. Level-to-Player imports are omitted here: the level files are
+    pasted into one assembled module at runtime and are not independent dependencies.
+    """
     imports = {"import LeanCraftGame.Referee"}
-    for player in sorted(ROOT.glob("LeanCraftGame/*/Player.lean")):
-        imports |= {l.strip() for l in player.read_text(encoding="utf-8").splitlines() if re.match(r"import\s", l)}
+    for level in sorted(ROOT.glob("LeanCraftGame/*")):
+        if not level.is_dir():
+            continue
+        for name in ("Player.lean", "Tests.lean"):
+            f = level / name
+            if f.is_file():
+                imports |= {l.strip() for l in f.read_text(encoding="utf-8").splitlines()
+                            if re.match(r"import\s", l)}
+    imports = {i for i in imports if not re.match(
+        r"import LeanCraftGame\.(?:L\d+|[A-Z]+\d+)\.Player$", i)}
     return sorted(imports)
 
 
@@ -120,9 +134,11 @@ def main():
             "url": f"{opts.url_base.rstrip('/')}/{name}",
             "sha256": h.hexdigest(), "size": (out / name).stat().st_size}
     (out / "deps.json").write_text(json.dumps(deps, indent=2) + "\n", encoding="utf-8")
-    referee = out / "olean" / "LeanCraftGame" / "Referee.olean"
-    referee.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(own / "lib" / "lean" / "LeanCraftGame" / "Referee.olean", referee)
+    lib = own / "lib" / "lean"
+    for compiled in lib.glob("LeanCraftGame/**/*.olean"):
+        dest = out / "olean" / compiled.relative_to(lib)
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(compiled, dest)
     print(json.dumps(deps, indent=2))
 
 

@@ -96,3 +96,24 @@ Verification with the supplementary 4.33.1 environment:
 
 T1 remains only an architecture placeholder; T3, the rest of T4's diagnosis content and the
 other T5 examples remain open. Next: T8/T9 complete the five-exercise end-to-end vertical slice.
+
+## Iteration 4 — complete end-to-end vertical slice
+
+Added T8 continuity and T9's continuous-bijection/non-homeomorphism counterexample. Shared
+`Topology/Maps.lean` now bridges `MyTopology` to `TopologicalSpace` and proves `MyContinuous`
+equivalent to Mathlib `Continuous`; identity and constant continuity lemmas are included.
+The vertical checkpoint and its acceptance table are in [Vertical slice](docs/vertical-slice.md).
+
+Verification with the supplementary 4.33.1 environment:
+
+* shared topology mathematical tests: **passed**;
+* T8: **3/3** plus identity, constant-map and explicit inverse-non-continuity Lean gates;
+* T9: **3/3** plus bijectivity, forward continuity and inverse non-continuity Lean gates;
+* all five vertical levels share the normal exercise format and reject their included mutants.
+
+Desktop integration was audited and updated: import collection includes shared modules imported
+by `Tests.lean`; all compiled game `.olean` files are copied; T9 is bundled into app self-tests.
+Python compilation and import-collection assertions pass, but a desktop package was not built.
+`python3 check_levels.py --static` and `python3 online/build.py` **pass for 66 levels**;
+ordered topology registry/deep-link export checks pass. Node remains unavailable for a JS
+syntax-only check, and the pinned toolchain remains the release blocker.

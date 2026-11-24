@@ -261,14 +261,16 @@ class Setup:
 # ------------------------------------------------------------------ self-test
 
 def self_test(setup):
-    """Set up, then play two levels (one needs Mathlib's ℚ) with a correct and a buggy answer."""
+    """Set up, then check basics, arithmetic and topology with correct and buggy answers."""
     setup.run()
     if setup.status()["error"]:
         return 1
     failures = 0
-    cases = [(1, "correct", True), (1, "bug_text", False), (13, "correct", True), (13, "bug_divide", False)]
+    cases = [(1, "correct", True), (1, "bug_text", False),
+             (13, "correct", True), (13, "bug_divide", False),
+             ("T9", "correct", True), ("T9", "bug_constant", False)]
     for n, name, should_clear in cases:
-        code = (BUNDLE / "variants" / f"L{n}" / f"{name}.lean").read_text(encoding="utf-8")
+        code = (BUNDLE / "variants" / server.level_dir(n) / f"{name}.lean").read_text(encoding="utf-8")
         events, t0 = queue.Queue(), time.time()
         threading.Thread(target=server.run_level, daemon=True,
                          args=(server.Run(), n, code, events, os.cpu_count() or 2, 600, server.Cache())).start()

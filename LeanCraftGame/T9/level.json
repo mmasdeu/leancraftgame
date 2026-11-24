@@ -1,0 +1,62 @@
+{
+  "world": "Topology World",
+  "title": "Homeomorphisms",
+  "skill": "refute",
+  "public": "all",
+  "hintsAfter": 1,
+  "exercises": [
+    {
+      "title": "Construct the counterexample data",
+      "type": "construct",
+      "objective": "Choose discrete and indiscrete topologies and the identity map.",
+      "success": [
+        "the source is discrete",
+        "the proposed map is the identity"
+      ]
+    },
+    {
+      "title": "Check continuity and bijectivity",
+      "type": "classify",
+      "objective": "Verify the forward direction without assuming inverse continuity.",
+      "success": [
+        "the target contains the universal set"
+      ]
+    },
+    {
+      "title": "Refute homeomorphism",
+      "type": "refute",
+      "objective": "Use singleton true to refute inverse continuity.",
+      "success": [
+        "the proposed map is the identity"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : Function.Bijective T9.bijection := Function.bijective_id",
+      "message": "The proposed map must be bijective; the identity is the intended witness."
+    },
+    {
+      "lean": "example : LeanCraftGame.Topology.MyContinuous T9.sourceTopology T9.targetTopology T9.bijection := by intro s hs; rcases hs with rfl | rfl <;> simp [T9.sourceTopology, T9.targetTopology, T9.bijection, LeanCraftGame.Topology.discrete]",
+      "message": "The forward map must be continuous: indiscrete codomain opens are only `∅` and `univ`."
+    },
+    {
+      "lean": "example : ¬ LeanCraftGame.Topology.MyContinuous T9.targetTopology T9.sourceTopology T9.bijection := by\n  intro h\n  have ho := h {true} (by trivial)\n  have hn : ¬ (LeanCraftGame.Topology.indiscrete Bool).IsOpen {true} := by\n    simp [LeanCraftGame.Topology.indiscrete, Set.ext_iff]\n  exact hn (by simpa [T9.sourceTopology, T9.targetTopology, T9.bijection] using ho)",
+      "message": "The inverse identity is not continuous: apply it to `{true}`, open in discrete Bool but not in indiscrete Bool. The data therefore is not a homeomorphism."
+    }
+  ],
+  "hints": [
+    {
+      "match": "source is discrete",
+      "hint": "Every set is open in `LeanCraftGame.Topology.discrete Bool`."
+    },
+    {
+      "match": "target contains",
+      "hint": "Use `LeanCraftGame.Topology.indiscrete Bool`; only `∅` and `univ` are open there."
+    },
+    {
+      "match": "identity",
+      "hint": "Use `id`, not a constant map and not `not`."
+    }
+  ]
+}

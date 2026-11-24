@@ -1,0 +1,51 @@
+{
+  "world": "Topology World",
+  "title": "Continuous maps",
+  "skill": "construct",
+  "public": [
+    "the identity map is continuous"
+  ],
+  "hintsAfter": 1,
+  "exercises": [
+    {
+      "title": "Define continuity",
+      "type": "construct",
+      "objective": "Use inverse images of every open set.",
+      "success": [
+        "continuity uses inverse images"
+      ]
+    },
+    {
+      "title": "Check identity and finite examples",
+      "type": "connect",
+      "objective": "Distinguish inverse-image preservation from direct-image openness.",
+      "success": [
+        "the identity map is continuous",
+        "discrete to indiscrete identity is continuous"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example {α : Type*} (τ : LeanCraftGame.Topology.MyTopology α) : T8.MyContinuous τ τ id := by intro s hs; exact hs",
+      "message": "Identity must be continuous: apply your definition to an arbitrary open set."
+    },
+    {
+      "lean": "example {α β : Type*} (τs : LeanCraftGame.Topology.MyTopology α) (τt : LeanCraftGame.Topology.MyTopology β) (b : β) : T8.MyContinuous τs τt (fun _ => b) := by\n  intro s hs\n  by_cases hb : b ∈ s\n  · rw [Set.preimage_const_of_mem hb]\n    exact τs.isOpen_univ\n  · rw [Set.preimage_const_of_notMem hb]\n    exact τs.isOpen_empty",
+      "message": "Every constant map must be continuous; split on whether the constant belongs to the open set and use `univ` or `∅`."
+    },
+    {
+      "lean": "example : ¬ T8.MyContinuous (LeanCraftGame.Topology.indiscrete Bool) (LeanCraftGame.Topology.discrete Bool) id := by\n  intro h\n  have ho := h {true} (by trivial)\n  have hn : ¬ (LeanCraftGame.Topology.indiscrete Bool).IsOpen {true} := by\n    simp [LeanCraftGame.Topology.indiscrete, Set.ext_iff]\n  exact hn (by simpa using ho)",
+      "message": "The identity is not continuous from indiscrete to discrete: apply your definition to the codomain's singleton `{true}`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "inverse images",
+      "steps": [
+        "Given an open `s` in the codomain, which set in the domain must be open?"
+      ],
+      "hint": "Use `∀ s, τt.IsOpen s → τs.IsOpen (f ⁻¹' s)`."
+    }
+  ]
+}

@@ -88,9 +88,10 @@ set in `level.json`.
   colleague's definitions and proving them wrong with counterexamples, and writing a
   test suite that catches hidden wrong definitions.
 
-The number of a level is the name of its directory (`LeanCraftGame/L<n>`,
-`variants/L<n>`), and also its position in the game: `LEVELS` in `web/server.py` lists
-the directories in order. Inserting a level means renumbering the ones after it.
+Original numeric levels live in `LeanCraftGame/L<n>` and `variants/L<n>`. Later worlds
+can use stable prefixed IDs: topology levels are `T1`–`T15`. Original IDs remain numeric
+for saved-game compatibility. `LEVELS` in `web/server.py` discovers the directories in
+play order, and the server, browser, CLI, online export and desktop packer share those IDs.
 
 The browser has a **Symbols** drawer that lists every symbol with the keys to
 type it (`\forall`, `\to`, `\le`, …) and its plain-ASCII spelling, with a

@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--deps", type=Path, required=True)
-    ap.add_argument("--olean", type=Path, required=True, help="folder holding LeanCraftGame/Referee.olean")
+    ap.add_argument("--olean", type=Path, required=True, help="folder holding the compiled LeanCraftGame modules")
     ap.add_argument("--out", type=Path, default=ROOT / "dist")
     opts = ap.parse_args()
     out = opts.out.resolve()
@@ -36,7 +36,8 @@ def main():
     data = [(ROOT / "web" / "static", "web/static"), (ROOT / "LeanCraftGame", "LeanCraftGame"),
             (ROOT / "lean-toolchain", "."), (ROOT / "lake-manifest.json", "."),
             (opts.deps.resolve(), "."), (opts.olean.resolve(), "olean"),
-            (ROOT / "variants" / "L1", "variants/L1"), (ROOT / "variants" / "L13", "variants/L13")]
+            (ROOT / "variants" / "L1", "variants/L1"), (ROOT / "variants" / "L13", "variants/L13"),
+            (ROOT / "variants" / "T9", "variants/T9")]
     args = [str(ROOT / "app" / "launcher.py"), "--name", "LeanCraftGame", "--noconfirm", "--clean", "--onedir",
             "--paths", str(ROOT / "web"), "--hidden-import", "server", "--hidden-import", "certifi",
             "--distpath", str(build / "dist"), "--workpath", str(build / "work"), "--specpath", str(build)]
