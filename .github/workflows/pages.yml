@@ -1,6 +1,7 @@
 # Publishes the landing page (site/) and the online version of the game (built by
 # online/build.py into play/) to the gh-pages branch, which GitHub Pages serves at
 # https://mmasdeu.github.io/leancraftgame/ and .../play/. Runs when either changes, or by hand.
+# The folders beta/ and v2/, published from other branches, are carried over unchanged.
 #
 # One-time setup: Settings → Pages → Build and deployment → Source: "Deploy from a branch",
 # Branch: gh-pages, folder: / (root). The branch is created by the first run of this workflow.
@@ -31,6 +32,16 @@ jobs:
           cp -r site "$RUNNER_TEMP/pages"
           python3 online/build.py --out "$RUNNER_TEMP/pages/play"
           touch "$RUNNER_TEMP/pages/.nojekyll"        # serve the files as they are
+          # keep the versions published from other branches (beta/, v2/): this workflow
+          # rebuilds the branch from scratch, and would otherwise delete them
+          if git fetch -q --depth 1 origin gh-pages; then
+            for d in beta v2; do
+              if git cat-file -e "FETCH_HEAD:$d" 2>/dev/null; then
+                mkdir -p "$RUNNER_TEMP/pages/$d"
+                git archive FETCH_HEAD "$d" | tar -x -C "$RUNNER_TEMP/pages"
+              fi
+            done
+          fi
           cd "$RUNNER_TEMP/pages"
           git init -q -b gh-pages
           git config user.name "github-actions[bot]"
