@@ -13,8 +13,8 @@ Mathlib, not the repository's pinned Lean 4.35.0.
 | Mathlib relationship documented and checked | Passed (supplementary) | `Topology/Maps.lean`, induced/product APIs, `Filter.Tendsto`, `nhds`, and proper/bottom-filter warning in T15. |
 | Mathematical distinctions and strict examples | Passed (supplementary) | Continuous/open, bijective/homeomorphic, T0/T1/T2, compact/cofinite, connected/Sierpiński, two limits checked. |
 | Original 60 levels remain registered and metadata-valid | Passed | 75-level static check and online export. Only L35 title/lesson wording changed. |
-| Complete current-game solution/mutant regression | Partial | Topology fully run; original full 60-level Lean regression not rerun in this environment. |
-| Clean pinned Lean 4.35.0 build | **Blocked** | VM provides 4.33.1. Lake fetched 4.35 dependencies but cannot build them with the older compiler. Run with the pinned toolchain. |
+| Complete current-game solution/mutant regression | Passed (pinned) | All 75 levels covered; zero unexpected results across the initial run and resumed L47–T15 run. |
+| Clean pinned Lean 4.35.0 build | Passed | Installed elan and Lean 4.35.0 in project home; `lake build` completed all 3143 jobs. |
 | JavaScript syntax check | Not run | `node` is unavailable. Static page code and generated data were exercised through the Python server/export only. |
 | Complete browser playthrough | Not run | Run local and online games with supported toolchains and pass every level through the UI. |
 | Desktop package and app self-test | Not run | Import collection and T9 self-test data updated; actual pinned package was not built. |
@@ -29,3 +29,13 @@ Recommended gate order:
    import and all filters in T15.
 3. Build the desktop pack and execute its self-test, then perform a human topology playthrough.
 4. Obtain external mathematical feedback, address it, and only then publish/deploy M9.
+
+
+## Pinned verification result
+
+Lean 4.35.0 is now installed in the project home via elan. `lake exe cache get` succeeded and
+`lake build` completed all **3143 jobs**. The all-level checker was split by the one-hour command
+limit: the first run covered L1 through part of L47 with no unexpected result, and a resumed
+L47–T15 run used the verdict cache and ended **“All answers behave as expected.”** Thus the
+automated build/regression gate passes. This does not replace the remaining UI, packaging and
+external-review gates above.

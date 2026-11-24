@@ -9,9 +9,10 @@ iteration; do not mark a milestone complete when its verification has not run.
   levels, source maps, validation, reusable UI, replacement candidates and the toolchain blocker.
 - [x] **M1 — curriculum and exercise format.** [Topology curriculum](docs/topology-curriculum.md)
   specifies T1–T15, dependencies, typed exercises, success conditions and the vertical slice.
-- [ ] **M2 — targeted refinement of existing levels.** Content edits are done: L35 is now
-  “Finset filters and counting”, with an explicit distinction from convergence filters. The
-  original curriculum otherwise stays intact. Full playthrough verification awaits Lean 4.35.0.
+- [x] **M2 — targeted refinement of existing levels.** L35 is now “Finset filters and
+  counting”, with an explicit distinction from convergence filters. The original curriculum
+  otherwise stayed intact. The complete original-game solution/mutant regression now passes
+  with the pinned Lean 4.35.0 toolchain.
 - [x] **M3 — topology model and finite referee.** `Topology/Basic.lean` defines `MyTopology`,
   discrete, indiscrete, particular-point and Sierpiński examples. `Topology/Finite.lean`
   exhaustively checks finite candidates and returns stable axiom codes plus concrete witnesses.
@@ -34,7 +35,8 @@ iteration; do not mark a milestone complete when its verification has not run.
   Lean/Mathlib theorems where required.
 - [x] **M8 — T15 filters/convergence.** Neighbourhoods, `nhds`, `Filter.Tendsto`, discrete
   eventual equality, two distinct Sierpiński limits and Hausdorff uniqueness are implemented.
-- [ ] **M9 — integration and release.** Requires the pinned build, full regression/playthrough,
+- [ ] **M9 — integration and release.** Pinned build and complete automated regression now
+  pass. Remaining gates are browser playthrough, desktop packaging, JS syntax check, deployment,
   and external mathematical review.
 
 ## Iteration 1 — audit, specification, and stable topology IDs
@@ -193,3 +195,18 @@ Full topology regression using the supplementary Lean 4.33.1 environment:
 * online export: **75 levels**, with T1–T15 ordered and at least three typed exercises each;
 * pinned 4.35.0 build, browser playthrough, deployment and external mathematical review remain
   open under M9 (see [Release checklist](docs/release-checklist.md)).
+
+## Iteration 10 — pinned Lean 4.35.0 release build and full regression
+
+Installed elan 4.2.4 and the pinned `leanprover/lean4:v4.35.0` toolchain in this project's home,
+then downloaded the matching Mathlib cache with `lake exe cache get`. With
+`PATH="$HOME/.elan/bin:$PATH"`:
+
+* `lake build`: **passed all 3143 jobs**, with only the existing `Mathlib.Tactic` module-system
+  warnings in `Referee.lean` and `Topology/Basic.lean`.
+* Complete `python3 check_levels.py` regression: **all 75 levels behaved as expected**. The
+  initial run hit the one-hour command limit during L47 without unexpected results. A second
+  invocation covering L47–L60 and T1–T15 reused the verdict cache and ended with
+  **“All answers behave as expected.”** Together the two runs cover the whole game.
+* This closes the pinned clean build and complete automated original/topology regression gates.
+  Browser playthrough, packaging, JS syntax check, deployment and external review remain open.
