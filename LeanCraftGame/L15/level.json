@@ -2,46 +2,34 @@
   "world": "Numbers World",
   "title": "Spot the bug: numbers",
   "skill": "reading",
+  "exercise": "Refute",
   "public": "all",
   "checks": [
     {
-      "lean": "example : ℕ := L15.diffA\nexample : ℕ := L15.diffB",
-      "message": "Keep `diffA` and `diffB` as natural numbers (`ℕ`)."
-    },
-    {
-      "lean": "example : ℚ := L15.recX\nexample : ℚ := L15.recY\nexample : ℚ := L15.avgA\nexample : ℚ := L15.avgB",
-      "message": "Keep `recX`, `recY`, `avgA` and `avgB` as rationals (`ℚ`)."
+      "lean": "example : ℕ := L15.diffA\nexample : ℕ := L15.diffB\nexample : ℚ := L15.recX\nexample : ℚ := L15.recY\nexample : ℚ := L15.avgA\nexample : ℚ := L15.avgB\nexample : ℕ := L15.egA\nexample : ℕ := L15.egB",
+      "message": "Keep the types of the counterexamples."
     }
   ],
   "hints": [
     {
-      "match": "diff gets",
-      "steps": [
-        "The subtraction inside happens in `ℕ`, before the cast. When does a subtraction in `ℕ` give a junk value?"
-      ],
-      "hint": "When `a < b`, `a - b` is 0 in `ℕ`. Take `diffA := 3`, `diffB := 5`: `diff 3 5` is 0, not -2."
+      "match": "diff",
+      "hint": "Any `a < b`, such as `3` and `5`: the colleague gets `0` instead of `-2`."
     },
     {
-      "match": "IsReciprocal accepts",
-      "steps": [
-        "Which `x` makes `1 / x` a junk value?"
-      ],
-      "hint": "`1 / 0 = 0` in Lean, so `IsReciprocal 0 0` holds. Take `recX := 0`, `recY := 0`."
+      "match": "IsReciprocal",
+      "hint": "`0` and `0`: `1 / 0 = 0`."
     },
     {
-      "match": "multiply to 1",
-      "steps": [
-        "Your pair is a genuine reciprocal pair. Look for a pair that `IsReciprocal` accepts *wrongly*: where is the division by zero?"
-      ],
-      "hint": "Take `recX := 0` and `recY := 0`: `0 * 0` is not 1."
+      "match": "average",
+      "hint": "Anything with `a ≠ 0`, such as `2` and `2`: `2 + 2/2 = 3`."
     },
     {
-      "match": "average gets",
-      "steps": [
-        "Put in the parentheses that Lean puts in: `/` binds tighter than `+`.",
-        "`a + b / 2` is `a + (b / 2)`. For which `a` does that happen to equal `(a + b) / 2`? Avoid those."
-      ],
-      "hint": "Any `a ≠ 0` works: `average 2 0` is 2, but the average of 2 and 0 is 1."
+      "match": "egypt",
+      "hint": "`2` and `2`: in ℕ, `1 / 2 = 0`."
+    },
+    {
+      "match": "",
+      "hint": "Pick small inputs where the trap bites."
     }
   ]
 }

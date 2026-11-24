@@ -1,49 +1,40 @@
 /-
 # Integers and casts
 
-Natural numbers have no negatives, which is why `3 - 5` is `0` in `ℕ`. The
-**integers** `ℤ` (type `\Z`, or write `Int`) are …, -2, -1, 0, 1, 2, …, and
-their subtraction is the real one. (`ℕ` is another name for `Nat`; type `\N`.)
+On paper, `ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ`, and `3` is the same object in all four. In Lean
+they are four different types, and `3 : ℕ` and `3 : ℤ` are different terms.
+To use a natural number `a` as an integer you **cast** it: `(a : ℤ)`, which
+Lean displays as `↑a`.
 
-* `(3 : ℤ)` means "3, as an integer". This is a *type ascription*.
-* `(3 : ℤ) - 5` is `-2`.
+Where the cast goes changes the meaning:
 
-## Casts
+* `((a - b : ℕ) : ℤ)` subtracts in `ℕ` (truncating at `0`) and then casts:
+  for `a = 3, b = 5` it is `0`;
+* `(a : ℤ) - (b : ℤ)` casts first and subtracts in `ℤ`: it is `-2`.
 
-A natural number `n : ℕ` can be used where an integer is expected: write
-`(n : ℤ)`. Lean then inserts a **cast**, displayed `↑n`. *Where* the cast goes
-changes the result:
+Casting is the formal shadow of a step mathematicians never write down:
+"regard `a` as an integer". The rule of thumb is **cast early**: move to the
+type where the operation behaves, then compute.
 
-```lean
-def good (a b : ℕ) : ℤ := (a : ℤ) - (b : ℤ)   -- good 3 5 = -2
-def bad  (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)   -- bad 3 5 = 0 : subtracted in ℕ, then cast
-```
-
-`(a - b : ℤ)` also works: Lean elaborates the whole expression as an integer
-and casts `a` and `b` first.
-
-## Dot notation and two more junk values
-
-* `x.natAbs` is the absolute value of an integer `x`, as a natural number.
-  It is short for `Int.natAbs x`: since `x` is an `Int`, Lean looks for
-  `natAbs` among the functions named `Int.something`.
-* `x.toNat` turns an integer into a natural number, but every negative number
-  becomes `0`. Like `3 - 5 = 0` in `ℕ`, this is a *junk value*: a function
-  must return something, so Lean returns 0.
+Integers have their own pitfalls. Division and remainder on `ℤ` are
+Euclidean: `(-7) / 2 = -4` and `(-7) % 2 = 1`, so the remainder modulo `2` is
+always `0` or `1`, also for negative numbers (other languages say `-1`).
+`Int.natAbs x` is the absolute value of `x` as a natural number.
 
 ## Your task
 
-Define `diff`, `distance` and `IsNegative`.
+Define `diff`, `gap` and `IsOddInt`.
 -/
+
 namespace L12
 
--- a minus b, as an integer        (diff 3 5 is -2)
+-- a - b as an integer, for natural numbers a and b      (diff 3 5 = -2)
 def diff (a b : ℕ) : ℤ := sorry
 
--- the distance between two integers, as a natural number   (distance 3 (-4) is 7)
-def distance (a b : ℤ) : ℕ := sorry
+-- the distance |a - b| between two integers, as a natural number   (gap 3 (-4) = 7)
+def gap (a b : ℤ) : ℕ := sorry
 
--- x is negative
-def IsNegative (x : ℤ) : Prop := sorry
+-- x is an odd integer (positive or negative)
+def IsOddInt (x : ℤ) : Prop := sorry
 
 end L12

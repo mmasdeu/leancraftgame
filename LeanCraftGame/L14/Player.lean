@@ -1,42 +1,39 @@
 /-
-# Challenge: truncated arithmetic
+# Challenge: Egyptian fractions
 
-Four functions where the junk values of `ℕ` and `ℚ` are waiting for you.
-Everything you need was in "Integers and casts" and "Division by zero".
+The scribes of the Rhind papyrus wrote every fraction as a sum of distinct
+unit fractions: `5/6 = 1/2 + 1/3`. Whether every `4/n` is a sum of three unit
+fractions (the Erdős–Straus conjecture) is still open.
 
-* `(a - b : ℕ)` stops at 0, and `a / b` on `ℕ` rounds **down** (and
-  `a / 0` is `0`).
-* A cast must happen **before** the operation it is meant to protect:
-  `((a - b : ℕ) : ℤ)` is too late, `(a : ℤ) - b` is right.
-* `(a : ℚ) / b` is a true fraction, but `((a / b : ℕ) : ℚ)` divides first
-  and casts afterwards.
-* `if x < 0 then … else …` also works on `ℤ`, and `if` can be nested.
+Writing `1/a + 1/b` for natural numbers `a`, `b` needs care twice over:
+
+* `1 / a` with `a : ℕ` is **natural-number division**: `1 / 2 = 0`. The
+  fraction is `1 / (a : ℚ)`: cast before dividing.
+* `1 / 0 = 0` in `ℚ`, so without the condition `a > 0`, the "Egyptian
+  fraction" `1/0 + 1/3` would be `1/3`.
+
+Also in this challenge: `absDiff` on `ℕ` (recall truncated subtraction),
+the sign of an integer (three cases), and the exact ratio of two natural
+numbers, which follows Mathlib's convention `a / 0 = 0`.
 
 ## Your task
 
-* `absDiff a b`: the distance between two naturals, as a natural.
-* `signum x`: -1, 0 or 1 according to the sign of the integer `x`.
-* `ratio a b`: the fraction `a / b` as a rational, but 0 when `b` is 0.
-* `percent a b`: what percentage `a` is of `b`, **rounded to the nearest
-  whole number, with halves rounded up**, as a natural. `percent 1 8` is 13
-  (12.5 rounds up), and it is 0 when `b` is 0. Stay in `ℕ` and arrange for the
-  division to round the way you want: adding half of the divisor before
-  dividing does that.
-
-Hidden tests will hunt for every inexact value.
+Define the four functions and predicates. Watch the boundaries: `0`, equal
+inputs, negative inputs.
 -/
+
 namespace L14
 
--- |a - b|                       (absDiff 3 5 is 2, absDiff 5 3 is 2)
+-- |a - b| for natural numbers
 def absDiff (a b : ℕ) : ℕ := sorry
 
--- the sign of x                  (signum (-7) is -1, signum 0 is 0, signum 4 is 1)
+-- the sign of x: -1, 0 or 1
 def signum (x : ℤ) : ℤ := sorry
 
--- a divided by b, exactly; 0 if b is 0       (ratio 1 2 is 1/2)
+-- a / b as an exact fraction (and 0 when b = 0, like Mathlib)
 def ratio (a b : ℕ) : ℚ := sorry
 
--- 100 * a / b rounded to the nearest whole number, halves up    (percent 2 3 is 67)
-def percent (a b : ℕ) : ℕ := sorry
+-- x is the Egyptian fraction 1/a + 1/b with positive a and b
+def IsEgyptian (x : ℚ) (a b : ℕ) : Prop := sorry
 
 end L14

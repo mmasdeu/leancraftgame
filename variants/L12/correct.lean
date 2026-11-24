@@ -1,8 +1,8 @@
--- a minus b, as an integer        (diff 3 5 is -2)
+-- a - b as an integer, for natural numbers a and b      (diff 3 5 = -2)
 def diff (a b : ℕ) : ℤ := (a : ℤ) - (b : ℤ)
 
--- the distance between two integers, as a natural number   (distance 3 (-4) is 7)
-def distance (a b : ℤ) : ℕ := (a - b).natAbs
+-- the distance |a - b| between two integers, as a natural number   (gap 3 (-4) = 7)
+def gap (a b : ℤ) : ℕ := (a - b).natAbs
 
--- x is negative
-def IsNegative (x : ℤ) : Prop := x < 0
+-- x is an odd integer (positive or negative)
+def IsOddInt (x : ℤ) : Prop := x % 2 = 1

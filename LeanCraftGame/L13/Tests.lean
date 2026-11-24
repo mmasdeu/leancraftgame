@@ -9,12 +9,10 @@ open L13
 #no_sorry HasSlope
 #level_start "Division by zero"
 
--- the worked example
 #expect_true "IsHalf 6 3 is true" unfolding IsHalf :
   IsHalf 6 3
-#expect_false "IsHalf 6 2 is false" unfolding IsHalf :
-  IsHalf 6 2
--- your definitions
+#expect_true "1 / 0 = 0 in ℚ (a junk value)" :
+  (1 : ℚ) / 0 = 0
 #expect_true "average 1 2 = 3 / 2" unfolding average :
   average 1 2 = 3 / 2
 #expect_true "average (-1) 1 = 0" unfolding average :

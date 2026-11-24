@@ -2,75 +2,45 @@
   "world": "Numbers World",
   "title": "Division by zero",
   "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
-      "test": "IsHalf 6 3 is true",
-      "statement": "IsHalf 6 3"
+      "test": "1 / 0 = 0 in ℚ (a junk value)",
+      "statement": "1 / 0 = 0 in ℚ"
     },
     {
-      "test": "IsReciprocal 0 0 is false (0 has no reciprocal)",
-      "statement": "IsReciprocal 0 0"
-    },
-    {
-      "test": "HasSlope 1 2 1 2 0 is false (one point does not determine a line)",
-      "statement": "HasSlope 1 2 1 2 0"
+      "test": "HasSlope 1 0 1 5 0 is false (a vertical line has no slope)",
+      "statement": "HasSlope 1 0 1 5 0: the line through (1, 0) and (1, 5) has slope 0"
     }
   ],
   "checks": [
     {
-      "lean": "example : ℚ → ℚ → ℚ := L13.average",
-      "message": "Keep `average : ℚ → ℚ → ℚ`."
-    },
-    {
-      "lean": "example : ℚ → ℚ → Prop := L13.IsReciprocal",
-      "message": "Keep `IsReciprocal : ℚ → ℚ → Prop`."
-    },
-    {
-      "lean": "example : ℚ → ℚ → ℚ → ℚ → ℚ → Prop := L13.HasSlope",
-      "message": "Keep `HasSlope` with five rational inputs."
+      "lean": "example : ℚ → ℚ → ℚ := L13.average\nexample : ℚ → ℚ → Prop := L13.IsReciprocal\nexample : ℚ → ℚ → ℚ → ℚ → ℚ → Prop := L13.HasSlope",
+      "message": "Keep `average : ℚ → ℚ → ℚ`, `IsReciprocal : ℚ → ℚ → Prop` and `HasSlope` with five rational inputs."
     }
   ],
   "hints": [
     {
-      "match": "average 1 2",
-      "hint": "`a + b / 2` means `a + (b / 2)`. Add parentheses: `(a + b) / 2`."
-    },
-    {
       "match": "average",
-      "steps": [
-        "Which binds tighter, `/` or `+`?"
-      ],
-      "hint": "`(a + b) / 2`."
-    },
-    {
-      "match": "0 has no reciprocal",
-      "hint": "With `y = 1 / x`, 0 is its own reciprocal, because `1 / 0 = 0` in Lean. Say it without dividing: `x * y = 1`."
+      "hint": "`(a + b) / 2`, with the brackets."
     },
     {
       "match": "IsReciprocal",
       "steps": [
-        "What is `1 / 0` in Lean?"
+        "What does `y = 1 / x` say when `x = 0`?"
       ],
-      "hint": "`x * y = 1`."
-    },
-    {
-      "match": "vertical line",
-      "hint": "With a division, the vertical line gets slope `5 / 0 = 0`. Multiply instead, and require `x₁ ≠ x₂`."
-    },
-    {
-      "match": "one point",
-      "hint": "Through a single point, every slope fits `m * 0 = 0`. Require `x₁ ≠ x₂`."
+      "hint": "`x * y = 1`: state the property instead of computing `1 / x`."
     },
     {
       "match": "HasSlope",
       "steps": [
-        "What happens to your definition when `x₁ = x₂`?"
+        "Without division: `m` times the run is the rise. And when is there no slope?"
       ],
       "hint": "`x₁ ≠ x₂ ∧ m * (x₂ - x₁) = y₂ - y₁`."
     },
     {
       "match": "",
-      "hint": "Is there a division that could be by zero?"
+      "hint": "State the property; avoid dividing."
     }
   ]
 }

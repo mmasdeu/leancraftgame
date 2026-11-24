@@ -1,68 +1,46 @@
 {
   "world": "Numbers World",
   "title": "Integers and casts",
-  "skill": "syntax",
+  "skill": "writing",
+  "exercise": "Define",
   "predict": [
     {
-      "test": "diff 3 5 = -2",
-      "statement": "diff 3 5 = -2"
+      "test": "(-7) / 2 = -4 and (-7) % 2 = 1 on ℤ",
+      "statement": "(-7) / 2 = -4 and (-7) % 2 = 1 in ℤ"
     },
     {
-      "test": "IsNegative 0 is false",
-      "statement": "IsNegative 0"
+      "test": "IsOddInt (-3): negative numbers can be odd",
+      "statement": "(-3) % 2 = 1 in ℤ"
     }
   ],
   "checks": [
     {
-      "lean": "example : ℕ → ℕ → ℤ := L12.diff",
-      "message": "Keep `diff : ℕ → ℕ → ℤ`."
-    },
-    {
-      "lean": "example : ℤ → ℤ → ℕ := L12.distance",
-      "message": "Keep `distance : ℤ → ℤ → ℕ`."
-    },
-    {
-      "lean": "example : ℤ → Prop := L12.IsNegative",
-      "message": "Keep `IsNegative : ℤ → Prop`."
+      "lean": "example : ℕ → ℕ → ℤ := L12.diff\nexample : ℤ → ℤ → ℕ := L12.gap\nexample : ℤ → Prop := L12.IsOddInt",
+      "message": "Keep `diff : ℕ → ℕ → ℤ`, `gap : ℤ → ℤ → ℕ` and `IsOddInt : ℤ → Prop`."
     }
   ],
   "hints": [
     {
-      "match": "diff 3 5",
-      "hint": "If you get 0 instead of -2, the subtraction happened in ℕ before the cast. Cast first: `(a : ℤ) - (b : ℤ)`."
-    },
-    {
       "match": "diff",
       "steps": [
-        "Where does your subtraction happen: in ℕ, or in ℤ?"
+        "Where is the subtraction done: in ℕ or in ℤ?"
       ],
-      "hint": "`(a : ℤ) - (b : ℤ)`."
+      "hint": "`(a : ℤ) - (b : ℤ)`: cast first, subtract in ℤ."
     },
     {
-      "match": "distance (-4) 3",
-      "hint": "`(a - b).toNat` turns the negative number -7 into 0. Use `(a - b).natAbs`."
-    },
-    {
-      "match": "distance",
-      "steps": [
-        "What does `.toNat` do to a negative number?"
-      ],
+      "match": "gap",
       "hint": "`(a - b).natAbs`."
     },
     {
-      "match": "IsNegative 0",
-      "hint": "0 is not negative: use `<`, not `≤`."
-    },
-    {
-      "match": "IsNegative",
+      "match": "IsOddInt",
       "steps": [
-        "Is 0 negative?"
+        "What is `(-3) % 2` in Lean?"
       ],
-      "hint": "`x < 0`."
+      "hint": "`x % 2 = 1`: the remainder on ℤ is never negative."
     },
     {
       "match": "",
-      "hint": "Check the examples in the comments."
+      "hint": "Cast early: `(a : ℤ)`."
     }
   ]
 }
