@@ -1,5 +1,10 @@
 /-
-# For all
+# Every position
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use ∀ to express a property of an entire sequence rather than a finite sample.**
 
 A *sequence* of natural numbers is a function `u : Nat → Nat`: for every
 position `n`, it gives a value `u n`. Think of the list `u 0, u 1, u 2, …`
@@ -29,6 +34,11 @@ Typing `∀` and friends: click **Symbols** at the top right of the page. It lis
 
 `AllBig` is done. Define `AlwaysBelow u B` (every term is at most `B`) and
 `AllEven u` (every term is even).
+
+## The road from here
+
+Relate one position's property to another's.
+
 -/
 namespace L16
 

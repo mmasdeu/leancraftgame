@@ -1,6 +1,6 @@
 {
-  "world": "Analysis World",
-  "title": "Limits",
+  "world": "Limits",
+  "title": "Convergent sequences",
   "skill": "writing",
   "predict": [
     {
@@ -39,5 +39,8 @@
       ],
       "hint": "`∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - a| < ε`."
     }
-  ]
+  ],
+  "order": 39,
+  "chapter": "II · Convergence",
+  "learningObjective": "Define ConvergesTo u a with ∀ ε > 0, ∃ N, every later term lying within ε of a—quantifying over all positive errors, not just a convenient one."
 }

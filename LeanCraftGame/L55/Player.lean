@@ -1,5 +1,10 @@
 /-
-# Instances that depend on instances
+# Dependent instances
+
+**ACT III — TOPOLOGY**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use parameters and existing instances to define reusable behaviour generically—the basis for subspaces, products and induced structure.**
 
 Sizes of strings, numbers and rectangles are fine, but what is the size of a
 *list* of strings, or of a *pair* of rectangles? The answer depends on what the
@@ -56,6 +61,11 @@ fixed, the tests use them at several types, also nested ones):
 * `Size (List α)` when `α` has `Size`: the sizes of all entries, added;
 * `largest`: the biggest size among the entries of a list (0 for the empty list);
 * `heavy`: the size of `a` plus its weight.
+
+## The road from here
+
+Compare definitions whose instances encode different choices.
+
 -/
 namespace L55
 

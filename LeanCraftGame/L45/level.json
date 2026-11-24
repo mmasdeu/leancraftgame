@@ -1,6 +1,6 @@
 {
-  "world": "Structure Syntax World",
-  "title": "Functions on structures",
+  "world": "Topology",
+  "title": "Functions on packaged data",
   "skill": "writing",
   "predict": [
     {
@@ -79,5 +79,8 @@
       "match": "",
       "hint": "Build the result with `⟨_, _⟩` in the declared order of the fields, reading the inputs with `p.x`, `r.width`, …"
     }
-  ]
+  ],
+  "order": 45,
+  "chapter": "III · Language for spaces",
+  "learningObjective": "Define operations on structures by reading, transforming and returning their fields."
 }

@@ -1,4 +1,5 @@
 /-
+
 # Compactness
 
 An open cover is a family `C : Set (Set α)` of open sets whose union is `univ`.
@@ -13,6 +14,17 @@ many points to cover. Continuous images of compact spaces are compact.
 
 The `checks` for this level use general Lean/Mathlib theorems for finite and
 infinite examples; finite enumeration is not used as a substitute for them.
+
+**ACT III — TOPOLOGY**
+
+The earlier acts gave you the vocabulary needed here: functions and quantifiers from
+**sequences**, inverse images and local approximation from **limits**, and packaged
+axioms from **structures**. This level turns those tools toward general spaces.
+
+## The road from here
+
+Connect compactness with connectivity and separation on the same shared examples.
+
 
 ## Your task
 

@@ -1,6 +1,6 @@
 {
-  "world": "Structure Syntax World",
-  "title": "Spot the bug: structures",
+  "world": "Topology",
+  "title": "Audit compound structures",
   "skill": "reading",
   "public": "all",
   "checks": [
@@ -48,5 +48,8 @@
       ],
       "hint": "`newer ⟨1, 5, 0⟩ ⟨2, 0, 0⟩` returns `1.5.0`, but the more recent one is `2.0.0`: the minor number `5` is bigger, but it should not count, because the major numbers already differ."
     }
-  ]
+  ],
+  "order": 48,
+  "chapter": "III · Language for spaces",
+  "learningObjective": "Identify where a structure declaration stops recording the intended information even though it compiles."
 }

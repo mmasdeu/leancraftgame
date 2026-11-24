@@ -1,5 +1,10 @@
 /-
-# If … then …
+# From premise to observation
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use implication to state when a property at one index constrains another observation.**
 
 Often a statement only concerns *some* positions: "from index 5 on, the terms
 are at least 3". That is a statement of the form "**if** *this*, **then**
@@ -26,6 +31,11 @@ is at least 3, which is false for every sequence. When a statement is about
 
 `BigAfter` is done. Define `LateBig u` (from index 5 on, every term is at
 least 3) and `EvenToEven u` (whenever `n` is even, `u n` is even).
+
+## The road from here
+
+Require an observation to exist.
+
 -/
 namespace L17
 

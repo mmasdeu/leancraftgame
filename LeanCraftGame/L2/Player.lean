@@ -1,5 +1,10 @@
 /-
-# Functions
+# Transform a sequence pointwise
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use functions as transformations u n ↦ f(u n), the simplest way to make a new sequence.**
 
 A *function* turns an input into an output. To define one, name its input in
 parentheses before the colon:
@@ -30,6 +35,11 @@ Division on natural numbers drops the remainder: `7 / 2` is `3`, and
 ## Your task
 
 Define the four functions below. The comment above each one gives examples.
+
+## The road from here
+
+Sample according to cases.
+
 -/
 namespace L2
 

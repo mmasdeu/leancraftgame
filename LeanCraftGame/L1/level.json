@@ -1,6 +1,6 @@
 {
-  "world": "Basics World",
-  "title": "Naming things",
+  "world": "Sequences",
+  "title": "Record a first reading",
   "skill": "syntax",
   "public": "all",
   "hintsAfter": 1,
@@ -31,5 +31,8 @@
       "match": "successor",
       "hint": "You can use `answer` inside another definition. One more than `answer` is `answer + 1`."
     }
-  ]
+  ],
+  "order": 1,
+  "chapter": "I · First observations",
+  "learningObjective": "Define values and a successor: a sequence begins as data with a next step."
 }

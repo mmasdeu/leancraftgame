@@ -1,5 +1,10 @@
 /-
-# Sums
+# Finite sums of observations
+
+**ACT II — LIMITS**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **sum values over an exactly specified finite set of indices, learning how range endpoints affect every sample.**
 
 How do you add up a long list of numbers in Lean? With a **big sum**, written
 with the symbol `∑` (type `\sum`):
@@ -49,6 +54,11 @@ not a special case you have to code: it is what the notation means.
 ## Your task
 
 `sumOfDoubles` is done. Define the other four sums. The comments give examples.
+
+## The road from here
+
+Select which observations contribute.
+
 -/
 namespace L34
 

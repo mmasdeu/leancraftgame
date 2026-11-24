@@ -1,4 +1,5 @@
 /-
+
 # Bases and generated topologies
 
 A basis `B` covers every point and satisfies an **intersection-refinement**
@@ -13,6 +14,17 @@ because its union closure adds `∅` and `univ`.
 
 For the usual topology on `ℝ`, open intervals with rational endpoints satisfy
 the same two conditions; density of `ℚ` supplies the refinements.
+
+**ACT III — TOPOLOGY**
+
+The earlier acts gave you the vocabulary needed here: functions and quantifiers from
+**sequences**, inverse images and local approximation from **limits**, and packaged
+axioms from **structures**. This level turns those tools toward general spaces.
+
+## The road from here
+
+Use basis-generated opens to define continuous maps and distinguish them from open maps.
+
 
 ## Your tasks
 

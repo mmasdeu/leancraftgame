@@ -1,5 +1,10 @@
 /-
-# Finset filters and counting
+# Filtering finite samples
+
+**ACT II — LIMITS**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use Finset.filter to sum, count or multiply only the observations satisfying a predicate—this is not the convergence filter Filter.**
 
 Last time you added up *all* the numbers of a `Finset`. Often you want only
 some of them, or you want to *count* them.
@@ -50,6 +55,11 @@ def prodFrom2 (n : ℕ) : ℕ := ∏ i ∈ Finset.Icc 2 n, i
 
 `evenSet` and `sumOdds` are done. Define the five functions below. Remember
 the end points: does your set contain `0`? Does it contain `n`?
+
+## The road from here
+
+Find closed forms for finite accumulations.
+
 -/
 namespace L35
 

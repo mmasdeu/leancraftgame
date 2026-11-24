@@ -1,5 +1,10 @@
 /-
-# Recursion
+# Recursive sequences
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **give base cases and recursive steps for factorials, powers and Fibonacci-style sequences.**
 
 A function on natural numbers can be defined **by cases**, one line per shape
 of the input:
@@ -40,6 +45,11 @@ def factorial : Nat → Nat
 ## Your task
 
 `factorial` is done. Fill in the right-hand sides of the cases below.
+
+## The road from here
+
+Count what happens in a finite prefix.
+
 -/
 namespace L4
 

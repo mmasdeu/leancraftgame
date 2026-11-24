@@ -1,5 +1,5 @@
 {
-  "world": "Topology World",
+  "world": "Topology",
   "title": "Connectedness",
   "skill": "construct",
   "public": "all",
@@ -56,5 +56,7 @@
       ],
       "hint": "Conclude `U = ∅ ∨ V = ∅`; do not require both to be empty."
     }
-  ]
+  ],
+  "order": 113,
+  "chapter": "III · Global properties"
 }

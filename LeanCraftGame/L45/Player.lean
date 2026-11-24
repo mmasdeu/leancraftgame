@@ -1,5 +1,10 @@
 /-
-# Functions on structures
+# Functions on packaged data
+
+**ACT III — TOPOLOGY**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **define operations on structures by reading, transforming and returning their fields.**
 
 A structure is a type like any other, so a function can take structures as
 inputs and give a structure as its output.
@@ -60,6 +65,11 @@ Two inputs, two patterns, separated by a comma. Both styles are equally good.
 `Point` and `Rectangle` are declared for you (a `Rectangle` has a `width` and
 a `height`; it sits with one corner at the point `⟨0, 0⟩`). Fill in the five
 functions. The comments give examples.
+
+## The road from here
+
+Extend an existing data package without rebuilding it.
+
 -/
 namespace L45
 

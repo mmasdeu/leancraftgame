@@ -1,5 +1,10 @@
 /-
-# There exists
+# Existence of a witness
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use ∃ for a zero, a large reading or another special observation, and distinguish naming a witness from proving universality.**
 
 `∃ n, P n` means "there **exists** a natural number `n` such that `P n`
 holds". Type `∃` as `\exists`, or write `exists`.
@@ -19,6 +24,11 @@ This says that **at least one** term of `u` is at least 10.
 
 `HasBig` is done. Define `HasZero u` (some term is zero) and `HasEvenBig u`
 (some term is even **and** at least 10, both for the same `n`).
+
+## The road from here
+
+Control the order in which witnesses are chosen.
+
 -/
 namespace L18
 

@@ -1,5 +1,10 @@
 /-
-# True or false?
+# Claims about readings
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **write predicates—true/false statements about individual values in a sequence.**
 
 So far our functions returned numbers. A mathematician's definitions are
 mostly *statements*: "n is even", "u is bounded". In Lean a statement has
@@ -26,6 +31,11 @@ The tests will check the boundary values.
 
 `IsBig` is done. Define `IsEven`, `IsSmall` (below 10) and `GoesInto`
 (`GoesInto a b` says that `a` divides `b` exactly).
+
+## The road from here
+
+Combine two claims about the same reading.
+
 -/
 namespace L7
 

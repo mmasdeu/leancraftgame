@@ -1,4 +1,5 @@
 /-
+
 # Bijective need not mean homeomorphic
 
 A homeomorphism needs a bijection whose map **and inverse** are continuous.
@@ -14,6 +15,17 @@ A homeomorphism also has an inverse function, two inverse laws, and continuity
 in both directions. Homeomorphism is an equivalence relation: the identity works,
 inverses swap the directions, and composition preserves all the fields. Open and
 closed sets correspond under either direction because continuity uses preimages.
+
+**ACT III — TOPOLOGY**
+
+The earlier acts gave you the vocabulary needed here: functions and quantifiers from
+**sequences**, inverse images and local approximation from **limits**, and packaged
+axioms from **structures**. This level turns those tools toward general spaces.
+
+## The road from here
+
+Build new spaces via induced subspace and product topologies.
+
 
 ## Your tasks
 

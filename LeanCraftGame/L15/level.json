@@ -1,6 +1,6 @@
 {
-  "world": "Numbers World",
-  "title": "Spot the bug: numbers",
+  "world": "Sequences",
+  "title": "Audit numerical claims",
   "skill": "reading",
   "public": "all",
   "checks": [
@@ -43,5 +43,8 @@
       ],
       "hint": "Any `a ≠ 0` works: `average 2 0` is 2, but the average of 2 and 0 is 1."
     }
-  ]
+  ],
+  "order": 15,
+  "chapter": "I · First observations",
+  "learningObjective": "Reject a convincing value or definition using a counterexample at a boundary case."
 }

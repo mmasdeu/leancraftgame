@@ -1,5 +1,5 @@
 {
-  "world": "Topology World",
+  "world": "Topology",
   "title": "The definition of a topology",
   "skill": "construct",
   "public": [
@@ -72,5 +72,7 @@
       "lean": "example {α : Type*} (τ : T4.MyTopology α) : τ.IsOpen ∅ := by simpa using τ.isOpen_sUnion ∅ (by simp)",
       "message": "Openness of the empty set should follow from the empty union."
     }
-  ]
+  ],
+  "order": 104,
+  "chapter": "III · Foundations"
 }

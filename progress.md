@@ -1,5 +1,10 @@
 # Topology branch progress
 
+> **Narrative redesign (current objective):** this branch now supersedes the earlier
+> “append topology and make targeted edits” approach. All original lessons have been
+> re-authored into the Sequences → Limits → Topology progression below. Do not revert to the
+> old twelve-world structure described in the historical log.
+
 This file is the handoff point for agents working on this branch. Keep it current after every
 iteration; do not mark a milestone complete when its verification has not run.
 
@@ -9,10 +14,10 @@ iteration; do not mark a milestone complete when its verification has not run.
   levels, source maps, validation, reusable UI, replacement candidates and the toolchain blocker.
 - [x] **M1 — curriculum and exercise format.** [Topology curriculum](docs/topology-curriculum.md)
   specifies T1–T15, dependencies, typed exercises, success conditions and the vertical slice.
-- [x] **M2 — targeted refinement of existing levels.** L35 is now “Finset filters and
-  counting”, with an explicit distinction from convergence filters. The original curriculum
-  otherwise stayed intact. The complete original-game solution/mutant regression now passes
-  with the pinned Lean 4.35.0 toolchain.
+- [x] **M2 — narrative redesign (superseding targeted refinement).** All 60 original
+  lessons are now framed as Sequences → Limits → Topology, with structures and type classes
+  serving as topological preparation. The earlier “otherwise intact” curriculum is historical,
+  not the current game structure.
 - [x] **M3 — topology model and finite referee.** `Topology/Basic.lean` defines `MyTopology`,
   discrete, indiscrete, particular-point and Sierpiński examples. `Topology/Finite.lean`
   exhaustively checks finite candidates and returns stable axiom codes plus concrete witnesses.
@@ -232,3 +237,28 @@ Completed the local release checks and tested the hosted path:
 
 M9 remains open only for Windows/macOS packaging, deployment and the required external
 mathematician/student playthrough, plus any hosted-backend retest when the public service permits it.
+
+## Iteration 12 — complete sequence/limit/topology narrative redesign
+
+Reworked all original 60 lesson texts and metadata, not just the topology appendage. Every
+original level now has a new story-led title, act, chapter, objective and explicit bridge to its
+next step. Added **ACT I — SEQUENCES**, **ACT II — LIMITS**, and **ACT III — TOPOLOGY** to the
+actual lesson UI. Structure/class levels now explicitly prepare packaged topology axioms and
+instances; the three prime/orbit/Goldbach auditing levels form a coda after T15 rather than a
+pre-topology detour. Intro, landing page and README now describe a single mathematical journey.
+
+`level.json` now supplies narrative `order`; the shared registry sorts by it while retaining
+stable IDs and saved progress. Actual order is L1–L57, T1–T15, then L58–L60. Generated the new
+[Curriculum](CURRICULUM.md), full [narrative design](docs/narrative-redesign.md) and 60-row
+[narrative data](docs/narrative-data.json). Static narrative checks and docs are retained in
+`tests/check_narrative.py`; Chromium coverage is in `tests/browser_narrative.py`.
+
+Verification:
+
+* all 60 original lessons have new titles, acts, objectives and bridges; all T1–T15 have
+  callbacks to the preceding acts;
+* all 75 browser pages render in the new order, with no JavaScript page errors;
+* representative browser solutions passed L1 (4/4), L23 (9/9), L39 (6/6), T15 (5/5);
+* T15 Next correctly enters L58's coda; static level metadata and 75-level online export pass;
+* existing proof tests and solutions were preserved, so the full proof regression from iteration
+  10 remains the mathematical baseline while text/navigation changes receive focused UI tests.

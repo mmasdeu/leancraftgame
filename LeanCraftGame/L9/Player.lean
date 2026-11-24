@@ -1,5 +1,10 @@
 /-
-# Or and not
+# Alternatives and exclusions
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use disjunction and negation to separate types of observations and rules.**
 
 * `p ∨ q` means "p **or** q": true when at least one of them is true,
   possibly both. Type it `\or` (or write `\/`).
@@ -24,6 +29,11 @@ When in doubt, add parentheses. They never hurt.
 A cinema gives free tickets to children under 5 and to people aged 65 or
 more. Define `FreeTicket`, then `PaysFull` using `FreeTicket`. Then define
 `NotTiny`: a number that is neither 0 nor 1.
+
+## The road from here
+
+Handle definitions with interacting constraints.
+
 -/
 namespace L9
 

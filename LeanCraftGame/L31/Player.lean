@@ -1,5 +1,10 @@
 /-
-# Divisibility and gcd
+# Divisibility of indices
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **define common divisors, coprimality, gcd and primality as predicates on sequence indices.**
 
 Time to define real number theory. Everything is built from `a ∣ b` ("`a`
 divides `b`", typed `\|`), quantifiers and the Mathlib notions you already know.
@@ -32,6 +37,11 @@ def CommonDiv (d a b : ℕ) : Prop := d ∣ a ∧ d ∣ b
 and `Squarefree'` (no square `d * d` other than `1` divides `n`). Do not use
 Mathlib's `Nat.gcd`, `Nat.Coprime`, `Nat.Prime` or `Squarefree`: the referee
 compares your definitions to them.
+
+## The road from here
+
+Express order and equivalence relations on those indices.
+
 -/
 namespace L31
 

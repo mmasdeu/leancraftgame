@@ -1,5 +1,10 @@
 /-
-# Extending and updating
+# Extend and update structures
+
+**ACT III — TOPOLOGY**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use extension, update and parameterisation to enrich the description of mathematical objects.**
 
 Three more tools for structures. Each is small.
 
@@ -73,6 +78,11 @@ def Pair.first {α : Type} (p : Pair α) : α := p.fst
 
 `Point` is declared. Write `moveRight`; declare `Settings` with default
 values, and `Point3` and `Pair`; then write the functions on them.
+
+## The road from here
+
+Audit compound data definitions before adding axioms.
+
 -/
 namespace L46
 

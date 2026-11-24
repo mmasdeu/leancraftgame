@@ -1,5 +1,10 @@
 /-
-# Bounded quantifiers
+# Eventually and bounded quantifiers
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **restrict claims to indices beyond a threshold N, separating finite bad behaviour from long-run behaviour.**
 
 Mathematicians write "for all n ≥ N" and "there is an n > 0". Lean (with
 Mathlib) has the same shorthand:
@@ -25,6 +30,11 @@ def EventuallyBig (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 10 ≤ u n
 ## Your task
 
 `EventuallyBig` is done. Define `HasPositiveRoot f` and `EventuallyZero u`.
+
+## The road from here
+
+Describe long-run patterns.
+
 -/
 namespace L20
 

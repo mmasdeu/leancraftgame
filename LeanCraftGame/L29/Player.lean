@@ -1,5 +1,10 @@
 /-
-# Using Mathlib
+# Library facts about observations
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use established definitions while distinguishing a satisfactory statement from the library statement you intended.**
 
 Mathlib, Lean's mathematical library, already defines thousands of notions.
 Real definitions are built from them rather than from scratch:
@@ -35,6 +40,11 @@ def BigEven (n : ℕ) : Prop := Even n ∧ 4 ≤ n
 
 `BigEven` is done. Define `TwinPrime`, `CommonDivisor` and `OneToOne` using
 Mathlib's notions.
+
+## The road from here
+
+State those properties over an arbitrary type.
+
 -/
 namespace L29
 

@@ -1,6 +1,6 @@
 {
-  "world": "Basics World",
-  "title": "Functions",
+  "world": "Sequences",
+  "title": "Transform a sequence pointwise",
   "skill": "syntax",
   "public": "all",
   "hintsAfter": 1,
@@ -47,5 +47,8 @@
       "match": "",
       "hint": "Re-read the examples in the comment above the function."
     }
-  ]
+  ],
+  "order": 2,
+  "chapter": "I · First observations",
+  "learningObjective": "Use functions as transformations u n ↦ f(u n), the simplest way to make a new sequence."
 }

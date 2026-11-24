@@ -1,5 +1,10 @@
 /-
-# Spot the bug
+# Audit a sampling report
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **find boundary-case mistakes in packaged functions whose definitions compile but misreport observations.**
 
 Until now you have *written* definitions. Every world from here on ends with a
 level where you **read** someone else's definitions instead, and prove them
@@ -44,6 +49,11 @@ numbers are equal. The next world, Statements, explains both.)
 
 Give three numbers on which `middle` returns the wrong number, and a year on
 which `daysInYear` gives the wrong answer.
+
+## The road from here
+
+Turn observations into mathematical claims.
+
 -/
 namespace L6
 

@@ -1,6 +1,11 @@
 /-
 # Metric spaces
 
+**ACT III — TOPOLOGY**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **package a distance with nonnegativity, identity, symmetry and triangle inequality—the named structure behind familiar open-ball examples.**
+
 A **distance** tells how far apart two points are. On a type `α` it is a
 function `dist : α → α → ℤ` (we use integers `ℤ`, so that negative numbers are
 possible: your axioms have to forbid them).
@@ -25,6 +30,11 @@ imposters (`x - y`, `(x - y)^2`, ...). Each of your axioms must be true for
 the first kind, and the imposters must each fail at least one of them.
 
 Think about what each imposter gets wrong.
+
+## The road from here
+
+Audit the hidden assumptions inside a related algebraic structure.
+
 -/
 namespace L51
 

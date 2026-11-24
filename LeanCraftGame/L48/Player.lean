@@ -1,5 +1,10 @@
 /-
-# Spot the bug: structures
+# Audit compound structures
+
+**ACT III — TOPOLOGY**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **identify where a structure declaration stops recording the intended information even though it compiles.**
 
 Back to reading a colleague's code, as in the earlier "Spot the bug" levels:
 the code compiles, it looks reasonable, and you must prove it wrong with
@@ -47,6 +52,11 @@ def Version.newer (a b : Version) : Version :=
 
 For each function, give input values on which it gives the wrong answer. The
 referee compares the colleague's answer with the right one on your inputs.
+
+## The road from here
+
+Add requirements to data rather than only storing values.
+
 -/
 namespace L48
 

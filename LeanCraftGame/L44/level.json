@@ -1,6 +1,6 @@
 {
-  "world": "Structure Syntax World",
-  "title": "Declaring a structure",
+  "world": "Topology",
+  "title": "Package a point as data",
   "skill": "syntax",
   "public": "all",
   "hintsAfter": 1,
@@ -83,5 +83,8 @@
       "match": "",
       "hint": "Fields are declared one per line as `name : type`; values are built with `⟨a, b⟩` in the same order, and fields are read with `p.name`."
     }
-  ]
+  ],
+  "order": 44,
+  "chapter": "III · Language for spaces",
+  "learningObjective": "Use structures to package coordinates and other observational data, learning the syntax later used to package axioms."
 }

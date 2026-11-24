@@ -1,5 +1,10 @@
 /-
-# Cluster values
+# Cluster values and subsequences
+
+**ACT II — LIMITS**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **define a cluster value through a convergent subsequence, distinguishing recurrence at arbitrary distance from eventual convergence.**
 
 A sequence that does not converge can still have numbers it keeps coming back to:
 `0, 1, 0, 1, …` has no limit, yet it visits `0` and `1` forever. Two notions say
@@ -39,6 +44,11 @@ def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n �
 
 `ConvergesTo` is done. Define `ClusterValue u a`, then
 `IsSubseqLimit u φ a`: "`u ∘ φ` is a subsequence of `u` converging to `a`".
+
+## The road from here
+
+Audit claimed limits before constructing spaces.
+
 -/
 namespace L42
 

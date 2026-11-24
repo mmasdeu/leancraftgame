@@ -1,6 +1,6 @@
 {
-  "world": "Structure Syntax World",
-  "title": "Challenge: structures",
+  "world": "Topology",
+  "title": "Compound structural calibrations",
   "skill": "writing",
   "predict": [
     {
@@ -117,5 +117,8 @@
       "match": "",
       "hint": "Test small cases by hand, especially the first and last day of a month and of the year."
     }
-  ]
+  ],
+  "order": 47,
+  "chapter": "III · Language for spaces",
+  "learningObjective": "Practise building richer structures whose fields fit together correctly, so that packaging a future topological object is routine rather than mysterious."
 }

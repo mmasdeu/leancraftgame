@@ -5,6 +5,11 @@ You do not need to know anything about Lean, or to have read a line of code befo
 This page explains what you are about to do. It takes a few minutes to read, and you
 can come back to it at any time with the **Welcome** tab.
 
+Your course is one continuous story: **sequences → limits → topology**. You begin by
+writing and analysing sequences. You learn what their long-term behaviour means. Then
+you abstract from numerical limits to open sets, continuous maps and convergence in an
+arbitrary topological space. Every technical detour exists to serve that destination.
+
 ## What is Lean?
 
 Lean is a programming language, and also a tool for doing mathematics on a computer.
@@ -117,35 +122,34 @@ Some appear as soon as the name is complete; for the others, press the space bar
 The **∀ Symbols** button, at the top right of the page, opens a table of every symbol
 with the keys to type it, and a short typing drill. You can try it right now.
 
-## The road ahead
+## The road ahead: sequences → limits → topology
 
-Most worlds end with a **Spot the bug** level: a colleague's definitions compile
-but are wrong, and you prove it with a counterexample. The first four worlds also
-have a **Challenge** level, a harder task with traps, just before it.
+The game now has three acts and 75 levels. It is not a collection of unrelated worlds.
 
-* **Basics:** values, functions, choices and recursion.
-* **Statements:** true or false, and the connectives *and*, *or*, *not*.
-* **Numbers:** integers, casts, and what happens when you divide by zero.
-* **Quantifiers:** *for all*, *there exists*, *if … then …*, and why their order
-  matters.
-* **Predicate:** your first real definitions, about sequences and functions: tending
-  to infinity, bounded, monotone, injective, coming back infinitely often. Then you
-  swap roles with the referee: you write the tests, and it tries to slip wrong
-  definitions past them.
-* **Library:** sets, the definitions that Mathlib already has, generality, divisibility
-  and relations.
-* **Finite Sums:** adding up and counting over finite sets with `∑`, `∏`,
-  `Finset.range` and `Finset.filter`, and seeing exactly which numbers a sum runs through.
-* **Analysis:** limits, continuity, Cauchy sequences and cluster values of real
-  sequences.
-* **Structure Syntax:** declaring structures, building values with `⟨ , ⟩`, `.mk` and
-  `{ x := … }`, writing functions on them, and updating, extending and parameterising them.
-* **Structure:** bundling data with axioms: order relations, metric spaces, and finding
-  the mistake in a colleague's definition of a group.
-* **Classes:** how one notation (`+`, `max`, `size`) gets a meaning on many types: you
-  declare classes, write instances, and learn why an instance that compiles can still be wrong.
-* **Faithfulness:** an AI claims to have proved the infinitude of the primes, the Collatz
-  conjecture, and Goldbach's conjecture, in a few lines each. What did it really prove?
+* **Act I — Sequences (33 levels).** Define observations and transformations. Use
+  propositions and quantifiers to describe individual terms, whole sequences and
+  long-run behaviour: boundedness, divergence, monotonicity, recurrence, injections,
+  surjections and relations. You learn Lean by answering mathematical questions about
+  sequences, not by doing syntax for its own sake.
+* **Act II — Limits (10 levels).** First learn to aggregate finite observations with
+  exact index sets, `∑`, `∏` and `Finset.filter`. Then define convergence with every
+  positive error, continuity with error control, Cauchy sequences and cluster values.
+  This is the mathematical and conceptual bridge between elementary Lean and topology.
+* **Act III — Topology (32 levels).** Structures and type classes now have a specific
+  purpose: packaging axioms and letting Lean find them. After that preparation you
+  define sets, topologies, continuous maps, homeomorphisms, subspaces and products,
+  compactness, connectedness and separation. Neighbourhood filters and T1/T0 separation
+  bring the course back to convergence: discrete limits, two different Sierpiński limits
+  and Hausdorff uniqueness.
+* **Coda — Mathematical auditing (the last three levels).** Revisit claims about primes,
+  iterating sequences and Goldbach. A statement compiling is not evidence that it says
+  what the author intended, and checking finitely many toy worlds is not proving a
+  universal conjecture. This is the same definition-first discipline used at every
+  earlier stage.
+
+Levels within an act move from definitions to examples to counterexamples. Audit levels
+are placed where you need to challenge a new definition, rather than ending every topic
+with the same disconnected syntax review.
 
 ## Good to know
 

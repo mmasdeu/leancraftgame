@@ -1,22 +1,42 @@
 {
-  "world": "Basics World",
-  "title": "Challenge: counting",
+  "world": "Sequences",
+  "title": "Counting finite prefixes",
   "skill": "writing",
   "hintsAfter": 2,
   "predict": [
-    { "test": "stairs 0 = 1 (one way to climb nothing: do nothing)", "statement": "stairs 0 = 1" },
-    { "test": "choose 3 5 = 0 (cannot pick more than there are)", "statement": "choose 3 5 = 0" },
-    { "test": "countEven 0 = 1 (0 is even)", "statement": "countEven 0 = 1" }
+    {
+      "test": "stairs 0 = 1 (one way to climb nothing: do nothing)",
+      "statement": "stairs 0 = 1"
+    },
+    {
+      "test": "choose 3 5 = 0 (cannot pick more than there are)",
+      "statement": "choose 3 5 = 0"
+    },
+    {
+      "test": "countEven 0 = 1 (0 is even)",
+      "statement": "countEven 0 = 1"
+    }
   ],
   "checks": [
-    { "lean": "example : Nat → Nat := L5.stairs", "message": "Keep `stairs : Nat → Nat`." },
-    { "lean": "example : Nat → Nat → Nat := L5.choose", "message": "Keep `choose : Nat → Nat → Nat` (two inputs)." },
-    { "lean": "example : Nat → Nat := L5.countEven", "message": "Keep `countEven : Nat → Nat`." }
+    {
+      "lean": "example : Nat → Nat := L5.stairs",
+      "message": "Keep `stairs : Nat → Nat`."
+    },
+    {
+      "lean": "example : Nat → Nat → Nat := L5.choose",
+      "message": "Keep `choose : Nat → Nat → Nat` (two inputs)."
+    },
+    {
+      "lean": "example : Nat → Nat := L5.countEven",
+      "message": "Keep `countEven : Nat → Nat`."
+    }
   ],
   "hints": [
     {
       "match": "stairs 0",
-      "steps": ["How many different ways are there to climb zero steps? Is \"doing nothing\" a way?"],
+      "steps": [
+        "How many different ways are there to climb zero steps? Is \"doing nothing\" a way?"
+      ],
       "hint": "`stairs 0 = 1`: there is exactly one way, the empty one."
     },
     {
@@ -29,7 +49,9 @@
     },
     {
       "match": "choose 3 5",
-      "steps": ["Can you pick 5 objects out of 3? How many ways are there to do something impossible?"],
+      "steps": [
+        "Can you pick 5 objects out of 3? How many ways are there to do something impossible?"
+      ],
       "hint": "Zero. It comes out by itself if `choose 0 (k + 1) = 0` and the recursion reduces both inputs."
     },
     {
@@ -59,5 +81,8 @@
       "match": "",
       "hint": "Compute the first values by hand and compare with your cases."
     }
-  ]
+  ],
+  "order": 5,
+  "chapter": "I · First observations",
+  "learningObjective": "Use recursive counts and finite arithmetic to describe the beginning of a sequence."
 }

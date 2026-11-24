@@ -1,5 +1,10 @@
 /-
-# Challenge: truncated arithmetic
+# Truncated measurements
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use integer sign, absolute difference, ratio and percent without confusing rounded data with exact data.**
 
 Four functions where the junk values of `ℕ` and `ℚ` are waiting for you.
 Everything you need was in "Integers and casts" and "Division by zero".
@@ -24,6 +29,11 @@ Everything you need was in "Integers and casts" and "Division by zero".
   dividing does that.
 
 Hidden tests will hunt for every inexact value.
+
+## The road from here
+
+Audit those numerical normalisations.
+
 -/
 namespace L14
 

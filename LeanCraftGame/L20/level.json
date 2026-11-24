@@ -1,6 +1,6 @@
 {
-  "world": "Quantifiers World",
-  "title": "Bounded quantifiers",
+  "world": "Sequences",
+  "title": "Eventually and bounded quantifiers",
   "skill": "syntax",
   "predict": [
     {
@@ -53,5 +53,8 @@
       "match": "",
       "hint": "Expand the shorthand: `∀ n ≥ N` hides an `→`, `∃ n > 0` hides an `∧`."
     }
-  ]
+  ],
+  "order": 20,
+  "chapter": "I · Mathematical language",
+  "learningObjective": "Restrict claims to indices beyond a threshold N, separating finite bad behaviour from long-run behaviour."
 }

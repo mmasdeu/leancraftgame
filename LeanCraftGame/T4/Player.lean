@@ -1,4 +1,5 @@
 /-
+
 # The definition of a topology
 
 A topology on `α` consists of a predicate saying which sets are open, together
@@ -16,6 +17,17 @@ finite intersection.
 An *arbitrary intersection* axiom would be different and too strong. A basis,
 introduced in T7, need not itself be closed under intersections: pairs of basis
 sets merely have to be refined by basis sets around each point.
+
+**ACT III — TOPOLOGY**
+
+The earlier acts gave you the vocabulary needed here: functions and quantifiers from
+**sequences**, inverse images and local approximation from **limits**, and packaged
+axioms from **structures**. This level turns those tools toward general spaces.
+
+## The road from here
+
+Test the topology axioms on reusable examples, starting with Sierpiński space.
+
 
 ## Your task
 

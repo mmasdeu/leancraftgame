@@ -1,5 +1,5 @@
 {
-  "world": "Topology World",
+  "world": "Topology",
   "title": "Relations and partitions",
   "skill": "construct",
   "public": "all",
@@ -71,5 +71,7 @@
       "match": "same fibre means",
       "hint": "Define `f x = f y`; then `{y | SameFiber f x y}` is `f ⁻¹' {f x}`."
     }
-  ]
+  ],
+  "order": 103,
+  "chapter": "III · Foundations"
 }

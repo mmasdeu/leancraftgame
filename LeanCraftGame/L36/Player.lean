@@ -1,5 +1,10 @@
 /-
-# Closed forms
+# Closed forms for accumulations
+
+**ACT II — LIMITS**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **compare sums of powers and other finite sums with formulas rather than guessing a closed form from a few values.**
 
 A sum such as `1 + 2 + … + n` has a **closed form**: a formula with no sum in
 it, like `n * (n + 1) / 2`. Both define a function of `n`, and the two
@@ -39,6 +44,11 @@ happen *before* the division, not after it.
 ## Your task
 
 `triSum`, `triFormula` and `pairs` are done. Define the other six functions.
+
+## The road from here
+
+Exploit cancellation across a sequence segment.
+
 -/
 namespace L36
 

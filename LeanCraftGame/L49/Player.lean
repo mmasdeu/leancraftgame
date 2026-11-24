@@ -1,5 +1,10 @@
 /-
-# Your first structure
+# Predicates and small structures
+
+**ACT III — TOPOLOGY**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **bundle values with evidence such as positivity or interval bounds—the first step from syntax to mathematical structure.**
 
 In the Structure Syntax world a structure bundled *data*: a point is two
 numbers, a rectangle a width and a height. Mathematicians use structures for
@@ -32,6 +37,11 @@ rejected (✅ if some axiom fails).
 Define `Interval` with two numbers `lo` and `hi` and an axiom saying that
 `lo ≤ hi`. Then define `PosNat`, a number `val` that is positive.
 Keep the fields in the order they are listed.
+
+## The road from here
+
+Learn which relation axioms a structure needs.
+
 -/
 namespace L49
 

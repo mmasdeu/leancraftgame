@@ -1,5 +1,10 @@
 /-
-# Spot the bug: limits
+# Audit limit claims
+
+**ACT II — LIMITS**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use explicit sequences to disprove an incorrect proposed limit or convergence claim.**
 
 Two colleagues each wrote down the limit of a real sequence, from memory.
 Both got it wrong, in opposite directions.
@@ -33,6 +38,11 @@ usual: `0`, `1`, `(1 / 2 : ℝ)`.
   rejects.
 * `seqB`, `limB`: a sequence that does not converge to `limB`, but that
   `ConvergesB` accepts.
+
+## The road from here
+
+Prepare the language needed for general topological spaces.
+
 -/
 namespace L43
 

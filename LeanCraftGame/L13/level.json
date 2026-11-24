@@ -1,6 +1,6 @@
 {
-  "world": "Numbers World",
-  "title": "Division by zero",
+  "world": "Sequences",
+  "title": "Normalising readings",
   "skill": "writing",
   "predict": [
     {
@@ -72,5 +72,8 @@
       "match": "",
       "hint": "Is there a division that could be by zero?"
     }
-  ]
+  ],
+  "order": 13,
+  "chapter": "I · First observations",
+  "learningObjective": "Define ratios and reciprocal relations while explicitly controlling division by zero."
 }

@@ -1,6 +1,6 @@
 {
-  "world": "Statements World",
-  "title": "And",
+  "world": "Sequences",
+  "title": "Join observations",
   "skill": "syntax",
   "predict": [
     {
@@ -61,5 +61,8 @@
       "match": "",
       "hint": "Check the examples in the comment above the predicate."
     }
-  ]
+  ],
+  "order": 8,
+  "chapter": "I · First observations",
+  "learningObjective": "Express simultaneous properties with conjunctions and intervals of admissible readings."
 }

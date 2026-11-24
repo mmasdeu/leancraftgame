@@ -1,6 +1,6 @@
 {
-  "world": "Statements World",
-  "title": "Spot the bug: connectives",
+  "world": "Sequences",
+  "title": "Audit connective readings",
   "skill": "reading",
   "public": "all",
   "checks": [
@@ -49,5 +49,8 @@
       ],
       "hint": "Take `a` odd and `b` even, such as 1 and 2."
     }
-  ]
+  ],
+  "order": 11,
+  "chapter": "I · First observations",
+  "learningObjective": "Use concrete values to refute definitions that swap a connective or draw an invalid conclusion."
 }

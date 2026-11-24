@@ -1,5 +1,5 @@
 {
-  "world": "Topology World",
+  "world": "Topology",
   "title": "Subspace topology",
   "skill": "construct",
   "public": "all",
@@ -61,5 +61,7 @@
       "match": "singleton true",
       "hint": "Both concrete sets should be `{true}`."
     }
-  ]
+  ],
+  "order": 110,
+  "chapter": "III · New spaces"
 }

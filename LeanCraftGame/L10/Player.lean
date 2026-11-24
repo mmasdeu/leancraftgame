@@ -1,5 +1,10 @@
 /-
-# Challenge: calendars and triangles
+# Interacting constraints
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **translate compound conditions into precise definitions instead of relying on a plausible reading.**
 
 Three definitions from everyday life, each with a trap or two. Combine what
 you know: `∧`, `∨`, `¬`, `=`, `≠`, `<`, `≤`, `%`, and parentheses wherever
@@ -17,6 +22,11 @@ you are unsure (remember: `∧` binds tighter than `∨`).
   (Not "at least one", and not "all of them".)
 
 The tests are hidden: think about the edge cases before you run.
+
+## The road from here
+
+Audit the connectives in those translations.
+
 -/
 namespace L10
 

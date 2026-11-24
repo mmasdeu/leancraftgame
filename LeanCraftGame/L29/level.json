@@ -1,6 +1,6 @@
 {
-  "world": "Library World",
-  "title": "Using Mathlib",
+  "world": "Sequences",
+  "title": "Library facts about observations",
   "skill": "writing",
   "predict": [
     {
@@ -72,5 +72,8 @@
       "match": "",
       "hint": "Look up the name of the notion in the lesson text."
     }
-  ]
+  ],
+  "order": 29,
+  "chapter": "I · Sequence behaviour",
+  "learningObjective": "Use established definitions while distinguishing a satisfactory statement from the library statement you intended."
 }

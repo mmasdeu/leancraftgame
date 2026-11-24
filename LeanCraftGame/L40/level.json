@@ -1,6 +1,6 @@
 {
-  "world": "Analysis World",
-  "title": "Continuity",
+  "world": "Limits",
+  "title": "Continuity as error control",
   "skill": "writing",
   "predict": [
     {
@@ -91,5 +91,8 @@
       ],
       "hint": "`IsDeltaFor f a ε δ := 0 < δ ∧ ∀ x, |x - a| < δ → |f x - f a| < ε`, and `ContAt f a := ∀ ε > 0, ∃ δ, IsDeltaFor f a ε δ`."
     }
-  ]
+  ],
+  "order": 40,
+  "chapter": "II · Convergence",
+  "learningObjective": "Define ContAt f a using δ for every ε, relating a targeted error in output to an allowed error in input."
 }

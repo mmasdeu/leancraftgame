@@ -1,5 +1,10 @@
 /-
-# Injective and surjective
+# Injective and surjective sampling
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **distinguish distinct-index distinct-output sampling from covering the output type and from bijectivity.**
 
 Two properties of a function `f : ℕ → ℕ`, and a third that combines them.
 
@@ -22,6 +27,11 @@ and `fun n => 2 * n`. Press **Run tests** to see the report.
 
 Hint: for each of the four functions above, decide *by hand* whether it is
 injective and whether it is surjective before you press the button.
+
+## The road from here
+
+Study repeated visits instead of one-time coverage.
+
 -/
 import Mathlib.Tactic
 

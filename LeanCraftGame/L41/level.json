@@ -1,5 +1,5 @@
 {
-  "world": "Analysis World",
+  "world": "Limits",
   "title": "Cauchy sequences",
   "skill": "writing",
   "predict": [
@@ -66,5 +66,8 @@
       ],
       "hint": "`IsEventuallyConstant u := ∃ N, ∀ n ≥ N, u n = u N`, and `IsCauchy u := ∀ ε > 0, ∃ N, ∀ m ≥ N, ∀ n ≥ N, |u m - u n| < ε`."
     }
-  ]
+  ],
+  "order": 41,
+  "chapter": "II · Convergence",
+  "learningObjective": "Separate Cauchy closeness of terms from convergence to a named limit, using eventual indices and positive errors."
 }

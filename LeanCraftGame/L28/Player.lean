@@ -1,5 +1,10 @@
 /-
-# Sets
+# Sets of indices
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **describe even indices, multiples and bounded index sets, so conditions can be treated as set membership.**
 
 `Set ℕ` is the type of sets of natural numbers.
 
@@ -20,6 +25,11 @@ def evens : Set ℕ := {n | n % 2 = 0}
 ## Your task
 
 `evens` is done. Define `multiplesOf k` and `BoundedSet s`.
+
+## The road from here
+
+Use Mathlib's existing vocabulary carefully.
+
 -/
 namespace L28
 

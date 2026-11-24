@@ -1,6 +1,11 @@
 /-
 # Classes and instances
 
+**ACT III — TOPOLOGY**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **give notation a meaning on new types through classes and instances, the mechanism behind TopologicalSpace and filters.**
+
 Many things in Lean can be "measured": a string has a length, a list has a
 number of entries, a rectangle has an area. We would like one word, `size`,
 that works for all of them, and does the right thing for each. That is what a
@@ -52,6 +57,11 @@ Three instances are missing. The sizes mean:
 * a `List ℕ`: the number of entries (not their sum!);
 * a `Rect` (a rectangle with width `w` and height `h`): the number of unit
   squares in it.
+
+## The road from here
+
+Reuse standard instances rather than rebuilding them.
+
 -/
 namespace L53
 

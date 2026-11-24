@@ -1,6 +1,11 @@
 /-
 # Standard instances
 
+**ACT III — TOPOLOGY**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **interpret arithmetic operations on custom structures through coherent instances, checking the resulting expressions against intended semantics.**
+
 In "Classes and instances" you wrote instances of a class that we invented.
 Lean and Mathlib come with many classes of their own, and each one is the
 reason a certain piece of notation works:
@@ -47,6 +52,11 @@ A `Vec` is an arrow in the plane. Give it the standard notation:
   types of the left side, the right side and the result.)
 
 Instances can use each other: inside `Sub` you may write `u + -v`.
+
+## The road from here
+
+Build instances that depend on earlier ones.
+
 -/
 namespace L54
 

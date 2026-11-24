@@ -50,11 +50,21 @@ def level_dir(n):
     return f"L{n}" if isinstance(n, int) else n
 
 
-LEVELS = ([n for n in sorted(int(d.name[1:]) for d in (ROOT / "LeanCraftGame").glob("L[0-9]*")
-                           if d.is_dir() and d.name[1:].isdigit())] +
-          sorted((d.name for d in (ROOT / "LeanCraftGame").iterdir()
-                  if d.is_dir() and re.fullmatch(r"(?!L\d+$)[A-Z]+[1-9]\d*", d.name)),
-                 key=lambda s: (re.match(r"[A-Z]+", s).group(), int(re.search(r"\d+", s).group()))))
+def discover_levels():
+    numeric = [int(d.name[1:]) for d in (ROOT / "LeanCraftGame").glob("L[0-9]*")
+                if d.is_dir() and d.name[1:].isdigit()]
+    prefixed = [d.name for d in (ROOT / "LeanCraftGame").iterdir()
+                if d.is_dir() and re.fullmatch(r"(?!L\d+$)[A-Z]+[1-9]\d*", d.name)]
+    def order(n):
+        meta = json.loads((ROOT / "LeanCraftGame" / level_dir(n) / "level.json").read_text(encoding="utf-8"))
+        # The narrative position can differ from the stable storage/directory ID: the
+        # mathematical auditing coda comes after topology, not before it.
+        fallback = n if isinstance(n, int) else 100 + int(n[1:])
+        return (meta.get("order", fallback), isinstance(n, str), n)
+    return sorted(numeric + prefixed, key=order)
+
+
+LEVELS = discover_levels()
 LEAN_ENV = {}       # environment for running Lean (LEAN, LEAN_PATH, …), see prepare_lean()
 # The app's first-launch setup (an object with status() and retry()), or None when the
 # server runs from a checkout and Lean is ready from the start.

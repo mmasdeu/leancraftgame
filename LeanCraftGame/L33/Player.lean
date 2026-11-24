@@ -1,5 +1,10 @@
 /-
-# Spot the bug: the library
+# Audit relations and number claims
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **refute plausible library-style predicates with a concrete counterexample.**
 
 A colleague used Mathlib's notions, but not quite as Mathlib means them.
 
@@ -32,6 +37,11 @@ although it does not have the property in the comment:
 * `twin`: `TwinPrime twin` holds, but `twin` and `twin + 2` are not both prime.
 * `mulK`, `mulN`: `mulN ∈ multiplesOf mulK` holds, but `mulN` is not a multiple
   of `mulK`.
+
+## The road from here
+
+Aggregate a finite segment of observations.
+
 -/
 namespace L33
 

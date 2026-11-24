@@ -1,5 +1,5 @@
 {
-  "world": "Topology World",
+  "world": "Topology",
   "title": "Families of sets",
   "skill": "construct",
   "public": [
@@ -90,5 +90,7 @@
       "match": "finite family is binary",
       "hint": "Use exactly `{∅, {0}, {1}, Set.univ}`. Any two distinct singleton sets meet in `∅`."
     }
-  ]
+  ],
+  "order": 102,
+  "chapter": "III · Foundations"
 }

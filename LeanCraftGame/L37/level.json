@@ -1,6 +1,6 @@
 {
-  "world": "Finite Sums World",
-  "title": "Challenge: finite sums",
+  "world": "Limits",
+  "title": "Telescoping and partial sums",
   "skill": "writing",
   "hintsAfter": 2,
   "predict": [
@@ -108,5 +108,8 @@
       "match": "",
       "hint": "Write out the terms of the sum by hand for the smallest `n` that fails, and compare with what your set contains."
     }
-  ]
+  ],
+  "order": 37,
+  "chapter": "II · Accumulation",
+  "learningObjective": "Recognise when successive differences telescope and how endpoints determine the whole sum."
 }

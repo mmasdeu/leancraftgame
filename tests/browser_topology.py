@@ -35,9 +35,11 @@ try:
    if i==1:
     page.click('#next')
     page.wait_for_function("location.search.includes('level=T2')")
-  assert 'last level' in page.locator('#summary').inner_text()
+  page.click('#next')
+  page.wait_for_function("location.search.includes('level=58')")
+  print('T15 next step is the mathematical-auditing coda at L58.')
   assert not errors,errors
-  print(f'All 15 levels cleared through the browser UI in {time.time()-started:.1f}s; Next navigation and T15 completion passed.')
+  print(f'All 15 levels cleared through the browser UI in {time.time()-started:.1f}s; Next navigation and the T15-to-coda transition passed.')
   if console_errors: print('Console errors (information may include third-party analytics):',console_errors)
   browser.close()
 finally:

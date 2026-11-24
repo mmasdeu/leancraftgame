@@ -1,6 +1,6 @@
 {
-  "world": "Quantifiers World",
-  "title": "Spot the bug: quantifiers",
+  "world": "Sequences",
+  "title": "Audit long-run claims",
   "skill": "reading",
   "public": "all",
   "checks": [
@@ -52,5 +52,8 @@
       ],
       "hint": "`fun _ => 7`."
     }
-  ]
+  ],
+  "order": 22,
+  "chapter": "I · Mathematical language",
+  "learningObjective": "Choose the counterexample that exposes swapped or misplaced quantifiers in sequence claims."
 }

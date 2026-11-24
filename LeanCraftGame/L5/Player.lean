@@ -1,5 +1,10 @@
 /-
-# Challenge: counting
+# Counting finite prefixes
+
+**ACT I — SEQUENCES**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **use recursive counts and finite arithmetic to describe the beginning of a sequence.**
 
 Time to turn word problems into cases and recursion. Nothing new to learn,
 but you must decide the base cases yourself, and the tests are hidden.
@@ -28,6 +33,11 @@ def both : Nat → Nat → Nat
 
 Think about the smallest inputs first: what does the story say about 0 steps,
 about picking 0 objects, about picking more objects than there are?
+
+## The road from here
+
+Audit a sampling report rather than trusting its presentation.
+
 -/
 namespace L5
 

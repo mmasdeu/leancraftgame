@@ -1,5 +1,10 @@
 /-
-# Spot the bug: classes
+# Audit class instances
+
+**ACT III — TOPOLOGY**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **reject a compiling but unsuitable instance with an expression whose value contradicts its description.**
 
 Lean checks that an instance has the right *types*. It does not check that it
 behaves: `a + b` may be any function you like, and Lean will happily rewrite
@@ -58,6 +63,11 @@ Give an input that shows each bug. The tests run the colleague's code:
 * `version1`, `version2`: two versions, as pairs (major, minor), such that
   `max` returns a version that is *lower* than one of them, according to
   `compare`.
+
+## The road from here
+
+Use mathematical auditing to test claims after building the theory.
+
 -/
 namespace L57
 

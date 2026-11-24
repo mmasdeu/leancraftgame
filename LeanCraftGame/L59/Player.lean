@@ -1,5 +1,10 @@
 /-
-# The AI proved the Collatz conjecture!
+# Audit an orbit conjecture
+
+**ACT III — TOPOLOGY · CODA**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **define a Collatz step and orbit with explicit finite behaviour, separating unbounded iteration from successfully reaching a target.**
 
 An AI assistant was asked to formalise and prove the Collatz conjecture:
 
@@ -33,6 +38,11 @@ applies. These items matter most here:
    counting down, jumping to 0. A faithful statement must be right in
    all of them. (`Collatz o` below means: from every positive start
    the process reaches exactly 1.)
+
+## The road from here
+
+Distinguish finite toy-world validation from an open general claim.
+
 -/
 import Mathlib.Tactic
 

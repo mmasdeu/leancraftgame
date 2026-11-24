@@ -1,5 +1,10 @@
 /-
-# Limits
+# Convergent sequences
+
+**ACT II — LIMITS**
+
+This is the same journey, in a new order: **sequences → limits → topology**. Your
+current step is to **define ConvergesTo u a with ∀ ε > 0, ∃ N, every later term lying within ε of a—quantifying over all positive errors, not just a convenient one.**
 
 Time for the definition every analysis course starts with. Some new notation:
 
@@ -28,6 +33,11 @@ def BoundedSeq (u : ℕ → ℝ) : Prop := ∃ M, ∀ n, |u n| ≤ M
 ## Your task
 
 `BoundedSeq` is done. Define `ConvergesTo u a`.
+
+## The road from here
+
+Move from limiting values to continuity of transformations.
+
 -/
 namespace L39
 

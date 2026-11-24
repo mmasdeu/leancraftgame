@@ -1,6 +1,6 @@
 {
-  "world": "Numbers World",
-  "title": "Integers and casts",
+  "world": "Sequences",
+  "title": "Indices and integer arithmetic",
   "skill": "syntax",
   "predict": [
     {
@@ -64,5 +64,8 @@
       "match": "",
       "hint": "Check the examples in the comments."
     }
-  ]
+  ],
+  "order": 12,
+  "chapter": "I · First observations",
+  "learningObjective": "Work with casts and integer distances when positions and readings no longer have the same type."
 }

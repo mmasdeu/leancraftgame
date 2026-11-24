@@ -1,6 +1,6 @@
 {
-  "world": "Library World",
-  "title": "Divisibility and gcd",
+  "world": "Sequences",
+  "title": "Divisibility of indices",
   "skill": "writing",
   "predict": [
     {
@@ -126,5 +126,8 @@
       "match": "",
       "hint": "Test your definition on the corner cases 0 and 1, and remember that `n ∣ 0` always holds."
     }
-  ]
+  ],
+  "order": 31,
+  "chapter": "I · Sequence behaviour",
+  "learningObjective": "Define common divisors, coprimality, gcd and primality as predicates on sequence indices."
 }

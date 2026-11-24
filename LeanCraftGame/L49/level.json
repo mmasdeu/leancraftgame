@@ -1,6 +1,6 @@
 {
-  "world": "Structure World",
-  "title": "Your first structure",
+  "world": "Topology",
+  "title": "Predicates and small structures",
   "skill": "writing",
   "predict": [
     {
@@ -51,5 +51,8 @@
       "match": "",
       "hint": "An axiom is a field whose type is a statement, such as `h : lo ≤ hi`."
     }
-  ]
+  ],
+  "order": 49,
+  "chapter": "III · Language for spaces",
+  "learningObjective": "Bundle values with evidence such as positivity or interval bounds—the first step from syntax to mathematical structure."
 }
