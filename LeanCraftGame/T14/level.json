@@ -1,0 +1,74 @@
+{
+  "world": "Topology World",
+  "title": "Separation axioms",
+  "skill": "construct",
+  "public": "all",
+  "hintsAfter": 1,
+  "exercises": [
+    {
+      "title": "Define T0 and T1",
+      "type": "construct",
+      "objective": "Distinguish one-directional and preferred-direction open separation.",
+      "success": [
+        "T0 distinguishes points in at least one direction",
+        "T1 separates the first point from the second"
+      ]
+    },
+    {
+      "title": "Define Hausdorff spaces",
+      "type": "construct",
+      "objective": "Require disjoint open neighbourhoods.",
+      "success": [
+        "Hausdorff gives disjoint neighbourhoods"
+      ]
+    },
+    {
+      "title": "Prove the implications and strictness",
+      "type": "connect",
+      "objective": "Use Hausdorff to T1 to T0, Sierpiński, and infinite cofinite counterexamples.",
+      "success": [
+        "T1 separates the first point from the second"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example {α : Type*} (τ : LeanCraftGame.Topology.MyTopology α) (h : T14.MyHausdorff τ) : T14.MyT1 τ := by\n  intro x y hxy\n  obtain ⟨U, V, hU, hV, hxU, hyV, hd⟩ := h x y hxy\n  refine ⟨U, hU, hxU, ?_⟩\n  intro hyU\n  have hz : y ∈ U ∩ V := ⟨hyU, hyV⟩\n  rw [hd] at hz\n  exact hz",
+      "message": "A Hausdorff neighbourhood of `x` contains no point of the disjoint neighbourhood of `y`, so Hausdorff implies T1."
+    },
+    {
+      "lean": "example {α : Type*} (τ : LeanCraftGame.Topology.MyTopology α) (h : T14.MyT1 τ) : T14.MyT0 τ := by\n  intro x y hxy\n  obtain ⟨U, hU, hx, hy⟩ := h x y hxy\n  exact ⟨U, hU, Or.inl ⟨hx, hy⟩⟩",
+      "message": "T1 supplies the preferred direction needed for one disjunct of T0."
+    },
+    {
+      "lean": "example : T14.MyT0 LeanCraftGame.Topology.sierpinski := by\n  intro x y hxy\n  cases x <;> cases y\n  · exact (hxy rfl).elim\n  · exact ⟨{true}, Or.inr rfl, Or.inr ⟨rfl, by simp⟩⟩\n  · exact ⟨{true}, Or.inr rfl, Or.inl ⟨rfl, by simp⟩⟩\n  · exact (hxy rfl).elim",
+      "message": "Singleton `{true}` distinguishes Boolean points in either order, so Sierpiński is T0."
+    },
+    {
+      "lean": "example : ¬ T14.MyT1 LeanCraftGame.Topology.sierpinski := by\n  intro h\n  obtain ⟨U, hU, hf, ht⟩ := h false true (by decide)\n  rw [LeanCraftGame.Topology.sierpinski_isOpen_iff] at hU\n  rcases hU with rfl | rfl | rfl <;> simp_all",
+      "message": "No Sierpiński open set contains `false` while omitting `true`, so the space is not T1."
+    },
+    {
+      "lean": "example : T1Space (CofiniteTopology Nat) := inferInstance",
+      "message": "Infinite cofinite Nat is T1 by a general instance."
+    },
+    {
+      "lean": "example : ¬ T2Space (CofiniteTopology Nat) := by\n  intro h\n  exact @not_preirreducible_nontrivial_t2 (CofiniteTopology Nat) inferInstance inferInstance inferInstance h",
+      "message": "Infinite cofinite Nat is irreducible, so a Hausdorff structure would contradict nontriviality."
+    }
+  ],
+  "hints": [
+    {
+      "match": "T0 distinguishes",
+      "hint": "Use `∃ U, τ.IsOpen U ∧ (x ∈ U ∧ y ∉ U ∨ y ∈ U ∧ x ∉ U)` after `∀ x y, x ≠ y →`."
+    },
+    {
+      "match": "T1 separates",
+      "hint": "Use the same preferred-direction witness without the second disjunct."
+    },
+    {
+      "match": "Hausdorff gives",
+      "hint": "Return two opens `U,V`, membership proofs `x ∈ U`, `y ∈ V`, and `U ∩ V = ∅`."
+    }
+  ]
+}

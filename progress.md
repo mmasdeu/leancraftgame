@@ -29,7 +29,10 @@ iteration; do not mark a milestone complete when its verification has not run.
   coordinate-generated products/projections and finite-coordinate cylinders. Box versus
   product is distinguished mathematically by the exercises; a formal non-openness proof
   for `allTrue` is optional enrichment.
-- [ ] **M7 — T12–T14 global properties.**
+- [x] **M7 — T12–T14 global properties.** Open-cover compactness, separation-based
+  connectedness and T0/T1/Hausdorff are implemented. Finite, infinite-discrete,
+  infinite-cofinite, Sierpiński and continuous-image examples are verified by general
+  Lean/Mathlib theorems where required.
 - [ ] **M8 — T15 filters/convergence.**
 - [ ] **M9 — integration and release.** Requires the pinned build, full regression/playthrough,
   and external mathematical review.
@@ -160,3 +163,16 @@ continuous projections, one-coordinate cylinders and infinite box-style `allTrue
 Supplementary 4.33.1 verification: T9 **4/4**, T10 **4/4**, T11 **4/4**, with all semantic
 checks and included mutants behaving as intended. Static metadata and online export pass.
 Next: global properties T12–T14 and the infinite cofinite proofs they require.
+
+## Iteration 8 — global properties T12–T14
+
+T12 uses unindexed covers and `Finset (Set α)` subcovers after the indexed version exposed an
+unnecessary universe-polymorphism complication. General examples use Mathlib instances for
+finite compactness, infinite-discrete noncompactness and cofinite compactness. T13 includes
+Sierpiński connectedness, discrete-Bool separation and continuous images. T14 proves
+Hausdorff ⇒ T1 ⇒ T0 and verifies Sierpiński T0/not-T1 plus infinite-cofinite T1/not-T2.
+All distinguish infinite general proofs from finite checks.
+
+Supplementary 4.33.1 verification: T12 **2/2**, T13 **2/2**, T14 **3/3**, all semantic gates
+and included mutants behaving as expected. Static metadata and online export pass.
+Next: T15 neighbourhoods, filters and convergence, then full integration/regression accounting.

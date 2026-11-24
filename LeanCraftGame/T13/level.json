@@ -1,0 +1,60 @@
+{
+  "world": "Topology World",
+  "title": "Connectedness",
+  "skill": "construct",
+  "public": "all",
+  "hintsAfter": 1,
+  "exercises": [
+    {
+      "title": "Define connectedness by separations",
+      "type": "construct",
+      "objective": "Rule out a disjoint covering pair of nonempty open sets.",
+      "success": [
+        "connectedness rules out separations"
+      ]
+    },
+    {
+      "title": "Classify standard finite spaces",
+      "type": "classify",
+      "objective": "Show Sierpiński space connected and discrete Bool disconnected.",
+      "success": [
+        "connectedness applies to arbitrary open pairs"
+      ]
+    },
+    {
+      "title": "Connect clopen sets and continuous images",
+      "type": "connect",
+      "objective": "Relate separation to clopen sets and use inverse images for continuous maps.",
+      "success": [
+        "connectedness rules out separations"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example {α : Type*} (τ : LeanCraftGame.Topology.MyTopology α) (h : T13.MyConnected τ) (U V : Set α) (hU : τ.IsOpen U) (hV : τ.IsOpen V) (hc : U ∪ V = Set.univ) (hd : U ∩ V = ∅) : U = ∅ ∨ V = ∅ := h U V hU hV hc hd",
+      "message": "Your predicate must apply directly to every disjoint open covering pair."
+    },
+    {
+      "lean": "example : T13.MyConnected LeanCraftGame.Topology.sierpinski := by\n  intro U V hU hV hc hd\n  rw [LeanCraftGame.Topology.sierpinski_isOpen_iff] at hU hV\n  rcases hU with rfl | rfl | rfl <;> rcases hV with rfl | rfl | rfl <;> simp_all [Set.ext_iff]",
+      "message": "Sierpiński space has no disjoint pair of nonempty opens covering Bool."
+    },
+    {
+      "lean": "example : ¬ T13.MyConnected (LeanCraftGame.Topology.discrete Bool) := by\n  intro h\n  have hs := h {true} {false} trivial trivial (by ext b; cases b <;> simp) (by simp)\n  rcases hs with ht | hf\n  · have hx : true ∈ ({true} : Set Bool) := rfl\n    rw [ht] at hx\n    exact hx\n  · have hx : false ∈ ({false} : Set Bool) := rfl\n    rw [hf] at hx\n    exact hx",
+      "message": "The two singleton clopen sets separate discrete Bool."
+    },
+    {
+      "lean": "example {α β : Type*} [TopologicalSpace α] [TopologicalSpace β] [PreconnectedSpace α] (f : α → β) (hf : Continuous f) : IsPreconnected (f '' Set.univ) := isPreconnected_univ.image f hf.continuousOn",
+      "message": "Continuous images of preconnected spaces are preconnected."
+    }
+  ],
+  "hints": [
+    {
+      "match": "connectedness",
+      "steps": [
+        "Quantify two sets `U,V`. Require openness, `U ∪ V = univ`, and `U ∩ V = ∅`."
+      ],
+      "hint": "Conclude `U = ∅ ∨ V = ∅`; do not require both to be empty."
+    }
+  ]
+}

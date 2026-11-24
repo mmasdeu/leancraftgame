@@ -1,0 +1,68 @@
+{
+  "world": "Topology World",
+  "title": "Compactness",
+  "skill": "construct",
+  "public": "all",
+  "hintsAfter": 1,
+  "exercises": [
+    {
+      "title": "Define compactness with open covers",
+      "type": "construct",
+      "objective": "Return a finite subcover of every indexed open cover.",
+      "success": [
+        "compactness returns a finite subcover"
+      ]
+    },
+    {
+      "title": "Classify finite, discrete, and cofinite spaces",
+      "type": "classify",
+      "objective": "Distinguish finite compactness, infinite-discrete noncompactness, and infinite-cofinite compactness.",
+      "success": [
+        "finite covers are enough to state compactness"
+      ]
+    },
+    {
+      "title": "Connect continuity and compact images",
+      "type": "connect",
+      "objective": "Pull an open cover of the image back to the compact domain.",
+      "success": [
+        "compactness returns a finite subcover"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example {α : Type*} (τ : LeanCraftGame.Topology.MyTopology α) (h : T12.MyCompact τ) (C : Set (Set α)) (ho : ∀ s ∈ C, τ.IsOpen s) (hc : (⋃₀ C) = Set.univ) : ∃ F : Finset (Set α), (↑F : Set (Set α)) ⊆ C ∧ (⋃₀ (↑F : Set (Set α))) = Set.univ := h C ho hc",
+      "message": "Your predicate must apply directly to any open cover and produce a finite subcover."
+    },
+    {
+      "lean": "example : CompactSpace Bool := inferInstance",
+      "message": "Every finite topological space, including Bool, is compact."
+    },
+    {
+      "lean": "example : ¬ CompactSpace Nat := not_compactSpace_iff.mpr inferInstance",
+      "message": "The usual infinite discrete topology on Nat is not compact."
+    },
+    {
+      "lean": "example : IsCompact (Set.univ : Set (CofiniteTopology Nat)) := isCompact_univ",
+      "message": "The infinite cofinite space on Nat is compact by a general theorem, not a finite check."
+    },
+    {
+      "lean": "example {α β : Type*} [TopologicalSpace α] [TopologicalSpace β] [CompactSpace α] (f : α → β) (hf : Continuous f) : IsCompact (f '' Set.univ) := isCompact_univ.image hf",
+      "message": "Continuous images of compact spaces are compact."
+    }
+  ],
+  "hints": [
+    {
+      "match": "compactness",
+      "steps": [
+        "Start with `∀ C : Set (Set α)`, and assume every member is open and `⋃₀ C = univ`."
+      ],
+      "hint": "Finish with `∃ F : Finset (Set α), (↑F : Set (Set α)) ⊆ C ∧ (⋃₀ (↑F : Set (Set α))) = Set.univ`."
+    },
+    {
+      "match": "finite covers",
+      "hint": "Reuse the same finite-subcover conclusion; the extra premises simply appear in a different order."
+    }
+  ]
+}
