@@ -239,5 +239,6 @@ Updated `.github/workflows/pages.yml` so changes to the shared publication input
 trigger GitHub Pages. The workflow deploys the online game directly to `/beta` while preserving
 main's root site and `/play`; main-site jobs now also preserve `/beta`. Existing gh-pages content
 is fetched and updated with a normal commit, not a forced branch replacement. YAML parsing and
-the local 75-level beta build/preservation check pass. Actual GitHub Actions and Pages serving
-must be confirmed after pushing the workflow change.
+the local 75-level beta build/preservation check pass. GitHub rejected the workflow commit:
+this connection lacks `workflows` permission for `.github/workflows/pages.yml`. The blocking
+commit remains local; the remote branch and live beta site were not updated.
