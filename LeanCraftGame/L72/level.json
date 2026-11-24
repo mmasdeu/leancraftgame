@@ -1,0 +1,20 @@
+{
+  "world": "Topology World",
+  "title": "Neighbourhoods, filters and convergence",
+  "skill": "writing",
+  "exercise": "Construct",
+  "predict": [
+    {"test": "The constant sequence 1 converges to 0 in Sierpiński space", "statement": "the constant sequence 1, 1, 1, … converges to 0 in Sierpiński space"},
+    {"test": "0, 1, 0, 1, … converges to 1 in Sierpiński space", "statement": "0, 1, 0, 1, … converges to 1 in Sierpiński space"}
+  ],
+  "checks": [
+    {"lean": "example : Family 3 → Fin 3 → Family 3 := L72.nbhds\nexample : Family 3 → Prop := L72.IsFilter", "message": "Keep `nbhds T x : Family n` and `IsFilter F : Prop`."},
+    {"lean": "example : Family 2 → (ℕ → Fin 2) → Fin 2 → Prop := L72.Converges\nexample : ℕ → Fin 2 := L72.twoLimits", "message": "Keep `Converges T u x : Prop` and `twoLimits : ℕ → Fin 2`."}
+  ],
+  "hints": [
+    {"match": "twoLimits", "steps": ["Every sequence converges to `0`. Which sequences converge to `1`?"], "hint": "A sequence that is eventually `1`: `fun k => if k = 0 then 0 else 1`."},
+    {"match": "eighbourhood", "hint": "`Finset.univ.powerset.filter (fun A => ∃ U ∈ T, x ∈ U ∧ U ⊆ A)`."},
+    {"match": "filter", "steps": ["Four conditions, joined by `∧`."], "hint": "`Finset.univ ∈ F ∧ ∅ ∉ F ∧ (∀ A ∈ F, ∀ B : Finset (Fin n), A ⊆ B → B ∈ F) ∧ ∀ A ∈ F, ∀ B ∈ F, A ∩ B ∈ F`."},
+    {"match": "converge", "hint": "`∀ U ∈ T, x ∈ U → ∃ N, ∀ k, N ≤ k → u k ∈ U`."}
+  ]
+}

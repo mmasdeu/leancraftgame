@@ -1,0 +1,19 @@
+{
+  "world": "Topology World",
+  "title": "Compactness",
+  "skill": "writing",
+  "exercise": "Refute",
+  "predict": [
+    {"test": "The initial segments {x | x < i} cover ℕ", "statement": "Covers (fun i => {x | x < i})"},
+    {"test": "The initial segments {x | x < i} have no finite subcover", "statement": "HasFiniteSubcover (fun i => {x | x < i})"}
+  ],
+  "checks": [
+    {"lean": "example : (ℕ → Set ℕ) → Prop := L69.Covers\nexample : (ℕ → Set ℕ) → Prop := L69.HasFiniteSubcover", "message": "Keep `Covers U` and `HasFiniteSubcover U` as propositions about `U : ℕ → Set ℕ`."},
+    {"lean": "example : ℕ → Set ℕ := L69.noSubcover\nexample : ℕ := L69.N0", "message": "Keep `noSubcover : ℕ → Set ℕ` and `N0 : ℕ`."}
+  ],
+  "hints": [
+    {"match": "noSubcover", "steps": ["Finitely many singletons miss a point."], "hint": "`fun i => {i}`."},
+    {"match": "N0", "steps": ["`V i` misses the points `i, …, 3`. Which `V i` misses nothing?"], "hint": "`V 4 = {x | x < 4 ∨ 4 ≤ x}` is everything: `N0 = 4`."},
+    {"match": "", "steps": ["Write the subcover with a bounded quantifier: `∃ i ≤ N, …`."], "hint": "`Covers U := ∀ x, ∃ i, x ∈ U i` and `HasFiniteSubcover U := ∃ N, ∀ x, ∃ i ≤ N, x ∈ U i`."}
+  ]
+}

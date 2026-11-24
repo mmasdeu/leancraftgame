@@ -1,0 +1,19 @@
+{
+  "world": "Topology World",
+  "title": "Products",
+  "skill": "writing",
+  "exercise": "Classify",
+  "predict": [
+    {"test": "The L-shaped set {(0, 1), (1, 0), (1, 1)} is open, though not a rectangle", "statement": "{(0, 1), (1, 0), (1, 1)} is open in Sierpiński × Sierpiński"},
+    {"test": "{(0, 1), (1, 0)} is open in Sierpiński × Sierpiński", "statement": "{(0, 1), (1, 0)} is open in Sierpiński × Sierpiński"}
+  ],
+  "public": ["q1: your answer agrees with the referee's computation"],
+  "checks": [
+    {"lean": "example : Family 2 → Family 3 → Finset (Finset (Fin 2 × Fin 3)) := L68.product", "message": "Keep `product T S : Finset (Finset (Fin m × Fin n))`."},
+    {"lean": "example : Finset (Fin 2 × Fin 2) := L68.diagonal\nexample : Bool := L68.q1", "message": "Keep `diagonal : Finset (Fin 2 × Fin 2)` and `q1 : Bool`."}
+  ],
+  "hints": [
+    {"match": "q1", "steps": ["The complement of the diagonal is `{(0, 1), (1, 0)}`. Is it open?"], "hint": "It is not open (no rectangle around `(0, 1)` avoids `(1, 1)`), so the diagonal is not closed: `false`. The diagonal is closed exactly in Hausdorff spaces, and Sierpiński space is not Hausdorff."},
+    {"match": "", "steps": ["Start from all subsets of the product, and keep those in which every point has a rectangle around it."], "hint": "`Finset.univ.powerset.filter (fun W => ∀ z ∈ W, ∃ U ∈ T, ∃ V ∈ S, z ∈ U ×ˢ V ∧ U ×ˢ V ⊆ W)`."}
+  ]
+}
