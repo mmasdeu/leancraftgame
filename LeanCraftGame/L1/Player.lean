@@ -1,59 +1,44 @@
 /-
 # Naming things
 
-Welcome! In this game you write **definitions** in Lean, a language for
-mathematics. You never write proofs: a hidden *referee* tests your definitions
-and reports what it finds. The first levels teach the syntax step by step.
+Visiting Ramanujan in hospital, Hardy remarked that his taxi had a dull
+number, 1729. Ramanujan replied that it was a very interesting number: the
+smallest that is a sum of two cubes in two different ways.
 
-## What is a definition?
-
-A definition gives a name to a value:
+Mathematics starts by giving names to things. In Lean a name is introduced
+with `def`:
 
 ```lean
-def answer : Nat := 42
+def hardy : Nat := 1729
 ```
 
-Read it piece by piece:
+* `hardy` is the name,
+* `Nat` is its **type**: the natural numbers `0, 1, 2, …` (also written `ℕ`),
+* `1729` is its value.
 
-* `def` says "I am defining something".
-* `answer` is the name. You choose it.
-* After the colon `:` comes the **type**, the kind of thing being defined.
-  `Nat` means *natural numbers*: 0, 1, 2, 3, …
-* `:=` means "is defined to be".
-* `42` is the value.
+Every object in Lean has a type, and Lean checks that the value has the
+type you announced. Arithmetic is written as usual: `+`, `*`, and `^` for
+powers, so `12 ^ 3` is `12³`. A name can be used in later definitions.
 
-One more type: `String` is text in double quotes, like `"hello"`.
-
-## Using names
-
-A definition can use the names defined before it. If `answer` is 42, then
-`answer + 1` is 43. That is what names are for.
-
-## `sorry` and comments
-
-* `sorry` is a placeholder meaning "to be filled in". Replace every `sorry`
-  with a value. The tests only run once no `sorry` is left.
-* A line starting with `--` is a *comment*: Lean ignores it.
-
-## How to play
-
-Edit the code on the left, then press **Run tests** (or `Ctrl`+`Enter`). The
-report on the right shows ✅ for a passed test and ❌ for a failed one.
-If you are stuck, a **Hint** appears under a failed test after a failed run.
+In this game you only write **definitions**. Every statement about them is
+checked by the **referee**, an automatic prover that proves or refutes it.
+In this first world its job is easy: it computes.
 
 ## Your task
 
-Give the three definitions below their right values.
+Replace each `sorry` (Lean's placeholder for "not written yet") by a value.
+Then press **Run tests**.
 -/
+
 namespace L1
 
--- The answer to life, the universe and everything.
-def answer : Nat := sorry
+-- the number of Hardy's taxi
+def hardy : Nat := sorry
 
--- The name of this programming language, as text.
-def language : String := sorry
+-- 1³ + 12³, written with `^`
+def firstWay : Nat := sorry
 
--- One more than the answer. Use `answer` in the definition.
-def successor : Nat := sorry
+-- 9³ + 10³
+def secondWay : Nat := sorry
 
 end L1

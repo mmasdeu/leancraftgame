@@ -1,34 +1,39 @@
 {
-  "world": "Basics World",
+  "world": "Foundations World",
   "title": "Spot the bug",
   "skill": "reading",
-  "public": "all",
-  "checks": [
+  "exercise": "Repair",
+  "predict": [
     {
-      "lean": "example : Nat := L6.ma\nexample : Nat := L6.mb\nexample : Nat := L6.mc",
-      "message": "Keep `ma`, `mb` and `mc` as three natural numbers (`Nat`)."
+      "test": "median3 2 3 1 = 2",
+      "statement": "the colleague's median3 2 3 1 = 2"
     },
     {
-      "lean": "example : Nat := L6.year",
-      "message": "Keep `year : Nat`."
+      "test": "daysInYear 2000 = 366 (divisible by 400)",
+      "statement": "the colleague's daysInYear 2000 = 366"
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : Nat → Nat → Nat → Nat := L6.median3\nexample : Nat → Nat := L6.daysInYear",
+      "message": "Keep `median3 : Nat → Nat → Nat → Nat` and `daysInYear : Nat → Nat`."
     }
   ],
   "hints": [
     {
-      "match": "middle",
+      "match": "median3",
       "steps": [
-        "Did you try inputs in every order? The colleague probably tested `1 2 3`. What about the same three numbers in other orders?",
-        "Look at the first branch: when `a ≤ b` but not `b ≤ c`, `middle` returns `c`. Is the median always `c` then?"
+        "In the branch `a ≤ b` and not `b ≤ c`, the answer is `c` only if `a ≤ c`."
       ],
-      "hint": "`middle 2 3 1` is 1, but the median of 2, 3 and 1 is 2. So `ma = 2`, `mb = 3`, `mc = 1` works."
+      "hint": "`max (min a b) (min (max a b) c)`, or add the missing comparison in the first branch."
     },
     {
       "match": "daysInYear",
-      "steps": [
-        "The specification has *two* exceptions. Does the code handle both?",
-        "The code handles \"except the centuries\". What about \"except every fourth century\"?"
-      ],
-      "hint": "2000 is divisible by 400, so it had 366 days, but `daysInYear 2000` is 365, not 366."
+      "hint": "Test the 400 rule first: `if y % 400 = 0 then 366 else if y % 100 = 0 then 365 else if y % 4 = 0 then 366 else 365`."
+    },
+    {
+      "match": "",
+      "hint": "Find an input where each function fails before you change it."
     }
   ]
 }

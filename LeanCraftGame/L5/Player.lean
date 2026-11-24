@@ -1,43 +1,51 @@
 /-
-# Challenge: counting
+# Challenge: witnesses
 
-Time to turn word problems into cases and recursion. Nothing new to learn,
-but you must decide the base cases yourself, and the tests are hidden.
+An existence statement is proved by exhibiting an object: a **witness**.
+"Some number is a sum of two squares in two ways" is settled by `65 = 1² +
+8² = 4² + 7²`. Finding the witness is the mathematics; checking it is
+computation, and the referee does it for you.
 
-* **Several inputs.** A function may match on two inputs at once:
+Here the definitions are numbers, chosen by you. The tests state what they
+must satisfy. A few things you may want to know:
 
-```lean
-def both : Nat → Nat → Nat
-  | 0, _ => 1
-  | n + 1, k => both n k + k
-```
+* A number is a sum of two squares exactly when each prime `≡ 3 (mod 4)`
+  divides it an even number of times (Fermat, Euler); and products of such
+  numbers have several representations, by the identity
+  `(a² + b²)(c² + d²) = (ac - bd)² + (ad + bc)²`. Try `5 · 13`.
+* Primitive Pythagorean triples are `(m² - n², 2mn, m² + n²)` with
+  `m > n`, coprime, not both odd (Euclid).
+* The Collatz trajectories of `27, 31, 41, 47` are unusually long.
 
-  (`match n, k with` followed by the same `|` lines works too.) Lines are
-  tried from the top, so put the special cases first.
-* A recursive call may be on **any** smaller input, and a function may call
-  itself several times. `if … then … else …` can be used inside a case.
+`Nat.gcd a b` is the greatest common divisor.
 
 ## Your task
 
-* `stairs n`: in how many ways can you climb `n` steps, taking 1 or 2 steps
-  at a time? (`stairs 3` is 3: 1+1+1, 1+2, 2+1.)
-* `choose n k`: in how many ways can you pick `k` of `n` different objects?
-  The first object is either in your pick (then pick `k - 1` of the other
-  `n - 1`) or it is not (pick `k` of the other `n - 1`). `choose 4 2` is 6.
-* `countEven n`: how many even numbers are there among 0, 1, …, n?
-
-Think about the smallest inputs first: what does the story say about 0 steps,
-about picking 0 objects, about picking more objects than there are?
+Choose the witnesses. You may compute in the editor: `#eval iter 100 27`
+prints a value (and is ignored by the referee).
 -/
+
 namespace L5
 
--- the number of ways to climb n steps, 1 or 2 at a time   (stairs 3 is 3)
-def stairs (n : Nat) : Nat := sorry
+-- the Collatz map and its iterates (done)
+def collatz (n : Nat) : Nat := if n % 2 = 0 then n / 2 else 3 * n + 1
+def iter : Nat → Nat → Nat
+  | 0, n => n
+  | k + 1, n => iter k (collatz n)
 
--- the number of ways to choose k objects out of n          (choose 4 2 is 6)
-def choose (n k : Nat) : Nat := sorry
+-- two different ways to write a number as a sum of two squares: p₁² + p₂² = q₁² + q₂²,
+-- with 0 < p₁ < p₂, 0 < q₁ < q₂ and p₁ < q₁
+def p₁ : Nat := sorry
+def p₂ : Nat := sorry
+def q₁ : Nat := sorry
+def q₂ : Nat := sorry
 
--- how many even numbers lie among 0, 1, …, n               (countEven 4 is 3)
-def countEven (n : Nat) : Nat := sorry
+-- a start below 50 that does not reach 1 in the first 100 steps (but does within 200)
+def slow : Nat := sorry
+
+-- a primitive Pythagorean triple x² + y² = z² with gcd(x, y) = 1 and z > 20
+def x : Nat := sorry
+def y : Nat := sorry
+def z : Nat := sorry
 
 end L5

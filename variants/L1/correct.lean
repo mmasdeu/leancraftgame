@@ -1,8 +1,8 @@
--- The answer to life, the universe and everything.
-def answer : Nat := 42
+-- the number of Hardy's taxi
+def hardy : Nat := 1729
 
--- The name of this programming language, as text.
-def language : String := "Lean"
+-- 1³ + 12³, written with `^`
+def firstWay : Nat := 1 ^ 3 + 12 ^ 3
 
--- One more than the answer. Use `answer` in the definition.
-def successor : Nat := answer + 1
+-- 9³ + 10³
+def secondWay : Nat := 9 ^ 3 + 10 ^ 3

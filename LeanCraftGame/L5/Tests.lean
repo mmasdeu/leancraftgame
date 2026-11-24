@@ -1,49 +1,30 @@
-/- Hidden test battery for Level Challenge: counting. -/
+/- Hidden test battery for Level Challenge: witnesses. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L5.Player
 
 open L5
 
-#no_sorry stairs
-#no_sorry choose
-#no_sorry countEven
-#level_start "Challenge: counting"
+#no_sorry p₁
+#no_sorry p₂
+#no_sorry q₁
+#no_sorry q₂
+#no_sorry slow
+#no_sorry x
+#no_sorry y
+#no_sorry z
+#level_start "Challenge: witnesses"
 
-#expect_true "stairs 0 = 1 (one way to climb nothing: do nothing)" :
-  stairs 0 = 1
-#expect_true "stairs 1 = 1" :
-  stairs 1 = 1
-#expect_true "stairs 2 = 2" :
-  stairs 2 = 2
-#expect_true "stairs 5 = 8" :
-  stairs 5 = 8
-#expect_true "stairs 10 = 89" :
-  stairs 10 = 89
-#expect_true "choose 4 2 = 6" :
-  choose 4 2 = 6
-#expect_true "choose 5 0 = 1 (one way to pick nothing)" :
-  choose 5 0 = 1
-#expect_true "choose 0 0 = 1" :
-  choose 0 0 = 1
-#expect_true "choose 3 5 = 0 (cannot pick more than there are)" :
-  choose 3 5 = 0
-#expect_true "choose 0 3 = 0" :
-  choose 0 3 = 0
-#expect_true "choose 5 5 = 1" :
-  choose 5 5 = 1
-#expect_true "choose 6 3 = 20" :
-  choose 6 3 = 20
-#expect_true "choose 10 4 = 210" :
-  choose 10 4 = 210
-#expect_true "countEven 0 = 1 (0 is even)" :
-  countEven 0 = 1
-#expect_true "countEven 1 = 1" :
-  countEven 1 = 1
-#expect_true "countEven 2 = 2" :
-  countEven 2 = 2
-#expect_true "countEven 7 = 4" :
-  countEven 7 = 4
-#expect_true "countEven 10 = 6" :
-  countEven 10 = 6
+#expect_true "p₁² + p₂² = q₁² + q₂²" unfolding p₁ p₂ q₁ q₂ :
+  p₁ ^ 2 + p₂ ^ 2 = q₁ ^ 2 + q₂ ^ 2
+#expect_true "The two ways are different: 0 < p₁ < p₂, 0 < q₁ < q₂ and p₁ < q₁" unfolding p₁ p₂ q₁ q₂ :
+  0 < p₁ ∧ p₁ < p₂ ∧ 0 < q₁ ∧ q₁ < q₂ ∧ p₁ < q₁
+#expect_true "slow < 50 and slow does not reach 1 in the first 100 steps" unfolding slow iter collatz :
+  slow < 50 ∧ ∀ k ≤ 100, iter k slow ≠ 1
+#expect_true "slow reaches 1 within 200 steps" unfolding slow iter collatz :
+  ∃ k ≤ 200, iter k slow = 1
+#expect_true "x² + y² = z²" unfolding x y z :
+  x ^ 2 + y ^ 2 = z ^ 2
+#expect_true "The triple is primitive, with z > 20 and x, y > 0" unfolding x y z :
+  Nat.gcd x y = 1 ∧ 20 < z ∧ 0 < x ∧ 0 < y
 
 #level_report

@@ -1,48 +1,44 @@
 /-
 # Functions
 
-A *function* turns an input into an output. To define one, name its input in
-parentheses before the colon:
+A function is a definition with an input:
 
 ```lean
-def double (n : Nat) : Nat := 2 * n
+def square (n : Nat) : Nat := n * n
 ```
 
-* `(n : Nat)` is the **input**: a natural number that we call `n`.
-* The `Nat` after the colon is the type of the **output**.
-* After `:=` comes a formula that may use `n`.
+`square` takes a natural number `n` and returns `n * n`. You apply it by
+writing the input after the name, with a space: `square 7` is `49`, and
+`square (2 + 1)` is `9`. No brackets around the argument are needed, only
+around compound expressions.
 
-## Using a function
+## Division on ℕ
 
-Write the function's name, a space, then the input: `double 5` is `10`.
-There are **no brackets and no commas**. Brackets only group things:
-`double (2 + 3)` is `10`, while `double 2 + 3` is `7`.
+In `Nat` there are no fractions: `a / b` is the quotient of the Euclidean
+division, rounded down. So `7 / 2 = 3`, and the order of operations
+matters: `5 * 6 / 2 = 15`, but `5 / 2 * 6 = 12`. Gauss's formula
+`n(n + 1)/2` is safe because the product `n(n + 1)` is always even, *as long
+as you divide last*.
 
-## Arithmetic
-
-`+` add, `-` subtract, `*` multiply, `/` divide, `%` remainder.
-Division on natural numbers drops the remainder: `7 / 2` is `3`, and
-`7 % 2` is `1`.
-
-**Careful:** natural numbers have no negatives. Subtraction stops at zero, so
-`3 - 5` is `0`, not `-2`.
+Likewise `a - b` is `0` when `b > a` ("truncated subtraction"): `3 - 5 = 0`.
+This is a boundary case to keep in mind: `n - 1` is `0` when `n = 0`.
 
 ## Your task
 
-Define the four functions below. The comment above each one gives examples.
+Define `cube`, `triangular` and `handshakes`. The referee checks a few
+values, and also identities such as `8·T(n) + 1 = (2n + 1)²` for every
+`n ≤ 30`.
 -/
+
 namespace L2
 
--- twice the input        (double 4 is 8)
-def double (n : Nat) : Nat := sorry
+-- n³
+def cube (n : Nat) : Nat := sorry
 
--- the input times itself  (squared 5 is 25)
-def squared (n : Nat) : Nat := sorry
+-- the n-th triangular number 0 + 1 + ⋯ + n, by Gauss's formula n(n + 1)/2
+def triangular (n : Nat) : Nat := sorry
 
--- ten more than the input (addTen 1 is 11)
-def addTen (n : Nat) : Nat := sorry
-
--- one less than the input, but 0 stays 0   (minusOne 5 is 4, minusOne 0 is 0)
-def minusOne (n : Nat) : Nat := sorry
+-- the number of handshakes among n people, if each pair shakes hands once
+def handshakes (n : Nat) : Nat := sorry
 
 end L2

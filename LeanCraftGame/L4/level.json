@@ -1,47 +1,41 @@
 {
-  "world": "Basics World",
+  "world": "Foundations World",
   "title": "Recursion",
   "skill": "syntax",
+  "exercise": "Define",
   "public": "all",
   "hintsAfter": 1,
+  "predict": [
+    {
+      "test": "iter 0 7 = 7 (doing nothing)",
+      "statement": "iter 0 7 = 7"
+    }
+  ],
   "checks": [
     {
-      "lean": "example : Nat → Nat := L4.sumTo",
-      "message": "Keep `sumTo : Nat → Nat`."
-    },
-    {
-      "lean": "example : Nat → Nat := L4.pow2",
-      "message": "Keep `pow2 : Nat → Nat`."
-    },
-    {
-      "lean": "example : Nat → Nat := L4.fib",
-      "message": "Keep `fib : Nat → Nat`."
+      "lean": "example : Nat → Nat → Nat := L4.iter\nexample : Nat → Nat := L4.fib\nexample : Nat → Nat := L4.oddSum",
+      "message": "Keep `iter : Nat → Nat → Nat`, `fib : Nat → Nat` and `oddSum : Nat → Nat`."
     }
   ],
   "hints": [
     {
-      "match": "sumTo 0",
-      "hint": "Adding no numbers at all (0 + … up to 0) gives 0."
-    },
-    {
-      "match": "sumTo",
-      "hint": "`sumTo (n + 1)` is `sumTo n` plus the new number, which is `n + 1`."
-    },
-    {
-      "match": "pow2 0",
-      "hint": "2 multiplied by itself zero times is 1, like `factorial 0`."
-    },
-    {
-      "match": "pow2",
-      "hint": "`pow2 (n + 1)` is twice `pow2 n`."
+      "match": "iter",
+      "steps": [
+        "Applying the map 0 times does nothing. Applying it `k + 1` times: once, then `k` more times."
+      ],
+      "hint": "`| 0, n => n` and `| k + 1, n => iter k (collatz n)`."
     },
     {
       "match": "fib",
-      "hint": "`fib 0` is 0, `fib 1` is 1, and `fib (n + 2)` is `fib n + fib (n + 1)`."
+      "hint": "`| 0 => 0`, `| 1 => 1`, `| n + 2 => fib (n + 1) + fib n`."
+    },
+    {
+      "match": "oddSum",
+      "hint": "`| 0 => 0` and `| n + 1 => oddSum n + (2 * n + 1)`: the `(n + 1)`-th odd number is `2n + 1`."
     },
     {
       "match": "",
-      "hint": "Compute a few small values by hand and compare with your cases."
+      "hint": "Each case gives the value for one shape of input."
     }
   ]
 }

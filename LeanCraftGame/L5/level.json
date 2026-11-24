@@ -1,63 +1,40 @@
 {
-  "world": "Basics World",
-  "title": "Challenge: counting",
+  "world": "Foundations World",
+  "title": "Challenge: witnesses",
   "skill": "writing",
-  "hintsAfter": 2,
-  "predict": [
-    { "test": "stairs 0 = 1 (one way to climb nothing: do nothing)", "statement": "stairs 0 = 1" },
-    { "test": "choose 3 5 = 0 (cannot pick more than there are)", "statement": "choose 3 5 = 0" },
-    { "test": "countEven 0 = 1 (0 is even)", "statement": "countEven 0 = 1" }
-  ],
+  "exercise": "Construct",
+  "public": "all",
   "checks": [
-    { "lean": "example : Nat → Nat := L5.stairs", "message": "Keep `stairs : Nat → Nat`." },
-    { "lean": "example : Nat → Nat → Nat := L5.choose", "message": "Keep `choose : Nat → Nat → Nat` (two inputs)." },
-    { "lean": "example : Nat → Nat := L5.countEven", "message": "Keep `countEven : Nat → Nat`." }
+    {
+      "lean": "example : Nat := L5.p₁\nexample : Nat := L5.slow\nexample : Nat := L5.z",
+      "message": "Keep the witnesses as natural numbers."
+    }
   ],
   "hints": [
     {
-      "match": "stairs 0",
-      "steps": ["How many different ways are there to climb zero steps? Is \"doing nothing\" a way?"],
-      "hint": "`stairs 0 = 1`: there is exactly one way, the empty one."
-    },
-    {
-      "match": "stairs",
+      "match": "p₁",
       "steps": [
-        "Look at your last move: it was either a 1-step or a 2-step. What is left to climb in each case?",
-        "The ways to climb `n + 2` steps split in two groups, by the last move."
+        "Multiply two sums of two squares, such as `5 = 1² + 2²` and `13 = 2² + 3²`."
       ],
-      "hint": "`stairs 0 = 1`, `stairs 1 = 1`, `stairs (n + 2) = stairs n + stairs (n + 1)`."
+      "hint": "`65 = 1² + 8² = 4² + 7²`: `p₁ = 1, p₂ = 8, q₁ = 4, q₂ = 7`."
     },
     {
-      "match": "choose 3 5",
-      "steps": ["Can you pick 5 objects out of 3? How many ways are there to do something impossible?"],
-      "hint": "Zero. It comes out by itself if `choose 0 (k + 1) = 0` and the recursion reduces both inputs."
-    },
-    {
-      "match": "choose 5 0",
-      "hint": "Picking nothing can be done in exactly one way, whatever `n` is: the case `choose _ 0 = 1` must come first."
-    },
-    {
-      "match": "choose",
+      "match": "slow",
       "steps": [
-        "Which are the base cases: picking 0 objects (any `n`), and picking `k + 1` objects out of 0?",
-        "For `choose (n + 1) (k + 1)`: the first object is in your pick, or it is not."
+        "Try the starting values mentioned in the lesson, with `#eval iter 100 27`."
       ],
-      "hint": "`| _, 0 => 1`, `| 0, k + 1 => 0`, `| n + 1, k + 1 => choose n k + choose n (k + 1)`."
+      "hint": "`27` takes 111 steps."
     },
     {
-      "match": "countEven 0",
-      "hint": "0 is even, so among 0, …, 0 there is one even number."
-    },
-    {
-      "match": "countEven",
+      "match": "x²",
       "steps": [
-        "`countEven (n + 1)` is `countEven n` plus the new number `n + 1`, if that number counts. When does it?"
+        "Use Euclid's formula with `m = 5`."
       ],
-      "hint": "`| 0 => 1`, `| n + 1 => if (n + 1) % 2 = 0 then countEven n + 1 else countEven n`."
+      "hint": "`m = 5, n = 2` gives `(21, 20, 29)`; so does `x = 20, y = 21, z = 29`."
     },
     {
       "match": "",
-      "hint": "Compute the first values by hand and compare with your cases."
+      "hint": "Each test says what your numbers must satisfy. Compute candidates with `#eval`."
     }
   ]
 }

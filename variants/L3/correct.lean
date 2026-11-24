@@ -1,12 +1,9 @@
--- the larger of two numbers (already done)
-def biggest (a b : Nat) : Nat :=
-  if a ≤ b then b else a
+-- the Collatz map: halve an even number, send an odd number n to 3n + 1
+def collatz (n : Nat) : Nat := if n % 2 = 0 then n / 2 else 3 * n + 1
 
--- the smaller of two numbers           (smallest 3 8 is 3)
-def smallest (a b : Nat) : Nat := if a ≤ b then a else b
-
--- the distance between two numbers, whichever is larger   (gap 10 4 is 6, gap 4 10 is 6)
+-- the distance |a - b| between two natural numbers
 def gap (a b : Nat) : Nat := if a ≤ b then b - a else a - b
 
--- 0 for the input 0, and 1 for any other input   (zeroOrOne 0 is 0, zeroOrOne 9 is 1)
-def zeroOrOne (n : Nat) : Nat := if n = 0 then 0 else 1
+-- the number of real roots of x² + b·x + c (0, 1 or 2), counted without multiplicity
+def rootCount (b c : Nat) : Nat :=
+  if b * b > 4 * c then 2 else if b * b = 4 * c then 1 else 0

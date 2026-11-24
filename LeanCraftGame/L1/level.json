@@ -1,35 +1,28 @@
 {
-  "world": "Basics World",
+  "world": "Foundations World",
   "title": "Naming things",
   "skill": "syntax",
+  "exercise": "Define",
   "public": "all",
   "hintsAfter": 1,
   "checks": [
     {
-      "lean": "example : Nat := L1.answer",
-      "message": "Keep the name and the type: `answer : Nat`."
-    },
-    {
-      "lean": "example : String := L1.language",
-      "message": "Keep the name and the type: `language : String`."
-    },
-    {
-      "lean": "example : Nat := L1.successor",
-      "message": "Keep the name and the type: `successor : Nat`."
+      "lean": "example : Nat := L1.hardy\nexample : Nat := L1.firstWay\nexample : Nat := L1.secondWay",
+      "message": "Keep the names and the type `Nat`: `hardy`, `firstWay` and `secondWay`."
     }
   ],
   "hints": [
     {
-      "match": "answer",
-      "hint": "The answer to everything is 42. Write it after `:=`, as in `def answer : Nat := 42`."
+      "match": "firstWay",
+      "hint": "`1 ^ 3 + 12 ^ 3`. The powers are computed first, as on paper."
     },
     {
-      "match": "language",
-      "hint": "Text goes in double quotes: `\"Lean\"`, with a capital L."
+      "match": "secondWay",
+      "hint": "`9 ^ 3 + 10 ^ 3`."
     },
     {
-      "match": "successor",
-      "hint": "You can use `answer` inside another definition. One more than `answer` is `answer + 1`."
+      "match": "",
+      "hint": "`def hardy : Nat := 1729`: the value goes after `:=`."
     }
   ]
 }

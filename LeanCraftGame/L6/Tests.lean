@@ -1,28 +1,28 @@
-/- Hidden test battery for Level Spot the bug (Basics). -/
+/- Hidden test battery for Level Spot the bug. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L6.Player
 
--- the referee's own copies: the colleague's code, and the right answers
-namespace L6Ref
-def middle (a b c : Nat) : Nat :=
-  if a ≤ b then (if b ≤ c then b else c)
-  else (if a ≤ c then a else c)
-def median (a b c : Nat) : Nat := max (min a b) (min (max a b) c)
-def daysInYear (y : Nat) : Nat :=
-  if y % 4 = 0 then (if y % 100 = 0 then 365 else 366) else 365
-def daysInYearRight (y : Nat) : Nat :=
-  if y % 4 = 0 then (if y % 100 = 0 then (if y % 400 = 0 then 366 else 365) else 366) else 365
-end L6Ref
+open L6
 
-#no_sorry L6.ma
-#no_sorry L6.mb
-#no_sorry L6.mc
-#no_sorry L6.year
+#no_sorry median3
+#no_sorry daysInYear
 #level_start "Spot the bug"
 
-#expect_true "middle gives the wrong answer on your three numbers" :
-  L6Ref.middle L6.ma L6.mb L6.mc ≠ L6Ref.median L6.ma L6.mb L6.mc
-#expect_true "daysInYear gives the wrong answer on your year" :
-  L6Ref.daysInYear L6.year ≠ L6Ref.daysInYearRight L6.year
+#expect_true "median3 1 2 3 = 2" unfolding median3 :
+  median3 1 2 3 = 2
+#expect_true "median3 2 3 1 = 2" unfolding median3 :
+  median3 2 3 1 = 2
+#expect_true "median3 3 2 1 = 2" unfolding median3 :
+  median3 3 2 1 = 2
+#expect_true "median3 is right on every triple below 5" unfolding median3 :
+  ∀ a < 5, ∀ b < 5, ∀ c < 5, median3 a b c = max (min a b) (min (max a b) c)
+#expect_true "daysInYear 2023 = 365 and daysInYear 2024 = 366" unfolding daysInYear :
+  daysInYear 2023 = 365 ∧ daysInYear 2024 = 366
+#expect_true "daysInYear 1900 = 365 (a century)" unfolding daysInYear :
+  daysInYear 1900 = 365
+#expect_true "daysInYear 2000 = 366 (divisible by 400)" unfolding daysInYear :
+  daysInYear 2000 = 366
+#expect_true "400 consecutive years have 146097 days (= 20871 weeks exactly)" unfolding daysInYear :
+  (List.range 400).foldl (fun s k => s + daysInYear (2000 + k)) 0 = 146097
 
 #level_report

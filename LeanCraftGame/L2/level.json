@@ -1,51 +1,45 @@
 {
-  "world": "Basics World",
+  "world": "Foundations World",
   "title": "Functions",
   "skill": "syntax",
+  "exercise": "Define",
   "public": "all",
   "hintsAfter": 1,
+  "predict": [
+    {
+      "test": "5 / 2 * 6 = 15 (division rounds down first)",
+      "statement": "5 / 2 * 6 = 15 in Nat"
+    },
+    {
+      "test": "handshakes 1 = 0 and handshakes 0 = 0",
+      "statement": "handshakes 1 = 0 and handshakes 0 = 0"
+    }
+  ],
   "checks": [
     {
-      "lean": "example : Nat → Nat := L2.double",
-      "message": "Keep `double : Nat → Nat`."
-    },
-    {
-      "lean": "example : Nat → Nat := L2.squared",
-      "message": "Keep `squared : Nat → Nat`."
-    },
-    {
-      "lean": "example : Nat → Nat := L2.addTen",
-      "message": "Keep `addTen : Nat → Nat`."
-    },
-    {
-      "lean": "example : Nat → Nat := L2.minusOne",
-      "message": "Keep `minusOne : Nat → Nat`."
+      "lean": "example : Nat → Nat := L2.cube\nexample : Nat → Nat := L2.triangular\nexample : Nat → Nat := L2.handshakes",
+      "message": "Keep `cube`, `triangular` and `handshakes : Nat → Nat`."
     }
   ],
   "hints": [
     {
-      "match": "double 7",
-      "hint": "`double n` should be twice `n`: `2 * n` or `n + n`."
+      "match": "triangular",
+      "steps": [
+        "What is `5 / 2 * 6`? Where should the division go?"
+      ],
+      "hint": "`n * (n + 1) / 2`: multiply first, divide last."
     },
     {
-      "match": "squared",
-      "hint": "The square of `n` is `n` times `n`: write `n * n`."
+      "match": "handshakes",
+      "hint": "Each of the `n` people shakes `n - 1` hands, and each handshake is counted twice: `n * (n - 1) / 2`."
     },
     {
-      "match": "addTen",
-      "hint": "Ten more than `n` is `n + 10`."
-    },
-    {
-      "match": "minusOne 0",
-      "hint": "Natural subtraction stops at zero, so `n - 1` already gives `0 - 1 = 0`."
-    },
-    {
-      "match": "minusOne",
-      "hint": "One less than `n` is `n - 1`."
+      "match": "cube",
+      "hint": "`n ^ 3`, or `n * n * n`."
     },
     {
       "match": "",
-      "hint": "Re-read the examples in the comment above the function."
+      "hint": "Write the formula after `:=`, using the input `n`."
     }
   ]
 }

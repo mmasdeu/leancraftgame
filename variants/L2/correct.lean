@@ -1,11 +1,8 @@
--- twice the input        (double 4 is 8)
-def double (n : Nat) : Nat := 2 * n
+-- n³
+def cube (n : Nat) : Nat := n ^ 3
 
--- the input times itself  (squared 5 is 25)
-def squared (n : Nat) : Nat := n * n
+-- the n-th triangular number 0 + 1 + ⋯ + n, by Gauss's formula n(n + 1)/2
+def triangular (n : Nat) : Nat := n * (n + 1) / 2
 
--- ten more than the input (addTen 1 is 11)
-def addTen (n : Nat) : Nat := n + 10
-
--- one less than the input, but 0 stays 0   (minusOne 5 is 4, minusOne 0 is 0)
-def minusOne (n : Nat) : Nat := n - 1
+-- the number of handshakes among n people, if each pair shakes hands once
+def handshakes (n : Nat) : Nat := n * (n - 1) / 2

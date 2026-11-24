@@ -1,67 +1,42 @@
 /-
 # Spot the bug
 
-Until now you have *written* definitions. Every world from here on ends with a
-level where you **read** someone else's definitions instead, and prove them
-wrong. This is the everyday skill of checking a formalisation: an AI or a
-colleague hands you code that compiles, and you must find out whether it means
-what it claims.
+A colleague wrote two functions. Both compile, both give the right answer
+on the examples they tried, and both are wrong.
 
-How do you prove that a definition is wrong? Not by saying so: by giving a
-**counterexample**, an input on which it gives the wrong answer. The referee
-then checks your counterexample against the right answer, so it is evidence,
-not opinion.
+Before repairing code, **find an input where it fails**. Walk through every
+branch of every `if`, and ask which inputs land there:
 
-A colleague wrote the two functions below. Both compile, both look reasonable,
-and both are wrong.
+* `median3`: there are six orderings of three distinct numbers. In which
+  branch does each one land, and does that branch return the middle value?
+  (`median3 1 2 3`, `median3 3 1 2`, …)
+* `daysInYear`: the Gregorian rule is "divisible by 4, except centuries,
+  except centuries divisible by 400". 1900 was not a leap year, 2000 was.
 
-```lean
--- the middle one of three numbers (the median): middle 1 5 3 is 3
-def middle (a b c : Nat) : Nat :=
-  if a ≤ b then (if b ≤ c then b else c)
-  else (if a ≤ c then a else c)
+A case analysis that misses a case is the commonest bug in mathematics as
+in programming: a proof "by symmetry" that is not symmetric, a "without loss
+of generality" that loses generality.
 
--- how many days has year y? A year divisible by 4 is a leap year (366 days),
--- except the centuries, except every fourth century: 2024 and 2000 had 366
--- days, 2023 and 1900 had 365.
-def daysInYear (y : Nat) : Nat :=
-  if y % 4 = 0 then (if y % 100 = 0 then 365 else 366) else 365
-```
-
-(`y % 4` is the remainder of `y` divided by 4, and `=` tests whether two
-numbers are equal. The next world, Statements, explains both.)
-
-## How to hunt
-
-* **Run the code in your head on small inputs.** Try the cases the author was
-  probably thinking of, then the ones they probably were not.
-* **Walk through every branch of an `if`.** Each branch is a claim. Find inputs
-  that land in each branch, and check the claim there.
-* **Read the specification again, word by word.** Every "except" is a case
-  someone may have forgotten.
+`min` and `max` exist in Lean, and the median of three numbers is
+`max (min a b) (min (max a b) c)`.
 
 ## Your task
 
-Give three numbers on which `middle` returns the wrong number, and a year on
-which `daysInYear` gives the wrong answer.
+Repair both definitions. The referee checks `median3` on every triple of
+numbers below 5 (all orderings, and ties), and `daysInYear` on famous years.
 -/
+
 namespace L6
 
--- The colleague's code, to read (changing it here changes nothing: the
--- referee uses its own copy).
-def middle (a b c : Nat) : Nat :=
+-- A colleague's code. Repair it; keep the names and the types.
+
+-- the median (middle value) of three numbers
+def median3 (a b c : Nat) : Nat :=
   if a ≤ b then (if b ≤ c then b else c)
   else (if a ≤ c then a else c)
 
+-- the number of days in the year y of the Gregorian calendar
 def daysInYear (y : Nat) : Nat :=
   if y % 4 = 0 then (if y % 100 = 0 then 365 else 366) else 365
-
--- Three numbers on which `middle` is wrong.
-def ma : Nat := sorry
-def mb : Nat := sorry
-def mc : Nat := sorry
-
--- A year on which `daysInYear` is wrong.
-def year : Nat := sorry
 
 end L6

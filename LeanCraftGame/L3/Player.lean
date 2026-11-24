@@ -1,56 +1,44 @@
 /-
 # Making choices
 
-## Several inputs
-
-Put several inputs in parentheses. Inputs of the same type can share one pair:
+Many functions are defined by cases. In Lean:
 
 ```lean
-def add3 (a b c : Nat) : Nat := a + b + c
+def sign (n : Nat) : Nat := if n = 0 then 0 else 1
 ```
 
-You call it by listing the inputs in order: `add3 1 2 3` is `6`.
+The condition can be any decidable statement about numbers: `n = 0`,
+`a ≤ b`, `n % 2 = 0` (`%` is the remainder: `17 % 5 = 2`). Conditions can
+be nested: `if … then … else if … then … else …`.
 
-## `if … then … else …`
+A definition by cases is only as good as its cases. Two questions to ask
+every time:
 
-```lean
-def biggest (a b : Nat) : Nat :=
-  if a ≤ b then b else a
-```
+* **Does every input fall into the intended case?** Look at the boundary:
+  `0`, `1`, equal inputs.
+* **Is each branch well defined there?** Remember that `a - b = 0` when
+  `b > a`: the distance `|a - b|` needs a case split on ℕ.
 
-If the condition holds, the result is the `then` part; otherwise it is the
-`else` part. Both parts are required and must have the same type.
-
-## Conditions
-
-`a = b` equal · `a ≠ b` different · `a < b` less · `a ≤ b` less or equal ·
-`a > b` greater · `a ≥ b` greater or equal.
-
-`≤`, `≥` and `≠` are not on your keyboard. In the editor, type `\le`,
-`\ge`, `\ne` and then a space. You can also write `<=` and `>=`.
-Typing `∀` and friends: click **Symbols** at the top right of the page. It lists every symbol with the keys to type it, and has typing practice.
-
-Note that `=` is not an instruction to store a value, as in many programming
-languages: it is a statement, "is equal to".
+The **Collatz map** sends an even `n` to `n/2` and an odd `n` to `3n + 1`.
+Iterating it from any start seems to reach `1` (`6 → 3 → 10 → 5 → 16 → 8 →
+4 → 2 → 1`). Nobody knows whether this always happens: we will meet this
+open problem again at the end of the game.
 
 ## Your task
 
-`biggest` is already written, so you can read it. Define the other three
-functions in the same style.
+Define `collatz`, `gap` and `rootCount`. For `rootCount`, recall the
+discriminant `b² - 4c`, and do not subtract on ℕ: compare instead.
 -/
+
 namespace L3
 
--- the larger of two numbers (already done)
-def biggest (a b : Nat) : Nat :=
-  if a ≤ b then b else a
+-- the Collatz map: halve an even number, send an odd number n to 3n + 1
+def collatz (n : Nat) : Nat := sorry
 
--- the smaller of two numbers           (smallest 3 8 is 3)
-def smallest (a b : Nat) : Nat := sorry
-
--- the distance between two numbers, whichever is larger   (gap 10 4 is 6, gap 4 10 is 6)
+-- the distance |a - b| between two natural numbers
 def gap (a b : Nat) : Nat := sorry
 
--- 0 for the input 0, and 1 for any other input   (zeroOrOne 0 is 0, zeroOrOne 9 is 1)
-def zeroOrOne (n : Nat) : Nat := sorry
+-- the number of real roots of x² + b·x + c (0, 1 or 2), counted without multiplicity
+def rootCount (b c : Nat) : Nat := sorry
 
 end L3

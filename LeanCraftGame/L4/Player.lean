@@ -1,24 +1,8 @@
 /-
 # Recursion
 
-A function on natural numbers can be defined **by cases**, one line per shape
-of the input:
-
-```lean
-def bonus : Nat → Nat
-  | 0 => 10
-  | 1 => 20
-  | _ => 0
-```
-
-* The input is not named before the colon. Instead, its type is part of the
-  function type `Nat → Nat` ("from `Nat` to `Nat`"; type `→` as `\to`).
-* Each line `| pattern => result` handles the inputs that match the pattern.
-  `_` matches anything: here `bonus 0` is 10, `bonus 1` is 20 and `bonus 5` is 0.
-
-## Recursion
-
-A case may use the function itself on a **smaller** input:
+Sequences defined by induction are defined in Lean by **recursion**: give
+the value at `0`, and the value at `n + 1` in terms of the value at `n`.
 
 ```lean
 def factorial : Nat → Nat
@@ -26,42 +10,44 @@ def factorial : Nat → Nat
   | n + 1 => (n + 1) * factorial n
 ```
 
-* The pattern `n + 1` matches every number except 0, and names its
-  predecessor `n`. So `factorial 4` is `4 * factorial 3`, and so on down to
-  `factorial 0`.
-* You cannot write the pattern `n - 1`: Lean matches on how a number is
-  *built* (0, or one more than something), not on arbitrary formulas.
-* Lean accepts the definition because each recursive call is on a smaller
-  input, so the computation ends. If it cannot see that, it reports an error
-  about *termination*.
-* You may also write `match n with` followed by the same `|` lines, inside a
-  definition with a named input `(n : Nat)`.
+Each line `| pattern => value` is one case. Lean accepts the definition
+because every recursive call is on a smaller input (`n` is smaller than
+`n + 1`), so the computation terminates: this is induction, run backwards.
+
+A function of two inputs can recurse on one of them. To iterate a map `k`
+times, apply it once and then iterate `k - 1` more times:
+`iter (k + 1) n = iter k (collatz n)`.
+
+Some starting values take a long time to reach `1` under the Collatz map:
+`27` needs 111 steps, climbing as high as 9232 on the way.
 
 ## Your task
 
-`factorial` is done. Fill in the right-hand sides of the cases below.
+Fill in the cases of `iter`, `fib` and `oddSum`. The referee checks values,
+Cassini's identity `F(n)F(n+2) = F(n+1)² ± 1`, and that the sum of the first
+`n` odd numbers is `n²` (for `n < 30`: computing is not proving, but it is
+how one finds the theorem).
 -/
+
 namespace L4
 
--- 1 * 2 * … * n (already done)
-def factorial : Nat → Nat
-  | 0 => 1
-  | n + 1 => (n + 1) * factorial n
+-- the Collatz map (done)
+def collatz (n : Nat) : Nat := if n % 2 = 0 then n / 2 else 3 * n + 1
 
--- 0 + 1 + 2 + … + n          (sumTo 4 is 10)
-def sumTo : Nat → Nat
-  | 0 => sorry
-  | n + 1 => sorry
+-- the Collatz map applied k times to n:  iter 0 n = n,  iter 1 n = collatz n, …
+def iter : Nat → Nat → Nat
+  | 0, n => sorry
+  | k + 1, n => sorry
 
--- 2 multiplied by itself n times   (pow2 3 is 8, pow2 0 is 1)
-def pow2 : Nat → Nat
-  | 0 => sorry
-  | n + 1 => sorry
-
--- the Fibonacci numbers 0, 1, 1, 2, 3, 5, 8, …: each one is the sum of the two before it
+-- the Fibonacci numbers 0, 1, 1, 2, 3, 5, 8, …
 def fib : Nat → Nat
   | 0 => sorry
   | 1 => sorry
   | n + 2 => sorry
+
+-- the sum 1 + 3 + 5 + ⋯ + (2n - 1) of the first n odd numbers
+def oddSum : Nat → Nat
+  | 0 => sorry
+  | n + 1 => sorry
 
 end L4
