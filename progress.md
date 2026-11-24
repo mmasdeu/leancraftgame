@@ -78,3 +78,21 @@ does not replace, the pending pinned 4.35.0 build.
 
 Next iteration: complete T2 and T4, connect the finite referee to their exercises, and add the
 Sierpiński exercise in T5 for the first vertical slice.
+
+## Iteration 3 — T2, T4 and T5 vertical-slice exercises
+
+Implemented the family-definition, topology-structure and Sierpiński exercises. T2's finite
+counterexample uses `List (Finset (Fin 3))`, with executable intersection/union diagnoses; its
+arbitrary-union predicate also has a direct empty-subfamily semantic gate. T4 checks the actual
+structure fields with Lean rather than asking the search referee to discover higher-order proofs.
+T5 accepts `particularPoint true` and rejects the discrete and wrong-point constructions.
+
+Verification with the supplementary 4.33.1 environment:
+
+* T2 `correct.lean`: **9/9**; three mutants rejected (semantic gates or type errors).
+* T4 `correct.lean`: **2/2 plus four structural checks**; two malformed structures rejected.
+* T5 `correct.lean`: **4/4**; two wrong constructions produce proved failures.
+* `python3 check_levels.py --static`: **passed for 63 levels**.
+
+T1 remains only an architecture placeholder; T3, the rest of T4's diagnosis content and the
+other T5 examples remain open. Next: T8/T9 complete the five-exercise end-to-end vertical slice.

@@ -60,8 +60,9 @@ and subset statements.
    `ClosedUnderBinaryIntersections`; success checks intended positive and negative families.
 3. **Connect — finite intersections:** prove binary intersection plus `univ` gives every
    finite intersection, including the empty finite intersection.
-4. **Refute — closure mismatch:** construct a family closed under finite intersections but
-   not arbitrary unions; success verifies both claims.
+4. **Refute — closure mismatch:** construct `{∅,{0},{1},univ}` on `Fin 3` as an executable
+   `List (Finset (Fin 3))`; the shared finite checker verifies binary-intersection closure and
+   diagnoses the missing union `{0,1}`. General closure claims remain Lean propositions.
 
 ## T3 — Relations and partitions
 

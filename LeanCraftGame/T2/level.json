@@ -1,0 +1,94 @@
+{
+  "world": "Topology World",
+  "title": "Families of sets",
+  "skill": "construct",
+  "public": [
+    "a family is an indexed collection of sets",
+    "the missing union is 0,1"
+  ],
+  "hintsAfter": 1,
+  "exercises": [
+    {
+      "title": "Define a family of subsets",
+      "type": "construct",
+      "objective": "Represent an indexed family as a function into Set α.",
+      "success": [
+        "a family is an indexed collection of sets"
+      ]
+    },
+    {
+      "title": "Express closure under unions",
+      "type": "construct",
+      "objective": "Quantify over every subfamily, not only binary unions.",
+      "success": [
+        "union closure applies to every subfamily"
+      ]
+    },
+    {
+      "title": "Express binary intersection closure",
+      "type": "construct",
+      "objective": "Require every pairwise intersection to remain in the family.",
+      "success": [
+        "binary intersection closure applies to every pair"
+      ]
+    },
+    {
+      "title": "Separate finite and arbitrary closure",
+      "type": "refute",
+      "objective": "Exhibit a finite-intersection-closed family with a missing arbitrary union.",
+      "success": [
+        "the finite family is binary intersection closed"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : T2.Family Nat Bool → Set Nat := fun f => f true",
+      "message": "A `Family Nat Bool` must be applied to a `Bool` index to produce a `Set Nat`."
+    },
+    {
+      "lean": "example {α : Type*} (C : Set (Set α)) (h : T2.ClosedUnderUnions C) : ∅ ∈ C := by simpa using h ∅ (by simp)",
+      "message": "Arbitrary-union closure must include the empty union: apply your definition to the empty subfamily."
+    },
+    {
+      "lean": "example : Type _ → Type _ → Type _ := T2.Family",
+      "message": "Keep `Family (α : Type*) (ι : Type*) : Type _`."
+    },
+    {
+      "lean": "example {α : Type*} : Set (Set α) → Prop := T2.ClosedUnderUnions",
+      "message": "Keep `ClosedUnderUnions (C : Set (Set α)) : Prop`."
+    },
+    {
+      "lean": "example {α : Type*} : Set (Set α) → Prop := T2.ClosedUnderBinaryIntersections",
+      "message": "Keep `ClosedUnderBinaryIntersections (C : Set (Set α)) : Prop`."
+    },
+    {
+      "lean": "example : List (Finset (Fin 3)) := T2.FiniteButNotUnionClosed",
+      "message": "Keep `FiniteButNotUnionClosed : Set (Set (Fin 3))`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "indexed collection",
+      "steps": [
+        "The index type is the domain; `Set α` is the codomain."
+      ],
+      "hint": "Write `ι → Set α` after `:=`."
+    },
+    {
+      "match": "union closure applies",
+      "steps": [
+        "Take an arbitrary `D : Set (Set α)`. Which assumption relates it to `C`?"
+      ],
+      "hint": "Use `∀ D : Set (Set α), D ⊆ C → ⋃₀ D ∈ C`."
+    },
+    {
+      "match": "binary intersection closure applies",
+      "hint": "Use `∀ s ∈ C, ∀ t ∈ C, s ∩ t ∈ C`."
+    },
+    {
+      "match": "finite family is binary",
+      "hint": "Use exactly `{∅, {0}, {1}, Set.univ}`. Any two distinct singleton sets meet in `∅`."
+    }
+  ]
+}

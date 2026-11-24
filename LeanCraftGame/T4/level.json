@@ -1,0 +1,75 @@
+{
+  "world": "Topology World",
+  "title": "The definition of a topology",
+  "skill": "construct",
+  "public": [
+    "discrete topology is accepted",
+    "candidate with only the empty set is rejected"
+  ],
+  "hintsAfter": 1,
+  "exercises": [
+    {
+      "title": "Complete the topology structure",
+      "type": "construct",
+      "objective": "State universal, arbitrary-union, and binary-intersection axioms.",
+      "success": [
+        "discrete topology is accepted"
+      ]
+    },
+    {
+      "title": "Derive the empty set",
+      "type": "connect",
+      "objective": "Use the empty subfamily instead of assuming a redundant axiom.",
+      "success": [
+        "discrete topology is accepted"
+      ]
+    },
+    {
+      "title": "Diagnose bad candidates",
+      "type": "referee",
+      "objective": "Identify concrete topologies and axiom violations.",
+      "success": [
+        "candidate with only the empty set is rejected"
+      ]
+    }
+  ],
+  "hints": [
+    {
+      "match": "universal set",
+      "hint": "The first field is `IsOpen Set.univ`."
+    },
+    {
+      "match": "empty set follows",
+      "steps": [
+        "Which subfamily has union `∅`?"
+      ],
+      "hint": "Use `(∀ s ∈ C, IsOpen s) → IsOpen (⋃₀ C)`; when `C = ∅`, this derives openness of `∅`."
+    },
+    {
+      "match": "arbitrary unions",
+      "hint": "The second field is `(C : Set (Set α)) → (∀ s ∈ C, IsOpen s) → IsOpen (⋃₀ C)`."
+    },
+    {
+      "match": "binary intersections",
+      "hint": "The third field is `∀ s t, IsOpen s → IsOpen t → IsOpen (s ∩ t)`."
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example {α : Type*} (τ : T4.MyTopology α) : τ.IsOpen Set.univ := τ.isOpen_univ",
+      "message": "`isOpen_univ` must state exactly that the universal set is open."
+    },
+    {
+      "lean": "example {α : Type*} (τ : T4.MyTopology α) (C : Set (Set α)) (h : ∀ s ∈ C, τ.IsOpen s) : τ.IsOpen (⋃₀ C) := τ.isOpen_sUnion C h",
+      "message": "`isOpen_sUnion` must accept every family of open sets."
+    },
+    {
+      "lean": "example {α : Type*} (τ : T4.MyTopology α) (s t : Set α) (hs : τ.IsOpen s) (ht : τ.IsOpen t) : τ.IsOpen (s ∩ t) := τ.isOpen_inter s t hs ht",
+      "message": "`isOpen_inter` must conclude openness of the intersection, not the union."
+    },
+    {
+      "lean": "example {α : Type*} (τ : T4.MyTopology α) : τ.IsOpen ∅ := by simpa using τ.isOpen_sUnion ∅ (by simp)",
+      "message": "Openness of the empty set should follow from the empty union."
+    }
+  ]
+}

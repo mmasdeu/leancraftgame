@@ -1,0 +1,27 @@
+{
+  "world": "Topology World",
+  "title": "Standard examples of topologies",
+  "skill": "construct",
+  "public": ["the singleton true is open", "the singleton false is not open"],
+  "hintsAfter": 1,
+  "exercises": [
+    {
+      "title": "Construct the Sierpiński topology",
+      "type": "construct",
+      "objective": "Use the particular-point construction at true on Bool.",
+      "success": ["the singleton true is open", "the singleton false is not open"]
+    }
+  ],
+  "checks": [
+    {
+      "lean": "example : LeanCraftGame.Topology.MyTopology Bool := T5.sierpinskiSpace",
+      "message": "Keep `sierpinskiSpace : MyTopology Bool`."
+    }
+  ],
+  "hints": [
+    {
+      "match": "singleton false",
+      "hint": "Use the particular-point topology at `true`, not at `false` and not the discrete topology."
+    }
+  ]
+}
