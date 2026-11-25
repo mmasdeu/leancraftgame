@@ -372,7 +372,7 @@ async function loadLevels() {
   // the Welcome page for a first visit; otherwise where the player was (a link wins)
   const want = new URLSearchParams(location.search).get("level") ?? store.get("level", "intro");
   if (want === "intro") return openIntro();
-  const id = Number(want);
+  const id = /^\d+$/.test(want) ? Number(want) : want;
   await openLevel(levels.some((l) => l.id === id) ? id : levels[0].id);
 }
 
@@ -380,6 +380,7 @@ async function loadLevels() {
    is the world of the current level; a click on a world opens or closes it (until the player
    moves to another level). */
 let worldToggled = {};                 // world -> true/false, set by clicking on it
+const levelLabel = (l) => typeof l.id === "string" ? l.id : String(l.num);
 
 function renderTabs() {
   const cleared = store.get("cleared", []);
@@ -395,7 +396,7 @@ function renderTabs() {
       ${esc(world)} <span class="count">${done}/${inWorld.length}</span></button>`;
     if (open) for (const l of inWorld)
       html += `<button class="level-tab${level && l.id === level.id ? " active" : ""}" data-id="${l.id}"
-        title="Level ${l.num} · ${esc(l.title)} (${esc(l.skill)})"><span class="num">${l.num}</span>
+        title="Level ${levelLabel(l)} · ${esc(l.title)} (${esc(l.skill)})"><span class="num">${levelLabel(l)}</span>
         <span class="ttl">${esc(l.title)}</span>${cleared.includes(l.id) ? doneMark(l.id) : ""}</button>`;
     html += "</span>";
   }
@@ -406,7 +407,8 @@ function renderTabs() {
       renderTabs();
       $("levels").querySelector(`.world-toggle[data-world="${CSS.escape(b.dataset.world)}"]`)?.focus();
     };
-    else b.onclick = () => (b.dataset.id === "intro" ? openIntro() : openLevel(Number(b.dataset.id)));
+    else b.onclick = () => (b.dataset.id === "intro" ? openIntro()
+      : openLevel(/^\d+$/.test(b.dataset.id) ? Number(b.dataset.id) : b.dataset.id));
   }
 }
 
@@ -981,13 +983,13 @@ $("run").onclick = () => runTests();
    file is cut and the whole of it is copied to the clipboard for pasting instead. */
 function reportProblem() {
   const lines = ["**What went wrong?**", "", "<!-- Describe the problem here. -->", "", "---",
-    `Level: ${level ? `${level.num} · ${level.title}` : "Welcome page"}`,
+    `Level: ${level ? `${levelLabel(level)} · ${level.title}` : "Welcome page"}`,
     `Browser: ${navigator.userAgent}`];
   if (level) {
     const failing = tests.filter((t) => view(t) === "fail").map((t) => `- ❌ ${t.name}`);
     if (failing.length) lines.push("", "Failing tests:", ...failing.slice(0, 8));
     const url = (body) => `https://github.com/${REPO}/issues/new?` +
-      new URLSearchParams({ title: level ? `Level ${level.num}: ` : "", body }).toString();
+      new URLSearchParams({ title: level ? `Level ${levelLabel(level)}: ` : "", body }).toString();
     const fence = (code) => ["", "My code:", "```lean", code.trimEnd(), "```"];
     let body = lines.concat(fence(src.value)).join("\n");
     if (url(body).length > 6000) {
