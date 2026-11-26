@@ -1,6 +1,18 @@
-def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n, n > 0 → f n = 0
-def EventuallyZero (u : ℕ → ℕ) : Prop := ∀ N, ∃ n ≥ N, u n = 0
-def Unbounded (u : ℕ → ℕ) : Prop := ∃ M, ∀ n, M ≤ u n
-def noRoot : ℕ → ℕ := fun n => n + 1
-def notEventuallyZero : ℕ → ℕ := fun n => n % 2
-def bounded : ℕ → ℕ := fun _ => 7
+def fac : ℕ → ℕ
+  | 0 => 1
+  | n + 1 => (n + 1) * fac n
+
+def fib : ℕ → ℕ
+  | 0 => 0
+  | 1 => 1
+  | n + 2 => fib n + fib (n + 1)
+
+def sumTo : ℕ → ℕ
+  | 0 => 0
+  | n + 1 => sumTo n + (n + 1)
+
+def collatz (n : ℕ) : ℕ := if n % 2 = 0 then n / 2 else 3 * n + 1
+
+statement sum_id (n : ℕ) : ∑ i ∈ Finset.range (n + 1), i = n * (n + 1) / 2
+
+statement fac_ge (n : ℕ) : 2 ^ (n - 1) ≤ Nat.factorial n

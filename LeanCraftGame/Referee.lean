@@ -41,7 +41,8 @@ def closers : TacticM (Array (String × TSyntax `tactic)) := do
   return #[("omega", ← `(tactic| omega)), ("decide", ← `(tactic| decide)),
     ("decide +kernel", ← `(tactic| decide +kernel)), ("positivity", ← `(tactic| positivity)),
     ("linarith", ← `(tactic| linarith)),
-    ("simp_all <;> omega", ← `(tactic| (simp_all <;> omega))), ("grind", ← `(tactic| grind))]
+    ("simp_all <;> omega", ← `(tactic| (simp_all <;> omega))), ("ring1", ← `(tactic| ring1)),
+    ("grind", ← `(tactic| grind))]
 
 /-- Mathlib's heavier closing tactics. They cost too much to run at every node, so only
 the last, shallow pass of `settle` uses them (after the cheap closers). -/
@@ -59,7 +60,10 @@ def closesWith (name : String) (t : TSyntax `tactic) : TacticM Bool := do
   let s ← saveState
   let ok ← tryCatchRuntimeEx
     (do
-      withTheReader Core.Context (fun c => { c with maxHeartbeats := 20000 * 1000 }) <|
+      -- `simp_all` turns a hypothesis `∀ a b, … → a = b` into a rewrite rule that matches every
+      -- term, and can spend seconds on one goal: it gets a small budget
+      let budget := if name.startsWith "simp_all" then 2000 else 20000
+      withTheReader Core.Context (fun c => { c with maxHeartbeats := budget * 1000 }) <|
         withCurrHeartbeats <| focus do
           evalTactic t
           unless (← getUnsolvedGoals).isEmpty do throwError "not closed"
@@ -90,9 +94,29 @@ def mentionsField : TacticM Bool := do
   if isF (← instantiateMVars (← g.getType)) then return true
   return (← g.getDecl).lctx.any fun d => !d.isImplementationDetail && isF d.type
 
+/-- A hypothesis without variables that `decide` refutes (a false identity about finite sums,
+`2 ∣ 7`, …) closes any goal. `simp_all` often cannot evaluate such hypotheses. -/
+def refuteClosedHyp : TacticM Bool := do
+  let g ← getMainGoal
+  g.withContext do
+    for d in (← g.getDecl).lctx do
+      if d.isImplementationDetail then continue
+      let ty ← instantiateMVars d.type
+      if ty.hasFVar || ty.hasMVar || !(← isProp ty) then continue
+      let s ← saveState
+      let m ← mkFreshExprMVar (mkNot ty)
+      setGoals [m.mvarId!]
+      if ← closesWith "decide (false hypothesis)" (← `(tactic| decide)) then
+        g.assign (← mkAbsurd (← g.getType) d.toExpr (← instantiateMVars m))
+        setGoals []
+        return true
+      s.restore
+    return false
+
 def tryClose (strong : Bool) : TacticM Bool := do
   let key := s!"{strong}{← Meta.ppGoal (← getMainGoal)}"
   if (← failedRef.get).contains key then return false
+  if ← refuteClosedHyp then return true
   let tactics := (← closers) ++ (← if ← mentionsField then fieldClosers else pure #[]) ++
     (← if strong then finishers else pure #[])
   for (name, t) in tactics do
@@ -116,7 +140,10 @@ def isDestructible (ty : Expr) : MetaM Bool := do
   match ty.getAppFn with
   | .const n _ =>
     if n == ``Exists || n == ``And then return true
-    if n == ``Nat || n == ``Int || n == ``Bool || n == ``Fin then return false
+    -- number types are kept whole: `ℝ`, `ℚ` and `ℂ` are structures (a real number is a
+    -- Cauchy sequence), and taking `a : ℝ` apart would lose it as a witness
+    if n == ``Nat || n == ``Int || n == ``Bool || n == ``Fin || n == ``Real || n == ``Rat
+        || n == ``Complex || n == ``NNReal then return false
     return isStructure (← getEnv) n
   | _ => return false
 
@@ -135,7 +162,8 @@ partial def destructAll : TacticM Unit := do
 /-- Light normalisation: intro everything, beta-reduce, substitute, destruct. -/
 def normalize : TacticM Unit := do
   try evalTactic (← `(tactic| repeat intro)) catch _ => pure ()
-  try evalTactic (← `(tactic| simp only [ge_iff_le, gt_iff_lt, ne_eq, Set.subset_def, Set.mem_setOf_eq] at *)) catch _ => pure ()
+  try evalTactic (← `(tactic| simp only [ge_iff_le, gt_iff_lt, ne_eq, Set.subset_def, Set.mem_setOf_eq,
+      Set.mem_iUnion, Set.mem_iInter] at *)) catch _ => pure ()
   try evalTactic (← `(tactic| subst_vars)) catch _ => pure ()
   try destructAll catch _ => pure ()
   try evalTactic (← `(tactic| repeat intro)) catch _ => pure ()
@@ -144,6 +172,10 @@ def normalize : TacticM Unit := do
 def candidates (ty : Expr) : TacticM (Array Expr × Array Expr) := do
   let ty ← whnfR ty
   if ty.isConstOf ``Bool then return (#[], #[mkConst ``Bool.true, mkConst ``Bool.false])
+  -- a type variable (a generic statement `∀ {α : Type} [Lattice α], …`): the usual types,
+  -- whose instances (lattice, ring, metric space, …) Lean then finds
+  if ty == mkSort Level.one then
+    return (#[], #[mkConst ``Nat, mkConst ``Int, mkConst ``Rat, mkConst ``Real, mkConst ``Bool])
   let isNat := ty.isConstOf ``Nat
   let isInt := ty.isConstOf ``Int
   let isField := ty.isConstOf ``Rat || ty.isConstOf ``Real
@@ -163,9 +195,14 @@ def candidates (ty : Expr) : TacticM (Array Expr × Array Expr) := do
     out := out.push (← mkAppM ``HSub.hSub #[x, ← lit 1])
     out := out.push (← mkAppM ``HSub.hSub #[x, ← lit 2])
   let mut nums : Array Expr := #[]
+  -- in ℚ and ℝ, `1/2` first: it is the usual `ε` that refutes a convergence or a continuity
+  -- claim, and each wrong value tried before it costs a deep search
+  if isField then nums := nums.push (← mkAppM ``HDiv.hDiv #[← lit 1, ← lit 2])
   for n in [0, 1, 2, 3, 4, 6, 100] do
     nums := nums.push (← lit n)
-  if isField then nums := nums.push (← mkAppM ``HDiv.hDiv #[← lit 1, ← lit 2])
+    -- negative numbers, where they exist (a sign condition is the usual missing hypothesis)
+    if (n == 1 || n == 2) && (isInt || isField) then
+      nums := nums.push (← mkAppM ``Neg.neg #[← lit n])
   return (out, nums)
 
 /-- The elements of an explicit set or finset `{a, b, …}` (nested `insert`s and a `singleton`). -/
@@ -218,8 +255,8 @@ partial def solve (fuel : Nat) (strong : Bool := false) : TacticM Unit := do
   let g ← getMainGoal
   g.withContext do
     let tgt ← whnfR (← instantiateMVars (← g.getType))
-    -- split conjunctions
-    if tgt.isAppOfArity ``And 2 then
+    -- split conjunctions and equivalences (`P ↔ Q` into `P → Q` and `Q → P`)
+    if tgt.isAppOfArity ``And 2 || tgt.isAppOfArity ``Iff 2 then
       let s ← saveState
       try
         evalTactic (← `(tactic| constructor))
@@ -230,6 +267,15 @@ partial def solve (fuel : Nat) (strong : Bool := false) : TacticM Unit := do
         setGoals []
         return
       catch _ => s.restore
+    -- a disjunction: prove one side (`x ∈ A ∪ B` with `A` given by an `∃`)
+    if tgt.isAppOfArity ``Or 2 then
+      for side in [← `(tactic| left), ← `(tactic| right)] do
+        let s ← saveState
+        try
+          evalTactic side
+          solve fuel strong
+          return
+        catch _ => s.restore
     -- the three kinds of moves, cheapest / most promising first
     let tryWitnesses (useNums : Bool) : TacticM Bool := do
       unless tgt.isAppOfArity ``Exists 2 do return false
@@ -270,6 +316,11 @@ partial def solve (fuel : Nat) (strong : Bool := false) : TacticM Unit := do
               repeat
                 match ← whnfR ety with
                 | .forallE _ p q _ =>
+                  -- an instance argument (`[Lattice ℕ]`): Lean finds it, or this type is no good
+                  if (← isClass? p).isSome then
+                    let inst ← synthInstance p
+                    e := mkApp e inst; ety := q.instantiate1 inst
+                    continue
                   if q.hasLooseBVars || !(← inferType p).isProp then break
                   match ← proveSide p with
                   | some pf => e := mkApp e pf; ety := q
@@ -358,16 +409,27 @@ def fuelStrong : Nat := 1
 
 /-- Iterative deepening, alternating between `P` and `¬P`:
 fuel 0 for `P`, fuel 0 for `¬P`, fuel 1 for `P`, … Returns `(proved, refuted)`. -/
-def settle (P : Expr) (unfolds : Array Ident) : TermElabM (Bool × Bool) := do
+def settle (P : Expr) (unfolds : Array Ident) (refuteFirst := false) : TermElabM (Bool × Bool) := do
   failedRef.set {}
   let nP := mkNot P
   for f in List.range (fuelDefault + 1) do
+    -- the expected direction first: at the depth where it succeeds, the other is not tried
+    if refuteFirst then
+      if ← tryProve nP unfolds f then return (false, true)
     if ← tryProve P unfolds f then return (true, false)
     if ← tryProve nP unfolds f then return (false, true)
   -- last resort: a shallow search in which Mathlib's heavier tactics close the leaves
   if ← tryProve P unfolds fuelStrong true then return (true, false)
   if ← tryProve nP unfolds fuelStrong true then return (false, true)
   return (false, false)
+
+/-- Universe levels left open by a test (a generic `statement` such as
+`∀ {R : Type*} [CommRing R], …` used without naming its universe) are set to `0`:
+a test is about one concrete instance of the statement. -/
+def zeroLevelMVars (e : Expr) : MetaM Expr := do
+  for m in (Lean.collectLevelMVars {} e).result do
+    assignLevelMVar m Level.zero
+  instantiateMVars e
 
 def bump (k : Nat) : CommandElabM Unit := do
   scoreRef.modify fun s => match k with
@@ -381,8 +443,9 @@ def runTest (name : String) (t : Term) (unfolds : Array Ident) (mode : Nat) : Co
     let P ← Term.withoutErrToSorry do
       let P ← Term.elabType t
       Term.synthesizeSyntheticMVarsNoPostponing
-      instantiateMVars P
-    settle P unfolds
+      zeroLevelMVars (← instantiateMVars P)
+    -- `#expect_false` and `#expect_caught` expect a refutation
+    settle P unfolds (refuteFirst := mode == 1 || mode == 3)
   let (pos, neg) := res
   match mode, pos, neg with
   -- should be true
@@ -398,9 +461,13 @@ def runTest (name : String) (t : Term) (unfolds : Array Ident) (mode : Nat) : Co
   | 3, true, _ => bump 1; logWarning m!"❌ {name}\n   This wrong definition survives: it gives the right verdict on every one of your examples, so they cannot tell it apart from the right definition."
   | 3, false, false => bump 2; logWarning m!"❓ {name}\n   Inconclusive: the referee could not decide whether one of your probes catches this wrong definition."
   -- should be open
-  | _, false, false => bump 0; logInfo m!"✅ {name}\n   (the referee could not settle it, as expected)"
-  | _, true, _ => bump 1; logWarning m!"❌ {name}\n   The referee PROVED this. A famous open problem should not be this easy: your statement is probably vacuous."
-  | _, false, true => bump 1; logWarning m!"❌ {name}\n   The referee REFUTED this. Your statement is false for a silly reason."
+  | 2, false, false => bump 0; logInfo m!"✅ {name}\n   (the referee could not settle it, as expected)"
+  | 2, true, _ => bump 1; logWarning m!"❌ {name}\n   The referee PROVED this. A famous open problem should not be this easy: your statement is probably vacuous."
+  | 2, false, true => bump 1; logWarning m!"❌ {name}\n   The referee REFUTED this. Your statement is false for a silly reason."
+  -- an answer to a question (`#expect_choice`): settled by evaluation
+  | _, true, _ => bump 0; logInfo m!"✅ {name}"
+  | _, false, true => bump 1; logWarning m!"❌ {name}\n   This is not the right answer. Read the question and the lesson again."
+  | _, false, false => bump 2; logWarning m!"❓ {name}\n   Inconclusive: the referee could not evaluate your answer."
 
 elab_rules : command
   | `(#expect_true $n:str $[$u]? : $t) => runTest n.getString t (getUnfolds u) 0
@@ -408,17 +475,359 @@ elab_rules : command
   | `(#expect_open $n:str $[$u]? : $t) => runTest n.getString t (getUnfolds u) 2
   | `(#expect_caught $n:str $[$u]? : $t) => runTest n.getString t (getUnfolds u) 3
 
+/-! ## Statements without proofs
+
+`statement add_pos' {a b : ℝ} (ha : 0 < a) (hb : 0 < b) : 0 < a + b` names the
+proposition `∀ {a b : ℝ}, 0 < a → 0 < b → 0 < a + b`, written the way Mathlib writes a
+theorem: binders and hypotheses before the colon, the conclusion after it. No proof is
+asked for: the tests compare the statement with the intended one. It is an `abbrev`, so
+the referee sees through the name. -/
+
+syntax (name := statementCmd) (docComment)? "statement " ident bracketedBinder* " : " term : command
+
+macro_rules
+  | `($[$doc:docComment]? statement $id:ident $bs:bracketedBinder* : $t) =>
+    -- the hypotheses are named for the reader, not used: silence the unused-variable linter
+    if bs.isEmpty then `(set_option linter.unusedVariables false in $[$doc:docComment]? abbrev $id : Prop := $t)
+    else `(set_option linter.unusedVariables false in $[$doc:docComment]? abbrev $id : Prop := ∀ $bs*, $t)
+
+/-! ## Equivalence of statements
+
+`#expect_equiv "name" unfolding foo : foo ↔ Q` passes when the player's statement `foo`
+says the same as the reference `Q`.
+
+For a **closed statement** (a theorem statement: the test is `foo ↔ Q`), logical
+equivalence is the wrong notion: any two true statements are equivalent, so `1 = 1` would
+"say" AM-GM. The referee therefore compares their *shape*: the same binders, hypotheses and
+conclusion, in the same order. The two sides of an `=` may be swapped and reordered (`a * b`
+for `b * a`), the sides of `≤` and `<` may be rewritten by algebra (`ring`), `≥`/`>` are
+read as `≤`/`<`, and `¬`, `≠` may be pushed inwards (`push_neg`). When the shapes differ, the referee looks for a proof that the
+statements differ (one true and the other false), so that a ❌ is always backed by a proof.
+With `using h`, where `h` is a Mathlib proof of `Q` (or of `¬ Q`), only the player's side
+needs to be settled, which is much faster.
+
+For a **definition** (the test is `∀ x, foo x ↔ Q x`), equivalence for every `x` is the
+right notion: the referee also tries to prove it (`push_neg`, `simp`, `tauto`, `grind`, its
+own search) or to refute it. -/
+
+syntax (name := expectEquiv) "#expect_equiv " str (unfoldClause)? " : " term (" using " term)? : command
+
+/-- Try to close `P` with one tactic, after unfolding; never throws, restores the state. -/
+def tryTactic (P : Expr) (unfolds : Array Ident) (tac : TSyntax `tactic)
+    (budget : Nat := 40000) : TermElabM Bool := do
+  let s ← saveState
+  let ok ← tryCatchRuntimeEx (do
+    let m ← mkFreshExprSyntheticOpaqueMVar P
+    let rest ← withTheReader Core.Context (fun c => { c with maxHeartbeats := budget * 1000 }) <|
+      withCurrHeartbeats <| Tactic.run m.mvarId! (do
+        for id in unfolds do
+          try evalTactic (← `(tactic| unfold $id:ident)) catch _ => pure ()
+        evalTactic tac)
+    let r ← instantiateMVars m
+    return rest.isEmpty && !r.hasSyntheticSorry && !r.hasSorry && !r.hasExprMVar)
+    (fun _ => pure false)
+  s.restore
+  return ok
+
+/-- `≥`, `>` and `≠` as `≤`, `<` and `¬ =`, so that the shapes can be compared. -/
+def canonRel (e : Expr) : MetaM Expr := do
+  -- `whnfR` unfolds the player's `statement`s (they are `abbrev`s) and `≥`, `>`, `≠`
+  let e ← whnfR (← instantiateMVars e).headBeta
+  if e.isAppOfArity ``GE.ge 4 then
+    return mkAppN (mkConst ``LE.le e.getAppFn.constLevels!) #[e.getArg! 0, e.getArg! 1, e.getArg! 3, e.getArg! 2]
+  if e.isAppOfArity ``GT.gt 4 then
+    return mkAppN (mkConst ``LT.lt e.getAppFn.constLevels!) #[e.getArg! 0, e.getArg! 1, e.getArg! 3, e.getArg! 2]
+  if e.isAppOfArity ``Ne 3 then
+    return mkNot (← mkEq (e.getArg! 1) (e.getArg! 2))
+  return e
+
+/-- Two terms are the same expression: definitionally (reducibly), up to associativity and
+commutativity (`ac_rfl`), or, for terms without variables, by `norm_num` (`2⁻¹ = 1 / 2`).
+With `algebra`, also by `ring`. Equations use the strict version: any two sides of a ring
+identity are equal by `ring`, so with it `(a + b) ^ 2 = (a + b) ^ 2` would match the
+binomial formula. -/
+def termsEqual (a b : Expr) (algebra : Bool := false) : TermElabM Bool := do
+  if ← withReducible (isDefEq a b) then return true
+  -- `s + t` and `fun n ↦ s n + t n` (a pointwise operation) agree once instances unfold
+  if ← withTransparency .instances (isDefEq a b) then return true
+  let some eq ← observing? (mkEq a b) | return false
+  if ← tryTactic eq #[] (← `(tactic| ac_rfl)) 4000 then return true
+  if algebra then
+    if ← tryTactic eq #[] (← `(tactic| ring1)) 4000 then return true
+  if !a.hasFVar && !b.hasFVar then
+    return ← tryTactic eq #[] (← `(tactic| norm_num)) 4000
+  return false
+
+/-- The hypotheses `h₁ → h₂ → … → c` in a row (non-dependent), and the conclusion `c`. -/
+partial def hypotheses (e : Expr) : MetaM (Array Expr × Expr) := do
+  let e ← canonRel e
+  match e with
+  | .forallE _ t b _ =>
+    if !b.hasLooseBVars && (← isProp t) then
+      let (hs, c) ← hypotheses b
+      return (#[t] ++ hs, c)
+    return (#[], e)
+  | _ => return (#[], e)
+
+mutual
+/-- Can the hypotheses `xs` be paired with `ys`, each pair of the same shape? -/
+partial def matchAll : List Expr → List Expr → TermElabM Bool
+  | [], [] => return true
+  | x :: xs, ys => do
+    for i in [0:ys.length] do
+      if ← sameShape x ys[i]! then
+        if ← matchAll xs (ys.eraseIdx i) then return true
+    return false
+  | _, _ => return false
+
+/-- Do `a` and `b` have the same shape: the same quantifiers, connectives and relations, in
+the same order, with each side of a relation equal by algebra? (`∧`, `∨`, `↔` and the sides
+of `=` may also be swapped, and hypotheses in a row reordered.) -/
+partial def sameShape (a b : Expr) : TermElabM Bool := do
+  let a ← canonRel a
+  let b ← canonRel b
+  if a == b then return true
+  match a, b with
+  | .forallE n t₁ b₁ bi, .forallE _ t₂ b₂ _ =>
+    if !b₁.hasLooseBVars && !b₂.hasLooseBVars && (← isProp t₁) then
+      -- implications: the hypotheses in a row may come in any order (`(hab : a ≤ b)
+      -- (ha : 0 ≤ a)` for `(ha : 0 ≤ a) (hab : a ≤ b)`), then the conclusions must match
+      let (hs₁, c₁) ← hypotheses a
+      let (hs₂, c₂) ← hypotheses b
+      unless hs₁.size == hs₂.size do return false
+      unless ← matchAll hs₁.toList hs₂.toList do return false
+      return ← sameShape c₁ c₂
+    unless ← withReducible (isDefEq t₁ t₂) do
+      unless (← isProp t₁) && (← sameShape t₁ t₂) do return false
+    withLocalDecl n bi t₁ fun x => sameShape (b₁.instantiate1 x) (b₂.instantiate1 x)
+  | _, _ =>
+    let fa := a.getAppFn
+    let fb := b.getAppFn
+    let n := a.getAppNumArgs
+    unless fa.isConst && fb.isConst && fa.constName! == fb.constName! && n == b.getAppNumArgs do
+      return ← withReducible (isDefEq a b)
+    let args₁ := a.getAppArgs
+    let args₂ := b.getAppArgs
+    let c := fa.constName!
+    let pair (i j : Nat) : TermElabM Bool := sameShape args₁[i]! args₂[j]!
+    if c == ``And || c == ``Or || c == ``Iff then
+      return ((← pair 0 0) && (← pair 1 1)) || ((← pair 0 1) && (← pair 1 0))
+    if c == ``Not then return ← pair 0 0
+    if c == ``Exists then
+      unless ← withReducible (isDefEq args₁[0]! args₂[0]!) do return false
+      let p₁ := args₁[1]!
+      let p₂ := args₂[1]!
+      return ← withLocalDeclD `x args₁[0]! fun x => sameShape (p₁.beta #[x]) (p₂.beta #[x])
+    if c == ``Eq then
+      unless ← withReducible (isDefEq args₁[0]! args₂[0]!) do return false
+      return ((← termsEqual args₁[1]! args₂[1]!) && (← termsEqual args₁[2]! args₂[2]!)) ||
+        ((← termsEqual args₁[1]! args₂[2]!) && (← termsEqual args₁[2]! args₂[1]!))
+    if c == ``LE.le || c == ``LT.lt then
+      unless ← withReducible (isDefEq args₁[0]! args₂[0]!) do return false
+      return (← termsEqual args₁[2]! args₂[2]! true) && (← termsEqual args₁[3]! args₂[3]! true)
+    -- any other head (a predicate such as `Nat.Prime`, `Irrational`, `Continuous`): the
+    -- arguments that are propositions or terms are compared one by one
+    unless ← withReducible (isDefEq fa fb) do return false
+    for i in [0:n] do
+      let x := args₁[i]!
+      let y := args₂[i]!
+      if ← isProp x then
+        unless ← sameShape x y do return false
+      else
+        unless ← withReducible (isDefEq x y) do
+          unless ← termsEqual x y do return false
+    return true
+end
+
+/-- The statement after a preprocessing tactic (`push_neg`, unfolding `≠`, …) run on the goal
+`A ↔ B`: compare the two sides of what remains. -/
+def shapesMatchAfter (E : Expr) (pre : Option (TSyntax `tactic)) : TermElabM Bool := do
+  let s ← saveState
+  let ok ← tryCatchRuntimeEx (do
+    let m ← mkFreshExprSyntheticOpaqueMVar E
+    let gs ← withTheReader Core.Context (fun c => { c with maxHeartbeats := 40000 * 1000 }) <|
+      withCurrHeartbeats <| Tactic.run m.mvarId! (do
+        if let some t := pre then
+          try evalTactic t catch _ => pure ())
+    -- the preprocessing closed the goal: the two sides became identical
+    if gs.isEmpty then return true
+    let g := gs[0]!
+    g.withContext do
+      let tgt ← whnfR (← instantiateMVars (← g.getType))
+      unless tgt.isAppOfArity ``Iff 2 do return false
+      sameShape (tgt.getArg! 0) (tgt.getArg! 1)) (fun _ => pure false)
+  s.restore
+  return ok
+
+/-- Direct proofs that two *definitions* agree everywhere, cheapest first. -/
+def equivTactics : TermElabM (Array (TSyntax `tactic)) := do
+  return #[← `(tactic| (intros; exact Iff.rfl)),
+    ← `(tactic| (intros; push_neg; exact Iff.rfl)),
+    ← `(tactic| (simp only [ge_iff_le, gt_iff_lt, ne_eq] at *; tauto)),
+    ← `(tactic| (intros; constructor <;> intro h <;> intros <;> simp_all)),
+    ← `(tactic| (intros; constructor <;> intro h <;> intros <;> grind))]
+
+/-- Is `h` a proof of `Q` (`some true`), of `¬ Q` (`some false`), or neither? -/
+def knownTruth (Q : Expr) (h : Term) : TermElabM (Option Bool) := do
+  for (target, val) in [(Q, true), (mkNot Q, false)] do
+    let s ← saveState
+    let ok ← try
+        Term.withoutErrToSorry do
+          let v ← Term.elabTermEnsuringType h target
+          Term.synthesizeSyntheticMVarsNoPostponing
+          let v ← instantiateMVars v
+          pure (!v.hasSorry && !v.hasSyntheticSorry && (← isDefEq (← inferType v) target))
+      catch _ => pure false
+    s.restore
+    if ok then return some val
+  return none
+
+/-- Fuel for the searches of `#expect_equiv` once the shapes differ: a refutation of a
+statement usually needs one witness per quantifier, and a correct answer never gets here. -/
+def fuelEquiv : Nat := 3
+
+/-- Iterative deepening for a refutation of `P` only. -/
+def refutes (P : Expr) (unfolds : Array Ident) : TermElabM Bool := do
+  failedRef.set {}
+  for f in List.range (fuelEquiv + 1) do
+    if ← tryProve (mkNot P) unfolds f then return true
+  tryProve (mkNot P) unfolds fuelStrong true
+
+/-- A shorter `settle`, for the fallbacks of `#expect_equiv`. -/
+def settleShort (P : Expr) (unfolds : Array Ident) : TermElabM (Bool × Bool) := do
+  failedRef.set {}
+  for f in List.range (fuelEquiv + 1) do
+    if ← tryProve P unfolds f then return (true, false)
+    if ← tryProve (mkNot P) unfolds f then return (false, true)
+  return (false, false)
+
+/-- The verdicts of `#expect_equiv`. -/
+inductive EquivVerdict where
+  | same | falseButTrue | trueButFalse | differ | trueOtherShape | unknown
+
+def equivVerdict (E : Expr) (unfolds : Array Ident) (known : Option Term) :
+    TermElabM EquivVerdict := do
+  -- the player's definitions, unfolded (statements are `abbrev`s and need no unfolding)
+  let names ← unfolds.mapM fun id => realizeGlobalConstNoOverload id
+  let E ← deltaExpand E names.contains
+  let E := E.headBeta
+  let closed := (← whnfR E).isAppOfArity ``Iff 2
+  let pres : Array (Option (TSyntax `tactic)) := #[none,
+    some (← `(tactic| intros)),
+    some (← `(tactic| (intros; simp only [ne_eq, ge_iff_le, gt_iff_lt]))),
+    some (← `(tactic| (intros; push_neg)))]
+  if let some h := known then
+    unless closed do throwError "`using` needs a closed statement `P ↔ Q`"
+    let E' ← whnfR E
+    if (← knownTruth (E'.getArg! 1) h).isNone then
+      throwError "the proof given after `using` proves neither the reference nor its negation"
+  for pre in pres do
+    if ← shapesMatchAfter E pre then return .same
+  unless closed do
+    -- a definition: agreeing everywhere is enough
+    for tac in ← equivTactics do
+      if ← tryTactic E #[] tac then return .same
+    let (pos, neg) ← settleShort E #[]
+    return if pos then .same else if neg then .differ else .unknown
+  let E' ← whnfR E
+  let P := E'.getArg! 0
+  let Q := E'.getArg! 1
+  if let some h := known then
+    match ← knownTruth Q h with
+    | some true =>
+      if ← refutes P #[] then return .falseButTrue
+      return if ← tryProve P #[] 1 then .trueOtherShape else .unknown
+    | some false =>
+      let (pos, _) ← settleShort P #[]
+      return if pos then .trueButFalse else .unknown
+    | none => throwError "the proof given after `using` proves neither the reference nor its negation"
+  let (pP, nP) ← settleShort P #[]
+  if pP || nP then
+    let (pQ, nQ) ← settleShort Q #[]
+    if nP && pQ then return .falseButTrue
+    if pP && nQ then return .trueButFalse
+    if pP && pQ then return .trueOtherShape
+  return .unknown
+
+def runEquiv (name : String) (t : Term) (unfolds : Array Ident) (known : Option Term) :
+    CommandElabM Unit := do
+  if ← blockedRef.get then return
+  let verdict ← liftTermElabM do
+    let E ← Term.withoutErrToSorry do
+      let E ← Term.elabType t
+      Term.synthesizeSyntheticMVarsNoPostponing
+      zeroLevelMVars (← instantiateMVars E)
+    equivVerdict E unfolds known
+  match verdict with
+  | .same => bump 0; logInfo m!"✅ {name}"
+  | .falseButTrue => bump 1; logWarning m!"❌ {name}\n   Your statement is FALSE (the referee has a counterexample), but the intended statement is TRUE: they do not say the same thing."
+  | .trueButFalse => bump 1; logWarning m!"❌ {name}\n   Your statement is TRUE (the referee proved it), but the intended statement is FALSE: they do not say the same thing."
+  | .differ => bump 1; logWarning m!"❌ {name}\n   The referee proved that your definition and the intended one disagree on some input."
+  | .trueOtherShape => bump 2; logWarning m!"❓ {name}\n   Your statement is true, but it is not the statement asked for: its hypotheses or its conclusion differ from the intended ones. (Two true statements cannot be told apart by proofs, so this is ❓, not ❌.)"
+  | .unknown => bump 2; logWarning m!"❓ {name}\n   Inconclusive: the referee could not match your statement with the intended one (same hypotheses and conclusion, up to algebra), nor show that they differ. Compare yours with the description, piece by piece."
+
+elab_rules : command
+  | `(#expect_equiv $n:str $[$u]? : $t $[using $h]?) => runEquiv n.getString t (getUnfolds u) h
+
+/-! ## Types
+
+`#expect_type "name" : e : T` passes when `e` elaborates with type `T`. A type error is a
+❌ with Lean's own message: Lean's type checker is the proof. -/
+
+syntax (name := expectType) "#expect_type " str " : " term " : " term : command
+
+elab_rules : command
+  | `(#expect_type $n:str : $e : $T) => do
+    if ← blockedRef.get then return
+    let name := n.getString
+    let err ← liftTermElabM do
+      -- errors that elaboration logs (instead of throwing) are collected, and taken back
+      let before := (← getThe Core.State).messages
+      let res ← try
+        Term.withoutErrToSorry do
+          let ty ← Term.elabType T
+          let v ← Term.elabTermEnsuringType e ty
+          Term.synthesizeSyntheticMVarsNoPostponing
+          let v ← instantiateMVars v
+          let vty ← inferType v
+          unless ← isDefEq vty ty do
+            throwError "it has type{indentExpr vty}\nbut should have type{indentExpr ty}"
+          if v.hasSyntheticSorry then throwError "it does not elaborate"
+        pure none
+      catch ex => pure (some (← ex.toMessageData.toString))
+      let logged := (← getThe Core.State).messages
+      modifyThe Core.State fun st => { st with messages := before }
+      if res.isSome then return res
+      let errs ← (logged.toList.drop before.toList.length).filter (·.severity == .error)
+        |>.mapM (·.data.toString)
+      return if errs.isEmpty then none else some ("\n".intercalate errs)
+    match err with
+    | none => bump 0; logInfo m!"✅ {name}"
+    | some msg => bump 1; logWarning m!"❌ {name}\n   This does not have the expected type. Lean says: {msg}"
+
+/-! ## Answers to questions
+
+`#expect_choice "name" : q = k` checks a reading question: `q` is the player's answer
+(a `Bool`, or a `Fin k` for a multiple choice), `k` the right one. -/
+
+syntax (name := expectChoice) "#expect_choice " str " : " term : command
+
+elab_rules : command
+  | `(#expect_choice $n:str : $t) => runTest n.getString t #[] 4
+
+
 /-! ## Model tests for structures
 
 `#expect_model "name" : S.mk d₁ d₂ …` supplies the data fields of a structure `S`.
 The remaining arguments of `S.mk` are the axioms, and the referee tries to
 settle each one in this concrete model. -/
 
-syntax (name := expectModel) "#expect_model " str " : " term : command
-syntax (name := expectNotModel) "#expect_not_model " str " : " term : command
+syntax (name := expectModel) "#expect_model " str (unfoldClause)? " : " term : command
+syntax (name := expectNotModel) "#expect_not_model " str (unfoldClause)? " : " term : command
 
 /-- Settle every remaining (axiom) argument of a partially applied constructor. -/
-def settleAxioms (t : Term) : CommandElabM (Array (Name × Bool × Bool)) := liftTermElabM do
+def settleAxioms (t : Term) (unfolds : Array Ident := #[]) :
+    CommandElabM (Array (Name × Bool × Bool)) := liftTermElabM do
   let e ← Term.withoutErrToSorry do
     let e ← Term.elabTerm t none
     Term.synthesizeSyntheticMVarsNoPostponing
@@ -429,7 +838,7 @@ def settleAxioms (t : Term) : CommandElabM (Array (Name × Bool × Bool)) := lif
   repeat
     match ty with
     | .forallE n dom body _ =>
-      let r ← settle dom #[]
+      let r ← settle dom unfolds
       -- axioms are propositions: later fields do not depend on the proof
       acc := acc.push (n, r.1, r.2)
       ty := body.instantiate1 (← mkSorry dom false)
@@ -437,9 +846,9 @@ def settleAxioms (t : Term) : CommandElabM (Array (Name × Bool × Bool)) := lif
   return acc
 
 elab_rules : command
-  | `(#expect_model $n:str : $t) => do
+  | `(#expect_model $n:str $[$u]? : $t) => do
     if ← blockedRef.get then return
-    let rs ← settleAxioms t
+    let rs ← settleAxioms t (getUnfolds u)
     let bad := rs.filter (fun r => r.2.2)
     let unk := rs.filter (fun r => !r.2.1 && !r.2.2)
     if !bad.isEmpty then
@@ -450,9 +859,9 @@ elab_rules : command
       logWarning m!"❓ {n.getString}\n   Inconclusive: the referee could not decide {unk.map (·.1)} in this example. This is not evidence against your definition."
     else
       bump 0; logInfo m!"✅ {n.getString}"
-  | `(#expect_not_model $n:str : $t) => do
+  | `(#expect_not_model $n:str $[$u]? : $t) => do
     if ← blockedRef.get then return
-    let rs ← settleAxioms t
+    let rs ← settleAxioms t (getUnfolds u)
     let bad := rs.filter (fun r => r.2.2)
     let unk := rs.filter (fun r => !r.2.1 && !r.2.2)
     if !bad.isEmpty then

@@ -1,9 +1,7 @@
-def CommonDivisor (d a b : ℕ) : Prop := a ∣ d ∧ b ∣ d
-def TwinPrime (p : ℕ) : Prop := Nat.Prime p ∨ Nat.Prime (p + 2)
-def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
-def cdD : ℕ := 6
-def cdA : ℕ := 2
-def cdB : ℕ := 3
-def twin : ℕ := 7
-def mulK : ℕ := 6
-def mulN : ℕ := 3
+def q1 : Fin 4 := 3
+def q2 : Fin 4 := 2
+def q3 : Bool := false
+def q4 : Fin 3 := 1
+def q5 : Bool := true
+def q6 : Fin 4 := 0
+def q7 : Bool := false

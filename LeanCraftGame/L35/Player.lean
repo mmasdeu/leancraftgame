@@ -1,54 +1,54 @@
 /-
-# Counting
+# Sub-objects
 
-To count the elements of a finite set with a property, select them and
-take the cardinality:
+A subgroup, a subring, a subspace: a subset that is closed under the operations. MIL 8.3
+defines a submonoid as a structure that bundles a set with the facts that make it one:
 
 ```lean
-def evenSet (n : ℕ) : Finset ℕ := Finset.filter (fun i => i % 2 = 0) (Finset.range n)
+structure Submonoid₁ (M : Type) [Monoid M] where
+  carrier : Set M                -- the subset
+  -- the product of two elements of the submonoid is in it
+  mul_mem {a b} : a ∈ carrier → b ∈ carrier → a * b ∈ carrier
+  -- the unit is in it
+  one_mem : 1 ∈ carrier
 ```
 
-`Finset.filter p s` keeps the elements of `s` that satisfy `p`, and
-`s.card` is the number of elements. (This is "filter" in the sense of
-selecting; the *filters* of topology, families of sets closed upwards and
-under intersections, are something else and come in the Topology world.)
+* `carrier : Set M` is a field that holds data: the subset.
+* `mul_mem` and `one_mem` are fields that hold *propositions*: the axioms. A field such as
+  `mul_mem {a b} : …` has its own binders; `{a b}` makes `a` and `b` implicit.
 
-Arithmetic functions are counts and sums over divisors and primes:
+MIL then declares an instance `SetLike (Submonoid₁ M) M`, so that one writes `x ∈ N`
+instead of `x ∈ N.carrier`; Mathlib's `Submonoid`, `Subgroup`, `Ideal` and `Submodule`
+all work this way.
 
-* the number of divisors `τ(n)`: `τ(12) = 6`; and `τ(0)`? Every number
-  divides `0`, so the formula you write must decide what to do with it;
-* the prime-counting function `π(n)`, here the number of primes below `n`;
-* `n!` as a product `∏ i ∈ Finset.Icc 1 n, i` (type `\prod`);
-* **perfect numbers**, from scratch: `n` is the sum of its divisors smaller
-  than `n`.
+## Junk models
+
+Leave out an axiom and the structure accepts subsets it should not. The set of numbers
+`≥ 1` is closed under addition, but it is not an additive submonoid of ℕ: it misses `0`.
+The referee checks your axioms against a zoo of subsets: real submonoids must satisfy
+every axiom, and junk must break at least one.
+
+## Set-builder notation
+
+`{n : ℕ | P n}` is the set of `n` satisfying `P n` (MIL 4.1), so `{n | n % 2 = 0}` is
+the even numbers, and `{n | k ∣ n}` the multiples of `k` (type `\|` or `\mid` for `∣`).
 
 ## Your task
 
-Define the five functions. Each comment says which numbers are included.
+1. Complete `AddSubmonoid₁`, the additive version: the carrier is closed under `+` and
+   contains `0`. Keep `carrier` as the first field and add the axioms after it.
+2. Define `evens`, the even natural numbers, and `multiplesOf k`, the multiples of `k`.
 -/
 namespace L35
 
--- the even numbers below n (already done)
-def evenSet (n : ℕ) : Finset ℕ := Finset.filter (fun i => i % 2 = 0) (Finset.range n)
+structure AddSubmonoid₁ (M : Type) [AddMonoid M] where
+  carrier : Set M
+  -- add the axioms here
 
--- the sum of the odd numbers below n (already done)
-def sumOdds (n : ℕ) : ℕ := ∑ i ∈ Finset.filter (fun i => i % 2 = 1) (Finset.range n), i
+-- the even natural numbers
+def evens : Set ℕ := sorry
 
--- how many positive numbers divide n         (numDivisors 12 is 6: 1, 2, 3, 4, 6, 12)
-def numDivisors (n : ℕ) : ℕ := sorry
-
--- how many primes are below n                (countPrimes 10 is 4: 2, 3, 5, 7)
-def countPrimes (n : ℕ) : ℕ := sorry
-
--- the product 1 * 2 * … * n                  (fact 4 is 24)
-def fact (n : ℕ) : ℕ := sorry
-
--- the sum of the numbers below n that are multiples of 3 or of 5
--- (multiples3or5 10 is 23: 3 + 5 + 6 + 9)
-def multiples3or5 (n : ℕ) : ℕ := sorry
-
--- n is perfect: n is positive and equals the sum of its divisors that are
--- smaller than n                             (6 = 1 + 2 + 3 is perfect)
-def IsPerfect (n : ℕ) : Prop := sorry
+-- the natural numbers divisible by k
+def multiplesOf (k : ℕ) : Set ℕ := sorry
 
 end L35

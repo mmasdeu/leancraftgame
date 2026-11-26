@@ -1,56 +1,61 @@
 /-
-# Challenge: matrices
+# Spot the bug: topology
 
-The Fibonacci recursion is linear, so it is a matrix power:
+A colleague is writing a topology library. Four of their claims are wrong, and your job is
+to refute them with small spaces, where the referee checks everything. The spaces are
+those of the library: Sierpiński space `sierpinski` (`{1}` open, `{0}` not) and the
+discrete space `discrete 2` (every set open), on the two points `Fin 2 = {0, 1}`.
 
-`(F(n+1) F(n) / F(n) F(n-1)) = (1 1 / 1 0)ⁿ`.
+## Claim 1: continuity with images
 
-Two consequences, for free. Taking determinants gives **Cassini's
-identity** `F(n+1)F(n-1) - F(n)² = (-1)ⁿ` (you checked it by brute force
-in the Foundations world). And the power can be computed by repeated
-squaring in `O(log n)` multiplications, which is how large Fibonacci
-numbers are computed in practice.
+```lean
+def ColleagueCont (T : Family m) (S : Family n) (f : Fin m → Fin n) : Prop :=
+  ∀ U ∈ T, img f U ∈ S        -- the image of every open set is open
+```
 
-Matrix powers are defined by recursion, like powers of numbers and of
-Gaussian integers: `M⁰` is the identity and `Mⁿ⁺¹ = Mⁿ · M`.
+The real definition pulls open sets back: `∀ V ∈ S, pre f V ∈ T`. The two disagree in
+both directions. Give a map `f₁` from `discrete 2` to `sierpinski` that is continuous but
+rejected by the colleague, and a map `f₂` from `sierpinski` to `discrete 2` that the
+colleague accepts but is not continuous.
 
-**Torsion in `SL₂(ℤ)`**: an integer matrix of finite order has order
-`1, 2, 3, 4` or `6`; the characteristic polynomial of a matrix of order
-`6` is `x² - x + 1`, the sixth cyclotomic polynomial, so its trace is `1`
-and its determinant `1`. Find one.
+## Claim 2: "a continuous bijection is a homeomorphism"
 
-## Your task
+True for compact Hausdorff spaces, false in general. Give a bijection `g` from
+`discrete 2` to `sierpinski` that is continuous, but whose inverse is not: some open set
+of `discrete 2` has an image that is not open.
 
-Define `pow`, `fibMatrix`, `fibM`, and construct a matrix of order exactly
-`6`.
+## Claim 3: "limits are unique"
+
+True in Hausdorff spaces only. In Sierpiński space, the constant sequence at a point `p`
+converges to `x` when every open set containing `x` also contains `p`. Give `p` and two
+different points `x` and `y` such that the constant sequence `p` converges to both.
+
+## Claim 4: a reading
+
+The colleague writes continuity at a point with `Tendsto`, and the arguments in the wrong
+order:
+
+```lean
+def ColleagueContAt (f : ℝ → ℝ) (x : ℝ) : Prop := Tendsto f (𝓝 (f x)) (𝓝 x)
+```
+
+Answer the question below the lesson about it.
 -/
+import LeanCraftGame.Lib.Topology
 
 namespace L47
 
--- 2×2 integer matrices and their product (already done)
-structure Matrix2 where
-  a : ℤ
-  b : ℤ
-  c : ℤ
-  d : ℤ
+open Top
 
-def mul (M N : Matrix2) : Matrix2 :=
-  ⟨M.a * N.a + M.b * N.c, M.a * N.b + M.b * N.d, M.c * N.a + M.d * N.c, M.c * N.b + M.d * N.d⟩
+def f₁ : Fin 2 → Fin 2 := sorry
+def f₂ : Fin 2 → Fin 2 := sorry
 
-def det (M : Matrix2) : ℤ := M.a * M.d - M.b * M.c
+def g : Fin 2 → Fin 2 := sorry
 
--- M multiplied by itself n times (M⁰ is the identity)
-def pow (M : Matrix2) : ℕ → Matrix2
-  | 0 => sorry
-  | n + 1 => sorry
+def p : Fin 2 := sorry
+def x : Fin 2 := sorry
+def y : Fin 2 := sorry
 
--- the Fibonacci matrix (1 1 / 1 0)
-def fibMatrix : Matrix2 := sorry
-
--- the n-th Fibonacci number, read off the matrix fibMatrix ^ n (it is the entry b)
-def fibM (n : ℕ) : ℤ := sorry
-
--- a matrix of order exactly 6: R⁶ is the identity, and no smaller positive power is
-def order6 : Matrix2 := sorry
+def q1 : Bool := sorry
 
 end L47

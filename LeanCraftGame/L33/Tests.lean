@@ -1,32 +1,24 @@
-/- Hidden test battery for Level Spot the bug: the library. -/
+/- Hidden test battery for Level 33: Reading the hierarchy. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L33.Player
 
-namespace L33Ref
-def CommonDivisor (d a b : ℕ) : Prop := a ∣ d ∧ b ∣ d
-def TwinPrime (p : ℕ) : Prop := Nat.Prime p ∨ Nat.Prime (p + 2)
-def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
-end L33Ref
+open L33
 
-#no_sorry L33.cdD
-#no_sorry L33.cdA
-#no_sorry L33.cdB
-#no_sorry L33.twin
-#no_sorry L33.mulK
-#no_sorry L33.mulN
-#level_start "Spot the bug: the library"
+#no_sorry q1
+#no_sorry q2
+#no_sorry q3
+#no_sorry q4
+#no_sorry q5
+#no_sorry q6
+#no_sorry q7
+#level_start "Reading the hierarchy"
 
-#expect_true "CommonDivisor accepts your three numbers" unfolding L33Ref.CommonDivisor L33.cdD L33.cdA L33.cdB :
-  L33Ref.CommonDivisor L33.cdD L33.cdA L33.cdB
-#expect_true "cdD does not divide both cdA and cdB" unfolding L33.cdD L33.cdA L33.cdB :
-  ¬ (L33.cdD ∣ L33.cdA ∧ L33.cdD ∣ L33.cdB)
-#expect_true "TwinPrime accepts your number" unfolding L33Ref.TwinPrime L33.twin :
-  L33Ref.TwinPrime L33.twin
-#expect_true "your number and the number 2 above it are not both prime" unfolding L33.twin :
-  ¬ (Nat.Prime L33.twin ∧ Nat.Prime (L33.twin + 2))
-#expect_true "mulN ∈ multiplesOf mulK holds" unfolding L33Ref.multiplesOf L33.mulK L33.mulN :
-  L33.mulN ∈ L33Ref.multiplesOf L33.mulK
-#expect_true "mulN is not a multiple of mulK" unfolding L33.mulK L33.mulN :
-  ¬ (L33.mulK ∣ L33.mulN)
+#expect_choice "Question 1: what `Field ℝ` gives you" : q1 = 3
+#expect_choice "Question 2: what `#check (-3 : ℕ)` does" : q2 = 2
+#expect_choice "Question 3: `mul_comm` on 2 × 2 matrices" : q3 = false
+#expect_choice "Question 4: the explicit arguments of `add_comm`" : q4 = 1
+#expect_choice "Question 5: a lemma for `[Ring R]`, used on ℤ" : q5 = true
+#expect_choice "Question 6: what `E` is" : q6 = 0
+#expect_choice "Question 7: an instance `Field ℤ`" : q7 = false
 
 #level_report

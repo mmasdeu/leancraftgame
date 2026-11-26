@@ -1,49 +1,39 @@
-/- Hidden test battery for Level Challenge: periodicity. -/
+/- Hidden test battery for Level 21: Irrational roots. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L21.Player
 
-open L21
+/-- MIL's theorem on ℕ, proved for the referee. -/
+theorem L21Ref.sqrt2_nat : ∀ m n : ℕ, Nat.Coprime m n → m ^ 2 ≠ 2 * n ^ 2 := by
+  intro m n hc h
+  have h2 : 2 ∣ m := Nat.prime_two.dvd_of_dvd_pow ⟨n ^ 2, h⟩
+  obtain ⟨k, rfl⟩ := h2
+  have hn : 2 ∣ n := by
+    have : n ^ 2 = 2 * k ^ 2 := by nlinarith
+    exact Nat.prime_two.dvd_of_dvd_pow ⟨k ^ 2, this⟩
+  have : 2 ∣ Nat.gcd (2 * k) n := Nat.dvd_gcd ⟨k, rfl⟩ hn
+  rw [hc] at this
+  omega
 
-#no_sorry Periodic
-#no_sorry EventuallyConstant
-#no_sorry HasMaximum
-#no_sorry EventuallyPeriodic
-#level_start "Challenge: periodicity"
+theorem L21Ref.no_rat : ¬ ∃ q : ℚ, (q : ℝ) = Real.sqrt 2 :=
+  fun ⟨q, hq⟩ => irrational_sqrt_two ⟨q, hq⟩
 
-#expect_true "Periodic (fun n => n % 3) is true" unfolding Periodic :
-  Periodic (fun n => n % 3)
-#expect_true "Periodic (fun _ => 5) is true" unfolding Periodic :
-  Periodic (fun _ => 5)
-#expect_false "Periodic (fun n => n) is false (p = 0 is not a period)" unfolding Periodic :
-  Periodic (fun n => n)
-#expect_false "Periodic (fun n => if n < 5 then 7 else 0) is false (irregular start)" unfolding Periodic :
-  Periodic (fun n => if n < 5 then 7 else 0)
+#no_sorry L21.irr_sqrt2
+#no_sorry L21.no_rat_sqrt
+#no_sorry L21.sqrt2_nat
+#no_sorry L21.prime_sqrt
+#level_start "Irrational roots"
 
-#expect_true "EventuallyConstant (fun n => if n < 5 then 7 else 0) is true" unfolding EventuallyConstant :
-  EventuallyConstant (fun n => if n < 5 then 7 else 0)
-#expect_true "EventuallyConstant (fun n => if n < 5 then 0 else 6) is true (the constant is not 0)" unfolding EventuallyConstant :
-  EventuallyConstant (fun n => if n < 5 then 0 else 6)
-#expect_false "EventuallyConstant (fun n => n) is false" unfolding EventuallyConstant :
-  EventuallyConstant (fun n => n)
-#expect_false "EventuallyConstant (fun n => n % 2) is false (keeps changing)" unfolding EventuallyConstant :
-  EventuallyConstant (fun n => n % 2)
-
-#expect_true "HasMaximum (fun n => n % 3) is true" unfolding HasMaximum :
-  HasMaximum (fun n => n % 3)
-#expect_true "HasMaximum (fun _ => 5) is true (the maximum may be reached many times)" unfolding HasMaximum :
-  HasMaximum (fun _ => 5)
-#expect_true "HasMaximum (fun n => if n < 5 then 7 else 0) is true" unfolding HasMaximum :
-  HasMaximum (fun n => if n < 5 then 7 else 0)
-#expect_false "HasMaximum (fun n => n) is false (every term is beaten by a later one)" unfolding HasMaximum :
-  HasMaximum (fun n => n)
-#expect_false "HasMaximum (fun n => n + 1) is false" unfolding HasMaximum :
-  HasMaximum (fun n => n + 1)
-
-#expect_true "EventuallyPeriodic (fun n => if n < 5 then 7 else 0) is true" unfolding EventuallyPeriodic :
-  EventuallyPeriodic (fun n => if n < 5 then 7 else 0)
-#expect_true "EventuallyPeriodic (fun n => n % 3) is true" unfolding EventuallyPeriodic :
-  EventuallyPeriodic (fun n => n % 3)
-#expect_false "EventuallyPeriodic (fun n => n) is false (p = 0 is not a period)" unfolding EventuallyPeriodic :
-  EventuallyPeriodic (fun n => n)
+#expect_type "irr_sqrt2 is a proposition" : L21.irr_sqrt2 : Prop
+#expect_equiv "irr_sqrt2 says √2 is irrational" :
+  L21.irr_sqrt2 ↔ Irrational (Real.sqrt 2)
+  using irrational_sqrt_two
+#expect_equiv "no_rat_sqrt says no rational equals √2" :
+  L21.no_rat_sqrt ↔ ¬ ∃ q : ℚ, (q : ℝ) = Real.sqrt 2
+  using L21Ref.no_rat
+#expect_equiv "sqrt2_nat says m² ≠ 2n² for coprime m, n" :
+  L21.sqrt2_nat ↔ ∀ m n : ℕ, Nat.Coprime m n → m ^ 2 ≠ 2 * n ^ 2
+  using L21Ref.sqrt2_nat
+#expect_equiv "prime_sqrt says m² ≠ p n² for n ≠ 0 and p prime" :
+  L21.prime_sqrt ↔ ∀ {m n p : ℕ}, n ≠ 0 → p.Prime → m ^ 2 ≠ p * n ^ 2
 
 #level_report

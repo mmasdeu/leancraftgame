@@ -1,5 +1,9 @@
-def telescope (n : ℕ) : ℚ := ∑ i ∈ Finset.Icc 1 n, 1 / ((i : ℚ) * (i + 1))
-def sumOfSucc (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, (i + 1)
-def rangeSum (a b : ℕ) : ℕ := ∑ i ∈ Finset.Icc a b, i
-def totalChange (a : ℕ → ℕ) (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, ((a (i + 1) - a i) + (a i - a (i + 1)))
-def floorSum (n : ℕ) : ℕ := ∑ i ∈ Finset.Icc 1 n, n / i
+open Polynomial
+
+def I : Ideal ℤ := Ideal.span {12}
+
+def p : ℤ[X] := (X - 2) * (X - 3)
+
+def inv3 : ZMod 7 := 5
+
+statement crt (m n : ℕ) (h : Nat.Coprime m n) : Nonempty (ZMod (m * n) ≃+* ZMod m × ZMod n)

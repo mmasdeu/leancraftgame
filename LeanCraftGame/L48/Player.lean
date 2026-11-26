@@ -1,46 +1,80 @@
 /-
-# Morphisms
+# Derivatives
 
-A structure is only half of the story; the other half is the maps that
-**preserve** it. A homomorphism of monoids `(M, ·, 1) → (N, ·, 1)` is a map
-with `f(1) = 1` and `f(xy) = f(x) f(y)`. Continuous maps preserve
-topologies, linear maps preserve linear combinations, monotone maps preserve
-order.
+MIL's chapter on differential calculus starts with functions `f : ℝ → ℝ`. Mathlib has
+three ways to talk about the derivative of `f` at a point `x`:
 
-Two of the commonest confusions:
+```lean
+deriv f x                  -- a real number: the derivative of f at x
+HasDerivAt f f' x          -- a statement: f has derivative f' at x
+DifferentiableAt ℝ f x     -- a statement: f is differentiable at x
+```
 
-* **Preserving the operation is not the same as being bijective.** The map
-  `n ↦ 2n` preserves addition and misses every odd number. Swapping `0` and
-  `1` is a bijection of `ℕ` that preserves nothing.
-* **A morphism goes between two structures, which may differ.** The
-  exponential `n ↦ 2ⁿ` is a homomorphism from `(ℕ, +, 0)` to `(ℕ, ·, 1)`:
-  `2^(a+b) = 2^a · 2^b`, and `2⁰ = 1`. This is the whole point of
-  logarithms, and of the exponential map of a Lie group.
+* `deriv f x` is a **number**, so you can compute with it:
+  `deriv (fun x : ℝ => x ^ 2) 3` is `6`.
+* `HasDerivAt f f' x` is a **proposition**. Read the arguments in order: the function,
+  then the derivative, then the point. `HasDerivAt (fun x : ℝ => x ^ 2) 6 3` says "the
+  derivative of `x ↦ x²` at `3` is `6`".
+* `DifferentiableAt ℝ f x` names the field `ℝ` explicitly, because Mathlib also
+  differentiates over `ℂ`. On a set: `DifferentiableOn ℝ f s`, and `ContinuousOn f s`.
 
-An **isomorphism** is a morphism with an inverse morphism. For groups, a
-bijective homomorphism is automatically an isomorphism; for topological
-spaces a continuous bijection need not be a homeomorphism (the Topology
-world has the counterexample). Which structures have this property is a
-real question.
+## A junk value
+
+`deriv f x` is always defined, even where `f` has no derivative: then Mathlib sets it to
+`0`. So `deriv (fun x : ℝ => |x|) 0 = 0`, although `|x|` has a corner at `0`. This is the
+same convention as `x / 0 = 0`: a total function is easier to use, and a theorem that
+needs differentiability says so in a hypothesis.
+
+## Intervals and "some point in between"
+
+`Set.Icc a b` is the closed interval `[a, b]` and `Set.Ioo a b` the open interval
+`(a, b)` (the letters say closed/open at each end). "There is a `c` in `(a, b)` with
+`P c`" is written `∃ c ∈ Set.Ioo a b, P c`.
+
+## Two theorems of MIL 12.1
+
+**Rolle's theorem**, as Mathlib states it (`exists_deriv_eq_zero`):
+
+> if `a < b`, `f` is continuous on `[a, b]` and `f a = f b`, then some `c ∈ (a, b)` has
+> `deriv f c = 0`.
+
+There is no differentiability hypothesis! At a point where `f` is not differentiable,
+`deriv f c` is `0` anyway.
+
+**The mean value theorem** (`exists_deriv_eq_slope`):
+
+> if `a < b`, `f` is continuous on `[a, b]` and differentiable on `(a, b)`, then some
+> `c ∈ (a, b)` has `deriv f c = (f b - f a) / (b - a)`.
+
+Here differentiability is needed: without it, the junk value `0` would not be the slope.
 
 ## Your task
 
-Define the two kinds of homomorphism, and construct the two
-counterexamples.
+1. `d3`: the derivative of `x ↦ x³` at `2`, written with `deriv`.
+2. `sq_hasDeriv`: the statement "`x ↦ x²` has derivative `6` at `3`", with `HasDerivAt`.
+3. `rolle`: Rolle's theorem as above, with the variables and hypotheses in this order:
+   `(f : ℝ → ℝ) (a b : ℝ)`, then `a < b`, continuity on `[a, b]`, `f a = f b`.
+4. `mvt`: the mean value theorem, in the order `(f : ℝ → ℝ) (a b : ℝ)`, `a < b`,
+   continuity on `[a, b]`, differentiability on `(a, b)`.
+5. Answer the two questions below the lesson.
 -/
+import Mathlib.Analysis.Calculus.Deriv.Pow
+import Mathlib.Analysis.Calculus.Deriv.Abs
+import Mathlib.Analysis.Calculus.LocalExtr.Rolle
+import Mathlib.Analysis.Calculus.MeanValue
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
 
 namespace L48
 
--- f is a homomorphism of (ℕ, +, 0) to itself: f 0 = 0 and f (a + b) = f a + f b
-def IsAddHom (f : ℕ → ℕ) : Prop := sorry
+def d3 : ℝ := sorry
 
--- f is a homomorphism of (ℕ, +, 0) to (ℕ, ·, 1): f 0 = 1 and f (a + b) = f a · f b
-def IsExpHom (f : ℕ → ℕ) : Prop := sorry
+statement sq_hasDeriv : sorry
 
--- an additive homomorphism that is not surjective
-def homNotOnto : ℕ → ℕ := sorry
+statement rolle : sorry
 
--- a bijection of ℕ that is its own inverse and is not an additive homomorphism
-def bijNotHom : ℕ → ℕ := sorry
+statement mvt : sorry
+
+def q1 : Fin 4 := sorry
+def q2 : Bool := sorry
 
 end L48

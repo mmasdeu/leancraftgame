@@ -1,50 +1,70 @@
 /-
-# Divisibility and gcd
+# Spot the bug: structures
 
-The greatest common divisor is usually defined as "the largest common
-divisor". The better definition, which is the one that generalises to
-polynomials, Gaussian integers and every principal ideal domain, does not
-mention size:
+A colleague used this world's structures in a project. Each piece below compiles, and
+each one is wrong. Prove it with a counterexample.
 
-> `d` is a gcd of `a` and `b` when `d` is a common divisor, and every
-> common divisor divides `d`.
+```lean
+structure GaussInt where
+  re : ℤ
+  im : ℤ
 
-With it, `gcd(0, 0) = 0`: every number divides `0`, and `0` is the greatest
-element for divisibility, although it is the least for `≤`.
+-- the product (a + bi)(c + di)
+def GaussInt.mul (z w : GaussInt) : GaussInt :=
+  ⟨z.re * w.re + z.im * w.im, z.re * w.im + z.im * w.re⟩
 
-Related notions, all defined by divisibility:
+structure Point where
+  x : ℚ
+  y : ℚ
+  z : ℚ
 
-* `a`, `b` **coprime**: their only common divisor is `1`;
-* `p` **prime**: `p ≥ 2` and its only divisors are `1` and `p`
-  (with the boundary cases `0` and `1` excluded explicitly);
-* `n` **squarefree**: no square `d²` with `d ≠ 1` divides `n`
-  (`12 = 2² · 3` is not, `30` is).
+-- the midpoint of a and b
+def Point.mid (a b : Point) : Point :=
+  ⟨(a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + a.z) / 2⟩
 
-Write the quantifiers so that the referee can check them: a divisor of a
-positive `n` is at most `n`, so `∀ d, d ∣ n → …` is a finite check in
-disguise.
+-- the rational numbers t with 0 ≤ t ≤ 1
+structure UnitInterval where
+  t : ℚ
+  in_range : 0 ≤ t ∨ t ≤ 1
+```
+
+## Reading a structure
+
+* A wrong **operation** shows on a particular input: find one where it disagrees with
+  the right formula. Beware of inputs that make the wrong term vanish.
+* A **symmetric** notion (the midpoint of `a` and `b` is the midpoint of `b` and `a`)
+  gives a test for free: swap the arguments and compare.
+* A propositional field can be **vacuous**: so weak that junk satisfies it. Here, an
+  element of `UnitInterval` is a number together with a proof of `in_range`. Find a
+  number that satisfies the colleague's `in_range` and is not in `[0, 1]`.
 
 ## Your task
 
-Define `Coprime'`, `IsGcd`, `IsPrime'` and `Squarefree'` (with a prime to
-avoid clashing with Mathlib's names).
+Give the counterexamples. The template has the colleague's types; the referee uses its
+own copy of the colleague's functions.
 -/
+import Mathlib.Tactic
+
 namespace L31
 
--- d divides both a and b (already done)
-def CommonDiv (d a b : ℕ) : Prop := d ∣ a ∧ d ∣ b
+structure GaussInt where
+  re : ℤ
+  im : ℤ
 
--- a and b have no common divisor other than 1       (Coprime' 8 15 is true)
-def Coprime' (a b : ℕ) : Prop := sorry
+structure Point where
+  x : ℚ
+  y : ℚ
+  z : ℚ
 
--- d is a greatest common divisor of a and b: a common divisor that every
--- common divisor divides                            (IsGcd 12 18 6 is true)
-def IsGcd (a b d : ℕ) : Prop := sorry
+-- two Gaussian integers whose product the colleague gets wrong
+def gz : GaussInt := sorry
+def gw : GaussInt := sorry
 
--- p is a prime number
-def IsPrime' (p : ℕ) : Prop := sorry
+-- two points a, b with `mid a b ≠ mid b a`
+def pa : Point := sorry
+def pb : Point := sorry
 
--- no square d * d with d ≠ 1 divides n               (Squarefree' 6 is true)
-def Squarefree' (n : ℕ) : Prop := sorry
+-- a number that satisfies the colleague's `in_range` but is not between 0 and 1
+def badT : ℚ := sorry
 
 end L31

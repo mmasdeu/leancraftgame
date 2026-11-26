@@ -5,9 +5,10 @@
 const $ = (id) => document.getElementById(id);
 const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 
-/* Version 2 has its own levels and numbering, and is served from the same site as version 1
-   (…/play/ and …/v2/ share the browser's storage), so it keeps its progress under its own prefix. */
-const STORE = "leancraftgame.v2.";
+/* Version 3 has its own levels and numbering, and is served from the same site as the earlier
+   versions (…/play/, …/v2/ and …/v3/ share the browser's storage), so it keeps its progress
+   under its own prefix. */
+const STORE = "leancraftgame.v3.";
 const store = {
   get(key, fallback) {
     try { const v = localStorage.getItem(STORE + key); return v === null ? fallback : JSON.parse(v); }
@@ -116,6 +117,13 @@ function texToHtml(tex, plain) {
 function nameToHtml(name) {
   let out = "", i = 0;
   while (i < name.length) {
+    // `code` in a test name, as in the lesson
+    const close = name[i] === "`" ? name.indexOf("`", i + 1) : -1;
+    if (close > i) {
+      out += `<code>${esc(name.slice(i + 1, close))}</code>`;
+      i = close + 1;
+      continue;
+    }
     if (name.startsWith("(fun ", i)) {
       let depth = 0, j = i;
       for (; j < name.length; j++) {
@@ -278,13 +286,65 @@ function attachAbbrev(el, onChange, onRun) {
   });
 }
 
-attachAbbrev(src, () => {
+function codeChanged() {
   diagnostics = [];
   render();
   store.set(`draft.${level.id}`, src.value);
   renderTests();
   updateSummary();
-}, () => runTests());
+  syncQuestions();
+}
+attachAbbrev(src, codeChanged, () => runTests());
+
+/* ------------------------------------------------------------ reading questions */
+
+/* A reading level asks questions about a piece of Lean (level.json "questions"). Each answer
+   is a line of the player's code, `def q1 : Fin 3 := 2` (the index of a choice) or
+   `def q2 : Bool := true`; the buttons below the lesson edit that line, and editing the line
+   by hand moves the buttons. The code stays the one thing that is run and saved. */
+const answerLine = (name) => new RegExp(`^(def ${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} : [^:=\n]+ :=)[ \t]*(.*)$`, "m");
+
+function currentAnswer(q) {
+  const m = answerLine(q.answer).exec(src.value);
+  if (!m) return null;
+  const v = m[2].replace(/--.*$/, "").trim();
+  if (q.choices) return /^\d+$/.test(v) && +v < q.choices.length ? +v : null;
+  return v === "true" ? true : v === "false" ? false : null;
+}
+
+function renderQuestions() {
+  const qs = level.questions || [];
+  if (!qs.length) return;
+  const box = document.createElement("section");
+  box.className = "questions";
+  box.id = "questions";
+  box.innerHTML = `<h2>Questions</h2><p class="muted">Your choices are written into the code on the right
+    (the lines <code>def ${esc(qs[0].answer)} …</code>); <b>Run tests</b> checks them.</p><ol>${qs.map((q, i) => {
+    const opts = q.choices ? q.choices.map((c, k) => [k, c]) : [[true, "true"], [false, "false"]];
+    return `<li data-q="${i}"><div class="q-text">${markdown(q.text)}</div><div class="q-opts">${opts.map(([v, label]) =>
+      `<button type="button" class="q-opt" data-v="${v}"><span class="q-key">${q.choices ? `(${v})` : ""}</span> ${inline(label)}</button>`).join("")}</div></li>`;
+  }).join("")}</ol>`;
+  $("intro").appendChild(box);
+  box.querySelectorAll(".q-opt").forEach((b) => b.onclick = () => {
+    const q = qs[+b.closest("li").dataset.q];
+    const m = answerLine(q.answer).exec(src.value);
+    if (!m) { alert(`The line \`def ${q.answer} …\` is missing from your code: press Reset to get it back.`); return; }
+    const start = m.index + m[1].length;
+    src.value = src.value.slice(0, start) + " " + b.dataset.v + src.value.slice(m.index + m[0].length);
+    codeChanged();
+  });
+  syncQuestions();
+}
+
+function syncQuestions() {
+  const box = $("questions");
+  if (!box || !level) return;
+  (level.questions || []).forEach((q, i) => {
+    const a = currentAnswer(q);
+    box.querySelectorAll(`li[data-q="${i}"] .q-opt`).forEach((b) =>
+      b.classList.toggle("picked", a !== null && String(a) === b.dataset.v));
+  });
+}
 
 /* Select a (1-based line, 0-based codepoint column) range from a Lean message. */
 function jumpTo(d) {
@@ -395,7 +455,7 @@ async function openIntro() {
   level = null;
   store.set("level", "intro");
   history.replaceState(null, "", "?level=intro");
-  document.title = "Lean Craft Game v2 · Welcome";
+  document.title = "Lean Craft Game v3 · Welcome";
   document.body.classList.add("intro-mode");
   worldToggled = {};
   renderTabs();
@@ -420,22 +480,22 @@ async function openLevel(id) {
   } else level = await (await fetch(`/api/levels/${id}`)).json();
   store.set("level", id);
   history.replaceState(null, "", `?level=${id}`);
-  document.title = `Lean Craft Game v2 · ${level.title}`;
+  document.title = `Lean Craft Game v3 · ${level.title}`;
   worldToggled = {};
   renderTabs();
   // the kind of exercise (level.json "exercise"), as a tag above the lesson
   const EXERCISE_TIPS = {
-    Define: "Write a definition that matches the description.",
-    Construct: "Build an example: a witness, a function, a structure.",
-    Repair: "A colleague's definition is wrong: fix it.",
-    Classify: "Decide which objects have the property, and say so in Lean.",
-    Refute: "A claim is false: give the counterexample.",
-    Referee: "Choose the examples that tell right definitions from wrong ones.",
-    Connect: "Relate two definitions: one is a special case of the other.",
+    Write: "Write a definition or a statement from a mathematical description.",
+    Read: "Read Lean code and say what it means: answer the questions.",
+    Construct: "Build an example: a witness, a function, a set, a structure.",
+    Refute: "A claim or a colleague's definition is wrong: give the counterexample.",
+    Repair: "A colleague's definition or statement is wrong: fix it.",
     Audit: "Check whether a formal statement says what it claims to say.",
   };
   const tag = level.exercise ? `<p class="exercise-tag" title="${esc(EXERCISE_TIPS[level.exercise] || "")}">${esc(level.exercise)}</p>` : "";
-  $("intro").innerHTML = tag + markdown(level.intro);
+  const mil = level.mil ? `<p class="mil-ref">Follows <i>Mathematics in Lean</i>, ${esc(level.mil)}</p>` : "";
+  $("intro").innerHTML = tag + mil + markdown(level.intro);
+  renderQuestions();
   src.value = store.get(`draft.${id}`, level.template);
   diagnostics = [];
   render();
@@ -446,13 +506,10 @@ async function openLevel(id) {
 }
 
 $("reset").onclick = () => {
+  if (!level) return;
   if (src.value !== level.template && !confirm("Discard your changes and restore the original file?")) return;
   src.value = level.template;
-  store.set(`draft.${level.id}`, src.value);
-  diagnostics = [];
-  render();
-  renderTests();
-  updateSummary();
+  codeChanged();
 };
 
 /* ------------------------------------------------------------ predict first, hidden tests, hints */
@@ -615,7 +672,8 @@ function starsLine() {
 const KIND = {
   expect_true: "must be true", expect_false: "must be false", expect_open: "must stay open",
   expect_model: "must be allowed", expect_not_model: "must be ruled out",
-  expect_caught: "must be caught",
+  expect_caught: "must be caught", expect_equiv: "must say the same", expect_type: "must typecheck",
+  expect_choice: "your answer",
 };
 const ICON = { pass: "✅", fail: "❌", unknown: "❓", error: "⚠️" };
 let tests = [], ticker = null, controller = null;

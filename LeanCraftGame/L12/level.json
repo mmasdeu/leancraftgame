@@ -1,46 +1,25 @@
 {
-  "world": "Numbers World",
-  "title": "Integers and casts",
-  "skill": "writing",
-  "exercise": "Define",
+  "world": "Logic",
+  "title": "Sequences and convergence",
+  "skill": "writing definitions",
+  "exercise": "Write",
+  "mil": "§3.6",
   "predict": [
-    {
-      "test": "(-7) / 2 = -4 and (-7) % 2 = 1 on ℤ",
-      "statement": "(-7) / 2 = -4 and (-7) % 2 = 1 in ℤ"
-    },
-    {
-      "test": "IsOddInt (-3): negative numbers can be odd",
-      "statement": "(-3) % 2 = 1 in ℤ"
-    }
+    {"test": "7, 7, 7, 7, 7, 0, 0, 0, … converges to 0", "statement": "`ConvergesTo (fun n ↦ if n < 5 then 7 else 0) 0`"},
+    {"test": "0, 1, 0, 1, … converges to 0", "statement": "`ConvergesTo (fun n ↦ if n % 2 = 0 then 0 else 1) 0`"}
   ],
+  "public": ["the constant sequence 3 converges to 3"],
   "checks": [
-    {
-      "lean": "example : ℕ → ℕ → ℤ := L12.diff\nexample : ℤ → ℤ → ℕ := L12.gap\nexample : ℤ → Prop := L12.IsOddInt",
-      "message": "Keep `diff : ℕ → ℕ → ℤ`, `gap : ℤ → ℤ → ℕ` and `IsOddInt : ℤ → Prop`."
-    }
+    {"lean": "#check (L12.ConvergesTo : (ℕ → ℝ) → ℝ → Prop)", "message": "Keep `ConvergesTo : (ℕ → ℝ) → ℝ → Prop`."}
   ],
   "hints": [
-    {
-      "match": "diff",
-      "steps": [
-        "Where is the subtraction done: in ℕ or in ℤ?"
-      ],
-      "hint": "`(a : ℤ) - (b : ℤ)`: cast first, subtract in ℤ."
-    },
-    {
-      "match": "gap",
-      "hint": "`(a - b).natAbs`."
-    },
-    {
-      "match": "IsOddInt",
-      "steps": [
-        "What is `(-3) % 2` in Lean?"
-      ],
-      "hint": "`x % 2 = 1`: the remainder on ℤ is never negative."
-    },
-    {
-      "match": "",
-      "hint": "Cast early: `(a : ℤ)`."
-    }
+    {"match": "constant sequence 3 converges to 3", "steps": ["Is there a tolerance `ε` for which even a constant sequence fails?"], "hint": "Did you forget `ε > 0`? With `ε = 0` nothing is close enough: `∀ ε > 0, …`."},
+    {"match": "7, 7, 7", "hint": "The first terms must not matter: `∃ N, ∀ n ≥ N, …`."},
+    {"match": "converges to 4", "hint": "`|s n - a| < ε`: the distance to the limit."},
+    {"match": "0, 1, 0, 1", "steps": ["Is one close term enough, or must all terms from some point on be close?"], "hint": "`∃ N, ∀ n ≥ N, |s n - a| < ε`."},
+    {"match": "0, 1, 2", "hint": "`∀ ε > 0, ∃ N, ∀ n ≥ N, |s n - a| < ε`."},
+    {"match": "convergesTo_const", "hint": "`statement convergesTo_const (a : ℝ) : ConvergesTo (fun _ ↦ a) a`."},
+    {"match": "convergesTo_add", "hint": "`statement convergesTo_add (s t : ℕ → ℝ) (a b : ℝ) (hs : ConvergesTo s a) (ht : ConvergesTo t b) : ConvergesTo (fun n ↦ s n + t n) (a + b)`."},
+    {"match": "convergesTo_unique", "hint": "`statement convergesTo_unique (s : ℕ → ℝ) (a b : ℝ) (sa : ConvergesTo s a) (sb : ConvergesTo s b) : a = b`."}
   ]
 }

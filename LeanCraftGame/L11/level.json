@@ -1,35 +1,21 @@
 {
-  "world": "Logic World",
-  "title": "Spot the bug: connectives",
-  "skill": "reading",
-  "exercise": "Refute",
-  "public": "all",
+  "world": "Logic",
+  "title": "∧, ∨ and ↔",
+  "skill": "writing statements",
+  "exercise": "Write",
+  "mil": "§3.4–3.5",
+  "predict": [
+    {"test": "some x satisfies x > 5 → x = 0", "statement": "`∃ x : ℝ, x > 5 → x = 0`"}
+  ],
+  "public": ["x ↦ x - 1 has a zero in [0, 2]"],
   "checks": [
-    {
-      "lean": "example : Nat := L11.r\nexample : Nat := L11.c\nexample : Nat := L11.ca\nexample : Nat := L11.cb\nexample : Nat := L11.oa\nexample : Nat := L11.ob",
-      "message": "Keep the counterexamples as natural numbers (small ones are easiest for the referee)."
-    }
+    {"lean": "#check (L11.HasZeroIn : (ℝ → ℝ) → ℝ → ℝ → Prop)", "message": "Keep `HasZeroIn : (ℝ → ℝ) → ℝ → ℝ → Prop`."}
   ],
   "hints": [
-    {
-      "match": "InRange",
-      "hint": "Every number is at least 13 or at most 19: any number outside, such as `30`, is accepted."
-    },
-    {
-      "match": "IsComposite",
-      "hint": "`1` (or `0`) is not prime, and not composite either."
-    },
-    {
-      "match": "Coprime",
-      "hint": "Two multiples of 3, odd or not: `3` and `6`."
-    },
-    {
-      "match": "BothOdd",
-      "hint": "`¬ a % 2 = 0 ∧ b % 2 = 0` asks for `b` even. Two odd numbers, such as `1` and `3`, are rejected."
-    },
-    {
-      "match": "",
-      "hint": "Read the definition aloud, literally. Too weak or too strong?"
-    }
+    {"match": "lt_iff'", "hint": "`statement lt_iff' (x y : ℝ) : x < y ↔ x ≤ y ∧ x ≠ y`."},
+    {"match": "abs_lt'", "steps": ["`|x| < y` needs *both* bounds: is that `∧` or `∨`?"], "hint": "`statement abs_lt' (x y : ℝ) : |x| < y ↔ -y < x ∧ x < y`."},
+    {"match": "le_abs'", "hint": "`statement le_abs' (x y : ℝ) : x ≤ |y| ↔ x ≤ y ∨ x ≤ -y`."},
+    {"match": "x > 5", "hint": "An implication with a false hypothesis is true: take `x = 0`."},
+    {"match": "has a zero in", "steps": ["Under `∃`, should the conditions be joined with `→` or with `∧`?"], "hint": "`∃ x, a ≤ x ∧ x ≤ b ∧ f x = 0`."}
   ]
 }

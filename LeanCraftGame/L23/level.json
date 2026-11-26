@@ -1,74 +1,38 @@
 {
-  "world": "Sequence World",
-  "title": "Going to infinity",
-  "skill": "writing",
-  "exercise": "Define",
+  "world": "Elementary Number Theory",
+  "title": "The AI proved the infinitude of primes!",
+  "skill": "auditing",
+  "exercise": "Audit",
+  "mil": "§5.3–5.4",
+  "public": ["Toy world: every number is 'prime'"],
   "predict": [
-    {
-      "test": "u n = n / 2 tends to infinity (it is not strictly increasing!)",
-      "statement": "TendsToInfinity (fun n => n / 2)"
-    },
-    {
-      "test": "0, 4, 2, 6, 4, 8, … tends to infinity (it is not monotone!)",
-      "statement": "TendsToInfinity (fun n => n + 3 * (n % 2))"
-    },
-    {
-      "test": "0, 0, 2, 0, 4, 0, … does not tend to infinity (unbounded is not enough!)",
-      "statement": "TendsToInfinity (fun n => if n % 2 = 0 then n else 0)"
-    }
+    {"test": "Toy world: the 'primes' are 2 and 3", "statement": "With 'prime' meaning `p = 2 ∨ p = 3`, there are infinitely many 'primes'."},
+    {"test": "Your fakePrime: the AI's IsPrime accepts it", "statement": "The AI's `IsPrime` accepts some number that is not prime."}
+  ],
+  "questions": [
+    {"answer": "q1", "text": "Why does Lean accept the recursive call `digitSum (n / 10)`?",
+     "choices": ["it is structural recursion, from `n + 1` to `n`", "`termination_by n` and `decreasing_by` show that `n / 10 < n` in that branch", "Lean evaluates `digitSum` on every number first"]},
+    {"answer": "q2", "text": "True or false: `digitSum 1234 = 10`."}
   ],
   "checks": [
-    {
-      "lean": "example : (Nat → Nat) → Prop := L23.TendsToInfinity",
-      "message": "Keep the name and the type: `L23.TendsToInfinity : (Nat → Nat) → Prop`."
-    }
+    {"lean": "#check (L23.Unbounded : (ℕ → Prop) → Prop)\n#check (L23.smallWorld : ℕ → Prop)\n#check (L23.fakePrime : ℕ)\n#check (L23.q1 : Fin 3)\n#check (L23.q2 : Bool)",
+     "message": "Keep the names and types: `Unbounded : (ℕ → Prop) → Prop`, `smallWorld : ℕ → Prop`, `fakePrime : ℕ`, and the answer lines."}
   ],
   "hints": [
-    {
-      "match": "u n = n tends",
-      "hint": "Even the identity sequence fails. Read your quantifiers from left to right: can the threshold `N` depend on `M`? With `∃ N, ∀ M, …` it cannot.",
-      "steps": [
-        "Say it in words for the identity sequence `u n = n`: given a bound `M`, from which index on is every term at least `M`?"
-      ]
-    },
-    {
-      "match": "n / 2",
-      "hint": "`n / 2` is 0, 0, 1, 1, 2, 2, …. It tends to infinity, but it is not strictly increasing. Your definition should not require the sequence to increase.",
-      "steps": [
-        "The terms of `n / 2` are 0, 0, 1, 1, 2, 2, …. Does your definition ask the terms to go up at every step?"
-      ]
-    },
-    {
-      "match": "0, 4, 2, 6",
-      "hint": "This sequence goes up and down, and still tends to infinity. Monotonicity is not part of the notion.",
-      "steps": [
-        "The terms 0, 4, 2, 6, 4, 8, … do not go up at every step. Should that matter for tending to infinity?"
-      ]
-    },
-    {
-      "match": "constant",
-      "hint": "Your definition accepts a constant sequence, so it is too weak. What must eventually happen for every bound `M`?",
-      "steps": [
-        "Imagine the bound `M = 100`. What does a sequence tending to infinity have to do about it? Does the constant sequence 7 do that?"
-      ]
-    },
-    {
-      "match": "0, 1, 0, 1",
-      "hint": "Your definition accepts a bounded sequence, so it is too weak. What must eventually happen for every bound `M`?",
-      "steps": [
-        "Take the bound `M = 2`. Is the sequence 0, 1, 0, 1, … ever at least 2? What should happen for *every* bound?"
-      ]
-    },
-    {
-      "match": "0, 0, 2, 0",
-      "hint": "This sequence is unbounded but keeps falling back to 0. Being unbounded is not enough: from some index on, every term must be at least `M`.",
-      "steps": [
-        "This sequence has arbitrarily large terms but keeps falling back to 0. What does tending to infinity say about *all* the terms after some index?"
-      ]
-    },
-    {
-      "match": "if u → ∞",
-      "hint": "A user of your definition needs this lemma. If it is ❓, the referee could not derive it from your definition: try a more standard formulation."
-    }
+    {"match": "every number is 'prime'", "steps": ["Is your statement `∀ n, ∃ p, …` or `∃ p, ∀ n, …`?"],
+     "hint": "`∀ n, ∃ p, n < p ∧ P p`: for every bound, a bigger 'prime'."},
+    {"match": "nothing is 'prime'", "steps": ["Did you combine `P p` and the bound with `→` under `∃`?"],
+     "hint": "`∃ p, P p → n < p` is true for every `P` (take any `p` that is not 'prime'). Under `∃`, use `∧`."},
+    {"match": "2 and 3", "steps": ["For every `n` there is a 'prime' different from `n`: is that infinitely many?"],
+     "hint": "`p ≠ n` only needs two 'primes'. Ask for `n < p` (or `n ≤ p`)."},
+    {"match": "odd numbers", "hint": "Odd numbers go on forever: `2 n + 1` is odd and bigger than `n`."},
+    {"match": "Your world", "steps": ["How many 'primes' does a world need so that every `n` has a 'prime' different from it?"],
+     "hint": "`fun p => p = 2 ∨ p = 3`."},
+    {"match": "fakePrime", "steps": ["Try the borders: `0`, `1`, `2`. Which divisors does `1` have?"],
+     "hint": "`1`: its only divisor is `1`, but `Nat.Prime` asks for `2 ≤ p`."},
+    {"match": "euclid says", "hint": "`statement euclid : ∀ n : ℕ, ∃ p, n ≤ p ∧ Nat.Prime p`."},
+    {"match": "euclid_mod4", "hint": "`statement euclid_mod4 : ∀ n : ℕ, ∃ p, n ≤ p ∧ Nat.Prime p ∧ p % 4 = 3`."},
+    {"match": "Question 1", "hint": "`n / 10` is not `n - 1`: the recursion is not structural, and the `termination_by` lines are there for it."},
+    {"match": "Question 2", "hint": "`4 + 3 + 2 + 1`."}
   ]
 }

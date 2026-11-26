@@ -1,34 +1,39 @@
-/- Hidden test battery for Level 23. Players don't edit (or ideally see) this file. -/
+/- Hidden test battery for Level 23: Infinitely many primes. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L23.Player
 
 open L23
 
-#no_sorry TendsToInfinity
-#level_start "Level 23 · Going to infinity"
+namespace L23Ref
+def Real (P : ℕ → Prop) : Prop := ∀ n, ∃ p, n < p ∧ P p
+end L23Ref
 
--- Sanity: things that should tend to infinity
-#expect_true "u n = n tends to infinity" unfolding TendsToInfinity :
-  TendsToInfinity (fun n => n)
-#expect_true "u n = n / 2 tends to infinity (it is not strictly increasing!)" unfolding TendsToInfinity :
-  TendsToInfinity (fun n => n / 2)
-#expect_true "0, 4, 2, 6, 4, 8, … tends to infinity (it is not monotone!)" unfolding TendsToInfinity :
-  TendsToInfinity (fun n => n + 3 * (n % 2))
+#no_sorry Unbounded
+#no_sorry smallWorld
+#no_sorry fakePrime
+#no_sorry L23.euclid
+#no_sorry L23.euclid_mod4
+#no_sorry q1
+#no_sorry q2
+#level_start "Infinitely many primes"
 
--- Anti-theorems: things that should NOT tend to infinity
-#expect_false "a constant sequence does not tend to infinity" unfolding TendsToInfinity :
-  TendsToInfinity (fun _ => 7)
-#expect_false "0, 1, 0, 1, … does not tend to infinity" unfolding TendsToInfinity :
-  TendsToInfinity (fun n => n % 2)
-#expect_false "0, 0, 2, 0, 4, 0, … does not tend to infinity (unbounded is not enough!)" unfolding TendsToInfinity :
-  TendsToInfinity (fun n => if n % 2 = 0 then n else 0)
-
--- Downstream lemmas: what users of your definition will need
-#expect_true "if u → ∞ then u is unbounded" unfolding TendsToInfinity :
-  ∀ u : Nat → Nat, TendsToInfinity u → ∀ M, ∃ n, M ≤ u n
-#expect_true "if u → ∞ then (u n + 1) → ∞" unfolding TendsToInfinity :
-  ∀ u : Nat → Nat, TendsToInfinity u → TendsToInfinity (fun n => u n + 1)
-#expect_true "if u → ∞ then the shifted sequence u (n+1) → ∞" unfolding TendsToInfinity :
-  ∀ u : Nat → Nat, TendsToInfinity u → TendsToInfinity (fun n => u (n + 1))
+#expect_true "Toy world: every number is 'prime'" unfolding Unbounded : Unbounded (fun _ => True)
+#expect_false "Toy world: nothing is 'prime'" unfolding Unbounded : Unbounded (fun _ => False)
+#expect_false "Toy world: the 'primes' are 2 and 3" unfolding Unbounded : Unbounded (fun p => p = 2 ∨ p = 3)
+#expect_true "Toy world: the 'primes' are the odd numbers" unfolding Unbounded : Unbounded (fun p => p % 2 = 1)
+#expect_true "Your world: nothing outside [2, 100]" unfolding smallWorld :
+  ∀ p, smallWorld p → 2 ≤ p ∧ p ≤ 100
+#expect_true "Your world: the AI's claim holds there" unfolding AIClaim smallWorld : AIClaim smallWorld
+#expect_false "Your world: infinitely many 'primes' there" unfolding L23Ref.Real smallWorld :
+  L23Ref.Real smallWorld
+#expect_true "Your fakePrime: the AI's IsPrime accepts it" unfolding IsPrime fakePrime : IsPrime fakePrime
+#expect_false "Your fakePrime: it is a real prime" unfolding fakePrime : Nat.Prime fakePrime
+#expect_equiv "euclid says: for every n, a prime p ≥ n" :
+  L23.euclid ↔ ∀ n : ℕ, ∃ p, n ≤ p ∧ Nat.Prime p
+  using Nat.exists_infinite_primes
+#expect_equiv "euclid_mod4 says: for every n, a prime p ≥ n with p % 4 = 3" :
+  L23.euclid_mod4 ↔ ∀ n : ℕ, ∃ p, n ≤ p ∧ Nat.Prime p ∧ p % 4 = 3
+#expect_choice "Question 1: why Lean accepts the recursion of `digitSum`" : q1 = 1
+#expect_choice "Question 2: `digitSum 1234 = 10`?" : q2 = true
 
 #level_report

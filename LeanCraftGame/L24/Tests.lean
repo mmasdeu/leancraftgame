@@ -1,53 +1,30 @@
-/- Hidden test battery for Level Bounded and monotone. -/
+/- Hidden test battery for Level 24: Finset and Fintype. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L24.Player
 
 open L24
 
-#no_sorry BoundedAbove
-#no_sorry Bounded
-#no_sorry NonDecreasing
-#no_sorry StrictlyIncreasing
-#level_start "Level Bounded and monotone"
+#no_sorry divs
+#no_sorry squaresUpTo
+#no_sorry subsetsOfSize
+#no_sorry numFns
+#level_start "Finset and Fintype"
 
--- bounded above / bounded
-#expect_true "BoundedAbove (-n) is true (0, -1, -2, …)" unfolding BoundedAbove :
-  BoundedAbove (fun n => -(n : ℤ))
-#expect_false "Bounded (-n) is false (0, -1, -2, … falls forever: bounded means on both sides)" unfolding Bounded :
-  Bounded (fun n => -(n : ℤ))
-#expect_false "BoundedAbove n is false (0, 1, 2, …)" unfolding BoundedAbove :
-  BoundedAbove (fun n => (n : ℤ))
-#expect_false "Bounded n is false (0, 1, 2, …)" unfolding Bounded :
-  Bounded (fun n => (n : ℤ))
-#expect_true "Bounded (1, -1, 1, -1, …) is true" unfolding Bounded :
-  Bounded (fun n => if n % 2 = 0 then (1 : ℤ) else -1)
-#expect_true "Bounded (a constant) is true" unfolding Bounded :
-  Bounded (fun _ => (-5 : ℤ))
-#expect_true "Bounded u implies BoundedAbove u" unfolding Bounded BoundedAbove :
-  ∀ u : ℕ → ℤ, Bounded u → BoundedAbove u
-
--- monotone
-#expect_true "NonDecreasing (n / 2) is true (0, 0, 1, 1, 2, …)" unfolding NonDecreasing :
-  NonDecreasing (fun n => (n : ℤ) / 2)
-#expect_false "StrictlyIncreasing (n / 2) is false (0, 0, 1, 1, …)" unfolding StrictlyIncreasing :
-  StrictlyIncreasing (fun n => (n : ℤ) / 2)
-#expect_true "StrictlyIncreasing (n) is true (it is a claim about m < n, not m ≤ n)" unfolding StrictlyIncreasing :
-  StrictlyIncreasing (fun n => (n : ℤ))
-#expect_true "StrictlyIncreasing (2n - 7) is true (negative values are fine)" unfolding StrictlyIncreasing :
-  StrictlyIncreasing (fun n => 2 * (n : ℤ) - 7)
-#expect_true "NonDecreasing (a constant) is true" unfolding NonDecreasing :
-  NonDecreasing (fun _ => (3 : ℤ))
-#expect_false "StrictlyIncreasing (a constant) is false" unfolding StrictlyIncreasing :
-  StrictlyIncreasing (fun _ => (3 : ℤ))
-#expect_false "NonDecreasing (-n) is false (it is going down, not up)" unfolding NonDecreasing :
-  NonDecreasing (fun n => -(n : ℤ))
-#expect_false "NonDecreasing (0, 1, 2, 0, 0, …) is false (up at first, then it falls back)" unfolding NonDecreasing :
-  NonDecreasing (fun n => if n < 3 then (n : ℤ) else 0)
-#expect_false "NonDecreasing (0, 1, 0, 1, …) is false" unfolding NonDecreasing :
-  NonDecreasing (fun n => ((n % 2 : ℕ) : ℤ))
-#expect_true "StrictlyIncreasing u implies u n < u (n + 1)" unfolding StrictlyIncreasing :
-  ∀ u : ℕ → ℤ, StrictlyIncreasing u → ∀ n, u n < u (n + 1)
-#expect_true "NonDecreasing u implies u n ≤ u (n + 1)" unfolding NonDecreasing :
-  ∀ u : ℕ → ℤ, NonDecreasing u → ∀ n, u n ≤ u (n + 1)
+#expect_false "Finset.range 4 contains 4" : 4 ∈ Finset.range 4
+#expect_true "divs 12 is {1, 2, 3, 4, 6, 12}" unfolding divs : divs 12 = {1, 2, 3, 4, 6, 12}
+#expect_true "9 is one of the divisors of 9" unfolding divs : 9 ∈ divs 9
+#expect_true "7 has exactly two divisors" unfolding divs : (divs 7).card = 2
+#expect_true "squaresUpTo 4 contains 16" unfolding squaresUpTo : 16 ∈ squaresUpTo 4
+#expect_true "squaresUpTo 4 has five elements" unfolding squaresUpTo : (squaresUpTo 4).card = 5
+#expect_false "squaresUpTo 3 contains 2" unfolding squaresUpTo : 2 ∈ squaresUpTo 3
+#expect_true "{1, 2, 3, 4} has six subsets of size 2" unfolding subsetsOfSize :
+  (subsetsOfSize {1, 2, 3, 4} 2).card = 6
+#expect_true "{1, 3} is a subset of size 2 of {1, 2, 3, 4}" unfolding subsetsOfSize :
+  ({1, 3} : Finset ℕ) ∈ subsetsOfSize {1, 2, 3, 4} 2
+#expect_false "{1} is a subset of size 2 of {1, 2, 3, 4}" unfolding subsetsOfSize :
+  ({1} : Finset ℕ) ∈ subsetsOfSize {1, 2, 3, 4} 2
+#expect_true "the only subset of size 0 is ∅" unfolding subsetsOfSize :
+  subsetsOfSize {1, 2, 3} 0 = {∅}
+#expect_true "there are 8 functions Fin 3 → Bool" unfolding numFns : numFns = 8
 
 #level_report

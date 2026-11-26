@@ -1,7 +1,10 @@
-def AlwaysBelow {α : Type*} [Preorder α] (u : ℕ → α) (B : α) : Prop := ∀ n, u n ≤ B
+structure GaussInt where
+  re : ℤ
+  im : ℤ
 
-def Between {α : Type*} [Preorder α] (a b x : α) : Prop := a ≤ x ∧ x ≤ b
-
-def IsUpperBound {α : Type*} [Preorder α] (s : Set α) (B : α) : Prop := ∀ x ∈ s, x ≤ B
-
-def largest {α : Type*} [LinearOrder α] (a b : α) : α := if a ≤ b then b else a
+def GaussInt.add (z w : GaussInt) : GaussInt := ⟨z.re + w.re, z.im + w.im⟩
+def GaussInt.mul (z w : GaussInt) : GaussInt := ⟨z.re * w.re - z.im * w.im, z.re * w.im + z.im * w.re⟩
+def GaussInt.conj (z : GaussInt) : GaussInt := ⟨z.re, -z.im⟩
+def GaussInt.norm (z : GaussInt) : ℤ := z.re ^ 2 + z.im ^ 2
+def z5 : GaussInt := ⟨2, 1⟩
+def w13 : GaussInt := ⟨3, 2⟩

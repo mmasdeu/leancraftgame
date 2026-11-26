@@ -1,90 +1,84 @@
 {
-  "world": "Structure World",
-  "title": "Order relations",
-  "skill": "writing",
-  "exercise": "Define",
+  "world": "Integration and Measure Theory",
+  "title": "Integrals and measures",
+  "skill": "writing statements",
+  "exercise": "Write",
+  "mil": "§13.1–13.3",
   "predict": [
     {
-      "test": "< on ℕ is not a partial order",
-      "statement": "the relation `<` on ℕ, as a PartialOrder'"
+      "test": "In Mathlib, ∫ x in (1:ℝ)..0, x = 1 / 2",
+      "statement": "In Mathlib, `∫ x in (1:ℝ)..0, x = 1 / 2` (the bounds are in the \"wrong\" order)."
+    }
+  ],
+  "public": [
+    "I2 is the integral of x² from 0 to 1"
+  ],
+  "questions": [
+    {
+      "answer": "q1",
+      "text": "True or false: Lean refuses to write `∫ x in (0:ℝ)..1, 1 / x`, because this integral diverges."
     },
     {
-      "test": "divisibility on {0, …, 6} is a partial order",
-      "statement": "the relation `∣` on the numbers 0 to 6, as a PartialOrder'"
+      "answer": "q2",
+      "text": "What does `∀ᵐ x ∂μ, f x = 0` say?",
+      "choices": [
+        "`f x = 0` for every `x`",
+        "the set of `x` with `f x ≠ 0` has measure `0`",
+        "`f x = 0` for some `x`",
+        "`∫ x, f x ∂μ = 0`"
+      ]
     },
     {
-      "test": "'differ by at most 1' on {0, 1, 2} is not a partial order",
-      "statement": "the relation `a ≤ b + 1 ∧ b ≤ a + 1` on the numbers 0, 1, 2, as a PartialOrder'"
+      "answer": "q3",
+      "text": "In the dominated convergence theorem shown in the lesson, which hypothesis says that the functions `F n` are dominated by `bound`?",
+      "choices": [
+        "`F_measurable`",
+        "`bound_integrable`",
+        "`h_bound`",
+        "`h_lim`"
+      ]
     }
   ],
   "checks": [
     {
-      "lean": "example := fun (α : Type) (r : α → α → Prop) => L50.PartialOrder'.mk r",
-      "message": "`PartialOrder'` needs the field `le : α → α → Prop` first, then your three axioms."
+      "lean": "#check (L50.I2 : ℝ)\n#check (L50.vol : ENNReal)\n#check (L50.ftc : Prop)\n#check (L50.q1 : Bool)\n#check (L50.q2 : Fin 4)\n#check (L50.q3 : Fin 4)",
+      "message": "Keep the names and kinds: `I2 : ℝ`, `vol : ENNReal`, the `statement ftc`, `q1 : Bool`, `q2 q3 : Fin 4`."
     }
   ],
   "hints": [
     {
-      "match": "< on ℕ",
-      "steps": [
-        "Is `a < a` ever true?",
-        "Which of your axioms should rule out `<`?"
-      ],
-      "hint": "`<` is not reflexive. Add `refl : ∀ a, le a a`."
+      "match": "(1:ℝ)..0",
+      "hint": "The interval integral is oriented: from 1 down to 0 it is `-1/2`."
     },
     {
-      "match": "≠ on ℕ",
-      "steps": [
-        "Is `a ≠ a` true?"
-      ],
-      "hint": "`≠` is not reflexive: you need `refl : ∀ a, le a a`."
+      "match": "I2",
+      "hint": "`∫ x in (0:ℝ)..1, x ^ 2`. Write the square as `x ^ 2`: the referee integrates powers `x ^ n`."
     },
     {
-      "match": "always-true",
+      "match": "vol",
       "steps": [
-        "The relation relates 0 and 1 in both directions. Do they have to be equal?"
+        "The closed interval is `Set.Icc 0 2`. Did you say that its points are reals?"
       ],
-      "hint": "Add antisymmetry: `antisymm : ∀ a b, le a b → le b a → a = b`."
+      "hint": "`MeasureTheory.volume (Set.Icc (0:ℝ) 2)`."
     },
     {
-      "match": "differ by at most 1",
+      "match": "ftc",
       "steps": [
-        "0 ~ 1 and 1 ~ 2. Is 0 ~ 2?"
+        "Which is subtracted from which: `f b - f a` or `f a - f b`? Integrability is about `f'`, not `f`."
       ],
-      "hint": "Add transitivity: `trans : ∀ a b c, le a b → le b c → le a c`."
+      "hint": "`statement ftc (f f' : ℝ → ℝ) (a b : ℝ) (hderiv : ∀ x ∈ Set.uIcc a b, HasDerivAt f (f' x) x) (hint : IntervalIntegrable f' MeasureTheory.volume a b) : ∫ y in a..b, f' y = f b - f a`."
     },
     {
-      "match": "% 2",
-      "steps": [
-        "Take a = 0 and b = 2: both `a % 2 ≤ b % 2` and `b % 2 ≤ a % 2`. Equal?"
-      ],
-      "hint": "This relation is reflexive and transitive but not antisymmetric: `∀ a b, le a b → le b a → a = b` rules it out."
+      "match": "Question 1",
+      "hint": "The integral is a total function, like `deriv` and `/`: what is its value on a function that is not integrable?"
     },
     {
-      "match": "equal or next",
-      "steps": [
-        "The relation is reflexive and antisymmetric. Try 0, 1, 2: is 0 related to 2?"
-      ],
-      "hint": "0 ≤ 1 and 1 ≤ 2 but not 0 ≤ 2. Only transitivity, `∀ a b c, le a b → le b c → le a c`, rules this relation out: check that it is there and in this shape."
+      "match": "Question 2",
+      "hint": "\"Almost every\": the exceptions form a set of measure zero."
     },
     {
-      "match": "≤ on ℕ",
-      "steps": [
-        "Which axiom fails, according to the report?",
-        "Antisymmetry says that two elements related both ways are *equal*; it is not the same as symmetry."
-      ],
-      "hint": "Antisymmetry is `∀ a b, le a b → le b a → a = b`, with the conclusion `a = b`. Transitivity is `le a b → le b c → le a c`."
-    },
-    {
-      "match": "≥ on ℕ",
-      "steps": [
-        "The axioms must hold for the reversed order too."
-      ],
-      "hint": "Axioms must not mention `≤` directly: they are about the field `le`."
-    },
-    {
-      "match": "",
-      "hint": "Each axiom is a field whose type is a `∀` statement about `le`, for example `refl : ∀ a, le a a`."
+      "match": "Question 3",
+      "hint": "Domination is an inequality `‖F n a‖ ≤ bound a`."
     }
   ]
 }

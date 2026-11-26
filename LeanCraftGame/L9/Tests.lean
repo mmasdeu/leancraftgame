@@ -1,46 +1,31 @@
-/- Hidden test battery for Level If, then. -/
+/- Hidden test battery for Level 9: ∃. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L9.Player
 
-open L9
+#no_sorry L9.FnHasUb
+#no_sorry L9.FnHasLb
+#no_sorry L9.bound
+#no_sorry L9.root
+#no_sorry L9.TakesBothSigns
+#level_start "∃"
 
-#no_sorry FourThenTwo
-#no_sorry TwoThenFour
-#no_sorry breaksConverse
-#no_sorry PrimeThenOdd
-#no_sorry breaksPrimeOdd
-#no_sorry SameParity
-#level_start "If, then"
-
-#expect_true "FourThenTwo 12 is true" unfolding FourThenTwo :
-  FourThenTwo 12
-#expect_true "FourThenTwo 3 is true (vacuously: 4 does not divide 3)" unfolding FourThenTwo :
-  FourThenTwo 3
-#expect_true "FourThenTwo n for every n < 100" unfolding FourThenTwo :
-  ∀ n < 100, FourThenTwo n
-#expect_true "TwoThenFour 8 is true" unfolding TwoThenFour :
-  TwoThenFour 8
-#expect_false "TwoThenFour 10 is false" unfolding TwoThenFour :
-  TwoThenFour 10
-#expect_true "TwoThenFour 7 is true (vacuously)" unfolding TwoThenFour :
-  TwoThenFour 7
-#expect_true "breaksConverse: 2 divides it and 4 does not" unfolding breaksConverse :
-  2 ∣ breaksConverse ∧ ¬ 4 ∣ breaksConverse
-#expect_true "PrimeThenOdd 7 and PrimeThenOdd 9 are true" unfolding PrimeThenOdd :
-  PrimeThenOdd 7 ∧ PrimeThenOdd 9
-#expect_false "PrimeThenOdd 2 is false" unfolding PrimeThenOdd :
-  PrimeThenOdd 2
-#expect_true "breaksPrimeOdd is an even prime" unfolding breaksPrimeOdd :
-  Nat.Prime breaksPrimeOdd ∧ breaksPrimeOdd % 2 = 0
-#expect_true "SameParity 4 10 is true" unfolding SameParity :
-  SameParity 4 10
-#expect_true "SameParity 3 5 is true (both sides of ↔ are false)" unfolding SameParity :
-  SameParity 3 5
-#expect_false "SameParity 2 3 is false" unfolding SameParity :
-  SameParity 2 3
-#expect_false "SameParity 3 2 is false" unfolding SameParity :
-  SameParity 3 2
-#expect_true "SameParity a b ↔ (a + b) % 2 = 0, for all a, b < 20" unfolding SameParity :
-  ∀ a < 20, ∀ b < 20, SameParity a b ↔ (a + b) % 2 = 0
+#expect_true "x ↦ min x 3 has an upper bound" unfolding L9.FnHasUb L9.FnUb :
+  L9.FnHasUb (fun x => min x 3)
+#expect_false "x ↦ x has an upper bound" unfolding L9.FnHasUb L9.FnUb :
+  L9.FnHasUb (fun x => x)
+#expect_true "x ↦ x² has a lower bound" unfolding L9.FnHasLb :
+  L9.FnHasLb (fun x => x ^ 2)
+#expect_false "x ↦ x has a lower bound" unfolding L9.FnHasLb :
+  L9.FnHasLb (fun x => x)
+#expect_true "bound is an upper bound of x ↦ min x 3" unfolding L9.bound :
+  ∀ x : ℝ, min x 3 ≤ L9.bound
+#expect_true "root² - 4·root + 4 = 0" unfolding L9.root :
+  L9.root ^ 2 - 4 * L9.root + 4 = 0
+#expect_false "some real number is both positive and negative" :
+  ∃ x : ℝ, x > 0 ∧ x < 0
+#expect_true "x ↦ x takes both signs" unfolding L9.TakesBothSigns :
+  L9.TakesBothSigns (fun x => x)
+#expect_false "x ↦ x² + 1 takes both signs" unfolding L9.TakesBothSigns :
+  L9.TakesBothSigns (fun x => x ^ 2 + 1)
 
 #level_report

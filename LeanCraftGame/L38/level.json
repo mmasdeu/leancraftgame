@@ -1,44 +1,26 @@
 {
-  "world": "Finite World",
-  "title": "Spot the bug: sums",
+  "world": "Groups and Rings",
+  "title": "Spot the bug: algebra",
   "skill": "reading",
   "exercise": "Refute",
-  "public": "all",
+  "mil": "§8.3, §9.1–9.2",
+  "predict": [
+    {"test": "Claim 4: in ZMod 7 every nonzero element has an inverse (7 is prime)", "statement": "In `ZMod 7`, every nonzero element has an inverse."}
+  ],
+  "public": ["Claim 1: junk contains 0 and is closed under +", "Claim 2: x is in Ideal.span {2}", "Claim 5: σ * τ ≠ τ * σ"],
   "checks": [
-    {
-      "lean": "example : ℕ := L38.tn\nexample : ℕ := L38.dn\nexample : ℕ := L38.pn\nexample : ℕ := L38.en",
-      "message": "Keep `tn`, `dn`, `pn` and `en` as natural numbers (`ℕ`). Small numbers make the referee's job easy."
-    }
+    {"lean": "#check (L38.junk : Set ℤ)\n#check (L38.x : ℤ)\n#check (L38.p : Polynomial ℤ)\n#check (L38.q : Polynomial ℤ)\n#check (L38.a : ZMod 6)\n#check (L38.σ : Equiv.Perm (Fin 3))\n#check (L38.τ : Equiv.Perm (Fin 3))",
+     "message": "Keep the names and types: `junk : Set ℤ`, `x : ℤ`, `p q : ℤ[X]`, `a : ZMod 6`, `σ τ : Equiv.Perm (Fin 3)`."}
   ],
   "hints": [
-    {
-      "match": "triangle",
-      "steps": [
-        "Which numbers does `Finset.range n` contain? Does it contain `n`? Compute `triangle 3` by hand and compare with 1 + 2 + 3."
-      ],
-      "hint": "`Finset.range n` stops at `n - 1`, so the colleague adds `0 + 1 + … + (n - 1)`. Take `tn := 3`: the sum is 3, but 1 + 2 + 3 = 6."
-    },
-    {
-      "match": "numDivisors",
-      "steps": [
-        "`Finset.Ico 1 n` leaves out its right end. Which divisor of `n` is always missing?"
-      ],
-      "hint": "`n` divides itself but is not in `Finset.Ico 1 n`. Take `dn := 6`: the colleague counts 1, 2, 3 (three), the right answer is four. (`dn := 0` does not work: both counts are 0.)"
-    },
-    {
-      "match": "primesUpTo",
-      "steps": [
-        "\"At most `n`\" includes `n`. Does `Finset.range n` include `n`? For which `n` does this matter?"
-      ],
-      "hint": "It matters when `n` itself is prime. Take `pn := 2`: `Finset.range 2` is `{0, 1}`: no prime, but 2 is prime."
-    },
-    {
-      "match": "evenSquares",
-      "steps": [
-        "Compare where the colleague squares: each term, or the whole sum? Try `en := 3` by hand: evens below 3 are 0 and 2. Do the two ways agree?",
-        "They agree when only one even term is nonzero. You need two nonzero even terms: 2 and 4."
-      ],
-      "hint": "The colleague squares the *sum* of the even numbers: `(2 + 4)² = 36`, not `2² + 4² = 20`. Take `en := 5`."
-    }
+    {"match": "Claim 1", "steps": ["Which axiom does a subgroup have that a submonoid lacks? Which familiar subset of ℤ contains 0, is closed under +, and has no negatives?"],
+     "hint": "`{n | 0 ≤ n}`: the natural numbers inside ℤ. 1 is in it, -1 is not."},
+    {"match": "Claim 2", "hint": "Any even number that is not a multiple of 12, such as `2`."},
+    {"match": "Claim 3", "steps": ["Over ℤ the formula holds for nonzero polynomials. What is the degree of the zero polynomial in Mathlib?"],
+     "hint": "`p := 0` and `q := X`: `0 * X = 0` has degree 0, but `0 + 1 = 1`."},
+    {"match": "a is not 0", "hint": "Choose a nonzero element: 1, 2, 3, 4 or 5."},
+    {"match": "no b has", "steps": ["If `a` and 6 have a common factor, can `a * b` be 1 modulo 6?"],
+     "hint": "`a := 2`: `2 * b` is always even modulo 6, never 1."},
+    {"match": "Claim 5", "hint": "Two different swaps: `σ := Equiv.swap 0 1`, `τ := Equiv.swap 1 2`."}
   ]
 }

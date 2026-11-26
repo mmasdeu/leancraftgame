@@ -1,33 +1,29 @@
 {
-  "world": "Structure World",
-  "title": "Challenge: matrices",
-  "skill": "writing",
-  "exercise": "Construct",
+  "world": "Topology",
+  "title": "Spot the bug: topology",
+  "skill": "refuting",
+  "exercise": "Refute",
+  "mil": "§11.1–11.3",
+  "predict": [
+    {"test": "Claim 2: g sends open sets to open sets (its inverse is continuous)", "statement": "Every continuous bijection from `discrete 2` to Sierpiński space has a continuous inverse."}
+  ],
+  "public": ["Claim 1: f₁ is continuous from discrete 2 to Sierpiński space", "Claim 2: g is a bijection", "Claim 3: x and y are different"],
+  "questions": [
+    {"answer": "q1", "text": "True or false: `ColleagueContAt (fun _ => 0) 1` holds, that is, the colleague's definition says that the constant function `0` is continuous at `1`."}
+  ],
   "checks": [
-    {
-      "lean": "example : L47.Matrix2 → ℕ → L47.Matrix2 := L47.pow\nexample : L47.Matrix2 := L47.fibMatrix\nexample : ℕ → ℤ := L47.fibM\nexample : L47.Matrix2 := L47.order6",
-      "message": "Keep the types of `pow`, `fibMatrix`, `fibM` and `order6`."
-    }
+    {"lean": "#check (L47.f₁ : Fin 2 → Fin 2)\n#check (L47.f₂ : Fin 2 → Fin 2)\n#check (L47.g : Fin 2 → Fin 2)\n#check (L47.p : Fin 2)\n#check (L47.x : Fin 2)\n#check (L47.y : Fin 2)\n#check (L47.q1 : Bool)",
+     "message": "Keep the maps `f₁ f₂ g : Fin 2 → Fin 2`, the points `p x y : Fin 2` and the answer `q1 : Bool`."}
   ],
   "hints": [
-    {
-      "match": "identity",
-      "hint": "`| 0 => ⟨1, 0, 0, 1⟩` and `| n + 1 => mul (pow M n) M`."
-    },
-    {
-      "match": "fib",
-      "hint": "`fibMatrix := ⟨1, 1, 1, 0⟩` and `fibM n := (pow fibMatrix n).b`."
-    },
-    {
-      "match": "order6",
-      "steps": [
-        "A matrix with trace `1` and determinant `1` satisfies `M² = M - I`, hence `M³ = -I`."
-      ],
-      "hint": "`⟨1, -1, 1, 0⟩`: trace 1, determinant 1."
-    },
-    {
-      "match": "",
-      "hint": "Compute small powers with `#eval` to check your matrices."
-    }
+    {"match": "f₁", "steps": ["Every map out of a discrete space is continuous. Now look for a map whose image of `{0}` is not open in Sierpiński space."],
+     "hint": "`f₁ = id`, written `fun i => i`: the image of the open set `{0}` is `{0}`, which is not open in Sierpiński space."},
+    {"match": "f₂", "steps": ["Every set is open in `discrete 2`, so the colleague accepts any map out of Sierpiński space. Which map pulls `{0}` back to a non-open set?"],
+     "hint": "`f₂ = fun i => i`: the preimage of `{0}` is `{0}`, not open in Sierpiński space."},
+    {"match": "Claim 2", "steps": ["Any bijection out of a discrete space is continuous. Is its image of `{0}` open?"],
+     "hint": "`g = fun i => i`: continuous, but the image of the open set `{0}` is `{0}`."},
+    {"match": "Claim 3", "steps": ["The only open set containing `0` is the whole space. Which point lies in every open set containing `1`?"],
+     "hint": "`p = 1`, `x = 0`, `y = 1`: every open set containing `0` or `1` contains `1`."},
+    {"match": "Claim 4", "hint": "For a constant function, the preimage of a small neighbourhood of `1` (one that misses `0`) is `∅`, and `∅` is not a neighbourhood of `0`."}
   ]
 }

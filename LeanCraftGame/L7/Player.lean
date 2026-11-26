@@ -1,52 +1,50 @@
 /-
-# Statements
+# Spot the bug: statements
 
-`collatz 5` is a number. `collatz 5 = 16` is a **statement**: something
-that is true or false. Statements have their own type, `Prop`, and a
-*predicate* is a function that returns a statement:
+A colleague wrote three statements for their notes on MIL's chapter 2. Each compiles.
+Each is **false**:
 
 ```lean
-def IsEven (n : Nat) : Prop := n % 2 = 0
+statement sub_sq_nat (a b : ℕ) : (a - b) ^ 2 = a ^ 2 - 2 * a * b + b ^ 2
+
+statement sq_le_sq_of_le (a b : ℝ) (hab : a ≤ b) : a ^ 2 ≤ b ^ 2
+
+statement div_mul_cancel_bad (x y : ℝ) : x / y * y = x
 ```
 
-`IsEven 10` is the statement `10 % 2 = 0`, which happens to be true;
-`IsEven 7` is a statement too, a false one. Writing `IsEven 7` is not an
-error: false statements are perfectly good mathematical objects (you need
-them to state that something is *not* the case).
+A false statement about *all* numbers is refuted by **one** counterexample: values of the
+variables that satisfy every hypothesis and break the conclusion. Usual suspects:
 
-The difference between a function and a statement about it matters: `def
-f (n : Nat) : Nat := …` computes, `def P (n : Nat) : Prop := …` asserts.
-The referee proves or refutes your statements; here it can always decide
-them by computing both sides.
+* **truncated subtraction**: in `ℕ`, `a - b = 0` when `a ≤ b`;
+* a **missing hypothesis**: here, a sign condition;
+* **junk values**: Mathlib defines `x / 0 = 0` for every `x`, so that division is a
+  function on all of `ℝ`. Theorems about division therefore carry a hypothesis `y ≠ 0`.
 
-## Boundary cases
+## Part A: counterexamples
 
-Definitions are judged at the boundary. With `Divides a b := b % a = 0`,
-what is `Divides 0 0`? In Lean, `b % 0 = b`, so `Divides 0 b` says `b = 0`.
-This agrees with the mathematical convention: `a ∣ b` means `b = a·k` for
-some `k`, and `0 = 0·k`. Every number divides `0`.
+Give the values. The referee checks that they satisfy the hypotheses and break the
+conclusion. Small numbers suffice (the referee computes, it does not search).
 
-## Your task
+## Part B: repairs
 
-Define `Divides`, `IsPythagorean` and `IsFixed` (the Collatz map has a
-fixed point: which one?).
+State the two real-number facts correctly, by **adding** the missing hypothesis (and
+nothing else). Name the hypotheses as you like.
 -/
-
 namespace L7
 
--- the Collatz map (from the Foundations world)
-def collatz (n : Nat) : Nat := if n % 2 = 0 then n / 2 else 3 * n + 1
+-- Part A
+def a₁ : ℕ := sorry
+def b₁ : ℕ := sorry
 
--- n is even (already done)
-def IsEven (n : Nat) : Prop := n % 2 = 0
+def a₂ : ℝ := sorry
+def b₂ : ℝ := sorry
 
--- a divides b: b is a multiple of a (write it with %, not with ∣)
-def Divides (a b : Nat) : Prop := sorry
+def x₃ : ℝ := sorry
+def y₃ : ℝ := sorry
 
--- (a, b, c) is a Pythagorean triple: a² + b² = c²
-def IsPythagorean (a b c : Nat) : Prop := sorry
+-- Part B
+statement sq_le_sq_of_le : sorry
 
--- n is a fixed point of the Collatz map
-def IsFixed (n : Nat) : Prop := sorry
+statement div_mul_cancel_ok : sorry
 
 end L7

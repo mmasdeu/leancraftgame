@@ -1,68 +1,32 @@
-/- Hidden test battery for Level Closed forms. -/
+/- Hidden test battery for Level 36: Groups in Mathlib. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L36.Player
 
-open L36
+#no_sorry L36.lagrange
+#no_sorry L36.cauchy
+#no_sorry L36.ord4
+#no_sorry L36.σ
+#no_sorry L36.τ
+#level_start "Groups in Mathlib"
 
-#no_sorry cubeSum
-#no_sorry cubeFormula
-#no_sorry sameParity
-#no_sorry geom
-#no_sorry geomFormula
-#no_sorry meanSquare
-#level_start "Closed forms"
-
--- the worked examples
-#expect_true "triSum 4 = 10 (the worked example)" unfolding triSum :
-  triSum 4 = 10
-#expect_true "triSum agrees with triFormula below 10 (the worked example)" unfolding triSum triFormula :
-  ∀ n < 10, triSum n = triFormula n
-#expect_true "pairs 5 = 10 (the worked example)" unfolding pairs :
-  pairs 5 = 10
--- your definitions
-#expect_true "cubeSum 0 = 0" unfolding cubeSum :
-  cubeSum 0 = 0
-#expect_true "cubeSum 3 = 36 (1 + 8 + 27)" unfolding cubeSum :
-  cubeSum 3 = 36
-#expect_true "cubeSum 5 = 225" unfolding cubeSum :
-  cubeSum 5 = 225
-#expect_true "cubeFormula 0 = 0" unfolding cubeFormula :
-  cubeFormula 0 = 0
-#expect_true "cubeFormula 2 = 9 (the square of 1 + 2)" unfolding cubeFormula :
-  cubeFormula 2 = 9
-#expect_true "cubeFormula 4 = 100" unfolding cubeFormula :
-  cubeFormula 4 = 100
-#expect_true "cubeSum agrees with cubeFormula for every n < 8" unfolding cubeSum cubeFormula :
-  ∀ n < 8, cubeSum n = cubeFormula n
-#expect_true "sameParity 0 = 0" unfolding sameParity :
-  sameParity 0 = 0
-#expect_true "sameParity 3 = 1 (only the pair (0, 2))" unfolding sameParity :
-  sameParity 3 = 1
-#expect_true "sameParity 4 = 2" unfolding sameParity :
-  sameParity 4 = 2
-#expect_true "sameParity 5 = 4" unfolding sameParity :
-  sameParity 5 = 4
-#expect_true "geom 0 = 0 (the empty sum)" unfolding geom :
-  geom 0 = 0
-#expect_true "geom 1 = 1" unfolding geom :
-  geom 1 = 1
-#expect_true "geom 3 = 7/4" unfolding geom :
-  geom 3 = 7 / 4
-#expect_true "geomFormula 0 = 0" unfolding geomFormula :
-  geomFormula 0 = 0
-#expect_true "geomFormula 1 = 1" unfolding geomFormula :
-  geomFormula 1 = 1
-#expect_true "geomFormula 3 = 7/4" unfolding geomFormula :
-  geomFormula 3 = 7 / 4
-#expect_true "geom agrees with geomFormula for every n < 6" unfolding geom geomFormula :
-  ∀ n < 6, geom n = geomFormula n
-#expect_true "meanSquare 0 = 0 (division by zero gives 0)" unfolding meanSquare :
-  meanSquare 0 = 0
-#expect_true "meanSquare 1 = 0" unfolding meanSquare :
-  meanSquare 1 = 0
-#expect_true "meanSquare 4 = 7/2 (the mean of 0, 1, 4, 9)" unfolding meanSquare :
-  meanSquare 4 = 7 / 2
-#expect_true "meanSquare 3 = 5/3 (not a whole number)" unfolding meanSquare :
-  meanSquare 3 = 5 / 3
+#expect_equiv "lagrange: the order of a subgroup divides the order of the group" :
+  L36.lagrange ↔ ∀ {G : Type} [Group G] (H : Subgroup G), Nat.card H ∣ Nat.card G
+  using fun H => Subgroup.card_subgroup_dvd_card H
+#expect_equiv "cauchy: a prime divisor of |G| is the order of an element" :
+  L36.cauchy ↔ ∀ {G : Type} [Group G] [Fintype G] (p : ℕ), p.Prime → p ∣ Fintype.card G →
+    ∃ x : G, orderOf x = p
+  using fun p hp hd => @exists_prime_orderOf_dvd_card _ _ _ p ⟨hp⟩ hd
+#expect_true "3 • (4 : ZMod 12) = 0" :
+  3 • (4 : ZMod 12) = 0
+#expect_true "ord4 • 4 = 0 in ZMod 12" unfolding L36.ord4 :
+  L36.ord4 • (4 : ZMod 12) = 0
+#expect_true "no smaller positive multiple of 4 is 0 in ZMod 12" unfolding L36.ord4 :
+  ∀ k < L36.ord4, 0 < k → k • (4 : ZMod 12) ≠ 0
+#expect_true "σ ^ 3 = 1, and σ ≠ 1" unfolding L36.σ :
+  L36.σ ^ 3 = 1 ∧ L36.σ ≠ 1
+#expect_true "τ ^ 2 = 1, and τ ≠ 1" unfolding L36.τ :
+  L36.τ ^ 2 = 1 ∧ L36.τ ≠ 1
+#expect_true "Perm (Fin 3) is not commutative: σ * τ ≠ τ * σ" unfolding L36.σ L36.τ :
+  L36.σ * L36.τ ≠ L36.τ * L36.σ
 
 #level_report

@@ -1,54 +1,67 @@
 /-
-# Functions on structures
+# Topological spaces
 
-Functions on a structure read the fields of their inputs and build a new
-value with `⟨_, _⟩`:
+MIL §11.3 meets Mathlib's most general notion of space. A **topology** on a type `X`
+says which subsets are *open*:
 
 ```lean
-def GaussInt.normSq (z : GaussInt) : ℤ := z.re ^ 2 + z.im ^ 2
+class TopologicalSpace (X : Type u) where
+  IsOpen : Set X → Prop
+  isOpen_univ : IsOpen Set.univ
+  isOpen_inter : ∀ s t, IsOpen s → IsOpen t → IsOpen (s ∩ t)
+  isOpen_sUnion : ∀ S : Set (Set X), (∀ t ∈ S, IsOpen t) → IsOpen (⋃₀ S)
 ```
 
-Naming a function `GaussInt.normSq` puts it in the **namespace** of the
-type, and unlocks **dot notation**: for `z : GaussInt`, `z.normSq` means
-`GaussInt.normSq z`, and `z.mul w` means `GaussInt.mul z w`. This is how
-Mathlib names everything: `Nat.Prime`, `Finset.card`, `Function.Injective`.
+The whole space is open, the intersection of *two* open sets is open, and the union of
+*any* family of open sets is open (`∅` is the union of the empty family). A map is
+continuous when the **preimage** of every open set is open:
 
-Multiplication in `ℤ[i]` comes from `i² = -1`:
-`(a + bi)(c + di) = (ac - bd) + (ad + bc)i`. The norm is multiplicative,
-`N(zw) = N(z) N(w)`, which written out is the
-**Brahmagupta–Fibonacci identity**
+```lean
+theorem continuous_def {f : X → Y} : Continuous f ↔ ∀ s, IsOpen s → IsOpen (f ⁻¹' s)
+```
 
-`(a² + b²)(c² + d²) = (ac - bd)² + (ad + bc)²`.
+Not the image: `f '' U` open for every open `U` is a different notion (an *open map*).
 
-Remember `65 = 1² + 8² = 4² + 7²` from the Foundations world? It is
-`(1² + 2²)(2² + 3²)`, and the two representations come from
-`(1 + 2i)(2 + 3i)` and `(1 + 2i)(2 - 3i)`.
+## Finite spaces
 
-Powers are defined by recursion on the exponent, as for numbers.
+On a type like `ℝ` the referee cannot list the open sets. On a finite set it can check
+everything, so this level works on `Fin n = {0, 1, …, n-1}`, where a subset is a
+`Finset (Fin n)` and a family of subsets is a `Family n := Finset (Finset (Fin n))`.
+On a finite set every union is a finite union, so the axioms only need `∅`, the whole
+set `Finset.univ`, and *binary* unions and intersections.
+
+Two spaces are worth knowing by heart:
+
+* **Sierpiński space**: two points `0` and `1`, open sets `∅`, `{1}`, `{0, 1}`.
+* the **particular-point topology** at `p`: the open sets are `∅` and every set
+  containing `p`.
+
+A family is written like a set: `({∅, {1}, Finset.univ} : Family 2)`. The library also
+has the discrete space `Top.discrete n` (every set is open) and the indiscrete space
+`Top.indiscrete n` (only `∅` and everything), and the preimage
+`Top.Ref.pre f V = {x | f x ∈ V}`.
 
 ## Your task
 
-Define `add`, `mul` and `pow` on Gaussian integers.
+1. Give `FinTopology` its axioms, one field per axiom, after `opens`.
+2. Define Sierpiński space and the particular-point topology.
+3. Define continuity, with preimages (`Top.Ref.pre f V`).
 -/
+import LeanCraftGame.Lib.Topology
 
 namespace L45
 
--- the Gaussian integers (already done)
-structure GaussInt where
-  re : ℤ
-  im : ℤ
+structure FinTopology (n : Nat) where
+  opens : Family n
+  -- your axioms here, for example `empty_mem : ∅ ∈ opens`
 
-def GaussInt.normSq (z : GaussInt) : ℤ := z.re ^ 2 + z.im ^ 2
+-- the open sets of Sierpiński space
+def mySierpinski : Family 2 := sorry
 
--- (a + bi) + (c + di)
-def GaussInt.add (z w : GaussInt) : GaussInt := sorry
+-- ∅, and every subset of Fin n that contains p
+def myParticular (n : Nat) (p : Fin n) : Family n := sorry
 
--- (a + bi)(c + di) = (ac - bd) + (ad + bc)i
-def GaussInt.mul (z w : GaussInt) : GaussInt := sorry
-
--- z multiplied by itself n times (z⁰ = 1)
-def GaussInt.pow (z : GaussInt) : ℕ → GaussInt
-  | 0 => sorry
-  | n + 1 => sorry
+-- the preimage under f of every S-open set is T-open
+def IsCont {m n : Nat} (T : Family m) (S : Family n) (f : Fin m → Fin n) : Prop := sorry
 
 end L45

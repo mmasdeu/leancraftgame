@@ -1,43 +1,23 @@
 {
-  "world": "Logic World",
-  "title": "Challenge: triangles",
-  "skill": "writing",
-  "exercise": "Define",
+  "world": "Logic",
+  "title": "¬ and the order of quantifiers",
+  "skill": "writing definitions",
+  "exercise": "Write",
+  "mil": "§3.3",
   "predict": [
-    {
-      "test": "1, 2, 3 is flat, not a triangle",
-      "statement": "IsTriangle 1 2 3"
-    },
-    {
-      "test": "IsRight 0 5 5 is false (no side of length 0)",
-      "statement": "IsRight 0 5 5"
-    }
+    {"test": "the sequence 0, 1, 2, 3, … is bounded", "statement": "Written as `∀ n, ∃ M, u n ≤ M`, the sequence `u n = n` is \"bounded\"."}
   ],
+  "public": ["x ↦ x has no upper bound", "the constant sequence 5 is bounded"],
   "checks": [
-    {
-      "lean": "example : Nat → Nat → Nat → Prop := L10.IsTriangle\nexample : Nat → Nat → Nat → Prop := L10.IsRight\nexample : Nat → Nat → Nat → Prop := L10.ExactlyOneEven",
-      "message": "Keep the three predicates, each with three natural-number inputs."
-    }
+    {"lean": "#check (L10.NotFnUb : (ℝ → ℝ) → ℝ → Prop)\n#check (L10.NoUpperBound : (ℝ → ℝ) → Prop)\n#check (L10.NotMonotone : (ℝ → ℝ) → Prop)\n#check (L10.BoundedSeq : (ℕ → ℕ) → Prop)",
+     "message": "Keep the names and the types of the four definitions."}
   ],
   "hints": [
-    {
-      "match": "triangle",
-      "steps": [
-        "Each side must be shorter than the other two together. How many inequalities is that?"
-      ],
-      "hint": "`a < b + c ∧ b < a + c ∧ c < a + b`."
-    },
-    {
-      "match": "IsRight",
-      "hint": "Positive sides, and one of `a² + b² = c²`, `a² + c² = b²`, `b² + c² = a²`."
-    },
-    {
-      "match": "ExactlyOneEven",
-      "hint": "Three cases joined by `∨`: `(a % 2 = 0 ∧ b % 2 = 1 ∧ c % 2 = 1) ∨ …`."
-    },
-    {
-      "match": "",
-      "hint": "List the cases explicitly."
-    }
+    {"match": "NotFnUb", "hint": "`∃ x, a < f x`: some value exceeds `a`."},
+    {"match": "NoUpperBound f means", "hint": "`∀ a, ∃ x, a < f x`."},
+    {"match": "no upper bound", "steps": ["Which comes first: the proposed bound `a`, or the point `x` that beats it?"], "hint": "`∀ a, ∃ x, a < f x`: `x` may depend on `a`."},
+    {"match": "not monotone", "steps": ["Push `¬` through `∀ a b, a ≤ b → f a ≤ f b`."], "hint": "`∃ a b, a ≤ b ∧ f b < f a`."},
+    {"match": "means ¬ Monotone", "hint": "`∃ a b, a ≤ b ∧ f b < f a`."},
+    {"match": "bounded", "steps": ["Is it one `M` for all `n`, or an `M` for each `n`?"], "hint": "`∃ M, ∀ n, u n ≤ M`."}
   ]
 }

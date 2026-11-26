@@ -1,11 +1,36 @@
-def Reflexive' (r : ℕ → ℕ → Prop) : Prop := ∀ a, r a a
 
-def Symmetric' (r : ℕ → ℕ → Prop) : Prop := ∀ a b, r a b → r b a
+class One₁ (α : Type) where
+  one : α
 
-def Transitive' (r : ℕ → ℕ → Prop) : Prop := ∀ a b c, r a b → r b c → r a c
+class Dia₁ (α : Type) where
+  dia : α → α → α
 
-def Antisymmetric' (r : ℕ → ℕ → Prop) : Prop := ∀ a b, r a b → r b a → a = b
+infixl:70 " ⋄ " => Dia₁.dia
 
-def IsEquivalence' (r : ℕ → ℕ → Prop) : Prop := Reflexive' r ∧ Symmetric' r ∧ Transitive' r
+class Monoid₁ (α : Type) extends Dia₁ α, One₁ α
 
-def IsPartialOrder' (r : ℕ → ℕ → Prop) : Prop := Reflexive' r ∧ Antisymmetric' r ∧ Transitive' r
+-- x ⋄ x ⋄ ⋯ ⋄ x (n times), in every monoid at once (done)
+def mpow {α : Type} [Monoid₁ α] (x : α) : ℕ → α
+  | 0 => One₁.one
+  | n + 1 => mpow x n ⋄ x
+
+-- (ℕ, *, 1) (done)
+instance natMul : Monoid₁ ℕ where
+  dia a b := a * b
+  one := 1
+
+-- (Bool, xor, false)
+instance boolXor : Monoid₁ Bool where
+  dia a b := xor a b
+  one := false
+
+-- (ℤ, +, 0)
+instance intAdd : Monoid₁ ℤ where
+  dia a b := a + b
+  one := 0
+
+-- (ℕ → ℕ, composition, identity): f ⋄ g is "first g, then f"
+instance endo : Monoid₁ (ℕ → ℕ) where
+  dia f g := fun n => f (g n)
+  one := fun n => n
+

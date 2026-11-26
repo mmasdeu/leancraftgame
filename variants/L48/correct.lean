@@ -1,11 +1,13 @@
--- f is a homomorphism of (ℕ, +, 0) to itself: f 0 = 0 and f (a + b) = f a + f b
-def IsAddHom (f : ℕ → ℕ) : Prop := f 0 = 0 ∧ ∀ a b, f (a + b) = f a + f b
+def d3 : ℝ := deriv (fun x : ℝ => x ^ 3) 2
 
--- f is a homomorphism of (ℕ, +, 0) to (ℕ, ·, 1): f 0 = 1 and f (a + b) = f a · f b
-def IsExpHom (f : ℕ → ℕ) : Prop := f 0 = 1 ∧ ∀ a b, f (a + b) = f a * f b
+statement sq_hasDeriv : HasDerivAt (fun x : ℝ => x ^ 2) 6 3
 
--- an additive homomorphism that is not surjective
-def homNotOnto : ℕ → ℕ := fun n => 2 * n
+statement rolle (f : ℝ → ℝ) (a b : ℝ) (hab : a < b) (hfc : ContinuousOn f (Set.Icc a b))
+    (hfab : f a = f b) : ∃ c ∈ Set.Ioo a b, deriv f c = 0
 
--- a bijection of ℕ that is its own inverse and is not an additive homomorphism
-def bijNotHom : ℕ → ℕ := fun n => if n = 0 then 1 else if n = 1 then 0 else n
+statement mvt (f : ℝ → ℝ) (a b : ℝ) (hab : a < b) (hfc : ContinuousOn f (Set.Icc a b))
+    (hfd : DifferentiableOn ℝ f (Set.Ioo a b)) :
+    ∃ c ∈ Set.Ioo a b, deriv f c = (f b - f a) / (b - a)
+
+def q1 : Fin 4 := 1
+def q2 : Bool := false

@@ -1,33 +1,59 @@
 /-
-# Quantifiers in order
+# Spot the bug: sets
 
-Quantifiers are read from left to right, and **the order matters**.
+A colleague wrote three things about sets. Each one compiles, and each one is wrong.
+Your job is to **prove them wrong** with counterexamples, then repair the first one.
 
-* `∀ m, ∃ n, f n = m`: every `m` is a value of `f`. The `n` may depend on
-  `m`. This is **surjectivity**.
-* `∃ n, ∀ m, f n = m`: one single `n` with `f n` equal to every `m` at
-  once. This is absurd as soon as there are two values of `m`.
+## 1. The multiples of `k`
 
-The same swap separates "for every `ε` there is a `δ`" (continuity) from
-"there is a `δ` that works for every `ε`", and continuity from uniform
-continuity ("for every `ε` there is a `δ` that works at every point").
-Most errors in formalisation are quantifier swaps.
+```lean
+def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
+```
 
-Unboundedness is a `∀ ∃` statement too: "however large `M`, some term is at
-least `M`". Its negation, boundedness, is `∃ M, ∀ n, u n < M`: negation
-swaps the quantifiers.
+meant as "the multiples of `k`". (Recall that `k % n` is the remainder of `k` divided
+by `n`.) Give `k₁` and `n₁` with `n₁` a multiple of `k₁` that is **not** in
+`multiplesOf k₁`.
 
-## Your task
+## 2. Preimage of the image
 
-Define `HitsEverything f` (`f` is surjective: every natural number is a value
-of `f`) and `Unbounded u` (for every `M` some term of `u` is at least `M`).
+The colleague's lemma, for every `f : ℕ → ℕ` and `s : Set ℕ`:
+
+```lean
+f ⁻¹' (f '' s) = s
+```
+
+The inclusion `s ⊆ f ⁻¹' (f '' s)` always holds. Give `f₁`, `s₁` and a point `x₁` that is
+in `f₁ ⁻¹' (f₁ '' s₁)` but not in `s₁`. (For which kind of `f` is the lemma true?)
+
+## 3. Swapping `⋃` and `⋂`
+
+For a family `A i j` of sets with two indices, the colleague claims
+
+```lean
+⋃ i, ⋂ j, A i j = ⋂ j, ⋃ i, A i j
+```
+
+Read both sides: `x ∈ ⋃ i, ⋂ j, A i j` is `∃ i, ∀ j, x ∈ A i j`, and the right-hand side
+is `∀ j, ∃ i, x ∈ A i j`. It is the order of quantifiers again (Logic world). Give a
+family `A : Bool → Bool → Set ℕ` (the indices are `true` and `false`) and a point `x₂` on
+the right-hand side but not on the left. You may use `if i = j then … else …`.
+
+## 4. Repair
+
+Write `multiplesOfFixed k`, the multiples of `k`, correctly.
 -/
 namespace L19
 
--- every natural number is a value of f
-def HitsEverything (f : Nat → Nat) : Prop := sorry
+def k₁ : ℕ := sorry
+def n₁ : ℕ := sorry
 
--- the sequence gets above every bound M at least once
-def Unbounded (u : Nat → Nat) : Prop := sorry
+def f₁ : ℕ → ℕ := sorry
+def s₁ : Set ℕ := sorry
+def x₁ : ℕ := sorry
+
+def A : Bool → Bool → Set ℕ := sorry
+def x₂ : ℕ := sorry
+
+def multiplesOfFixed (k : ℕ) : Set ℕ := sorry
 
 end L19

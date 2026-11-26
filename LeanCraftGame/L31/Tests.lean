@@ -1,58 +1,33 @@
-/- Hidden test battery for Level Divisibility and gcd. -/
+/- Hidden test battery for Level 31: Spot the bug: structures. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L31.Player
 
-open L31
+namespace L31Ref
+def mul (z w : L31.GaussInt) : L31.GaussInt :=
+  ⟨z.re * w.re + z.im * w.im, z.re * w.im + z.im * w.re⟩
+def mulRight (z w : L31.GaussInt) : L31.GaussInt :=
+  ⟨z.re * w.re - z.im * w.im, z.re * w.im + z.im * w.re⟩
+def mid (a b : L31.Point) : L31.Point :=
+  ⟨(a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + a.z) / 2⟩
+structure UnitInterval where
+  t : ℚ
+  in_range : 0 ≤ t ∨ t ≤ 1
+end L31Ref
 
-#no_sorry Coprime'
-#no_sorry IsGcd
-#no_sorry IsPrime'
-#no_sorry Squarefree'
-#level_start "Divisibility and gcd"
+#no_sorry L31.gz
+#no_sorry L31.gw
+#no_sorry L31.pa
+#no_sorry L31.pb
+#no_sorry L31.badT
+#level_start "Spot the bug: structures"
 
-#expect_true "CommonDiv 3 6 9 is true" unfolding CommonDiv :
-  CommonDiv 3 6 9
-#expect_false "Coprime' 6 15 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  Coprime' 6 15
-#expect_false "Coprime' 4 6 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  Coprime' 4 6
-#expect_true "Coprime' 0 1 is true" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  Coprime' 0 1
-#expect_true "Coprime' 1 1 is true" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  Coprime' 1 1
-#expect_false "Coprime' 0 4 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  Coprime' 0 4
-#expect_false "Coprime' 0 0 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  Coprime' 0 0
-#expect_false "IsGcd 12 18 3 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  IsGcd 12 18 3
-#expect_false "IsGcd 12 18 12 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  IsGcd 12 18 12
-#expect_false "IsGcd 8 12 2 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  IsGcd 8 12 2
-#expect_true "IsGcd 0 5 5 is true" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  IsGcd 0 5 5
-#expect_true "IsGcd 0 0 0 is true" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  IsGcd 0 0 0
-#expect_true "IsGcd 6 0 6 is true" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  IsGcd 6 0 6
-#expect_false "IsGcd 0 0 4 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  IsGcd 0 0 4
-#expect_false "IsPrime' 0 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  IsPrime' 0
-#expect_false "IsPrime' 1 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  IsPrime' 1
-#expect_false "IsPrime' 4 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  IsPrime' 4
-#expect_false "IsPrime' 9 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  IsPrime' 9
-#expect_false "Squarefree' 12 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  Squarefree' 12
-#expect_true "Squarefree' 1 is true" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  Squarefree' 1
-#expect_false "Squarefree' 0 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  Squarefree' 0
-#expect_false "Squarefree' 18 is false" unfolding Coprime' IsGcd IsPrime' Squarefree' CommonDiv :
-  Squarefree' 18
+#expect_false "with the colleague's product, i · i = -1" unfolding L31Ref.mul :
+  (L31Ref.mul ⟨0, 1⟩ ⟨0, 1⟩).re = -1
+#expect_true "the colleague's product of gz and gw is wrong" unfolding L31Ref.mul L31Ref.mulRight L31.gz L31.gw :
+  (L31Ref.mul L31.gz L31.gw).re ≠ (L31Ref.mulRight L31.gz L31.gw).re
+#expect_true "the colleague's midpoint of pa and pb depends on the order" unfolding L31Ref.mid L31.pa L31.pb :
+  (L31Ref.mid L31.pa L31.pb).z ≠ (L31Ref.mid L31.pb L31.pa).z
+#expect_model "badT satisfies the colleague's in_range" : L31Ref.UnitInterval.mk L31.badT
+#expect_true "badT is not between 0 and 1" unfolding L31.badT : ¬ (0 ≤ L31.badT ∧ L31.badT ≤ 1)
 
 #level_report

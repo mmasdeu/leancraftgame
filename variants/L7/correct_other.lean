@@ -1,0 +1,8 @@
+def a₁ : ℕ := 1
+def b₁ : ℕ := 2
+def a₂ : ℝ := -3
+def b₂ : ℝ := 0
+def x₃ : ℝ := 2
+def y₃ : ℝ := 0
+statement sq_le_sq_of_le (a b : ℝ) (hab : a ≤ b) (ha : 0 ≤ a) : a ^ 2 ≤ b ^ 2
+statement div_mul_cancel_ok : ∀ x y : ℝ, y ≠ 0 → x / y * y = x

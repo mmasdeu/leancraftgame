@@ -1,0 +1,5 @@
+def rot : (Fin 2 → ℚ) → (Fin 2 → ℚ) := fun v => ![0 * v 0 - v 1, v 0 + 0 * v 1]
+def proj (v : Fin 2 → ℚ) : Fin 2 → ℚ := ![v 0, 0 * v 1]
+def shift : (Fin 2 → ℚ) → (Fin 2 → ℚ) := fun v => v + ![1, 0]
+def u : Fin 2 → ℚ := ![1, 2]
+def w : Fin 2 → ℚ := ![3, 4]

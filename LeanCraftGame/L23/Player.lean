@@ -1,37 +1,75 @@
 /-
-# Going to infinity
+# Infinitely many primes
 
-"`u n` tends to infinity" is the first genuine definition of analysis, and
-it already has three quantifiers:
+MIL §5.3 proves Euclid's theorem, in the form Mathlib states it:
 
-> for every bound `M`, from some index `N` on, every term is at least `M`.
+```lean
+theorem Nat.exists_infinite_primes (n : ℕ) : ∃ p, n ≤ p ∧ Nat.Prime p
+```
 
-Compare it with its neighbours:
+"For every bound `n` there is a prime at least `n`": that is how "infinitely many" is
+said with quantifiers. This level is an **audit**: an AI also claims to have proved
+Euclid's theorem, and Lean accepts its proof. Your job is to decide whether its
+*statement* says what it claims.
 
-* **unbounded**: for every `M`, *some* term is at least `M`. The sequence
-  `0, 1, 0, 2, 0, 3, …` is unbounded but does not tend to infinity: it
-  keeps coming back to `0`.
-* **increasing and unbounded**: this implies tending to infinity, but not
-  conversely (`0, 2, 1, 3, 2, 4, …` tends to infinity and is not monotone).
-* **`u n ≥ n`**: sufficient, not necessary (`n / 2` tends to infinity).
+## How to audit a formalisation
 
-A definition must capture exactly the intended class: neither a
-sufficient condition nor a necessary one. The referee tests your
-definition on sequences that separate these notions.
+1. **Say the formal statement out loud**, quantifier by quantifier.
+2. **Check every definition on its borders**: `0`, `1`, `2`.
+3. **Test in toy worlds.** Replace the notion ("prime") by a made-up one where you know
+   the answer. A statement that holds in a world where there are *not* infinitely many
+   "primes" does not say "infinitely many".
 
-The Collatz map is a test case for intuition: does the orbit of `n` tend
-to infinity for some `n`? Nobody knows; but `fun n => iter n 27` certainly
-does not, since it ends in the cycle `4, 2, 1`.
+The AI's statement is written for any notion of "prime" `P`, which makes step 3 easy:
+
+```lean
+def IsPrime (p : ℕ) : Prop := ∀ d, d ∣ p → d = 1 ∨ d = p
+def AIClaim (P : ℕ → Prop) : Prop := ∀ n, ∃ p, P p ∧ p ≠ n
+theorem ai_primes : AIClaim IsPrime := …     -- Lean accepts the proof
+```
+
+## Strong recursion (MIL §5.4), read only
+
+Not every recursion is on `n` and `n + 1`. This one calls itself on `n / 10`:
+
+```lean
+def digitSum (n : ℕ) : ℕ :=
+  if n < 10 then n else n % 10 + digitSum (n / 10)
+termination_by n
+decreasing_by omega
+```
+
+`termination_by n` names the quantity that decreases, and `decreasing_by` proves that it
+does (here `n / 10 < n` when `n ≥ 10`): Lean only accepts a recursion that stops.
 
 ## Your task
 
-Define `TendsToInfinity u`.
+1. `Unbounded P`: the faithful "there are infinitely many numbers satisfying `P`".
+2. `smallWorld`: a toy notion of "prime", with only numbers between 2 and 100, in which
+   the AI's claim holds but there are not infinitely many "primes".
+3. `fakePrime`: a number that the AI's `IsPrime` accepts but `Nat.Prime` rejects.
+4. State Euclid as Mathlib does (`euclid`), and its variant for the primes `p` with
+   `p % 4 = 3` (`euclid_mod4`: for every `n` a prime `p ≥ n` with `p % 4 = 3`), in the
+   order "bound, prime, remainder".
+5. Answer the two questions about `digitSum`.
 -/
-import Mathlib.Tactic
-
 namespace L23
 
-def TendsToInfinity (u : Nat → Nat) : Prop :=
-  sorry
+def IsPrime (p : ℕ) : Prop := ∀ d, d ∣ p → d = 1 ∨ d = p
+
+def AIClaim (P : ℕ → Prop) : Prop := ∀ n, ∃ p, P p ∧ p ≠ n
+
+def Unbounded (P : ℕ → Prop) : Prop := sorry
+
+def smallWorld : ℕ → Prop := sorry
+
+def fakePrime : ℕ := sorry
+
+statement euclid : sorry
+
+statement euclid_mod4 : sorry
+
+def q1 : Fin 3 := sorry
+def q2 : Bool := sorry
 
 end L23

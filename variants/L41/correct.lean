@@ -1,6 +1,14 @@
--- u converges to a (already done)
-def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - a| < ε
+def q1 : Fin 4 := 2
+def q2 : Bool := false
+def q3 : Fin 4 := 1
+def q4 : Bool := false
 
-def IsEventuallyConstant (u : ℕ → ℝ) : Prop := ∃ N, ∀ n ≥ N, u n = u N
+statement exists_eig {V : Type} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
+    [Nontrivial V] (f : Module.End ℂ V) : ∃ c : ℂ, f.HasEigenvalue c
 
-def IsCauchy (u : ℕ → ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ m ≥ N, ∀ n ≥ N, |u m - u n| < ε
+def A : Matrix (Fin 2) (Fin 2) ℚ := !![2, 1; 0, 3]
+
+def ev₁ : ℚ := 2
+def vec₁ : Fin 2 → ℚ := ![1, 0]
+def ev₂ : ℚ := 3
+def vec₂ : Fin 2 → ℚ := ![1, 1]

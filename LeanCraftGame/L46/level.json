@@ -1,47 +1,31 @@
 {
-  "world": "Structure World",
-  "title": "Defaults and updates",
-  "skill": "syntax",
-  "exercise": "Define",
+  "world": "Topology",
+  "title": "Separation and compactness",
+  "skill": "writing definitions",
+  "exercise": "Write",
+  "mil": "§11.3",
   "predict": [
-    {
-      "test": "M N = N M for all sample matrices (matrices do not commute)",
-      "statement": "the matrix products M N and N M always agree"
-    },
-    {
-      "test": "det (shear k) = 1 for -3 ≤ k ≤ 3",
-      "statement": "det (1 k / 0 1) = 1"
-    }
+    {"test": "Sierpiński space is T1", "statement": "Sierpiński space is T1."},
+    {"test": "The one-point space is T2 (no two points to separate)", "statement": "The space with one point is Hausdorff."}
+  ],
+  "public": ["noSubcover covers ℕ"],
+  "questions": [
+    {"answer": "q1", "text": "True or false: every T1 topology on the three points `{0, 1, 2}` is the discrete topology."},
+    {"answer": "q2", "text": "Which Mathlib class is the Hausdorff property?",
+     "choices": ["`T0Space X`", "`CompactSpace X`", "`T2Space X`"]}
   ],
   "checks": [
-    {
-      "lean": "example : L46.Matrix2 := L46.identity\nexample : ℤ → L46.Matrix2 := L46.shear\nexample : L46.Matrix2 → L46.Matrix2 := L46.transpose\nexample : L46.Matrix2 → ℤ := L46.det\nexample : L46.Matrix2 → L46.Matrix2 → L46.Matrix2 := L46.mul",
-      "message": "Keep the types of `identity`, `shear`, `transpose`, `det` and `mul`."
-    }
+    {"lean": "#check (@L46.IsT1 : {n : Nat} → Family n → Prop)\n#check (@L46.IsT2 : {n : Nat} → Family n → Prop)\n#check (L46.noSubcover : ℕ → Set ℕ)\n#check (L46.q1 : Bool)\n#check (L46.q2 : Fin 3)",
+     "message": "Keep `IsT1`, `IsT2 : Family n → Prop`, `noSubcover : ℕ → Set ℕ` and the answer lines."}
   ],
   "hints": [
-    {
-      "match": "identity",
-      "hint": "`{}`: every field takes its default."
-    },
-    {
-      "match": "shear",
-      "hint": "`{ b := k }`."
-    },
-    {
-      "match": "transpose",
-      "hint": "`{ M with b := M.c, c := M.b }`."
-    },
-    {
-      "match": "det",
-      "hint": "`M.a * M.d - M.b * M.c`."
-    },
-    {
-      "match": "",
-      "steps": [
-        "Entry `(i, j)` of `MN` is row `i` of `M` times column `j` of `N`."
-      ],
-      "hint": "The product: `⟨M.a * N.a + M.b * N.c, M.a * N.b + M.b * N.d, M.c * N.a + M.d * N.c, M.c * N.b + M.d * N.d⟩`."
-    }
+    {"match": "T1", "steps": ["For every two different points `x` and `y`, you want one open set: which point does it contain, and which not?"],
+     "hint": "`∀ x y : Fin n, x ≠ y → ∃ U ∈ T, x ∈ U ∧ y ∉ U`."},
+    {"match": "T2", "steps": ["Two open sets this time, one around each point. What must be true of their intersection?"],
+     "hint": "`∀ x y : Fin n, x ≠ y → ∃ U ∈ T, ∃ V ∈ T, x ∈ U ∧ y ∈ V ∧ U ∩ V = ∅`. Did you forget `x ≠ y`? A point cannot be separated from itself."},
+    {"match": "covers ℕ", "hint": "Every `x` must be in some `noSubcover i`: the singletons `fun i => {i}` work, and so do the segments `fun i => {x | x < i}`."},
+    {"match": "finite subcover", "steps": ["If `U 0, …, U N` covered ℕ, which number would they miss?"], "hint": "With `fun i => {x | x < i}`, the sets `U 0, …, U N` all miss `N`."},
+    {"match": "Question 1", "hint": "In a finite T1 space, `{y}` is the complement of a finite union of closed points, so it is open: every set is open."},
+    {"match": "Question 2", "hint": "T2 is Hausdorff: `T2Space`."}
   ]
 }

@@ -1,7 +1,12 @@
-def evenSet (n : ℕ) : Finset ℕ := Finset.filter (fun i => i % 2 = 0) (Finset.range n)
-def sumOdds (n : ℕ) : ℕ := ∑ i ∈ Finset.filter (fun i => i % 2 = 1) (Finset.range n), i
-def numDivisors (n : ℕ) : ℕ := (Finset.filter (fun d => d ∣ n) (Finset.Icc 1 n)).card
-def countPrimes (n : ℕ) : ℕ := (Finset.filter (fun p => Nat.Prime p) (Finset.range n)).card
-def fact (n : ℕ) : ℕ := ∏ i ∈ Finset.Icc 1 n, i
-def multiples3or5 (n : ℕ) : ℕ := ∑ i ∈ Finset.filter (fun i => i % 3 = 0 ∨ i % 5 = 0) (Finset.range n), i
-def IsPerfect (n : ℕ) : Prop := 0 < n ∧ ∑ d ∈ Finset.filter (fun d => d ∣ n) (Finset.Ico 1 n), d = n
+
+structure AddSubmonoid₁ (M : Type) [AddMonoid M] where
+  carrier : Set M
+  zero_mem : (0 : M) ∈ carrier
+  add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier
+
+-- the even natural numbers
+def evens : Set ℕ := {n | n % 2 = 0}
+
+-- the natural numbers divisible by k
+def multiplesOf (k : ℕ) : Set ℕ := {n | k ∣ n}
+

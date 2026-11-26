@@ -1,9 +1,10 @@
-def triSum (n : ℕ) : ℕ := ∑ i ∈ Finset.range (n + 1), i
-def triFormula (n : ℕ) : ℕ := n * (n + 1) / 2
-def pairs (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, ∑ j ∈ Finset.range i, 1
-def cubeSum (n : ℕ) : ℕ := ∑ i ∈ Finset.Icc 1 n, i ^ 3
-def cubeFormula (n : ℕ) : ℕ := (n * (n + 1) / 2) ^ 2
-def sameParity (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, ∑ j ∈ Finset.range i, if (i + j) % 2 = 0 then 1 else 0
-def geom (n : ℕ) : ℚ := ∑ i ∈ Finset.range n, (1 / 2 : ℚ) ^ i
-def geomFormula (n : ℕ) : ℚ := 2 - 2 * (1 / 2 : ℚ) ^ n
-def meanSquare (n : ℕ) : ℚ := (∑ i ∈ Finset.range n, (i : ℚ) ^ 2) / n
+statement lagrange {G : Type*} [Group G] (H : Subgroup G) : Nat.card H ∣ Nat.card G
+
+statement cauchy {G : Type*} [Group G] [Fintype G] (p : ℕ) (hp : p.Prime)
+    (hdvd : p ∣ Fintype.card G) : ∃ x : G, orderOf x = p
+
+def ord4 : ℕ := 3
+
+def σ : Equiv.Perm (Fin 3) := Equiv.swap 0 1 * Equiv.swap 1 2
+
+def τ : Equiv.Perm (Fin 3) := Equiv.swap 0 1

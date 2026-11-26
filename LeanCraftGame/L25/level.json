@@ -1,89 +1,27 @@
 {
-  "world": "Sequence World",
-  "title": "Injective and surjective",
-  "skill": "writing",
-  "exercise": "Define",
+  "world": "Discrete Mathematics",
+  "title": "Big operators and counting",
+  "skill": "sums and products",
+  "exercise": "Write",
+  "mil": "§6.2",
   "predict": [
-    {
-      "test": "Surjective (n + 1) is false (nothing is sent to 0)",
-      "statement": "Surjective (fun n => n + 1)"
-    },
-    {
-      "test": "Injective (n - 1) is false (0 and 1 both go to 0)",
-      "statement": "Injective (fun n => n - 1)"
-    },
-    {
-      "test": "Surjective (n - 1) is true (y is hit by y + 1)",
-      "statement": "Surjective (fun n => n - 1)"
-    }
+    {"test": "∏ i ∈ Finset.range 4, i is 0", "statement": "`∏ i ∈ Finset.range 4, i = 0`"},
+    {"test": "the empty product ∏ i ∈ Finset.range 0, i is 1", "statement": "`∏ i ∈ Finset.range 0, i = 1` (a product of nothing)"}
   ],
+  "public": ["gauss 4 = 10", "fact 5 = 120", "pairsLt 4 = 6"],
   "checks": [
-    {
-      "lean": "example : (ℕ → ℕ) → Prop := L25.Injective\nexample : (ℕ → ℕ) → Prop := L25.Surjective\nexample : (ℕ → ℕ) → Prop := L25.Bijective",
-      "message": "Keep the names and the types: `Injective`, `Surjective` and `Bijective` all have type `(ℕ → ℕ) → Prop`."
-    }
+    {"lean": "#check (L25.gauss : ℕ → ℕ)\n#check (L25.fact : ℕ → ℕ)\n#check (L25.pairsLt : ℕ → ℕ)\n#check (L25.gauss_formula : Prop)\n#check (L25.nicomachus : Prop)",
+     "message": "Keep the names and types: `gauss`, `fact`, `pairsLt : ℕ → ℕ`, and the two statements."}
   ],
   "hints": [
-    {
-      "match": "Injective (n + 1) is true",
-      "hint": "`n + 1` never sends two different numbers to the same place. Injectivity reads `∀ a b, f a = f b → a = b`: the arrow goes from equal outputs to equal inputs."
-    },
-    {
-      "match": "Surjective (n + 1)",
-      "steps": [
-        "Which number is never an output of `n + 1`?"
-      ],
-      "hint": "Nothing is sent to 0, so `n + 1` is not surjective. A definition that accepts it is too weak: is your `∃ x` after the `∀ y`, and does it say `f x = y`?"
-    },
-    {
-      "match": "Surjective (n - 1) is true",
-      "hint": "Every `y` is hit by `x = y + 1`. In ℕ, `0 - 1 = 0`, so 0 is hit twice, which is fine for surjectivity. Write `∀ y, ∃ x, f x = y`."
-    },
-    {
-      "match": "Injective (n - 1)",
-      "steps": [
-        "What are `f 0` and `f 1` for `n - 1` in ℕ?"
-      ],
-      "hint": "Both are 0, so it is not injective. If your definition accepts it, check the direction of the arrow: `a = b → f a = f b` is true for every function, and so is `f a ≠ f b → a ≠ b`."
-    },
-    {
-      "match": "Surjective (n % 3)",
-      "hint": "The outputs are only 0, 1 and 2, so 3 is never hit. With `∀ x, ∃ y, f x = y` every function qualifies (take `y = f x`): the `∀` must range over the *outputs*, and the witness over the *inputs*."
-    },
-    {
-      "match": "Injective (2 * n)",
-      "hint": "`2 * a = 2 * b` forces `a = b`. A correct injectivity does not care that 1 is never hit."
-    },
-    {
-      "match": "Surjective (2 * n)",
-      "hint": "No `x` has `2 * x = 1`. Your definition accepts it: is it `∀ y, ∃ x, f x = y`, with `∃` inside?"
-    },
-    {
-      "match": "fun _ => 0",
-      "hint": "A constant function is neither injective nor surjective. Check each definition against `fun _ => 0`."
-    },
-    {
-      "match": "Bijective (n) is true",
-      "hint": "The identity is injective and surjective. `Bijective f` means both: `Injective f ∧ Surjective f`."
-    },
-    {
-      "match": "Bijective (n + 1) is false",
-      "hint": "`n + 1` is injective but not surjective, so it is not bijective: `Bijective` needs `∧`, not `∨`."
-    },
-    {
-      "match": "implies",
-      "hint": "A user of your definition needs this lemma. If it is ❓, the referee could not derive it from your definitions: try the standard formulations."
-    },
-    {
-      "match": "Injective (swap",
-      "hint": "The function swaps 0↔1, 2↔3, …: different inputs give different outputs, so it is injective. If the referee rejects it, your definition is too strong."
-    },
-    {
-      "match": "fails as soon as",
-      "steps": [
-        "If `f a = f b` for two *different* inputs, can `f` be injective?"
-      ],
-      "hint": "A user of your definition needs this lemma. If it is ❌ or ❓, your `Injective` does not say `f a = f b → a = b` (or `Bijective` does not contain it)."
-    }
+    {"match": "gauss 4", "steps": ["Is `n` itself in `Finset.range n`?"], "hint": "`∑ i ∈ Finset.range (n + 1), i`."},
+    {"match": "gauss 100", "hint": "`∑ i ∈ Finset.range (n + 1), i`."},
+    {"match": "fact", "steps": ["What is `∏ i ∈ Finset.range n, i` when the range contains 0?"],
+     "hint": "`∏ i ∈ Finset.Icc 1 n, i`, or `∏ i ∈ Finset.range n, (i + 1)`."},
+    {"match": "pairsLt", "steps": ["Build all pairs with `Finset.range n ×ˢ Finset.range n`, then keep the right ones with `filter`, then count with `card`."],
+     "hint": "`((Finset.range n ×ˢ Finset.range n).filter (fun p => p.1 < p.2)).card`."},
+    {"match": "gauss_formula", "steps": ["The variable `n` goes before the colon: `statement gauss_formula (n : ℕ) : …`."],
+     "hint": "`statement gauss_formula (n : ℕ) : ∑ i ∈ Finset.range (n + 1), i = n * (n + 1) / 2`."},
+    {"match": "nicomachus", "hint": "`statement nicomachus (n : ℕ) : ∑ i ∈ Finset.range (n + 1), i ^ 3 = (∑ i ∈ Finset.range (n + 1), i) ^ 2`: brackets around the second sum before squaring."}
   ]
 }

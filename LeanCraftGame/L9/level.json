@@ -1,51 +1,23 @@
 {
-  "world": "Logic World",
-  "title": "If, then",
-  "skill": "writing",
-  "exercise": "Refute",
+  "world": "Logic",
+  "title": "∃",
+  "skill": "writing definitions",
+  "exercise": "Write",
+  "mil": "§3.2",
   "predict": [
-    {
-      "test": "FourThenTwo 3 is true (vacuously: 4 does not divide 3)",
-      "statement": "FourThenTwo 3"
-    },
-    {
-      "test": "TwoThenFour 7 is true (vacuously)",
-      "statement": "TwoThenFour 7"
-    },
-    {
-      "test": "SameParity 3 5 is true (both sides of ↔ are false)",
-      "statement": "SameParity 3 5"
-    }
+    {"test": "some real number is both positive and negative", "statement": "`∃ x : ℝ, x > 0 ∧ x < 0`"}
   ],
+  "public": ["bound is an upper bound of x ↦ min x 3", "root² - 4·root + 4 = 0"],
   "checks": [
-    {
-      "lean": "example : Nat → Prop := L9.FourThenTwo\nexample : Nat → Prop := L9.TwoThenFour\nexample : Nat → Prop := L9.PrimeThenOdd\nexample : Nat → Nat → Prop := L9.SameParity",
-      "message": "Keep the predicates of type `Nat → Prop`."
-    },
-    {
-      "lean": "example : Nat := L9.breaksConverse\nexample : Nat := L9.breaksPrimeOdd",
-      "message": "Keep `breaksConverse` and `breaksPrimeOdd : Nat`."
-    }
+    {"lean": "#check (L9.FnHasUb : (ℝ → ℝ) → Prop)\n#check (L9.FnHasLb : (ℝ → ℝ) → Prop)\n#check (L9.bound : ℝ)\n#check (L9.root : ℝ)\n#check (L9.TakesBothSigns : (ℝ → ℝ) → Prop)",
+     "message": "Keep the names and types: `FnHasUb FnHasLb TakesBothSigns : (ℝ → ℝ) → Prop`, `bound root : ℝ`."}
   ],
   "hints": [
-    {
-      "match": "breaksConverse",
-      "hint": "Any multiple of 2 that is not a multiple of 4: `6`."
-    },
-    {
-      "match": "breaksPrimeOdd",
-      "hint": "The only even prime: `2`."
-    },
-    {
-      "match": "SameParity",
-      "hint": "`a % 2 = 0 ↔ b % 2 = 0`."
-    },
-    {
-      "match": "",
-      "steps": [
-        "Which part is the hypothesis, which the conclusion?"
-      ],
-      "hint": "`4 ∣ n → 2 ∣ n`: the hypothesis on the left of the arrow."
-    }
+    {"match": "has an upper bound", "steps": ["Is it *some* `a` or *every* `a`?"], "hint": "`∃ a, FnUb f a`."},
+    {"match": "has a lower bound", "hint": "`∃ a, ∀ x, a ≤ f x`."},
+    {"match": "bound is", "hint": "Any number at least 3."},
+    {"match": "root", "hint": "`x² - 4x + 4 = (x - 2)²`."},
+    {"match": "x ↦ x takes both signs", "steps": ["Can one `x` be both positive and negative?"], "hint": "`(∃ x, f x > 0) ∧ (∃ x, f x < 0)`: two separate `∃`."},
+    {"match": "x² + 1 takes", "hint": "`(∃ x, f x > 0) ∧ (∃ x, f x < 0)`."}
   ]
 }

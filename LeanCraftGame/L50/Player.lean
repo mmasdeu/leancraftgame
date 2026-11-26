@@ -1,40 +1,76 @@
 /-
-# Order relations
+# Integrals and measures
 
-A **partial order** on `α` is a relation `≤` that is reflexive,
-antisymmetric and transitive. Some examples, each a test of your axioms:
+MIL's last chapter integrates. Its first section uses the **interval integral**, which
+works like the integral of a first calculus course:
 
-* `≤` on `ℕ` (a total order);
-* divisibility on `ℕ`, in which `0` is the largest element and `1` the
-  smallest, and `2`, `3` are incomparable;
-* inclusion of sets;
-* *not* `<` (not reflexive), and *not* "`a % 3 ≤ b % 3`" (a preorder: `0`
-  and `3` are below each other without being equal).
+```lean
+∫ x in a..b, f x        -- the integral of f from a to b
+∫ x in (0:ℝ)..1, x ^ 2  -- = 1 / 3
+```
 
-In the Topology world, a finite topology is the same thing as a preorder on
-its points (`x ≤ y` when every open set containing `x` contains `y`), and
-it is T0 exactly when that preorder is a partial order. Sierpiński space is
-the two-element order `0 < 1`.
+* `∫ x in a..b, f x` is a real number. The `x` is a bound variable, like the `x` of
+  `fun x => …`. The type annotation `(0:ℝ)` tells Lean that the bounds are reals.
+* When `b < a` it is **oriented**: `∫ x in b..a, f x = -∫ x in a..b, f x`.
+* Like `deriv`, it is a total function. If `f` is not integrable, the integral is `0`.
+
+## The fundamental theorem of calculus
+
+Mathlib's version (`intervalIntegral.integral_eq_sub_of_hasDerivAt`), for `f f' : ℝ → ℝ`:
+
+> if `f` has derivative `f' x` at every `x` of `Set.uIcc a b` (the interval between `a`
+> and `b`, in either order), and `f'` is integrable on it, then
+> `∫ y in a..b, f' y = f b - f a`.
+
+"`f'` is integrable between `a` and `b`" is written
+`IntervalIntegrable f' MeasureTheory.volume a b`.
+
+## Measures
+
+The second and third sections of the chapter build the integral from a **measure**. On `ℝ`
+the measure is `MeasureTheory.volume`, the length: `volume (Set.Icc a b)` is `b - a`.
+Measures take values in `ENNReal`, the numbers in `[0, ∞]`, since a set may have infinite
+measure.
+
+* `MeasurableSet s`: `s` is one of the sets the measure is defined on.
+* `∀ᵐ x ∂μ, P x`: `P x` holds for **almost every** `x`, that is, the set where it fails
+  has measure `0`.
+* `∫ x, f x ∂μ`: the integral of `f` over the whole space with respect to `μ`.
+
+The great theorem of the chapter is **dominated convergence**. Here is Mathlib's
+statement, `MeasureTheory.tendsto_integral_of_dominated_convergence`, slightly shortened:
+
+```lean
+theorem tendsto_integral_of_dominated_convergence {F : ℕ → α → ℝ} {f : α → ℝ}
+    (bound : α → ℝ)
+    (F_measurable : ∀ n, AEStronglyMeasurable (F n) μ)
+    (bound_integrable : Integrable bound μ)
+    (h_bound : ∀ n, ∀ᵐ a ∂μ, ‖F n a‖ ≤ bound a)
+    (h_lim : ∀ᵐ a ∂μ, Tendsto (fun n => F n a) atTop (𝓝 (f a))) :
+    Tendsto (fun n => ∫ a, F n a ∂μ) atTop (𝓝 (∫ a, f a ∂μ))
+```
 
 ## Your task
 
-Write the three axioms of a partial order `le` on `α`:
-
-* **reflexive**: everything is related to itself;
-* **antisymmetric**: if `a` is below `b` and `b` is below `a`, they are equal;
-* **transitive**: if `a` is below `b` and `b` is below `c`, then `a` is below `c`.
-
-Keep `le` as the first field and the axioms in the order listed. The referee
-tests your structure on relations that are partial orders (`≤` and `≥` on
-numbers, divisibility, equality...) and on relations that are not. Careful:
-each of your axioms must be true for the first kind and false for the second.
+1. `I2`: the integral of `x ↦ x²` from `0` to `1`, written with `∫`.
+2. `vol`: the measure (`MeasureTheory.volume`) of the closed interval `[0, 2]` of `ℝ`.
+3. `ftc`: the fundamental theorem of calculus as above, with the binders in this order:
+   `(f f' : ℝ → ℝ) (a b : ℝ)`, the derivative hypothesis, the integrability hypothesis.
+4. Answer the questions below the lesson.
 -/
+import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
+
 namespace L50
 
-structure PartialOrder' (α : Type) where
-  le : α → α → Prop
-  refl : sorry
-  antisymm : sorry
-  trans : sorry
+def I2 : ℝ := sorry
+
+def vol : ENNReal := sorry
+
+statement ftc : sorry
+
+def q1 : Bool := sorry
+def q2 : Fin 4 := sorry
+def q3 : Fin 4 := sorry
 
 end L50

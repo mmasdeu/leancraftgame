@@ -1,40 +1,38 @@
-/- Hidden test battery for Level Challenge: Egyptian fractions. -/
+/- Hidden test battery for Level 14: Spot the bug: logic. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L14.Player
 
-open L14
+namespace L14Ref
+def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - a| < ε
+def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
+def ConvergesB (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ n, |u n - a| < ε
+def SomePositive (u : ℕ → ℝ) : Prop := ∃ n, n > 0 → u n > 0
+def BoundedAbove (f : ℝ → ℝ) : Prop := ∀ x, ∃ M, f x ≤ M
+end L14Ref
 
-#no_sorry absDiff
-#no_sorry signum
-#no_sorry ratio
-#no_sorry IsEgyptian
-#level_start "Challenge: Egyptian fractions"
+#no_sorry L14.seqA
+#no_sorry L14.limA
+#no_sorry L14.seqB
+#no_sorry L14.limB
+#no_sorry L14.seqC
+#no_sorry L14.funD
+#level_start "Spot the bug: logic"
 
-#expect_true "absDiff 5 3 = 2 and absDiff 3 5 = 2" unfolding absDiff :
-  absDiff 5 3 = 2 ∧ absDiff 3 5 = 2
-#expect_true "absDiff 4 4 = 0 and absDiff 0 7 = 7" unfolding absDiff :
-  absDiff 4 4 = 0 ∧ absDiff 0 7 = 7
-#expect_true "signum 4 = 1 and signum (-7) = -1" unfolding signum :
-  signum 4 = 1 ∧ signum (-7) = -1
-#expect_true "signum 0 = 0" unfolding signum :
-  signum 0 = 0
-#expect_true "signum (x · y) = signum x · signum y for -5 ≤ x, y ≤ 5" unfolding signum :
-  ∀ x ∈ Finset.Icc (-5 : ℤ) 5, ∀ y ∈ Finset.Icc (-5 : ℤ) 5, signum (x * y) = signum x * signum y
-#expect_true "ratio 1 2 = 1 / 2 (not rounded down)" unfolding ratio :
-  ratio 1 2 = 1 / 2
-#expect_true "ratio 6 3 = 2" unfolding ratio :
-  ratio 6 3 = 2
-#expect_true "ratio 5 0 = 0" unfolding ratio :
-  ratio 5 0 = 0
-#expect_true "IsEgyptian (5 / 6) 2 3" unfolding IsEgyptian :
-  IsEgyptian (5 / 6) 2 3
-#expect_true "IsEgyptian (1 / 2) 4 4" unfolding IsEgyptian :
-  IsEgyptian (1 / 2) 4 4
-#expect_false "IsEgyptian (2 / 3) 2 2" unfolding IsEgyptian :
-  IsEgyptian (2 / 3) 2 2
-#expect_false "IsEgyptian (1 / 3) 0 3 (1/0 is not a unit fraction)" unfolding IsEgyptian :
-  IsEgyptian (1 / 3) 0 3
-#expect_false "IsEgyptian 0 2 2 (1/2 + 1/2 is 1, not 0)" unfolding IsEgyptian :
-  IsEgyptian 0 2 2
+#expect_true "seqA converges to limA" unfolding L14Ref.ConvergesTo L14.seqA L14.limA :
+  L14Ref.ConvergesTo L14.seqA L14.limA
+#expect_true "Alice's ConvergesA rejects seqA and limA" unfolding L14Ref.ConvergesA L14.seqA L14.limA :
+  ¬ L14Ref.ConvergesA L14.seqA L14.limA
+#expect_true "seqB does not converge to limB" unfolding L14Ref.ConvergesTo L14.seqB L14.limB :
+  ¬ L14Ref.ConvergesTo L14.seqB L14.limB
+#expect_true "Bob's ConvergesB accepts seqB and limB" unfolding L14Ref.ConvergesB L14.seqB L14.limB :
+  L14Ref.ConvergesB L14.seqB L14.limB
+#expect_true "no term of seqC is positive" unfolding L14.seqC :
+  ∀ n, L14.seqC n ≤ 0
+#expect_true "Carol's SomePositive accepts seqC" unfolding L14Ref.SomePositive L14.seqC :
+  L14Ref.SomePositive L14.seqC
+#expect_true "funD is not bounded above" unfolding L14.funD :
+  ¬ ∃ M, ∀ x, L14.funD x ≤ M
+#expect_true "Dan's BoundedAbove accepts funD" unfolding L14Ref.BoundedAbove L14.funD :
+  L14Ref.BoundedAbove L14.funD
 
 #level_report

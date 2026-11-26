@@ -1,41 +1,30 @@
-/- Hidden test battery for Level Challenge: triangles. -/
+/- Hidden test battery for Level 10: ¬ and the order of quantifiers. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L10.Player
 
-open L10
+#no_sorry L10.NotFnUb
+#no_sorry L10.NoUpperBound
+#no_sorry L10.NotMonotone
+#no_sorry L10.BoundedSeq
+#level_start "¬ and the order of quantifiers"
 
-#no_sorry IsTriangle
-#no_sorry IsRight
-#no_sorry ExactlyOneEven
-#level_start "Challenge: triangles"
-
-#expect_true "3, 4, 5 is a triangle" unfolding IsTriangle :
-  IsTriangle 3 4 5
-#expect_false "1, 2, 10 is not a triangle" unfolding IsTriangle :
-  IsTriangle 1 2 10
-#expect_false "1, 2, 3 is flat, not a triangle" unfolding IsTriangle :
-  IsTriangle 1 2 3
-#expect_false "10, 2, 1 is not a triangle" unfolding IsTriangle :
-  IsTriangle 10 2 1
-#expect_true "Equilateral triangles: n, n, n for 0 < n < 20" unfolding IsTriangle :
-  ∀ n < 20, 0 < n → IsTriangle n n n
-#expect_true "IsRight 3 4 5, and 5 4 3 (any side can be the hypotenuse)" unfolding IsRight :
-  IsRight 3 4 5 ∧ IsRight 5 4 3
-#expect_true "IsRight 13 5 12" unfolding IsRight :
-  IsRight 13 5 12
-#expect_false "IsRight 0 5 5 is false (no side of length 0)" unfolding IsRight :
-  IsRight 0 5 5
-#expect_true "Every right triangle is a triangle (all sides < 15)" unfolding IsRight IsTriangle :
-  ∀ a < 15, ∀ b < 15, ∀ c < 15, IsRight a b c → IsTriangle a b c
-#expect_true "ExactlyOneEven 3 4 5" unfolding ExactlyOneEven :
-  ExactlyOneEven 3 4 5
-#expect_false "ExactlyOneEven 2 4 5" unfolding ExactlyOneEven :
-  ExactlyOneEven 2 4 5
-#expect_false "ExactlyOneEven 1 3 5" unfolding ExactlyOneEven :
-  ExactlyOneEven 1 3 5
-#expect_false "ExactlyOneEven 2 4 6" unfolding ExactlyOneEven :
-  ExactlyOneEven 2 4 6
-#expect_true "Primitive Pythagorean triples: exactly one of the three is even" unfolding ExactlyOneEven :
-  ∀ t ∈ [(3, 4, 5), (4, 3, 5), (5, 12, 13), (8, 15, 17), (7, 24, 25), (20, 21, 29), (12, 35, 37)], ExactlyOneEven t.1 t.2.1 t.2.2
+#expect_equiv "NotFnUb f a means ¬ FnUb f a" unfolding L10.NotFnUb L10.FnUb :
+  ∀ f a, L10.NotFnUb f a ↔ ∃ x, a < f x
+#expect_equiv "NoUpperBound f means ¬ FnHasUb f" unfolding L10.NoUpperBound :
+  ∀ f, L10.NoUpperBound f ↔ ∀ a, ∃ x, a < f x
+#expect_equiv "NotMonotone f means ¬ Monotone f" unfolding L10.NotMonotone :
+  ∀ f : ℝ → ℝ, L10.NotMonotone f ↔ ∃ a b, a ≤ b ∧ f b < f a
+#expect_true "x ↦ x has no upper bound" unfolding L10.NoUpperBound :
+  L10.NoUpperBound (fun x => x)
+#expect_false "x ↦ min x 0 has no upper bound" unfolding L10.NoUpperBound :
+  L10.NoUpperBound (fun x => min x 0)
+#expect_true "x ↦ -x is not monotone" unfolding L10.NotMonotone :
+  L10.NotMonotone (fun x => -x)
+#expect_false "x ↦ 2x is not monotone" unfolding L10.NotMonotone :
+  L10.NotMonotone (fun x => 2 * x)
+#expect_true "the constant sequence 5 is bounded" unfolding L10.BoundedSeq :
+  L10.BoundedSeq (fun _ => 5)
+#expect_false "the sequence 0, 1, 2, 3, … is bounded" unfolding L10.BoundedSeq :
+  L10.BoundedSeq (fun n => n)
 
 #level_report

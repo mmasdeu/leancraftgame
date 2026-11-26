@@ -1,42 +1,77 @@
 /-
-# Sequences that come back
+# Inductive types
 
-How often does a sequence take the value `a`?
+MIL 6.3 builds new types *inductively*: by listing the ways to construct an element.
+Its main example is the type of binary trees:
 
-* **eventually equal** to `a`: from some index on, always `a`.
-* **infinitely often** `a`: for every `N`, some later index has value `a`
-  (`∀ N, ∃ n ≥ N, u n = a`). Equivalently, the set of indices is
-  infinite.
-* **only finitely often**: the negation of infinitely often. Write it as
-  "from some index on, never `a`".
+```lean
+inductive BinTree where
+  | empty : BinTree
+  | node : BinTree → BinTree → BinTree
+```
 
-These are the two basic "sizes" of a set of indices, and they are dual:
-"eventually `P`" is "not infinitely often not `P`". The pair reappears in
-probability (Borel–Cantelli: `lim sup` and `lim inf` of events), in dynamics
-(Poincaré recurrence), and in topology as two filters on `ℕ`.
+A binary tree is either `empty`, or a `node` with a left and a right subtree. These two
+**constructors** are the only ways to build a tree, so `node empty (node empty empty)`
+is a tree, with two nodes.
 
-A sequence is **recurrent** when every value it takes, it takes infinitely
-often: `0, 1, 0, 1, …` is recurrent, `0, 1, 1, 1, …` is not.
+## Structural recursion
+
+To define a function on trees, say what it does on each constructor. In the `node`
+case, the function may call itself on the subtrees `l` and `r`: they are smaller, so
+the recursion stops.
+
+```lean
+def leaves : BinTree → ℕ
+  | empty => 1
+  | node l r => leaves l + leaves r
+```
+
+`leaves (node empty empty)` is `leaves empty + leaves empty = 2`.
+
+Lists are an inductive type too: a list is either `[]` or `x :: xs` (an element `x` in
+front of a list `xs`), and `[1, 2, 3]` is `1 :: 2 :: 3 :: []`. Functions on lists
+recurse the same way.
+
+## Counting trees
+
+The number of trees with `n` nodes is the `n`-th **Catalan number**: 1, 1, 2, 5, 14, …
+MIL proves it; the referee will check your `size` against it on small trees.
 
 ## Your task
 
-Define `EventuallyEqual`, `InfinitelyOften`, `OnlyFinitelyOften` and
-`Recurrent`.
+Fill in each case. The trap is the case that is easy to forget: a node is itself a
+node, and is counted as one.
 -/
 import Mathlib.Tactic
 
 namespace L26
 
-def EventuallyEqual (u : ℕ → ℕ) (a : ℕ) : Prop :=
-  sorry
+-- binary trees, as in MIL 6.3 (already done)
+inductive BinTree where
+  | empty : BinTree
+  | node : BinTree → BinTree → BinTree
+  deriving DecidableEq
 
-def InfinitelyOften (u : ℕ → ℕ) (a : ℕ) : Prop :=
-  sorry
+open BinTree
 
-def OnlyFinitelyOften (u : ℕ → ℕ) (a : ℕ) : Prop :=
-  sorry
+-- the number of nodes (`empty` has none)
+def size : BinTree → ℕ
+  | empty => sorry
+  | node l r => sorry
 
-def Recurrent (u : ℕ → ℕ) : Prop :=
-  sorry
+-- the height: `empty` has height 0, and a node is one more than its higher subtree
+def height : BinTree → ℕ
+  | empty => sorry
+  | node l r => sorry
+
+-- the mirror image: swap left and right at every node
+def mirror : BinTree → BinTree
+  | empty => sorry
+  | node l r => sorry
+
+-- the sum of a list of natural numbers
+def sumList : List ℕ → ℕ
+  | [] => sorry
+  | x :: xs => sorry
 
 end L26

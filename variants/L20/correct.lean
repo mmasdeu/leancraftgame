@@ -1,8 +1,9 @@
--- from some index on, every term is at least 10 (already done)
-def EventuallyBig (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, 10 ≤ u n
+def TwinPrime (p : ℕ) : Prop := p.Prime ∧ (p + 2).Prime
 
--- f is zero at some n other than 0
-def HasPositiveRoot (f : ℕ → ℕ) : Prop := ∃ n > 0, f n = 0
+def PrimitiveTriple (a b c : ℕ) : Prop := a ^ 2 + b ^ 2 = c ^ 2 ∧ Nat.Coprime a b
 
--- from some index on, every term is 0
-def EventuallyZero (u : ℕ → ℕ) : Prop := ∃ N, ∀ n ≥ N, u n = 0
+def lcm' (a b : ℕ) : ℕ := a * b / Nat.gcd a b
+
+statement prime_two_le {p : ℕ} (hp : p.Prime) : 2 ≤ p
+
+statement coprime_dvd {k m n : ℕ} (H1 : Nat.Coprime k m) (H2 : k ∣ m * n) : k ∣ n

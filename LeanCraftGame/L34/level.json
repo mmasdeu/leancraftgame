@@ -1,82 +1,31 @@
 {
-  "world": "Finite World",
-  "title": "Sums",
-  "skill": "syntax",
-  "exercise": "Define",
-  "public": "all",
-  "hintsAfter": 1,
+  "world": "Hierarchies",
+  "title": "Morphisms",
+  "skill": "writing definitions",
+  "exercise": "Write",
+  "mil": "§8.2",
   "predict": [
-    {
-      "test": "sumBelow 1 = 0 (only 0 is below 1)",
-      "statement": "sumBelow 1 = 0"
-    },
-    {
-      "test": "sumBetween 4 4 = 0 (nothing between 4 and 4)",
-      "statement": "sumBetween 4 4 = 0"
-    },
-    {
-      "test": "squares 0 = 0 (the empty sum)",
-      "statement": "squares 0 = 0"
-    }
+    {"test": "The constant map 0 is a homomorphism of (ℕ, *)", "statement": "The constant map `n ↦ 0` is a homomorphism of the monoid (ℕ, *, 1)."},
+    {"test": "n ↦ n² is a homomorphism of (ℕ, *)", "statement": "`n ↦ n²` is a homomorphism of the monoid (ℕ, *, 1)."}
   ],
+  "public": ["n ↦ n² is a homomorphism of (ℕ, *)", "n ↦ 3n is a homomorphism of (ℤ, +)"],
   "checks": [
-    {
-      "lean": "example : ℕ → ℕ := L34.squares",
-      "message": "Keep `squares : ℕ → ℕ`."
-    },
-    {
-      "lean": "example : ℕ → ℕ := L34.oddSum",
-      "message": "Keep `oddSum : ℕ → ℕ`."
-    },
-    {
-      "lean": "example : ℕ → ℕ := L34.sumBelow",
-      "message": "Keep `sumBelow : ℕ → ℕ`."
-    },
-    {
-      "lean": "example : ℕ → ℕ → ℕ := L34.sumBetween",
-      "message": "Keep `sumBetween : ℕ → ℕ → ℕ` (two inputs)."
-    }
+    {"lean": "#check (@L34.IsMonoidHom : {M N : Type} → [Monoid M] → [Monoid N] → (M → N) → Prop)\n#check (@L34.IsAddMonoidHom : {M N : Type} → [AddMonoid M] → [AddMonoid N] → (M → N) → Prop)\n#check (L34.homNotOnto : ℤ → ℤ)\n#check (L34.bijNotHom : ℤ → ℤ)",
+     "message": "Keep the names and the types of `IsMonoidHom`, `IsAddMonoidHom`, `homNotOnto` and `bijNotHom`."}
   ],
   "hints": [
-    {
-      "match": "squares 4",
-      "steps": [
-        "`Finset.range 4` is `{0, 1, 2, 3}`. Does the sum you want run over exactly those numbers?"
-      ],
-      "hint": "You want 1² up to n². Either `∑ i ∈ Finset.Icc 1 n, i ^ 2` (both ends included), or `∑ i ∈ Finset.range n, (i + 1) ^ 2`."
-    },
-    {
-      "match": "squares",
-      "hint": "Add up `i ^ 2` for `i` running through `Finset.Icc 1 n`: `∑ i ∈ Finset.Icc 1 n, i ^ 2`."
-    },
-    {
-      "match": "oddSum",
-      "steps": [
-        "Which odd number comes first, and how far apart are the odd numbers? Write the k-th one as a formula in `i`."
-      ],
-      "hint": "With `i` running through `Finset.range n` (that is 0, …, n - 1), the odd numbers are `2 * i + 1`: `∑ i ∈ Finset.range n, (2 * i + 1)`."
-    },
-    {
-      "match": "sumBelow",
-      "steps": [
-        "`Finset.range n` is exactly the set of numbers below `n`."
-      ],
-      "hint": "`∑ i ∈ Finset.range n, i`."
-    },
-    {
-      "match": "sumBetween 6 3",
-      "hint": "`Finset.Ico a b` is empty when `b ≤ a`, so the sum is `0` by itself. Did you subtract (`b - a`) or use `range b` minus something? Use `∑ i ∈ Finset.Ico a b, i`."
-    },
-    {
-      "match": "sumBetween",
-      "steps": [
-        "`a` is added, `b` is not. Which of `Icc` and `Ico` leaves out its right end?"
-      ],
-      "hint": "`∑ i ∈ Finset.Ico a b, i`."
-    },
-    {
-      "match": "",
-      "hint": "Re-read the examples in the comments, and check the end points: does your set contain the first and last number you want, and no other?"
-    }
+    {"match": "constant map 0", "steps": ["The constant map 0 respects multiplication: 0 = 0 · 0. What else must a homomorphism of monoids do?"],
+     "hint": "Ask for `f 1 = 1` as well: `f 1 = 1 ∧ ∀ a b, f (a * b) = f a * f b`."},
+    {"match": "2n is a homomorphism of (ℕ, *)", "hint": "`2 · (a · b)` is not `(2a) · (2b)`: your definition must say `f (a * b) = f a * f b` for all `a`, `b`."},
+    {"match": "-n is a homomorphism", "hint": "`-(a · b) ≠ (-a) · (-b)`: check that your condition compares `f (a * b)` with `f a * f b`."},
+    {"match": "Every bundled f : ℕ →* ℤ", "steps": ["A bundled homomorphism has exactly two properties, `map_one` and `map_mul`. Does your definition ask for more?"],
+     "hint": "Ask for exactly `f 1 = 1 ∧ ∀ a b, f (a * b) = f a * f b`, nothing more (no injectivity, no surjectivity)."},
+    {"match": "n + 1 is a homomorphism", "hint": "`n ↦ n + 1` sends 0 to 1: ask for `f 0 = 0`."},
+    {"match": "2ⁿ is a homomorphism of (ℕ, +)", "hint": "The additive version compares `f (a + b)` with `f a + f b` (a sum, not a product)."},
+    {"match": "Every bundled f : ℤ →+ ℤ", "hint": "Ask for exactly `f 0 = 0 ∧ ∀ a b, f (a + b) = f a + f b`."},
+    {"match": "homNotOnto", "steps": ["Which homomorphisms ℤ → ℤ are there? They are all `n ↦ k · n`. Which `k` misses some integer?"],
+     "hint": "`fun n => 2 * n` misses every odd number."},
+    {"match": "bijNotHom", "steps": ["A reflection `n ↦ c - n` is its own inverse. For which `c` is it not a homomorphism?"],
+     "hint": "`fun n => 1 - n` is its own inverse, and sends 0 to 1."}
   ]
 }

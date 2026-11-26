@@ -1,5 +1,10 @@
-def TendsToInfinity (u : ℕ → ℕ) : Prop := ∀ M, ∃ N, ∀ n ≥ N, M ≤ u n
-def good₁ : ℕ → ℕ := fun n => n / 2
-def good₂ : ℕ → ℕ := fun n => n + 3 * (n % 2)
-def bad₁ : ℕ → ℕ := fun n => if n % 2 = 0 then n else 0
-def bad₂ : ℕ → ℕ := fun _ => 7
+inductive BinTree where
+  | empty : BinTree
+  | node : BinTree → BinTree → BinTree
+
+open BinTree
+
+def tn : ℕ := 1
+def dn : ℕ := 6
+def tree : BinTree := node empty empty
+def gn : ℕ := 1

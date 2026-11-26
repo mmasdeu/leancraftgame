@@ -1,50 +1,43 @@
 /-
-# Spot the bug: connectives
+# ∧, ∨ and ↔
 
-A colleague translated four definitions into Lean. Each compiles; each says
-something other than what was meant. Your job is to prove it, the way a
-referee proves a paper wrong: with a **counterexample**, an input on which
-the definition and its intended meaning disagree.
+MIL §3.4–3.5 combine statements:
 
-Read each definition aloud, literally, connective by connective:
+* `P ∧ Q`: both. MIL's first example: `x < y` is the same as `x ≤ y ∧ x ≠ y`.
+* `P ∨ Q`: at least one. MIL's: `x ≤ |y|` holds exactly when `x ≤ y ∨ x ≤ -y`.
+* `P ↔ Q`: `P` and `Q` say the same thing; Mathlib states characterisations this way,
+  such as `abs_lt : |a| < b ↔ -b < a ∧ a < b`.
 
-* `13 ≤ n ∨ n ≤ 19`: "at least 13, *or* at most 19". Which numbers fail
-  that?
-* `¬ Nat.Prime n`: what about the numbers that are neither prime nor
-  composite?
-* `¬ (2 ∣ a ∧ 2 ∣ b)` only looks at the prime 2.
-* `¬ a % 2 = 0 ∧ b % 2 = 0`: where does the `¬` stop? (`¬` binds tighter
-  than `∧`.)
+## Precedence
 
-Some definitions are **too weak** (they accept things they should reject)
-and some are **too strong** (they reject things they should accept). Decide
-which before hunting.
+From tightest to loosest: `¬`, then `∧`, then `∨`, then `→` and `↔`. So
+`P ∧ Q → R` is `(P ∧ Q) → R`, and `¬ P ∨ Q` is `(¬ P) ∨ Q`.
+
+## The trap: `→` under `∃`
+
+"`f` has a zero in `[a, b]`" is `∃ x, a ≤ x ∧ x ≤ b ∧ f x = 0`: one `x` that satisfies
+all three. It is tempting to write `∃ x, a ≤ x ∧ x ≤ b → f x = 0`, which is a different
+statement: it is true as soon as some `x` lies *outside* `[a, b]`, because an implication
+with a false hypothesis is true. Under `∀`, use `→`; under `∃`, use `∧`.
 
 ## Your task
 
-For each definition, give an input where it gives the wrong answer. The
-referee evaluates the colleague's definitions on your inputs (its own copy:
-editing the definitions above changes nothing) and checks that your inputs
-really are counterexamples.
--/
+State MIL's three characterisations, for all reals `x` and `y`:
 
+1. `lt_iff'`: `x < y ↔ x ≤ y ∧ x ≠ y`;
+2. `abs_lt'`: `|x| < y ↔ -y < x ∧ x < y`;
+3. `le_abs'`: `x ≤ |y| ↔ x ≤ y ∨ x ≤ -y`.
+
+Then define `HasZeroIn f a b`: `f` has a zero in the closed interval `[a, b]`.
+-/
 namespace L11
 
--- A colleague's definitions (to read: the referee uses its own copy).
-def InRange (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19              -- meant: 13 ≤ n ≤ 19
-def IsComposite (n : Nat) : Prop := ¬ Nat.Prime n               -- meant: composite
-def Coprime (a b : Nat) : Prop := ¬ (2 ∣ a ∧ 2 ∣ b)            -- meant: gcd a b = 1
-def BothOdd (a b : Nat) : Prop := ¬ a % 2 = 0 ∧ b % 2 = 0      -- meant: a and b odd
+statement lt_iff' : sorry
 
--- accepted by InRange, but not between 13 and 19
-def r : Nat := sorry
--- accepted by IsComposite, but not composite
-def c : Nat := sorry
--- accepted by Coprime, but with a common factor
-def ca : Nat := sorry
-def cb : Nat := sorry
--- two odd numbers that BothOdd rejects
-def oa : Nat := sorry
-def ob : Nat := sorry
+statement abs_lt' : sorry
+
+statement le_abs' : sorry
+
+def HasZeroIn (f : ℝ → ℝ) (a b : ℝ) : Prop := sorry
 
 end L11

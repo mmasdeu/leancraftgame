@@ -1,43 +1,36 @@
 {
-  "world": "Structure World",
-  "title": "Morphisms",
-  "skill": "writing",
-  "exercise": "Classify",
+  "world": "Differential Calculus",
+  "title": "Derivatives",
+  "skill": "writing statements",
+  "exercise": "Write",
+  "mil": "§12.1",
   "predict": [
-    {
-      "test": "The constant map 0 is a homomorphism from (ℕ, +) to (ℕ, ·)",
-      "statement": "the constant map 0 is a homomorphism from (ℕ, +, 0) to (ℕ, ·, 1)"
-    },
-    {
-      "test": "The zero map is an additive homomorphism",
-      "statement": "the zero map is a homomorphism from (ℕ, +, 0) to itself"
-    }
+    {"test": "In Mathlib, deriv (fun x => |x|) 0 = 0", "statement": "In Mathlib, `deriv (fun x : ℝ => |x|) 0 = 0`, although `|x|` is not differentiable at 0."}
+  ],
+  "public": ["d3 is the derivative of x ↦ x³ at 2"],
+  "questions": [
+    {"answer": "q1", "text": "Mathlib's Rolle theorem has no hypothesis that `f` is differentiable. Why is it still true?",
+     "choices": ["every function continuous on `[a, b]` is differentiable on `(a, b)`",
+                 "at a point where `f` is not differentiable, `deriv f c` is `0` anyway, so an extremum in `(a, b)` is a witness either way",
+                 "it is false: Mathlib has a bug",
+                 "Lean's `ℝ` only contains differentiable functions"]},
+    {"answer": "q2", "text": "True or false: `HasDerivAt f 3 2` says that the derivative of `f` at `3` is `2`."}
   ],
   "checks": [
-    {
-      "lean": "example : (ℕ → ℕ) → Prop := L48.IsAddHom\nexample : (ℕ → ℕ) → Prop := L48.IsExpHom\nexample : ℕ → ℕ := L48.homNotOnto\nexample : ℕ → ℕ := L48.bijNotHom",
-      "message": "Keep `IsAddHom`, `IsExpHom : (ℕ → ℕ) → Prop` and the two maps `ℕ → ℕ`."
-    }
+    {"lean": "#check (L48.d3 : ℝ)\n#check (L48.sq_hasDeriv : Prop)\n#check (L48.rolle : Prop)\n#check (L48.mvt : Prop)\n#check (L48.q1 : Fin 4)\n#check (L48.q2 : Bool)",
+     "message": "Keep the names and kinds: `d3 : ℝ`, the three `statement`s, `q1 : Fin 4` and `q2 : Bool`."}
   ],
   "hints": [
-    {
-      "match": "homNotOnto",
-      "hint": "`fun n => 2 * n` misses every odd number."
-    },
-    {
-      "match": "bijNotHom",
-      "hint": "Swap `0` and `1`: `fun n => if n = 0 then 1 else if n = 1 then 0 else n`."
-    },
-    {
-      "match": "(ℕ, ·)",
-      "steps": [
-        "The identity of `(ℕ, +)` is `0`; of `(ℕ, ·)` it is `1`."
-      ],
-      "hint": "`f 0 = 1 ∧ ∀ a b, f (a + b) = f a * f b`."
-    },
-    {
-      "match": "",
-      "hint": "`f 0 = 0 ∧ ∀ a b, f (a + b) = f a + f b`."
-    }
+    {"match": "|x|", "hint": "`deriv` is a total function: where there is no derivative, its value is `0`."},
+    {"match": "d3", "steps": ["`deriv` takes a function and a point: `deriv (fun x : ℝ => …) …`."],
+     "hint": "`deriv (fun x : ℝ => x ^ 3) 2`, which is `3 · 2² = 12`."},
+    {"match": "sq_hasDeriv", "steps": ["In `HasDerivAt f f' x`, which argument is the derivative and which is the point?"],
+     "hint": "`statement sq_hasDeriv : HasDerivAt (fun x : ℝ => x ^ 2) 6 3`: the derivative `6` comes before the point `3`."},
+    {"match": "rolle", "steps": ["Three hypotheses: `a < b`, `ContinuousOn f (Set.Icc a b)`, `f a = f b`. Did you add one that Mathlib does not need?"],
+     "hint": "`statement rolle (f : ℝ → ℝ) (a b : ℝ) (hab : a < b) (hfc : ContinuousOn f (Set.Icc a b)) (hfab : f a = f b) : ∃ c ∈ Set.Ioo a b, deriv f c = 0`."},
+    {"match": "mvt", "steps": ["The slope of the chord from `(a, f a)` to `(b, f b)`: which difference goes on top, and which below?"],
+     "hint": "`statement mvt (f : ℝ → ℝ) (a b : ℝ) (hab : a < b) (hfc : ContinuousOn f (Set.Icc a b)) (hfd : DifferentiableOn ℝ f (Set.Ioo a b)) : ∃ c ∈ Set.Ioo a b, deriv f c = (f b - f a) / (b - a)`."},
+    {"match": "Question 1", "hint": "Think of the junk value: what is `deriv f c` where `f` has no derivative?"},
+    {"match": "Question 2", "hint": "`HasDerivAt f f' x`: the derivative `f'` comes before the point `x`. So `HasDerivAt f 3 2` says the derivative at `2` is `3`."}
   ]
 }

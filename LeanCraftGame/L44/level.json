@@ -1,40 +1,26 @@
 {
-  "world": "Structure World",
-  "title": "Declaring a structure",
-  "skill": "syntax",
-  "exercise": "Define",
-  "public": "all",
-  "hintsAfter": 1,
+  "world": "Topology",
+  "title": "Metric spaces",
+  "skill": "writing definitions",
+  "exercise": "Write",
+  "mil": "§11.2",
+  "predict": [
+    {"test": "(x - y)² is not a metric", "statement": "`(x - y) ^ 2` is a distance on the points 0, 1, 2, 3."},
+    {"test": "the zero distance is not a metric", "statement": "The distance that is always `0` is a metric."}
+  ],
+  "public": ["|x - y| on {0, 1, 2, 3} is a metric", "x - y is not a metric"],
   "checks": [
-    {
-      "lean": "example : ℤ → ℤ → L44.GaussInt := L44.GaussInt.mk",
-      "message": "`GaussInt` needs two integer fields, `re` and `im`, in this order."
-    },
-    {
-      "lean": "example : L44.GaussInt := L44.I\nexample : L44.GaussInt := L44.z34\nexample : L44.GaussInt → ℤ := L44.normSq\nexample : L44.GaussInt → L44.GaussInt := L44.conjugate\nexample : L44.GaussInt → L44.Point := L44.toPoint",
-      "message": "Keep the types: `I z34 : GaussInt`, `normSq : GaussInt → ℤ`, `conjugate : GaussInt → GaussInt`, `toPoint : GaussInt → Point`."
-    }
+    {"lean": "#check fun (α : Type) (d : α → α → ℤ) => L44.Metric'.mk d", "message": "`Metric'` needs the field `dist : α → α → ℤ` first, then your axioms."},
+    {"lean": "#check (L44.UnifCont : (ℝ → ℝ) → Prop)", "message": "Keep `UnifCont : (ℝ → ℝ) → Prop`."}
   ],
   "hints": [
-    {
-      "match": "first field",
-      "hint": "Inside `structure GaussInt where`, write two lines: `re : ℤ` and `im : ℤ`."
-    },
-    {
-      "match": "normSq",
-      "hint": "`z.re ^ 2 + z.im ^ 2`."
-    },
-    {
-      "match": "conjugate",
-      "hint": "`⟨z.re, -z.im⟩`."
-    },
-    {
-      "match": "toPoint",
-      "hint": "`⟨z.re, z.im⟩`: the same numbers, in a `Point`."
-    },
-    {
-      "match": "",
-      "hint": "`⟨0, 1⟩` builds a `GaussInt` from its two fields, in order."
-    }
+    {"match": "x - y is not", "steps": ["What is the distance from 0 to 1, and from 1 to 0?"], "hint": "A distance is symmetric: add `symm : ∀ a b, dist a b = dist b a`, or ask that it be nonnegative."},
+    {"match": "(x - y)²", "steps": ["Compare the distance from 0 to 2 with the distances 0 to 1 and 1 to 2."], "hint": "`4 > 1 + 1`: add the triangle inequality `∀ a b c, dist a c ≤ dist a b + dist b c`."},
+    {"match": "zero distance", "steps": ["Which axiom says that different points are at a positive distance?"], "hint": "Add `eq_zero : ∀ a b, dist a b = 0 ↔ a = b`."},
+    {"match": "constant distance 1", "hint": "The distance from a point to itself must be `0`: `∀ a b, dist a b = 0 ↔ a = b`."},
+    {"match": "one-way", "hint": "Going from 3 to 0 costs twice as much as from 0 to 3: symmetry rules it out."},
+    {"match": "is a metric", "hint": "A genuine metric breaks one of your axioms, and the report names it. Is that axiom true for `|x - y|`? Watch the direction of `≤` in the triangle inequality."},
+    {"match": "UnifCont", "steps": ["The order: `∀ ε > 0`, then `∃ δ > 0`, then `∀ x y`. Where does pointwise continuity put `∀ x`?"],
+     "hint": "`∀ ε > 0, ∃ δ > 0, ∀ x y, dist x y < δ → dist (f x) (f y) < ε`."}
   ]
 }

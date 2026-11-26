@@ -1,14 +1,8 @@
--- the Collatz map (from the Foundations world)
-def collatz (n : Nat) : Nat := if n % 2 = 0 then n / 2 else 3 * n + 1
-
--- n is even (already done)
-def IsEven (n : Nat) : Prop := n % 2 = 0
-
--- a divides b: b is a multiple of a (write it with %, not with ∣)
-def Divides (a b : Nat) : Prop := b % a = 0
-
--- (a, b, c) is a Pythagorean triple: a² + b² = c²
-def IsPythagorean (a b c : Nat) : Prop := a ^ 2 + b ^ 2 = c ^ 2
-
--- n is a fixed point of the Collatz map
-def IsFixed (n : Nat) : Prop := collatz n = n
+def a₁ : ℕ := 0
+def b₁ : ℕ := 1
+def a₂ : ℝ := -2
+def b₂ : ℝ := 1
+def x₃ : ℝ := 1
+def y₃ : ℝ := 0
+statement sq_le_sq_of_le (a b : ℝ) (ha : 0 ≤ a) (hab : a ≤ b) : a ^ 2 ≤ b ^ 2
+statement div_mul_cancel_ok (x y : ℝ) (h : y ≠ 0) : x / y * y = x

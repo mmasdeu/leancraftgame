@@ -1,33 +1,45 @@
-/- Hidden test battery for Level Functions on structures. -/
+/- Hidden test battery for Level 45: Topological spaces. -/
 import LeanCraftGame.Referee
+import LeanCraftGame.Lib.Topology
 import LeanCraftGame.L45.Player
 
-open L45 L45.GaussInt
+open L45 Top
 
-#no_sorry GaussInt.add
-#no_sorry GaussInt.mul
-#no_sorry GaussInt.pow
-#level_start "Functions on structures"
+#no_sorry mySierpinski
+#no_sorry myParticular
+#no_sorry IsCont
+#level_start "Topological spaces"
 
-#expect_true "(1 + 2i) + (3 - i) = 4 + i" unfolding GaussInt.add :
-  (GaussInt.add ⟨1, 2⟩ ⟨3, -1⟩).re = 4 ∧ (GaussInt.add ⟨1, 2⟩ ⟨3, -1⟩).im = 1
-#expect_true "i · i = -1" unfolding GaussInt.mul :
-  (GaussInt.mul ⟨0, 1⟩ ⟨0, 1⟩).re = -1 ∧ (GaussInt.mul ⟨0, 1⟩ ⟨0, 1⟩).im = 0
-#expect_true "(2 + i)(2 - i) = 5: the prime 5 splits" unfolding GaussInt.mul :
-  (GaussInt.mul ⟨2, 1⟩ ⟨2, -1⟩).re = 5 ∧ (GaussInt.mul ⟨2, 1⟩ ⟨2, -1⟩).im = 0
-#expect_true "(1 + 2i)(2 + 3i) = -4 + 7i, and 65 = 4² + 7²" unfolding GaussInt.mul GaussInt.normSq :
-  (GaussInt.mul ⟨1, 2⟩ ⟨2, 3⟩).re = -4 ∧ (GaussInt.mul ⟨1, 2⟩ ⟨2, 3⟩).im = 7 ∧ (GaussInt.mul ⟨1, 2⟩ ⟨2, 3⟩).normSq = 65
-#expect_true "(1 + 2i)(2 - 3i) = 8 + i, and 65 = 8² + 1²" unfolding GaussInt.mul :
-  (GaussInt.mul ⟨1, 2⟩ ⟨2, -3⟩).re = 8 ∧ (GaussInt.mul ⟨1, 2⟩ ⟨2, -3⟩).im = 1
-#expect_true "mul is commutative (all coordinates in [-2, 2])" unfolding GaussInt.mul :
-  ∀ a ∈ Finset.Icc (-2 : ℤ) 2, ∀ b ∈ Finset.Icc (-2 : ℤ) 2, ∀ c ∈ Finset.Icc (-2 : ℤ) 2, ∀ d ∈ Finset.Icc (-2 : ℤ) 2, (GaussInt.mul ⟨a, b⟩ ⟨c, d⟩).re = (GaussInt.mul ⟨c, d⟩ ⟨a, b⟩).re ∧ (GaussInt.mul ⟨a, b⟩ ⟨c, d⟩).im = (GaussInt.mul ⟨c, d⟩ ⟨a, b⟩).im
-#expect_true "The norm is multiplicative (all coordinates in [-2, 2])" unfolding GaussInt.mul GaussInt.normSq :
-  ∀ a ∈ Finset.Icc (-2 : ℤ) 2, ∀ b ∈ Finset.Icc (-2 : ℤ) 2, ∀ c ∈ Finset.Icc (-2 : ℤ) 2, ∀ d ∈ Finset.Icc (-2 : ℤ) 2, (GaussInt.mul ⟨a, b⟩ ⟨c, d⟩).normSq = (GaussInt.normSq ⟨a, b⟩) * (GaussInt.normSq ⟨c, d⟩)
-#expect_true "z⁰ = 1" unfolding GaussInt.pow :
-  (GaussInt.pow ⟨5, 7⟩ 0).re = 1 ∧ (GaussInt.pow ⟨5, 7⟩ 0).im = 0
-#expect_true "i⁴ = 1" unfolding GaussInt.pow GaussInt.mul :
-  (GaussInt.pow ⟨0, 1⟩ 4).re = 1 ∧ (GaussInt.pow ⟨0, 1⟩ 4).im = 0
-#expect_true "(1 + i)⁴ = -4" unfolding GaussInt.pow GaussInt.mul :
-  (GaussInt.pow ⟨1, 1⟩ 4).re = -4 ∧ (GaussInt.pow ⟨1, 1⟩ 4).im = 0
+-- the axioms: the standard examples are accepted, impostors are not
+#expect_model "Sierpiński space satisfies your axioms" :
+  FinTopology.mk (n := 2) sierpinski
+#expect_model "The particular-point topology at 0 on 3 points satisfies your axioms" :
+  FinTopology.mk (n := 3) (particularPoint 3 0)
+#expect_model "The discrete topology on 3 points satisfies your axioms" :
+  FinTopology.mk (n := 3) (discrete 3)
+#expect_not_model "{∅, {0}} on 2 points is ruled out" :
+  FinTopology.mk (n := 2) {∅, {0}}
+#expect_not_model "{∅, {0, 1}, {1, 2}, {0, 1, 2}} is ruled out" :
+  FinTopology.mk (n := 3) {∅, {0, 1}, {1, 2}, Finset.univ}
+#expect_not_model "{∅, {0}, {1}, {0, 1, 2}} is ruled out" :
+  FinTopology.mk (n := 3) {∅, {0}, {1}, Finset.univ}
+
+-- the gallery
+#expect_true "Your Sierpiński space is the referee's" unfolding mySierpinski :
+  mySierpinski = sierpinski
+#expect_true "Your particular-point topology at 0 on 3 points has the right open sets" unfolding myParticular :
+  myParticular 3 0 = particularPoint 3 0
+#expect_true "Your particular-point topology at 2 on 3 points has the right open sets" unfolding myParticular :
+  myParticular 3 2 = particularPoint 3 2
+
+-- continuity
+#expect_true "The identity of Sierpiński space is continuous" unfolding IsCont Ref.pre :
+  IsCont sierpinski sierpinski id
+#expect_false "The identity from Sierpiński space to the discrete space on {0, 1} is continuous" unfolding IsCont Ref.pre :
+  IsCont sierpinski (discrete 2) id
+#expect_true "The identity from the discrete space on {0, 1} to Sierpiński space is continuous" unfolding IsCont Ref.pre :
+  IsCont (discrete 2) sierpinski id
+#expect_false "Swapping the two points of Sierpiński space is continuous" unfolding IsCont Ref.pre :
+  IsCont sierpinski sierpinski ![1, 0]
 
 #level_report

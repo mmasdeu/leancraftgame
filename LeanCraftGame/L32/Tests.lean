@@ -1,86 +1,31 @@
-/- Hidden test battery for Level Relations. -/
+/- Hidden test battery for Level 32: Classes and instances. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L32.Player
 
 open L32
 
-#no_sorry Reflexive'
-#no_sorry Symmetric'
-#no_sorry Transitive'
-#no_sorry Antisymmetric'
-#no_sorry IsEquivalence'
-#no_sorry IsPartialOrder'
-#level_start "Relations"
+#no_sorry L32.boolXor
+#no_sorry L32.intAdd
+#no_sorry L32.endo
+#level_start "Classes and instances"
 
-#expect_true "Reflexive' (· ≤ ·) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Reflexive' (· ≤ ·)
-#expect_false "Reflexive' (· < ·) is false" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Reflexive' (· < ·)
-#expect_true "Reflexive' (· ∣ ·) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Reflexive' (· ∣ ·)
-#expect_true "Reflexive' (fun a b => a % 3 = b % 3) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Reflexive' (fun a b => a % 3 = b % 3)
-#expect_false "Reflexive' (fun a b => a ≠ b) is false" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Reflexive' (fun a b => a ≠ b)
-#expect_false "Reflexive' (fun _ _ => False) is false" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Reflexive' (fun _ _ => False)
-#expect_true "Reflexive' (fun _ _ => True) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Reflexive' (fun _ _ => True)
-#expect_false "Symmetric' (· ≤ ·) is false" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Symmetric' (· ≤ ·)
-#expect_false "Symmetric' (· < ·) is false" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Symmetric' (· < ·)
-#expect_false "Symmetric' (· ∣ ·) is false" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Symmetric' (· ∣ ·)
-#expect_true "Symmetric' (fun a b => a % 3 = b % 3) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Symmetric' (fun a b => a % 3 = b % 3)
-#expect_true "Symmetric' (fun a b => a ≠ b) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Symmetric' (fun a b => a ≠ b)
-#expect_true "Symmetric' (fun _ _ => False) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Symmetric' (fun _ _ => False)
-#expect_true "Symmetric' (fun _ _ => True) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Symmetric' (fun _ _ => True)
-#expect_true "Transitive' (· ≤ ·) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Transitive' (· ≤ ·)
-#expect_true "Transitive' (· < ·) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Transitive' (· < ·)
-#expect_true "Transitive' (fun a b => a % 3 = b % 3) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Transitive' (fun a b => a % 3 = b % 3)
-#expect_false "Transitive' (fun a b => a ≠ b) is false" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Transitive' (fun a b => a ≠ b)
-#expect_true "Transitive' (fun _ _ => False) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Transitive' (fun _ _ => False)
-#expect_true "Transitive' (fun _ _ => True) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Transitive' (fun _ _ => True)
-#expect_true "Antisymmetric' (· ≤ ·) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Antisymmetric' (· ≤ ·)
-#expect_true "Antisymmetric' (· < ·) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Antisymmetric' (· < ·)
-#expect_false "Antisymmetric' (fun a b => a ≠ b) is false" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Antisymmetric' (fun a b => a ≠ b)
-#expect_true "Antisymmetric' (fun _ _ => False) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Antisymmetric' (fun _ _ => False)
-#expect_false "Antisymmetric' (fun _ _ => True) is false" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Antisymmetric' (fun _ _ => True)
-#expect_true "IsEquivalence' (fun a b => a % 3 = b % 3) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  IsEquivalence' (fun a b => a % 3 = b % 3)
-#expect_true "IsEquivalence' (fun _ _ => True) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  IsEquivalence' (fun _ _ => True)
-#expect_false "IsEquivalence' (fun _ _ => False) is false" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  IsEquivalence' (fun _ _ => False)
-#expect_false "IsEquivalence' (fun a b => a ≠ b) is false" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  IsEquivalence' (fun a b => a ≠ b)
-#expect_true "IsPartialOrder' (· ≤ ·) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  IsPartialOrder' (· ≤ ·)
-#expect_false "IsPartialOrder' (fun _ _ => False) is false" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  IsPartialOrder' (fun _ _ => False)
-#expect_false "IsPartialOrder' (· ≠ ·) is false" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  IsPartialOrder' (fun a b => a ≠ b)
-#expect_true "IsPartialOrder' (· = ·) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  IsPartialOrder' (fun a b => a = b)
-#expect_false "Antisymmetric' (differ by at most 1) is false" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Antisymmetric' (fun a b => a ≤ b + 1 ∧ b ≤ a + 1)
-#expect_true "Symmetric' (differ by at most 1) is true" unfolding Reflexive' Symmetric' Transitive' Antisymmetric' IsEquivalence' IsPartialOrder' :
-  Symmetric' (fun a b => a ≤ b + 1 ∧ b ≤ a + 1)
+#expect_true "mpow 2 10 = 1024 in (ℕ, *)" :
+  mpow (2 : ℕ) 10 = 1024
+#expect_true "In (Bool, xor): mpow true 3 = true and mpow true 4 = false" :
+  mpow true 3 = true ∧ mpow true 4 = false
+#expect_true "(Bool, xor) is associative, with unit false on both sides" :
+  ∀ a b c : Bool, (a ⋄ b) ⋄ c = a ⋄ (b ⋄ c) ∧ One₁.one ⋄ a = a ∧ a ⋄ One₁.one = a
+#expect_true "In (Bool, xor) every element is its own inverse" :
+  ∀ a : Bool, a ⋄ a = One₁.one
+#expect_true "In (ℤ, +): mpow 5 3 = 15 and mpow (-2) 4 = -8" :
+  mpow (5 : ℤ) 3 = 15 ∧ mpow (-2 : ℤ) 4 = -8
+#expect_true "In (ℤ, +): the unit is a unit on both sides" :
+  One₁.one ⋄ (7 : ℤ) = 7 ∧ (-3 : ℤ) ⋄ One₁.one = -3 ∧ (2 : ℤ) ⋄ 3 = 5
+#expect_true "In (ℕ → ℕ, ∘): mpow (fun n => n + 3) 4 sends 0 to 12" :
+  mpow (fun n : ℕ => n + 3) 4 0 = 12
+#expect_true "f ⋄ g is \"first g, then f\": (· * 2) ⋄ (· + 1) sends 5 to 12" :
+  ((fun n : ℕ => n * 2) ⋄ (fun n => n + 1)) 5 = 12
+#expect_true "The unit of (ℕ → ℕ, ∘) is the identity" :
+  (One₁.one : ℕ → ℕ) 7 = 7 ∧ (One₁.one : ℕ → ℕ) 0 = 0
 
 #level_report

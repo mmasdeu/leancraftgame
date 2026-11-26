@@ -1,71 +1,31 @@
 {
-  "world": "Analysis World",
-  "title": "Cauchy sequences",
-  "skill": "writing",
-  "exercise": "Define",
-  "predict": [
-    {
-      "test": "1, 0, 0, 0, … is Cauchy: the first terms never matter",
-      "statement": "IsCauchy (fun n => if n = 0 then 1 else 0)"
-    },
-    {
-      "test": "0, 1, 2, 3, … is not Cauchy",
-      "statement": "IsCauchy (fun n => (n : ℝ))"
-    },
-    {
-      "test": "7, 7, 7, 7, 7, 0, 0, 0, … is eventually constant",
-      "statement": "IsEventuallyConstant (fun n => if n < 5 then 7 else 0)"
-    }
+  "world": "Linear Algebra",
+  "title": "Endomorphisms",
+  "skill": "reading and writing statements",
+  "exercise": "Read",
+  "mil": "§10.3",
+  "public": "all",
+  "questions": [
+    {"answer": "q1", "text": "What is `Module.End K V`?",
+     "choices": ["the matrices with entries in `K`", "the elements of `V` fixed by every linear map", "the linear maps from `V` to itself", "the field automorphisms of `K`"]},
+    {"answer": "q2", "text": "True or false: by Mathlib's definition, `0` is an eigenvector of every endomorphism, for every `μ`."},
+    {"answer": "q3", "text": "What is the type of `minpoly K f`?",
+     "choices": ["`K`", "`K[X]`, the polynomials over `K`", "`Module.End K V`", "`ℕ`, its degree"]},
+    {"answer": "q4", "text": "True or false: every endomorphism of a nontrivial finite-dimensional *real* vector space has a real eigenvalue."}
   ],
   "checks": [
-    {
-      "lean": "example : (ℕ → ℝ) → Prop := L41.IsEventuallyConstant",
-      "message": "Keep `IsEventuallyConstant : (ℕ → ℝ) → Prop`."
-    },
-    {
-      "lean": "example : (ℕ → ℝ) → Prop := L41.IsCauchy",
-      "message": "Keep `IsCauchy : (ℕ → ℝ) → Prop`."
-    }
+    {"lean": "#check (L41.exists_eig : Prop)\n#check (L41.ev₁ : ℚ)\n#check (L41.vec₁ : Fin 2 → ℚ)\n#check (L41.ev₂ : ℚ)\n#check (L41.vec₂ : Fin 2 → ℚ)",
+     "message": "Keep `exists_eig` a `statement`, `ev₁ ev₂ : ℚ` and `vec₁ vec₂ : Fin 2 → ℚ`."}
   ],
   "hints": [
-    {
-      "match": "is eventually constant",
-      "hint": "The first terms should not matter: the condition is only about the terms from `N` on, `∀ n ≥ N, …`."
-    },
-    {
-      "match": "not eventually constant",
-      "hint": "Your definition accepts a sequence that takes the value `u N` only once. *Every* term from `N` on must equal `u N`: `∀ n ≥ N, u n = u N`."
-    },
-    {
-      "match": "constant sequence 3 is Cauchy",
-      "hint": "Even a constant sequence fails: did you forget `ε > 0`? With `ε = 0` no two terms are \"within `ε`\" of each other."
-    },
-    {
-      "match": "first terms never matter",
-      "steps": [
-        "In `1, 0, 0, 0, …`, which pair of terms is far apart? Are both of them beyond `N` when `N` is large?"
-      ],
-      "hint": "Both indices must be at least `N`: `∀ m ≥ N, ∀ n ≥ N, |u m - u n| < ε`. If `n` is free, the wild first term `u 0` spoils it."
-    },
-    {
-      "match": "7, 7, 7",
-      "hint": "Both indices must be at least `N`: `∀ m ≥ N, ∀ n ≥ N, |u m - u n| < ε`."
-    },
-    {
-      "match": "is not Cauchy",
-      "steps": [
-        "Your definition accepts a sequence whose terms stay far apart. Which two terms of it, however far you go, are at distance 1?",
-        "Does your definition say \"*any* two terms\" or \"*some* two terms\"?"
-      ],
-      "hint": "Use `∀ m ≥ N, ∀ n ≥ N` for the two indices: with `∃`, one pair (even `m = n`) would be enough."
-    },
-    {
-      "match": "",
-      "steps": [
-        "Read your definitions aloud, and compare them with the sentences in the lesson, clause by clause.",
-        "Check the mistakes listed under \"What can go wrong\" in the lesson."
-      ],
-      "hint": "`IsEventuallyConstant u := ∃ N, ∀ n ≥ N, u n = u N`, and `IsCauchy u := ∀ ε > 0, ∃ N, ∀ m ≥ N, ∀ n ≥ N, |u m - u n| < ε`."
-    }
+    {"match": "Question 1", "hint": "`Module.End R M` is an abbreviation for `M →ₗ[R] M`."},
+    {"match": "Question 2", "hint": "`HasEigenvector f μ x` is `x ∈ eigenspace f μ ∧ x ≠ 0`."},
+    {"match": "Question 3", "hint": "The minimal polynomial is a polynomial: `K[X]`."},
+    {"match": "Question 4", "hint": "The quarter turn `(x, y) ↦ (-y, x)` of `ℝ²` sends no nonzero vector to a multiple of itself."},
+    {"match": "exists_eig", "steps": ["List the hypotheses: the type `V`, its additive group, the `ℂ`-module structure, finite dimension, nontriviality, then the endomorphism `f`.", "The conclusion is `∃ c : ℂ, f.HasEigenvalue c`."],
+     "hint": "`statement exists_eig {V : Type} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V] [Nontrivial V] (f : Module.End ℂ V) : ∃ c : ℂ, f.HasEigenvalue c`."},
+    {"match": "ev₁ •", "steps": ["`A` is upper triangular: its eigenvalues are on the diagonal."], "hint": "`ev₁ = 2` with `vec₁ = ![1, 0]`."},
+    {"match": "ev₂ •", "steps": ["For `ev₂ = 3` solve `2x + y = 3x`, that is `y = x`."], "hint": "`ev₂ = 3` with `vec₂ = ![1, 1]`."},
+    {"match": "zero vector", "hint": "An eigenvector must not be `0`: `A *ᵥ 0 = c • 0` holds for every `c`, which says nothing."}
   ]
 }

@@ -1,41 +1,62 @@
 /-
-# Bounded and monotone
+# Finset and Fintype
 
-The monotone convergence theorem says that a bounded monotone sequence of
-reals converges. Both hypotheses are definitions, and both come in
-variants that are easy to confuse. We use integer-valued sequences
-`u : ℕ → ℤ`, so that "bounded below" is a real condition.
+MIL's chapter on discrete mathematics starts with **finite sets**. Mathlib has two
+notions of set, and the difference matters:
 
-* **bounded above**: some `M` is at least every term (`∃ M, ∀ n, u n ≤ M`:
-  one `M` for all `n`, so `∃` comes first).
-* **bounded**: bounded above *and* below. With integers, "`|u n| ≤ M` for
-  some `M`" is equivalent.
-* **non-decreasing**: `m ≤ n → u m ≤ u n` for all `m`, `n`. Comparing
-  consecutive terms, `u n ≤ u (n + 1)`, is equivalent (by induction), and
-  the referee accepts either.
-* **strictly increasing**: `m < n → u m < u n`.
+* `Set α` is a predicate on `α`: `{n | Even n}` may be infinite, and Lean cannot
+  compute with it.
+* `Finset α` is a *finite* set that Lean can compute with: it can list its elements,
+  count them (`s.card`, also written `#s`), and decide whether `3 ∈ s`.
 
-Constant sequences are non-decreasing and not strictly increasing: a
-boundary case worth predicting.
+## Building finsets
+
+```lean
+Finset.range 5                       -- {0, 1, 2, 3, 4}: 5 itself is NOT in it
+Finset.Icc 1 5                       -- {1, 2, 3, 4, 5}: both ends included
+Finset.Ico 1 5                       -- {1, 2, 3, 4}
+(Finset.range 10).filter (fun n => n % 3 = 0)        -- {0, 3, 6, 9}
+(Finset.range 4).image (fun n => 2 * n)              -- {0, 2, 4, 6}
+({1, 2, 3} : Finset ℕ).powerset                      -- all 8 subsets
+({1, 2, 3} : Finset ℕ).card                          -- 3
+```
+
+* `s.filter p` keeps the elements that satisfy `p`.
+* `s.image f` applies `f` to every element (and removes repetitions).
+* `s.powerset` is the finset of all subsets of `s`: a `Finset (Finset α)`.
+
+`Finset.range n` is the most used finset in Mathlib, and the most common source of
+off-by-one errors: it stops **before** `n`.
+
+## Fintype
+
+A *type* can be finite too: `Bool`, `Fin n = {0, …, n-1}`, products and function types
+between finite types. For those, `Finset.univ` is the finset of all elements, and
+`Fintype.card α` counts them:
+
+```lean
+Fintype.card (Fin 3)          -- 3
+Fintype.card (Fin 3 × Bool)   -- 6
+```
 
 ## Your task
 
-Define `BoundedAbove`, `Bounded`, `NonDecreasing` and `StrictlyIncreasing`.
+Write the four definitions. The referee computes with them.
 -/
 import Mathlib.Tactic
 
 namespace L24
 
-def BoundedAbove (u : ℕ → ℤ) : Prop :=
-  sorry
+-- the divisors of n among 0, 1, …, n     (divs 12 = {1, 2, 3, 4, 6, 12})
+def divs (n : ℕ) : Finset ℕ := sorry
 
-def Bounded (u : ℕ → ℤ) : Prop :=
-  sorry
+-- the squares 0², 1², …, n², n included   (squaresUpTo 2 = {0, 1, 4})
+def squaresUpTo (n : ℕ) : Finset ℕ := sorry
 
-def NonDecreasing (u : ℕ → ℤ) : Prop :=
-  sorry
+-- the subsets of s that have exactly k elements
+def subsetsOfSize (s : Finset ℕ) (k : ℕ) : Finset (Finset ℕ) := sorry
 
-def StrictlyIncreasing (u : ℕ → ℤ) : Prop :=
-  sorry
+-- the number of functions Fin 3 → Bool, computed with `Fintype.card`
+def numFns : ℕ := sorry
 
 end L24

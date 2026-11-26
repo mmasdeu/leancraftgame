@@ -1,7 +1,7 @@
-def Periodic (u : ℕ → ℕ) : Prop := ∃ p > 0, ∀ n, u (n + p) = u n
+statement irr_sqrt2 : Irrational (√2)
 
-def EventuallyConstant (u : ℕ → ℕ) : Prop := ∃ N c, ∀ n ≥ N, u n = c
+statement no_rat_sqrt : ¬ ∃ q : ℚ, (q : ℝ) = √2
 
-def HasMaximum (u : ℕ → ℕ) : Prop := ∃ m, ∀ n, u n ≤ u m
+statement sqrt2_nat : ∀ m n : ℕ, Nat.Coprime m n → m ^ 2 ≠ 2 * n ^ 2
 
-def EventuallyPeriodic (u : ℕ → ℕ) : Prop := ∃ p > 0, ∃ N, ∀ n ≥ N, u (n + p) = u n
+statement prime_sqrt {m n p : ℕ} (nnz : n ≠ 0) (prime_p : p.Prime) : m ^ 2 ≠ p * n ^ 2

@@ -1,105 +1,98 @@
 {
-  "world": "Structure World",
-  "title": "Metric spaces",
-  "skill": "writing",
-  "exercise": "Define",
+  "world": "Final Audit",
+  "title": "Final audit: the AI proved Goldbach!",
+  "skill": "auditing",
+  "exercise": "Audit",
+  "mil": "all chapters",
+  "timeout": 120,
   "predict": [
     {
-      "test": "(x - y)^2 is not a metric",
-      "statement": "the distance `(x - y)^2` on the four points 0, 1, 2, 3, as a Metric'"
+      "test": "Goldbach, world C: no number is 'prime'",
+      "statement": "`GoldbachFor (fun _ => False)`: Goldbach holds in a world where no number is prime."
     },
     {
-      "test": "the zero distance is not a metric",
-      "statement": "the distance that is always 0, as a Metric'"
+      "test": "Collatz, process B: everything falls to 0 after the start",
+      "statement": "`CollatzFor (fun n k => if k = 0 then n else 0)`: every positive start reaches 1 if the process falls to 0 after one step."
+    }
+  ],
+  "questions": [
+    {
+      "answer": "q1",
+      "text": "Claim: *there are infinitely many primes*. The AI's theorem: `∀ n : ℕ, ∃ p, n ≤ p ∨ Nat.Prime p`. True or false: the statement says what the claim says."
     },
     {
-      "test": "the discrete metric on {0, 1, 2, 3} is a metric",
-      "statement": "the distance that is 0 for equal points and 1 otherwise, on the points 0, 1, 2, 3, as a Metric'"
+      "answer": "q2",
+      "text": "Claim: *every convergent sequence is bounded*. The AI's theorem: `∀ s : ℕ → ℝ, (∃ a, ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n - a| < ε) → ∃ M, ∀ n, |s n| ≤ M`. True or false: the statement says what the claim says."
+    },
+    {
+      "answer": "q3",
+      "text": "Claim: *`|x|` has no derivative at `0`*. The AI's theorem: `deriv (fun x : ℝ => |x|) 0 = 0`. True or false: the statement says what the claim says."
     }
   ],
   "checks": [
     {
-      "lean": "example := fun (α : Type) (d : α → α → Int) => L51.Metric'.mk d",
-      "message": "`Metric'` needs the field `dist : α → α → ℤ` first, then your four axioms."
+      "lean": "#check (L51.GoldbachFor : (ℕ → Prop) → Prop)\n#check (L51.CollatzFor : (ℕ → ℕ → ℕ) → Prop)\n#check (L51.q1 : Bool)\n#check (L51.q2 : Bool)\n#check (L51.q3 : Bool)",
+      "message": "Keep `GoldbachFor : (ℕ → Prop) → Prop`, `CollatzFor : (ℕ → ℕ → ℕ) → Prop` and the three `Bool` answers."
     }
   ],
   "hints": [
     {
-      "match": "x - y is not",
+      "match": "world A",
       "steps": [
-        "What is the distance from 0 to 1, and from 1 to 0?",
-        "Which of the axioms rules this out?"
+        "The 'primes' are the even numbers here. Is every even n > 2 a sum of two of them? Is an odd n, such as 3?"
       ],
-      "hint": "`x - y` is neither symmetric nor non-negative. You need `symm : ∀ a b, dist a b = dist b a` and `nonneg : ∀ a b, 0 ≤ dist a b`."
+      "hint": "Every even n is n + 0, but an odd n is never a sum of two even numbers: did you assume that n is even (`n % 2 = 0 →`)?"
     },
     {
-      "match": "(x - y)^2",
+      "match": "world B",
       "steps": [
-        "It is symmetric, non-negative and 0 only on equal points. Try the points 0, 1, 2."
+        "Every n ≥ 2 is 'prime' here. Which n does your statement cover? Try n = 2."
       ],
-      "hint": "Triangle inequality: `∀ a b c, dist a c ≤ dist a b + dist b c`. For 0, 1, 2 we get 4 ≤ 1 + 1, which is false."
+      "hint": "2 is not a sum of two numbers ≥ 2. The conjecture is about n > 2 (`2 < n`), not `2 ≤ n`; and the hypotheses must be assumed (`→`), not claimed (`∧`)."
     },
     {
-      "match": "zero distance",
+      "match": "world C",
       "steps": [
-        "The distance between 0 and 1 is 0. Should it be?"
+        "If nothing is prime, can any number be a sum of two primes?"
       ],
-      "hint": "Distance 0 must force equality: `eq_zero : ∀ a b, dist a b = 0 ↔ a = b`. With only the direction `a = b → dist a b = 0` the zero distance would slip through."
+      "hint": "If your statement still holds, the `∃ p q` is satisfied for a silly reason: write `P p ∧ P q ∧ p + q = n`, with `∧`, not `→`."
     },
     {
-      "match": "parity",
-      "steps": [
-        "Which points have distance 0 from each other? Are they equal?"
-      ],
-      "hint": "You need the direction `dist a b = 0 → a = b` too, so write the axiom with `↔`."
+      "match": "real world",
+      "hint": "A simple search settled your statement of an open problem: it is probably vacuous, or false for a silly reason. Compare with the toy worlds."
     },
     {
-      "match": "x + y",
+      "match": "process A",
       "steps": [
-        "What is `dist a a`?"
+        "Counting down from n reaches 1 at step n − 1. But from 0?"
       ],
-      "hint": "`dist a a` must be 0: this is the direction `a = b → dist a b = 0` of `eq_zero`."
+      "hint": "From 0 you never reach 1: assume the start is positive, `∀ n, 0 < n → …`."
     },
     {
-      "match": "max x y",
+      "match": "process B",
       "steps": [
-        "What is `dist a a`?"
+        "The process falls to 0 and stays. Is 0 equal to 1? Is it ≤ 1?"
       ],
-      "hint": "`dist a a` must be 0: this is the direction `a = b → dist a b = 0` of `eq_zero`."
+      "hint": "Ask for `o n k = 1`, not `o n k ≤ 1` or `o n k ≤ n`: 0 is not 1."
     },
     {
-      "match": "constant distance 1",
+      "match": "process C",
       "steps": [
-        "What is `dist a a`?"
+        "Which quantifier comes first in your statement, `∀ n` or `∃ k`?"
       ],
-      "hint": "`dist a a` must be 0: this is the direction `a = b → dist a b = 0` of `eq_zero`."
+      "hint": "The step k may depend on the start n: `∀ n, 0 < n → ∃ k, o n k = 1`."
     },
     {
-      "match": "one-way",
-      "steps": [
-        "Compare the distance from 0 to 1 with the one from 1 to 0."
-      ],
-      "hint": "Add `symm : ∀ a b, dist a b = dist b a`."
+      "match": "Audit 1",
+      "hint": "Take `p = n`: `n ≤ n` holds, so the statement is true without a single prime. The faithful version uses `∧`."
     },
     {
-      "match": "-|x - y|",
-      "steps": [
-        "Distances cannot be negative.",
-        "Which axiom does a negative distance contradict?"
-      ],
-      "hint": "Add `nonneg : ∀ a b, 0 ≤ dist a b`, or check your triangle inequality: `dist a a = 0 ≤ dist a b + dist b a` already forces non-negativity."
+      "match": "Audit 2",
+      "hint": "Read it slowly: a limit `a` with the ε-N condition, and a bound `M` for every term. That is the claim."
     },
     {
-      "match": "is a metric",
-      "steps": [
-        "Which axiom fails, according to the report?",
-        "Check the direction of `≤` in the triangle inequality and which points are used."
-      ],
-      "hint": "The triangle inequality is `∀ a b c, dist a c ≤ dist a b + dist b c` (the *short cut* on the left). Reversing it rejects every genuine distance."
-    },
-    {
-      "match": "",
-      "hint": "Each axiom is a `∀` statement about `dist`, for example `symm : ∀ a b, dist a b = dist b a`."
+      "match": "Audit 3",
+      "hint": "`deriv` is a total function with the junk value 0 where there is no derivative; `deriv f 0 = 0` also holds for differentiable functions with a horizontal tangent. The faithful statement is `¬ DifferentiableAt ℝ (fun x : ℝ => |x|) 0`."
     }
   ]
 }

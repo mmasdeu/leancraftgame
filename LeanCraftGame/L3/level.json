@@ -1,48 +1,33 @@
 {
-  "world": "Foundations World",
-  "title": "Making choices",
-  "skill": "syntax",
-  "exercise": "Define",
+  "world": "Basics",
+  "title": "How Lean parses",
+  "skill": "reading",
+  "exercise": "Read",
+  "mil": "§2.1",
   "public": "all",
   "hintsAfter": 1,
-  "predict": [
-    {
-      "test": "collatz 0 = 0 (0 is even)",
-      "statement": "collatz 0 = 0"
-    },
-    {
-      "test": "x² has 1 root, x² + 1 has none",
-      "statement": "rootCount 0 0 = 1 and rootCount 0 1 = 0"
-    }
+  "questions": [
+    {"answer": "q1", "text": "With `x = 3` in `ℤ`, what is `-x ^ 2`?", "choices": ["`9`", "`-9`"]},
+    {"answer": "q2", "text": "What is `2 * 3 + 4`?", "choices": ["`10`", "`14`"]},
+    {"answer": "q3", "text": "What is `8 / 4 * 2`?", "choices": ["`1`", "`4`"]},
+    {"answer": "q4", "text": "What is `3 - 5 + 4` in `ℕ`?", "choices": ["`2`", "`4`", "`0`", "`-2`"]},
+    {"answer": "q5", "text": "What is `2 ^ 3 ^ 2`?", "choices": ["`64`", "`512`"]},
+    {"answer": "q6", "text": "With `f := fun x ↦ 2 * x`, what is `f 3 + 1`?", "choices": ["`7`", "`8`"]},
+    {"answer": "q7", "text": "How does Lean read `a - b - c`?", "choices": ["`(a - b) - c`", "`a - (b - c)`"]},
+    {"answer": "q8", "text": "How does Lean read `f x ^ 2`?", "choices": ["`(f x) ^ 2`", "`f (x ^ 2)`"]}
   ],
   "checks": [
-    {
-      "lean": "example : Nat → Nat := L3.collatz\nexample : Nat → Nat → Nat := L3.gap\nexample : Nat → Nat → Nat := L3.rootCount",
-      "message": "Keep `collatz : Nat → Nat`, `gap : Nat → Nat → Nat` and `rootCount : Nat → Nat → Nat`."
-    }
+    {"lean": "#check (L3.q1 : Fin 2)\n#check (L3.q2 : Fin 2)\n#check (L3.q3 : Fin 2)\n#check (L3.q4 : Fin 4)\n#check (L3.q5 : Fin 2)\n#check (L3.q6 : Fin 2)\n#check (L3.q7 : Fin 2)\n#check (L3.q8 : Fin 2)",
+     "message": "Keep the eight answer lines, and only change the value after `:=`."}
   ],
   "hints": [
-    {
-      "match": "collatz",
-      "hint": "`if n % 2 = 0 then n / 2 else 3 * n + 1`."
-    },
-    {
-      "match": "gap",
-      "steps": [
-        "What is `3 - 8` on ℕ?"
-      ],
-      "hint": "`if a ≤ b then b - a else a - b`: subtract the smaller from the larger."
-    },
-    {
-      "match": "root",
-      "steps": [
-        "Which sign of the discriminant `b² - 4c` gives two roots? One? None?"
-      ],
-      "hint": "Compare `b * b` with `4 * c`: greater gives 2 roots, equal gives 1, smaller gives 0."
-    },
-    {
-      "match": "",
-      "hint": "Use `if … then … else …`, and check the boundary cases."
-    }
+    {"match": "Question 1", "hint": "`^` binds tighter than the minus sign: `-(3 ^ 2)`."},
+    {"match": "Question 2", "hint": "`*` before `+`: `6 + 4`."},
+    {"match": "Question 3", "hint": "`/` and `*` group to the left: `(8 / 4) * 2`."},
+    {"match": "Question 4", "steps": ["Which subtraction happens first, and what is `3 - 5` in ℕ?"], "hint": "`(3 - 5) + 4 = 0 + 4`."},
+    {"match": "Question 5", "hint": "`^` groups to the right: `2 ^ (3 ^ 2) = 2 ^ 9`."},
+    {"match": "Question 6", "hint": "Application first: `(f 3) + 1 = 6 + 1`."},
+    {"match": "Question 7", "hint": "`-` groups to the left."},
+    {"match": "Question 8", "hint": "Application binds tighter than any operator."}
   ]
 }

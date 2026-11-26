@@ -1,48 +1,40 @@
-/- Hidden test battery for Level Sums. -/
+/- Hidden test battery for Level 34: Morphisms. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L34.Player
 
 open L34
 
-#no_sorry squares
-#no_sorry oddSum
-#no_sorry sumBelow
-#no_sorry sumBetween
-#level_start "Sums"
+#no_sorry IsMonoidHom
+#no_sorry IsAddMonoidHom
+#no_sorry homNotOnto
+#no_sorry bijNotHom
+#level_start "Morphisms"
 
-#expect_true "sumOfDoubles 4 = 12 (the worked example)" unfolding sumOfDoubles :
-  sumOfDoubles 4 = 12
-#expect_true "squares 0 = 0 (the empty sum)" unfolding squares :
-  squares 0 = 0
-#expect_true "squares 1 = 1" unfolding squares :
-  squares 1 = 1
-#expect_true "squares 4 = 30 (1 + 4 + 9 + 16)" unfolding squares :
-  squares 4 = 30
-#expect_true "squares 10 = 385" unfolding squares :
-  squares 10 = 385
-#expect_true "oddSum 0 = 0" unfolding oddSum :
-  oddSum 0 = 0
-#expect_true "oddSum 1 = 1" unfolding oddSum :
-  oddSum 1 = 1
-#expect_true "oddSum 3 = 9 (1 + 3 + 5)" unfolding oddSum :
-  oddSum 3 = 9
-#expect_true "oddSum 7 = 49" unfolding oddSum :
-  oddSum 7 = 49
-#expect_true "sumBelow 0 = 0 (nothing is below 0)" unfolding sumBelow :
-  sumBelow 0 = 0
-#expect_true "sumBelow 1 = 0 (only 0 is below 1)" unfolding sumBelow :
-  sumBelow 1 = 0
-#expect_true "sumBelow 5 = 10 (0 + 1 + 2 + 3 + 4)" unfolding sumBelow :
-  sumBelow 5 = 10
-#expect_true "sumBetween 3 6 = 12 (3 + 4 + 5)" unfolding sumBetween :
-  sumBetween 3 6 = 12
-#expect_true "sumBetween 4 5 = 4 (only 4)" unfolding sumBetween :
-  sumBetween 4 5 = 4
-#expect_true "sumBetween 4 4 = 0 (nothing between 4 and 4)" unfolding sumBetween :
-  sumBetween 4 4 = 0
-#expect_true "sumBetween 6 3 = 0 (the wrong way round: empty)" unfolding sumBetween :
-  sumBetween 6 3 = 0
-#expect_true "sumBetween 0 4 = 6" unfolding sumBetween :
-  sumBetween 0 4 = 6
+#expect_true "n ↦ n² is a homomorphism of (ℕ, *)" unfolding IsMonoidHom :
+  IsMonoidHom (fun n : ℕ => n ^ 2)
+#expect_false "The constant map 0 is a homomorphism of (ℕ, *)" unfolding IsMonoidHom :
+  IsMonoidHom (fun _ : ℕ => (0 : ℕ))
+#expect_false "n ↦ 2n is a homomorphism of (ℕ, *)" unfolding IsMonoidHom :
+  IsMonoidHom (fun n : ℕ => 2 * n)
+#expect_false "n ↦ -n is a homomorphism of (ℤ, *)" unfolding IsMonoidHom :
+  IsMonoidHom (fun n : ℤ => -n)
+#expect_true "Every bundled f : ℕ →* ℤ satisfies IsMonoidHom ⇑f" unfolding IsMonoidHom :
+  ∀ f : ℕ →* ℤ, IsMonoidHom f
+#expect_true "n ↦ 3n is a homomorphism of (ℤ, +)" unfolding IsAddMonoidHom :
+  IsAddMonoidHom (fun n : ℤ => 3 * n)
+#expect_false "n ↦ n + 1 is a homomorphism of (ℤ, +)" unfolding IsAddMonoidHom :
+  IsAddMonoidHom (fun n : ℤ => n + 1)
+#expect_false "n ↦ 2ⁿ is a homomorphism of (ℕ, +)" unfolding IsAddMonoidHom :
+  IsAddMonoidHom (fun n : ℕ => 2 ^ n)
+#expect_true "Every bundled f : ℤ →+ ℤ satisfies IsAddMonoidHom ⇑f" unfolding IsAddMonoidHom :
+  ∀ f : ℤ →+ ℤ, IsAddMonoidHom f
+#expect_true "homNotOnto preserves 0 and +" unfolding homNotOnto :
+  homNotOnto 0 = 0 ∧ ∀ a b, homNotOnto (a + b) = homNotOnto a + homNotOnto b
+#expect_false "homNotOnto is surjective" unfolding homNotOnto :
+  ∀ m, ∃ n, homNotOnto n = m
+#expect_true "bijNotHom is its own inverse" unfolding bijNotHom :
+  ∀ n, bijNotHom (bijNotHom n) = n
+#expect_false "bijNotHom preserves 0 and +" unfolding bijNotHom :
+  bijNotHom 0 = 0 ∧ ∀ a b, bijNotHom (a + b) = bijNotHom a + bijNotHom b
 
 #level_report

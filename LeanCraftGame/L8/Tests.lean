@@ -1,40 +1,31 @@
-/- Hidden test battery for Level And, or, not. -/
+/- Hidden test battery for Level 8: ∀ and →. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L8.Player
 
-open L8
+#no_sorry L8.FnUb
+#no_sorry L8.FnLb
+#no_sorry L8.MonotoneFn
+#level_start "∀ and →"
 
-#no_sorry IsSophieGermain
-#no_sorry IsTwinPrime
-#no_sorry IsComposite
-#no_sorry ExactlyOneOf23
-#level_start "And, or, not"
-
-#expect_true "11 is a Sophie Germain prime (23 is prime)" unfolding IsSophieGermain :
-  IsSophieGermain 11
-#expect_false "7 is not a Sophie Germain prime (15 is not prime)" unfolding IsSophieGermain :
-  IsSophieGermain 7
-#expect_false "9 is not a Sophie Germain prime (19 is prime, but 9 is not)" unfolding IsSophieGermain :
-  IsSophieGermain 9
-#expect_true "17 and 19 are twin primes" unfolding IsTwinPrime :
-  IsTwinPrime 17
-#expect_false "7 and 9 are not twin primes" unfolding IsTwinPrime :
-  IsTwinPrime 7
-#expect_true "15 is composite" unfolding IsComposite :
-  IsComposite 15
-#expect_false "13 is not composite" unfolding IsComposite :
-  IsComposite 13
-#expect_false "1 is not composite" unfolding IsComposite :
-  IsComposite 1
-#expect_false "0 is not composite (by this definition)" unfolding IsComposite :
-  IsComposite 0
-#expect_true "ExactlyOneOf23 4 (divisible by 2 only)" unfolding ExactlyOneOf23 :
-  ExactlyOneOf23 4
-#expect_true "ExactlyOneOf23 9 (divisible by 3 only)" unfolding ExactlyOneOf23 :
-  ExactlyOneOf23 9
-#expect_false "ExactlyOneOf23 12 (divisible by both)" unfolding ExactlyOneOf23 :
-  ExactlyOneOf23 12
-#expect_false "ExactlyOneOf23 7 (divisible by neither)" unfolding ExactlyOneOf23 :
-  ExactlyOneOf23 7
+#expect_true "3 is an upper bound of the constant function 3" unfolding L8.FnUb :
+  L8.FnUb (fun _ => 3) 3
+#expect_false "5 is an upper bound of x ↦ x" unfolding L8.FnUb :
+  L8.FnUb (fun x => x) 5
+#expect_true "0 is an upper bound of x ↦ min x 0" unfolding L8.FnUb :
+  L8.FnUb (fun x => min x 0) 0
+#expect_true "0 is a lower bound of x ↦ x²" unfolding L8.FnLb :
+  L8.FnLb (fun x => x ^ 2) 0
+#expect_false "1 is a lower bound of x ↦ x²" unfolding L8.FnLb :
+  L8.FnLb (fun x => x ^ 2) 1
+#expect_true "x ↦ 2x + 1 is monotone" unfolding L8.MonotoneFn :
+  L8.MonotoneFn (fun x => 2 * x + 1)
+#expect_false "x ↦ -x is monotone" unfolding L8.MonotoneFn :
+  L8.MonotoneFn (fun x => -x)
+#expect_false "x ↦ x² is monotone" unfolding L8.MonotoneFn :
+  L8.MonotoneFn (fun x => x ^ 2)
+#expect_equiv "MonotoneFn is Mathlib's Monotone" unfolding L8.MonotoneFn :
+  ∀ f : ℝ → ℝ, L8.MonotoneFn f ↔ Monotone f
+#expect_type "MonotoneFn takes a and b implicitly: `h hab` makes sense" :
+  (fun (h : L8.MonotoneFn (fun x => x)) (hab : (1 : ℝ) ≤ 2) => h hab) : _ → _ → _
 
 #level_report

@@ -1,37 +1,29 @@
-/- Hidden test battery for Level Spot the bug: connectives. -/
+/- Hidden test battery for Level 11: ∧, ∨ and ↔. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L11.Player
 
-namespace L11Ref
-def InRange (n : Nat) : Prop := 13 ≤ n ∨ n ≤ 19
-def IsComposite (n : Nat) : Prop := ¬ Nat.Prime n
-def Coprime (a b : Nat) : Prop := ¬ (2 ∣ a ∧ 2 ∣ b)
-def BothOdd (a b : Nat) : Prop := ¬ a % 2 = 0 ∧ b % 2 = 0
-end L11Ref
+#no_sorry L11.lt_iff'
+#no_sorry L11.abs_lt'
+#no_sorry L11.le_abs'
+#no_sorry L11.HasZeroIn
+#level_start "∧, ∨ and ↔"
 
-#no_sorry L11.r
-#no_sorry L11.c
-#no_sorry L11.ca
-#no_sorry L11.cb
-#no_sorry L11.oa
-#no_sorry L11.ob
-#level_start "Spot the bug: connectives"
-
-#expect_true "InRange accepts r" unfolding L11Ref.InRange L11.r :
-  L11Ref.InRange L11.r
-#expect_true "r is not between 13 and 19" unfolding L11.r :
-  ¬ (13 ≤ L11.r ∧ L11.r ≤ 19)
-#expect_true "IsComposite accepts c" unfolding L11Ref.IsComposite L11.c :
-  L11Ref.IsComposite L11.c
-#expect_true "c is not composite (it is not a product of two numbers greater than 1)" unfolding L11.c :
-  ¬ (∃ x < 20, ∃ y < 20, 1 < x ∧ 1 < y ∧ x * y = L11.c)
-#expect_true "Coprime accepts ca and cb" unfolding L11Ref.Coprime L11.ca L11.cb :
-  L11Ref.Coprime L11.ca L11.cb
-#expect_true "ca and cb have a common factor greater than 1" unfolding L11.ca L11.cb :
-  Nat.gcd L11.ca L11.cb ≠ 1
-#expect_true "oa and ob are both odd" unfolding L11.oa L11.ob :
-  L11.oa % 2 = 1 ∧ L11.ob % 2 = 1
-#expect_true "BothOdd rejects oa and ob" unfolding L11Ref.BothOdd L11.oa L11.ob :
-  ¬ L11Ref.BothOdd L11.oa L11.ob
+#expect_equiv "lt_iff' says x < y ↔ x ≤ y ∧ x ≠ y" :
+  L11.lt_iff' ↔ ∀ x y : ℝ, x < y ↔ x ≤ y ∧ x ≠ y
+  using fun x y => lt_iff_le_and_ne
+#expect_equiv "abs_lt' says |x| < y ↔ -y < x ∧ x < y" :
+  L11.abs_lt' ↔ ∀ x y : ℝ, |x| < y ↔ -y < x ∧ x < y
+  using fun x y => abs_lt
+#expect_equiv "le_abs' says x ≤ |y| ↔ x ≤ y ∨ x ≤ -y" :
+  L11.le_abs' ↔ ∀ x y : ℝ, x ≤ |y| ↔ x ≤ y ∨ x ≤ -y
+  using fun x y => le_abs
+#expect_true "some x satisfies x > 5 → x = 0" :
+  ∃ x : ℝ, x > 5 → x = 0
+#expect_true "x ↦ x - 1 has a zero in [0, 2]" unfolding L11.HasZeroIn :
+  L11.HasZeroIn (fun x => x - 1) 0 2
+#expect_true "x ↦ x² - 4 has a zero in [0, 3]" unfolding L11.HasZeroIn :
+  L11.HasZeroIn (fun x => x ^ 2 - 4) 0 3
+#expect_false "x ↦ x + 10 has a zero in [0, 1]" unfolding L11.HasZeroIn :
+  L11.HasZeroIn (fun x => x + 10) 0 1
 
 #level_report

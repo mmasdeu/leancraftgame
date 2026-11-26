@@ -1,8 +1,6 @@
--- the number of Hardy's taxi
-def hardy : Nat := 1729
-
--- 1³ + 12³, written with `^`
-def firstWay : Nat := 1 ^ 3 + 12 ^ 3
-
--- 9³ + 10³
-def secondWay : Nat := 9 ^ 3 + 10 ^ 3
+def q1 : Fin 4 := 1
+def q2 : Fin 4 := 3
+def q3 : Fin 4 := 2
+def q4 : Bool := false
+def q5 : Fin 3 := 0
+def q6 : Bool := false

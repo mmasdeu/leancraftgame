@@ -1,58 +1,36 @@
 {
-  "world": "Quantifier World",
-  "title": "If … then …",
-  "skill": "syntax",
-  "exercise": "Define",
+  "world": "Sets and Functions",
+  "title": "Injective, surjective, inverses",
+  "skill": "functions",
+  "exercise": "Write",
+  "mil": "§4.2",
+  "public": ["Inj (n + 1)", "Surj of the identity"],
   "predict": [
-    {
-      "test": "LateBig (fun n => if n < 5 then 0 else 9) is true (the first terms are 0: that is fine!)",
-      "statement": "LateBig (fun n => if n < 5 then 0 else 9)"
-    },
-    {
-      "test": "LateBig (fun n => n % 4) is false",
-      "statement": "LateBig (fun n => n % 4)"
-    },
-    {
-      "test": "EvenToEven (fun n => n + 2) is true",
-      "statement": "EvenToEven (fun n => n + 2)"
-    }
+    {"test": "Surj (n - 1)", "statement": "`fun n : ℕ => n - 1` is surjective."},
+    {"test": "Inj (n - 1)", "statement": "`fun n : ℕ => n - 1` is injective."}
+  ],
+  "questions": [
+    {"answer": "q1", "text": "Why does `Function.invFun` have the argument `[Nonempty α]`?",
+     "choices": ["for `y` outside the range of `f`, `invFun f y` must still return an element of `α`", "because `f` must be injective", "so that Lean can compute `invFun f`"]},
+    {"answer": "q2", "text": "True or false: `Function.LeftInverse (Function.invFun f) f` holds for every `f : α → β` (with `α` nonempty)."},
+    {"answer": "q3", "text": "What does `Set.InjOn f s` say?",
+     "choices": ["`f` sends `s` into `s`", "`s` is the image of `f`", "two points of `s` with the same image under `f` are equal"]}
   ],
   "checks": [
-    {
-      "lean": "example : (Nat → Nat) → Prop := L17.LateBig",
-      "message": "Keep `LateBig : (Nat → Nat) → Prop`."
-    },
-    {
-      "lean": "example : (Nat → Nat) → Prop := L17.EvenToEven",
-      "message": "Keep `EvenToEven : (Nat → Nat) → Prop`."
-    }
+    {"lean": "#check (L17.Inj : (ℕ → ℕ) → Prop)\n#check (L17.Surj : (ℕ → ℕ) → Prop)\n#check (L17.pred' : ℕ → ℕ)\n#check (L17.q1 : Fin 3)\n#check (L17.q2 : Bool)\n#check (L17.q3 : Fin 3)",
+     "message": "Keep the names and types: `Inj`, `Surj : (ℕ → ℕ) → Prop`, `pred' : ℕ → ℕ`, and the three answer lines."}
   ],
   "hints": [
-    {
-      "match": "first terms are 0",
-      "hint": "Your definition rejects a sequence that starts with small values. Did you write `∧` where `→` belongs?"
-    },
-    {
-      "match": "LateBig (fun n => n) is true",
-      "hint": "This should hold: if you used `∧`, you claimed *all* `n` are at least 5. Use `→`."
-    },
-    {
-      "match": "LateBig",
-      "steps": [
-        "Read it as \"for every `n`, if `n` is at least 5, then …\"."
-      ],
-      "hint": "`∀ n, 5 ≤ n → 3 ≤ u n`."
-    },
-    {
-      "match": "EvenToEven",
-      "steps": [
-        "\"Whenever `n` is even\" is an *if*. Which arrow says that?"
-      ],
-      "hint": "`∀ n, n % 2 = 0 → u n % 2 = 0`."
-    },
-    {
-      "match": "",
-      "hint": "Read your definition aloud: \"for every n, if …, then …\"."
-    }
+    {"match": "Inj (n + 1)", "steps": ["Which part of your definition is the hypothesis: equal inputs, or equal outputs?"],
+     "hint": "`∀ a b, f a = f b → a = b`."},
+    {"match": "Inj (n - 1)", "steps": ["What are `0 - 1` and `1 - 1` in ℕ?"],
+     "hint": "`0` and `1` have the same output. Your definition should notice it: `∀ a b, f a = f b → a = b`."},
+    {"match": "Inj of a constant", "hint": "Did you write the converse, `a = b → f a = f b`? Every function satisfies it."},
+    {"match": "Surj", "steps": ["\"Every output is hit\": which quantifier comes first, the one over outputs or over inputs?"],
+     "hint": "`∀ b, ∃ a, f a = b`."},
+    {"match": "pred'", "hint": "`fun n => n - 1`: then `pred' (n + 1) = n`."},
+    {"match": "Question 1", "hint": "What should `invFun f y` be when no `x` has `f x = y`?"},
+    {"match": "Question 2", "hint": "If `f` is constant, can any `g` satisfy `g (f x) = x` for all `x`?"},
+    {"match": "Question 3", "hint": "It is injectivity, restricted to the points of `s`."}
   ]
 }

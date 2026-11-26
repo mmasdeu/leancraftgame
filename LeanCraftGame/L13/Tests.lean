@@ -1,39 +1,44 @@
-/- Hidden test battery for Level Division by zero. -/
+/- Hidden test battery for Level 13: Be the referee. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L13.Player
 
-open L13
+namespace L13Ref
+def ConvergesTo0 (s : ℕ → ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n| < ε
+-- The mutants. MutNonneg is stronger than convergence; MutFrequently, MutEventuallySmall
+-- and MutNoAbs are weaker; MutDecreasing is neither.
+def MutNonneg (s : ℕ → ℝ) : Prop := (∀ n, 0 ≤ s n) ∧ ∀ ε > 0, ∃ N, ∀ n ≥ N, s n < ε
+def MutFrequently (s : ℕ → ℝ) : Prop := ∀ ε > 0, ∀ N, ∃ n ≥ N, |s n| < ε
+def MutEventuallySmall (s : ℕ → ℝ) : Prop := ∃ N, ∀ n ≥ N, |s n| < 1
+def MutNoAbs (s : ℕ → ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, s n < ε
+def MutDecreasing (s : ℕ → ℝ) : Prop := (∀ n, s (n + 1) ≤ s n) ∧ ∀ ε > 0, ∃ n, |s n| < ε
+end L13Ref
 
-#no_sorry average
-#no_sorry IsReciprocal
-#no_sorry HasSlope
-#level_start "Division by zero"
+#no_sorry L13.good₁
+#no_sorry L13.good₂
+#no_sorry L13.bad₁
+#no_sorry L13.bad₂
+#level_start "Be the referee"
 
-#expect_true "IsHalf 6 3 is true" unfolding IsHalf :
-  IsHalf 6 3
-#expect_true "1 / 0 = 0 in ℚ (a junk value)" :
-  (1 : ℚ) / 0 = 0
-#expect_true "average 1 2 = 3 / 2" unfolding average :
-  average 1 2 = 3 / 2
-#expect_true "average (-1) 1 = 0" unfolding average :
-  average (-1) 1 = 0
-#expect_true "IsReciprocal 2 (1 / 2) is true" unfolding IsReciprocal :
-  IsReciprocal 2 (1 / 2)
-#expect_true "IsReciprocal (-4) (-1 / 4) is true" unfolding IsReciprocal :
-  IsReciprocal (-4) (-1 / 4)
-#expect_false "IsReciprocal 3 3 is false" unfolding IsReciprocal :
-  IsReciprocal 3 3
-#expect_false "IsReciprocal 0 0 is false (0 has no reciprocal)" unfolding IsReciprocal :
-  IsReciprocal 0 0
-#expect_true "HasSlope 0 0 2 6 3 is true" unfolding HasSlope :
-  HasSlope 0 0 2 6 3
-#expect_true "HasSlope 1 1 3 0 (-1 / 2) is true" unfolding HasSlope :
-  HasSlope 1 1 3 0 (-1 / 2)
-#expect_false "HasSlope 0 0 2 6 2 is false" unfolding HasSlope :
-  HasSlope 0 0 2 6 2
-#expect_false "HasSlope 1 0 1 5 0 is false (a vertical line has no slope)" unfolding HasSlope :
-  HasSlope 1 0 1 5 0
-#expect_false "HasSlope 1 2 1 2 0 is false (one point does not determine a line)" unfolding HasSlope :
-  HasSlope 1 2 1 2 0
+#expect_true "good₁ converges to 0" unfolding L13Ref.ConvergesTo0 L13.good₁ :
+  L13Ref.ConvergesTo0 L13.good₁
+#expect_true "good₂ converges to 0" unfolding L13Ref.ConvergesTo0 L13.good₂ :
+  L13Ref.ConvergesTo0 L13.good₂
+#expect_true "bad₁ does not converge to 0" unfolding L13Ref.ConvergesTo0 L13.bad₁ :
+  ¬ L13Ref.ConvergesTo0 L13.bad₁
+#expect_true "bad₂ does not converge to 0" unfolding L13Ref.ConvergesTo0 L13.bad₂ :
+  ¬ L13Ref.ConvergesTo0 L13.bad₂
+
+-- A stronger mutant can only be caught by a good sequence it rejects, a weaker one only by a
+-- bad sequence it accepts: only that half is stated (the labels are tested above).
+#expect_caught "mutant `(∀ n, 0 ≤ s n) ∧ ∀ ε > 0, ∃ N, ∀ n ≥ N, s n < ε` (nonnegative, eventually below ε) is caught" unfolding L13Ref.MutNonneg L13.good₁ L13.good₂ :
+  L13Ref.MutNonneg L13.good₁ ∧ L13Ref.MutNonneg L13.good₂
+#expect_caught "mutant `∀ ε > 0, ∀ N, ∃ n ≥ N, |s n| < ε` (close again and again) is caught" unfolding L13Ref.MutFrequently L13.bad₁ L13.bad₂ :
+  ¬ L13Ref.MutFrequently L13.bad₁ ∧ ¬ L13Ref.MutFrequently L13.bad₂
+#expect_caught "mutant `∃ N, ∀ n ≥ N, |s n| < 1` (eventually small) is caught" unfolding L13Ref.MutEventuallySmall L13.bad₁ L13.bad₂ :
+  ¬ L13Ref.MutEventuallySmall L13.bad₁ ∧ ¬ L13Ref.MutEventuallySmall L13.bad₂
+#expect_caught "mutant `∀ ε > 0, ∃ N, ∀ n ≥ N, s n < ε` (no absolute value) is caught" unfolding L13Ref.MutNoAbs L13.bad₁ L13.bad₂ :
+  ¬ L13Ref.MutNoAbs L13.bad₁ ∧ ¬ L13Ref.MutNoAbs L13.bad₂
+#expect_caught "mutant `decreasing, with a term within ε of 0` is caught" unfolding L13Ref.MutDecreasing L13.good₁ L13.good₂ :
+  L13Ref.MutDecreasing L13.good₁ ∧ L13Ref.MutDecreasing L13.good₂
 
 #level_report

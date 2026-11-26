@@ -1,5 +1,6 @@
-def sumOfDoubles (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, 2 * i
-def squares (n : ℕ) : ℕ := ∑ i ∈ Finset.Icc 1 n, i ^ 2
-def oddSum (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, (2 * i + 1)
-def sumBelow (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, i
-def sumBetween (a b : ℕ) : ℕ := ∑ i ∈ Finset.Ico a b, i
+def IsMonoidHom {M N : Type} [Monoid M] [Monoid N] (f : M → N) : Prop :=
+  f 1 = 1 ∧ ∀ a b, f (a * b) = f a * f b
+def IsAddMonoidHom {M N : Type} [AddMonoid M] [AddMonoid N] (f : M → N) : Prop :=
+  f 0 = 0 ∧ ∀ a b, f (a + b) = f a + f b
+def homNotOnto : ℤ → ℤ := fun n => 2 * n
+def bijNotHom : ℤ → ℤ := fun n => 1 - n

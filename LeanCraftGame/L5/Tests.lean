@@ -1,30 +1,32 @@
-/- Hidden test battery for Level Challenge: witnesses. -/
+/- Hidden test battery for Level 5: Stating theorems. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L5.Player
 
-open L5
+#no_sorry L5.sq_add
+#no_sorry L5.two_mul_le
+#no_sorry L5.abs_mul_le
+#no_sorry L5.min_comm'
+#no_sorry L5.max_assoc'
+#level_start "Stating theorems"
 
-#no_sorry p₁
-#no_sorry p₂
-#no_sorry q₁
-#no_sorry q₂
-#no_sorry slow
-#no_sorry x
-#no_sorry y
-#no_sorry z
-#level_start "Challenge: witnesses"
-
-#expect_true "p₁² + p₂² = q₁² + q₂²" unfolding p₁ p₂ q₁ q₂ :
-  p₁ ^ 2 + p₂ ^ 2 = q₁ ^ 2 + q₂ ^ 2
-#expect_true "The two ways are different: 0 < p₁ < p₂, 0 < q₁ < q₂ and p₁ < q₁" unfolding p₁ p₂ q₁ q₂ :
-  0 < p₁ ∧ p₁ < p₂ ∧ 0 < q₁ ∧ q₁ < q₂ ∧ p₁ < q₁
-#expect_true "slow < 50 and slow does not reach 1 in the first 100 steps" unfolding slow iter collatz :
-  slow < 50 ∧ ∀ k ≤ 100, iter k slow ≠ 1
-#expect_true "slow reaches 1 within 200 steps" unfolding slow iter collatz :
-  ∃ k ≤ 200, iter k slow = 1
-#expect_true "x² + y² = z²" unfolding x y z :
-  x ^ 2 + y ^ 2 = z ^ 2
-#expect_true "The triple is primitive, with z > 20 and x, y > 0" unfolding x y z :
-  Nat.gcd x y = 1 ∧ 20 < z ∧ 0 < x ∧ 0 < y
+#expect_false "(a + b)² = a² + b² for all reals" :
+  ∀ a b : ℝ, (a + b) ^ 2 = a ^ 2 + b ^ 2
+#expect_equiv "sq_add says (a + b)² = a² + 2ab + b²" :
+  L5.sq_add ↔ ∀ a b : ℝ, (a + b) ^ 2 = a ^ 2 + 2 * a * b + b ^ 2
+  using add_sq
+#expect_equiv "two_mul_le says 2ab ≤ a² + b²" :
+  L5.two_mul_le ↔ ∀ a b : ℝ, 2 * a * b ≤ a ^ 2 + b ^ 2
+  using two_mul_le_add_sq
+#expect_equiv "abs_mul_le says |ab| ≤ (a² + b²) / 2" :
+  L5.abs_mul_le ↔ ∀ a b : ℝ, |a * b| ≤ (a ^ 2 + b ^ 2) / 2
+  using fun a b => by
+    rw [abs_mul, le_div_iff₀ (by norm_num : (0:ℝ) < 2)]
+    nlinarith [sq_nonneg (|a| - |b|), sq_abs a, sq_abs b]
+#expect_equiv "min_comm' says min a b = min b a" :
+  L5.min_comm' ↔ ∀ a b : ℝ, min a b = min b a
+  using min_comm
+#expect_equiv "max_assoc' says max a (max b c) = max (max a b) c" :
+  L5.max_assoc' ↔ ∀ a b c : ℝ, max a (max b c) = max (max a b) c
+  using fun a b c => (max_assoc a b c).symm
 
 #level_report

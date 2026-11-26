@@ -1,43 +1,62 @@
 /-
-# Sums
+# Morphisms
 
-Recursion (the Foundations world) defines sums one term at a time. Mathlib
-has big operators instead:
+A structure is not studied alone: what matters is the maps that respect it. MIL 8.2
+defines a homomorphism of monoids as a *bundled* structure, a function together with
+the facts that it respects the operations:
 
 ```lean
-def sumOfDoubles (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, 2 * i
+structure MonoidHom₁ (G H : Type) [Monoid G] [Monoid H] where
+  toFun : G → H
+  map_one : toFun 1 = 1
+  map_mul : ∀ g g', toFun (g * g') = toFun g * toFun g'
 ```
 
-`Finset.range n` is the finite set `{0, 1, …, n - 1}`, **without `n`**, and
-`∑ i ∈ s, f i` is the sum of `f i` over the finite set `s` (type `\sum`).
-Intervals come in four flavours: `Finset.Icc a b = [a, b]`,
-`Finset.Ico a b = [a, b)`, `Finset.Ioc`, `Finset.Ioo`. The commonest bug in
-finite sums is an off-by-one error in the range, and the cure is to test
-the boundary: what is the sum for `n = 0`? (The empty sum is `0`.)
+Mathlib's version is written `G →* H` (and `G →+ H` for additive monoids, `R →+* S` for
+rings). A bundled map can be applied like a function, `f x`: Lean inserts a
+**coercion** `⇑f : G → H` for you, which appears as `⇑f` in messages.
 
-A `Finset` is a *finite* set, with a computable list of elements underneath;
-this is what lets the referee evaluate your sums. In the Topology world,
-finite spaces are built from `Finset`s for the same reason.
+## Bundled and unbundled
+
+A bundled `f : ℕ →* ℕ` is a function *with* its proofs. Sometimes you want to say of a
+plain function `f : M → N` that it *is* a homomorphism: that is a predicate, an
+"unbundled" definition. It must ask for exactly what the bundled structure asks for:
+
+* `map_one`: `f 1 = 1`;
+* `map_mul`: `f (a * b) = f a * f b` for all `a`, `b`.
+
+Neither condition follows from the other. In `(ℕ, *, 1)`, the constant map `0` respects
+multiplication (`0 = 0 * 0`) but sends `1` to `0`.
+
+## Homomorphisms and bijections
+
+A homomorphism need not be surjective (`n ↦ 2n` on `(ℤ, +)` misses the odd numbers), and
+a bijection need not be a homomorphism: being a bijection is about the *sets*, being a
+homomorphism is about the *operations*.
 
 ## Your task
 
-Define the four sums. Read the comments carefully: which ends are included?
+1. `IsMonoidHom f`: `f` preserves `1` and `*`, for any two monoids `M` and `N`.
+2. `IsAddMonoidHom f`: `f` preserves `0` and `+`, for any two additive monoids.
+3. `homNotOnto`: an additive homomorphism `ℤ → ℤ` that is not surjective.
+4. `bijNotHom`: a map `ℤ → ℤ` that is its own inverse (so it is a bijection) and is not
+   an additive homomorphism.
+
+The referee checks your predicates on many maps, and also that every bundled map
+`f : M →* N` satisfies your `IsMonoidHom ⇑f`.
 -/
 namespace L34
 
--- 2 * 0 + 2 * 1 + … + 2 * (n - 1)     (already done)
-def sumOfDoubles (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, 2 * i
+-- f preserves 1 and multiplication
+def IsMonoidHom {M N : Type} [Monoid M] [Monoid N] (f : M → N) : Prop := sorry
 
--- the sum of the first n squares: 1² + 2² + … + n²       (squares 4 is 30)
-def squares (n : ℕ) : ℕ := sorry
+-- f preserves 0 and addition
+def IsAddMonoidHom {M N : Type} [AddMonoid M] [AddMonoid N] (f : M → N) : Prop := sorry
 
--- the sum of the first n odd numbers: 1 + 3 + … + (2n - 1)   (oddSum 3 is 9)
-def oddSum (n : ℕ) : ℕ := sorry
+-- an additive homomorphism of ℤ that is not surjective
+def homNotOnto : ℤ → ℤ := sorry
 
--- the sum of all the numbers below n: 0 + 1 + … + (n - 1)    (sumBelow 5 is 10)
-def sumBelow (n : ℕ) : ℕ := sorry
-
--- a + (a + 1) + … + (b - 1): `b` itself is not added    (sumBetween 3 6 is 12)
-def sumBetween (a b : ℕ) : ℕ := sorry
+-- a map of ℤ that is its own inverse, and is not an additive homomorphism
+def bijNotHom : ℤ → ℤ := sorry
 
 end L34

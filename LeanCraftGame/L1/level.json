@@ -1,28 +1,93 @@
 {
-  "world": "Foundations World",
-  "title": "Naming things",
-  "skill": "syntax",
-  "exercise": "Define",
+  "world": "Getting Started",
+  "title": "Reading a Lean file",
+  "skill": "reading",
+  "exercise": "Read",
+  "mil": "§1 Introduction",
   "public": "all",
   "hintsAfter": 1,
+  "questions": [
+    {
+      "answer": "q1",
+      "text": "Which line gives a name to a value?",
+      "choices": [
+        "line 3, `variable (a b : ℝ)`",
+        "line 6, `def am …`",
+        "line 8, `#check am`",
+        "line 14, `example …`"
+      ]
+    },
+    {
+      "answer": "q2",
+      "text": "What does `#check am` (line 8) tell you?",
+      "choices": [
+        "the value of `am`",
+        "that `am` is correct",
+        "a proof that `am` is commutative",
+        "the type of `am`: it takes two reals and returns a real"
+      ]
+    },
+    {
+      "answer": "q3",
+      "text": "What does `#eval (7 + 2) / 2` (line 9) print?",
+      "choices": [
+        "`4.5`",
+        "`5`",
+        "`4`",
+        "an error: Lean cannot divide 9 by 2"
+      ]
+    },
+    {
+      "answer": "q4",
+      "text": "True or false: this file proves that `am a b ≤ max a b`."
+    },
+    {
+      "answer": "q5",
+      "text": "In `theorem am_comm : am a b = am b a` (line 11), where do `a` and `b` come from?",
+      "choices": [
+        "from `variable (a b : ℝ)` on line 3: they are arguments of the theorem",
+        "from the definition of `am` on line 6",
+        "Lean guesses them from the proof"
+      ]
+    },
+    {
+      "answer": "q6",
+      "text": "True or false: a later line of the file can use the fact on line 14 by its name."
+    }
+  ],
   "checks": [
     {
-      "lean": "example : Nat := L1.hardy\nexample : Nat := L1.firstWay\nexample : Nat := L1.secondWay",
-      "message": "Keep the names and the type `Nat`: `hardy`, `firstWay` and `secondWay`."
+      "lean": "#check (L1.q1 : Fin 4)\n#check (L1.q2 : Fin 4)\n#check (L1.q3 : Fin 4)\n#check (L1.q4 : Bool)\n#check (L1.q5 : Fin 3)\n#check (L1.q6 : Bool)",
+      "message": "Keep the six answer lines as they are, and only change the value after `:=`."
     }
   ],
   "hints": [
     {
-      "match": "firstWay",
-      "hint": "`1 ^ 3 + 12 ^ 3`. The powers are computed first, as on paper."
+      "match": "Question 1",
+      "hint": "`def` is the keyword for naming a value. `variable` only announces names for later theorems."
     },
     {
-      "match": "secondWay",
-      "hint": "`9 ^ 3 + 10 ^ 3`."
+      "match": "Question 2",
+      "hint": "`#check` shows a type, never a value: `am (x y : ℝ) : ℝ`."
     },
     {
-      "match": "",
-      "hint": "`def hardy : Nat := 1729`: the value goes after `:=`."
+      "match": "Question 3",
+      "steps": [
+        "What is the type of `7 + 2` when nothing says otherwise? How does division work there?"
+      ],
+      "hint": "Without a type, numbers are natural numbers, and `9 / 2` rounds down to `4`."
+    },
+    {
+      "match": "Question 4",
+      "hint": "Look at the proof of `am_le_max`: `sorry` is a placeholder, not a proof."
+    },
+    {
+      "match": "Question 5",
+      "hint": "The `variable` line declares `a` and `b` for every theorem below it."
+    },
+    {
+      "match": "Question 6",
+      "hint": "An `example` has no name, so nothing can refer to it."
     }
   ]
 }

@@ -1,10 +1,6 @@
--- two numbers `lo` and `hi`, in this order, with an axiom `lo ≤ hi`
-structure Interval where
-  lo : Nat
-  hi : Nat
-  h : lo ≤ hi
-
--- a number `val` with an axiom saying that it is positive
-structure PosNat where
-  val : Nat
-  pos : 0 < val
+def Df (f : ℝ × ℝ → ℝ) (p : ℝ × ℝ) : ℝ × ℝ →L[ℝ] ℝ := fderiv ℝ f p
+def Dg (g : ℝ → ℝ × ℝ) (t : ℝ) : ℝ →L[ℝ] ℝ × ℝ := fderiv ℝ g t
+def normPair : ℝ := 4
+def q1 : Fin 4 := 2
+def q2 : Fin 4 := 1
+def q3 : Bool := true

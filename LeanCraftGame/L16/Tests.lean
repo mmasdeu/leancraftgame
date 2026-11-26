@@ -1,34 +1,28 @@
-/- Hidden test battery for Level For all. -/
+/- Hidden test battery for Level 16: Images and preimages. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L16.Player
 
 open L16
 
-#no_sorry AlwaysBelow
-#no_sorry AllEven
-#level_start "For all"
+#no_sorry squares
+#no_sorry evensPre
+#no_sorry L16.preimage_inter'
+#no_sorry f₀
+#no_sorry s₀
+#no_sorry t₀
+#no_sorry y₀
+#level_start "Images and preimages"
 
--- the worked example
-#expect_true "AllBig (fun n => n + 10) is true" unfolding AllBig :
-  AllBig (fun n => n + 10)
-#expect_false "AllBig (fun n => n) is false" unfolding AllBig :
-  AllBig (fun n => n)
--- your predicates
-#expect_true "AlwaysBelow (fun n => n % 3) 2 is true" unfolding AlwaysBelow :
-  AlwaysBelow (fun n => n % 3) 2
-#expect_true "AlwaysBelow (fun _ => 4) 4 is true" unfolding AlwaysBelow :
-  AlwaysBelow (fun _ => 4) 4
-#expect_false "AlwaysBelow (fun n => n % 3) 1 is false" unfolding AlwaysBelow :
-  AlwaysBelow (fun n => n % 3) 1
-#expect_false "AlwaysBelow (fun n => n) 5 is false" unfolding AlwaysBelow :
-  AlwaysBelow (fun n => n) 5
-#expect_true "AllEven (fun n => 2 * n) is true" unfolding AllEven :
-  AllEven (fun n => 2 * n)
-#expect_true "AllEven (fun _ => 0) is true" unfolding AllEven :
-  AllEven (fun _ => 0)
-#expect_false "AllEven (fun n => n) is false" unfolding AllEven :
-  AllEven (fun n => n)
-#expect_false "AllEven (fun n => 2 * n + 1) is false" unfolding AllEven :
-  AllEven (fun n => 2 * n + 1)
+#expect_true "9 ∈ squares" unfolding squares Set.range : 9 ∈ squares
+#expect_true "16 ∈ squares" unfolding squares Set.range : 16 ∈ squares
+#expect_true "2 ∈ evensPre" unfolding evensPre Set.preimage : 2 ∈ evensPre
+#expect_false "3 ∈ evensPre" unfolding evensPre Set.preimage : 3 ∈ evensPre
+#expect_true "8 ∈ evensPre" unfolding evensPre Set.preimage : 8 ∈ evensPre
+#expect_equiv "preimage_inter' says f ⁻¹' (u ∩ v) = f ⁻¹' u ∩ f ⁻¹' v" :
+  L16.preimage_inter' ↔ ∀ {α β : Type} (f : α → β) (u v : Set β), f ⁻¹' (u ∩ v) = f ⁻¹' u ∩ f ⁻¹' v
+  using fun _ _ _ => Set.preimage_inter
+#expect_true "y₀ is in the image of s₀" unfolding y₀ f₀ s₀ Set.image : y₀ ∈ f₀ '' s₀
+#expect_true "y₀ is in the image of t₀" unfolding y₀ f₀ t₀ Set.image : y₀ ∈ f₀ '' t₀
+#expect_true "y₀ is not in the image of s₀ ∩ t₀" unfolding y₀ f₀ s₀ t₀ Set.image : y₀ ∉ f₀ '' (s₀ ∩ t₀)
 
 #level_report

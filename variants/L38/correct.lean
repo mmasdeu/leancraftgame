@@ -1,9 +1,31 @@
-def triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, i
-def numDivisors (n : ℕ) : ℕ := (Finset.filter (fun d => d ∣ n) (Finset.Ico 1 n)).card
-def primesUpTo (n : ℕ) : ℕ := (Finset.filter (fun p => Nat.Prime p) (Finset.range n)).card
-def evenSquares (n : ℕ) : ℕ := (∑ i ∈ Finset.filter (fun i => i % 2 = 0) (Finset.range n), i) ^ 2
 
-def tn : ℕ := 3
-def dn : ℕ := 6
-def pn : ℕ := 2
-def en : ℕ := 5
+open Polynomial
+
+structure AddSubmonoidℤ where
+  carrier : Set ℤ
+  zero_mem : 0 ∈ carrier
+  add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier
+
+structure AddSubgroupℤ where
+  carrier : Set ℤ
+  zero_mem : 0 ∈ carrier
+  add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier
+  neg_mem {a} : a ∈ carrier → -a ∈ carrier
+
+-- Claim 1: an additive submonoid of ℤ that is not a subgroup
+def junk : Set ℤ := {n | 0 ≤ n}
+
+-- Claim 2: in Ideal.span {2}, but not divisible by both 4 and 6
+def x : ℤ := 2
+
+-- Claim 3: natDegree (p * q) ≠ natDegree p + natDegree q
+def p : ℤ[X] := 0
+def q : ℤ[X] := X
+
+-- Claim 4: nonzero, and not invertible in ZMod 6
+def a : ZMod 6 := 2
+
+-- Claim 5: two permutations that do not commute
+def σ : Equiv.Perm (Fin 3) := Equiv.swap 0 1
+def τ : Equiv.Perm (Fin 3) := Equiv.swap 1 2
+

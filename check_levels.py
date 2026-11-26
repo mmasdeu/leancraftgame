@@ -7,6 +7,10 @@
 * An answer named `correct*.lean` or `fix*.lean` must pass every test.
 * An answer named `bug*.lean` must fail at least one test (❌), or be rejected
   before the tests run (for example by a check in level.json).
+* An answer named `other*.lean` is a statement other than the one asked for that no proof
+  within the referee's reach refutes: a *true* one (such as `(a + b) ^ 2 = (a + b) ^ 2` for
+  the binomial formula), or a false one whose counterexample the referee cannot build. It
+  must not clear the level, and must get no ❌ (only ❓).
 * The starting code (`Player.lean` as the player sees it) must not clear the level.
 * Every level's metadata (predictions, public tests, hints) must match its tests.
 
@@ -15,6 +19,7 @@
 Prints one line per answer and exits with status 1 if anything is unexpected.
 """
 import argparse
+import re
 import queue
 import sys
 import threading
@@ -47,17 +52,47 @@ def run(n, code, jobs, timeout, cache):
     return compiled, results, done
 
 
+def source_problems(n):
+    """Problems with Player.lean that the metadata cannot show.
+
+    * The lesson is the first comment, and ends at the first `-/`: a `/-- … -/` doc comment
+      inside a code block of the lesson cuts it short, and the rest of the lesson then lands in
+      the player's template. After the lesson and the imports, the file must open the namespace.
+    * Every import must exist (a module name that is wrong in this Mathlib fails only at run time)."""
+    out = []
+    text = (ROOT / "LeanCraftGame" / f"L{n}" / "Player.lean").read_text(encoding="utf-8")
+    _, rest = server.split_intro(text)
+    body = [l for l in rest.splitlines() if l.strip() and not l.startswith("import ")]
+    if not body or body[0].strip() != f"namespace L{n}":
+        out.append(f"after the lesson and the imports, Player.lean should open `namespace L{n}` "
+                   f"(a `-/` inside the lesson ends it early?), but it continues with {body[0][:60]!r}"
+                   if body else "Player.lean has no code after the lesson")
+    roots = [ROOT / ".lake" / "build" / "lib" / "lean"] + sorted(
+        (ROOT / ".lake" / "packages").glob("*/.lake/build/lib/lean"))
+    for m in re.findall(r"^import (\S+)", rest, re.M):
+        rel = Path(*m.split(".")).with_suffix(".olean")
+        if m.startswith("LeanCraftGame."):
+            src = ROOT / Path(*m.split(".")).with_suffix(".lean")
+            if not src.exists():
+                out.append(f"import {m}: there is no such module")
+        elif roots and not any((r / rel).exists() for r in roots):
+            out.append(f"import {m}: there is no such module in this Mathlib")
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("levels", nargs="*", type=int, help="level directories to check (default: all)")
     ap.add_argument("--jobs", type=int, default=8, help="Lean processes run in parallel")
     ap.add_argument("--timeout", type=int, default=60, help="seconds allowed per test")
     ap.add_argument("--static", action="store_true", help="only check the levels' metadata")
+    ap.add_argument("--no-build", action="store_true",
+                    help="do not rebuild the referee first (when another run is using it)")
     opts = ap.parse_args()
     problems = 0
     for n in opts.levels or server.LEVELS:
         lv = server.load_level(n)
-        for p in server.validate_level(lv):
+        for p in server.validate_level(lv) + source_problems(n):
             print(f"!! L{n:<3}{p}")
             problems += 1
         if not (ROOT / f"variants/L{n}").is_dir():
@@ -68,7 +103,7 @@ def main():
         sys.exit(1 if problems else 0)
     if problems:
         sys.exit(f"{problems} problem(s) with the level metadata: fix them first.")
-    server.prepare_lean()
+    server.prepare_lean(build=not opts.no_build)
     cache = server.Cache()
     unexpected = 0
     for n in opts.levels or server.LEVELS:
@@ -92,6 +127,8 @@ def main():
                 ok = cleared
             elif label.startswith("bug"):
                 ok = not cleared and (failed is None or failed > 0)
+            elif label.startswith("other"):
+                ok = not cleared and failed == 0
             else:
                 ok = not cleared
             print(f"{'  ' if ok else '!!'} L{n:<3}{label:22s}{line}  ({time.time() - t0:.0f} s)", flush=True)

@@ -1,50 +1,104 @@
 /-
-# Relations
+# Classes and instances
 
-A binary relation on `ℕ` is a function `r : ℕ → ℕ → Prop`: `r a b` is the
-statement "`a` is related to `b`". Relations are classified by a handful of
-properties:
+`x ^ n` means repeated multiplication in `ℕ`, in `ℤ`, in a ring of matrices, in a group
+of permutations: the *same* definition, read in different structures. MIL's chapter 8
+shows how Mathlib does this with **type classes**, by building a small copy of the
+hierarchy. This level follows it.
 
-* **reflexive**: `r a a` for every `a`;
-* **symmetric**: `r a b → r b a`;
-* **transitive**: `r a b → r b c → r a c`;
-* **antisymmetric**: `r a b → r b a → a = b`.
+## Classes
 
-An **equivalence relation** (reflexive, symmetric, transitive) is what you
-quotient by: congruence mod `n` gives `ℤ/nℤ`. A **partial order**
-(reflexive, antisymmetric, transitive) is what you compare with:
-divisibility on `ℕ` is one, and `0` is its largest element.
+A class is a structure whose instances Lean will *search for* by itself:
 
-Each property is independent of the others: "`|a - b| ≤ 1`" is reflexive
-and symmetric but not transitive; `<` is transitive and antisymmetric
-(vacuously!) but not reflexive. The referee tests your definitions on such
-examples.
+```lean
+class One₁ (α : Type) where
+  one : α
 
-In the Topology world you will meet the same properties on finite sets,
-with equivalence classes and the partitions they form.
+class Dia₁ (α : Type) where
+  dia : α → α → α
+
+infixl:70 " ⋄ " => Dia₁.dia
+
+class Monoid₁ (α : Type) extends Dia₁ α, One₁ α
+```
+
+`One₁ α` says "`α` has a distinguished element", `Dia₁ α` "`α` has a binary operation",
+written `a ⋄ b` (type `\diamond`). `extends` builds a bigger class from smaller ones: a
+`Monoid₁ α` has both. (MIL's real `Monoid₁` also has the axioms; they are left out
+here, and the tests check them on your examples.)
+
+## Instances
+
+An **instance** says that a particular type has the structure:
+
+```lean
+instance natMul : Monoid₁ ℕ where
+  dia a b := a * b
+  one := 1
+```
+
+## Using a class
+
+A definition can ask for "any type with a monoid structure" with an *instance argument*
+in square brackets, `[Monoid₁ α]`. Lean then finds the instance each time the definition
+is used:
+
+```lean
+def mpow {α : Type} [Monoid₁ α] (x : α) : ℕ → α
+  | 0 => One₁.one
+  | n + 1 => mpow x n ⋄ x
+```
+
+`mpow 2 10` finds `natMul` and gives `1024`. This search is how Mathlib knows that `ℝ` is
+a field and `ℤ` a ring, and why one lemma about monoids applies to all of them. A type
+gets **one** instance of a class, so `ℕ` cannot be a `Monoid₁` both under `*` and
+under `+`; Mathlib has separate additive classes (`AddMonoid`) for that reason.
 
 ## Your task
 
-Define the four properties, then equivalence relations and partial orders.
+Write three instances. Powers then come for free:
+
+* `(Bool, xor, false)`: `xor a b` is "exactly one of `a`, `b`". Then `mpow true n` is the
+  parity of `n`.
+* `(ℤ, +, 0)`: here `x ⋄ y` means `x + y`, so `mpow x n` is `n * x`.
+* `(ℕ → ℕ, ∘, id)`: `f ⋄ g` is the composition "first `g`, then `f`", as in `f ∘ g`.
+  Then `mpow f n` is `f` applied `n` times.
 -/
 namespace L32
 
--- every a is related to itself
-def Reflexive' (r : ℕ → ℕ → Prop) : Prop := sorry
+class One₁ (α : Type) where
+  one : α
 
--- if a is related to b, then b is related to a
-def Symmetric' (r : ℕ → ℕ → Prop) : Prop := sorry
+class Dia₁ (α : Type) where
+  dia : α → α → α
 
--- if a is related to b and b to c, then a is related to c
-def Transitive' (r : ℕ → ℕ → Prop) : Prop := sorry
+infixl:70 " ⋄ " => Dia₁.dia
 
--- if a is related to b and b to a, then a and b are equal
-def Antisymmetric' (r : ℕ → ℕ → Prop) : Prop := sorry
+class Monoid₁ (α : Type) extends Dia₁ α, One₁ α
 
--- reflexive, symmetric and transitive
-def IsEquivalence' (r : ℕ → ℕ → Prop) : Prop := sorry
+-- x ⋄ x ⋄ ⋯ ⋄ x (n times), in every monoid at once (done)
+def mpow {α : Type} [Monoid₁ α] (x : α) : ℕ → α
+  | 0 => One₁.one
+  | n + 1 => mpow x n ⋄ x
 
--- reflexive, antisymmetric and transitive
-def IsPartialOrder' (r : ℕ → ℕ → Prop) : Prop := sorry
+-- (ℕ, *, 1) (done)
+instance natMul : Monoid₁ ℕ where
+  dia a b := a * b
+  one := 1
+
+-- (Bool, xor, false)
+instance boolXor : Monoid₁ Bool where
+  dia a b := sorry
+  one := sorry
+
+-- (ℤ, +, 0)
+instance intAdd : Monoid₁ ℤ where
+  dia a b := sorry
+  one := sorry
+
+-- (ℕ → ℕ, composition, identity): f ⋄ g is "first g, then f"
+instance endo : Monoid₁ (ℕ → ℕ) where
+  dia f g := sorry
+  one := sorry
 
 end L32

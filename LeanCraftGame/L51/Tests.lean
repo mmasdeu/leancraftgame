@@ -1,41 +1,39 @@
-/- Hidden test battery for Level Metric spaces. -/
+/- Hidden test battery for Level 51: Final audit. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L51.Player
 
 open L51
 
-#level_start "Metric spaces"
+#no_sorry GoldbachFor
+#no_sorry CollatzFor
+#no_sorry q1
+#no_sorry q2
+#no_sorry q3
+#level_start "Final audit: the AI proved Goldbach!"
 
-#no_sorry Metric'
+-- Goldbach in toy worlds
+#expect_true "Goldbach, world A: the 'primes' are the even numbers" unfolding GoldbachFor :
+  GoldbachFor (fun p => p % 2 = 0)
+#expect_true "Goldbach, world B: the 'primes' are the numbers ≥ 2" unfolding GoldbachFor :
+  GoldbachFor (fun p => 2 ≤ p)
+#expect_false "Goldbach, world C: no number is 'prime'" unfolding GoldbachFor :
+  GoldbachFor (fun _ => False)
+#expect_open "Goldbach in the real world" unfolding GoldbachFor :
+  GoldbachFor Nat.Prime
 
--- genuine metrics (on the four points 0, 1, 2, 3)
-#expect_model "|x - y| on {0, 1, 2, 3} is a metric" :
-  Metric'.mk (α := Fin 4) (fun a b => (((a.val : ℤ) - b.val).natAbs : ℤ))
-#expect_model "the discrete metric on {0, 1, 2, 3} is a metric" :
-  Metric'.mk (α := Fin 4) (fun a b => if a = b then 0 else 1)
-#expect_model "2 * |x - y| on {0, 1, 2, 3} is a metric" :
-  Metric'.mk (α := Fin 4) (fun a b => 2 * (((a.val : ℤ) - b.val).natAbs : ℤ))
-#expect_model "the distance between naturals, as a truncated difference, is a metric" :
-  Metric'.mk (α := Fin 4) (fun a b => if a.val ≤ b.val then ((b.val - a.val : ℕ) : ℤ) else ((a.val - b.val : ℕ) : ℤ))
+-- Collatz in toy processes
+#expect_true "Collatz, process A: counting down, n - k" unfolding CollatzFor :
+  CollatzFor (fun n k => n - k)
+#expect_false "Collatz, process B: everything falls to 0 after the start" unfolding CollatzFor :
+  CollatzFor (fun n k => if k = 0 then n else 0)
+#expect_true "Collatz, process C: stays at n until step n, then jumps to 1" unfolding CollatzFor :
+  CollatzFor (fun n k => if k < n then n else 1)
+#expect_open "Collatz in the real world" unfolding CollatzFor collatz :
+  CollatzFor (fun n k => collatz^[k] n)
 
--- imposters
-#expect_not_model "x - y is not a metric" :
-  Metric'.mk (α := Fin 4) (fun a b => (a.val : ℤ) - b.val)
-#expect_not_model "(x - y)^2 is not a metric" :
-  Metric'.mk (α := Fin 4) (fun a b => ((a.val : ℤ) - b.val) ^ 2)
-#expect_not_model "the zero distance is not a metric" :
-  Metric'.mk (α := Fin 4) (fun _ _ => 0)
-#expect_not_model "x + y is not a metric" :
-  Metric'.mk (α := Fin 4) (fun a b => (a.val : ℤ) + b.val)
-#expect_not_model "max x y is not a metric" :
-  Metric'.mk (α := Fin 4) (fun a b => max (a.val : ℤ) b.val)
-#expect_not_model "the parity distance is not a metric" :
-  Metric'.mk (α := Fin 4) (fun a b => if a.val % 2 = b.val % 2 then 0 else 1)
-#expect_not_model "the one-way distance is not a metric" :
-  Metric'.mk (α := Fin 4) (fun a b => if a.val ≤ b.val then (b.val : ℤ) - a.val else 2 * ((a.val : ℤ) - b.val))
-#expect_not_model "the constant distance 1 is not a metric" :
-  Metric'.mk (α := Fin 4) (fun _ _ => 1)
-#expect_not_model "-|x - y| is not a metric" :
-  Metric'.mk (α := Fin 4) (fun a b => -(((a.val : ℤ) - b.val).natAbs : ℤ))
+-- Three more audits
+#expect_choice "Audit 1: infinitely many primes" : q1 = false
+#expect_choice "Audit 2: convergent sequences are bounded" : q2 = true
+#expect_choice "Audit 3: |x| has no derivative at 0" : q3 = false
 
 #level_report

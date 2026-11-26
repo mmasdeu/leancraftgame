@@ -1,58 +1,25 @@
 {
-  "world": "Quantifier World",
-  "title": "Bounded quantifiers",
-  "skill": "syntax",
-  "exercise": "Define",
+  "world": "Elementary Number Theory",
+  "title": "Divisibility and primes",
+  "skill": "library",
+  "exercise": "Write",
+  "mil": "§5.1",
+  "public": ["11 and 13 are twin primes", "(3, 4, 5) is a primitive triple", "lcm' 4 6 = 12"],
   "predict": [
-    {
-      "test": "HasPositiveRoot (fun n => n) is false (its only root is 0)",
-      "statement": "HasPositiveRoot (fun n => n)"
-    },
-    {
-      "test": "EventuallyZero (fun n => if n < 5 then 7 else 0) is true",
-      "statement": "EventuallyZero (fun n => if n < 5 then 7 else 0)"
-    },
-    {
-      "test": "EventuallyZero (fun n => n % 2) is false (0, 1, 0, 1, … keeps returning to 1)",
-      "statement": "EventuallyZero (fun n => n % 2)"
-    }
+    {"test": "lcm' 0 0 = 0", "statement": "With `lcm' a b := a * b / Nat.gcd a b`, `lcm' 0 0 = 0` (and not an error)."},
+    {"test": "(6, 8, 10) is a primitive triple", "statement": "`(6, 8, 10)` is a primitive Pythagorean triple."}
   ],
   "checks": [
-    {
-      "lean": "example : (ℕ → ℕ) → Prop := L20.HasPositiveRoot",
-      "message": "Keep `HasPositiveRoot : (ℕ → ℕ) → Prop`."
-    },
-    {
-      "lean": "example : (ℕ → ℕ) → Prop := L20.EventuallyZero",
-      "message": "Keep `EventuallyZero : (ℕ → ℕ) → Prop`."
-    }
+    {"lean": "#check (L20.TwinPrime : ℕ → Prop)\n#check (L20.PrimitiveTriple : ℕ → ℕ → ℕ → Prop)\n#check (L20.lcm' : ℕ → ℕ → ℕ)",
+     "message": "Keep `TwinPrime : ℕ → Prop`, `PrimitiveTriple : ℕ → ℕ → ℕ → Prop`, `lcm' : ℕ → ℕ → ℕ`."}
   ],
   "hints": [
-    {
-      "match": "only root is 0",
-      "hint": "Your definition accepts a function whose only root is 0. Under `∃`, the bound needs `∧`: `∃ n > 0, f n = 0` means `∃ n, n > 0 ∧ f n = 0`."
-    },
-    {
-      "match": "HasPositiveRoot",
-      "steps": [
-        "Under `∃`, a bound such as `n > 0` hides an `∧`, not an `→`."
-      ],
-      "hint": "`∃ n > 0, f n = 0`."
-    },
-    {
-      "match": "keeps returning",
-      "hint": "Your definition accepts a sequence that is 0 infinitely often but not from some point on. The `∃ N` must come first: `∃ N, ∀ n ≥ N, u n = 0`."
-    },
-    {
-      "match": "EventuallyZero",
-      "steps": [
-        "\"From some index on\": first the index `N`, then every `n` after it."
-      ],
-      "hint": "`∃ N, ∀ n ≥ N, u n = 0`."
-    },
-    {
-      "match": "",
-      "hint": "Expand the shorthand: `∀ n ≥ N` hides an `→`, `∃ n > 0` hides an `∧`."
-    }
+    {"match": "twin primes", "hint": "`p.Prime ∧ (p + 2).Prime`."},
+    {"match": "primitive triple", "steps": ["`(6, 8, 10)` satisfies `a² + b² = c²`. What makes it not primitive?"],
+     "hint": "`a ^ 2 + b ^ 2 = c ^ 2 ∧ Nat.Coprime a b`."},
+    {"match": "lcm'", "hint": "`a * b / Nat.gcd a b`. At `0, 0` it is `0 / 0`, which is `0` in Lean."},
+    {"match": "prime_two_le", "hint": "`statement prime_two_le {p : ℕ} (hp : p.Prime) : 2 ≤ p`."},
+    {"match": "coprime_dvd", "steps": ["Without the coprimality hypothesis, try `k = 4`, `m = n = 2`."],
+     "hint": "`statement coprime_dvd {k m n : ℕ} (H1 : Nat.Coprime k m) (H2 : k ∣ m * n) : k ∣ n`."}
   ]
 }

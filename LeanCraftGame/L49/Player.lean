@@ -1,44 +1,63 @@
 /-
-# Axioms in a structure
+# Derivatives in normed spaces
 
-A field of a structure can be a **proof**: a structure can carry, beside its
-data, the axioms the data must satisfy.
+MIL 12.2 differentiates functions between **normed spaces**: `f : E → F`, where `E` and
+`F` have a norm `‖x‖` and are vector spaces over `ℝ`. The plane `ℝ × ℝ` is one, and so is
+`ℝ` itself. The derivative of such an `f` at a point is no longer a number: it is the
+**best linear approximation** of `f` near that point.
 
 ```lean
-structure Interval where
-  lo : ℕ
-  hi : ℕ
-  le : lo ≤ hi
+variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+  [NormedAddCommGroup F] [NormedSpace ℝ F]
+
+#check fderiv ℝ f x        -- fderiv ℝ f x : E →L[ℝ] F
+#check HasFDerivAt f f' x  -- f' : E →L[ℝ] F
+#check ContDiff ℝ n f      -- f is n times continuously differentiable
 ```
 
-A value of `Interval` is then a pair of numbers *together with* a proof
-that the first is at most the second; `⟨5, 2, _⟩` cannot be built, because
-no proof of `5 ≤ 2` exists. This is how Mathlib defines `ℚ` (numerator,
-positive denominator, coprimality), the units of a monoid, and every
-algebraic structure: the axioms are fields.
+* `E →L[ℝ] F` is the type of **continuous linear maps** from `E` to `F`. It is a
+  structure, but it can be applied like a function: `fderiv ℝ f x v` is the derivative of
+  `f` at `x` in the direction `v`.
+* The `F` in `fderiv` stands for *Fréchet*. Its arguments `𝕜` (here `ℝ`), `f` and `x` are
+  explicit; `E` and `F` are implicit, found from the type of `f`.
+* For `f : ℝ → ℝ`, `deriv f x` is defined as `fderiv ℝ f x 1`: the linear map applied to
+  the direction `1`.
+* `ContDiff ℝ 1 f` says that `f` is differentiable and its derivative is continuous;
+  `ContDiff ℝ 2 f` asks the same of the derivative, and so on.
 
-You never write the proofs: the referee checks, for each example, whether
-the axioms hold (*a model*) or some axiom fails (*ruled out*). Your job is
-to choose axioms that accept exactly the intended objects: an axiom too
-weak lets junk in, an axiom too strong excludes the examples that matter
-(such as the one-point interval `[5, 5]`).
+## Which norm?
+
+On `ℝ × ℝ`, Mathlib's norm is the **maximum** of the absolute values of the coordinates,
+`‖(x, y)‖ = max |x| |y|`, not the Euclidean length `√(x² + y²)`. (The Euclidean plane is a
+different type, `EuclideanSpace ℝ (Fin 2)`.) The derivative does not depend on the choice,
+since all norms on a finite-dimensional space are equivalent, but a statement that
+mentions `‖·‖` does.
 
 ## Your task
 
-Add the axiom to `Interval` (`lo ≤ hi`) and to `PosNat` (`val` is positive).
-Keep the data fields in the order they are listed.
+1. Replace the first `sorry` of `Df` by its **type**, and the second by its value,
+   `fderiv ℝ f p`. Do the same for `Dg`.
+2. `normPair`: the value of `‖((3 : ℝ), (-4 : ℝ))‖` in Mathlib, as a number.
+3. Answer the questions below the lesson.
 -/
+import Mathlib.Analysis.Calculus.FDeriv.Basic
+import Mathlib.Analysis.Calculus.FDeriv.Prod
+import Mathlib.Analysis.Calculus.Deriv.Basic
+import Mathlib.Analysis.Calculus.ContDiff.Defs
+
 namespace L49
 
--- two numbers `lo` and `hi`, in this order, with an axiom `lo ≤ hi`
-structure Interval where
-  lo : Nat
-  hi : Nat
-  -- your axiom here
+-- the derivative of a function from the plane to ℝ, at a point p
+def Df (f : ℝ × ℝ → ℝ) (p : ℝ × ℝ) : sorry := sorry
 
--- a number `val` with an axiom saying that it is positive
-structure PosNat where
-  val : Nat
-  -- your axiom here
+-- the derivative of a curve in the plane, at a time t
+def Dg (g : ℝ → ℝ × ℝ) (t : ℝ) : sorry := sorry
+
+-- the value of ‖((3 : ℝ), (-4 : ℝ))‖, as a number
+def normPair : ℝ := sorry
+
+def q1 : Fin 4 := sorry
+def q2 : Fin 4 := sorry
+def q3 : Bool := sorry
 
 end L49

@@ -1,47 +1,31 @@
-/- Hidden test battery for Level Continuity. -/
+/- Hidden test battery for Level 40: Subspaces and quotients. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L40.Player
 
 open L40
 
-#no_sorry IsDeltaFor
-#no_sorry ContAt
-#level_start "Continuity"
+#no_sorry line
+#no_sorry a
+#no_sorry b
+#no_sorry p
+#no_sorry q1
+#no_sorry q2
+#no_sorry q3
+#level_start "Subspaces and quotients"
 
--- the worked example
-#expect_true "BoundedBy (fun _ => 3) 3 is true" unfolding BoundedBy :
-  BoundedBy (fun _ => 3) 3
-#expect_false "BoundedBy (fun x => x) 3 is false" unfolding BoundedBy :
-  BoundedBy (fun x => x) 3
--- the inner part: concrete numbers
-#expect_true "δ = 1/2 is good for ε = 1 for 2x at 0" unfolding IsDeltaFor :
-  IsDeltaFor (fun x => 2 * x) 0 1 (1 / 2)
-#expect_false "δ = 1 is too big for ε = 1 for 2x at 0" unfolding IsDeltaFor :
-  IsDeltaFor (fun x => 2 * x) 0 1 1
-#expect_false "δ = 0 is never good, even for a constant function" unfolding IsDeltaFor :
-  IsDeltaFor (fun _ => 5) 0 1 0
-#expect_false "a negative δ is never good" unfolding IsDeltaFor :
-  IsDeltaFor (fun _ => 5) 0 1 (-1)
-#expect_false "a jump of exactly ε is not within ε" unfolding IsDeltaFor :
-  IsDeltaFor (fun x => if x ≤ 0 then 0 else 1) 0 1 1
-#expect_true "a jump smaller than ε is fine" unfolding IsDeltaFor :
-  IsDeltaFor (fun x => if x ≤ 0 then 0 else 1) 0 2 1
-#expect_true "x is measured from a: δ = 1 is good for ε = 1 for x at 3" unfolding IsDeltaFor :
-  IsDeltaFor (fun x => x) 3 1 1
-#expect_true "f x is compared with f a: δ = 1 is good for ε = 1 for x + 1 at 2" unfolding IsDeltaFor :
-  IsDeltaFor (fun x => x + 1) 2 1 1
--- continuity
-#expect_true "a constant function is continuous" unfolding ContAt IsDeltaFor :
-  ContAt (fun _ => 5) 3
-#expect_true "x is continuous at 0" unfolding ContAt IsDeltaFor :
-  ContAt (fun x => x) 0
-#expect_true "x is continuous at 3" unfolding ContAt IsDeltaFor :
-  ContAt (fun x => x) 3
-#expect_true "x + 1 is continuous at 2" unfolding ContAt IsDeltaFor :
-  ContAt (fun x => x + 1) 2
-#expect_true "|x| is continuous at 0" unfolding ContAt IsDeltaFor :
-  ContAt (fun x => |x|) 0
-#expect_true "a step function is continuous away from its jump" unfolding ContAt IsDeltaFor :
-  ContAt (fun x => if x ≤ 0 then 0 else 1) 1
+#expect_true "![1, 2] is on line" unfolding line : ![1, 2] ∈ line
+#expect_false "![2, 1] is on line" unfolding line : ![2, 1] ∈ line
+#expect_true "line contains the zero vector (zero_mem')" unfolding line : ![0, 0] ∈ line
+#expect_true "line is closed under addition (add_mem')" unfolding line :
+  ∀ x y z t : ℚ, ![x, y] ∈ line → ![z, t] ∈ line → ![x + z, y + t] ∈ line
+#expect_true "line is closed under negation and tripling (smul_mem')" unfolding line :
+  ∀ x y : ℚ, ![x, y] ∈ line → ![-x, -y] ∈ line ∧ ![3 * x, 3 * y] ∈ line
+#expect_true "your a and b lie on the axes" unfolding axes a b : a ∈ axes ∧ b ∈ axes
+#expect_true "a + b is not on the axes" unfolding axes a b : a + b ∉ axes
+#expect_true "your p lies on the parabola" unfolding parabola p : p ∈ parabola
+#expect_true "2 • p is not on the parabola" unfolding parabola p : ![2 * p 0, 2 * p 1] ∉ parabola
+#expect_choice "Question 1: what `U ⊔ W` is" : q1 = 2
+#expect_choice "Question 2: what `⊥ : Submodule K V` is" : q2 = 0
+#expect_choice "Question 3: is `{v | v 1 = 2 * v 0 + 1}` a subspace?" : q3 = false
 
 #level_report

@@ -1,41 +1,31 @@
-/- Hidden test battery for Level Statements. -/
+/- Hidden test battery for Level 7: Spot the bug: statements. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L7.Player
 
 open L7
 
-#no_sorry Divides
-#no_sorry IsPythagorean
-#no_sorry IsFixed
-#level_start "Statements"
+#no_sorry a₁
+#no_sorry b₁
+#no_sorry a₂
+#no_sorry b₂
+#no_sorry x₃
+#no_sorry y₃
+#no_sorry sq_le_sq_of_le
+#no_sorry div_mul_cancel_ok
+#level_start "Spot the bug: statements"
 
-#expect_true "IsEven 10 is true" unfolding IsEven :
-  IsEven 10
-#expect_false "IsEven 7 is false" unfolding IsEven :
-  IsEven 7
-#expect_true "Divides 3 12 is true" unfolding Divides :
-  Divides 3 12
-#expect_false "Divides 5 12 is false" unfolding Divides :
-  Divides 5 12
-#expect_true "Divides 7 0 is true: everything divides 0" unfolding Divides :
-  Divides 7 0
-#expect_true "Divides 0 0 is true" unfolding Divides :
-  Divides 0 0
-#expect_false "Divides 0 5 is false" unfolding Divides :
-  Divides 0 5
-#expect_true "Divides 1 n for every n < 50" unfolding Divides :
-  ∀ n < 50, Divides 1 n
-#expect_true "IsPythagorean 3 4 5 is true" unfolding IsPythagorean :
-  IsPythagorean 3 4 5
-#expect_true "IsPythagorean 5 12 13 is true" unfolding IsPythagorean :
-  IsPythagorean 5 12 13
-#expect_false "IsPythagorean 4 3 6 is false" unfolding IsPythagorean :
-  IsPythagorean 4 3 6
-#expect_true "IsFixed 0 is true" unfolding IsFixed collatz :
-  IsFixed 0
-#expect_false "IsFixed 1 is false (1 → 4)" unfolding IsFixed collatz :
-  IsFixed 1
-#expect_true "0 is the only fixed point below 100" unfolding IsFixed collatz :
-  ∀ n < 100, IsFixed n → n = 0
+#expect_false "In ℕ, (0 - 1)² = 0² - 2·0·1 + 1²" :
+  ((0 : ℕ) - 1) ^ 2 = 0 ^ 2 - 2 * 0 * 1 + 1 ^ 2
+#expect_true "Part A: a₁, b₁ break (a - b)² = a² - 2ab + b² in ℕ" unfolding a₁ b₁ :
+  (a₁ - b₁) ^ 2 ≠ a₁ ^ 2 - 2 * a₁ * b₁ + b₁ ^ 2
+#expect_true "Part A: a₂ ≤ b₂ (the hypothesis holds)" unfolding a₂ b₂ : a₂ ≤ b₂
+#expect_true "Part A: a₂² > b₂² (the conclusion fails)" unfolding a₂ b₂ : b₂ ^ 2 < a₂ ^ 2
+#expect_true "Part A: x₃ / y₃ * y₃ ≠ x₃" unfolding x₃ y₃ : x₃ / y₃ * y₃ ≠ x₃
+#expect_equiv "Part B: sq_le_sq_of_le, repaired" :
+  L7.sq_le_sq_of_le ↔ ∀ a b : ℝ, 0 ≤ a → a ≤ b → a ^ 2 ≤ b ^ 2
+  using fun a b ha hab => pow_le_pow_left₀ ha hab 2
+#expect_equiv "Part B: div_mul_cancel_ok, repaired" :
+  L7.div_mul_cancel_ok ↔ ∀ x y : ℝ, y ≠ 0 → x / y * y = x
+  using fun x y h => div_mul_cancel₀ x h
 
 #level_report

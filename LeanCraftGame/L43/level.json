@@ -1,44 +1,29 @@
 {
-  "world": "Analysis World",
-  "title": "Spot the bug: limits",
-  "skill": "reading",
-  "exercise": "Refute",
+  "world": "Topology",
+  "title": "Filters",
+  "skill": "reading and writing statements",
+  "exercise": "Write",
+  "mil": "§11.1",
   "public": "all",
+  "questions": [
+    {"answer": "q1", "text": "What does `∃ᶠ n in atTop, P n` say?",
+     "choices": ["`∃ N, ∀ n ≥ N, P n`: eventually", "`∃ n, P n`: at least once", "`∀ n, P n`: always", "`∀ N, ∃ n ≥ N, P n`: infinitely often"]},
+    {"answer": "q2", "text": "In `Tendsto f l₁ l₂`, which filter describes where the *inputs* of `f` go?",
+     "choices": ["`l₂`", "`l₁`", "neither: the inputs are fixed"]},
+    {"answer": "q3", "text": "True or false: in Mathlib, `Tendsto u ⊥ (𝓝 0)` holds for every sequence `u : ℕ → ℝ`."}
+  ],
   "checks": [
-    {
-      "lean": "example : ℕ → ℝ := L43.seqA\nexample : ℝ := L43.limA\nexample : ℕ → ℝ := L43.seqB\nexample : ℝ := L43.limB",
-      "message": "Keep `seqA`, `seqB : ℕ → ℝ` and `limA`, `limB : ℝ`."
-    }
+    {"lean": "#check (L43.EventuallyPos : (ℕ → ℝ) → Prop)\n#check (L43.OftenZero : (ℕ → ℝ) → Prop)\n#check (L43.ConvTo : (ℕ → ℝ) → ℝ → Prop)\n#check (L43.ToInfinity : (ℕ → ℝ) → Prop)\n#check (L43.ContAt : (ℝ → ℝ) → ℝ → Prop)",
+     "message": "Keep the names and the types of the five definitions."}
   ],
   "hints": [
-    {
-      "match": "seqA converges",
-      "steps": [
-        "`seqA` must really converge to `limA`. What is the simplest convergent sequence you know?"
-      ],
-      "hint": "A constant sequence converges to its value: `seqA := fun _ => 0`, `limA := 0`."
-    },
-    {
-      "match": "Alice",
-      "steps": [
-        "Alice's definition is missing something that yours had. What happens to `|u n - a| < ε` when `ε` is 0, or negative?",
-        "With `ε = 0`, the condition `|u n - a| < 0` never holds. So which sequences does Alice's definition accept?"
-      ],
-      "hint": "Alice's definition accepts no sequence at all, so *every* convergent sequence shows the bug: a constant one is enough."
-    },
-    {
-      "match": "seqB does not converge",
-      "steps": [
-        "`seqB` must *not* converge to `limB`, and yet come within every `ε` of `limB` at least once."
-      ],
-      "hint": "`seqB := fun n => if n % 2 = 0 then 0 else 1` and `limB := 0`: the even terms are exactly 0, but the odd ones stay at 1."
-    },
-    {
-      "match": "Bob",
-      "steps": [
-        "Bob's definition only asks for *one* term within `ε` of the limit. Which sequences come close once, but do not stay close?"
-      ],
-      "hint": "Any sequence that hits the limit exactly at some index is accepted: `fun n => if n % 2 = 0 then 0 else 1` with limit 0."
-    }
+    {"match": "Question 1", "hint": "`∃ᶠ` is \"frequently\": however far you go, `P` holds again further on."},
+    {"match": "Question 2", "hint": "The order is: function, filter on its inputs, filter on its outputs."},
+    {"match": "Question 3", "hint": "`⊥` contains every set, so every preimage is in it: everything tends to everything along `⊥`."},
+    {"match": "EventuallyPos", "hint": "`∀ᶠ n in atTop, 0 < u n`."},
+    {"match": "OftenZero", "steps": ["\"Infinitely often\" is \"frequently\": which of `∀ᶠ` and `∃ᶠ`?"], "hint": "`∃ᶠ n in atTop, u n = 0`."},
+    {"match": "ConvTo", "steps": ["The index `n` goes to infinity: `atTop`. Where do the values `u n` go?"], "hint": "`Tendsto u atTop (𝓝 a)`."},
+    {"match": "ToInfinity", "hint": "`Tendsto u atTop atTop`: `atTop` on `ℝ` is the filter of the sets containing some `[M, ∞)`."},
+    {"match": "ContAt", "steps": ["As `y` approaches `x`, `f y` should approach `f x`. Which filter is on the inputs?"], "hint": "`Tendsto f (𝓝 x) (𝓝 (f x))`."}
   ]
 }

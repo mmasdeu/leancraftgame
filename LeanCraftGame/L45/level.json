@@ -1,39 +1,33 @@
 {
-  "world": "Structure World",
-  "title": "Functions on structures",
-  "skill": "syntax",
-  "exercise": "Define",
+  "world": "Topology",
+  "title": "Topological spaces",
+  "skill": "writing definitions",
+  "exercise": "Write",
+  "mil": "§11.3",
   "predict": [
-    {
-      "test": "(1 + i)⁴ = -4",
-      "statement": "(1 + i)⁴ = -4"
-    }
+    {"test": "The identity from Sierpiński space to the discrete space on {0, 1} is continuous",
+     "statement": "The identity map from Sierpiński space to the discrete space on {0, 1} is continuous."},
+    {"test": "{∅, {0, 1}, {1, 2}, {0, 1, 2}} is ruled out",
+     "statement": "{∅, {0, 1}, {1, 2}, {0, 1, 2}} is a topology on {0, 1, 2}."}
   ],
+  "public": ["Sierpiński space satisfies your axioms", "{∅, {0}} on 2 points is ruled out"],
   "checks": [
-    {
-      "lean": "example : L45.GaussInt → L45.GaussInt → L45.GaussInt := L45.GaussInt.add\nexample : L45.GaussInt → L45.GaussInt → L45.GaussInt := L45.GaussInt.mul\nexample : L45.GaussInt → ℕ → L45.GaussInt := L45.GaussInt.pow",
-      "message": "Keep `add`, `mul : GaussInt → GaussInt → GaussInt` and `pow : GaussInt → ℕ → GaussInt`."
-    }
+    {"lean": "#check fun (T : Family 2) => L45.FinTopology.mk T", "message": "Keep `opens : Family n` as the first field of `FinTopology`; the axioms come after it."},
+    {"lean": "#check (L45.mySierpinski : Family 2)\n#check (L45.myParticular : (n : Nat) → Fin n → Family n)\n#check (@L45.IsCont : {m n : Nat} → Family m → Family n → (Fin m → Fin n) → Prop)",
+     "message": "Keep `mySierpinski : Family 2`, `myParticular (n : Nat) (p : Fin n) : Family n` and `IsCont (T : Family m) (S : Family n) (f : Fin m → Fin n) : Prop`."}
   ],
   "hints": [
-    {
-      "match": "i · i",
-      "steps": [
-        "Where does the minus sign come from? `i · i = -1`."
-      ],
-      "hint": "`⟨z.re * w.re - z.im * w.im, z.re * w.im + z.im * w.re⟩`."
-    },
-    {
-      "match": "z⁰",
-      "hint": "`| 0 => ⟨1, 0⟩`: the empty product is `1 = 1 + 0i`."
-    },
-    {
-      "match": "pow",
-      "hint": "`| n + 1 => (z.pow n).mul z`."
-    },
-    {
-      "match": "",
-      "hint": "Build the result with `⟨real part, imaginary part⟩`."
-    }
+    {"match": "{∅, {0}} on 2 points", "steps": ["Which open set must every topology contain, besides ∅?"],
+     "hint": "Add `univ_mem : Finset.univ ∈ opens`."},
+    {"match": "{∅, {0, 1}, {1, 2}", "steps": ["{0, 1} and {1, 2} are open. Which set built from them is missing?"],
+     "hint": "Add `inter_mem : ∀ U ∈ opens, ∀ V ∈ opens, U ∩ V ∈ opens`."},
+    {"match": "{∅, {0}, {1}, {0, 1, 2}}", "steps": ["{0} and {1} are open. Which set built from them is missing?"],
+     "hint": "Add `union_mem : ∀ U ∈ opens, ∀ V ∈ opens, U ∪ V ∈ opens`."},
+    {"match": "satisfies your axioms", "hint": "One of your axioms is too strong: a genuine topology breaks it, and the report names it. Did you ask for complements or for every set to be open?"},
+    {"match": "Sierpiński space is the referee's", "hint": "`{∅, {1}, Finset.univ}`: `{1}` is open, `{0}` is not."},
+    {"match": "particular-point", "steps": ["Which sets contain `p`? `Finset.univ.powerset.filter (fun U => p ∈ U)`."],
+     "hint": "`insert ∅ (Finset.univ.powerset.filter (fun U => p ∈ U))`: do not forget `∅`."},
+    {"match": "continuous", "steps": ["Continuity pulls open sets back: for every `V ∈ S`, which set must be in `T`?"],
+     "hint": "`∀ V ∈ S, Top.Ref.pre f V ∈ T`. With images (`img f U ∈ S`) you get open maps instead."}
   ]
 }

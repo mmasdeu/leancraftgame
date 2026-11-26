@@ -1,28 +1,49 @@
-/- Hidden test battery for Level Challenge: matrices. -/
+/- Hidden test battery for Level 47: Spot the bug: topology. -/
 import LeanCraftGame.Referee
+import LeanCraftGame.Lib.Topology
 import LeanCraftGame.L47.Player
 
-open L47
+open Top
 
-#no_sorry pow
-#no_sorry fibMatrix
-#no_sorry fibM
-#no_sorry order6
-#level_start "Challenge: matrices"
+namespace L47Ref
+/-- The colleague's continuity, with images. -/
+def ColleagueCont {m n : Nat} (T : Family m) (S : Family n) (f : Fin m → Fin n) : Prop :=
+  ∀ U ∈ T, Ref.img f U ∈ S
+instance {m n : Nat} (T : Family m) (S : Family n) (f : Fin m → Fin n) :
+    Decidable (ColleagueCont T S f) := by unfold ColleagueCont; infer_instance
+/-- The constant sequence at `p` converges to `x`. -/
+def ConstConverges {n : Nat} (T : Family n) (p x : Fin n) : Prop := ∀ U ∈ T, x ∈ U → p ∈ U
+instance {n : Nat} (T : Family n) (p x : Fin n) : Decidable (ConstConverges T p x) := by
+  unfold ConstConverges; infer_instance
+end L47Ref
 
-#expect_true "M⁰ is the identity" unfolding pow :
-  ((pow ⟨2, 3, 5, 7⟩ 0).a = 1 ∧ (pow ⟨2, 3, 5, 7⟩ 0).b = 0 ∧ (pow ⟨2, 3, 5, 7⟩ 0).c = 0 ∧ (pow ⟨2, 3, 5, 7⟩ 0).d = 1)
-#expect_true "fibM 10 = 55" unfolding fibM pow fibMatrix mul :
-  fibM 10 = 55
-#expect_true "fibM n = Nat.fib n for every n < 25" unfolding fibM pow fibMatrix mul :
-  ∀ n < 25, fibM n = (Nat.fib n : ℤ)
-#expect_true "Cassini: det (fibMatrix ^ n) = (-1)ⁿ for n < 15" unfolding pow fibMatrix mul det :
-  ∀ n < 15, det (pow fibMatrix n) = (-1) ^ n
-#expect_true "order6 ^ 6 is the identity" unfolding order6 pow mul :
-  ((pow order6 6).a = 1 ∧ (pow order6 6).b = 0 ∧ (pow order6 6).c = 0 ∧ (pow order6 6).d = 1)
-#expect_true "order6 ^ k is not the identity for k = 1, …, 5" unfolding order6 pow mul :
-  ∀ k ∈ Finset.Icc 1 5, ¬ ((pow order6 k).a = 1 ∧ (pow order6 k).b = 0 ∧ (pow order6 k).c = 0 ∧ (pow order6 k).d = 1)
-#expect_true "order6 has determinant 1 and trace 1" unfolding order6 det :
-  det order6 = 1 ∧ order6.a + order6.d = 1
+#no_sorry L47.f₁
+#no_sorry L47.f₂
+#no_sorry L47.g
+#no_sorry L47.p
+#no_sorry L47.x
+#no_sorry L47.y
+#no_sorry L47.q1
+#level_start "Spot the bug: topology"
+
+#expect_true "Claim 1: f₁ is continuous from discrete 2 to Sierpiński space" unfolding L47.f₁ :
+  Ref.IsContinuous (discrete 2) sierpinski L47.f₁
+#expect_false "Claim 1: the colleague's definition accepts f₁" unfolding L47.f₁ :
+  L47Ref.ColleagueCont (discrete 2) sierpinski L47.f₁
+#expect_false "Claim 1: f₂ is continuous from Sierpiński space to discrete 2" unfolding L47.f₂ :
+  Ref.IsContinuous sierpinski (discrete 2) L47.f₂
+#expect_true "Claim 1: the colleague's definition accepts f₂" unfolding L47.f₂ :
+  L47Ref.ColleagueCont sierpinski (discrete 2) L47.f₂
+#expect_true "Claim 2: g is a bijection" unfolding L47.g : Ref.IsBijective L47.g
+#expect_true "Claim 2: g is continuous from discrete 2 to Sierpiński space" unfolding L47.g :
+  Ref.IsContinuous (discrete 2) sierpinski L47.g
+#expect_false "Claim 2: g sends open sets to open sets (its inverse is continuous)" unfolding L47.g :
+  ∀ U ∈ discrete 2, Ref.img L47.g U ∈ sierpinski
+#expect_true "Claim 3: x and y are different" unfolding L47.x L47.y : L47.x ≠ L47.y
+#expect_true "Claim 3: the constant sequence p converges to x" unfolding L47.p L47.x :
+  L47Ref.ConstConverges sierpinski L47.p L47.x
+#expect_true "Claim 3: the constant sequence p converges to y" unfolding L47.p L47.y :
+  L47Ref.ConstConverges sierpinski L47.p L47.y
+#expect_choice "Claim 4: does ColleagueContAt hold for a constant function?" : L47.q1 = false
 
 #level_report

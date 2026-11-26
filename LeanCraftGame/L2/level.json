@@ -1,45 +1,50 @@
 {
-  "world": "Foundations World",
-  "title": "Functions",
+  "world": "Getting Started",
+  "title": "Your first definitions",
   "skill": "syntax",
-  "exercise": "Define",
+  "exercise": "Write",
+  "mil": "§1.1–1.2",
   "public": "all",
   "hintsAfter": 1,
   "predict": [
     {
-      "test": "5 / 2 * 6 = 15 (division rounds down first)",
-      "statement": "5 / 2 * 6 = 15 in Nat"
+      "test": "halfNat 7 = 3: division in ℕ rounds down",
+      "statement": "In ℕ, `7 / 2 = 3`."
     },
     {
-      "test": "handshakes 1 = 0 and handshakes 0 = 0",
-      "statement": "handshakes 1 = 0 and handshakes 0 = 0"
+      "test": "am 0 4 = 2: the mean lies halfway (watch the brackets)",
+      "statement": "If `am a b` is written `a + b / 2`, then `am 0 4 = 2` still holds."
     }
   ],
   "checks": [
     {
-      "lean": "example : Nat → Nat := L2.cube\nexample : Nat → Nat := L2.triangular\nexample : Nat → Nat := L2.handshakes",
-      "message": "Keep `cube`, `triangular` and `handshakes : Nat → Nat`."
+      "lean": "#check (L2.square : ℝ → ℝ)\n#check (L2.am : ℝ → ℝ → ℝ)\n#check (L2.double : ℝ → ℝ)\n#check (L2.twelve : ℝ)\n#check (L2.halfNat : ℕ → ℕ)",
+      "message": "Keep the names and the types: `square : ℝ → ℝ`, `am : ℝ → ℝ → ℝ`, `double : ℝ → ℝ`, `twelve : ℝ`, `halfNat : ℕ → ℕ`."
     }
   ],
   "hints": [
     {
-      "match": "triangular",
+      "match": "square",
+      "hint": "`x ^ 2`, or `x * x`."
+    },
+    {
+      "match": "am",
       "steps": [
-        "What is `5 / 2 * 6`? Where should the division go?"
+        "Which is computed first in `a + b / 2`: the sum or the division?"
       ],
-      "hint": "`n * (n + 1) / 2`: multiply first, divide last."
+      "hint": "`(a + b) / 2`: the brackets make the sum happen before the division."
     },
     {
-      "match": "handshakes",
-      "hint": "Each of the `n` people shakes `n - 1` hands, and each handshake is counted twice: `n * (n - 1) / 2`."
+      "match": "double",
+      "hint": "`fun x ↦ 2 * x`."
     },
     {
-      "match": "cube",
-      "hint": "`n ^ 3`, or `n * n * n`."
+      "match": "twelve",
+      "hint": "`double (double 3)`: the brackets say which application happens first."
     },
     {
-      "match": "",
-      "hint": "Write the formula after `:=`, using the input `n`."
+      "match": "halfNat",
+      "hint": "`n / 2`: in ℕ, division already rounds down."
     }
   ]
 }

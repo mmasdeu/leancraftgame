@@ -1,33 +1,47 @@
 /-
-# Challenge: triangles
+# ¬ and the order of quantifiers
 
-Three lengths `a, b, c` form a triangle when each is smaller than the sum of
-the other two (strictly, if the triangle is not to be flat). All three
-inequalities are needed: `1, 2, 10` satisfies two of them.
+MIL §3.3 is about negation. To work with `¬ FnHasUb f` ("`f` has no upper bound") you
+first **push the negation inwards**, turning each quantifier over:
 
-A right triangle has `a² + b² = c²`, *where `c` is the longest side*. If you
-do not know which side is the hypotenuse, you must allow each of them. And a
-side of length `0` is not a side: `0² + 5² = 5²` is not a triangle.
+* `¬ ∀ x, P x` is `∃ x, ¬ P x` (a counterexample exists);
+* `¬ ∃ x, P x` is `∀ x, ¬ P x`;
+* `¬ (a ≤ b)` is `b < a`; `¬ (P ∧ Q)` is `P → ¬ Q`.
 
-Parity puzzle: in a primitive Pythagorean triple exactly one of the two legs
-is even, and the hypotenuse is odd. "Exactly one of three" is a statement
-with several cases; spell them out.
+So `¬ FnHasUb f` = `¬ ∃ a, ∀ x, f x ≤ a` = `∀ a, ∃ x, ¬ (f x ≤ a)` = `∀ a, ∃ x, a < f x`:
+"whatever bound you propose, some value exceeds it". Mathlib's tactic `push_neg` does
+this mechanically, and its output is what you will read in proofs, so you should be able
+to do it by hand.
+
+## The order of quantifiers
+
+`∀ a, ∃ x, …` and `∃ x, ∀ a, …` are different statements. In the first, `x` may depend
+on `a`; in the second, one `x` must work for every `a`. For sequences:
+
+* `∃ M, ∀ n, u n ≤ M`: the sequence is **bounded** (one `M` for all `n`);
+* `∀ n, ∃ M, u n ≤ M`: every term is below *some* number, which is true of every
+  sequence (take `M = u n`).
 
 ## Your task
 
-Define `IsTriangle`, `IsRight` and `ExactlyOneEven`. The referee checks them
-on all small inputs against facts about triangles.
--/
+Write the negations **pushed inwards**: no `¬` in front of a quantifier, and no `¬ (_ ≤ _)`.
 
+* `NotFnUb f a`: `a` is *not* an upper bound of `f`.
+* `NoUpperBound f`: `f` has *no* upper bound.
+* `NotMonotone f`: `f` is *not* monotone.
+* `BoundedSeq u`: the sequence `u : ℕ → ℕ` is bounded.
+-/
 namespace L10
 
--- a, b, c are the side lengths of a non-degenerate triangle (strict triangle inequalities)
-def IsTriangle (a b c : Nat) : Prop := sorry
+def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, f x ≤ a
+def FnHasUb (f : ℝ → ℝ) : Prop := ∃ a, FnUb f a
 
--- a, b, c are the sides of a right triangle, the hypotenuse being any of the three
-def IsRight (a b c : Nat) : Prop := sorry
+def NotFnUb (f : ℝ → ℝ) (a : ℝ) : Prop := sorry
 
--- exactly one of a, b, c is even
-def ExactlyOneEven (a b c : Nat) : Prop := sorry
+def NoUpperBound (f : ℝ → ℝ) : Prop := sorry
+
+def NotMonotone (f : ℝ → ℝ) : Prop := sorry
+
+def BoundedSeq (u : ℕ → ℕ) : Prop := sorry
 
 end L10

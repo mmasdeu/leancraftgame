@@ -1,42 +1,80 @@
 /-
-# Spot the bug: sums
+# Spot the bug: algebra
 
-Four functions from a colleague, each off by a little: a range that stops
-one short, a divisor count that forgets a divisor, a prime count that stops
-before `n`, a sum of squares that squares the sum.
+A colleague sends five claims from their algebra notes. Each is false. Prove it the way
+a referee would: with a counterexample, which the referee checks.
 
-For each one, find an `n` on which it is wrong. The fastest way is to
-evaluate the two sides on small inputs (`0`, `1`, `2`, …) in your head or
-with `#eval`, and stop at the first disagreement. The boundary cases `0` and
-`1`, and the inputs that are themselves divisors or primes, are where
-off-by-one errors live.
+## Claim 1: "a set of integers that contains 0 and is closed under + is a subgroup"
 
-`(∑ i, a i)² ≠ ∑ i, (a i)²` in general: the cross terms are missing. That
-inequality is the starting point of the Cauchy–Schwarz inequality.
+The colleague's structures, in the style of MIL 8.3:
 
-## Your task
+```lean
+structure AddSubmonoidℤ where
+  carrier : Set ℤ
+  zero_mem : 0 ∈ carrier
+  add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier
 
-Give one input per function. Each test checks that the colleague's function
-and the right one disagree there.
+structure AddSubgroupℤ where
+  carrier : Set ℤ
+  zero_mem : 0 ∈ carrier
+  add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier
+  neg_mem {a} : a ∈ carrier → -a ∈ carrier
+```
+
+Give `junk`, a *junk model*: a set that satisfies the first structure and not the second.
+
+## Claim 2: "`Ideal.span {2}` is the ideal of the integers divisible by 4 and by 6"
+
+Give `x`, an integer in `Ideal.span {2}` that is not divisible by both 4 and 6.
+
+## Claim 3: "`(p * q).natDegree = p.natDegree + q.natDegree` for all `p q : ℤ[X]`"
+
+Mathlib's `Polynomial.natDegree_mul` has hypotheses. Give `p` and `q` where the claim
+fails. (Mathlib's convention: `natDegree 0 = 0`, while `degree 0 = ⊥`.)
+
+## Claim 4: "in `ZMod n`, every nonzero element has an inverse"
+
+True when `n` is prime. Give `a : ZMod 6`, nonzero, with `a * b ≠ 1` for every `b`.
+
+## Claim 5: "permutations commute: `σ * τ = τ * σ`"
+
+Give `σ τ : Equiv.Perm (Fin 3)` with `σ * τ ≠ τ * σ`.
 -/
+import Mathlib.RingTheory.Ideal.Span
+import Mathlib.Algebra.Polynomial.Degree.Operations
+import Mathlib.GroupTheory.Perm.Basic
+import Mathlib.Data.ZMod.Basic
+
 namespace L38
 
--- The colleague's code, to read (the referee uses its own copy).
-def triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, i
-def numDivisors (n : ℕ) : ℕ := (Finset.filter (fun d => d ∣ n) (Finset.Ico 1 n)).card
-def primesUpTo (n : ℕ) : ℕ := (Finset.filter (fun p => Nat.Prime p) (Finset.range n)).card
-def evenSquares (n : ℕ) : ℕ := (∑ i ∈ Finset.filter (fun i => i % 2 = 0) (Finset.range n), i) ^ 2
+open Polynomial
 
--- an input on which `triangle` is wrong
-def tn : ℕ := sorry
+structure AddSubmonoidℤ where
+  carrier : Set ℤ
+  zero_mem : 0 ∈ carrier
+  add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier
 
--- an input on which `numDivisors` is wrong
-def dn : ℕ := sorry
+structure AddSubgroupℤ where
+  carrier : Set ℤ
+  zero_mem : 0 ∈ carrier
+  add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier
+  neg_mem {a} : a ∈ carrier → -a ∈ carrier
 
--- an input on which `primesUpTo` is wrong
-def pn : ℕ := sorry
+-- Claim 1: an additive submonoid of ℤ that is not a subgroup
+def junk : Set ℤ := sorry
 
--- an input on which `evenSquares` is wrong
-def en : ℕ := sorry
+-- Claim 2: in Ideal.span {2}, but not divisible by both 4 and 6
+def x : ℤ := sorry
+
+-- Claim 3: natDegree (p * q) ≠ natDegree p + natDegree q
+def p : ℤ[X] := sorry
+def q : ℤ[X] := sorry
+
+-- Claim 4: nonzero, and not invertible in ZMod 6
+def a : ZMod 6 := sorry
+
+-- Claim 5: two permutations that do not commute
+def σ : Equiv.Perm (Fin 3) := sorry
+def τ : Equiv.Perm (Fin 3) := sorry
 
 end L38

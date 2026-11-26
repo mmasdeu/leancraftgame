@@ -1,45 +1,68 @@
 /-
-# Spot the bug: numbers
+# Set notation
 
-Four definitions from a colleague, each with one of the traps of this
-world: a late cast, a junk value, a precedence slip, and division in the
-wrong type. For each, find inputs on which it disagrees with what was meant.
+MIL's fourth chapter starts with sets. In Mathlib, a set of elements of a type `α` has
+type `Set α`, and it is nothing more than a property: `x ∈ s` is a proposition.
 
-Questions to ask:
+## Building sets
 
-* **Where does each operation happen?** In `((a - b : ℕ) : ℤ)` the
-  subtraction is done in `ℕ`, before the cast. When does that matter?
-* **What does the definition say at `0`?** `1 / 0 = 0`.
-* **How does it parse?** `a + b / 2` is `a + (b / 2)`.
-* **Which `1 / a`?** Inside `(… : ℕ)`, `1 / a` is natural-number division.
+```lean
+def evens' : Set ℕ := {n | Even n}          -- "the n such that n is even"
+example : 4 ∈ evens' := …                   -- membership is a Prop
+```
 
-Small inputs are best: the referee checks your claims by computation.
+* `{x | P x}`: the set of `x` with the property `P` (set-builder notation).
+* `x ∈ s` (`\in`) and `x ∉ s` (`\notin`): membership.
+* `s ⊆ t` (`\sub`): every element of `s` is in `t`, that is `∀ x, x ∈ s → x ∈ t`.
+* `s ∩ t` (`\cap`), `s ∪ t` (`\cup`), `s \ t` (difference), `sᶜ` (`\compl`, the
+  complement): intersection, union, the elements of `s` not in `t`, everything not in `s`.
+* `∅` (`\empty`) and `Set.univ`: the empty set and the set of everything.
+* Intervals: `Set.Icc a b` is `{x | a ≤ x ∧ x ≤ b}`, `Set.Ici a` is `{x | a ≤ x}`.
+
+## Indexed unions and intersections
+
+A **family** of sets is a function `A : ι → Set α`, one set `A i` for each index `i`.
+
+```lean
+⋃ i, A i      -- \bigcup: x is in it when x ∈ A i for SOME i
+⋂ i, A i      -- \bigcap: x is in it when x ∈ A i for EVERY i
+⋃₀ S          -- the union of all the sets in a set of sets S
+```
+
+The index can range over a set: `⋃ k ∈ ({2, 3} : Set ℕ), A k` is `A 2 ∪ A 3`.
+For example `⋃ i : ℕ, Set.Icc 0 i` is all of ℕ: every `n` lies in `[0, n]`. And
+`⋂ i : ℕ, Set.Ici i` is empty: no number is `≥ i` for every `i`.
+
+## Reading set expressions
+
+Operators have precedences, like `+` and `*`: `ᶜ` binds tightest, then `∩`, then `∪`,
+then `∈` and `⊆`. Write brackets when in doubt: `s ∩ (t ∪ u)` reads "the elements of `s`
+that are in `t` or in `u`".
 
 ## Your task
 
-Give the counterexamples. Each test is a claim about your inputs that must
-be true.
+Answer the two questions under the lesson, then fill in the sets. Use Mathlib's `Even`
+and `Nat.Prime`, and the operations above (not a new property) where the comment asks.
 -/
-
 namespace L15
 
--- A colleague's definitions (to read: the referee uses its own copy).
-def diff (a b : ℕ) : ℤ := ((a - b : ℕ) : ℤ)                    -- meant: a - b in ℤ
-def IsReciprocal (x y : ℚ) : Prop := y = 1 / x                 -- meant: x · y = 1
-def average (a b : ℚ) : ℚ := a + b / 2                         -- meant: (a + b) / 2
-def egypt (a b : ℕ) : ℚ := ((1 / a + 1 / b : ℕ) : ℚ)          -- meant: 1/a + 1/b in ℚ
+-- the even natural numbers
+def evens : Set ℕ := sorry
 
--- diff gets these wrong
-def diffA : ℕ := sorry
-def diffB : ℕ := sorry
--- IsReciprocal accepts these, but recX · recY ≠ 1
-def recX : ℚ := sorry
-def recY : ℚ := sorry
--- average gets these wrong
-def avgA : ℚ := sorry
-def avgB : ℚ := sorry
--- egypt gets these wrong (both positive)
-def egA : ℕ := sorry
-def egB : ℕ := sorry
+-- the prime numbers
+def primes : Set ℕ := sorry
+
+-- the primes that are not even: build it from `primes` and `evens` with set operations
+def oddPrimes : Set ℕ := sorry
+
+-- the multiples of k: the n such that k divides n (`∣` is typed `\|`, it is not `|`)
+def multiples (k : ℕ) : Set ℕ := sorry
+
+-- the numbers that are a multiple of 4 or of 6, written as a union over k ∈ {4, 6}
+-- of `multiples k` (an indexed union `⋃ k ∈ s, A k`)
+def fourOrSix : Set ℕ := sorry
+
+def q1 : Fin 3 := sorry
+def q2 : Bool := sorry
 
 end L15

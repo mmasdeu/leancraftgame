@@ -1,40 +1,54 @@
 /-
-# Integers and casts
+# Sequences and convergence
 
-On paper, `ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ`, and `3` is the same object in all four. In Lean
-they are four different types, and `3 : ℕ` and `3 : ℤ` are different terms.
-To use a natural number `a` as an integer you **cast** it: `(a : ℤ)`, which
-Lean displays as `↑a`.
+MIL §3.6 puts the whole chapter to work on one definition, convergence of a sequence of
+reals:
 
-Where the cast goes changes the meaning:
+```lean
+def ConvergesTo (s : ℕ → ℝ) (a : ℝ) :=
+  ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n - a| < ε
+```
 
-* `((a - b : ℕ) : ℤ)` subtracts in `ℕ` (truncating at `0`) and then casts:
-  for `a = 3, b = 5` it is `0`;
-* `(a : ℤ) - (b : ℤ)` casts first and subtracts in `ℤ`: it is `-2`.
+Read it aloud: for every tolerance `ε > 0` there is an index `N` from which on every
+term is within `ε` of `a`. Every symbol matters:
 
-Casting is the formal shadow of a step mathematicians never write down:
-"regard `a` as an integer". The rule of thumb is **cast early**: move to the
-type where the operation behaves, then compute.
+* `ε > 0`: without it, `ε = 0` asks for `|s n - a| < 0`, which never holds, so no
+  sequence would converge;
+* `∃ N, ∀ n ≥ N`: from some point on, **every** term. With `∃ n` instead, one close term
+  would be enough, and `0, 1, 0, 1, …` would "converge" to `0`;
+* the order `∀ ε, ∃ N`: `N` may depend on `ε`.
 
-Integers have their own pitfalls. Division and remainder on `ℤ` are
-Euclidean: `(-7) / 2 = -4` and `(-7) % 2 = 1`, so the remainder modulo `2` is
-always `0` or `1`, also for negative numbers (other languages say `-1`).
-`Int.natAbs x` is the absolute value of `x` as a natural number.
+MIL then proves three theorems about it. You will **state** them.
+
+## Theorems about your definition
+
+A statement can mention your own definitions, exactly as a Mathlib theorem mentions
+Mathlib's:
+
+```lean
+statement convergesTo_const (a : ℝ) : ConvergesTo (fun _ ↦ a) a
+```
+
+`fun _ ↦ a` is the constant sequence `a, a, a, …` (the `_` is an index that is not used).
 
 ## Your task
 
-Define `diff`, `gap` and `IsOddInt`.
+1. Define `ConvergesTo s a`.
+2. `convergesTo_const`: for every real `a`, the constant sequence `a` converges to `a`.
+3. `convergesTo_add`: for all sequences `s t` and reals `a b` (in this order), if `s`
+   converges to `a` and `t` converges to `b`, then `fun n ↦ s n + t n` converges to
+   `a + b`.
+4. `convergesTo_unique`: for every sequence `s` and reals `a b`, if `s` converges to `a`
+   and to `b`, then `a = b`.
 -/
-
 namespace L12
 
--- a - b as an integer, for natural numbers a and b      (diff 3 5 = -2)
-def diff (a b : ℕ) : ℤ := sorry
+def ConvergesTo (s : ℕ → ℝ) (a : ℝ) : Prop := sorry
 
--- the distance |a - b| between two integers, as a natural number   (gap 3 (-4) = 7)
-def gap (a b : ℤ) : ℕ := sorry
+statement convergesTo_const : sorry
 
--- x is an odd integer (positive or negative)
-def IsOddInt (x : ℤ) : Prop := sorry
+statement convergesTo_add : sorry
+
+statement convergesTo_unique : sorry
 
 end L12

@@ -155,7 +155,9 @@ const LiveRunner = (() => {
 
   /* Run `job = { level, prelude, code, ids, stopOnFail, timeout }`. */
   async function run(job, emit, signal) {
-    const { level, prelude, code, stopOnFail, timeout = 60 } = job;
+    // a level may allow its tests more time (level.json "timeout", in seconds)
+    const { level, prelude, code, stopOnFail } = job;
+    const timeout = Math.max(job.timeout || 60, level.timeout || 0);
     const chosen = level.tests.map((t, id) => ({ ...t, id })).filter((t) => !job.ids || job.ids.includes(t.id));
     emit("tests", chosen.map((t) => ({ id: t.id, name: t.name, kind: t.kind })));
     let remaining = chosen, compiled = false, compileOk = true, stopped = false;
@@ -183,7 +185,9 @@ const LiveRunner = (() => {
         since = Date.now();
         emit("start", { id: t.id });
         clearTimeout(timer);
-        timer = setTimeout(() => { timedOut = t; stop(); }, timeout * 1000);
+        // an open problem passes when time runs out: it need not wait for a level's longer timeout
+        const limit = t.kind === "expect_open" ? Math.min(timeout, 60) : timeout;
+        timer = setTimeout(() => { timedOut = t; stop(); }, limit * 1000);
       };
 
       await session(text, ({ diags, upTo, done }) => {
@@ -229,7 +233,8 @@ const LiveRunner = (() => {
       if (lost) {
         settled.add(lost.id);
         const secs = Math.round((Date.now() - since) / 100) / 10;
-        const why = timedOut ? `within ${timeout} s` : "in the time the Lean Playground allows";
+        const why = timedOut ? `within ${lost.kind === "expect_open" ? Math.min(timeout, 60) : timeout} s`
+          : "in the time the Lean Playground allows";
         finish(lost, lost.kind === "expect_open"
           ? { status: "pass", seconds: secs, cached: false, detail: `(the referee could not settle it ${why}, as expected)` }
           : { status: "unknown", seconds: secs, cached: false,

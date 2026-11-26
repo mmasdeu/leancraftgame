@@ -1,112 +1,27 @@
 {
-  "world": "Sequence World",
-  "title": "Bounded and monotone",
-  "skill": "writing",
-  "exercise": "Define",
+  "world": "Discrete Mathematics",
+  "title": "Finset and Fintype",
+  "skill": "finite sets",
+  "exercise": "Write",
+  "mil": "§6.1",
   "predict": [
-    {
-      "test": "Bounded (-n) is false (0, -1, -2, … falls forever: bounded means on both sides)",
-      "statement": "Bounded (fun n => -(n : ℤ))"
-    },
-    {
-      "test": "StrictlyIncreasing (n / 2) is false (0, 0, 1, 1, …)",
-      "statement": "StrictlyIncreasing (fun n => (n : ℤ) / 2)"
-    },
-    {
-      "test": "NonDecreasing (0, 1, 2, 0, 0, …) is false (up at first, then it falls back)",
-      "statement": "NonDecreasing (fun n => if n < 3 then (n : ℤ) else 0)"
-    }
+    {"test": "Finset.range 4 contains 4", "statement": "`4 ∈ Finset.range 4`"},
+    {"test": "9 is one of the divisors of 9", "statement": "`9 ∈ divs 9`: a number is one of its own divisors"}
   ],
+  "public": ["divs 12 is {1, 2, 3, 4, 6, 12}", "squaresUpTo 4 contains 16", "there are 8 functions Fin 3 → Bool"],
   "checks": [
-    {
-      "lean": "example : (ℕ → ℤ) → Prop := L24.BoundedAbove\nexample : (ℕ → ℤ) → Prop := L24.Bounded\nexample : (ℕ → ℤ) → Prop := L24.NonDecreasing\nexample : (ℕ → ℤ) → Prop := L24.StrictlyIncreasing",
-      "message": "Keep the names and the types: each of `BoundedAbove`, `Bounded`, `NonDecreasing`, `StrictlyIncreasing` has type `(ℕ → ℤ) → Prop`."
-    }
+    {"lean": "#check (L24.divs : ℕ → Finset ℕ)\n#check (L24.squaresUpTo : ℕ → Finset ℕ)\n#check (L24.subsetsOfSize : Finset ℕ → ℕ → Finset (Finset ℕ))\n#check (L24.numFns : ℕ)",
+     "message": "Keep the names and types: `divs : ℕ → Finset ℕ`, `squaresUpTo : ℕ → Finset ℕ`, `subsetsOfSize : Finset ℕ → ℕ → Finset (Finset ℕ)`, `numFns : ℕ`."}
   ],
   "hints": [
-    {
-      "match": "BoundedAbove (-n)",
-      "steps": [
-        "Which `M` is at least every term of 0, -1, -2, …?"
-      ],
-      "hint": "`M = 0` works. If this fails, look at the order of your quantifiers: `∃ M, ∀ n, u n ≤ M`, with the `∃` first."
-    },
-    {
-      "match": "BoundedAbove n is false",
-      "hint": "Your definition accepts a sequence that goes up forever. With `∀ n, ∃ M, u n ≤ M` every sequence qualifies (take `M = u n`): the `M` must be chosen before `n`."
-    },
-    {
-      "match": "Bounded (-n)",
-      "steps": [
-        "Is 0, -1, -2, … bounded above? Is it bounded below?"
-      ],
-      "hint": "Bounded means both sides: use `|u n| ≤ M` (or `-M ≤ u n ∧ u n ≤ M`). A one-sided bound accepts a sequence that falls forever."
-    },
-    {
-      "match": "Bounded n is false",
-      "hint": "Your definition accepts a sequence that goes up forever. The bound `M` must not depend on `n`."
-    },
-    {
-      "match": "1, -1, 1",
-      "hint": "This sequence is bounded: `M = 1` works. Check that you use the absolute value (or both inequalities), and that `M` is bounding `|u n|`, not `u n` alone in the wrong direction."
-    },
-    {
-      "match": "a constant) is true",
-      "hint": "A constant sequence is bounded, even a negative one such as -5: `|-5| = 5`. Do you bound `u n` itself by a nonnegative `M`?"
-    },
-    {
-      "match": "Bounded u implies",
-      "hint": "A user of your definition needs this lemma. If it is ❓, the referee could not derive it: try the standard formulation `∃ M, ∀ n, |u n| ≤ M`."
-    },
-    {
-      "match": "NonDecreasing (n / 2) is true",
-      "hint": "0, 0, 1, 1, 2, … never goes down, so it is non-decreasing even though it stays level. Do you use `≤` between `u m` and `u n`?"
-    },
-    {
-      "match": "StrictlyIncreasing (n / 2)",
-      "hint": "0, 0, 1, 1, … repeats a value, so it is not strictly increasing. Your definition accepts it: do you compare with `<` (and `m < n`)?"
-    },
-    {
-      "match": "StrictlyIncreasing (n) is true",
-      "steps": [
-        "For `StrictlyIncreasing`, what should the hypothesis on `m` and `n` be?"
-      ],
-      "hint": "With `m ≤ n` you would compare `u m < u m` when `m = n`, which is false. The hypothesis must be `m < n`."
-    },
-    {
-      "match": "2n - 7",
-      "hint": "The sequence -7, -5, -3, … is strictly increasing. Nothing in the definition should depend on the sign of the terms."
-    },
-    {
-      "match": "NonDecreasing (a constant)",
-      "hint": "A constant sequence never goes down. Your definition should use `≤`, not `<`, for `NonDecreasing`."
-    },
-    {
-      "match": "StrictlyIncreasing (a constant)",
-      "hint": "A constant sequence does not strictly increase. For `StrictlyIncreasing` you need `<`."
-    },
-    {
-      "match": "NonDecreasing (-n)",
-      "hint": "-n goes down: 0 then -1. Check the direction of the inequality: `m ≤ n` should give `u m ≤ u n`, not `u n ≤ u m`, and the hypothesis `m ≤ n` must be there."
-    },
-    {
-      "match": "0, 1, 2, 0, 0",
-      "steps": [
-        "Which two positions `m ≤ n` show that 0, 1, 2, 0, 0, … goes down?"
-      ],
-      "hint": "`m = 2`, `n = 3`: `u 2 = 2` but `u 3 = 0`. If your definition accepts this sequence, it only looks at positions from some point on, or only at part of the pairs."
-    },
-    {
-      "match": "0, 1, 0, 1",
-      "hint": "This sequence goes down at every other step. Your definition is too weak: it should look at all pairs `m ≤ n` (or all consecutive terms) from the very start."
-    },
-    {
-      "match": "u n < u (n + 1)",
-      "hint": "A user of your definition needs this lemma. If it is ❓, try the standard formulation `∀ m n, m < n → u m < u n`."
-    },
-    {
-      "match": "u n ≤ u (n + 1)",
-      "hint": "A user of your definition needs this lemma. If it is ❓, try the standard formulation `∀ m n, m ≤ n → u m ≤ u n`."
-    }
+    {"match": "divisors", "steps": ["Which numbers does `Finset.range n` contain? Is `n` one of them?"],
+     "hint": "`(Finset.range (n + 1)).filter (fun d => d ∣ n)`: `range (n + 1)` goes up to `n` itself."},
+    {"match": "divs 12", "steps": ["Which numbers does `Finset.range n` contain? Is `n` one of them?"],
+     "hint": "`(Finset.range (n + 1)).filter (fun d => d ∣ n)`. The symbol `∣` is typed `\\mid`, not the key `|`."},
+    {"match": "squaresUpTo", "steps": ["Start from `0, 1, …, n` and apply `fun i => i ^ 2` to every element. Which finset is `0, 1, …, n`?"],
+     "hint": "`(Finset.range (n + 1)).image (fun i => i ^ 2)`."},
+    {"match": "subset", "steps": ["Start from all subsets, `s.powerset`, and keep some of them."],
+     "hint": "`s.powerset.filter (fun t => t.card = k)` (Mathlib also has `Finset.powersetCard k s`)."},
+    {"match": "functions", "hint": "`Fintype.card (Fin 3 → Bool)`: 2 choices for each of 3 inputs, 2³ = 8."}
   ]
 }

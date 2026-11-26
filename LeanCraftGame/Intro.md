@@ -1,64 +1,59 @@
 # Welcome to Lean Craft Game
 
-In this game you learn to write **definitions** in Lean, a language for mathematics.
-You do not need to know anything about Lean, or to have read a line of code before.
-This page explains what you are about to do. It takes a few minutes to read, and you
-can come back to it at any time with the **Welcome** tab.
+This game teaches you to **read and write Lean**, the language in which mathematicians
+now formalise mathematics, by following the book
+[*Mathematics in Lean*](https://leanprover-community.github.io/mathematics_in_lean/)
+(MIL) chapter by chapter. You do not need to know anything about Lean, or to have read a
+line of code before. This page explains what you are about to do. It takes a few minutes
+to read, and you can come back to it at any time with the **Welcome** tab.
 
 ## What is Lean?
 
 Lean is a programming language, and also a tool for doing mathematics on a computer.
 You write mathematics in a precise language, and Lean *checks* it, like a very strict
-proofreader that never gets tired. Mathematicians use it to state definitions and
-theorems, and to make sure that proofs are correct.
+proofreader that never gets tired. Its library, **Mathlib**, contains a large part of
+undergraduate mathematics, and much more.
 
 A piece of Lean looks like this:
 
 ```lean
 -- A definition: it gives a name to something.
-def double (n : Nat) : Nat := 2 * n
+def am (a b : ℝ) : ℝ := (a + b) / 2
 
 -- A theorem: a claim, together with a proof of it.
-theorem double_four : double 4 = 8 := by decide
+theorem two_mul_le_add_sq (a b : ℝ) : 2 * a * b ≤ a ^ 2 + b ^ 2 := by
+  nlinarith [sq_nonneg (a - b)]
 ```
 
-Do not worry about the details: every line you will need is explained when it first
-appears. What matters now is that there are two kinds of things in Lean.
+Every line you will need is explained when it first appears.
 
-* A **definition** says what something *means*: `double` is the function that
-  multiplies by 2.
-* A **theorem** says that something is *true*, and proves it.
-
-## Definitions, not proofs
+## Statements and definitions, not proofs
 
 Writing proofs is hard, and computers have become good at it. What stays hard, and
-matters just as much, is **saying what you mean**. Lean will happily accept a
-definition that does not mean what you intended:
+matters just as much, is **saying what you mean**, and **reading what others wrote**.
+Lean will happily accept a statement that does not mean what you intended:
 
 ```lean
-def IsEven (n : Nat) : Prop := n % 2 = 1
+theorem sq_le_sq' (a b : ℝ) (h : a ≤ b) : a ^ 2 ≤ b ^ 2 := …
 ```
 
-This is valid Lean. But it says that `n` leaves remainder 1 when divided by 2, so it
-defines the *odd* numbers, and not the even ones. Lean does not complain. It checks
-that your code is well formed, not that it means what its name says. Everything built
-on a wrong definition is then wrong too, and nothing warns you.
+This is valid Lean, and it is false: `-2 ≤ 1`, but `4 > 1`. A hypothesis `0 ≤ a` is
+missing. Lean checks that the statement is well formed, not that it says what its name
+promises.
 
-This is the skill the game trains. You never write a proof. Instead:
+So in this game **you never write a proof**. Where MIL proves something, you do one of
+these instead, and a hidden *referee*, an automated prover, does any proving that is
+needed:
 
-* You write a definition.
-* A hidden *referee*, an automated prover, tests it. It asks questions such as
-  "is 10 even?" and "is 7 even?", and tries to prove or refute each answer from your
-  definition.
-* When your definition gets a question wrong, the referee shows you which one.
+* you **write** the statement of a theorem, or a definition it depends on;
+* you **read** a Lean statement or definition and say what it means;
+* you give a **witness**, or a **counterexample** that breaks a colleague's claim.
 
-And the other way round: every world ends with a level where you **read** a
-colleague's definition, which compiles but is wrong, and *you* find the input that
-proves it.
-
+The referee then tests your work: it tries to prove or refute dozens of facts about it.
 A ❌ always comes with evidence: it means the referee found a real Lean proof of the
 opposite of what you meant. The game never tells you that you are wrong without a
-counterexample.
+counterexample. When the referee cannot decide, you get ❓, which is never held against
+you.
 
 ## How a level works
 
@@ -68,7 +63,8 @@ counterexample.
    lock in your answers. They are marked right or wrong straight away, and they cannot
    be changed. Predicting first is the habit the game is about: knowing what a
    definition *should* say before you see what yours does.
-3. Complete the code in the **editor**. Some definitions are already written, to be
+3. Complete the code in the **editor**. In a *reading* level, answer the questions under
+   the lesson instead: your choices are written into the code for you. Some definitions are already written, to be
    read as examples. Others contain `sorry`, a placeholder meaning "to be filled in":
    replace each one with your own definition.
 4. Press **Run tests**. Each test appears in the report on the right as soon as it is
@@ -79,7 +75,7 @@ counterexample.
    for the referee: ask yourself which inputs could break your definition.
 6. A run **stops at the first ❌**. The ▶ button next to a test runs only that test,
    which is handy once you have fixed a definition.
-7. **Hints unlock as you go.** After two failed runs (one in the Foundations world), a failing
+7. **Hints unlock as you go.** After two failed runs (one in the Getting Started world), a failing
    test offers the first step of its hint: usually a question. Each further failed run
    unlocks the next step, and the last step gives the answer away. A failed run is one
    with a ❌. A ❓ (the referee could not decide) is not held against you: it does not
@@ -119,38 +115,38 @@ with the keys to type it, and a short typing drill. You can try it right now.
 
 ## The road ahead
 
-The game is one mathematical story. Each world prepares the next, and a few
-objects come back again and again: the Collatz map, the Fibonacci numbers, the
-Gaussian integers, and above all **Sierpiński space**, the two-point space that is
-the hero of the Topology world. Most worlds end with a **Spot the bug** level: a
-colleague's definitions compile but are wrong, and you prove it with a
-counterexample. Each level is tagged with its kind of exercise: *Define*,
-*Construct* (build an example), *Repair*, *Classify*, *Refute* (give a
-counterexample), *Referee* (choose the examples that tell right from wrong),
-*Connect* or *Audit*.
+There is one world per chapter of *Mathematics in Lean*, in the same order, and the
+lesson of each level says which section it follows. A few objects come back again and
+again: the AM-GM inequality, convergent sequences, the primes, the Gaussian integers,
+`ℤ/nℤ`, linear maps on `ℝ²`, and Sierpiński space, the two-point topological space.
+Each level is tagged with its kind of exercise: *Write* (a definition or a statement),
+*Read* (answer questions about Lean code), *Construct* (build an example), *Refute*
+(give a counterexample), *Repair* (fix a colleague's code) or *Audit* (check whether a
+formal statement says what it claims). Most worlds end with a **Spot the bug** level.
 
-* **Foundations:** naming numbers and functions, definitions by cases and by
-  recursion, the Collatz map, and witnesses for existence statements.
-* **Logic:** statements, the connectives, implication and its converse, vacuous truth.
-* **Numbers:** ℕ, ℤ and ℚ, casts, junk values such as `1 / 0 = 0`, Egyptian fractions.
-* **Quantifiers:** *for all*, *there exists*, *eventually*, and why their order matters.
-* **Sequences:** tending to infinity, monotone and bounded sequences, injective and
-  surjective maps, recurrence. Then you swap roles with the referee: you write the
-  tests, and it tries to slip wrong definitions past them.
-* **Sets and relations:** sets as predicates, Mathlib's definitions, generality,
-  divisibility and gcd, equivalence relations and orders.
-* **Finite constructions:** sums and products over finite sets, counting, closed forms.
-* **Analysis:** limits, continuity, Cauchy sequences and cluster values.
-* **Structures:** Gaussian integers, 2×2 matrices, morphisms, and structures with axioms:
-  orders, metric spaces, and a colleague's flawed definition of a group.
-* **Classes:** one definition for every monoid, standard notation, instances built from
-  instances.
-* **Topology:** finite topological spaces that the referee checks exhaustively: the
-  axioms, a gallery of examples, closure, bases, continuity, homeomorphisms,
-  subspaces, products, compactness, connectedness, separation, and convergence with
-  filters.
-* **Audit:** an AI claims to have proved the infinitude of the primes, the Collatz
-  conjecture and Goldbach's conjecture, in a few lines each. What did it really prove?
+1. **Getting Started:** reading a Lean file; your first definitions.
+2. **Basics:** how Lean parses, reading a theorem's signature, stating theorems, generic
+   statements about rings, lattices and metric spaces.
+3. **Logic:** `∀`, `∃`, `¬`, `∧`, `∨`, `↔`, the order of quantifiers, convergence of
+   sequences; and a level where you write the tests and the referee tries to slip wrong
+   definitions past them.
+4. **Sets and Functions:** set notation, images and preimages, injective and surjective
+   functions, the Schröder–Bernstein construction.
+5. **Elementary Number Theory:** divisibility and primes, irrational roots, recursion and
+   induction, the infinitude of the primes.
+6. **Discrete Mathematics:** `Finset`, big operators and counting, inductive types.
+7. **Structures:** defining structures, algebraic structures, the Gaussian integers.
+8. **Hierarchies:** classes and instances, reading Mathlib's hierarchy, morphisms,
+   sub-objects.
+9. **Groups and Rings:** groups, subgroups, `ZMod n`, permutations, ideals, polynomials.
+10. **Linear Algebra:** vector spaces and linear maps, subspaces, endomorphisms,
+    matrices, bases and dimension.
+11. **Topology:** filters, metric spaces, topological spaces, separation and compactness.
+12. **Differential Calculus:** derivatives, in one variable and in normed spaces.
+13. **Integration and Measure Theory:** integrals and measures.
+
+The game ends with a **final audit**: an AI claims to have proved Goldbach's conjecture
+in one line. What did it really prove?
 
 ## Good to know
 

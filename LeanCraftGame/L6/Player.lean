@@ -1,42 +1,60 @@
 /-
-# Spot the bug
+# Generic statements
 
-A colleague wrote two functions. Both compile, both give the right answer
-on the examples they tried, and both are wrong.
+MIL §2.2 and §2.5 prove identities not for `ℝ` but for **every** ring, lattice or metric
+space at once. In Mathlib this is the normal way to state a theorem:
 
-Before repairing code, **find an input where it fails**. Walk through every
-branch of every `if`, and ask which inputs land there:
+```lean
+variable {R : Type*} [CommRing R]
 
-* `median3`: there are six orderings of three distinct numbers. In which
-  branch does each one land, and does that branch return the middle value?
-  (`median3 1 2 3`, `median3 3 1 2`, …)
-* `daysInYear`: the Gregorian rule is "divisible by 4, except centuries,
-  except centuries divisible by 400". 1900 was not a leap year, 2000 was.
+theorem sub_mul_add (a b : R) : (a - b) * (a + b) = a ^ 2 - b ^ 2 := by ring
+```
 
-A case analysis that misses a case is the commonest bug in mathematics as
-in programming: a proof "by symmetry" that is not symmetric, a "without loss
-of generality" that loses generality.
+* `{R : Type*}`: `R` is a **type**, any type, given implicitly (Lean reads it off `a`
+  and `b`). `Type*` means "a type in any universe"; you can read it as "a type".
+* `[CommRing R]`: an **instance argument**, the assumption "`R` is a commutative ring".
+  It is what makes `+`, `-`, `*`, `0`, `1` and `^` available on `R`, with their laws.
 
-`min` and `max` exist in Lean, and the median of three numbers is
-`max (min a b) (min (max a b) c)`.
+The same statement then applies to `ℤ`, `ℚ`, `ℝ`, `ℤ/nℤ`, polynomials… Other classes
+from MIL's chapter:
+
+| Class | Gives | Example |
+|---|---|---|
+| `[CommRing R]` | `+ - * 0 1` with the ring laws | `ℤ`, `ℝ` |
+| `[PartialOrder α]` | `≤`, reflexive, transitive, antisymmetric | sets under `⊆` |
+| `[LinearOrder α]` | a partial order where any two elements compare; also `min`, `max` | `ℝ` |
+| `[Lattice α]` | `⊓` (inf, meet) and `⊔` (sup, join) | sets with `∩`, `∪` |
+| `[MetricSpace X]` | `dist x y` with the metric axioms | `ℝ`, `ℝ²` |
+
+## Choosing the class
+
+The class must be strong enough for the statement to **make sense**, and no stronger
+than needed, or the theorem says less than it could. `max a b` only exists in a
+**linear** order: with `[PartialOrder α]` the statement does not even typecheck, and Lean
+complains that it cannot find `Max α`. With `[LinearOrder α]` it does.
+
+In this game, write the type and the class inside each statement, as in
+`statement foo {R : Type*} [CommRing R] (a b : R) : …`. (A `variable` line would turn
+the statement into a family of statements, one for each `R`.)
 
 ## Your task
 
-Repair both definitions. The referee checks `median3` on every triple of
-numbers below 5 (all orderings, and ties), and `daysInYear` on famous years.
--/
+1. `sq_sub_sq'`: in every commutative ring, `(a + b) * (a - b) = a ^ 2 - b ^ 2`.
+2. `absorb`: in every lattice, `x ⊓ (x ⊔ y) = x` (type `⊓` as `\inf`, `⊔` as `\sup`).
+3. `max_comm'`: in every linear order, `max a b = max b a`.
+4. `dist_triangle'`: in every metric space, `dist x z ≤ dist x y + dist y z`.
 
+Make the type and the class implicit or instance arguments, and the elements explicit,
+as Mathlib does: a user should be able to write `sq_sub_sq' 3 2` for integers.
+-/
 namespace L6
 
--- A colleague's code. Repair it; keep the names and the types.
+statement sq_sub_sq' : sorry
 
--- the median (middle value) of three numbers
-def median3 (a b c : Nat) : Nat :=
-  if a ≤ b then (if b ≤ c then b else c)
-  else (if a ≤ c then a else c)
+statement absorb : sorry
 
--- the number of days in the year y of the Gregorian calendar
-def daysInYear (y : Nat) : Nat :=
-  if y % 4 = 0 then (if y % 100 = 0 then 365 else 366) else 365
+statement max_comm' : sorry
+
+statement dist_triangle' : sorry
 
 end L6

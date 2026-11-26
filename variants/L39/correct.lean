@@ -1,6 +1,5 @@
--- some bound M is at least every |u n| (already done)
-def BoundedSeq (u : ℕ → ℝ) : Prop := ∃ M, ∀ n, |u n| ≤ M
-
--- u converges to a: for every ε > 0, from some index N on,
--- every term u n is within ε of a
-def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - a| < ε
+def rot : (Fin 2 → ℚ) → (Fin 2 → ℚ) := fun v => ![-v 1, v 0]
+def proj : (Fin 2 → ℚ) → (Fin 2 → ℚ) := fun v => ![v 0, 0]
+def shift : (Fin 2 → ℚ) → (Fin 2 → ℚ) := fun v => v + ![1, 0]
+def u : Fin 2 → ℚ := ![0, 0]
+def w : Fin 2 → ℚ := ![0, 0]

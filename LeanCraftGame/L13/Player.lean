@@ -1,41 +1,58 @@
 /-
-# Division by zero
+# Be the referee
 
-What is `1 / 0`? On paper the question is not asked: `1/x` comes with the
-side condition `x ≠ 0`. In Lean every function is total, so `1 / 0` must be
-*something*, and Mathlib chose `0`. This is a **junk value**: harmless in
-theorems (they carry the hypothesis `x ≠ 0` anyway, and `x / 0 = 0` makes
-many identities hold without it), dangerous in definitions.
+So far the referee tested *your* definitions. Now you write the tests, and the referee
+tries to slip wrong definitions past them.
 
-For example `IsReciprocal x y := y = 1 / x` looks right, and accepts `x = 0,
-y = 0`. Its author meant "`x · y = 1`", which says the same thing for
-`x ≠ 0` and correctly rules out `0`.
+Here is the right definition, for limit `0`:
 
-The general lesson: **a definition should state the property, not compute
-it**. "Half of `x`" is `2y = x`, which needs no division at all. The slope of
-the line through two points is the `m` with `m(x₂ - x₁) = y₂ - y₁`, *and*
-the points must have different abscissas; otherwise every `m` (vertical
-line) or no `m` would do.
+```lean
+def ConvergesTo0 (s : ℕ → ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n| < ε
+```
 
-We work in `ℚ`, where `1 / 2` is a genuine fraction.
+Your test suite is four sequences:
+
+* two that **do** converge to 0 (`good₁`, `good₂`), and
+* two that do **not** (`bad₁`, `bad₂`).
+
+The referee first checks that your labels are honest. Then it brings out the
+**mutants**: hidden *wrong* definitions of convergence, of the kind people write from
+memory. A mutant is **caught** when it gets at least one of your sequences wrong: it
+rejects a `good` one, or accepts a `bad` one. A mutant that gets all four right
+**survives**: your tests cannot tell it apart from the right definition. This is
+*mutation testing*, and it is how the tests of this game were chosen.
+
+## Choosing good tests
+
+A suite of obvious examples (`fun _ ↦ 0` and `fun n ↦ n`) catches little. Each probe
+should sit **on the boundary** of the notion:
+
+* a sequence that converges *despite* lacking a property people confuse with
+  convergence (it is not monotone; it is not always positive);
+* a sequence that does not converge *despite* having such a property (it comes close
+  to `0` again and again; it stays small; it stays below every `ε`, but on the wrong
+  side).
+
+The referee proves things about sequences by computing, so use sequences that are
+**eventually constant** or that **alternate**, such as
+`fun n ↦ if n < 3 then 5 else 0` or `fun n ↦ if n % 2 = 0 then 0 else 1`, and small
+numbers (`1`, `2`, `1/2`, `-1`).
 
 ## Your task
 
-Define `average`, `IsReciprocal` and `HasSlope`.
+Fill in the four sequences so that every mutant is caught. The report says how many
+mutants there are; a mutant that survives is revealed, with its definition.
 -/
-
 namespace L13
 
--- y is half of x (already done; note: no division)
-def IsHalf (x y : ℚ) : Prop := 2 * y = x
+def ConvergesTo0 (s : ℕ → ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n| < ε
 
--- the average of a and b                    (average 1 2 = 3/2)
-def average (a b : ℚ) : ℚ := sorry
+-- two sequences that converge to 0
+def good₁ : ℕ → ℝ := sorry
+def good₂ : ℕ → ℝ := sorry
 
--- y is a reciprocal of x: x · y = 1 (0 has no reciprocal)
-def IsReciprocal (x y : ℚ) : Prop := sorry
-
--- the line through (x₁, y₁) and (x₂, y₂) has slope m; a vertical line has no slope
-def HasSlope (x₁ y₁ x₂ y₂ m : ℚ) : Prop := sorry
+-- two sequences that do not
+def bad₁ : ℕ → ℝ := sorry
+def bad₂ : ℕ → ℝ := sorry
 
 end L13

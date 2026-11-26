@@ -1,47 +1,64 @@
 /-
-# Generality
+# Gaussian integers
 
-"Let `x ≤ y` in an ordered set." Mathematicians state definitions once, for
-every structure that supports them, and Lean does the same with **type
-variables** and **type classes**:
+MIL 7.3 builds the **Gaussian integers** `ℤ[i]`: the complex numbers `a + bi` with `a`
+and `b` integers. As a structure, a Gaussian integer is just its two integer parts:
 
 ```lean
-def AlwaysBelow {α : Type*} [Preorder α] (u : ℕ → α) (B : α) : Prop := ∀ n, u n ≤ B
+structure GaussInt where
+  re : ℤ
+  im : ℤ
 ```
 
-* `{α : Type*}`: for every type `α` (implicit: Lean infers it from `u`);
-* `[Preorder α]`: provided `α` carries a preorder, i.e. a reflexive and
-  transitive `≤`. Lean finds the order of `ℕ`, `ℤ`, `ℚ`, `ℝ`, `Set X`, … by
-  itself.
+so `⟨3, 4⟩` is `3 + 4i`, and `z.re`, `z.im` are the parts of `z`.
 
-The same definition then applies to sequences of naturals, of reals, of
-sets ordered by inclusion. Choose the **weakest** structure the definition
-needs: `≤` needs `Preorder` (or `LE`); `max` needs a `LinearOrder`
-(on a partial order such as sets, two elements need not be comparable).
+## Operations
 
-The general version is not just more reusable; it is more honest about what
-the definition depends on.
+The operations come from the rules of complex numbers, with `i² = -1`:
+
+* `(a + bi) + (c + di) = (a + c) + (b + d)i`
+* `(a + bi)(c + di) = (ac - bd) + (ad + bc)i`
+* the conjugate of `a + bi` is `a - bi`
+* the norm of `a + bi` is `a² + b²`
+
+The trap is multiplication: it is **not** coordinate by coordinate. `i · i` must be
+`-1`, but multiplying coordinates would give `0 · 0 + (1 · 1)i = i`.
+
+## Sums of two squares
+
+The norm is multiplicative: `N(zw) = N(z) N(w)`. Written out, this is Brahmagupta's
+identity, which shows that a product of sums of two squares is again a sum of two
+squares. For instance `5 = 2² + 1²` and `13 = 3² + 2²`, so multiplying a Gaussian
+integer of norm 5 by one of norm 13, or by its conjugate, writes `65` as a sum of two
+squares, in two *different* ways.
 
 ## Your task
 
-Generalise `Between`, `IsUpperBound` and `largest` from `ℕ` to an arbitrary
-ordered type. The referee tests them on `ℕ`, `ℤ`, `ℚ` and on sets.
+Write the structure (fields `re` then `im`), the four operations, and two Gaussian
+integers of norm 5 and 13. Each operation lives in the namespace `GaussInt`, so you
+can write `z.mul w` and `w.conj`.
 -/
+import Mathlib.Tactic
+
 namespace L30
 
--- every term of u is at most B, for any type with ≤ (already done)
-def AlwaysBelow {α : Type*} [Preorder α] (u : ℕ → α) (B : α) : Prop := ∀ n, u n ≤ B
+-- a Gaussian integer a + b·i: the integer fields `re` and `im`, in this order
+structure GaussInt where
+  -- your fields here
 
--- Make the three definitions below work for every type with an order
--- (ℕ, ℤ, ℚ, ℝ, …), not just for ℕ.
+def GaussInt.add (z w : GaussInt) : GaussInt := sorry
 
--- a ≤ x ≤ b
-def Between (a b x : ℕ) : Prop := a ≤ x ∧ x ≤ b
+-- (a + bi)(c + di) = (ac - bd) + (ad + bc)i
+def GaussInt.mul (z w : GaussInt) : GaussInt := sorry
 
--- B is at least every element of s
-def IsUpperBound (s : Set ℕ) (B : ℕ) : Prop := ∀ x ∈ s, x ≤ B
+-- the conjugate a - bi
+def GaussInt.conj (z : GaussInt) : GaussInt := sorry
 
--- the larger of a and b
-def largest (a b : ℕ) : ℕ := if a ≤ b then b else a
+-- the norm a² + b²
+def GaussInt.norm (z : GaussInt) : ℤ := sorry
+
+-- a Gaussian integer of norm 5, and one of norm 13
+def z5 : GaussInt := sorry
+def w13 : GaussInt := sorry
 
 end L30

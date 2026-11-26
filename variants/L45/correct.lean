@@ -1,18 +1,14 @@
--- the Gaussian integers (already done)
-structure GaussInt where
-  re : ℤ
-  im : ℤ
+structure FinTopology (n : Nat) where
+  opens : Family n
+  empty_mem : ∅ ∈ opens
+  univ_mem : Finset.univ ∈ opens
+  union_mem : ∀ U ∈ opens, ∀ V ∈ opens, U ∪ V ∈ opens
+  inter_mem : ∀ U ∈ opens, ∀ V ∈ opens, U ∩ V ∈ opens
 
-def GaussInt.normSq (z : GaussInt) : ℤ := z.re ^ 2 + z.im ^ 2
+def mySierpinski : Family 2 := {∅, {1}, Finset.univ}
 
--- (a + bi) + (c + di)
-def GaussInt.add (z w : GaussInt) : GaussInt := ⟨z.re + w.re, z.im + w.im⟩
+def myParticular (n : Nat) (p : Fin n) : Family n :=
+  insert ∅ (Finset.univ.powerset.filter (fun U => p ∈ U))
 
--- (a + bi)(c + di) = (ac - bd) + (ad + bc)i
-def GaussInt.mul (z w : GaussInt) : GaussInt :=
-  ⟨z.re * w.re - z.im * w.im, z.re * w.im + z.im * w.re⟩
-
--- z multiplied by itself n times (z⁰ = 1)
-def GaussInt.pow (z : GaussInt) : ℕ → GaussInt
-  | 0 => ⟨1, 0⟩
-  | n + 1 => (z.pow n).mul z
+def IsCont {m n : Nat} (T : Family m) (S : Family n) (f : Fin m → Fin n) : Prop :=
+  ∀ V ∈ S, Top.Ref.pre f V ∈ T

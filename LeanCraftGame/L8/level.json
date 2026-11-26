@@ -1,54 +1,25 @@
 {
-  "world": "Logic World",
-  "title": "And, or, not",
-  "skill": "syntax",
-  "exercise": "Define",
+  "world": "Logic",
+  "title": "∀ and →",
+  "skill": "writing definitions",
+  "exercise": "Write",
+  "mil": "§3.1",
   "predict": [
-    {
-      "test": "1 is not composite",
-      "statement": "IsComposite 1"
-    },
-    {
-      "test": "9 is not a Sophie Germain prime (19 is prime, but 9 is not)",
-      "statement": "IsSophieGermain 9"
-    },
-    {
-      "test": "ExactlyOneOf23 12 (divisible by both)",
-      "statement": "ExactlyOneOf23 12"
-    }
+    {"test": "5 is an upper bound of x ↦ x", "statement": "`FnUb (fun x ↦ x) 5`: 5 is an upper bound of the identity."},
+    {"test": "x ↦ x² is monotone", "statement": "`MonotoneFn (fun x ↦ x ^ 2)` on all of ℝ."}
   ],
+  "public": ["3 is an upper bound of the constant function 3", "x ↦ 2x + 1 is monotone"],
   "checks": [
-    {
-      "lean": "example : Nat → Prop := L8.IsSophieGermain\nexample : Nat → Prop := L8.IsTwinPrime\nexample : Nat → Prop := L8.IsComposite\nexample : Nat → Prop := L8.ExactlyOneOf23",
-      "message": "Keep the four predicates of type `Nat → Prop`."
-    }
+    {"lean": "#check (L8.FnUb : (ℝ → ℝ) → ℝ → Prop)\n#check (L8.FnLb : (ℝ → ℝ) → ℝ → Prop)\n#check (L8.MonotoneFn : (ℝ → ℝ) → Prop)",
+     "message": "Keep `FnUb FnLb : (ℝ → ℝ) → ℝ → Prop` and `MonotoneFn : (ℝ → ℝ) → Prop`."}
   ],
   "hints": [
-    {
-      "match": "Sophie",
-      "hint": "`Nat.Prime p ∧ Nat.Prime (2 * p + 1)`."
-    },
-    {
-      "match": "twin",
-      "hint": "`Nat.Prime p ∧ Nat.Prime (p + 2)`."
-    },
-    {
-      "match": "composite",
-      "steps": [
-        "Is 1 prime? Is it composite? What does `¬ Nat.Prime n` say about `1`?"
-      ],
-      "hint": "`1 < n ∧ ¬ Nat.Prime n`."
-    },
-    {
-      "match": "ExactlyOneOf23",
-      "steps": [
-        "\"Exactly one\" is \"at least one\" and \"not both\"."
-      ],
-      "hint": "`(2 ∣ n ∨ 3 ∣ n) ∧ ¬ (2 ∣ n ∧ 3 ∣ n)`."
-    },
-    {
-      "match": "",
-      "hint": "Combine the pieces with `∧`, `∨` and `¬`, with brackets."
-    }
+    {"match": "upper bound of the constant", "steps": ["Is 3 strictly greater than 3?"], "hint": "`∀ x, f x ≤ a`, with `≤`, not `<`."},
+    {"match": "upper bound of x ↦", "hint": "`FnUb f a` is `∀ x, f x ≤ a`."},
+    {"match": "lower bound", "hint": "`FnLb f a` is `∀ x, a ≤ f x`."},
+    {"match": "x ↦ 2x + 1 is monotone", "steps": ["Did you put the hypothesis `a ≤ b` before `f a ≤ f b`?"], "hint": "`∀ {a b : ℝ}, a ≤ b → f a ≤ f b`."},
+    {"match": "is monotone", "hint": "`MonotoneFn f` is `∀ {a b : ℝ}, a ≤ b → f a ≤ f b`."},
+    {"match": "Mathlib's Monotone", "hint": "`∀ {a b : ℝ}, a ≤ b → f a ≤ f b`."},
+    {"match": "implicitly", "steps": ["Are `a` and `b` in curly brackets in your definition?"], "hint": "Write `∀ {a b : ℝ}, a ≤ b → f a ≤ f b`: the curly brackets make them implicit."}
   ]
 }

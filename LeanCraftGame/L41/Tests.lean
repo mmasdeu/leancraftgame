@@ -1,31 +1,34 @@
-/- Hidden test battery for Level Cauchy sequences. -/
+/- Hidden test battery for Level 41: Endomorphisms. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L41.Player
 
 open L41
 
-#no_sorry IsEventuallyConstant
-#no_sorry IsCauchy
-#level_start "Cauchy sequences"
+#no_sorry q1
+#no_sorry q2
+#no_sorry q3
+#no_sorry q4
+#no_sorry exists_eig
+#no_sorry ev₁
+#no_sorry vec₁
+#no_sorry ev₂
+#no_sorry vec₂
+#level_start "Endomorphisms"
 
--- the worked example
-#expect_true "the constant sequence 3 converges to 3" unfolding ConvergesTo :
-  ConvergesTo (fun _ => 3) 3
--- the warm-up
-#expect_true "7, 7, 7, 7, 7, 0, 0, 0, … is eventually constant" unfolding IsEventuallyConstant :
-  IsEventuallyConstant (fun n => if n < 5 then 7 else 0)
-#expect_false "0, 1, 2, 3, … is not eventually constant" unfolding IsEventuallyConstant :
-  IsEventuallyConstant (fun n => (n : ℝ))
-#expect_false "0, 1, 0, 1, … is not eventually constant" unfolding IsEventuallyConstant :
-  IsEventuallyConstant (fun n => if n % 2 = 0 then 0 else 1)
--- Cauchy
-#expect_true "the constant sequence 3 is Cauchy" unfolding IsCauchy :
-  IsCauchy (fun _ => 3)
-#expect_true "7, 7, 7, 7, 7, 0, 0, 0, … is Cauchy" unfolding IsCauchy :
-  IsCauchy (fun n => if n < 5 then 7 else 0)
-#expect_true "1, 0, 0, 0, … is Cauchy: the first terms never matter" unfolding IsCauchy :
-  IsCauchy (fun n => if n = 0 then 1 else 0)
-#expect_false "0, 1, 2, 3, … is not Cauchy" unfolding IsCauchy :
-  IsCauchy (fun n => (n : ℝ))
+#expect_choice "Question 1: what `Module.End K V` is" : q1 = 2
+#expect_choice "Question 2: can the zero vector be an eigenvector?" : q2 = false
+#expect_choice "Question 3: the type of `minpoly K f`" : q3 = 1
+#expect_choice "Question 4: does the theorem stay true over ℝ?" : q4 = false
+
+#expect_equiv "exists_eig states MIL's theorem, with every hypothesis" :
+  L41.exists_eig ↔ ∀ {V : Type} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
+    [Nontrivial V] (f : Module.End ℂ V), ∃ c : ℂ, f.HasEigenvalue c
+  using fun f => Module.End.exists_eigenvalue f
+
+#expect_true "A *ᵥ vec₁ = ev₁ • vec₁" unfolding A ev₁ vec₁ : A.mulVec vec₁ = ev₁ • vec₁
+#expect_true "vec₁ is not the zero vector" unfolding vec₁ : vec₁ ≠ 0
+#expect_true "A *ᵥ vec₂ = ev₂ • vec₂" unfolding A ev₂ vec₂ : A.mulVec vec₂ = ev₂ • vec₂
+#expect_true "vec₂ is not the zero vector" unfolding vec₂ : vec₂ ≠ 0
+#expect_true "ev₁ < ev₂" unfolding ev₁ ev₂ : ev₁ < ev₂
 
 #level_report

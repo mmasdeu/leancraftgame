@@ -1,59 +1,50 @@
 /-
-# Declaring a structure
+# Metric spaces
 
-A complex number is a pair of reals, a rational is a pair of integers, a
-point of the plane is a pair of coordinates. Mathematics bundles data
-constantly, and Lean does it with **structures**:
+MIL §11.2 works in a metric space: a type `X` with a distance `dist : X → X → ℝ`.
 
 ```lean
-structure Point where
-  x : ℤ
-  y : ℤ
+variable {X : Type*} [MetricSpace X] (a b c : X)
+#check (dist a b : ℝ)
+#check (dist_nonneg : 0 ≤ dist a b)
+#check (dist_eq_zero : dist a b = 0 ↔ a = b)
+#check (dist_comm a b : dist a b = dist b a)
+#check (dist_triangle a b c : dist a c ≤ dist a b + dist b c)
 ```
 
-This declares a new type `Point` whose values have two **fields**. A value
-is built with the constructor, `Point.mk 3 4`, or with the anonymous
-constructor `⟨3, 4⟩` when the type is known. The fields are read with a dot:
-`p.x`, `p.y`. The order of the fields is the order of the arguments.
+From the distance come the open ball `Metric.ball x r = {y | dist y x < r}`, the closed
+ball `Metric.closedBall x r = {y | dist y x ≤ r}`, Cauchy sequences, compactness, and
+continuity in ε–δ form:
 
-The **Gaussian integers** `ℤ[i] = {a + b·i | a, b ∈ ℤ}` are the integer
-points of the complex plane. They have a norm `N(a + bi) = a² + b²`, which is
-multiplicative, and this is why a product of sums of two squares is a sum of
-two squares (we will use that in the next level). A prime `p` is a sum of
-two squares exactly when it splits in `ℤ[i]`: `5 = (2 + i)(2 - i)`.
+```lean
+theorem Metric.continuous_iff {f : X → Y} :
+    Continuous f ↔ ∀ b, ∀ ε > 0, ∃ δ > 0, ∀ a, dist a b < δ → dist (f a) (f b) < ε
+```
 
-The same data, a pair of integers, can mean a point or a Gaussian integer:
-the type records the intended meaning, and `toPoint` translates.
+The `δ` may depend on the point `b`. When one `δ` works for all points at once, `f` is
+**uniformly continuous**: the quantifier `∃ δ` moves before `∀ b`. In Mathlib that is
+`UniformContinuous f`, and its ε–δ form is `Metric.uniformContinuous_iff`.
 
-## Your task
+## Part A: the axioms
 
-Declare the fields of `GaussInt`, then define the values and functions.
+The class `MetricSpace` bundles `dist` with its axioms. Write them yourself, for a
+distance with values in `ℤ` (so that the referee can check examples on four points):
+one field per axiom, after `dist`. The referee feeds your structure genuine metrics, which
+must satisfy your axioms, and impostors, each of which must break at least one.
+
+## Part B: uniform continuity
+
+State `UnifCont f`: for every `ε > 0` there is `δ > 0` such that for all `x` and `y`,
+`dist x y < δ` implies `dist (f x) (f y) < ε`. Write the quantifiers in this order.
 -/
+import Mathlib.Topology.MetricSpace.Pseudo.Defs
 
 namespace L44
 
--- a point of the plane with integer coordinates (already done)
-structure Point where
-  x : ℤ
-  y : ℤ
+structure Metric' (α : Type) where
+  dist : α → α → ℤ
+  -- your axioms here
 
--- a Gaussian integer a + b·i: two integer fields `re` and `im`, in this order
-structure GaussInt where
-  -- your fields here
-
--- the imaginary unit i = 0 + 1·i
-def I : GaussInt := sorry
-
--- 3 + 4i
-def z34 : GaussInt := sorry
-
--- the norm a² + b² of a + b·i
-def normSq (z : GaussInt) : ℤ := sorry
-
--- the conjugate a - b·i of a + b·i
-def conjugate (z : GaussInt) : GaussInt := sorry
-
--- the point (a, b) of the plane
-def toPoint (z : GaussInt) : Point := sorry
+def UnifCont (f : ℝ → ℝ) : Prop := sorry
 
 end L44

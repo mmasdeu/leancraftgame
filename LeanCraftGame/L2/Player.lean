@@ -1,44 +1,61 @@
 /-
-# Functions
+# Your first definitions
 
-A function is a definition with an input:
+MIL's first chapter writes small definitions and checks them with `#check` and
+`#eval`. This level does the same with the quantities of the AM-GM inequality, which
+returns in the next world.
+
+## Functions
+
+A definition with arguments is a function:
 
 ```lean
-def square (n : Nat) : Nat := n * n
+def cube (x : ℝ) : ℝ := x ^ 3
 ```
 
-`square` takes a natural number `n` and returns `n * n`. You apply it by
-writing the input after the name, with a space: `square 7` is `49`, and
-`square (2 + 1)` is `9`. No brackets around the argument are needed, only
-around compound expressions.
+The same function can be written with `fun` (also spelled `λ`), and the arrow `↦` (type
+`\mapsto`, or write `=>`):
 
-## Division on ℕ
+```lean
+def cube' : ℝ → ℝ := fun x ↦ x ^ 3
+```
 
-In `Nat` there are no fractions: `a / b` is the quotient of the Euclidean
-division, rounded down. So `7 / 2 = 3`, and the order of operations
-matters: `5 * 6 / 2 = 15`, but `5 / 2 * 6 = 12`. Gauss's formula
-`n(n + 1)/2` is safe because the product `n(n + 1)` is always even, *as long
-as you divide last*.
+`ℝ → ℝ` is the type of functions from reals to reals. A function of two arguments has
+type `ℝ → ℝ → ℝ`: it takes one real and returns a function that waits for the second.
 
-Likewise `a - b` is `0` when `b > a` ("truncated subtraction"): `3 - 5 = 0`.
-This is a boundary case to keep in mind: `n - 1` is `0` when `n = 0`.
+## Applying a function
+
+Application is written **without brackets**: `cube 2`, `max a b`. Brackets only group:
+`cube (cube 2)` is the cube of `cube 2`, while `cube cube 2` is an error (it applies
+`cube` to the function `cube`). And `cube 2 + 1` is `(cube 2) + 1`: application binds
+tighter than any operator.
+
+## The type of a number
+
+A numeral such as `2` has no type of its own: Lean gives it the type the context asks
+for. In `def cube (x : ℝ) : ℝ := x ^ 3` everything is real. When the context says
+nothing, the number is a natural number in `ℕ`, where division rounds down: `7 / 2 = 3`.
+To force a real, write `(7 : ℝ) / 2`, which is `3.5`.
 
 ## Your task
 
-Define `cube`, `triangular` and `handshakes`. The referee checks a few
-values, and also identities such as `8·T(n) + 1 = (2n + 1)²` for every
-`n ≤ 30`.
+Fill in the five definitions. Each comment says what the value should be.
 -/
-
 namespace L2
 
--- n³
-def cube (n : Nat) : Nat := sorry
+-- the square of x
+def square (x : ℝ) : ℝ := sorry
 
--- the n-th triangular number 0 + 1 + ⋯ + n, by Gauss's formula n(n + 1)/2
-def triangular (n : Nat) : Nat := sorry
+-- the arithmetic mean of a and b, the right-hand side of AM-GM
+def am (a b : ℝ) : ℝ := sorry
 
--- the number of handshakes among n people, if each pair shakes hands once
-def handshakes (n : Nat) : Nat := sorry
+-- the function x ↦ 2x, written with `fun`
+def double : ℝ → ℝ := sorry
+
+-- `double` applied twice to 3 (use `double`, do not compute by hand)
+def twelve : ℝ := sorry
+
+-- n halved, in the natural numbers (rounding down)
+def halfNat (n : ℕ) : ℕ := sorry
 
 end L2

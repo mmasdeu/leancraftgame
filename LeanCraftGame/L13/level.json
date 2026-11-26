@@ -1,46 +1,73 @@
 {
-  "world": "Numbers World",
-  "title": "Division by zero",
-  "skill": "writing",
-  "exercise": "Define",
-  "predict": [
-    {
-      "test": "1 / 0 = 0 in ℚ (a junk value)",
-      "statement": "1 / 0 = 0 in ℚ"
-    },
-    {
-      "test": "HasSlope 1 0 1 5 0 is false (a vertical line has no slope)",
-      "statement": "HasSlope 1 0 1 5 0: the line through (1, 0) and (1, 5) has slope 0"
-    }
+  "world": "Logic",
+  "title": "Be the referee",
+  "skill": "testing",
+  "exercise": "Construct",
+  "mil": "§3.6",
+  "timeout": 150,
+  "public": [
+    "good₁ converges to 0",
+    "good₂ converges to 0",
+    "bad₁ does not converge to 0",
+    "bad₂ does not converge to 0"
   ],
   "checks": [
     {
-      "lean": "example : ℚ → ℚ → ℚ := L13.average\nexample : ℚ → ℚ → Prop := L13.IsReciprocal\nexample : ℚ → ℚ → ℚ → ℚ → ℚ → Prop := L13.HasSlope",
-      "message": "Keep `average : ℚ → ℚ → ℚ`, `IsReciprocal : ℚ → ℚ → Prop` and `HasSlope` with five rational inputs."
+      "lean": "#check (L13.good₁ : ℕ → ℝ)\n#check (L13.good₂ : ℕ → ℝ)\n#check (L13.bad₁ : ℕ → ℝ)\n#check (L13.bad₂ : ℕ → ℝ)",
+      "message": "Keep `good₁`, `good₂`, `bad₁` and `bad₂` as sequences `ℕ → ℝ`."
     }
   ],
   "hints": [
     {
-      "match": "average",
-      "hint": "`(a + b) / 2`, with the brackets."
+      "match": "good₁ converges",
+      "hint": "`good₁` is labelled as converging to 0, but it does not. Every label must be honest."
     },
     {
-      "match": "IsReciprocal",
+      "match": "good₂ converges",
+      "hint": "`good₂` is labelled as converging to 0, but it does not. Every label must be honest."
+    },
+    {
+      "match": "bad₁ does not",
+      "hint": "`bad₁` is labelled as not converging to 0, but it does. Every label must be honest."
+    },
+    {
+      "match": "bad₂ does not",
+      "hint": "`bad₂` is labelled as not converging to 0, but it does. Every label must be honest."
+    },
+    {
+      "match": "nonnegative, eventually below",
       "steps": [
-        "What does `y = 1 / x` say when `x = 0`?"
+        "This mutant only accepts sequences whose terms are all `≥ 0`. Must a sequence that converges to 0 stay nonnegative?"
       ],
-      "hint": "`x * y = 1`: state the property instead of computing `1 / x`."
+      "hint": "`fun n ↦ if n = 0 then -1 else 0` (-1, 0, 0, …) converges to 0: use it as a `good` sequence."
     },
     {
-      "match": "HasSlope",
+      "match": "close again and again",
       "steps": [
-        "Without division: `m` times the run is the rise. And when is there no slope?"
+        "This mutant accepts every sequence that comes back close to 0 infinitely often. Which non-convergent sequence does that?"
       ],
-      "hint": "`x₁ ≠ x₂ ∧ m * (x₂ - x₁) = y₂ - y₁`."
+      "hint": "`fun n ↦ if n % 2 = 0 then 0 else 1` (0, 1, 0, 1, …) as a `bad` sequence."
     },
     {
-      "match": "",
-      "hint": "State the property; avoid dividing."
+      "match": "eventually small",
+      "steps": [
+        "This mutant accepts any sequence that eventually stays below 1 in size. Can a sequence do that without converging to 0?"
+      ],
+      "hint": "A constant such as `fun _ ↦ 1/2`, or `fun _ ↦ -1/2`, as a `bad` sequence."
+    },
+    {
+      "match": "no absolute value",
+      "steps": [
+        "Without `|·|`, the mutant only checks `s n < ε`. Which sequences pass that easily?"
+      ],
+      "hint": "A negative constant, `fun _ ↦ -1/2`, as a `bad` sequence."
+    },
+    {
+      "match": "decreasing",
+      "steps": [
+        "This mutant only accepts sequences that never go up. Can a sequence converge to 0 while going up somewhere?"
+      ],
+      "hint": "`fun n ↦ if n = 1 then 1 else 0` (0, 1, 0, 0, …) as a `good` sequence."
     }
   ]
 }

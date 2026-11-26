@@ -1,9 +1,10 @@
 # Lean Craft Game: a Lean game about definitions, not proofs
 
-> **This is the `v2` branch**, published at <https://mmasdeu.github.io/leancraftgame/v2/>.
-> Version 2 rewrites every level as one mathematical arc, from naming numbers to finite
-> topological spaces, and adds a Topology world (15 levels) before the final Audit world:
-> 75 levels in twelve worlds. See [CURRICULUM.md](CURRICULUM.md).
+> **This is the `v3` branch**, to be published at <https://mmasdeu.github.io/leancraftgame/v3/>.
+> Version 3 follows *Mathematics in Lean* (MIL) chapter by chapter: 50 levels in thirteen
+> worlds, one per chapter, plus a final audit. The player reads as much as writes, states
+> theorems without proving them, and uses Mathlib's own names. See [CURRICULUM.md](CURRICULUM.md)
+> and the design in [REDESIGN_PLAN.md](REDESIGN_PLAN.md).
 
 [![Downloads](https://img.shields.io/github/downloads/mmasdeu/leancraftgame/total?label=downloads)](https://github.com/mmasdeu/leancraftgame/releases) [![Latest release](https://img.shields.io/github/downloads/mmasdeu/leancraftgame/latest/total?label=latest%20release)](https://github.com/mmasdeu/leancraftgame/releases/latest)
 
@@ -12,7 +13,8 @@ LLMs now write many Lean proofs well, so the scarce skill has moved upstream:
 or unusable, and no proof checker will warn you. Lean Craft Game teaches that skill.
 
 **The core mechanic.** The player never writes a proof. The player writes a
-definition (a predicate, a structure, a formal statement). A hidden *test
+definition or the statement of a theorem, gives a witness or a counterexample, or reads
+Lean code and answers questions about it. A hidden *test
 battery* then asks an automated *referee* to prove or refute dozens of facts
 about it:
 
@@ -25,6 +27,9 @@ about it:
 | `#expect_not_model` | a structure must rule out junk models | axioms that are too weak |
 | `#expect_open` | an open problem must not be trivially provable or refutable | vacuous or silly statements |
 | `#expect_caught` | a wrong definition (a *mutant*) must disagree with one of the player's tests | test suites that miss a mistake |
+| `#expect_equiv` | the player's `statement` must say the same as the intended one (same binders, hypotheses and conclusion, up to algebra) | missing hypotheses, wrong conclusions, statements that are true but not the one asked |
+| `#expect_type` | a term must have a given type | wrong binders (explicit where implicit was asked), wrong shapes |
+| `#expect_choice` | the answer to a reading question | misreadings |
 
 Each test comes back ✅ (as expected), ❌ (the referee *proved the opposite*,
 so it has a concrete witness against your definition) or ❓ (unsettled).
@@ -41,11 +46,11 @@ green by trial and error:
 * **Stars.** A cleared level earns up to three: cleared, no hint opened, every
   prediction right.
 
-**Reading in every world.** Most worlds end with a *Spot the bug* level, in which
-the player proves a colleague's definitions wrong with counterexamples, and the
-Predicate world has *Be the referee*, in which the player writes the tests and hidden
-mutants must each fail one of them. The first four worlds also have a harder
-*Challenge* level before it.
+**Reading as much as writing.** About two levels in five are reading levels: the player
+answers questions about Lean code, reads Mathlib signatures, or proves a colleague's
+definitions wrong with counterexamples (*Spot the bug*, the last level of most worlds).
+In *Be the referee* the player writes the tests, and hidden wrong definitions must each
+fail one of them.
 
 ## Quick start
 
@@ -73,90 +78,63 @@ python3 web/server.py --run 1 LeanCraftGame/L1/Player.lean
 
 The game starts from zero: no Lean knowledge is assumed. A Welcome page (`LeanCraftGame/Intro.md`)
 introduces Lean and the game to first-time visitors, and then each level teaches one
-idea, with a worked example in the lesson text. There are 75 levels in twelve worlds,
-which form one mathematical arc; [CURRICULUM.md](CURRICULUM.md) lists them with their
-exercise types (Define, Construct, Repair, Classify, Refute, Referee, Connect, Audit),
-and explains how predictions, hidden tests and hints are set in `level.json`.
+piece of syntax or one reading or writing skill, with a worked example from MIL in the
+lesson text, and names the MIL section it follows. There are 50 levels in thirteen
+worlds, one per MIL chapter, and a final audit; [CURRICULUM.md](CURRICULUM.md) lists them
+with their exercise types (Write, Read, Construct, Refute, Repair, Audit), and
+[AUTHORING.md](AUTHORING.md) explains how a level is written.
 
-* **Foundations, Logic, Numbers, Quantifiers:** `def`, functions, cases, recursion,
-  `Prop`, the connectives, casts and junk values, `∀ ∃` and their order (with the
-  Collatz map, Fibonacci numbers, Pythagorean triples, Egyptian fractions).
-* **Sequences, Sets, Finite, Analysis:** tending to infinity, monotone and bounded
-  sequences, injectivity, Mathlib's names, divisibility, relations, `∑` and `Finset`,
-  ε-δ limits, continuity, Cauchy sequences.
-* **Structures, Classes:** Gaussian integers, 2×2 matrices, morphisms, structures with
-  axioms (orders, metrics, groups), type classes and instances.
-* **Topology:** finite topological spaces built from `Finset`s, which the referee checks
-  exhaustively: the axioms, a gallery of examples (Sierpiński space throughout),
-  closure, bases, continuity, homeomorphisms, subspaces, products, compactness,
-  connectedness, separation, neighbourhoods, filters and convergence. The shared
-  examples are in `LeanCraftGame/Lib/Topology.lean`.
-* **Audit:** an AI's "proofs" of the infinitude of primes, Collatz and Goldbach.
-* **Spot the bug** (the last level of most worlds) and **Be the referee**: reading a
-  colleague's definitions and proving them wrong with counterexamples, and writing a
-  test suite that catches hidden wrong definitions.
+1. **Getting Started** (MIL 1) and **Basics** (MIL 2): reading a Lean file, `def`, how
+   Lean parses, reading Mathlib signatures, stating theorems with `statement`, generic
+   statements with type classes.
+2. **Logic** (MIL 3): `∀ ∃ ¬ ∧ ∨ ↔`, pushing negations, the order of quantifiers,
+   convergence of sequences, mutation testing ("Be the referee").
+3. **Sets and Functions**, **Elementary Number Theory**, **Discrete Mathematics**
+   (MIL 4–6): `Set`, images, injectivity, Schröder–Bernstein; primes, irrationality,
+   recursion; `Finset`, big operators, inductive types.
+4. **Structures**, **Hierarchies**, **Groups and Rings** (MIL 7–9): structures, the
+   Gaussian integers, classes and instances, morphisms, sub-objects, `ZMod`, ideals,
+   polynomials.
+5. **Linear Algebra**, **Topology**, **Differential Calculus**, **Integration and
+   Measure Theory** (MIL 10–13): linear maps, matrices, filters, metric and topological
+   spaces (with finite spaces checked exhaustively), `deriv`, `∫`. Where the referee
+   cannot compute, the checks are on types and on the shape of statements.
 
-The number of a level is the name of its directory (`LeanCraftGame/L<n>`,
-`variants/L<n>`), and also its position in the game: `LEVELS` in `web/server.py` lists
-the directories in order. Inserting a level means renumbering the ones after it.
+### Reading levels
 
-The browser has a **Symbols** drawer that lists every symbol with the keys to
-type it (`\forall`, `\to`, `\le`, …) and its plain-ASCII spelling, with a
-typing drill. Clicking a symbol inserts it into the editor.
+A *Read* level shows Lean code in the lesson and asks questions about it. The answers
+are lines of the player's code (`def q1 : Fin 4 := 2`), and the browser shows the
+questions under the lesson as buttons that write those lines. Questions aim at the
+traps: `#eval (7 + 2) / 2` is `4`, `-x ^ 2` is `-(x ^ 2)`, a hypothesis that an
+application of `pow_le_pow_left₀` must supply.
 
-The last levels, in more detail, exercise three different skills:
-**writing**, **reading**, and **auditing**.
+### Stating theorems (Basics, level 5, writing)
 
-### Going to infinity (Sequence World, level 23, writing)
-
-*Define `TendsToInfinity (u : ℕ → ℕ) : Prop`.*
-
-The test sequences are chosen so that each classic wrong definition fails a
-specific, readable test:
+`statement two_mul_le (a b : ℝ) : 2 * a * b ≤ a ^ 2 + b ^ 2` names a proposition without
+proving it. The referee compares it with the intended statement by *shape*, because any
+two true statements are logically equivalent:
 
 | Player writes | Referee says |
 |---|---|
-| `∀ M, ∃ N, ∀ n ≥ N, M ≤ u n` | 🏆 9/9 |
-| `∀ M, ∃ n, M ≤ u n` (unbounded) | ❌ "0, 0, 2, 0, 4, 0, … does not tend to infinity" |
-| `∀ n, u n < u (n+1)` (strictly increasing) | ❌ "n / 2 tends to infinity" and ❌ "0, 4, 2, 6, … tends to infinity" |
-| `∃ N, ∀ M, ∀ n ≥ N, M ≤ u n` (quantifier swap) | ❌ "u n = n tends to infinity". The downstream lemmas still pass, but only *vacuously*: nothing satisfies the definition. |
-| monotone ∧ unbounded | ❌ "0, 4, 2, 6, 4, 8, … tends to infinity (it is not monotone!)" |
+| `(a b : ℝ) : 2 * a * b ≤ a ^ 2 + b ^ 2`, or `a ^ 2 + b ^ 2 ≥ 2 * (a * b)` | ✅ |
+| `(a b : ℝ) : a ^ 2 + b ^ 2 ≤ 2 * a * b` | ❌ "your statement is FALSE, the intended one TRUE" (with a counterexample) |
+| `(a + b) ^ 2 = (a + b) ^ 2` for the binomial formula | ❓ "true, but not the statement asked for" |
 
-### A colleague's groups (Structure World, level 52, reading, then fixing)
+### Be the referee (Logic, level 13, testing)
 
-A colleague's `Group'` has associativity, a **left** identity and a **right**
-inverse. It compiles, and every group is an instance, but it is not the theory
-of groups.
+The player is given the right definition of convergence to 0 and writes four test
+sequences (two that converge, two that do not). Hidden *mutants* (`ε ≥ 0`, "close again
+and again", "eventually small", no absolute value, "decreasing") must each be caught by
+one of them.
 
-* **Part A, break it:** give the data of a junk model on `Bool`. The referee
-  checks that it satisfies `Group'` and that it is not a group. (Answer:
-  `a * b = b`.)
-* **Part B, fix it:** write `Group₂`. It is checked against a zoo of models.
-  ℤ, `Bool` under xor, ℤ/3 and the non-commutative S₃ must all be models.
-  `a * b = b` (on three carriers), (ℕ, +) and (`Bool`, and) must each break
-  some axiom. Adding `mul_comm` "to be safe" fails on S₃, and the report names
-  `mul_comm` as the axiom that fails.
-
-### The AI proved Goldbach! (Audit World, level 75, auditing)
+### The AI proved Goldbach! (Final Audit, level 51, auditing)
 
 An "AI" formalises Goldbach as
 `∀ n, 2 < n → n % 2 = 0 → ∃ p q, IsPrime p ∧ IsPrime q → p + q = n`
 and proves it in one line, with no `sorry`. (The `→` binds weaker than `∧`, so
-`p = 0` is a witness.)
-
-The player writes `GoldbachFor (P : ℕ → Prop)`: Goldbach relative to an
-arbitrary notion of "prime". This is the main idea of the level: **you can't
-test a statement nobody can prove, but you can test it in toy worlds where you
-know the answer.**
-
-| World | Expected | Catches |
-|---|---|---|
-| everything is prime | true | hypotheses written as conjuncts |
-| primes = odd numbers | true | forgetting "even" |
-| primes = numbers ≥ 2 | true | `2 ≤ n` instead of `2 < n` |
-| nothing is prime | false | the AI's precedence bug |
-| only 2 is prime | false | the AI's precedence bug |
-| real primes | **open** | "proved an open problem: probably vacuous" |
+`p = 0` is a witness.) The player writes the statement relative to an arbitrary notion
+of "prime" and tests it in toy worlds where the answer is known: **you can't test a
+statement nobody can prove, but you can test it in toy worlds.**
 
 ## Usage counts
 
@@ -196,8 +174,16 @@ python3 online/build.py          # writes dist/online/: upload it to any static 
 typical mistakes. `python3 check_levels.py` runs them all through the referee
 and checks that every correct answer clears its level and every buggy answer
 gets at least one ❌ (or is rejected before the tests run). Each bug is caught
-by the test designed for it. `python3 check_levels.py --static` only checks the
-levels' metadata (predictions, public tests, hints) against their tests, without Lean.
+by the test designed for it. An `other*` answer, a statement other than the one asked
+that no proof can refute (a true one, such as `(a + b) ^ 2 = (a + b) ^ 2` for the binomial
+formula), must not clear its level and must get no ❌. `python3 check_levels.py --static`
+only checks the levels' metadata (predictions, public tests, hints, questions) against
+their tests, without Lean.
+
+`python3 tests/browser_questions.py` plays every reading level in a headless browser
+(Playwright): it answers the questions by clicking, checks that the code follows the
+buttons and the buttons the code, and that the level is cleared. `python3
+make_curriculum.py` regenerates [CURRICULUM.md](CURRICULUM.md) from the levels.
 
 ## Architecture
 
@@ -218,7 +204,7 @@ app/launcher.py          the desktop app: installs Lean and the Mathlib pack on 
 app/make_pack.py         builds the Mathlib pack (the modules the game loads) and deps.json
 app/build_app.py         freezes the app with PyInstaller for the current OS
 .github/workflows/release.yml   builds, smoke-tests and publishes the apps for Windows, macOS and Linux
-.github/workflows/pages.yml     on this branch: publishes the online game to the v2/ folder of gh-pages
+.github/workflows/pages.yml     on this branch: publishes the online game to the v3/ folder of gh-pages
 ```
 
 **The referee** (`Referee.lean`) is deliberately simple: iterative

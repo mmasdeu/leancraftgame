@@ -1,6 +1,5 @@
--- u converges to a (already done)
-def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - a| < ε
-
-def ClusterValue (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∀ N, ∃ n, N ≤ n ∧ |u n - a| < ε
-
-def IsSubseqLimit (u : ℕ → ℝ) (φ : ℕ → ℕ) (a : ℝ) : Prop := (∀ n, φ n < φ (n + 1)) ∧ ∀ ε > 0, ∃ N, ∀ n ≥ N, |u (φ n) - a| < ε
+def rotM : Matrix (Fin 2) (Fin 2) ℚ := Matrix.of ![![0, -1], ![1, 0]]
+def fibM : Matrix (Fin 2) (Fin 2) ℤ := !![1, 1; 1, 0]
+def fib (n : ℕ) : ℤ := (fibM ^ n) 1 0
+def singular : Matrix (Fin 2) (Fin 2) ℚ := !![3, -1; -6, 2]
+def detB : ℚ := 2 * 4 - 1 * 7

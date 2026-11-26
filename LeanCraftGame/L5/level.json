@@ -1,40 +1,43 @@
 {
-  "world": "Foundations World",
-  "title": "Challenge: witnesses",
-  "skill": "writing",
-  "exercise": "Construct",
+  "world": "Basics",
+  "title": "Stating theorems",
+  "skill": "writing statements",
+  "exercise": "Write",
+  "mil": "§2.1–2.4",
   "public": "all",
-  "checks": [
-    {
-      "lean": "example : Nat := L5.p₁\nexample : Nat := L5.slow\nexample : Nat := L5.z",
-      "message": "Keep the witnesses as natural numbers."
-    }
-  ],
+  "hintsAfter": 1,
   "hints": [
     {
-      "match": "p₁",
-      "steps": [
-        "Multiply two sums of two squares, such as `5 = 1² + 2²` and `13 = 2² + 3²`."
-      ],
-      "hint": "`65 = 1² + 8² = 4² + 7²`: `p₁ = 1, p₂ = 8, q₁ = 4, q₂ = 7`."
+      "match": "sq_add",
+      "hint": "`statement sq_add (a b : ℝ) : (a + b) ^ 2 = a ^ 2 + 2 * a * b + b ^ 2`."
     },
     {
-      "match": "slow",
+      "match": "two_mul_le",
       "steps": [
-        "Try the starting values mentioned in the lesson, with `#eval iter 100 27`."
+        "Which side is the smaller one? `≤` reads \"is at most\"."
       ],
-      "hint": "`27` takes 111 steps."
+      "hint": "`statement two_mul_le (a b : ℝ) : 2 * a * b ≤ a ^ 2 + b ^ 2`."
     },
     {
-      "match": "x²",
+      "match": "abs_mul_le",
       "steps": [
-        "Use Euclid's formula with `m = 5`."
+        "Did you divide the whole sum by 2, or only `b ^ 2`?"
       ],
-      "hint": "`m = 5, n = 2` gives `(21, 20, 29)`; so does `x = 20, y = 21, z = 29`."
+      "hint": "`statement abs_mul_le (a b : ℝ) : |a * b| ≤ (a ^ 2 + b ^ 2) / 2`."
     },
     {
-      "match": "",
-      "hint": "Each test says what your numbers must satisfy. Compute candidates with `#eval`."
+      "match": "min_comm'",
+      "hint": "`statement min_comm' (a b : ℝ) : min a b = min b a`."
+    },
+    {
+      "match": "max_assoc'",
+      "hint": "`statement max_assoc' (a b c : ℝ) : max a (max b c) = max (max a b) c`."
+    }
+  ],
+  "predict": [
+    {
+      "test": "(a + b)² = a² + b² for all reals",
+      "statement": "For all reals `a` and `b`, `(a + b) ^ 2 = a ^ 2 + b ^ 2`."
     }
   ]
 }

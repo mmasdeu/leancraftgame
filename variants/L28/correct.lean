@@ -1,8 +1,19 @@
--- the even numbers (already done)
-def evens : Set ℕ := {n | n % 2 = 0}
+@[ext]
+structure Point where
+  x : ℝ
+  y : ℝ
+  z : ℝ
 
--- the multiples of k: 0, k, 2k, 3k, …     (12 ∈ multiplesOf 3, but not 13)
-def multiplesOf (k : ℕ) : Set ℕ := {n | n % k = 0}
+def origin : Point := { x := 0, y := 0, z := 0 }
+def p123 : Point := ⟨1, 2, 3⟩
+def Point.add (a b : Point) : Point := ⟨a.x + b.x, a.y + b.y, a.z + b.z⟩
+def Point.smul (r : ℝ) (a : Point) : Point := ⟨r * a.x, r * a.y, r * a.z⟩
 
--- some number B is at least as big as every element of s
-def BoundedSet (s : Set ℕ) : Prop := ∃ B, ∀ n ∈ s, n ≤ B
+structure StandardTwoSimplex where
+  x : ℝ
+  y : ℝ
+  z : ℝ
+  x_nonneg : 0 ≤ x
+  y_nonneg : 0 ≤ y
+  z_nonneg : 0 ≤ z
+  sum_eq : x + y + z = 1

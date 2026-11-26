@@ -1,32 +1,28 @@
-/- Hidden test battery for Level There exists. -/
+/- Hidden test battery for Level 18: Reading a construction: Schröder–Bernstein. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L18.Player
 
 open L18
 
-#no_sorry HasZero
-#no_sorry HasEvenBig
-#level_start "There exists"
+#no_sorry q1
+#no_sorry q2
+#no_sorry q3
+#no_sorry q4
+#no_sorry q5
+#no_sorry q6
+#no_sorry q7
+#no_sorry sbFun12
+#no_sorry sbFun8
+#level_start "Reading a construction: Schröder–Bernstein"
 
--- the worked example
-#expect_true "HasBig (fun n => n) is true" unfolding HasBig :
-  HasBig (fun n => n)
-#expect_false "HasBig (fun n => n % 5) is false" unfolding HasBig :
-  HasBig (fun n => n % 5)
--- your predicates
-#expect_true "HasZero (fun n => n) is true" unfolding HasZero :
-  HasZero (fun n => n)
-#expect_true "HasZero (fun n => n % 3) is true" unfolding HasZero :
-  HasZero (fun n => n % 3)
-#expect_false "HasZero (fun n => n + 1) is false" unfolding HasZero :
-  HasZero (fun n => n + 1)
-#expect_true "HasEvenBig (fun n => n) is true" unfolding HasEvenBig :
-  HasEvenBig (fun n => n)
-#expect_false "HasEvenBig (fun n => 2 * n + 1) is false" unfolding HasEvenBig :
-  HasEvenBig (fun n => 2 * n + 1)
-#expect_false "HasEvenBig (fun n => n % 5) is false" unfolding HasEvenBig :
-  HasEvenBig (fun n => n % 5)
-#expect_false "HasEvenBig (fun n => if n = 0 then 4 else 11) is false (4 is even, 11 is big, but no term is both)" unfolding HasEvenBig :
-  HasEvenBig (fun n => if n = 0 then 4 else 11)
+#expect_choice "Question 1: the definition by recursion" : q1 = 0
+#expect_choice "Question 2: what `sbAux f g 0` is" : q2 = 1
+#expect_choice "Question 3: the value of `sbFun` on `sbSet`" : q3 = 2
+#expect_choice "Question 4: what `[Nonempty β]` is for" : q4 = true
+#expect_choice "Question 5: is 3 in `sbSet f g`?" : q5 = true
+#expect_choice "Question 6: is 12 in `sbSet f g`?" : q6 = true
+#expect_choice "Question 7: is 8 in `sbSet f g`?" : q7 = false
+#expect_choice "the value of `sbFun f g 12`" : sbFun12 = 24
+#expect_choice "the value of `sbFun f g 8`" : sbFun8 = 4
 
 #level_report

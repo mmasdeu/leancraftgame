@@ -1,35 +1,82 @@
 {
-  "world": "Numbers World",
-  "title": "Spot the bug: numbers",
-  "skill": "reading",
-  "exercise": "Refute",
-  "public": "all",
+  "world": "Sets and Functions",
+  "title": "Set notation",
+  "skill": "sets",
+  "exercise": "Write",
+  "mil": "§4.1",
+  "public": [
+    "6 ∈ evens",
+    "7 ∈ primes",
+    "12 ∈ multiples 4"
+  ],
+  "predict": [
+    {
+      "test": "4 ∈ multiples 12",
+      "statement": "`4 ∈ {n | 12 ∣ n}`"
+    },
+    {
+      "test": "2 ∈ oddPrimes",
+      "statement": "`2 ∈ primes \\ evens`"
+    }
+  ],
+  "questions": [
+    {
+      "answer": "q1",
+      "text": "How does `s ∩ (t ∪ u)` read?",
+      "choices": [
+        "the elements that are in `s` and `t`, or in `u`",
+        "the elements of `s` that are in `t` or in `u`",
+        "the elements in all three sets"
+      ]
+    },
+    {
+      "answer": "q2",
+      "text": "True or false: `⋂ i : ℕ, Set.Ici i` is the empty set."
+    }
+  ],
   "checks": [
     {
-      "lean": "example : ℕ := L15.diffA\nexample : ℕ := L15.diffB\nexample : ℚ := L15.recX\nexample : ℚ := L15.recY\nexample : ℚ := L15.avgA\nexample : ℚ := L15.avgB\nexample : ℕ := L15.egA\nexample : ℕ := L15.egB",
-      "message": "Keep the types of the counterexamples."
+      "lean": "#check (L15.evens : Set ℕ)\n#check (L15.primes : Set ℕ)\n#check (L15.oddPrimes : Set ℕ)\n#check (L15.multiples : ℕ → Set ℕ)\n#check (L15.fourOrSix : Set ℕ)\n#check (L15.q1 : Fin 3)\n#check (L15.q2 : Bool)",
+      "message": "Keep the names and the types: `evens`, `primes`, `oddPrimes`, `fourOrSix : Set ℕ`, `multiples : ℕ → Set ℕ`, and the answers `q1 : Fin 3`, `q2 : Bool`."
     }
   ],
   "hints": [
     {
-      "match": "diff",
-      "hint": "Any `a < b`, such as `3` and `5`: the colleague gets `0` instead of `-2`."
+      "match": "Question 1",
+      "hint": "The brackets are computed first: `t ∪ u`, then the intersection with `s`."
     },
     {
-      "match": "IsReciprocal",
-      "hint": "`0` and `0`: `1 / 0 = 0`."
+      "match": "Question 2",
+      "hint": "A number `n` would have to satisfy `i ≤ n` for every `i`, including `i = n + 1`."
     },
     {
-      "match": "average",
-      "hint": "Anything with `a ≠ 0`, such as `2` and `2`: `2 + 2/2 = 3`."
+      "match": "evens",
+      "hint": "`{n | Even n}`."
     },
     {
-      "match": "egypt",
-      "hint": "`2` and `2`: in ℕ, `1 / 2 = 0`."
+      "match": "primes",
+      "hint": "`{n | Nat.Prime n}`."
     },
     {
-      "match": "",
-      "hint": "Pick small inputs where the trap bites."
+      "match": "oddPrimes",
+      "steps": [
+        "Is `2` prime? Is it odd? Which operation removes the elements of one set from another?"
+      ],
+      "hint": "`primes \\ evens`, or `primes ∩ evensᶜ`."
+    },
+    {
+      "match": "multiples",
+      "steps": [
+        "`a ∣ b` reads \"a divides b\". Which of `k` and `n` divides the other?"
+      ],
+      "hint": "`{n | k ∣ n}`: `k` divides `n`."
+    },
+    {
+      "match": "fourOrSix",
+      "steps": [
+        "A multiple of 4 *or* of 6: for some k in {4, 6}, or for every k? Which of `⋃` and `⋂` is \"for some\"?"
+      ],
+      "hint": "`⋃ k ∈ ({4, 6} : Set ℕ), multiples k`."
     }
   ]
 }

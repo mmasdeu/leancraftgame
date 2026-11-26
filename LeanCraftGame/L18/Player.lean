@@ -1,44 +1,61 @@
 /-
-# There exists
+# Reading a construction: Schröder–Bernstein
 
-The existential quantifier `∃ n, P n` (type `\exists`) says that **some**
-`n` satisfies `P`:
-
-```lean
-def HasBig (u : ℕ → ℕ) : Prop := ∃ n, 10 ≤ u n
-```
-
-An existential statement is proved by a **witness**: `HasBig (fun n => n)`
-holds because `n = 10` works. The referee searches for witnesses among
-small numbers and among expressions built from the variables in sight.
-
-Mind the scope. "Some term is even and some term is at least 10" is
+The Schröder–Bernstein theorem: if there are injections `f : α → β` and `g : β → α`,
+then there is a bijection between `α` and `β`. MIL §4.3 builds the bijection explicitly.
+Reading such a construction is a large part of using Mathlib, so here it is, with no
+proof to write. Read it, then answer the questions.
 
 ```lean
-(∃ n, u n % 2 = 0) ∧ (∃ m, 10 ≤ u m)
+variable {α β : Type*} [Nonempty β]
+variable (f : α → β) (g : β → α)
+
+def sbAux : ℕ → Set α
+  | 0 => univ \ g '' univ
+  | n + 1 => g '' (f '' sbAux n)
+
+def sbSet :=
+  ⋃ n, sbAux f g n
+
+def sbFun (x : α) : β :=
+  if x ∈ sbSet f g then f x else invFun g x
 ```
 
-with two possibly different witnesses, while "some term is both" is
-`∃ n, u n % 2 = 0 ∧ 10 ≤ u n`, with a single one. The sequence `4, 11, 11,
-11, …` satisfies the first and not the second.
+## How to read it
 
-And the restricted form: "some `n` with `P n` has `Q n`" is
-`∃ n, P n ∧ Q n`, with `∧`, not `→` (see the last level of this world).
+* `sbAux` is defined **by recursion on n**, by cases: one line for `0`, one for `n + 1`.
+  The `| 0 => …` and `| n + 1 => …` lines are *pattern matching*.
+* `sbAux 0` is `univ \ g '' univ`: the points of `α` that are **not** in the range of
+  `g`. Then each step applies `f` and then `g`.
+* `sbSet` collects all the `sbAux n`: an indexed union.
+* `sbFun` uses `if … then … else`. On `sbSet` it is `f`. Off `sbSet`, the point `x` is in
+  the range of `g` (it is not in `sbAux 0`), so `invFun g x` is a `y` with `g y = x`: there
+  `sbFun` undoes `g`. `invFun g : α → β` needs `[Nonempty β]` (Level 17).
+
+## An example to compute
+
+Take `α = β = ℕ` and `f n = g n = 2 * n`. Then `g '' univ` is the even numbers, so
+`sbAux 0` is the odd numbers. `sbAux 1 = g '' (f '' sbAux 0)` is the odd numbers times 4,
+`sbAux 2` the odd numbers times 16, and so on.
 
 ## Your task
 
-Define `HasZero u` (some term is zero) and `HasEvenBig u` (some single term is
-both even and at least 10).
+Answer the questions under the lesson. For the last two, write a number: the value of
+`sbFun f g` at `12` and at `8`, for this `f` and `g`.
 -/
 namespace L18
 
--- some term is at least 10 (already done)
-def HasBig (u : Nat → Nat) : Prop := ∃ n, 10 ≤ u n
+def q1 : Fin 3 := sorry
+def q2 : Fin 3 := sorry
+def q3 : Fin 3 := sorry
+def q4 : Bool := sorry
+def q5 : Bool := sorry
+def q6 : Bool := sorry
+def q7 : Bool := sorry
 
--- some term is zero
-def HasZero (u : Nat → Nat) : Prop := sorry
-
--- some single term is both even and at least 10
-def HasEvenBig (u : Nat → Nat) : Prop := sorry
+-- the value of `sbFun f g 12`, for f n = g n = 2 n
+def sbFun12 : ℕ := sorry
+-- the value of `sbFun f g 8`, for f n = g n = 2 n
+def sbFun8 : ℕ := sorry
 
 end L18

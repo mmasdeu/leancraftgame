@@ -1,41 +1,62 @@
 /-
-# For all
+# Images and preimages
 
-A **sequence** of natural numbers is a function `u : ℕ → ℕ`: the term of
-index `n` is `u n`. Sequences are written with `fun`: `fun n => 2 * n` is
-`0, 2, 4, 6, …`, and `fun n => n % 3` is `0, 1, 2, 0, 1, 2, …`. The referee
-uses such sequences to test your definitions.
-
-Statements about *all* terms use the universal quantifier:
+A function `f : α → β` moves sets around in two directions (MIL §4.2):
 
 ```lean
-def AllBig (u : ℕ → ℕ) : Prop := ∀ n, 10 ≤ u n
+f '' s      -- the image of s : Set α, a Set β:      {y | ∃ x, x ∈ s ∧ f x = y}
+f ⁻¹' t     -- the preimage of t : Set β, a Set α:   {x | f x ∈ t}
+Set.range f -- the image of everything:               {y | ∃ x, f x = y}
 ```
 
-reads "for every `n`, `10 ≤ u n`" (type `∀` as `\forall`). The variable
-after `∀` is bound: renaming it changes nothing.
+Type `''` as two apostrophes, and `⁻¹'` as `\inv'`. Read `f '' s` as "f of s" and
+`f ⁻¹' t` as "f inverse of t". The preimage needs no inverse function: it is defined
+for every `f`, injective or not.
 
-A universal statement is refuted by **one** counterexample, and confirmed
-by no number of examples: `n² + n + 41` is prime for `n = 0, 1, …, 39`, and
-not for `n = 40`. The referee proves universal statements by reasoning, not
-by trying cases.
+## A worked example
 
-Typing symbols: the **Symbols** button at the top right lists them all.
+Take `f n = 2 * n` on ℕ and the multiples of 4, `M = {m | m % 4 = 0}`:
+
+* `f '' M` doubles every multiple of 4: it is the multiples of 8. `4 ∈ f '' M`? No.
+* `f ⁻¹' M` is the set of `n` with `2 n` a multiple of 4: the even numbers. `2 ∈ f ⁻¹' M`.
+
+Image and preimage are easy to confuse, and they are rarely the same set.
+
+## Statements about images
+
+MIL proves facts such as `f '' (s ∪ t) = f '' s ∪ f '' t`. As statements, for every
+pair of types and every function:
+
+```lean
+statement image_union' {α β : Type*} (f : α → β) (s t : Set α) :
+    f '' (s ∪ t) = f '' s ∪ f '' t
+```
+
+`Type*` means "a type, in any universe". `α` and `β` are implicit: Lean finds them from
+`f`. The same is **not** true for intersections: `f '' (s ∩ t)` can be strictly smaller
+than `f '' s ∩ f '' t`, when two different points of `s` and `t` have the same image.
 
 ## Your task
 
-`AllBig` is done. Define `AlwaysBelow u B` (every term is at most `B`: the
-sequence is bounded by `B`) and `AllEven u` (every term is even).
+1. `squares`: the set of perfect squares, as the range of `n ↦ n ^ 2`.
+2. `evensPre`: the even numbers, as the preimage of `{m | m % 4 = 0}` under `n ↦ 2 * n`.
+3. `preimage_inter'`: state that the preimage of `u ∩ v` under `f : α → β` is the
+   intersection of the preimages (for all types `α`, `β`, all `f` and all `u v : Set β`).
+4. A counterexample to `f '' (s ∩ t) = f '' s ∩ f '' t` on ℕ: a function `f₀`, two sets
+   `s₀`, `t₀` and a point `y₀` that is in `f₀ '' s₀` and in `f₀ '' t₀`, but not in
+   `f₀ '' (s₀ ∩ t₀)`. Use small numbers and sets written as `{a, b}`.
 -/
 namespace L16
 
--- every term is at least 10 (already done)
-def AllBig (u : Nat → Nat) : Prop := ∀ n, 10 ≤ u n
+def squares : Set ℕ := sorry
 
--- every term is at most B
-def AlwaysBelow (u : Nat → Nat) (B : Nat) : Prop := sorry
+def evensPre : Set ℕ := sorry
 
--- every term is even
-def AllEven (u : Nat → Nat) : Prop := sorry
+statement preimage_inter' : sorry
+
+def f₀ : ℕ → ℕ := sorry
+def s₀ : Set ℕ := sorry
+def t₀ : Set ℕ := sorry
+def y₀ : ℕ := sorry
 
 end L16

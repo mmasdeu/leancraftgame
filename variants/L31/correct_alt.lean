@@ -1,9 +1,14 @@
-def CommonDiv (d a b : ℕ) : Prop := d ∣ a ∧ d ∣ b
+structure GaussInt where
+  re : ℤ
+  im : ℤ
 
-def Coprime' (a b : ℕ) : Prop := ¬ ∃ d, 1 < d ∧ CommonDiv d a b
+structure Point where
+  x : ℚ
+  y : ℚ
+  z : ℚ
 
-def IsGcd (a b d : ℕ) : Prop := CommonDiv d a b ∧ ∀ e, CommonDiv e a b → e ∣ d
-
-def IsPrime' (p : ℕ) : Prop := 1 < p ∧ ∀ d, 1 < d → d < p → ¬ d ∣ p
-
-def Squarefree' (n : ℕ) : Prop := ¬ ∃ d, 1 < d ∧ d * d ∣ n
+def gz : GaussInt := ⟨1, 2⟩
+def gw : GaussInt := ⟨3, -1⟩
+def pa : Point := ⟨0, 0, 0⟩
+def pb : Point := ⟨1, 1, 1⟩
+def badT : ℚ := -1

@@ -1,13 +1,13 @@
-# Publishes version 2 of the online game (built by online/build.py) to the v2/ folder of
-# the gh-pages branch, which GitHub Pages serves at https://mmasdeu.github.io/leancraftgame/v2/.
-# Only v2/ is replaced: the rest of gh-pages (the landing page, play/, beta/, …) is kept.
-# Runs on every push to the v2 branch that touches the game, or by hand.
+# Publishes version 3 of the online game (built by online/build.py) to the v3/ folder of
+# the gh-pages branch, which GitHub Pages serves at https://mmasdeu.github.io/leancraftgame/v3/.
+# Only v3/ is replaced: the rest of gh-pages (the landing page, play/, beta/, v2/, …) is kept.
+# Runs on every push to the v3 branch that touches the game, or by hand.
 
-name: Online game, version 2
+name: Online game, version 3
 
 on:
   push:
-    branches: [v2]
+    branches: [v3]
     paths: ["web/**", "LeanCraftGame/**", "online/**", ".github/workflows/pages.yml"]
   workflow_dispatch:
 
@@ -25,22 +25,22 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build the online game
-        run: python3 online/build.py --out "$RUNNER_TEMP/v2"
+        run: python3 online/build.py --out "$RUNNER_TEMP/v3"
 
       - uses: actions/checkout@v4
         with:
           ref: gh-pages
           path: gh-pages
 
-      - name: Replace v2/ on the gh-pages branch
+      - name: Replace v3/ on the gh-pages branch
         run: |
           cd gh-pages
-          rm -rf v2
-          cp -r "$RUNNER_TEMP/v2" v2
+          rm -rf v3
+          cp -r "$RUNNER_TEMP/v3" v3
           touch .nojekyll                      # serve the files as they are
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           if git diff --cached --quiet; then echo "Nothing to publish."; exit 0; fi
-          git commit -q -m "v2 from ${GITHUB_SHA::7}"
+          git commit -q -m "v3 from ${GITHUB_SHA::7}"
           git push origin gh-pages

@@ -1,56 +1,47 @@
-/- Hidden test battery for Level Injective and surjective. -/
+/- Hidden test battery for Level 25: Big operators and counting. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L25.Player
 
-open L25
+namespace L25Ref
+theorem gauss_formula (n : ℕ) : ∑ i ∈ Finset.range (n + 1), i = n * (n + 1) / 2 := by
+  rw [Finset.sum_range_id]; simp [Nat.mul_comm]
+theorem gauss2 (n : ℕ) : (∑ i ∈ Finset.range (n + 1), i) * 2 = n * (n + 1) := by
+  induction n with
+  | zero => simp
+  | succ n ih => rw [Finset.sum_range_succ, add_mul, ih]; ring
+theorem cubes4 (n : ℕ) : (∑ i ∈ Finset.range (n + 1), i ^ 3) * 4 = (n * (n + 1)) ^ 2 := by
+  induction n with
+  | zero => simp
+  | succ n ih => rw [Finset.sum_range_succ, add_mul, ih]; ring
+theorem nicomachus (n : ℕ) :
+    ∑ i ∈ Finset.range (n + 1), i ^ 3 = (∑ i ∈ Finset.range (n + 1), i) ^ 2 := by
+  have h1 := gauss2 n
+  have h2 := cubes4 n
+  have : (∑ i ∈ Finset.range (n + 1), i ^ 3) * 4 = ((∑ i ∈ Finset.range (n + 1), i) ^ 2) * 4 := by
+    rw [h2, ← h1]; ring
+  exact Nat.eq_of_mul_eq_mul_right (by norm_num) this
+end L25Ref
 
-#no_sorry Injective
-#no_sorry Surjective
-#no_sorry Bijective
-#level_start "Level Injective and surjective"
+#no_sorry L25.gauss
+#no_sorry L25.fact
+#no_sorry L25.pairsLt
+#no_sorry L25.gauss_formula
+#no_sorry L25.nicomachus
+#level_start "Big operators and counting"
 
--- n + 1: injective, not surjective (nothing hits 0)
-#expect_true "Injective (n + 1) is true" unfolding Injective :
-  Injective (fun n => n + 1)
-#expect_false "Surjective (n + 1) is false (nothing is sent to 0)" unfolding Surjective :
-  Surjective (fun n => n + 1)
--- n - 1 truncated: surjective, not injective (0 and 1 both go to 0)
-#expect_true "Surjective (n - 1) is true (y is hit by y + 1)" unfolding Surjective :
-  Surjective (fun n => n - 1)
-#expect_false "Injective (n - 1) is false (0 and 1 both go to 0)" unfolding Injective :
-  Injective (fun n => n - 1)
--- n % 3: neither
-#expect_false "Surjective (n % 3) is false (3 is never hit)" unfolding Surjective :
-  Surjective (fun n => n % 3)
--- 2 * n: injective, not surjective
-#expect_true "Injective (2 * n) is true" unfolding Injective :
-  Injective (fun n => 2 * n)
-#expect_false "Surjective (2 * n) is false (1 is never hit)" unfolding Surjective :
-  Surjective (fun n => 2 * n)
--- constant
-#expect_false "Surjective (fun _ => 0) is false (1 is never hit)" unfolding Surjective :
-  Surjective (fun _ => 0)
-#expect_false "Injective (fun _ => 0) is false" unfolding Injective :
-  Injective (fun _ => 0)
--- the identity
-#expect_true "Bijective (n) is true" unfolding Bijective Injective Surjective :
-  Bijective (fun n => n)
--- swapping neighbours 0↔1, 2↔3, 4↔5, … (its surjectivity is beyond the referee: a witness that depends on parity)
-#expect_true "Injective (swap neighbours: 1, 0, 3, 2, …) is true" unfolding Injective :
-  Injective (fun n => if n % 2 = 0 then n + 1 else n - 1)
--- bijective is both, not either
-#expect_false "Bijective (n + 1) is false (injective is not enough)" unfolding Bijective Injective Surjective :
-  Bijective (fun n => n + 1)
--- lemmas (two different inputs with the same output: not injective, not bijective)
-#expect_true "Injective f fails as soon as two different inputs collide" unfolding Injective :
-  ∀ f : ℕ → ℕ, ∀ a b, a ≠ b → f a = f b → ¬ Injective f
-#expect_true "Bijective f fails as soon as two different inputs collide" unfolding Bijective Injective :
-  ∀ f : ℕ → ℕ, ∀ a b, a ≠ b → f a = f b → ¬ Bijective f
-#expect_true "Injective f implies Injective (f n + 1)" unfolding Injective :
-  ∀ f : ℕ → ℕ, Injective f → Injective (fun n => f n + 1)
-#expect_true "Bijective f implies Surjective f" unfolding Bijective Surjective :
-  ∀ f : ℕ → ℕ, Bijective f → Surjective f
-#expect_true "Bijective f implies Injective f" unfolding Bijective Injective :
-  ∀ f : ℕ → ℕ, Bijective f → Injective f
+#expect_true "the empty product ∏ i ∈ Finset.range 0, i is 1" : ∏ i ∈ Finset.range 0, i = 1
+#expect_true "∏ i ∈ Finset.range 4, i is 0" : ∏ i ∈ Finset.range 4, i = 0
+#expect_true "gauss 4 = 10" unfolding L25.gauss : L25.gauss 4 = 10
+#expect_true "gauss 100 = 5050" unfolding L25.gauss : L25.gauss 100 = 5050
+#expect_true "fact 0 = 1" unfolding L25.fact : L25.fact 0 = 1
+#expect_true "fact 5 = 120" unfolding L25.fact : L25.fact 5 = 120
+#expect_true "pairsLt 4 = 6" unfolding L25.pairsLt : L25.pairsLt 4 = 6
+#expect_true "pairsLt 1 = 0" unfolding L25.pairsLt : L25.pairsLt 1 = 0
+#expect_equiv "gauss_formula is Gauss's formula" :
+  L25.gauss_formula ↔ ∀ n : ℕ, ∑ i ∈ Finset.range (n + 1), i = n * (n + 1) / 2
+  using L25Ref.gauss_formula
+#expect_equiv "nicomachus is Nicomachus's identity" :
+  L25.nicomachus ↔ ∀ n : ℕ, ∑ i ∈ Finset.range (n + 1), i ^ 3 = (∑ i ∈ Finset.range (n + 1), i) ^ 2
+  using L25Ref.nicomachus
 
 #level_report

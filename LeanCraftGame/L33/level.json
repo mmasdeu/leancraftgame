@@ -1,57 +1,35 @@
 {
-  "world": "Set World",
-  "title": "Spot the bug: the library",
+  "world": "Hierarchies",
+  "title": "Reading the hierarchy",
   "skill": "reading",
-  "exercise": "Refute",
+  "exercise": "Read",
+  "mil": "§8.1",
   "public": "all",
+  "hintsAfter": 1,
+  "questions": [
+    {"answer": "q1", "text": "From an instance `Field ℝ`, Lean finds instances of three of these classes automatically. Which one does **not** follow?",
+     "choices": ["`CommRing ℝ`", "`DivisionRing ℝ`", "`AddCommGroup ℝ`", "`LinearOrder ℝ`"]},
+    {"answer": "q2", "text": "What does `#check (-3 : ℕ)` do?",
+     "choices": ["prints `-3 : ℕ`", "prints `0 : ℕ`, since subtraction in ℕ stops at 0", "fails: `failed to synthesize Neg ℕ`", "prints `3 : ℕ`"]},
+    {"answer": "q3", "text": "`mul_comm` is stated as `theorem mul_comm {G : Type*} [CommMagma G] (a b : G) : a * b = b * a`. True or false: it applies to `A B : Matrix (Fin 2) (Fin 2) ℚ`, giving `A * B = B * A`."},
+    {"answer": "q4", "text": "`#check @add_comm` prints `@add_comm : ∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b + a`. How many arguments do you write when you use it?",
+     "choices": ["1", "2", "3"]},
+    {"answer": "q5", "text": "`class CommRing (R : Type*) extends Ring R, CommMonoid R`. True or false: a lemma stated for every `[Ring R]` applies to ℤ, which Mathlib declares a `CommRing`."},
+    {"answer": "q6", "text": "After `variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]`, what is `E`?",
+     "choices": ["a real vector space with an inner product, and the norm it defines", "a field containing ℝ", "a subset of ℝ", "a group of real matrices under multiplication"]},
+    {"answer": "q7", "text": "True or false: Lean finds an instance `Field ℤ`."}
+  ],
   "checks": [
-    {
-      "lean": "example : ℕ := L33.cdD\nexample : ℕ := L33.cdA\nexample : ℕ := L33.cdB\nexample : ℕ := L33.twin\nexample : ℕ := L33.mulK\nexample : ℕ := L33.mulN",
-      "message": "Keep `cdD`, `cdA`, `cdB`, `twin`, `mulK` and `mulN` as natural numbers (`ℕ`). Small numbers make the referee's job easier."
-    }
+    {"lean": "#check (L33.q1 : Fin 4)\n#check (L33.q2 : Fin 4)\n#check (L33.q3 : Bool)\n#check (L33.q4 : Fin 3)\n#check (L33.q5 : Bool)\n#check (L33.q6 : Fin 4)\n#check (L33.q7 : Bool)",
+     "message": "Keep the seven answer lines as they are, and only change the value after `:=`."}
   ],
   "hints": [
-    {
-      "match": "CommonDivisor accepts",
-      "steps": [
-        "`a ∣ d` reads \"a divides d\". So the colleague's definition says that `a` and `b` both divide `d`. What kind of number is `d` then?"
-      ],
-      "hint": "The colleague defined a common *multiple*. Take `cdD := 6`, `cdA := 2`, `cdB := 3`: 2 and 3 divide 6, but 6 does not divide 2."
-    },
-    {
-      "match": "cdD does not divide both",
-      "steps": [
-        "Your `cdD` really is a common divisor. You need numbers where `cdA` and `cdB` divide `cdD`, but not the other way round."
-      ],
-      "hint": "`cdD := 6`, `cdA := 2`, `cdB := 3`."
-    },
-    {
-      "match": "TwinPrime accepts",
-      "steps": [
-        "The colleague asks for `p` prime *or* `p + 2` prime. One of them is enough."
-      ],
-      "hint": "7 is prime, so `TwinPrime 7` holds, although 9 is not prime."
-    },
-    {
-      "match": "both prime",
-      "steps": [
-        "Your number is a genuine twin prime. Find a prime `p` for which `p + 2` is not prime."
-      ],
-      "hint": "Take `twin := 7`: 9 = 3 · 3."
-    },
-    {
-      "match": "multiplesOf",
-      "steps": [
-        "Read `{n | k % n = 0}`: which number is divided by which?"
-      ],
-      "hint": "`k % n = 0` says that `n` divides `k`: the colleague defined the divisors of `k`. Take `mulK := 6`, `mulN := 3`."
-    },
-    {
-      "match": "is not a multiple of",
-      "steps": [
-        "Your `mulN` really is a multiple of `mulK`. You need an element of the colleague's set that is not one."
-      ],
-      "hint": "`mulK := 6`, `mulN := 3`: 3 divides 6, but 3 is not a multiple of 6."
-    }
+    {"match": "Question 1", "hint": "Order is a separate branch of the hierarchy: ℂ is a field without a linear order compatible with its operations."},
+    {"match": "Question 2", "hint": "Writing `-3` needs a `Neg ℕ` instance, and ℕ has none: the instance search fails."},
+    {"match": "Question 3", "steps": ["Is multiplication of 2 × 2 matrices commutative?"], "hint": "Matrix multiplication is not commutative, so there is no `CommMagma` instance on matrices."},
+    {"match": "Question 4", "hint": "Only the round-bracket arguments `(a b : G)` are written; `{G}` and `[inst]` are found by Lean."},
+    {"match": "Question 5", "hint": "`extends` gives the instance `CommRing.toRing`: every commutative ring is a ring."},
+    {"match": "Question 6", "hint": "`InnerProductSpace ℝ E`: vectors over ℝ with an inner product; `NormedAddCommGroup E`: vectors with addition and a norm."},
+    {"match": "Question 7", "hint": "In ℤ, 2 has no inverse: ℤ is a commutative ring, not a field."}
   ]
 }

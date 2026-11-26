@@ -1,8 +1,5 @@
--- a - b as an integer, for natural numbers a and b      (diff 3 5 = -2)
-def diff (a b : ℕ) : ℤ := (a : ℤ) - (b : ℤ)
-
--- the distance |a - b| between two integers, as a natural number   (gap 3 (-4) = 7)
-def gap (a b : ℤ) : ℕ := (a - b).natAbs
-
--- x is an odd integer (positive or negative)
-def IsOddInt (x : ℤ) : Prop := x % 2 = 1
+def ConvergesTo (s : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n - a| < ε
+statement convergesTo_const (a : ℝ) : ConvergesTo (fun _ ↦ a) a
+statement convergesTo_add (s t : ℕ → ℝ) (a b : ℝ) (hs : ConvergesTo s a) (ht : ConvergesTo t b) :
+    ConvergesTo (fun n ↦ s n + t n) (a + b)
+statement convergesTo_unique (s : ℕ → ℝ) (a b : ℝ) (sa : ConvergesTo s a) (sb : ConvergesTo s b) : a = b

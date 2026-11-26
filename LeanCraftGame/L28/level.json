@@ -1,58 +1,55 @@
 {
-  "world": "Set World",
-  "title": "Sets",
-  "skill": "syntax",
-  "exercise": "Define",
+  "world": "Structures",
+  "title": "Defining structures",
+  "skill": "structures",
+  "exercise": "Write",
+  "mil": "§7.1",
   "predict": [
     {
-      "test": "0 ∈ multiplesOf 5 is true",
-      "statement": "0 ∈ multiplesOf 5"
-    },
-    {
-      "test": "BoundedSet ∅ is true",
-      "statement": "BoundedSet ∅"
-    },
-    {
-      "test": "evens ⊆ multiplesOf 4 is false",
-      "statement": "evens ⊆ multiplesOf 4"
+      "test": "(1, 1, -1) is not in the simplex",
+      "statement": "The point (1, 1, -1) belongs to the standard 2-simplex (its coordinates add up to 1)"
     }
+  ],
+  "public": [
+    "p123 has coordinates (1, 2, 3)",
+    "(1/2, 1/2, 0) is in the simplex"
   ],
   "checks": [
     {
-      "lean": "example : ℕ → Set ℕ := L28.multiplesOf",
-      "message": "Keep `multiplesOf : ℕ → Set ℕ`."
+      "lean": "#check (L28.origin : L28.Point)\n#check (L28.p123 : L28.Point)\n#check (L28.Point.add : L28.Point → L28.Point → L28.Point)\n#check (L28.Point.smul : ℝ → L28.Point → L28.Point)\n#check (L28.Point.mk : ℝ → ℝ → ℝ → L28.Point)",
+      "message": "Keep `Point` as given, and the names and types of `origin`, `p123`, `Point.add` and `Point.smul`."
     },
     {
-      "lean": "example : Set ℕ → Prop := L28.BoundedSet",
-      "message": "Keep `BoundedSet : Set ℕ → Prop`."
+      "lean": "example := fun (x y z : ℝ) => L28.StandardTwoSimplex.mk x y z\nexample : ∀ s : L28.StandardTwoSimplex, 0 ≤ s.x ∧ 0 ≤ s.y ∧ 0 ≤ s.z := fun s => ⟨s.x_nonneg, s.y_nonneg, s.z_nonneg⟩\nexample := fun s : L28.StandardTwoSimplex => s.sum_eq",
+      "message": "`StandardTwoSimplex` must start with the fields `x`, `y`, `z : ℝ`, then have the fields `x_nonneg : 0 ≤ x`, `y_nonneg : 0 ≤ y`, `z_nonneg : 0 ≤ z` and `sum_eq`."
     }
   ],
   "hints": [
     {
-      "match": "12 ∈ multiplesOf 3",
-      "hint": "A multiple of `k` leaves remainder 0 when divided by `k`: `{n | n % k = 0}`. Mind the order of `n` and `k`."
+      "match": "origin",
+      "hint": "`{ x := 0, y := 0, z := 0 }`."
     },
     {
-      "match": "multiplesOf",
+      "match": "p123",
+      "hint": "`⟨1, 2, 3⟩`."
+    },
+    {
+      "match": "add",
       "steps": [
-        "Is `n` divided by `k`, or `k` by `n`?"
+        "Each coordinate of the sum uses the same coordinate of `a` and of `b`."
       ],
-      "hint": "`{n | n % k = 0}`."
+      "hint": "`⟨a.x + b.x, a.y + b.y, a.z + b.z⟩`."
     },
     {
-      "match": "no upper bound",
-      "hint": "Your definition lets `B` depend on the element. Choose `B` first: `∃ B, ∀ n ∈ s, n ≤ B`."
+      "match": "smul",
+      "hint": "`⟨r * a.x, r * a.y, r * a.z⟩`."
     },
     {
-      "match": "BoundedSet",
+      "match": "simplex",
       "steps": [
-        "Does the bound `B` come before the element, or after it?"
+        "Which property says that a coordinate may not be negative? Is there one for each coordinate?"
       ],
-      "hint": "`∃ B, ∀ n ∈ s, n ≤ B`."
-    },
-    {
-      "match": "",
-      "hint": "Read your definition aloud, expanding `∈` and the bounded quantifiers."
+      "hint": "`x_nonneg : 0 ≤ x`, `y_nonneg : 0 ≤ y`, `z_nonneg : 0 ≤ z` and `sum_eq : x + y + z = 1`."
     }
   ]
 }

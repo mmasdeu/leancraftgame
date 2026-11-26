@@ -1,53 +1,74 @@
 {
-  "world": "Set World",
-  "title": "Using Mathlib",
-  "skill": "writing",
-  "exercise": "Define",
-  "predict": [
-    {
-      "test": "CommonDivisor 5 0 0 is true",
-      "statement": "CommonDivisor 5 0 0"
-    },
-    {
-      "test": "6 is not abundant (it is perfect)",
-      "statement": "IsAbundant 6"
-    },
-    {
-      "test": "OneToOne (fun n => n / 2) is false",
-      "statement": "OneToOne (fun n => n / 2)"
-    }
-  ],
+  "world": "Structures",
+  "title": "A colleague's groups",
+  "skill": "axioms",
+  "exercise": "Repair",
+  "mil": "§7.2",
   "checks": [
     {
-      "lean": "example : ℕ → Prop := L29.IsAbundant\nexample : ℕ → ℕ → ℕ → Prop := L29.CommonDivisor\nexample : (ℕ → ℕ) → Prop := L29.OneToOne",
-      "message": "Keep `IsAbundant : ℕ → Prop`, `CommonDivisor : ℕ → ℕ → ℕ → Prop` and `OneToOne : (ℕ → ℕ) → Prop`."
+      "lean": "#check (L29.junkMul : Bool → Bool → Bool)\n#check (L29.junkOne : Bool)\n#check (L29.junkInv : Bool → Bool)",
+      "message": "Keep the names and types of Part A: `junkMul : Bool → Bool → Bool`, `junkOne : Bool`, `junkInv : Bool → Bool`."
+    },
+    {
+      "lean": "example := fun (G : Type) (m : G → G → G) (o : G) (i : G → G) => L29.Group₂.mk m o i",
+      "message": "`Group₂` must keep `mul`, `one`, `inv` as its first three fields, in this order."
     }
   ],
   "hints": [
     {
-      "match": "abundant",
+      "match": "satisfies the colleague's axioms",
+      "hint": "Your three functions must satisfy associativity, `mul one a = a` and `mul a (inv a) = one`. Try an operation that ignores one of its arguments.",
       "steps": [
-        "Mathlib's `n.properDivisors` is the finite set of divisors smaller than `n`."
-      ],
-      "hint": "`n < ∑ d ∈ n.properDivisors, d`."
+        "Three functions on `Bool`. Which axioms constrain them, and could `mul` simply ignore one of its arguments?"
+      ]
     },
     {
-      "match": "CommonDivisor",
+      "match": "and yet it is not a group",
+      "hint": "Your model satisfies the axioms, but it is a genuine group. Look for an operation where `one` is a left identity but not a right identity.",
       "steps": [
-        "`d ∣ a` reads \"d divides a\"."
-      ],
-      "hint": "`d ∣ a ∧ d ∣ b`, with the divides symbol `\\|`."
+        "Compare the colleague's axioms with the textbook definition of a group. What does a group need that the axioms never say?"
+      ]
     },
     {
-      "match": "OneToOne",
+      "match": "S₃",
+      "hint": "S₃ is not commutative. If you added `mul_comm` to be safe, remove it: groups need not be commutative.",
       "steps": [
-        "Mathlib's properties of functions live in the namespace `Function`."
-      ],
-      "hint": "`Function.Injective f`."
+        "Is multiplication in S₃ commutative? Do your axioms ask for it?"
+      ]
     },
     {
-      "match": "",
-      "hint": "Use Mathlib's names: `Nat.properDivisors`, `∣`, `Function.Injective`."
+      "match": "is a group",
+      "hint": "A genuine group fails one of your axioms, and the report names it. Is that axiom true in every group?",
+      "steps": [
+        "The report names the axiom that a genuine group fails. Is that axiom true in *every* group?"
+      ]
+    },
+    {
+      "match": "'a * b = b'",
+      "hint": "The colleague's axioms allow `a * b = b`. Add an axiom that this operation violates, such as a right identity or a left inverse.",
+      "steps": [
+        "This operation passes the colleague's axioms. Which familiar group axiom does it violate?"
+      ]
+    },
+    {
+      "match": "(ℕ, +)",
+      "hint": "With `inv = id`, (ℕ, +) has no inverses: 1 + 1 ≠ 0. Do your axioms really require inverses?",
+      "steps": [
+        "Does every element of (ℕ, +) have an inverse? Do your axioms need that?"
+      ]
+    },
+    {
+      "match": "(Bool, and)",
+      "hint": "In (Bool, and) with identity `true`, the element `false` has no inverse. Do your axioms really require inverses?",
+      "steps": [
+        "Does every element of (Bool, and) have an inverse? Do your axioms need that?"
+      ]
+    }
+  ],
+  "predict": [
+    {
+      "test": "Part B: S₃ (non-commutative!) is a group",
+      "statement": "S₃, the symmetries of a triangle, satisfies every axiom of a group"
     }
   ]
 }

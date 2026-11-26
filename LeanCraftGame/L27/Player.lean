@@ -1,47 +1,60 @@
 /-
-# Be the referee
+# Spot the bug: counting
 
-Until now the referee has tested your definitions. In this level you write
-the tests.
-
-The right definition of "tends to infinity" is given:
+A colleague wrote the code below for a counting project. Each definition compiles, and
+each one is wrong. Your job is not to fix them but to **prove them wrong**: give an
+input on which each one gives the wrong answer. The referee computes both the
+colleague's answer and the right one, and checks that they differ.
 
 ```lean
-def TendsToInfinity (u : ℕ → ℕ) : Prop := ∀ M, ∃ N, ∀ n ≥ N, M ≤ u n
+-- 1 + 2 + ⋯ + n
+def triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, i
+
+-- the number of positive divisors of n
+def numDivisors (n : ℕ) : ℕ := ((Finset.Ico 1 n).filter (· ∣ n)).card
+
+-- the number of nodes of a binary tree
+def size : BinTree → ℕ
+  | empty => 0
+  | node l r => size l + size r
+
+-- "Gauss's formula": for all n, ∑ i ∈ Finset.range n, i = n * (n + 1) / 2
 ```
 
-Your test suite is four sequences:
+Read each one slowly: what does `Finset.range n` contain, what does `Ico 1 n`
+contain, which nodes does `size` count?
 
-* two that **do** tend to infinity (`good₁`, `good₂`), and
-* two that do **not** (`bad₁`, `bad₂`).
+## The trap
 
-The referee first checks that your labels are honest: each `good` sequence
-must really tend to infinity, and each `bad` one must really not.
+A wrong definition can still be right on some inputs, and the easy inputs are often
+those. `triangle 0` is `0`, as it should be. A counterexample must be an input where the
+two answers really differ.
 
-Then it brings out the **mutants**: hidden *wrong* definitions of
-`TendsToInfinity`, the plausible near-misses of the previous levels
-(unbounded, increasing, at least the identity, eventually positive, …). A
-mutant is **caught** when it gets at least one of your four sequences wrong:
-it rejects a `good` one, or accepts a `bad` one. A mutant that gets all four
-right **survives**: your examples cannot tell it apart from the right
-definition.
+## Your task
 
-This is how a mathematician chooses examples: not the typical case, but the
-case that separates two notions. A sufficient condition is exposed by a
-`good` sequence that violates it; a necessary condition by a `bad` sequence
-that satisfies it. It is also how the levels of this game were built.
+Give one counterexample for each definition. `BinTree` is the type of MIL 6.3, as in
+the previous level.
 -/
+import Mathlib.Tactic
+
 namespace L27
 
--- the right definition (already done)
-def TendsToInfinity (u : ℕ → ℕ) : Prop := ∀ M, ∃ N, ∀ n ≥ N, M ≤ u n
+inductive BinTree where
+  | empty : BinTree
+  | node : BinTree → BinTree → BinTree
 
--- two sequences that tend to infinity
-def good₁ : ℕ → ℕ := sorry
-def good₂ : ℕ → ℕ := sorry
+open BinTree
 
--- two sequences that do not
-def bad₁ : ℕ → ℕ := sorry
-def bad₂ : ℕ → ℕ := sorry
+-- an input on which `triangle` is wrong
+def tn : ℕ := sorry
+
+-- an input on which `numDivisors` is wrong
+def dn : ℕ := sorry
+
+-- a tree on which `size` is wrong
+def tree : BinTree := sorry
+
+-- an `n` for which the colleague's "Gauss's formula" is false
+def gn : ℕ := sorry
 
 end L27

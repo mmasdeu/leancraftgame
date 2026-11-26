@@ -1,43 +1,48 @@
-/- Hidden test battery for Level Using Mathlib. -/
+/- Hidden test battery for Level 29: A colleague's groups. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L29.Player
 
 open L29
 
-#no_sorry IsAbundant
-#no_sorry CommonDivisor
-#no_sorry OneToOne
-#level_start "Using Mathlib"
+/-! A non-commutative group: S₃ ≅ ℤ/3 ⋊ ℤ/2, encoded on `Fin 6` as `a + 3s`. -/
+def S3.mul (x y : Fin 6) : Fin 6 :=
+  let a := x.val % 3; let s := x.val / 3; let b := y.val % 3; let t := y.val / 3
+  Fin.ofNat 6 ((a + (if s = 0 then b else 3 - b)) % 3 + 3 * ((s + t) % 2))
+def S3.inv (x : Fin 6) : Fin 6 :=
+  let a := x.val % 3; let s := x.val / 3
+  Fin.ofNat 6 ((if s = 0 then (3 - a) % 3 else a) + 3 * s)
 
-#expect_true "BigEven 6 is true" unfolding BigEven :
-  BigEven 6
-#expect_false "BigEven 7 is false" unfolding BigEven :
-  BigEven 7
-#expect_true "12 is abundant (1 + 2 + 3 + 4 + 6 = 16)" unfolding IsAbundant :
-  IsAbundant 12
-#expect_true "18 and 20 are abundant" unfolding IsAbundant :
-  IsAbundant 18 ∧ IsAbundant 20
-#expect_false "6 is not abundant (it is perfect)" unfolding IsAbundant :
-  IsAbundant 6
-#expect_false "13 is not abundant (a prime: its proper divisors sum to 1)" unfolding IsAbundant :
-  IsAbundant 13
-#expect_true "No odd number below 100 is abundant" unfolding IsAbundant :
-  ∀ n < 100, n % 2 = 1 → ¬ IsAbundant n
-#expect_true "CommonDivisor 3 6 9 is true" unfolding CommonDivisor :
-  CommonDivisor 3 6 9
-#expect_true "CommonDivisor 5 0 0 is true" unfolding CommonDivisor :
-  CommonDivisor 5 0 0
-#expect_false "CommonDivisor 2 6 9 is false" unfolding CommonDivisor :
-  CommonDivisor 2 6 9
-#expect_false "CommonDivisor 12 6 9 is false" unfolding CommonDivisor :
-  CommonDivisor 12 6 9
-#expect_true "OneToOne (fun n => 2 * n) is true" unfolding OneToOne Function.Injective :
-  OneToOne (fun n => 2 * n)
-#expect_true "OneToOne (fun n => n + 3) is true" unfolding OneToOne Function.Injective :
-  OneToOne (fun n => n + 3)
-#expect_false "OneToOne (fun n => n / 2) is false" unfolding OneToOne Function.Injective :
-  OneToOne (fun n => n / 2)
-#expect_false "OneToOne (fun _ => 0) is false" unfolding OneToOne Function.Injective :
-  OneToOne (fun _ => 0)
+#no_sorry junkMul
+#no_sorry junkOne
+#no_sorry junkInv
+#level_start "A colleague's groups"
+
+/-! ### Part A: your junk model -/
+#expect_model "Part A: your junk model satisfies the colleague's axioms" :
+  Group'.mk junkMul junkOne junkInv
+#expect_true "Part A: …and yet it is not a group" :
+  (∃ a, junkMul a junkOne ≠ a) ∨ (∃ a, junkMul (junkInv a) a ≠ junkOne)
+
+/-! ### Part B: real groups must be models -/
+#expect_model "Part B: (ℤ, +) is a group" :
+  Group₂.mk (G := Int) (· + ·) 0 (- ·)
+#expect_model "Part B: (Bool, xor) is a group" :
+  Group₂.mk (G := Bool) xor false id
+#expect_model "Part B: ℤ/3 is a group" :
+  Group₂.mk (G := Fin 3) (· + ·) 0 (- ·)
+#expect_model "Part B: S₃ (non-commutative!) is a group" :
+  Group₂.mk (G := Fin 6) S3.mul 0 S3.inv
+
+/-! ### Part B: junk models must be ruled out -/
+#expect_not_model "Part B: 'a * b = b' on Bool is not a group" :
+  Group₂.mk (G := Bool) (fun _ b => b) false (fun _ => false)
+#expect_not_model "Part B: 'a * b = b' on ℤ/3 is not a group" :
+  Group₂.mk (G := Fin 3) (fun _ b => b) 0 (fun _ => 0)
+#expect_not_model "Part B: 'a * b = b' on ℤ is not a group" :
+  Group₂.mk (G := Int) (fun _ b => b) 0 (fun _ => 0)
+#expect_not_model "Part B: (ℕ, +) is not a group" :
+  Group₂.mk (G := Nat) (· + ·) 0 id
+#expect_not_model "Part B: (Bool, and) is not a group" :
+  Group₂.mk (G := Bool) and true id
 
 #level_report

@@ -42,6 +42,7 @@ LEAN_ENV = {}       # environment for running Lean (LEAN, LEAN_PATH, …), see p
 # server runs from a checkout and Lean is ready from the start.
 SETUP = None
 UTF8 = {"encoding": "utf-8", "errors": "replace"}
+BASE_TIMEOUT = 60   # seconds per test, unless a level asks for more (level.json "timeout")
 
 ICONS = {"✅": "pass", "❌": "fail", "❓": "unknown"}
 
@@ -107,21 +108,24 @@ def load_level(n):
     meta = json.loads((d / "level.json").read_text(encoding="utf-8"))
     intro, template = split_intro((d / "Player.lean").read_text(encoding="utf-8"))
     ns = f"L{n}"
-    # the shared library (LeanCraftGame.Lib.*) is imported by Tests.lean; the player never sees it
-    template = re.sub(r"^import LeanCraftGame\.\S*[ \t]*\n", "", template, flags=re.M).lstrip("\n")
+    # The imports of Player.lean (the shared library LeanCraftGame.Lib.*, the parts of Mathlib a
+    # level needs) are the level's: the player never sees them, and every test file gets them.
+    own = [l.strip() for l in re.findall(r"^import \S+[ \t]*$", template, flags=re.M)]
+    template = re.sub(r"^import \S+[ \t]*\n", "", template, flags=re.M).lstrip("\n")
+    tests = split_tests((d / "Tests.lean").read_text(encoding="utf-8"))
+    tests["imports"] = list(dict.fromkeys(tests["imports"] + own))
     return {**meta, "id": n, "num": LEVELS.index(n) + 1, "intro": intro, "namespace": ns,
-            "template": strip_namespace(template, ns),
-            **split_tests((d / "Tests.lean").read_text(encoding="utf-8"))}
+            "template": strip_namespace(template, ns), **tests}
 
 
 # What the browser needs to know about a level, besides its tests. `predict`, `public` and
 # `hintsAfter` drive the predictions, the hidden tests and the hint gates (see
 # validate_level and web/static/app.js).
-PUBLIC_KEYS = ("id", "num", "world", "title", "skill", "exercise", "intro", "template", "hints",
-               "predict", "public", "hintsAfter", "namespace")
+PUBLIC_KEYS = ("id", "num", "world", "title", "skill", "exercise", "mil", "intro", "template", "hints",
+               "predict", "public", "hintsAfter", "namespace", "questions", "timeout")
 
 # The kinds of exercise a level can be (level.json "exercise"), shown as a tag above the lesson.
-EXERCISES = ("Define", "Construct", "Repair", "Classify", "Refute", "Referee", "Connect", "Audit")
+EXERCISES = ("Write", "Read", "Construct", "Refute", "Repair", "Audit")
 
 
 def tidy(text):
@@ -161,6 +165,18 @@ def validate_level(lv):
             out.append('public must be "all" or a list of test names')
         else:
             out += [f"public: no test is called {n!r}" for n in public if n not in names]
+    # questions: the answers of a reading level, rendered as buttons that edit the code.
+    # {"answer": name of a `def` in the template, "text": the question, "choices": [...]}
+    # (with `choices`, the answer is a `Fin k`, the index of the choice; without, a `Bool`)
+    for q in lv.get("questions", []):
+        if not {"answer", "text"} <= set(q) or set(q) - {"answer", "text", "choices"}:
+            out.append(f"question {q} needs `answer` and `text`, and optionally `choices`")
+            continue
+        ty = f"Fin {len(q['choices'])}" if "choices" in q else "Bool"
+        if not re.search(rf"^def {re.escape(q['answer'])} : {ty} :=", lv["template"], re.M):
+            out.append(f"question {q['answer']!r}: the template has no line `def {q['answer']} : {ty} := …`")
+    if not isinstance(lv.get("timeout", 60), int) or not 60 <= lv.get("timeout", 60) <= 300:
+        out.append("timeout must be a number of seconds between 60 and 300")
     if not isinstance(lv.get("hintsAfter", 0), int) or lv.get("hintsAfter", 0) < 0:
         out.append("hintsAfter must be a natural number")
     for h in lv.get("hints", []):
@@ -351,6 +367,8 @@ def run_level(run, n, code, events, jobs, timeout, cache, only=None, stop_on_fai
     with a `skipped` event."""
     try:
         lv = load_level(n)
+        # a level whose tests need longer searches says so (level.json "timeout", in seconds)
+        timeout = max(timeout, lv.get("timeout", 0))
         run.dir.mkdir(parents=True, exist_ok=True)
         chosen = [i for i in range(len(lv["tests"])) if only is None or i in only]
         events.put(("tests", [{"id": i, "name": lv["tests"][i]["name"], "kind": lv["tests"][i]["kind"]}
@@ -382,7 +400,10 @@ def run_level(run, n, code, events, jobs, timeout, cache, only=None, stop_on_fai
                         return
                     events.put(("start", {"id": i}))
                     t0 = time.time()
-                    msgs = run.lean(f"T{i}", text, timeout)
+                    # an open problem passes when time runs out: a level's longer `timeout` is
+                    # for its slow searches, and need not make every open test wait for it
+                    limit = min(timeout, BASE_TIMEOUT) if t["kind"] == "expect_open" else timeout
+                    msgs = run.lean(f"T{i}", text, limit)
                     secs = round(time.time() - t0, 1)
                 if run.cancelled:
                     return
@@ -392,7 +413,7 @@ def run_level(run, n, code, events, jobs, timeout, cache, only=None, stop_on_fai
                 if msgs is None and t["kind"] == "expect_open":
                     # an open statement should not be settled, and the referee did not settle it
                     res = {"status": "pass", "seconds": secs,
-                           "detail": f"(the referee could not settle it within {timeout} s, as expected)"}
+                           "detail": f"(the referee could not settle it within {limit} s, as expected)"}
                 elif msgs is None:
                     res = {"status": "unknown", "seconds": secs,
                            "detail": f"The referee ran out of time ({timeout} s)."}
@@ -515,12 +536,13 @@ class Handler(BaseHTTPRequestHandler):
 
 # ---------------------------------------------------------------- main
 
-def prepare_lean():
+def prepare_lean(build=True):
     """From a checkout: build the referee with lake and ask lake for Lean's environment."""
-    print("Building the referee and the shared library (lake build LeanCraftGame)…", flush=True)
-    r = subprocess.run(["lake", "build", "LeanCraftGame"], cwd=ROOT, capture_output=True, **UTF8)
-    if r.returncode != 0:
-        sys.exit(f"`lake build LeanCraftGame` failed:\n{r.stdout}{r.stderr}")
+    if build:
+        print("Building the referee and the shared library (lake build LeanCraftGame)…", flush=True)
+        r = subprocess.run(["lake", "build", "LeanCraftGame"], cwd=ROOT, capture_output=True, **UTF8)
+        if r.returncode != 0:
+            sys.exit(f"`lake build LeanCraftGame` failed:\n{r.stdout}{r.stderr}")
     # Ask lake once for LEAN, LEAN_PATH, …: running `lake env` for every test would be
     # slower, and parallel calls can contend for lake's lock.
     r = subprocess.run(["lake", "env"], cwd=ROOT, capture_output=True, check=True, **UTF8)

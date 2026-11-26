@@ -1,37 +1,26 @@
-/- Hidden test battery for Level Making choices. -/
+/- Hidden test battery for Level 3: How Lean parses. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L3.Player
 
 open L3
 
-#no_sorry collatz
-#no_sorry gap
-#no_sorry rootCount
-#level_start "Making choices"
+#no_sorry q1
+#no_sorry q2
+#no_sorry q3
+#no_sorry q4
+#no_sorry q5
+#no_sorry q6
+#no_sorry q7
+#no_sorry q8
+#level_start "How Lean parses"
 
-#expect_true "collatz 6 = 3" unfolding collatz :
-  collatz 6 = 3
-#expect_true "collatz 7 = 22" unfolding collatz :
-  collatz 7 = 22
-#expect_true "collatz 1 = 4 (1 → 4 → 2 → 1 is a cycle)" unfolding collatz :
-  collatz 1 = 4
-#expect_true "collatz 0 = 0 (0 is even)" unfolding collatz :
-  collatz 0 = 0
-#expect_true "gap 3 8 = 5 and gap 8 3 = 5" unfolding gap :
-  gap 3 8 = 5 ∧ gap 8 3 = 5
-#expect_true "gap 4 4 = 0" unfolding gap :
-  gap 4 4 = 0
-#expect_true "gap is symmetric (all a, b < 12)" unfolding gap :
-  ∀ a < 12, ∀ b < 12, gap a b = gap b a
-#expect_true "gap satisfies the triangle inequality (all a, b, c < 8)" unfolding gap :
-  ∀ a < 8, ∀ b < 8, ∀ c < 8, gap a c ≤ gap a b + gap b c
-#expect_true "x² + 3x + 2 = (x + 1)(x + 2) has 2 roots" unfolding rootCount :
-  rootCount 3 2 = 2
-#expect_true "x² + 2x + 1 = (x + 1)² has 1 root" unfolding rootCount :
-  rootCount 2 1 = 1
-#expect_true "x² + x + 1 has no real root" unfolding rootCount :
-  rootCount 1 1 = 0
-#expect_true "x² has 1 root, x² + 1 has none" unfolding rootCount :
-  rootCount 0 0 = 1 ∧ rootCount 0 1 = 0
+#expect_choice "Question 1: `-x ^ 2` at x = 3" : q1 = 1
+#expect_choice "Question 2: `2 * 3 + 4`" : q2 = 0
+#expect_choice "Question 3: `8 / 4 * 2`" : q3 = 1
+#expect_choice "Question 4: `3 - 5 + 4` in ℕ" : q4 = 1
+#expect_choice "Question 5: `2 ^ 3 ^ 2`" : q5 = 1
+#expect_choice "Question 6: `f 3 + 1` with f x = 2x" : q6 = 0
+#expect_choice "Question 7: the brackets in `a - b - c`" : q7 = 0
+#expect_choice "Question 8: the brackets in `f x ^ 2`" : q8 = 0
 
 #level_report

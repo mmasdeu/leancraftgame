@@ -341,3 +341,15 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
   border-radius: 999px; font-size: 11px; text-transform: uppercase; letter-spacing: .06em;
   color: var(--accent); cursor: help;
 }
+
+/* reading questions (level.json "questions") */
+.mil-ref { font-size: 13px; color: var(--muted); margin: -4px 0 8px; }
+.questions { border-top: 1px solid var(--border); margin-top: 1.5rem; padding-top: .5rem; }
+.questions ol { padding-left: 1.4em; }
+.questions li { margin: 0 0 14px; }
+.questions .q-text p { margin: 0 0 6px; }
+.questions .q-opts { display: flex; flex-wrap: wrap; gap: 6px; }
+.questions .q-opt { text-align: left; padding: 4px 10px; max-width: 100%; white-space: normal; }
+.questions .q-opt .q-key { color: var(--muted); font-variant-numeric: tabular-nums; }
+.questions .q-opt.picked { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.questions .q-opt.picked .q-key { color: inherit; }

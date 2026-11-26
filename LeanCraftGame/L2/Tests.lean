@@ -1,33 +1,24 @@
-/- Hidden test battery for Level Functions. -/
+/- Hidden test battery for Level 2: Your first definitions. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L2.Player
 
 open L2
 
-#no_sorry cube
-#no_sorry triangular
-#no_sorry handshakes
-#level_start "Functions"
+#no_sorry square
+#no_sorry am
+#no_sorry double
+#no_sorry twelve
+#no_sorry halfNat
+#level_start "Your first definitions"
 
-#expect_true "cube 1 + cube 12 = 1729" unfolding cube :
-  cube 1 + cube 12 = 1729
-#expect_true "cube 0 = 0" unfolding cube :
-  cube 0 = 0
-#expect_false "5 / 2 * 6 = 15 (division rounds down first)" :
-  5 / 2 * 6 = 15
-#expect_true "triangular 4 = 10" unfolding triangular :
-  triangular 4 = 10
-#expect_true "triangular 5 = 15" unfolding triangular :
-  triangular 5 = 15
-#expect_true "triangular 100 = 5050 (Gauss)" unfolding triangular :
-  triangular 100 = 5050
-#expect_true "8 · triangular n + 1 = (2n + 1)² for every n ≤ 30" unfolding triangular :
-  ∀ n < 31, 8 * triangular n + 1 = (2 * n + 1) ^ 2
-#expect_true "handshakes 4 = 6" unfolding handshakes :
-  handshakes 4 = 6
-#expect_true "handshakes 1 = 0 and handshakes 0 = 0" unfolding handshakes :
-  handshakes 1 = 0 ∧ handshakes 0 = 0
-#expect_true "handshakes (n + 1) = triangular n for every n ≤ 30" unfolding handshakes triangular :
-  ∀ n < 31, handshakes (n + 1) = triangular n
+#expect_true "square 3 = 9" unfolding square : square 3 = 9
+#expect_true "square (-2) = 4: a square is never negative" unfolding square : square (-2) = 4
+#expect_true "am 1 2 = 3 / 2" unfolding am : am 1 2 = 3 / 2
+#expect_true "am 2 2 = 2: the mean of a number with itself" unfolding am : am 2 2 = 2
+#expect_true "am 0 4 = 2: the mean lies halfway (watch the brackets)" unfolding am : am 0 4 = 2
+#expect_true "double 5 = 10" unfolding double : double 5 = 10
+#expect_true "twelve = 12" unfolding twelve double : twelve = 12
+#expect_true "halfNat 7 = 3: division in ℕ rounds down" unfolding halfNat : halfNat 7 = 3
+#expect_true "halfNat 10 = 5" unfolding halfNat : halfNat 10 = 5
 
 #level_report

@@ -1,31 +1,37 @@
-/- Hidden test battery for Level Spot the bug: sums. -/
+/- Hidden test battery for Level 38: Spot the bug: algebra. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L38.Player
 
-namespace L38Ref
-def triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, i
-def triangleRight (n : ℕ) : ℕ := ∑ i ∈ Finset.Icc 1 n, i
-def numDivisors (n : ℕ) : ℕ := (Finset.filter (fun d => d ∣ n) (Finset.Ico 1 n)).card
-def numDivisorsRight (n : ℕ) : ℕ := (Finset.filter (fun d => d ∣ n) (Finset.Icc 1 n)).card
-def primesUpTo (n : ℕ) : ℕ := (Finset.filter (fun p => Nat.Prime p) (Finset.range n)).card
-def primesUpToRight (n : ℕ) : ℕ := (Finset.filter (fun p => Nat.Prime p) (Finset.range (n + 1))).card
-def evenSquares (n : ℕ) : ℕ := (∑ i ∈ Finset.filter (fun i => i % 2 = 0) (Finset.range n), i) ^ 2
-def evenSquaresRight (n : ℕ) : ℕ := ∑ i ∈ Finset.filter (fun i => i % 2 = 0) (Finset.range n), i ^ 2
-end L38Ref
+open L38
 
-#no_sorry L38.tn
-#no_sorry L38.dn
-#no_sorry L38.pn
-#no_sorry L38.en
-#level_start "Spot the bug: sums"
+#no_sorry L38.junk
+#no_sorry L38.x
+#no_sorry L38.p
+#no_sorry L38.q
+#no_sorry L38.a
+#no_sorry L38.σ
+#no_sorry L38.τ
 
-#expect_true "triangle is wrong on your tn" unfolding L38Ref.triangle L38Ref.triangleRight L38.tn :
-  L38Ref.triangle L38.tn ≠ L38Ref.triangleRight L38.tn
-#expect_true "numDivisors is wrong on your dn" unfolding L38Ref.numDivisors L38Ref.numDivisorsRight L38.dn :
-  L38Ref.numDivisors L38.dn ≠ L38Ref.numDivisorsRight L38.dn
-#expect_true "primesUpTo is wrong on your pn" unfolding L38Ref.primesUpTo L38Ref.primesUpToRight L38.pn :
-  L38Ref.primesUpTo L38.pn ≠ L38Ref.primesUpToRight L38.pn
-#expect_true "evenSquares is wrong on your en" unfolding L38Ref.evenSquares L38Ref.evenSquaresRight L38.en :
-  L38Ref.evenSquares L38.en ≠ L38Ref.evenSquaresRight L38.en
+-- membership in an ideal of ℤ, behind a name the referee's normalisation does not unfold
+attribute [simp] Ideal.mem_span_singleton
+@[irreducible] def InSpan2 (y : ℤ) : Prop := y ∈ Ideal.span {(2 : ℤ)}
+@[simp] theorem InSpan2_iff (y : ℤ) : InSpan2 y ↔ y ∈ Ideal.span {(2 : ℤ)} := by unfold InSpan2; rfl
+
+#level_start "Spot the bug: algebra"
+
+#expect_true "Claim 1: junk contains 0 and is closed under +" unfolding L38.junk :
+  0 ∈ L38.junk ∧ ∀ a b, a ∈ L38.junk → b ∈ L38.junk → a + b ∈ L38.junk
+#expect_true "Claim 1: …and yet junk is not closed under negation" unfolding L38.junk :
+  ∃ a, a ∈ L38.junk ∧ -a ∉ L38.junk
+#expect_true "Claim 2: x is in Ideal.span {2}" unfolding L38.x : InSpan2 L38.x
+#expect_true "Claim 2: …and x is not divisible by both 4 and 6" unfolding L38.x :
+  ¬ (4 ∣ L38.x ∧ 6 ∣ L38.x)
+#expect_true "Claim 3: the degree of p * q is not the sum of the degrees" unfolding L38.p L38.q :
+  (L38.p * L38.q).natDegree ≠ L38.p.natDegree + L38.q.natDegree
+#expect_true "Claim 4: in ZMod 7 every nonzero element has an inverse (7 is prime)" :
+  ∀ b : ZMod 7, b ≠ 0 → ∃ c, b * c = 1
+#expect_true "Claim 4: a is not 0 in ZMod 6" unfolding L38.a : L38.a ≠ 0
+#expect_true "Claim 4: …and no b has a * b = 1" unfolding L38.a : ∀ b : ZMod 6, L38.a * b ≠ 1
+#expect_true "Claim 5: σ * τ ≠ τ * σ" unfolding L38.σ L38.τ : L38.σ * L38.τ ≠ L38.τ * L38.σ
 
 #level_report
