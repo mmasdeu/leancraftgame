@@ -1,4 +1,4 @@
-/- Hidden test battery for Level 29: A colleague's groups. -/
+/- Hidden test battery for Level 29: Sam's groups. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L29.Player
 
@@ -15,7 +15,7 @@ def S3.inv (x : Fin 6) : Fin 6 :=
 #no_sorry junkMul
 #no_sorry junkOne
 #no_sorry junkInv
-#level_start "A colleague's groups"
+#level_start "Sam's groups"
 
 /-! ### Part A: your junk model -/
 #expect_model "Part A: your junk model satisfies Sam's axioms" :

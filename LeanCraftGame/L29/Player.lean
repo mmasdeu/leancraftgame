@@ -1,5 +1,5 @@
 /-
-# A colleague's groups
+# Sam's groups
 
 *Sam needed groups before the project was allowed Mathlib's, and wrote them over lunch:
 associativity, an identity, inverses. The file compiles. Noor asks the auditor's
