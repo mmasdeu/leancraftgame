@@ -476,7 +476,7 @@ def run_level(run, n, code, events, jobs, timeout, cache, only=None, stop_on_fai
                 if msgs is None and t["kind"] == "expect_open":
                     # an open statement should not be settled, and the referee did not settle it
                     res = {"status": "pass", "seconds": secs,
-                           "detail": f"(the referee could not settle it within {limit} s, as expected)"}
+                           "detail": f"(undecided after {limit} s, as it should be)"}
                 elif msgs is None:
                     res = {"status": "unknown", "seconds": secs,
                            "detail": f"The referee ran out of time ({timeout} s)."}

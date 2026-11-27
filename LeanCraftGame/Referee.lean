@@ -450,24 +450,24 @@ def runTest (name : String) (t : Term) (unfolds : Array Ident) (mode : Nat) : Co
   match mode, pos, neg with
   -- should be true
   | 0, true, _ => bump 0; logInfo m!"✅ {name}"
-  | 0, false, true => bump 1; logWarning m!"❌ {name}\n   Under your definition this is FALSE, but it should be TRUE. The referee has a Lean proof that it fails, so this is a genuine counterexample to your definition."
-  | 0, false, false => bump 2; logWarning m!"❓ {name}\n   Inconclusive: the referee could neither prove nor refute this. This is not evidence against your definition."
+  | 0, false, true => bump 1; logWarning m!"❌ {name}\n   This should be true, but with your definition it's false. The referee has a proof, so this is a real counterexample."
+  | 0, false, false => bump 2; logWarning m!"❓ {name}\n   Undecided: the referee could neither prove nor disprove this. It doesn't count against you."
   -- should be false
   | 1, false, true => bump 0; logInfo m!"✅ {name}"
-  | 1, true, _ => bump 1; logWarning m!"❌ {name}\n   Under your definition this is TRUE, but it should be FALSE. The referee has a Lean proof that it holds, so your definition accepts something it should reject."
-  | 1, false, false => bump 2; logWarning m!"❓ {name}\n   Inconclusive: the referee could neither prove nor refute this. This is not evidence against your definition."
+  | 1, true, _ => bump 1; logWarning m!"❌ {name}\n   This should be false, but with your definition it's true. The referee has a proof: your definition accepts something it should reject."
+  | 1, false, false => bump 2; logWarning m!"❓ {name}\n   Undecided: the referee could neither prove nor disprove this. It doesn't count against you."
   -- a mutant should be caught (`P`, "the mutant agrees with every probe", is false)
-  | 3, false, true => bump 0; logInfo m!"✅ {name}\n   (one of your probes tells it apart from the right definition)"
-  | 3, true, _ => bump 1; logWarning m!"❌ {name}\n   This wrong definition survives: it gives the right verdict on every one of your examples, so they cannot tell it apart from the right definition."
-  | 3, false, false => bump 2; logWarning m!"❓ {name}\n   Inconclusive: the referee could not decide whether one of your probes catches this wrong definition."
+  | 3, false, true => bump 0; logInfo m!"✅ {name}\n   (one of your examples catches it)"
+  | 3, true, _ => bump 1; logWarning m!"❌ {name}\n   This wrong definition gets every one of your examples right, so your examples can't catch it."
+  | 3, false, false => bump 2; logWarning m!"❓ {name}\n   Undecided: the referee couldn't tell whether your examples catch this wrong definition."
   -- should be open
-  | 2, false, false => bump 0; logInfo m!"✅ {name}\n   (the referee could not settle it, as expected)"
-  | 2, true, _ => bump 1; logWarning m!"❌ {name}\n   The referee PROVED this. A famous open problem should not be this easy: your statement is probably vacuous."
-  | 2, false, true => bump 1; logWarning m!"❌ {name}\n   The referee REFUTED this. Your statement is false for a silly reason."
+  | 2, false, false => bump 0; logInfo m!"✅ {name}\n   (undecided, as it should be)"
+  | 2, true, _ => bump 1; logWarning m!"❌ {name}\n   The referee proved this. An open problem shouldn't be this easy, so your statement probably says nothing."
+  | 2, false, true => bump 1; logWarning m!"❌ {name}\n   The referee disproved this. Your statement is false for a silly reason."
   -- an answer to a question (`#expect_choice`): settled by evaluation
   | _, true, _ => bump 0; logInfo m!"✅ {name}"
-  | _, false, true => bump 1; logWarning m!"❌ {name}\n   This is not the right answer. Read the question and the lesson again."
-  | _, false, false => bump 2; logWarning m!"❓ {name}\n   Inconclusive: the referee could not evaluate your answer."
+  | _, false, true => bump 1; logWarning m!"❌ {name}\n   Not the right answer. Read the question and the lesson again."
+  | _, false, false => bump 2; logWarning m!"❓ {name}\n   Undecided: the referee couldn't evaluate your answer."
 
 elab_rules : command
   | `(#expect_true $n:str $[$u]? : $t) => runTest n.getString t (getUnfolds u) 0
@@ -760,11 +760,11 @@ def runEquiv (name : String) (t : Term) (unfolds : Array Ident) (known : Option 
     equivVerdict E unfolds known
   match verdict with
   | .same => bump 0; logInfo m!"✅ {name}"
-  | .falseButTrue => bump 1; logWarning m!"❌ {name}\n   Your statement is FALSE (the referee has a counterexample), but the intended statement is TRUE: they do not say the same thing."
-  | .trueButFalse => bump 1; logWarning m!"❌ {name}\n   Your statement is TRUE (the referee proved it), but the intended statement is FALSE: they do not say the same thing."
-  | .differ => bump 1; logWarning m!"❌ {name}\n   The referee proved that your definition and the intended one disagree on some input."
-  | .trueOtherShape => bump 2; logWarning m!"❓ {name}\n   Your statement is true, but it is not the statement asked for: its hypotheses or its conclusion differ from the intended ones. (Two true statements cannot be told apart by proofs, so this is ❓, not ❌.)"
-  | .unknown => bump 2; logWarning m!"❓ {name}\n   Inconclusive: the referee could not match your statement with the intended one (same hypotheses and conclusion, up to algebra), nor show that they differ. Compare yours with the description, piece by piece."
+  | .falseButTrue => bump 1; logWarning m!"❌ {name}\n   Your statement is false (the referee has a counterexample), but the intended one is true. They don't say the same thing."
+  | .trueButFalse => bump 1; logWarning m!"❌ {name}\n   Your statement is true (the referee proved it), but the intended one is false. They don't say the same thing."
+  | .differ => bump 1; logWarning m!"❌ {name}\n   The referee proved that your definition and the intended one disagree somewhere."
+  | .trueOtherShape => bump 2; logWarning m!"❓ {name}\n   Your statement is true, but it isn't the one asked for: the hypotheses or the conclusion differ. (Proofs can't tell two true statements apart, so this is ❓, not ❌.)"
+  | .unknown => bump 2; logWarning m!"❓ {name}\n   Undecided: the referee couldn't match your statement with the intended one, or show that they differ. Compare yours with the description, piece by piece."
 
 elab_rules : command
   | `(#expect_equiv $n:str $[$u]? : $t $[using $h]?) => runEquiv n.getString t (getUnfolds u) h
@@ -803,7 +803,7 @@ elab_rules : command
       return if errs.isEmpty then none else some ("\n".intercalate errs)
     match err with
     | none => bump 0; logInfo m!"✅ {name}"
-    | some msg => bump 1; logWarning m!"❌ {name}\n   This does not have the expected type. Lean says: {msg}"
+    | some msg => bump 1; logWarning m!"❌ {name}\n   This doesn't have the expected type. Lean says: {msg}"
 
 /-! ## Answers to questions
 
@@ -853,10 +853,10 @@ elab_rules : command
     let unk := rs.filter (fun r => !r.2.1 && !r.2.2)
     if !bad.isEmpty then
       bump 1
-      logWarning m!"❌ {n.getString}\n   This should satisfy your axioms, but the referee proved that {bad.map (·.1)} fail(s) here: a violated axiom."
+      logWarning m!"❌ {n.getString}\n   This should satisfy your axioms, but the referee proved that {bad.map (·.1)} fail(s) here."
     else if !unk.isEmpty then
       bump 2
-      logWarning m!"❓ {n.getString}\n   Inconclusive: the referee could not decide {unk.map (·.1)} in this example. This is not evidence against your definition."
+      logWarning m!"❓ {n.getString}\n   Undecided: the referee couldn't decide {unk.map (·.1)} in this example. It doesn't count against you."
     else
       bump 0; logInfo m!"✅ {n.getString}"
   | `(#expect_not_model $n:str $[$u]? : $t) => do
@@ -868,10 +868,10 @@ elab_rules : command
       bump 0; logInfo m!"✅ {n.getString}\n   (ruled out by {bad.map (·.1)})"
     else if !unk.isEmpty then
       bump 2
-      logWarning m!"❓ {n.getString}\n   Inconclusive: the referee could not decide {unk.map (·.1)} in this example. This is not evidence against your definition."
+      logWarning m!"❓ {n.getString}\n   Undecided: the referee couldn't decide {unk.map (·.1)} in this example. It doesn't count against you."
     else
       bump 1
-      logWarning m!"❌ {n.getString}\n   This example should violate one of your axioms, but the referee proved that it satisfies all of them."
+      logWarning m!"❌ {n.getString}\n   This example should break one of your axioms, but the referee proved it satisfies all of them."
 
 /-- `#no_sorry foo` — reject definitions that use `sorry`. -/
 elab "#no_sorry " id:ident : command => do

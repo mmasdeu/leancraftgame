@@ -318,7 +318,7 @@ const LiveRunner = (() => {
         const why = timedOut ? `within ${lost.kind === "expect_open" ? Math.min(timeout, 60) : timeout} s`
           : "in the time the Lean Playground allows";
         finish(lost, lost.kind === "expect_open"
-          ? { status: "pass", seconds: secs, cached: false, detail: `(the referee could not settle it ${why}, as expected)` }
+          ? { status: "pass", seconds: secs, cached: false, detail: `(undecided ${why}, as it should be)` }
           : { status: "unknown", seconds: secs, cached: false,
               detail: timedOut ? `The referee ran out of time (${timeout} s).`
                 : "The Lean Playground ended the session while the referee was working on this test (a limit on time or memory)." });
