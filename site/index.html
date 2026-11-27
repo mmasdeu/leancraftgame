@@ -42,6 +42,7 @@
     h2 { font-size: 24px; margin: 48px 0 12px; }
     h3 { font-size: 17px; margin: 0 0 6px; }
     .muted { color: var(--muted); }
+    .paused { border: 1px solid var(--accent); border-radius: 10px; padding: 10px 14px; margin: 0 0 10px; text-align: left; }
 
     /* hero */
     .hero { padding: 56px 0 24px; }
@@ -128,8 +129,10 @@
       </div>
     </div>
     <div class="other">
-      No install? <a href="play/"><b>Play in your browser</b></a>: your code is checked on the
-      <a href="https://live.lean-lang.org/">Lean Playground</a>, so it is slower than the app and needs an internet connection.<br>
+      <p class="paused"><b>Playing in the browser is paused for now.</b> The online version checked your code on
+      the <a href="https://live.lean-lang.org/">Lean Playground</a>, a public server of the Lean community, and
+      we are working out how to use it fairly. Until then, <b>download the app</b> above to play: it checks your
+      code on your own computer. You can still <a href="play/">read the lessons online</a>.</p>
       <span id="counts" hidden></span>
       All versions and release notes: <a href="https://github.com/mmasdeu/leancraftgame/releases">GitHub Releases</a>
       · <a href="https://github.com/mmasdeu/leancraftgame">source code</a>
