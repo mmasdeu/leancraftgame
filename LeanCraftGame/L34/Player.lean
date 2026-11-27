@@ -1,12 +1,11 @@
 /-
 # Morphisms
 
-*Noor: a structure is never studied alone, what matters is the maps that respect it. Sam's
-first definition of a homomorphism checked products and forgot the unit. The Prover then
-proved that the constant map `0` is one.*
+*What matters about a structure is the maps that respect it. Sam's first homomorphism
+checked products and forgot the unit, so the Prover proved the constant map `0` is one.*
 
-Mathlib defines a monoid homomorphism as a **bundled** structure: a function plus the
-facts that it respects the operations.
+Mathlib defines a monoid homomorphism as a **bundled** structure, a function plus the facts
+that it respects the operations:
 
 ```lean
 structure MonoidHom₁ (G H : Type) [Monoid G] [Monoid H] where
@@ -16,29 +15,28 @@ structure MonoidHom₁ (G H : Type) [Monoid G] [Monoid H] where
 ```
 
 Mathlib writes it `G →* H` (and `G →+ H` for additive monoids, `R →+* S` for rings). You
-can apply a bundled map like a function, `f x`. Lean inserts a coercion `⇑f : G → H` for
-you, and messages show it as `⇑f`.
+apply a bundled map like a function, `f x`. Lean inserts a coercion, shown as `⇑f`.
 
 ## Bundled and unbundled
 
-A bundled `f : ℕ →* ℕ` is a function together with its proofs. Sometimes you want to say
-that a plain function `f : M → N` is a homomorphism. That's a predicate, an "unbundled"
-definition. It must ask for exactly what the bundled structure asks for:
+Sometimes you want to say that a plain function `f : M → N` is a homomorphism. That's a
+predicate, an "unbundled" definition. It must ask for exactly what the bundled structure
+asks for:
 
 * `map_one`: `f 1 = 1`;
 * `map_mul`: `f (a * b) = f a * f b` for all `a`, `b`.
 
-Neither condition implies the other. In `(ℕ, *, 1)`, the constant map `0` respects
-multiplication (`0 = 0 * 0`) but sends `1` to `0`.
+Neither implies the other. In `(ℕ, *, 1)`, the constant map `0` respects multiplication
+(`0 = 0 * 0`) but sends `1` to `0`.
 
-You've met one homomorphism already: the norm of the `GaussInt` of level 30,
-`N(a + bi) = a² + b²`. There `N(zw) = N(z) N(w)`, and `N(1) = 1`. So the norm is a monoid
-homomorphism from `(ℤ[i], ·, 1)` to `(ℤ, ·, 1)`.
+You've met one homomorphism already: the norm `N(a + bi) = a² + b²` of the `GaussInt` of
+level 30. It has `N(zw) = N(z) N(w)` and `N(1) = 1`, so it's a monoid homomorphism from
+`(ℤ[i], ·, 1)` to `(ℤ, ·, 1)`.
 
 ## Homomorphisms and bijections
 
-A homomorphism needn't be surjective: `n ↦ 2n` on `(ℤ, +)` misses the odd numbers. And a
-bijection needn't be a homomorphism. Bijection is about the sets, homomorphism is about the
+A homomorphism needn't be surjective: `n ↦ 2n` on `(ℤ, +)` misses the odd numbers. A
+bijection needn't be a homomorphism either. One is about the sets, the other about the
 operations.
 
 ## Your task
@@ -49,7 +47,7 @@ operations.
 4. `bijNotHom`: a map `ℤ → ℤ` that is its own inverse (so a bijection) and isn't an
    additive homomorphism.
 
-The referee tests your predicates on many maps. It also checks that every bundled map
+The referee tests your predicates on many maps. It also checks that every bundled
 `f : M →* N` satisfies your `IsMonoidHom ⇑f`.
 -/
 namespace L34

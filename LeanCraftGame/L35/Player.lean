@@ -1,12 +1,12 @@
 /-
 # Sub-objects
 
-*Noor needs sub-objects next: the even numbers inside ℕ, the multiples of 12 inside ℤ,
-later a line inside the plane. Sam proposed "a subset closed under `+`". The referee
-quickly found a subset that passes that test and shouldn't.*
+*Noor needs sub-objects next: the even numbers inside ℕ, the multiples of 12 inside ℤ.
+Sam proposed "a subset closed under `+`". The referee quickly found a subset that passes
+and shouldn't.*
 
-Subgroups, subrings and subspaces are subsets closed under the operations. A submonoid is a
-structure that bundles a set with the facts that make it one:
+A submonoid is a structure that bundles a set with the facts that make it closed under the
+operations:
 
 ```lean
 structure Submonoid₁ (M : Type) [Monoid M] where
@@ -17,24 +17,21 @@ structure Submonoid₁ (M : Type) [Monoid M] where
   one_mem : 1 ∈ carrier
 ```
 
-* `carrier : Set M` is a field that holds data, the subset.
-* `mul_mem` and `one_mem` are fields that hold propositions, the axioms. A field like
-  `mul_mem {a b} : …` has its own binders. `{a b}` makes `a` and `b` implicit.
+* `carrier : Set M` holds data, the subset.
+* `mul_mem` and `one_mem` hold propositions, the axioms. `mul_mem {a b} : …` has its own
+  binders, and `{a b}` makes `a` and `b` implicit.
 
-An instance `SetLike (Submonoid₁ M) M` then lets you write `x ∈ N` instead of
-`x ∈ N.carrier`. Mathlib's `Submonoid`, `Subgroup`, `Ideal` and `Submodule` all work this
-way.
+An instance `SetLike (Submonoid₁ M) M` then lets you write `x ∈ N` for `x ∈ N.carrier`.
+Mathlib's `Submonoid`, `Subgroup`, `Ideal` and `Submodule` all work this way.
 
 For example, in the `GaussInt` of level 30, the elements of norm 1 (`1`, `-1`, `i`, `-i`)
-form a submonoid under multiplication. `1` has norm 1, and the norm is multiplicative, so a
-product of two elements of norm 1 has norm 1.
+form a submonoid under multiplication: `1` has norm 1, and the norm is multiplicative.
 
 ## Junk models
 
-Leave out an axiom and the structure accepts subsets it shouldn't. The numbers `≥ 1` are
-closed under addition, but they aren't an additive submonoid of ℕ, since `0` is missing.
-The referee tests your axioms on many subsets. Real submonoids must satisfy every axiom,
-and junk must break at least one.
+Leave out an axiom and junk gets in. The numbers `≥ 1` are closed under addition, but they
+aren't an additive submonoid of ℕ: `0` is missing. The referee tests your axioms on many
+subsets. Real submonoids must satisfy every axiom, and junk must break at least one.
 
 ## Set-builder notation
 

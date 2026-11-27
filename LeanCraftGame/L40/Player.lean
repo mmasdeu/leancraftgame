@@ -5,8 +5,8 @@
 origin, the two axes together, a parabola, and a line that misses `0`. Only the first
 belongs.*
 
-In Mathlib a subspace of `V` is a `Submodule K V`. Like the sub-objects of level 35, it's a
-set (its `carrier`) bundled with proofs that it's closed under the operations.
+A subspace of `V` is a `Submodule K V`. Like the sub-objects of level 35, it's a set (its
+`carrier`) bundled with proofs that it's closed under the operations:
 
 ```lean
 structure Submodule (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] where
@@ -16,28 +16,27 @@ structure Submodule (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] wh
   smul_mem' : ∀ (c : R) {x}, x ∈ carrier → c • x ∈ carrier
 ```
 
-Subspaces are ordered by inclusion, and Mathlib uses lattice notation for them:
+Subspaces are ordered by inclusion, with lattice notation:
 
-* `⊥` is the zero subspace `{0}`, and `⊤` is the whole space.
+* `⊥` is the zero subspace `{0}`, and `⊤` the whole space.
 * `U ⊓ W` is the intersection `U ∩ W`.
-* `U ⊔ W` is the smallest subspace containing both, that is `U + W`. It isn't the union.
-  The union of two lines through `0` is not a subspace.
+* `U ⊔ W` is the smallest subspace containing both, that is `U + W`. It isn't the union:
+  two lines through `0` don't form a subspace.
 * `Submodule.span K s` is the smallest subspace containing the set `s`.
-* `V ⧸ W` is the quotient space: vectors of `V`, with two vectors identified when their
-  difference lies in `W`.
+* `V ⧸ W` is the quotient space: two vectors are identified when their difference lies
+  in `W`.
 
-The kernel `LinearMap.ker φ` of level 39 is a subspace. It measures injectivity in the
-sense of level 17: `φ` is injective exactly when `LinearMap.ker φ = ⊥`.
+The kernel `LinearMap.ker φ` of level 39 is a subspace. `φ` is injective (level 17)
+exactly when `LinearMap.ker φ = ⊥`.
 
 ## Which sets are subspaces?
 
-A line through the origin is a subspace of the plane. Many reasonable-looking sets aren't:
-a line that misses `0`, a curve, the union of the two axes. To show a set isn't a
-subspace, give a counterexample to one of the three fields.
+A line through the origin is a subspace of the plane. A line that misses `0`, a curve, or
+the union of the axes isn't. To show that, give a counterexample to one of the three
+fields.
 
-As in the last level, the plane `ℚ²` is `Fin 2 → ℚ`, a vector is `![x, y]` and its
-coordinates are `v 0` and `v 1`. Write sets with set-builder notation, such as
-`{v | v 0 = 0}` (the vertical axis).
+As before, the plane is `Fin 2 → ℚ`, a vector is `![x, y]` with coordinates `v 0` and
+`v 1`. Write sets as `{v | v 0 = 0}` (the vertical axis).
 
 ## Your task
 
