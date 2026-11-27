@@ -33,7 +33,8 @@ def main():
                    stdout=subprocess.DEVNULL)
     # the diagnostics are about a live connection: test them as if the online version were not paused
     cfg = OUT / "config.js"
-    cfg.write_text(cfg.read_text(encoding="utf-8").replace(", livePaused: true", ""), encoding="utf-8")
+    cfg.write_text(cfg.read_text(encoding="utf-8").replace(', "livePaused": true', ""), encoding="utf-8")
+    assert "livePaused" not in cfg.read_text(encoding="utf-8"), "config.js changed: cannot un-pause it"
     class Quiet(SimpleHTTPRequestHandler):
         def log_message(self, *args):
             pass

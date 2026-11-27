@@ -163,6 +163,9 @@ python3 online/build.py          # writes dist/online/: upload it to any static 
 * A run takes about a minute for most levels, and a few minutes for the hardest. A test that
   runs more than 60 s is dropped (✅ for a test that should stay open, ❓ otherwise), and a
   cut-off session continues with the remaining tests.
+* **Checking code online is paused** in the published builds (`LIVE_PAUSED` in `online/build.py`),
+  until its use of the public Lean Playground has been agreed with the server's owners. To develop
+  the online version, run a local lean4web server: see [DEVELOPMENT.md](DEVELOPMENT.md).
 * The Welcome page tells the player that the code goes to a public server.
 * When the connection fails, the page says why it most likely failed. A browser hides the
   reason a WebSocket was refused, so `live.js` keeps a timeline of the session (socket open,

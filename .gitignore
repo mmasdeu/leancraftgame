@@ -8,3 +8,5 @@ dist/
 claude-desktop/
 # scratch work (prototypes, logs)
 .scratch/
+# a local lean4web server for developing the online version (see DEVELOPMENT.md)
+.lean4web/

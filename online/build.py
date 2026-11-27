@@ -3,6 +3,7 @@
 
     python3 online/build.py                 writes dist/online/
     python3 online/build.py --out DIR
+    python3 online/build.py --out DIR --live-server ws://127.0.0.1:8090    a development build
 
 The folder can be served by any static web server. The browser checks the player's
 code on https://live.lean-lang.org/ (see web/static/live.js), so the host needs no Lean.
@@ -84,9 +85,12 @@ def library():
     return out
 
 
-def intro():
+def intro(paused=LIVE_PAUSED, server=None):
     text = (ROOT / "LeanCraftGame" / "Intro.md").read_text(encoding="utf-8")
-    text, n = LOCAL_NOTE.subn(PAUSED_NOTE if LIVE_PAUSED else ONLINE_NOTE, text)
+    note = (PAUSED_NOTE if paused else
+            ONLINE_NOTE if server is None else
+            f"When you run the tests, your code is sent to the Lean server at {server} (a development build).")
+    text, n = LOCAL_NOTE.subn(note, text)
     assert n == 1, "Intro.md no longer has the sentence about nothing being sent"
     return text
 
@@ -105,18 +109,29 @@ def levels():
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--out", type=Path, default=ROOT / "dist" / "online")
+    ap.add_argument("--live-server", metavar="URL",
+                    help="a development build that checks code on this lean4web server instead of the "
+                         "Lean Playground, such as ws://127.0.0.1:8090 (see DEVELOPMENT.md); it is not "
+                         "paused and does not count usage")
+    ap.add_argument("--live-project", metavar="NAME", default="LeanCraftGame",
+                    help="the lean4web project to use with --live-server (default: LeanCraftGame)")
     opts = ap.parse_args()
     out = opts.out
     shutil.rmtree(out, ignore_errors=True)
     shutil.copytree(ROOT / "web" / "static", out)
     (out / "data").mkdir()
-    # `livePaused`: the online version does not contact the Lean Playground at all (live.js
-    # refuses to run, and the Welcome page says why). Set LIVE_PAUSED to False to re-enable it.
-    (out / "config.js").write_text(
-        'window.LEANCRAFT = { online: true, goatcounter: "mmasdeu"'
-        + (', livePaused: true' if LIVE_PAUSED else '') + ' };\n', encoding="utf-8")
+    if opts.live_server:
+        # a development build: your own server, no pause, no usage counting
+        paused = False
+        config = {"online": True, "liveServer": opts.live_server, "liveProject": opts.live_project}
+    else:
+        # `livePaused`: the online version does not contact the Lean Playground at all (live.js
+        # refuses to run, and the Welcome page says why). Set LIVE_PAUSED to False to re-enable it.
+        paused = LIVE_PAUSED
+        config = {"online": True, "goatcounter": "mmasdeu"} | ({"livePaused": True} if paused else {})
+    (out / "config.js").write_text(f"window.LEANCRAFT = {json.dumps(config)};\n", encoding="utf-8")
     (out / "data" / "levels.json").write_text(json.dumps(levels(), ensure_ascii=False), encoding="utf-8")
-    (out / "data" / "intro.md").write_text(intro(), encoding="utf-8")
+    (out / "data" / "intro.md").write_text(intro(paused, opts.live_server), encoding="utf-8")
     (out / "data" / "prelude.lean").write_text(prelude() + "\n", encoding="utf-8")
     print(f"Wrote {out}")
 
