@@ -101,8 +101,11 @@ def levels():
         lv = server.load_level(n)
         # the referee is pasted into the file (prelude.lean), not imported
         imports = [i for i in lv["imports"] if not i.strip().startswith("import LeanCraftGame.")]
-        out.append({k: lv[k] for k in server.PUBLIC_KEYS + ("preamble", "gates", "tests") if k in lv}
-                   | {"imports": imports} | {"checks": lv.get("checks", [])})
+        # reading questions are graded in the browser from a hashed key: leave their answers out
+        tests = [{"kind": t["kind"], "name": t["name"], "answer": t["answer"]} if "answer" in t else t
+                 for t in lv["tests"]]
+        out.append({k: lv[k] for k in server.PUBLIC_KEYS + ("preamble", "gates") if k in lv}
+                   | {"tests": tests, "imports": imports} | {"checks": lv.get("checks", [])})
     return out
 
 
