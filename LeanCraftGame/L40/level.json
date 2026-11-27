@@ -3,7 +3,6 @@
   "title": "Subspaces and quotients",
   "skill": "writing and refuting",
   "exercise": "Write",
-  "mil": "§10.2",
   "predict": [
     {"test": "a + b is not on the axes", "statement": "The union of the two axes is closed under addition."}
   ],

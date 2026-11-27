@@ -3,7 +3,6 @@
   "title": "Spot the bug: logic",
   "skill": "reading",
   "exercise": "Refute",
-  "mil": "§3.1–3.6",
   "public": "all",
   "checks": [
     {"lean": "#check (L14.seqA : ℕ → ℝ)\n#check (L14.limA : ℝ)\n#check (L14.seqB : ℕ → ℝ)\n#check (L14.limB : ℝ)\n#check (L14.seqC : ℕ → ℝ)\n#check (L14.funD : ℝ → ℝ)",

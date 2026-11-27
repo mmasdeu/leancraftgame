@@ -3,7 +3,6 @@
   "title": "Irrational roots",
   "skill": "writing statements",
   "exercise": "Write",
-  "mil": "§5.1",
   "public": ["irr_sqrt2 says √2 is irrational"],
   "hints": [
     {"match": "irr_sqrt2", "hint": "`statement irr_sqrt2 : Irrational (√2)`."},

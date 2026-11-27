@@ -3,7 +3,6 @@
   "title": "Spot the bug: topology",
   "skill": "refuting",
   "exercise": "Refute",
-  "mil": "§11.1–11.3",
   "predict": [
     {"test": "Claim 2: g sends open sets to open sets (its inverse is continuous)", "statement": "Every continuous bijection from `discrete 2` to Sierpiński space has a continuous inverse."}
   ],

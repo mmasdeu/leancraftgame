@@ -3,7 +3,6 @@
   "title": "Derivatives",
   "skill": "writing statements",
   "exercise": "Write",
-  "mil": "§12.1",
   "predict": [
     {"test": "In Mathlib, deriv (fun x => |x|) 0 = 0", "statement": "In Mathlib, `deriv (fun x : ℝ => |x|) 0 = 0`, although `|x|` is not differentiable at 0."}
   ],

@@ -3,7 +3,6 @@
   "title": "Big operators and counting",
   "skill": "sums and products",
   "exercise": "Write",
-  "mil": "§6.2",
   "predict": [
     {"test": "∏ i ∈ Finset.range 4, i is 0", "statement": "`∏ i ∈ Finset.range 4, i = 0`"},
     {"test": "the empty product ∏ i ∈ Finset.range 0, i is 1", "statement": "`∏ i ∈ Finset.range 0, i = 1` (a product of nothing)"}

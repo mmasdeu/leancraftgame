@@ -3,7 +3,6 @@
   "title": "Spot the bug: algebra",
   "skill": "reading",
   "exercise": "Refute",
-  "mil": "§8.3, §9.1–9.2",
   "predict": [
     {"test": "Claim 4: in ZMod 7 every nonzero element has an inverse (7 is prime)", "statement": "In `ZMod 7`, every nonzero element has an inverse."}
   ],

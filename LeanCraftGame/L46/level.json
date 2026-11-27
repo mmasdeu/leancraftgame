@@ -3,7 +3,6 @@
   "title": "Separation and compactness",
   "skill": "writing definitions",
   "exercise": "Write",
-  "mil": "§11.3",
   "predict": [
     {"test": "Sierpiński space is T1", "statement": "Sierpiński space is T1."},
     {"test": "The one-point space is T2 (no two points to separate)", "statement": "The space with one point is Hausdorff."}

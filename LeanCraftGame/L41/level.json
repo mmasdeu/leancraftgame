@@ -3,7 +3,6 @@
   "title": "Endomorphisms",
   "skill": "reading and writing statements",
   "exercise": "Read",
-  "mil": "§10.3",
   "public": "all",
   "questions": [
     {"answer": "q1", "text": "What is `Module.End K V`?",

@@ -3,7 +3,6 @@
   "title": "Final audit: the AI proved Goldbach!",
   "skill": "auditing",
   "exercise": "Audit",
-  "mil": "all chapters",
   "timeout": 120,
   "predict": [
     {

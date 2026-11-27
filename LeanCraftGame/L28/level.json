@@ -3,7 +3,6 @@
   "title": "Defining structures",
   "skill": "structures",
   "exercise": "Write",
-  "mil": "§7.1",
   "predict": [
     {
       "test": "(1, 1, -1) is not in the simplex",

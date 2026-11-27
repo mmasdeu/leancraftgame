@@ -3,7 +3,6 @@
   "title": "Integrals and measures",
   "skill": "writing statements",
   "exercise": "Write",
-  "mil": "§13.1–13.3",
   "predict": [
     {
       "test": "In Mathlib, ∫ x in (1:ℝ)..0, x = 1 / 2",

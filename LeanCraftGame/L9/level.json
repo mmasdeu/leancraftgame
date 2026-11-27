@@ -3,7 +3,6 @@
   "title": "∃",
   "skill": "writing definitions",
   "exercise": "Write",
-  "mil": "§3.2",
   "predict": [
     {"test": "some real number is both positive and negative", "statement": "`∃ x : ℝ, x > 0 ∧ x < 0`"}
   ],

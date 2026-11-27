@@ -3,7 +3,6 @@
   "title": "Images and preimages",
   "skill": "sets",
   "exercise": "Write",
-  "mil": "§4.2",
   "public": ["9 ∈ squares", "y₀ is in the image of s₀"],
   "predict": [
     {"test": "2 ∈ evensPre", "statement": "`2 ∈ (fun n => 2 * n) ⁻¹' {m | m % 4 = 0}`"},

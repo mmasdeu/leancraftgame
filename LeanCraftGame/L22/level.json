@@ -3,7 +3,6 @@
   "title": "Recursion and induction",
   "skill": "recursion",
   "exercise": "Write",
-  "mil": "§5.2",
   "public": [
     "fac 5 = 120",
     "fib 10 = 55",

@@ -3,7 +3,6 @@
   "title": "Metric spaces",
   "skill": "writing definitions",
   "exercise": "Write",
-  "mil": "§11.2",
   "predict": [
     {"test": "(x - y)² is not a metric", "statement": "`(x - y) ^ 2` is a distance on the points 0, 1, 2, 3."},
     {"test": "the zero distance is not a metric", "statement": "The distance that is always `0` is a metric."}

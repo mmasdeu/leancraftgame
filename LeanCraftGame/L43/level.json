@@ -3,7 +3,6 @@
   "title": "Filters",
   "skill": "reading and writing statements",
   "exercise": "Write",
-  "mil": "§11.1",
   "public": "all",
   "questions": [
     {"answer": "q1", "text": "What does `∃ᶠ n in atTop, P n` say?",

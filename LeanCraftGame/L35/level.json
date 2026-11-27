@@ -3,7 +3,6 @@
   "title": "Sub-objects",
   "skill": "axioms",
   "exercise": "Write",
-  "mil": "§8.3",
   "predict": [
     {"test": "the numbers ≥ 1 are not an additive submonoid", "statement": "With only the axiom \"closed under `+`\", the numbers `≥ 1` would be accepted as an additive submonoid."},
     {"test": "{0, 1} is not an additive submonoid", "statement": "`{0, 1}` is closed under multiplication; it is still not an additive submonoid of ℕ."}

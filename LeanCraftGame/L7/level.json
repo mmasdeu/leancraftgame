@@ -3,7 +3,6 @@
   "title": "Spot the bug: statements",
   "skill": "reading",
   "exercise": "Refute",
-  "mil": "§2.1–2.4",
   "public": ["Part A: a₁, b₁ break (a - b)² = a² - 2ab + b² in ℕ", "Part A: a₂ ≤ b₂ (the hypothesis holds)", "Part A: a₂² > b₂² (the conclusion fails)", "Part A: x₃ / y₃ * y₃ ≠ x₃"],
   "predict": [
     {"test": "In ℕ, (0 - 1)² = 0² - 2·0·1 + 1²", "statement": "In ℕ, `(0 - 1) ^ 2 = 0 ^ 2 - 2 * 0 * 1 + 1 ^ 2`."}

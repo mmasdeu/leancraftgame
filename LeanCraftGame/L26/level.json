@@ -3,7 +3,6 @@
   "title": "Inductive types",
   "skill": "recursion",
   "exercise": "Write",
-  "mil": "§6.3",
   "predict": [
     {"test": "a single node has height 1", "statement": "`height (node empty empty) = 1`"},
     {"test": "there are 5 trees with 3 nodes (a Catalan number)", "statement": "There are exactly 5 binary trees with 3 nodes"}

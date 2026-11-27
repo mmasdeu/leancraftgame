@@ -3,7 +3,6 @@
   "title": "∧, ∨ and ↔",
   "skill": "writing statements",
   "exercise": "Write",
-  "mil": "§3.4–3.5",
   "predict": [
     {"test": "some x satisfies x > 5 → x = 0", "statement": "`∃ x : ℝ, x > 5 → x = 0`"}
   ],

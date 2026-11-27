@@ -3,7 +3,6 @@
   "title": "Finset and Fintype",
   "skill": "finite sets",
   "exercise": "Write",
-  "mil": "§6.1",
   "predict": [
     {"test": "Finset.range 4 contains 4", "statement": "`4 ∈ Finset.range 4`"},
     {"test": "9 is one of the divisors of 9", "statement": "`9 ∈ divs 9`: a number is one of its own divisors"}

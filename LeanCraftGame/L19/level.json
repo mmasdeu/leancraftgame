@@ -3,7 +3,6 @@
   "title": "Spot the bug: sets",
   "skill": "reading",
   "exercise": "Refute",
-  "mil": "§4.1–4.2",
   "public": "all",
   "predict": [
     {"test": "4. 4 ∈ multiplesOfFixed 12", "statement": "`4` is a multiple of `12`."}

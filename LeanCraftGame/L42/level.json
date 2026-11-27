@@ -3,7 +3,6 @@
   "title": "Matrices, bases and dimension",
   "skill": "writing definitions",
   "exercise": "Write",
-  "mil": "§10.4",
   "predict": [
     {"test": "Reading: in !![1, 2; 3, 4], the entry in row 0, column 1 is 2", "statement": "In `!![1, 2; 3, 4]`, the entry `A 0 1` is `2`."},
     {"test": "fib 0 = 0", "statement": "The entry `(fibM ^ n) 0 1` is `F n` for every `n`, including `n = 0`."}

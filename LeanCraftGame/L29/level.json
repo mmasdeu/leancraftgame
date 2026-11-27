@@ -3,7 +3,6 @@
   "title": "A colleague's groups",
   "skill": "axioms",
   "exercise": "Repair",
-  "mil": "§7.2",
   "checks": [
     {
       "lean": "#check (L29.junkMul : Bool → Bool → Bool)\n#check (L29.junkOne : Bool)\n#check (L29.junkInv : Bool → Bool)",

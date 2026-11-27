@@ -3,7 +3,6 @@
   "title": "Injective, surjective, inverses",
   "skill": "functions",
   "exercise": "Write",
-  "mil": "§4.2",
   "public": ["Inj (n + 1)", "Surj of the identity"],
   "predict": [
     {"test": "Surj (n - 1)", "statement": "`fun n : ℕ => n - 1` is surjective."},

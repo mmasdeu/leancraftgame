@@ -3,7 +3,6 @@
   "title": "The AI proved the infinitude of primes!",
   "skill": "auditing",
   "exercise": "Audit",
-  "mil": "§5.3–5.4",
   "public": ["Toy world: every number is 'prime'"],
   "predict": [
     {"test": "Toy world: the 'primes' are 2 and 3", "statement": "With 'prime' meaning `p = 2 ∨ p = 3`, there are infinitely many 'primes'."},

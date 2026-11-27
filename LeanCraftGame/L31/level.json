@@ -3,7 +3,6 @@
   "title": "Spot the bug: structures",
   "skill": "reading",
   "exercise": "Refute",
-  "mil": "§7.1–7.3",
   "public": "all",
   "predict": [
     {"test": "with the colleague's product, i · i = -1", "statement": "With the colleague's `GaussInt.mul`, `i · i` has real part `-1`"}

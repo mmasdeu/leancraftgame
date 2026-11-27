@@ -3,7 +3,6 @@
   "title": "Vector spaces and linear maps",
   "skill": "constructing examples",
   "exercise": "Construct",
-  "mil": "§10.1",
   "predict": [
     {"test": "shift sends the zero vector to zero", "statement": "`shift v = v + ![1, 0]` sends the zero vector to the zero vector."}
   ],

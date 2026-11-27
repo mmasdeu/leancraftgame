@@ -114,14 +114,57 @@ def load_level(n):
     template = re.sub(r"^import \S+[ \t]*\n", "", template, flags=re.M).lstrip("\n")
     tests = split_tests((d / "Tests.lean").read_text(encoding="utf-8"))
     tests["imports"] = list(dict.fromkeys(tests["imports"] + own))
+    # A reading question (`#expect_choice "…" : q1 = 2` on an answer line of `questions`) is
+    # graded without Lean: by the browser, and by grade_answer below. The browser gets the
+    # key as a hash (answer_hash), so that the level's data does not show the answers.
+    asked = {q["answer"]: q for q in meta.get("questions", [])}
+    questions = []
+    for t in tests["tests"]:
+        m = re.search(rf"\s:\s*(?:{ns}\.)?(\w+)\s*=\s*(\d+|true|false)\s*$", t["src"])
+        if t["kind"] == "expect_choice" and m and m.group(1) in asked:
+            t["answer"], t["key"] = m.group(1), m.group(2)
+    keys = {t["answer"]: t for t in tests["tests"] if "answer" in t}
+    for q in meta.get("questions", []):
+        t = keys.get(q["answer"])
+        questions.append(q | ({"test": t["name"], "key": answer_hash(ns, q["answer"], t["key"])} if t else {}))
+    if questions:
+        meta = meta | {"questions": questions}
     return {**meta, "id": n, "num": LEVELS.index(n) + 1, "intro": intro, "namespace": ns,
             "template": strip_namespace(template, ns), **tests}
+
+
+def answer_hash(ns, answer, value):
+    """FNV-1a (32 bits) of `L3.q1=2`, in hex: the same function as answerHash in app.js."""
+    h = 0x811C9DC5
+    for b in f"{ns}.{answer}={value}".encode():
+        h = ((h ^ b) * 0x01000193) & 0xFFFFFFFF
+    return f"{h:08x}"
+
+
+def answer_of(code, name):
+    """The player's answer to a question: the value on the line `def <name> : T := v`, as
+    text (`2`, `true`), "sorry" when not answered yet, or None when the line is missing."""
+    m = re.search(rf"^def {re.escape(name)} : [^:=\n]+ :=[ \t]*(.*)$", code, re.M)
+    return None if m is None else re.sub(r"--.*$", "", m.group(1)).strip()
+
+
+def grade_answer(lv, t, code):
+    """Grade a reading question without Lean: a result, or a problem (str) if unanswered."""
+    v = answer_of(code, t["answer"])
+    if v is None:
+        return f"The line `def {t['answer']} …` is missing from your code: press Reset to get it back."
+    if not re.fullmatch(r"\d+|true|false", v):
+        return f"Question `{t['answer']}` has no answer yet: pick one of the choices."
+    if v == t["key"]:
+        return {"status": "pass", "detail": "", "seconds": 0}
+    return {"status": "fail", "seconds": 0,
+            "detail": "This is not the right answer. Read the question and the lesson again."}
 
 
 # What the browser needs to know about a level, besides its tests. `predict`, `public` and
 # `hintsAfter` drive the predictions, the hidden tests and the hint gates (see
 # validate_level and web/static/app.js).
-PUBLIC_KEYS = ("id", "num", "world", "title", "skill", "exercise", "mil", "intro", "template", "hints",
+PUBLIC_KEYS = ("id", "num", "world", "title", "skill", "exercise", "intro", "template", "hints",
                "predict", "public", "hintsAfter", "namespace", "questions", "timeout")
 
 # The kinds of exercise a level can be (level.json "exercise"), shown as a tag above the lesson.
@@ -373,6 +416,25 @@ def run_level(run, n, code, events, jobs, timeout, cache, only=None, stop_on_fai
         chosen = [i for i in range(len(lv["tests"])) if only is None or i in only]
         events.put(("tests", [{"id": i, "name": lv["tests"][i]["name"], "kind": lv["tests"][i]["kind"]}
                               for i in chosen]))
+        # reading questions first, without Lean
+        results = {}
+        graded = {i: grade_answer(lv, lv["tests"][i], code) for i in chosen if "answer" in lv["tests"][i]}
+        missing = [g for g in graded.values() if isinstance(g, str)]
+        if missing:
+            events.put(("compile", {"ok": False, "diagnostics": [], "problems": missing}))
+            return
+        for i, res in graded.items():
+            results[i] = res
+            events.put(("result", {"id": i, **res}))
+        rest = [i for i in chosen if i not in graded]
+        if not rest or (stop_on_fail and any(r["status"] == "fail" for r in graded.values())):
+            for i in rest:
+                events.put(("skipped", {"id": i}))
+            count = lambda s: sum(r["status"] == s for r in results.values())
+            events.put(("done", {"total": len(chosen), "passed": count("pass"), "failed": count("fail"),
+                                 "unknown": 0, "errors": 0, "stopped": bool(rest)}))
+            return
+        chosen = rest
         check = compile_check(run, lv, code, timeout)
         if check is None:
             events.put(("compile", {"ok": False, "diagnostics": [],
@@ -382,7 +444,6 @@ def run_level(run, n, code, events, jobs, timeout, cache, only=None, stop_on_fai
         if not check["ok"]:
             return
 
-        results = {}
         slots = threading.Semaphore(jobs)
 
         def one(i, t):
@@ -434,7 +495,7 @@ def run_level(run, n, code, events, jobs, timeout, cache, only=None, stop_on_fai
         if run.cancelled:
             return
         count = lambda s: sum(r["status"] == s for r in results.values())
-        events.put(("done", {"total": len(chosen), "passed": count("pass"), "failed": count("fail"),
+        events.put(("done", {"total": len(chosen) + len(graded), "passed": count("pass"), "failed": count("fail"),
                              "unknown": count("unknown"), "errors": count("error"),
                              "stopped": run.stopped}))
     except Exception as e:  # report instead of leaving the browser waiting

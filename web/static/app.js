@@ -312,6 +312,26 @@ function currentAnswer(q) {
   return v === "true" ? true : v === "false" ? false : null;
 }
 
+/* Reading questions are graded here, without Lean: the level carries each key as a hash
+   (answer_hash in web/server.py), and the player's answer is hashed the same way. */
+function answerHash(answer, value) {
+  let h = 0x811c9dc5;
+  for (const b of new TextEncoder().encode(`${level.namespace}.${answer}=${value}`))
+    h = Math.imul(h ^ b, 0x01000193) >>> 0;
+  return h.toString(16).padStart(8, "0");
+}
+
+/* The local verdict of a question's test: a result, or a problem (a string) when unanswered. */
+function gradeQuestion(q) {
+  if (!answerLine(q.answer).exec(src.value))
+    return `The line \`def ${q.answer} …\` is missing from your code: press Reset to get it back.`;
+  const a = currentAnswer(q);
+  if (a === null) return `Question \`${q.answer}\` has no answer yet: pick one of the choices.`;
+  return answerHash(q.answer, String(a)) === q.key
+    ? { status: "pass", detail: "", seconds: 0 }
+    : { status: "fail", detail: "This is not the right answer. Read the question and the lesson again.", seconds: 0 };
+}
+
 function renderQuestions() {
   const qs = level.questions || [];
   if (!qs.length) return;
@@ -829,8 +849,9 @@ async function runTests(ids = null) {
   ticker = setInterval(() => tests.some((t) => t.state === "running") && renderTests(), 1000);
   const handle = (event, data) => {
     if (event === "tests") {
-      run = data.map((t) => t.id);
-      for (const i of run) Object.assign(tests[i], { state: "queued", code, detail: "", cached: false });
+      const fresh = data.map((t) => t.id);      // after any questions graded locally
+      run = [...new Set([...run, ...fresh])];
+      for (const i of fresh) Object.assign(tests[i], { state: "queued", code, detail: "", cached: false });
       setSummary("", '<span class="spin"></span> Compiling your code…');
     } else if (event === "compile") {
       showCompile(data);
@@ -854,15 +875,39 @@ async function runTests(ids = null) {
     }
     renderTests();
   };
+  // reading questions: graded at once, without Lean; the rest goes to the referee
+  const byTest = new Map((level.questions || []).filter((q) => q.key).map((q) => [q.test, q]));
+  const wanted = ids ?? tests.map((t) => t.id);
+  const local = wanted.filter((i) => byTest.has(tests[i].name));
+  const rest = wanted.filter((i) => !byTest.has(tests[i].name));
+  const graded = local.map((i) => [i, gradeQuestion(byTest.get(tests[i].name))]);
+  const missing = graded.filter(([, g]) => typeof g === "string").map(([, g]) => g);
+  let remote = rest;
+  if (missing.length) {
+    handle("tests", local.map((id) => ({ id })));
+    handle("compile", { ok: false, diagnostics: [], problems: missing });
+    remote = [];
+  } else if (local.length) {
+    handle("tests", local.map((id) => ({ id })));
+    for (const [id, g] of graded) handle("result", { id, ...g });
+    const failed = graded.some(([, g]) => g.status === "fail");
+    if (ids === null && failed && rest.length) {
+      for (const id of rest) handle("skipped", { id });
+      outcome = "Stopped at the first failure: the remaining tests were not run.";
+      remote = [];
+    } else if (!rest.length) outcome = "";
+  }
   try {
-    if (ONLINE) {
+    if (!remote.length) {
+      /* nothing for Lean to do */
+    } else if (ONLINE) {
       const full = hosted.levels.find((l) => l.id === level.id);
-      await LiveRunner.run({ level: full, prelude: hosted.prelude, code, ids, stopOnFail: ids === null }, handle, ctl.signal);
+      await LiveRunner.run({ level: full, prelude: hosted.prelude, code, ids: remote, stopOnFail: ids === null }, handle, ctl.signal);
     } else {
       const res = await fetch(`/api/levels/${level.id}/run`, {
         method: "POST", signal: ctl.signal,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code, tests: ids, stopOnFail: ids === null }),
+        body: JSON.stringify({ code, tests: remote, stopOnFail: ids === null }),
       });
       const reader = res.body.pipeThrough(new TextDecoderStream()).getReader();
       let buf = "";

@@ -3,7 +3,6 @@
   "title": "Topological spaces",
   "skill": "writing definitions",
   "exercise": "Write",
-  "mil": "§11.3",
   "predict": [
     {"test": "The identity from Sierpiński space to the discrete space on {0, 1} is continuous",
      "statement": "The identity map from Sierpiński space to the discrete space on {0, 1} is continuous."},

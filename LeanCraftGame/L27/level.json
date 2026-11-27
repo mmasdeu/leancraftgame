@@ -3,7 +3,6 @@
   "title": "Spot the bug: counting",
   "skill": "reading",
   "exercise": "Refute",
-  "mil": "§6.1–6.3",
   "public": "all",
   "predict": [
     {"test": "the colleague's triangle is right at 0", "statement": "The colleague's `triangle 0` is the right value, 0"}

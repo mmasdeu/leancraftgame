@@ -3,7 +3,6 @@
   "title": "Divisibility and primes",
   "skill": "library",
   "exercise": "Write",
-  "mil": "§5.1",
   "public": ["11 and 13 are twin primes", "(3, 4, 5) is a primitive triple", "lcm' 4 6 = 12"],
   "predict": [
     {"test": "lcm' 0 0 = 0", "statement": "With `lcm' a b := a * b / Nat.gcd a b`, `lcm' 0 0 = 0` (and not an error)."},

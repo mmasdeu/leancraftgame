@@ -3,7 +3,6 @@
   "title": "Morphisms",
   "skill": "writing definitions",
   "exercise": "Write",
-  "mil": "§8.2",
   "predict": [
     {"test": "The constant map 0 is a homomorphism of (ℕ, *)", "statement": "The constant map `n ↦ 0` is a homomorphism of the monoid (ℕ, *, 1)."},
     {"test": "n ↦ n² is a homomorphism of (ℕ, *)", "statement": "`n ↦ n²` is a homomorphism of the monoid (ℕ, *, 1)."}

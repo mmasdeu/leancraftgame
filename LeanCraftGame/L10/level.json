@@ -3,7 +3,6 @@
   "title": "¬ and the order of quantifiers",
   "skill": "writing definitions",
   "exercise": "Write",
-  "mil": "§3.3",
   "predict": [
     {"test": "the sequence 0, 1, 2, 3, … is bounded", "statement": "Written as `∀ n, ∃ M, u n ≤ M`, the sequence `u n = n` is \"bounded\"."}
   ],
