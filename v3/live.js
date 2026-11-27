@@ -10,8 +10,14 @@
    tests, compile, start, result, skipped, done, fatal. */
 
 const LiveRunner = (() => {
-  const PROJECT = "MathlibDemo";                      // the Playground's project with Mathlib
-  const SOCKET = `wss://live.lean-lang.org/websocket/${PROJECT}`;
+  /* The Lean server: the Lean Playground by default, or the lean4web server and project named in
+     config.js (`liveServer`, `liveProject`), such as a local one for development (DEVELOPMENT.md). */
+  const CFG = (typeof window !== "undefined" && window.LEANCRAFT) || {};
+  const SERVER = (CFG.liveServer || "wss://live.lean-lang.org").replace(/\/+$/, "");
+  const HOST = new URL(SERVER.replace(/^ws/, "http")).host;
+  const SERVER_NAME = CFG.liveServer ? `The Lean server (${HOST})` : "The Lean Playground (live.lean-lang.org)";
+  const PROJECT = CFG.liveProject || "MathlibDemo";   // the server's project with Mathlib
+  const SOCKET = `${SERVER}/websocket/${PROJECT}`;
   const ROOT = `file:///${PROJECT}`;                  // the server wants a document inside the project
   const URI = `${ROOT}/LeanCraftGame.lean`;
   const ICONS = { "✅": "pass", "❌": "fail", "❓": "unknown" };
@@ -115,7 +121,7 @@ const LiveRunner = (() => {
      reachable, whatever it thinks of this site. The timeline is shown with the error, logged
      to the console, and added to "Report a problem" (`LiveRunner.lastDiagnostic`). */
 
-  const PROBE = "https://live.lean-lang.org/";
+  const PROBE = SERVER.replace(/^ws/, "http") + "/";
   const PROBE_TIMEOUT = 10000;
   let lastDiagnostic = null;
 
@@ -141,14 +147,15 @@ const LiveRunner = (() => {
     const message =
       !navigator.onLine ? "Your browser is offline, so the Lean Playground cannot check your code."
       : stage === "connect" && reach === true
-        ? `The Lean Playground (live.lean-lang.org) is up, but refused the connection from this page. ` +
+        ? `${SERVER_NAME} is up, but refused the connection from this page. ` +
           `It may be refusing this site (${site}), or limiting connections; try again in a few minutes. ` +
           `If it keeps happening, please use "Report a problem".`
       : stage === "connect" && reach === false
-        ? "The Lean Playground (live.lean-lang.org) cannot be reached from here: it may be down, " +
+        ? `${SERVER_NAME} cannot be reached from here`
+          + ": it may be down, " +
           "or blocked by your network (a firewall, a proxy, a browser extension)."
       : stage === "connect"
-        ? "The Lean Playground (live.lean-lang.org) is not answering. It may be down or overloaded; try again in a minute."
+        ? `${SERVER_NAME} is not answering.` + " It may be down or overloaded; try again in a minute."
       : stage === "start"
         ? "Connected to the Lean Playground, but Lean did not start in time. The Playground is probably busy; try again in a minute."
         : "Connected to the Lean Playground, but it closed the connection before Lean started. " +
