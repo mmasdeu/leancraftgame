@@ -212,7 +212,7 @@ def validate_level(lv):
     # {"answer": name of a `def` in the template, "text": the question, "choices": [...]}
     # (with `choices`, the answer is a `Fin k`, the index of the choice; without, a `Bool`)
     for q in lv.get("questions", []):
-        if not {"answer", "text"} <= set(q) or set(q) - {"answer", "text", "choices"}:
+        if not {"answer", "text"} <= set(q) or set(q) - {"answer", "text", "choices", "test", "key"}:
             out.append(f"question {q} needs `answer` and `text`, and optionally `choices`")
             continue
         ty = f"Fin {len(q['choices'])}" if "choices" in q else "Bool"
