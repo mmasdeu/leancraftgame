@@ -423,6 +423,8 @@ def run_level(run, n, code, events, jobs, timeout, cache, only=None, stop_on_fai
         if missing:
             events.put(("compile", {"ok": False, "diagnostics": [], "problems": missing}))
             return
+        if graded and not [i for i in chosen if i not in graded]:
+            events.put(("compile", {"ok": True, "diagnostics": [], "problems": []}))
         for i, res in graded.items():
             results[i] = res
             events.put(("result", {"id": i, **res}))
