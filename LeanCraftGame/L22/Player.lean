@@ -17,7 +17,7 @@ def fac : ℕ → ℕ
 There is no `:=`: each line `| pattern => value` covers one shape of the argument. A
 natural number is either `0` or `n + 1` for some `n`, so these two lines cover
 everything, and `fac (n + 1)` may call `fac n`. The `0` line is the one to think about:
-every value is built from it, and `fac 0 = 0` would make every `fac n` zero. Patterns can
+every other value is built from it. Patterns can
 go deeper:
 
 ```lean
