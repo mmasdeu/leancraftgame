@@ -11,7 +11,7 @@
   "hints": [
     {"match": "seqA converges", "hint": "Any convergent sequence will do, such as the constant `fun _ ↦ 0` with limit `0`."},
     {"match": "ConvergesA rejects", "steps": ["What does `ConvergesA` ask for when `ε = 0`?"], "hint": "With `ε = 0` it needs `|u n - a| < 0`, which never holds: `ConvergesA` rejects *every* sequence."},
-    {"match": "seqB does not", "hint": "Take a sequence that keeps coming back to 0 but also keeps leaving, such as `blink` from level 12: `fun n ↦ if n % 2 = 0 then 0 else 1`, limit `0`."},
+    {"match": "seqB does not", "hint": "Try `blink` from level 12, which keeps returning to 0 and leaving again: `fun n ↦ if n % 2 = 0 then 0 else 1`, limit `0`."},
     {"match": "ConvergesB accepts", "hint": "`ConvergesB` only needs one close term for each `ε`. `0, 1, 0, 1, …` has many terms equal to `0`."},
     {"match": "no term of seqC", "hint": "Every term must be `≤ 0`: a constant such as `fun _ ↦ -1`."},
     {"match": "SomePositive accepts", "steps": ["Which `n` makes the implication `n > 0 → u n > 0` true for free?"], "hint": "`n = 0`: the hypothesis `0 > 0` is false, so the implication holds, whatever `u` is."},

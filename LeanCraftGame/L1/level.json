@@ -57,7 +57,7 @@
   "checks": [
     {
       "lean": "#check (L1.q1 : Fin 4)\n#check (L1.q2 : Fin 4)\n#check (L1.q3 : Fin 4)\n#check (L1.q4 : Bool)\n#check (L1.q5 : Fin 3)\n#check (L1.q6 : Bool)",
-      "message": "Keep the six answer lines as they are, and only change the value after `:=`."
+      "message": "Keep the six answer lines. Only change the value after `:=`."
     }
   ],
   "hints": [
@@ -78,7 +78,7 @@
     },
     {
       "match": "Question 4",
-      "hint": "Look at the proof of `am_le_max`: `sorry` is a placeholder, not a proof."
+      "hint": "The proof of `am_le_max` is `sorry`, a placeholder."
     },
     {
       "match": "Question 5",

@@ -1,9 +1,8 @@
 /-
 # Your first definitions
 
-*Noor's file defined `am`. The library also needs `square`, and both will state AM-GM in
-the next world. "Write them yourself," says Noor, "and mind the brackets. Sam's first `am`
-was `a + b / 2`."*
+*The library needs `am` and `square` to state AM-GM in the next world. "Write them
+yourself," says Noor, "and mind the brackets. Sam's first `am` was `a + b / 2`."*
 
 ## Functions
 
@@ -20,21 +19,19 @@ or write `=>`):
 def cube' : ℝ → ℝ := fun x ↦ x ^ 3
 ```
 
-`ℝ → ℝ` is the type of functions from reals to reals. A function of two arguments has type
-`ℝ → ℝ → ℝ`: it takes one real and returns a function that waits for the second.
+`ℝ → ℝ` is the type of functions from reals to reals. A function of two reals has type
+`ℝ → ℝ → ℝ`: it takes one real and returns a function waiting for the second.
 
 ## Applying a function
 
-You apply a function **without brackets**: `cube 2`, `max a b`. Brackets only group.
-`cube (cube 2)` is the cube of `cube 2`. `cube cube 2` is an error, since it applies
-`cube` to the function `cube`. And `cube 2 + 1` is `(cube 2) + 1`, because application
-binds tighter than any operator.
+You apply a function **without brackets**: `cube 2`, `max a b`. Brackets only group:
+`cube (cube 2)` works, while `cube cube 2` is an error (it applies `cube` to the function
+`cube`). Application binds tighter than any operator, so `cube 2 + 1` is `(cube 2) + 1`.
 
 ## The type of a number
 
-A numeral like `2` takes whatever type the context asks for. In `cube` above, everything is
-real. When the context says nothing, the number is in `ℕ`, where division rounds down:
-`7 / 2 = 3`. To get a real, write `(7 : ℝ) / 2`, which is `3.5`.
+A numeral like `2` takes the type the context asks for. With no context it's in `ℕ`,
+where division rounds down: `7 / 2 = 3`. For a real, write `(7 : ℝ) / 2`, which is `3.5`.
 
 ## Your task
 

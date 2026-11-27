@@ -31,7 +31,7 @@
       "steps": [
         "Which is computed first in `a + b / 2`: the sum or the division?"
       ],
-      "hint": "`(a + b) / 2`: the brackets make the sum happen before the division."
+      "hint": "`(a + b) / 2`. The brackets make the sum come first."
     },
     {
       "match": "double",
@@ -39,7 +39,7 @@
     },
     {
       "match": "twelve",
-      "hint": "`double (double 3)`: the brackets say which application happens first."
+      "hint": "`double (double 3)`. The brackets say which application comes first."
     },
     {
       "match": "halfNat",

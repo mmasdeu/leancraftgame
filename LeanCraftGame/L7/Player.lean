@@ -14,13 +14,13 @@ statement sq_le_sq_of_le (a b : ℝ) (hab : a ≤ b) : a ^ 2 ≤ b ^ 2
 statement div_mul_cancel_bad (x y : ℝ) : x / y * y = x
 ```
 
-One **counterexample** refutes a false statement about all numbers: values that satisfy
-every hypothesis and break the conclusion. The usual suspects:
+One **counterexample** refutes a statement about all numbers: values that satisfy every
+hypothesis and break the conclusion. Usual suspects:
 
 * truncated subtraction: in `ℕ`, `a - b = 0` when `a ≤ b`;
 * a missing hypothesis, here a sign condition;
-* junk values: Mathlib sets `x / 0 = 0` for every `x`, so that division works on all of
-  `ℝ`. That's why theorems about division carry a hypothesis `y ≠ 0`.
+* junk values: Mathlib sets `x / 0 = 0`, so division works on all of `ℝ`. Theorems about
+  division need a hypothesis `y ≠ 0`.
 
 ## Part A: counterexamples
 

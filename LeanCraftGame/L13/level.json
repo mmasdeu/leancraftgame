@@ -19,19 +19,19 @@
   "hints": [
     {
       "match": "good₁ converges",
-      "hint": "`good₁` is labelled as converging to 0, but it does not. Every label must be honest."
+      "hint": "`good₁` is labelled as converging to 0, but it doesn't."
     },
     {
       "match": "good₂ converges",
-      "hint": "`good₂` is labelled as converging to 0, but it does not. Every label must be honest."
+      "hint": "`good₂` is labelled as converging to 0, but it doesn't."
     },
     {
       "match": "bad₁ does not",
-      "hint": "`bad₁` is labelled as not converging to 0, but it does. Every label must be honest."
+      "hint": "`bad₁` is labelled as not converging to 0, but it does."
     },
     {
       "match": "bad₂ does not",
-      "hint": "`bad₂` is labelled as not converging to 0, but it does. Every label must be honest."
+      "hint": "`bad₂` is labelled as not converging to 0, but it does."
     },
     {
       "match": "nonnegative, eventually below",

@@ -1,11 +1,8 @@
 /-
 # Generic statements
 
-*Noor reads your AM-GM statements and asks: "Why only `ℝ`? Half of these hold in every
-ring, or every ordered type." Mathlib states a theorem once, for every type where it makes
-sense, and it then serves `ℤ`, `ℚ`, `ℝ` and the rest.*
-
-In Mathlib it looks like this:
+*Noor reads your AM-GM statements: "Why only `ℝ`? Half of these hold in every ring, or
+every ordered type." Mathlib states a theorem once, for every type where it makes sense.*
 
 ```lean
 variable {R : Type*} [CommRing R]
@@ -18,8 +15,7 @@ theorem sub_mul_add (a b : R) : (a - b) * (a + b) = a ^ 2 - b ^ 2 := by ring
 * `[CommRing R]`: an instance argument, the assumption "`R` is a commutative ring". It
   makes `+`, `-`, `*`, `0`, `1` and `^` available on `R`, with their laws.
 
-The same statement then applies to `ℤ`, `ℚ`, `ℝ`, `ℤ/nℤ`, polynomials. Other common
-classes:
+The theorem then applies to `ℤ`, `ℚ`, `ℝ`, `ℤ/nℤ`, polynomials. Other common classes:
 
 | Class | Gives | Example |
 |---|---|---|
@@ -31,17 +27,16 @@ classes:
 
 ## Choosing the class
 
-Pick a class strong enough for the statement to make sense, and no stronger, or the theorem
-says less than it could. The `am` of level 2 divides by 2, so it needs a **field**. With
-`[CommRing K]` Lean finds no division on `K`, while
+Pick a class just strong enough for the statement to make sense. A stronger one makes the
+theorem say less. Level 2's `am` divides by 2, so it needs a **field**. With `[CommRing K]`
+Lean finds no division on `K`, while
 
 ```lean
 def am {K : Type*} [Field K] (a b : K) : K := (a + b) / 2
 ```
 
-works for `ℚ` and `ℝ` alike. Likewise, `max a b` only exists in a linear order. With
-`[PartialOrder α]` a statement about `max` doesn't even typecheck (Lean can't find
-`Max α`). With `[LinearOrder α]` it does.
+works for `ℚ` and `ℝ`. Likewise, `max a b` needs a linear order. With `[PartialOrder α]`
+a statement about `max` doesn't typecheck (Lean can't find `Max α`).
 
 In this game, write the type and the class inside each statement:
 `statement foo {R : Type*} [CommRing R] (a b : R) : …`. (A `variable` line would turn the

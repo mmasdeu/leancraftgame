@@ -1,50 +1,42 @@
 /-
 # Be the referee
 
-*Everyone at the Annex writes convergence from memory, and not everyone gets it right.
-Noor's question for you: are the referee's tests good enough to catch them? So far the
-referee tested *your* definitions. Now you write the tests, and the referee tries to
-slip wrong definitions past them.*
+*Everyone at the Annex writes convergence from memory, and not always right. Would the
+referee's tests catch them? This time you write the tests, and the referee tries to slip
+wrong definitions past them.*
 
-Here is the right definition, for limit `0`:
+The right definition, for limit `0`:
 
 ```lean
 def ConvergesTo0 (s : ℕ → ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n| < ε
 ```
 
-Your test suite is four sequences:
+Your test suite is four sequences: two that converge to 0 (`good₁`, `good₂`) and two that
+don't (`bad₁`, `bad₂`).
 
-* two that **do** converge to 0 (`good₁`, `good₂`), and
-* two that do **not** (`bad₁`, `bad₂`).
-
-The referee first checks that your labels are honest. Then it brings out the
-**mutants**: hidden *wrong* definitions of convergence, of the kind people write from
-memory. A mutant is **caught** when it gets at least one of your sequences wrong: it
-rejects a `good` one, or accepts a `bad` one. A mutant that gets all four right
-**survives**: your tests cannot tell it apart from the right definition. This is
-*mutation testing*, and it is how the tests of this game were chosen.
+The referee first checks your labels. Then it brings out the **mutants**: hidden wrong
+definitions of convergence, the kind people write from memory. A mutant is caught when it
+rejects a `good` sequence or accepts a `bad` one. A mutant that gets all four right
+survives. This is *mutation testing*, and it's how this game's tests were chosen.
 
 ## Choosing good tests
 
-A suite of obvious examples (`fun _ ↦ 0` and `fun n ↦ n`) catches little. Each probe
-should sit **on the boundary** of the notion:
+Obvious examples like `fun _ ↦ 0` and `fun n ↦ n` catch little. Aim at the boundary:
 
-* a sequence that converges *despite* lacking a property people confuse with
-  convergence (it is not monotone; it is not always positive);
-* a sequence that does not converge *despite* having such a property (it comes close
-  to `0` again and again; it stays small; it stays below every `ε`, but on the wrong
-  side).
+* a sequence that converges even though it lacks a property people confuse with
+  convergence (it isn't monotone, or isn't always positive);
+* a sequence that doesn't converge even though it has such a property (it keeps coming
+  back near `0`, or stays small, or stays below every `ε` but on the wrong side).
 
-The referee proves things about sequences by computing, so use sequences that are
-**eventually constant** or that **alternate**, like Sam's `late` and `blink` from
-level 12 (`fun n ↦ if n < 5 then 7 else 0` and `fun n ↦ if n % 2 = 0 then 0 else 1`),
-and small numbers (`1`, `2`, `1/2`, `-1`). Write them out in full: the template does
-not know `late` and `blink`.
+The referee computes, so use sequences that are eventually constant or alternate, like Sam's `late` and `blink` from level 12
+(`fun n ↦ if n < 5 then 7 else 0` and `fun n ↦ if n % 2 = 0 then 0 else 1`), with small
+numbers (`1`, `2`, `1/2`, `-1`). Write them out in full: the template doesn't know `late`
+and `blink`.
 
 ## Your task
 
 Fill in the four sequences so that every mutant is caught. The report says how many
-mutants there are; a mutant that survives is revealed, with its definition.
+mutants there are, and shows the definition of any mutant that survives.
 -/
 namespace L13
 
@@ -54,7 +46,7 @@ def ConvergesTo0 (s : ℕ → ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |s 
 def good₁ : ℕ → ℝ := sorry
 def good₂ : ℕ → ℝ := sorry
 
--- two sequences that do not
+-- two sequences that don't
 def bad₁ : ℕ → ℝ := sorry
 def bad₂ : ℕ → ℝ := sorry
 

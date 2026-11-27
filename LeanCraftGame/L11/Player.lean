@@ -1,28 +1,25 @@
 /-
 # ∧, ∨ and ↔
 
-*Noor wants three characterisations from Mathlib restated for the project, as warm-up,
-and one new definition: "`f` has a zero in `[a, b]`". Sam's draft of that one holds
-for every function, zeros or not. The connectives explain why.*
+*Noor wants three Mathlib characterisations restated as a warm-up, and one new
+definition: "`f` has a zero in `[a, b]`". Sam's draft of it holds for every function.*
 
 * `P ∧ Q`: both. For example, `x < y` is the same as `x ≤ y ∧ x ≠ y`.
 * `P ∨ Q`: at least one. For example, `x ≤ |y|` holds exactly when `x ≤ y ∨ x ≤ -y`.
-* `P ↔ Q`: `P` and `Q` say the same thing; Mathlib states characterisations this way,
-  such as `abs_le : |a| ≤ b ↔ -b ≤ a ∧ a ≤ b`. With it, the bound
-  `FnUb (fun x ↦ |f x|) a` of level 8 unpacks into `∀ x, -a ≤ f x ∧ f x ≤ a`: an upper
-  bound and a lower bound at once.
+* `P ↔ Q`: `P` and `Q` say the same thing, as in `abs_le : |a| ≤ b ↔ -b ≤ a ∧ a ≤ b`.
+  With it, level 8's `FnUb (fun x ↦ |f x|) a` unpacks into `∀ x, -a ≤ f x ∧ f x ≤ a`.
 
 ## Precedence
 
-From tightest to loosest: `¬`, then `∧`, then `∨`, then `→` and `↔`. So
-`P ∧ Q → R` is `(P ∧ Q) → R`, and `¬ P ∨ Q` is `(¬ P) ∨ Q`.
+From tightest to loosest: `¬`, then `∧`, then `∨`, then `→` and `↔`. So `P ∧ Q → R` is
+`(P ∧ Q) → R`, and `¬ P ∨ Q` is `(¬ P) ∨ Q`.
 
 ## The trap: `→` under `∃`
 
-"`f` has a zero in `[a, b]`" is `∃ x, a ≤ x ∧ x ≤ b ∧ f x = 0`: one `x` that satisfies
-all three. Sam wrote `∃ x, a ≤ x ∧ x ≤ b → f x = 0`, which is a different
-statement: it is true as soon as some `x` lies *outside* `[a, b]`, because an implication
-with a false hypothesis is true. Under `∀`, use `→`; under `∃`, use `∧`.
+"`f` has a zero in `[a, b]`" is `∃ x, a ≤ x ∧ x ≤ b ∧ f x = 0`: one `x` that meets all
+three conditions. Sam wrote `∃ x, a ≤ x ∧ x ≤ b → f x = 0`, which holds as soon as some
+`x` lies outside `[a, b]`: an implication with a false hypothesis is true. Under `∀`, use
+`→`. Under `∃`, use `∧`.
 
 ## Your task
 

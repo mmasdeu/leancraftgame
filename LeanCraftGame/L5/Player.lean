@@ -1,22 +1,20 @@
 /-
 # Stating theorems
 
-*Time to write for the library. Noor's list starts with AM-GM. With `square` and `am` from
-level 2 it reads `a * b ≤ square (am a b)`, and expanding the square gives
-`2 * a * b ≤ a ^ 2 + b ^ 2`. The Prover will prove whatever you write, so the referee
-checks that you wrote what was asked.*
+*Noor's list starts with AM-GM: `a * b ≤ square (am a b)`, with level 2's `square` and
+`am`, or `2 * a * b ≤ a ^ 2 + b ^ 2` once expanded. The Prover proves whatever you write,
+so the referee checks you wrote what was asked.*
 
 ## The `statement` command
 
-A Mathlib theorem has a name, **binders** (variables and hypotheses, before the colon) and
-a **conclusion** (after the colon):
+A theorem has a name, **binders** (variables and hypotheses, before the colon) and a
+conclusion (after it):
 
 ```lean
 theorem add_pos {a b : ℝ} (ha : 0 < a) (hb : 0 < b) : 0 < a + b := …
 ```
 
-This game adds `statement`, a theorem without its proof. Here it is with `am` from level 2,
-restated so the file has it:
+This game adds `statement`, a theorem without its proof. With `am` from level 2:
 
 ```lean
 def am (a b : ℝ) : ℝ := (a + b) / 2
@@ -27,22 +25,20 @@ statement am_pos {a b : ℝ} (ha : 0 < a) (hb : 0 < b) : 0 < am a b
 It says: for all reals `a` and `b`, if `0 < a` and `0 < b`, then `0 < am a b`.
 
 * `(a b : ℝ)`: explicit variables. A user supplies them: `am_pos 2 3 …`.
-* `{a b : ℝ}`: implicit variables. Lean works them out from the hypotheses, so a user
-  writes `am_pos h₁ h₂`. Logically, `( )` and `{ }` both mean "for all".
-* `(ha : 0 < a)`: a **hypothesis**, named `ha` so a proof can refer to it. The statement
-  says "*if* `0 < a` then …".
-* After the last colon: the conclusion.
+* `{a b : ℝ}`: implicit variables. Lean infers them from the hypotheses, so a user writes
+  `am_pos h₁ h₂`. Logically, both mean "for all".
+* `(ha : 0 < a)`: a hypothesis, named `ha` so a proof can use it. It means "*if* `0 < a`".
 
-So `statement foo (x : ℝ) (h : 0 ≤ x) : P x` is the proposition `∀ x : ℝ, 0 ≤ x → P x`.
-You could also write it that way: `statement foo : ∀ x : ℝ, 0 ≤ x → P x`.
+So `statement foo (x : ℝ) (h : 0 ≤ x) : P x` is the same as
+`statement foo : ∀ x : ℝ, 0 ≤ x → P x`.
 
 ## How the referee reads your statement
 
-The referee compares your statement with the intended one: same variables, same
-hypotheses, same conclusion, same order. It allows harmless differences (variable names,
-`b ≥ a` for `a ≤ b`, `a * b` for `b * a`, the sides of an `=` swapped). If your statement
-is false, it shows a counterexample. No proof can tell two true statements apart, so a
-statement that is true but different gets ❓, not ✅.
+The referee compares your statement with the intended one: same variables, hypotheses
+and conclusion, in the same order. Harmless differences are fine (variable names, `b ≥ a`
+for `a ≤ b`, `a * b` for `b * a`, the sides of an `=` swapped). A false statement gets a
+counterexample. A proof can't tell two true statements apart, so a true but different
+statement gets ❓, not ✅.
 
 ## Your task
 

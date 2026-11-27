@@ -1,18 +1,17 @@
 /-
 # How Lean parses
 
-*A new project. Noor wants AM-GM and its friends stated for the library, from
-`2 * a * b ≤ a ^ 2 + b ^ 2` to facts about `min` and `max`. First, everyone has to agree
-on where Lean puts the brackets nobody writes, because the Prover reads every formula
-exactly as Lean parses it.*
+*A new project: Noor wants AM-GM and its friends stated for the library, from
+`2 * a * b ≤ a ^ 2 + b ^ 2` to facts about `min` and `max`. First, learn where Lean puts
+the brackets nobody writes. The Prover reads every formula exactly that way.*
 
 ## Precedence
 
 From tightest to loosest:
 
 1. Function application, `f x`. So `f x + 1` is `(f x) + 1`, and `f x ^ 2` is
-   `(f x) ^ 2`. To apply `f` to `x + 1`, write `f (x + 1)`. With `square` and `am` from
-   level 2, `square am a b` is an error. The square of the mean is `square (am a b)`.
+   `(f x) ^ 2`. Write `f (x + 1)` to apply `f` to `x + 1`. With level 2's `square` and
+   `am`, `square am a b` is an error. You want `square (am a b)`.
 2. `^` (power).
 3. `-x` (negation). It is weaker than `^`, so `-x ^ 2` is `-(x ^ 2)`, as on paper.
 4. `*` and `/`.
@@ -27,15 +26,14 @@ From tightest to loosest:
 
 ## Subtraction in ℕ
 
-`ℕ` has no negative numbers, so subtraction stops at zero: `3 - 5 = 0`. This **truncated
-subtraction** is the most common source of false statements about `ℕ`. With left
+`ℕ` has no negatives, so subtraction stops at zero: `3 - 5 = 0`. This **truncated
+subtraction** causes more false statements about `ℕ` than anything else. With left
 grouping, `3 - 5 + 4` is `(3 - 5) + 4 = 0 + 4`.
 
 ## Your task
 
-Answer the questions below the lesson. Numbers with no type are natural numbers unless the
-question says otherwise. You can check an answer with, say, `#eval 2 ^ 3 ^ 2`, but try to
-predict it first.
+Answer the questions below. Numbers with no type are natural numbers unless the question
+says otherwise. Predict first, then check with, say, `#eval 2 ^ 3 ^ 2`.
 -/
 namespace L3
 

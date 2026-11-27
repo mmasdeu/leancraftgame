@@ -1,34 +1,31 @@
 /-
 # ∃
 
-*`FnUb f a` from level 8 names one particular bound; most of the time Noor only cares
-that **some** bound exists. Meanwhile Sam has written "`f` takes both signs" with a
-single `∃`, a statement that no function satisfies.*
+*`FnUb f a` from level 8 names one bound. Usually Noor only cares that some bound exists.
+Meanwhile Sam wrote "`f` takes both signs" with a single `∃`, and no function satisfies it.*
 
-With the `FnUb` of level 8 (given in the template), "`f` has an upper bound" reads:
+With `FnUb` (given in the template), "`f` has an upper bound" reads:
 
 ```lean
 def FnHasUb (f : ℝ → ℝ) : Prop :=
   ∃ a, FnUb f a
 ```
 
-"there is an `a` such that `a` is an upper bound of `f`". To show an `∃` statement you
-give a **witness**: for `fun x ↦ min x 3`, the witness `3` works, and so does `100`.
+"There is an `a` that is an upper bound of `f`." To show an `∃` statement, you give a
+**witness**. For `fun x ↦ min x 3`, the witness `3` works, and so does `100`.
 
 ## The scope of ∃
 
-`∃ x, P x ∧ Q x` says that **one** `x` satisfies both `P` and `Q`.
-`(∃ x, P x) ∧ (∃ x, Q x)` says that some `x` satisfies `P` and some, possibly
-different, `x` satisfies `Q`. The brackets decide. "`f` takes a positive value and a
-negative value" is the second kind: no single `x` can make `f x` both positive and
-negative.
+`∃ x, P x ∧ Q x` says one `x` satisfies both `P` and `Q`. `(∃ x, P x) ∧ (∃ x, Q x)` says
+some `x` satisfies `P` and some `x`, maybe another, satisfies `Q`. "`f` takes a positive
+value and a negative value" is the second kind: no single `f x` is both.
 
-The scope of `∃` (and `∀`) extends **as far right as possible**: in
-`∃ x, P x ∧ Q x`, both `P` and `Q` are under the quantifier.
+The scope of `∃` (and `∀`) reaches as far right as possible, so in `∃ x, P x ∧ Q x` both
+`P` and `Q` are under it.
 
 ## Your task
 
-`FnUb` is given, as you wrote it in level 8. Write:
+Write:
 
 * `FnHasUb f`: `f` has an upper bound; `FnHasLb f`: `f` has a lower bound;
 * `bound`: an upper bound of `fun x ↦ min x 3` (a witness);

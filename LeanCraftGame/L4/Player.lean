@@ -2,10 +2,9 @@
 # Anatomy of a theorem
 
 *Much of the AM-GM project is already in Mathlib, and Noor wants nothing stated twice. So
-you read first: what does a Mathlib theorem promise, and what does it ask for? The Prover
-never applies one without every hypothesis.*
+you read first: what does a Mathlib theorem promise, and what does it ask for?*
 
-To use a theorem, read its signature as `#check` prints it. Here are four from Mathlib:
+To use a theorem, read its signature as `#check` prints it. Four from Mathlib:
 
 ```lean
 mul_le_mul {α : Type u_1} [Mul α] [Zero α] [Preorder α] {a b c d : α}
@@ -31,14 +30,14 @@ le_div_iff₀ {G₀ : Type u_3} [GroupWithZero G₀] [PartialOrder G₀] [MulPos
 * `[ ]` **instance** arguments. Facts about the type that Lean finds in its library.
   `[CommSemiring α]` says `α` has `+` and `*` with the usual laws, as `ℕ`, `ℤ`, `ℚ`, `ℝ`
   do. Odd names like `PosMulMono` (multiplying by a nonnegative number is monotone) are
-  the exact conditions the proof needs. For `ℝ` they all hold.
+  conditions the proof needs. All hold for `ℝ`.
 
 ## Hypotheses and conclusion
 
-Explicit arguments named `h…` are **hypotheses**. To use the theorem you supply a proof of
-each. The type after the last colon is the **conclusion**, what you get. So
-`pow_le_pow_left₀` gives `a ^ n ≤ b ^ n` from `a ≤ b` only when `0 ≤ a`. Drop that
-hypothesis and the statement is false: `-2 ≤ 1`, but `4 > 1`.
+Explicit arguments named `h…` are **hypotheses**: you supply a proof of each. The type
+after the last colon is the **conclusion**, what you get. So `pow_le_pow_left₀` gives
+`a ^ n ≤ b ^ n` from `a ≤ b` only when `0 ≤ a`. Without that, it's false: `-2 ≤ 1`, but
+`4 > 1`.
 
 An `↔` conclusion, as in `le_div_iff₀`, works in both directions.
 

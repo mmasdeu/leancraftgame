@@ -17,7 +17,7 @@
   ],
   "checks": [
     {"lean": "#check (L3.q1 : Fin 2)\n#check (L3.q2 : Fin 2)\n#check (L3.q3 : Fin 2)\n#check (L3.q4 : Fin 4)\n#check (L3.q5 : Fin 2)\n#check (L3.q6 : Fin 2)\n#check (L3.q7 : Fin 2)\n#check (L3.q8 : Fin 2)",
-     "message": "Keep the eight answer lines, and only change the value after `:=`."}
+     "message": "Keep the eight answer lines. Only change the value after `:=`."}
   ],
   "hints": [
     {"match": "Question 1", "hint": "`^` binds tighter than the minus sign: `-(3 ^ 2)`."},
