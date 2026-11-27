@@ -1,28 +1,25 @@
 /-
 # Infinitely many primes
 
-*"The AI proved the infinitude of primes!" The Prover's announcement is on every screen,
-and Lean accepts its proof. Noor's only question: does its **statement** say what the
-announcement claims? This level is your audit.*
+*"The AI proved the infinitude of primes!" Lean accepts the proof. Noor's question: does
+the **statement** say what the announcement claims? This level is your audit.*
 
-Euclid's theorem, in the form Mathlib states it:
+Euclid's theorem, as Mathlib states it:
 
 ```lean
 theorem Nat.exists_infinite_primes (n : ℕ) : ∃ p, n ≤ p ∧ Nat.Prime p
 ```
 
-"For every bound `n` there is a prime at least `n`": that is how "infinitely many" is
-said with quantifiers.
+For every bound `n` there's a prime at least `n`. That's "infinitely many" in quantifiers.
 
-## How to audit a formalisation
+## How to audit
 
-1. **Say the formal statement out loud**, quantifier by quantifier.
-2. **Check every definition on its borders**: `0`, `1`, `2`.
-3. **Test in toy worlds.** Replace the notion ("prime") by a made-up one where you know
-   the answer. A statement that holds in a world where there are *not* infinitely many
-   "primes" does not say "infinitely many".
+1. **Read the statement out loud**, quantifier by quantifier.
+2. **Check definitions at the borders**: `0`, `1`, `2`.
+3. **Try toy worlds.** Swap "prime" for a made-up notion where you know the answer. If the
+   statement holds with only finitely many "primes", it doesn't say "infinitely many".
 
-The Prover's statement is written for any notion of "prime" `P`, which makes step 3 easy:
+The Prover's statement works for any notion `P`, which makes step 3 easy:
 
 ```lean
 def IsPrime (p : ℕ) : Prop := ∀ d, d ∣ p → d = 1 ∨ d = p
@@ -30,12 +27,11 @@ def AIClaim (P : ℕ → Prop) : Prop := ∀ n, ∃ p, P p ∧ p ≠ n
 theorem ai_primes : AIClaim IsPrime := …     -- Lean accepts the proof
 ```
 
-Compare `IsPrime` with the `Nat.Prime` of level 20 at the borders.
+Compare `IsPrime` with `Nat.Prime` (level 20) at the borders.
 
 ## Strong recursion, read only
 
-Not every recursion is on `n` and `n + 1`, like the `fac` of level 22. This one calls
-itself on `n / 10`:
+Unlike `fac` (level 22), this recursion calls itself on `n / 10`, not `n - 1`:
 
 ```lean
 def digitSum (n : ℕ) : ℕ :=
@@ -44,16 +40,16 @@ termination_by n
 decreasing_by omega
 ```
 
-`termination_by n` names the quantity that decreases, and `decreasing_by` proves that it
-does (here `n / 10 < n` when `n ≥ 10`): Lean only accepts a recursion that stops.
+`termination_by n` names what goes down, and `decreasing_by` proves it does (`n / 10 < n`
+when `n ≥ 10`). Lean only accepts recursions that stop.
 
 ## Your task
 
-1. `Unbounded P`: the faithful "there are infinitely many numbers satisfying `P`".
-2. `smallWorld`: a toy notion of "prime", with only numbers between 2 and 100, in which
-   the Prover's claim holds but there are not infinitely many "primes".
-3. `fakePrime`: a number that the Prover's `IsPrime` accepts but `Nat.Prime` rejects.
-4. State Euclid as Mathlib does (`euclid`), and its variant for the primes `p` with
+1. `Unbounded P`: an honest "infinitely many numbers satisfy `P`".
+2. `smallWorld`: a toy "prime", using only numbers between 2 and 100, where the Prover's
+   claim holds but there are only finitely many "primes".
+3. `fakePrime`: a number the Prover's `IsPrime` accepts but `Nat.Prime` rejects.
+4. State Euclid as Mathlib does (`euclid`), and its variant for primes `p` with
    `p % 4 = 3` (`euclid_mod4`: for every `n` a prime `p ≥ n` with `p % 4 = 3`), in the
    order "bound, prime, remainder".
 5. Answer the two questions about `digitSum`.

@@ -47,16 +47,16 @@
   "hints": [
     {
       "match": "(1:ℝ)..0",
-      "hint": "The interval integral is oriented: from 1 down to 0 it is `-1/2`."
+      "hint": "The interval integral is oriented. From 1 down to 0 it's `-1/2`."
     },
     {
       "match": "I2",
-      "hint": "`∫ x in (0:ℝ)..1, x ^ 2`. Write the square as `x ^ 2`: the referee integrates powers `x ^ n`."
+      "hint": "`∫ x in (0:ℝ)..1, x ^ 2`. Write the square as `x ^ 2`, since the referee integrates powers `x ^ n`."
     },
     {
       "match": "vol",
       "steps": [
-        "The closed interval is `Set.Icc 0 2`. Did you say that its points are reals?"
+        "The closed interval is `Set.Icc 0 2`. Did you say its points are reals?"
       ],
       "hint": "`MeasureTheory.volume (Set.Icc (0:ℝ) 2)`."
     },
@@ -69,11 +69,11 @@
     },
     {
       "match": "Question 1",
-      "hint": "The integral is a total function, like `deriv` and `/`: what is its value on a function that is not integrable?"
+      "hint": "The integral is a total function, like `deriv` and `/`. What's its value on a function that isn't integrable?"
     },
     {
       "match": "Question 2",
-      "hint": "\"Almost every\": the exceptions form a set of measure zero."
+      "hint": "\"Almost every\" means the exceptions form a set of measure zero."
     },
     {
       "match": "Question 3",

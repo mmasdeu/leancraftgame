@@ -1,13 +1,12 @@
 /-
 # Set notation
 
-*A new project. Noor wants the library to state the Schröder–Bernstein theorem, which is
-written with sets and images. First the vocabulary: the even numbers, the primes and the
-multiples, as sets.*
+*A new project: Noor wants the library to state the Schröder–Bernstein theorem, which is
+about sets and images. First, some sets: the evens, the primes, the multiples.*
 
-In Mathlib, a set of elements of a type `α` has type `Set α`. It is just a property:
-`x ∈ s` is a proposition. You've met such properties already. `FnUb f a` from level 8 is
-one, and `{a | FnUb f a}` is the set of upper bounds of `f`.
+In Mathlib, a set of elements of `α` has type `Set α`. It's just a property: `x ∈ s` is a
+proposition. `FnUb f a` from level 8 is such a property, and `{a | FnUb f a}` is the set
+of upper bounds of `f`.
 
 ## Building sets
 
@@ -16,11 +15,11 @@ def evens' : Set ℕ := {n | Even n}          -- "the n such that n is even"
 example : 4 ∈ evens' := …                   -- membership is a Prop
 ```
 
-* `{x | P x}`: the set of `x` with property `P` (set-builder notation).
-* `x ∈ s` (`\in`) and `x ∉ s` (`\notin`): membership.
-* `s ⊆ t` (`\sub`): every element of `s` is in `t`, that is `∀ x, x ∈ s → x ∈ t`.
+* `{x | P x}`: the set of `x` with property `P`.
+* `x ∈ s` (`\in`), `x ∉ s` (`\notin`): membership.
+* `s ⊆ t` (`\sub`): `∀ x, x ∈ s → x ∈ t`.
 * `s ∩ t` (`\cap`), `s ∪ t` (`\cup`), `s \ t` (difference), `sᶜ` (`\compl`, the
-  complement): intersection, union, the elements of `s` not in `t`, everything not in `s`.
+  complement).
 * `∅` (`\empty`) and `Set.univ`: the empty set and the set of everything.
 * Intervals: `Set.Icc a b` is `{x | a ≤ x ∧ x ≤ b}`, `Set.Ici a` is `{x | a ≤ x}`.
 
@@ -34,22 +33,20 @@ A **family** of sets is a function `A : ι → Set α`, one set `A i` for each i
 ⋃₀ S          -- the union of all the sets in a set of sets S
 ```
 
-`⋃` is an `∃` and `⋂` is a `∀`. The index can range over a set:
-`⋃ k ∈ ({2, 3} : Set ℕ), A k` is `A 2 ∪ A 3`. For example, `⋃ i : ℕ, Set.Icc 0 i` is all
-of ℕ, since every `n` lies in `[0, n]`. And `⋂ i : ℕ, Set.Ici i` is empty, since no number
-is `≥ i` for every `i`.
+So `⋃` is an `∃` and `⋂` is a `∀`. The index can range over a set:
+`⋃ k ∈ ({2, 3} : Set ℕ), A k` is `A 2 ∪ A 3`. `⋃ i : ℕ, Set.Icc 0 i` is all of ℕ, since
+`n ∈ [0, n]`. `⋂ i : ℕ, Set.Ici i` is empty, since no number is `≥ i` for every `i`.
 
-## Reading set expressions
+## Precedence
 
-Like `+` and `*`, the operators have precedences. `ᶜ` binds tightest, then `∩`, then `∪`,
-then `∈` and `⊆`. When in doubt, write brackets. `s ∩ (t ∪ u)` reads "the elements of `s`
-that are in `t` or in `u`".
+`ᶜ` binds tightest, then `∩`, then `∪`, then `∈` and `⊆`. When in doubt, use brackets:
+`s ∩ (t ∪ u)` is "the elements of `s` that are in `t` or in `u`".
 
 ## Your task
 
-Answer the two questions, then fill in the sets. Use Mathlib's `Even` and `Nat.Prime`.
-Where a comment asks, build the set from the operations above, not a new property.
-Watch two things: `2` is prime, and in `k ∣ n` the order says who divides whom.
+Answer the two questions, then fill in the sets with Mathlib's `Even` and `Nat.Prime`.
+Where a comment asks, use set operations, not a new property. Careful: `2` is prime, and
+in `k ∣ n` the order says who divides whom.
 -/
 namespace L15
 

@@ -2,18 +2,18 @@
 # Endomorphisms
 
 *The quarter turn of level 39 sends no nonzero vector of the real plane to a multiple of
-itself. Over ℂ it does: its eigenvalues are `i` and `-i`, the `i` of the Gaussian
-integers. Noor wants the theorem behind this stated, with every hypothesis it needs, before
-the Prover is handed it.*
+itself. Over ℂ it does: its eigenvalues are `i` and `-i`, the `i` of the Gaussian integers.
+Noor wants the theorem behind this stated, with every hypothesis it needs, before the
+Prover gets it.*
 
-Linear maps from a space to itself are called **endomorphisms**:
+Linear maps from a space to itself are **endomorphisms**:
 
 ```lean
 abbrev Module.End (R : Type*) (M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] :=
   M →ₗ[R] M
 ```
 
-They can be composed (`f * g` is `f ∘ g`) and added, so `Module.End K V` is a ring.
+You can compose them (`f * g` is `f ∘ g`) and add them, so `Module.End K V` is a ring.
 Its vocabulary:
 
 ```lean
@@ -26,25 +26,25 @@ def Module.End.HasEigenvalue (f : End R M) (a : R) : Prop :=
 #check (minpoly K f : K[X])                          -- the minimal polynomial
 ```
 
-Read `HasEigenvector` carefully: `x ≠ 0` is part of the definition, since `f 0 = μ • 0`
-for every `μ`. And `HasEigenvalue f a` says the eigenspace is not the zero subspace `⊥`.
+Read `HasEigenvector` carefully. `x ≠ 0` is part of the definition, since `f 0 = μ • 0`
+for every `μ`. `HasEigenvalue f a` says the eigenspace isn't the zero subspace `⊥`.
 
 ## A theorem to state
 
 Mathlib proves that an endomorphism of a finite-dimensional complex vector space has an
 eigenvalue. Every hypothesis matters:
 
-* over `ℝ` the quarter turn of the plane has no eigenvalue (no line is mapped to itself);
-* on the zero space `{0}` there are no nonzero vectors, hence no eigenvectors: the space
-  must be `Nontrivial`, that is, have two different elements;
-* in infinite dimension there are counterexamples too.
+* Over `ℝ`, the quarter turn of the plane has no eigenvalue. No line maps to itself.
+* The zero space `{0}` has no nonzero vectors, so no eigenvectors. The space must be
+  `Nontrivial`, that is, have two different elements.
+* In infinite dimension there are counterexamples too.
 
-A type-class hypothesis is written in square brackets, like an instance argument of a
-Mathlib theorem: `[FiniteDimensional ℂ V] [Nontrivial V]`.
+Write a type-class hypothesis in square brackets, like an instance argument of a Mathlib
+theorem: `[FiniteDimensional ℂ V] [Nontrivial V]`.
 
 ## Matrices
 
-For a matrix, an eigenpair can be checked by hand: `A *ᵥ v = c • v` with `v ≠ 0`, where
+For a matrix, you can check an eigenpair by hand: `A *ᵥ v = c • v` with `v ≠ 0`, where
 `A *ᵥ v` is `A.mulVec v`.
 
 ## Your task

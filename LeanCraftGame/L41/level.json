@@ -21,10 +21,10 @@
     {"match": "Question 2", "hint": "`HasEigenvector f μ x` is `x ∈ eigenspace f μ ∧ x ≠ 0`."},
     {"match": "Question 3", "hint": "The minimal polynomial is a polynomial: `K[X]`."},
     {"match": "Question 4", "hint": "The quarter turn `(x, y) ↦ (-y, x)` of `ℝ²` sends no nonzero vector to a multiple of itself."},
-    {"match": "exists_eig", "steps": ["List the hypotheses: the type `V`, its additive group, the `ℂ`-module structure, finite dimension, nontriviality, then the endomorphism `f`.", "The conclusion is `∃ c : ℂ, f.HasEigenvalue c`."],
+    {"match": "exists_eig", "steps": ["In order: the type `V`, its additive group, the `ℂ`-module structure, finite dimension, nontriviality, then the endomorphism `f`.", "The conclusion is `∃ c : ℂ, f.HasEigenvalue c`."],
      "hint": "`statement exists_eig {V : Type} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V] [Nontrivial V] (f : Module.End ℂ V) : ∃ c : ℂ, f.HasEigenvalue c`."},
-    {"match": "ev₁ •", "steps": ["`A` is upper triangular: its eigenvalues are on the diagonal."], "hint": "`ev₁ = 2` with `vec₁ = ![1, 0]`."},
+    {"match": "ev₁ •", "steps": ["`A` is upper triangular, so its eigenvalues are on the diagonal."], "hint": "`ev₁ = 2` with `vec₁ = ![1, 0]`."},
     {"match": "ev₂ •", "steps": ["For `ev₂ = 3` solve `2x + y = 3x`, that is `y = x`."], "hint": "`ev₂ = 3` with `vec₂ = ![1, 1]`."},
-    {"match": "zero vector", "hint": "An eigenvector must not be `0`: `A *ᵥ 0 = c • 0` holds for every `c`, which says nothing."}
+    {"match": "zero vector", "hint": "An eigenvector can't be `0`. `A *ᵥ 0 = c • 0` holds for every `c`, so it tells you nothing."}
   ]
 }

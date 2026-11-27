@@ -12,14 +12,14 @@
      "message": "Keep the names and types: `junk : Set ℤ`, `x : ℤ`, `p q : ℤ[X]`, `a : ZMod 6`, `σ τ : Equiv.Perm (Fin 3)`."}
   ],
   "hints": [
-    {"match": "Claim 1", "steps": ["Which axiom does a subgroup have that a submonoid lacks? Which familiar subset of ℤ contains 0, is closed under +, and has no negatives?"],
-     "hint": "`{n | 0 ≤ n}`: the natural numbers inside ℤ. 1 is in it, -1 is not."},
-    {"match": "Claim 2", "hint": "Any even number that is not a multiple of 12, such as `2`."},
-    {"match": "Claim 3", "steps": ["Over ℤ the formula holds for nonzero polynomials. What is the degree of the zero polynomial in Mathlib?"],
-     "hint": "`p := 0` and `q := X`: `0 * X = 0` has degree 0, but `0 + 1 = 1`."},
+    {"match": "Claim 1", "steps": ["Which axiom does a subgroup have that a submonoid lacks? Which familiar subset of ℤ contains 0, is closed under + and has no negatives?"],
+     "hint": "`{n | 0 ≤ n}`, the natural numbers inside ℤ. 1 is in it, -1 isn't."},
+    {"match": "Claim 2", "hint": "Any even number that isn't a multiple of 12, such as `2`."},
+    {"match": "Claim 3", "steps": ["Over ℤ the formula holds for nonzero polynomials. What's the degree of the zero polynomial in Mathlib?"],
+     "hint": "`p := 0` and `q := X`. `0 * X = 0` has degree 0, but `0 + 1 = 1`."},
     {"match": "a is not 0", "hint": "Choose a nonzero element: 1, 2, 3, 4 or 5."},
     {"match": "no b has", "steps": ["If `a` and 6 have a common factor, can `a * b` be 1 modulo 6?"],
-     "hint": "`a := 2`: `2 * b` is always even modulo 6, never 1."},
+     "hint": "`a := 2`. `2 * b` is always even modulo 6, never 1."},
     {"match": "Claim 5", "hint": "Two different swaps: `σ := Equiv.swap 0 1`, `τ := Equiv.swap 1 2`."}
   ]
 }

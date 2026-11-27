@@ -19,14 +19,14 @@
      "message": "Keep `line : Set (Fin 2 → ℚ)`, the vectors `a b p : Fin 2 → ℚ`, and the three answer lines."}
   ],
   "hints": [
-    {"match": "on line", "steps": ["Which coordinate is `x`, which is `y`? `y = 2x` relates `v 1` and `v 0`."],
+    {"match": "on line", "steps": ["Which coordinate is `x` and which is `y`? `y = 2x` relates `v 1` and `v 0`."],
      "hint": "`{v | v 1 = 2 * v 0}`."},
-    {"match": "line contains", "hint": "A line through the origin contains `![0, 0]`: is there a `+ 1` in your equation?"},
-    {"match": "closed", "hint": "Use a linear equation: `{v | v 1 = 2 * v 0}`. Squares, products and constants break the closure properties."},
-    {"match": "axes", "steps": ["Take one vector on each axis."], "hint": "`a = ![1, 0]` and `b = ![0, 1]`: their sum `![1, 1]` is on neither axis."},
-    {"match": "parabola", "steps": ["Pick a point of the parabola other than `0`. Is its double on it?"], "hint": "`p = ![1, 1]`: then `![2, 2]` is not on the parabola, since `2 ≠ 2 ^ 2`."},
-    {"match": "Question 1", "hint": "The union of two lines is not a subspace; `⊔` is the smallest subspace containing both."},
-    {"match": "Question 2", "hint": "Every subspace contains `0`: the smallest one is `{0}`."},
+    {"match": "line contains", "hint": "A line through the origin contains `![0, 0]`. Is there a `+ 1` in your equation?"},
+    {"match": "closed", "hint": "Use a linear equation: `{v | v 1 = 2 * v 0}`. Squares, products and constants break closure."},
+    {"match": "axes", "steps": ["Take one vector on each axis."], "hint": "`a = ![1, 0]` and `b = ![0, 1]`. Their sum `![1, 1]` is on neither axis."},
+    {"match": "parabola", "steps": ["Pick a point of the parabola other than `0`. Is its double on it?"], "hint": "`p = ![1, 1]`. Then `![2, 2]` isn't on the parabola, since `2 ≠ 2 ^ 2`."},
+    {"match": "Question 1", "hint": "The union of two lines isn't a subspace. `⊔` is the smallest subspace containing both."},
+    {"match": "Question 2", "hint": "Every subspace contains `0`, so the smallest one is `{0}`."},
     {"match": "Question 3", "hint": "Does that line contain `![0, 0]`?"}
   ]
 }

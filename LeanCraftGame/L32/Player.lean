@@ -1,14 +1,14 @@
 /-
 # Classes and instances
 
-*A new project. Noor has noticed that the library defines powers four times: in `ℕ`, in
-`ℤ`, for the `GaussInt` of level 30, for permutations. "It is the same definition every
-time. Write it once, and let Lean find the structure." The tool for that is the
-**type class**, and this world builds a small copy of Mathlib's hierarchy of them.*
+*A new project. Noor notices the library defines powers four times: in `ℕ`, in `ℤ`, for
+the `GaussInt` of level 30, and for permutations. It's the same definition each time. Write
+it once and let Lean find the structure. This world builds a small copy of Mathlib's
+**type classes**.*
 
 ## Classes
 
-A class is a structure whose instances Lean will *search for* by itself:
+A class is a structure whose instances Lean searches for by itself:
 
 ```lean
 class One₁ (α : Type) where
@@ -22,14 +22,14 @@ infixl:70 " ⋄ " => Dia₁.dia
 class Monoid₁ (α : Type) extends Dia₁ α, One₁ α
 ```
 
-`One₁ α` says "`α` has a distinguished element", `Dia₁ α` "`α` has a binary operation",
-written `a ⋄ b` (type `\diamond`). `extends` builds a bigger class from smaller ones: a
-`Monoid₁ α` has both. (A real monoid class also has the axioms; they are left out
-here, and the tests check them on your examples.)
+`One₁ α` says `α` has a chosen element. `Dia₁ α` says `α` has a binary operation, written
+`a ⋄ b` (type `\diamond`). `extends` builds a bigger class from smaller ones, so a
+`Monoid₁ α` has both. A real monoid class would also have the axioms. They're left out
+here, and the tests check them on your examples.
 
 ## Instances
 
-An **instance** says that a particular type has the structure:
+An **instance** says that a given type has the structure:
 
 ```lean
 instance natMul : Monoid₁ ℕ where
@@ -51,9 +51,8 @@ instance gaussMul : Monoid₁ GaussInt where
 
 ## Using a class
 
-A definition can ask for "any type with a monoid structure" with an *instance argument*
-in square brackets, `[Monoid₁ α]`. Lean then finds the instance each time the definition
-is used:
+A definition can ask for any type with a monoid structure through an instance argument in
+square brackets, `[Monoid₁ α]`. Lean finds the instance each time you use the definition:
 
 ```lean
 def mpow {α : Type} [Monoid₁ α] (x : α) : ℕ → α
@@ -61,22 +60,21 @@ def mpow {α : Type} [Monoid₁ α] (x : α) : ℕ → α
   | n + 1 => mpow x n ⋄ x
 ```
 
-`mpow 2 10` finds `natMul` and gives `1024`; `mpow (⟨0, 1⟩ : GaussInt) 2` finds
-`gaussMul` and gives `⟨-1, 0⟩`, that is `i² = -1`, with no new definition of powers.
-This search is how Mathlib knows that `ℝ` is a field and `ℤ` a ring, and why one lemma
-about monoids applies to all of them. A type gets **one** instance of a class, so `ℕ`
-cannot be a `Monoid₁` both under `*` and under `+`; Mathlib has separate additive classes
-(`AddMonoid`) for that reason.
+`mpow 2 10` finds `natMul` and gives `1024`. `mpow (⟨0, 1⟩ : GaussInt) 2` finds `gaussMul`
+and gives `⟨-1, 0⟩`, that is `i² = -1`. No new definition of powers needed. This search is
+how Mathlib knows `ℝ` is a field and `ℤ` a ring, and why one lemma about monoids covers
+them all. A type gets one instance of a class, so `ℕ` can't be a `Monoid₁` under both `*`
+and `+`. That's why Mathlib has separate additive classes such as `AddMonoid`.
 
 ## Your task
 
 Write three instances. Powers then come for free:
 
-* `(Bool, xor, false)`: `xor a b` is "exactly one of `a`, `b`". Then `mpow true n` is the
-  parity of `n`.
+* `(Bool, xor, false)`: `xor a b` means exactly one of `a`, `b` is true. Then `mpow true n`
+  is the parity of `n`.
 * `(ℤ, +, 0)`: here `x ⋄ y` means `x + y`, so `mpow x n` is `n * x`.
-* `(ℕ → ℕ, ∘, id)`: `f ⋄ g` is the composition "first `g`, then `f`", as in `f ∘ g`.
-  Then `mpow f n` is `f` applied `n` times.
+* `(ℕ → ℕ, ∘, id)`: `f ⋄ g` is the composition "first `g`, then `f`", as in `f ∘ g`. Then
+  `mpow f n` is `f` applied `n` times.
 -/
 namespace L32
 

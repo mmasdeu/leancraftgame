@@ -14,11 +14,11 @@
   "hints": [
     {"match": "rot sends", "steps": ["Where does the quarter turn send the point `(x, y)`? Try `(1, 0)` and `(0, 1)`."],
      "hint": "`fun v => ![-v 1, v 0]`: `(x, y) ↦ (-y, x)`."},
-    {"match": "proj sends", "steps": ["Which coordinate survives, and what does the other one become?"],
+    {"match": "proj sends", "steps": ["Which coordinate stays, and what does the other become?"],
      "hint": "`fun v => ![v 0, 0]`."},
-    {"match": "additive", "hint": "A linear map is built from the coordinates by sums and constant multiples only: no `+ 1`, no products of coordinates."},
-    {"match": "scalars", "hint": "A linear map is built from the coordinates by sums and constant multiples only: no `+ 1`, no products of coordinates."},
+    {"match": "additive", "hint": "A linear map uses only sums and constant multiples of the coordinates. No `+ 1`, no products of coordinates."},
+    {"match": "scalars", "hint": "A linear map uses only sums and constant multiples of the coordinates. No `+ 1`, no products of coordinates."},
     {"match": "your u and w", "steps": ["Compute `shift (u + w)` and `shift u + shift w` for `u = w = 0`. How many times is `![1, 0]` added on each side?"],
-     "hint": "Any two vectors work, for instance `u = ![0, 0]` and `w = ![0, 0]`: one side adds `![1, 0]` once, the other twice."}
+     "hint": "Any two vectors work, for example `u = ![0, 0]` and `w = ![0, 0]`. One side adds `![1, 0]` once, the other twice."}
   ]
 }

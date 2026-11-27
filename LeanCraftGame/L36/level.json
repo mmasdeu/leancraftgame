@@ -10,17 +10,17 @@
   "public": ["3 • (4 : ZMod 12) = 0"],
   "checks": [
     {"lean": "#check (L36.lagrange : Prop)\n#check (L36.cauchy : Prop)\n#check (L36.ord4 : ℕ)\n#check (L36.σ : Equiv.Perm (Fin 3))\n#check (L36.τ : Equiv.Perm (Fin 3))",
-     "message": "Keep the names and the types: `lagrange` and `cauchy` are statements, `ord4 : ℕ`, `σ τ : Equiv.Perm (Fin 3)`."}
+     "message": "Keep the names and types: `lagrange` and `cauchy` are statements, `ord4 : ℕ`, `σ τ : Equiv.Perm (Fin 3)`."}
   ],
   "hints": [
     {"match": "lagrange", "hint": "`statement lagrange {G : Type*} [Group G] (H : Subgroup G) : Nat.card H ∣ Nat.card G` (the bar is `\\mid`)."},
-    {"match": "cauchy", "steps": ["The binders, in order: `{G : Type*}`, `[Group G]`, `[Fintype G]`, `(p : ℕ)`, then the hypotheses `(hp : p.Prime)` and `(hdvd : p ∣ Fintype.card G)`.", "The conclusion is an existence statement: `∃ x : G, orderOf x = p`."],
+    {"match": "cauchy", "steps": ["The binders, in order: `{G : Type*}`, `[Group G]`, `[Fintype G]`, `(p : ℕ)`, then the hypotheses `(hp : p.Prime)` and `(hdvd : p ∣ Fintype.card G)`.", "The conclusion says some element exists: `∃ x : G, orderOf x = p`."],
      "hint": "`statement cauchy {G : Type*} [Group G] [Fintype G] (p : ℕ) (hp : p.Prime) (hdvd : p ∣ Fintype.card G) : ∃ x : G, orderOf x = p`."},
     {"match": "ord4", "steps": ["List 4, 8, 12, … modulo 12. When do you first reach 0?"],
      "hint": "`4 + 4 + 4 = 12 = 0`, so `ord4 := 3`."},
-    {"match": "σ ^ 3", "steps": ["A permutation of order 3 moves all three points in a cycle 0 → 1 → 2 → 0."],
+    {"match": "σ ^ 3", "steps": ["An order-3 permutation moves all three points in a cycle 0 → 1 → 2 → 0."],
      "hint": "A product of two different swaps: `Equiv.swap 0 1 * Equiv.swap 1 2`."},
     {"match": "τ ^ 2", "hint": "A single swap has order 2: `Equiv.swap 0 1`."},
-    {"match": "not commutative", "hint": "With σ of order 3 and τ of order 2 this always holds: check σ and τ first."}
+    {"match": "not commutative", "hint": "This always holds when σ has order 3 and τ order 2. Check σ and τ first."}
   ]
 }

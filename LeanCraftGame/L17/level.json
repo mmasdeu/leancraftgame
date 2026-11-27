@@ -23,13 +23,13 @@
     {"match": "Inj (n + 1)", "steps": ["Which part of your definition is the hypothesis: equal inputs, or equal outputs?"],
      "hint": "`∀ a b, f a = f b → a = b`."},
     {"match": "Inj (n - 1)", "steps": ["What are `0 - 1` and `1 - 1` in ℕ?"],
-     "hint": "`0` and `1` have the same output. Your definition should notice it: `∀ a b, f a = f b → a = b`."},
+     "hint": "`0` and `1` have the same output. Your definition should catch that: `∀ a b, f a = f b → a = b`."},
     {"match": "Inj of a constant", "hint": "Did you write the converse, `a = b → f a = f b`? Every function satisfies it."},
     {"match": "Surj", "steps": ["\"Every output is hit\": which quantifier comes first, the one over outputs or over inputs?"],
      "hint": "`∀ b, ∃ a, f a = b`."},
     {"match": "pred'", "hint": "`fun n => n - 1`: then `pred' (n + 1) = n`."},
     {"match": "Question 1", "hint": "What should `invFun f y` be when no `x` has `f x = y`?"},
     {"match": "Question 2", "hint": "If `f` is constant, can any `g` satisfy `g (f x) = x` for all `x`?"},
-    {"match": "Question 3", "hint": "It is injectivity, restricted to the points of `s`."}
+    {"match": "Question 3", "hint": "It's injectivity, restricted to the points of `s`."}
   ]
 }

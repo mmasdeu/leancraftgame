@@ -6,7 +6,7 @@
   "public": "all",
   "hintsAfter": 1,
   "questions": [
-    {"answer": "q1", "text": "From an instance `Field ℝ`, Lean finds instances of three of these classes automatically. Which one does **not** follow?",
+    {"answer": "q1", "text": "From an instance `Field ℝ`, Lean finds three of these instances automatically. Which one does **not** follow?",
      "choices": ["`CommRing ℝ`", "`DivisionRing ℝ`", "`AddCommGroup ℝ`", "`LinearOrder ℝ`"]},
     {"answer": "q2", "text": "What does `#check (-3 : ℕ)` do?",
      "choices": ["prints `-3 : ℕ`", "prints `0 : ℕ`, since subtraction in ℕ stops at 0", "fails: `failed to synthesize Neg ℕ`", "prints `3 : ℕ`"]},
@@ -23,12 +23,12 @@
      "message": "Keep the seven answer lines as they are, and only change the value after `:=`."}
   ],
   "hints": [
-    {"match": "Question 1", "hint": "Order is a separate branch of the hierarchy: ℂ is a field without a linear order compatible with its operations."},
-    {"match": "Question 2", "hint": "Writing `-3` needs a `Neg ℕ` instance, and ℕ has none: the instance search fails."},
-    {"match": "Question 3", "steps": ["Is multiplication of 2 × 2 matrices commutative?"], "hint": "Matrix multiplication is not commutative, so there is no `CommMagma` instance on matrices."},
-    {"match": "Question 4", "hint": "Only the round-bracket arguments `(a b : G)` are written; `{G}` and `[inst]` are found by Lean."},
-    {"match": "Question 5", "hint": "`extends` gives the instance `CommRing.toRing`: every commutative ring is a ring."},
-    {"match": "Question 6", "hint": "`InnerProductSpace ℝ E`: vectors over ℝ with an inner product; `NormedAddCommGroup E`: vectors with addition and a norm."},
-    {"match": "Question 7", "hint": "In ℤ, 2 has no inverse: ℤ is a commutative ring, not a field."}
+    {"match": "Question 1", "hint": "Order is a separate branch of the hierarchy. ℂ is a field with no linear order that fits its operations."},
+    {"match": "Question 2", "hint": "Writing `-3` needs a `Neg ℕ` instance. ℕ has none, so the search fails."},
+    {"match": "Question 3", "steps": ["Is multiplication of 2 × 2 matrices commutative?"], "hint": "Matrix multiplication isn't commutative, so matrices have no `CommMagma` instance."},
+    {"match": "Question 4", "hint": "You write only the round-bracket arguments `(a b : G)`. Lean finds `{G}` and `[inst]`."},
+    {"match": "Question 5", "hint": "`extends` gives the instance `CommRing.toRing`. Every commutative ring is a ring."},
+    {"match": "Question 6", "hint": "`InnerProductSpace ℝ E` gives vectors over ℝ with an inner product. `NormedAddCommGroup E` gives addition and a norm."},
+    {"match": "Question 7", "hint": "In ℤ, 2 has no inverse. ℤ is a commutative ring, not a field."}
   ]
 }

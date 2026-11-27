@@ -14,9 +14,9 @@
      "message": "Keep the three instances `boolXor`, `intAdd` and `endo`, with their types."}
   ],
   "hints": [
-    {"match": "Bool", "steps": ["Which Boolean is the unit of xor: which `u` has `xor u a = a` for every `a`?"],
+    {"match": "Bool", "steps": ["Which Boolean is the unit of xor? Which `u` has `xor u a = a` for every `a`?"],
      "hint": "`dia a b := xor a b` and `one := false`."},
-    {"match": "(ℤ, +)", "steps": ["In this monoid the operation is addition. What is its unit?"],
+    {"match": "(ℤ, +)", "steps": ["Here the operation is addition. What's its unit?"],
      "hint": "`dia a b := a + b` and `one := 0`."},
     {"match": "first g", "steps": ["Which function runs first in `f (g n)`?"],
      "hint": "`dia f g := fun n => f (g n)` (or `f ∘ g`)."},

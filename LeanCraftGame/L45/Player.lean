@@ -2,8 +2,8 @@
 # Topological spaces
 
 *Some spaces Noor needs have no sensible distance. Mathlib's most general notion of space
-keeps only the open sets, which is too abstract to test on `ℝ`. So the Annex builds a
-gallery of tiny spaces, where the referee can check every open set.*
+keeps only the open sets. That's hard to test on `ℝ`, so the Annex builds a gallery of
+tiny spaces where the referee can check every open set.*
 
 A **topology** on a type `X` says which subsets are *open*:
 
@@ -16,23 +16,21 @@ class TopologicalSpace (X : Type u) where
 ```
 
 The whole space is open, the intersection of *two* open sets is open, and the union of
-*any* family of open sets is open (`∅` is the union of the empty family). A map is
-continuous when the preimage of every open set is open (the `f ⁻¹' s` of level 16):
+*any* family of open sets is open (`∅` is the empty union). A map is continuous when the
+preimage of every open set is open (the `f ⁻¹' s` of level 16):
 
 ```lean
 theorem continuous_def {f : X → Y} : Continuous f ↔ ∀ s, IsOpen s → IsOpen (f ⁻¹' s)
 ```
 
-Preimage, not image. Asking that `f '' U` be open for every open `U` gives a different
-notion, an *open map*.
+Preimage, not image. Maps that send open sets to open sets are *open maps*, a different
+notion.
 
 ## Finite spaces
 
-The referee can't list the open sets of `ℝ`, but on a finite set it can check everything.
-So this level works on `Fin n = {0, 1, …, n-1}`. A subset is a `Finset (Fin n)`, and a
-family of subsets is a `Family n := Finset (Finset (Fin n))`. On a finite set every union
-is finite, so the axioms only need `∅`, the whole set `Finset.univ`, and *binary* unions
-and intersections.
+This level works on `Fin n = {0, 1, …, n-1}`. A subset is a `Finset (Fin n)`, and a family
+of subsets is a `Family n := Finset (Finset (Fin n))`. Every union is finite here, so the
+axioms only need `∅`, `Finset.univ`, and *binary* unions and intersections.
 
 Two spaces worth knowing:
 
@@ -40,10 +38,9 @@ Two spaces worth knowing:
 * the **particular-point topology** at `p`: the open sets are `∅` and every set
   containing `p`.
 
-Write a family like a set: `({∅, {1}, Finset.univ} : Family 2)`. The library also has the
-discrete space `Top.discrete n` (every set is open), the indiscrete space
-`Top.indiscrete n` (only `∅` and everything), and the preimage
-`Top.Ref.pre f V = {x | f x ∈ V}`.
+Write a family like a set: `({∅, {1}, Finset.univ} : Family 2)`. The library also has
+`Top.discrete n` (every set open), `Top.indiscrete n` (only `∅` and everything), and the
+preimage `Top.Ref.pre f V = {x | f x ∈ V}`.
 
 ## Your task
 

@@ -40,58 +40,58 @@
       "steps": [
         "The 'primes' are the even numbers here. Is every even n > 2 a sum of two of them? Is an odd n, such as 3?"
       ],
-      "hint": "Every even n is n + 0, but an odd n is never a sum of two even numbers: did you assume that n is even (`n % 2 = 0 →`)?"
+      "hint": "Every even n is n + 0, but an odd n is never a sum of two even numbers. Did you assume n is even (`n % 2 = 0 →`)?"
     },
     {
       "match": "world B",
       "steps": [
         "Every n ≥ 2 is 'prime' here. Which n does your statement cover? Try n = 2."
       ],
-      "hint": "2 is not a sum of two numbers ≥ 2. The conjecture is about n > 2 (`2 < n`), not `2 ≤ n`; and the hypotheses must be assumed (`→`), not claimed (`∧`)."
+      "hint": "2 isn't a sum of two numbers ≥ 2. The conjecture is about n > 2 (`2 < n`), not `2 ≤ n`. Also, assume the hypotheses with `→`; don't claim them with `∧`."
     },
     {
       "match": "world C",
       "steps": [
         "If nothing is prime, can any number be a sum of two primes?"
       ],
-      "hint": "If your statement still holds, the `∃ p q` is satisfied for a silly reason: write `P p ∧ P q ∧ p + q = n`, with `∧`, not `→`."
+      "hint": "If your statement still holds, the `∃ p q` is satisfied for a silly reason. Write `P p ∧ P q ∧ p + q = n`, with `∧`, not `→`."
     },
     {
       "match": "real world",
-      "hint": "A simple search settled your statement of an open problem: it is probably vacuous, or false for a silly reason. Compare with the toy worlds."
+      "hint": "A simple search settled your statement of an open problem, so it's probably vacuous or false for a silly reason. Compare with the toy worlds."
     },
     {
       "match": "process A",
       "steps": [
         "Counting down from n reaches 1 at step n − 1. But from 0?"
       ],
-      "hint": "From 0 you never reach 1: assume the start is positive, `∀ n, 0 < n → …`."
+      "hint": "From 0 you never reach 1. Assume the start is positive, `∀ n, 0 < n → …`."
     },
     {
       "match": "process B",
       "steps": [
         "The process falls to 0 and stays. Is 0 equal to 1? Is it ≤ 1?"
       ],
-      "hint": "Ask for `o n k = 1`, not `o n k ≤ 1` or `o n k ≤ n`: 0 is not 1."
+      "hint": "Ask for `o n k = 1`, not `o n k ≤ 1` or `o n k ≤ n`. 0 isn't 1."
     },
     {
       "match": "process C",
       "steps": [
         "Which quantifier comes first in your statement, `∀ n` or `∃ k`?"
       ],
-      "hint": "The step k may depend on the start n: `∀ n, 0 < n → ∃ k, o n k = 1`."
+      "hint": "The step k may depend on the start n, so `∀ n, 0 < n → ∃ k, o n k = 1`."
     },
     {
       "match": "Audit 1",
-      "hint": "Take `p = n`: `n ≤ n` holds, so the statement is true without a single prime. The faithful version uses `∧`."
+      "hint": "Take `p = n`. Then `n ≤ n` holds, so the statement is true without a single prime. The faithful version uses `∧`."
     },
     {
       "match": "Audit 2",
-      "hint": "Read it slowly: a limit `a` with the ε-N condition, and a bound `M` for every term. That is the claim."
+      "hint": "Read it slowly. A limit `a` with the ε-N condition, and a bound `M` for every term. That's the claim."
     },
     {
       "match": "Audit 3",
-      "hint": "`deriv` is a total function with the junk value 0 where there is no derivative; `deriv f 0 = 0` also holds for differentiable functions with a horizontal tangent. The faithful statement is `¬ DifferentiableAt ℝ (fun x : ℝ => |x|) 0`."
+      "hint": "`deriv` is a total function, with the junk value 0 where there's no derivative. `deriv f 0 = 0` also holds for differentiable functions with a flat tangent. The faithful statement is `¬ DifferentiableAt ℝ (fun x : ℝ => |x|) 0`."
     }
   ]
 }

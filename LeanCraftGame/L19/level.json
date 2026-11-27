@@ -9,7 +9,7 @@
   ],
   "checks": [
     {"lean": "#check (L19.k₁ : ℕ)\n#check (L19.n₁ : ℕ)\n#check (L19.f₁ : ℕ → ℕ)\n#check (L19.s₁ : Set ℕ)\n#check (L19.x₁ : ℕ)\n#check (L19.A : Bool → Bool → Set ℕ)\n#check (L19.x₂ : ℕ)\n#check (L19.multiplesOfFixed : ℕ → Set ℕ)",
-     "message": "Keep the names and the types given in the template."}
+     "message": "Keep the names and types from the template."}
   ],
   "hints": [
     {"match": "1. n₁ is not", "steps": ["What is `2 % 4`? Is `4` a multiple of `2`?"],

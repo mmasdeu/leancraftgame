@@ -10,14 +10,14 @@
   "public": ["p (2) = 0", "p (3) = 0"],
   "checks": [
     {"lean": "#check (L37.I : Ideal ℤ)\n#check (L37.p : Polynomial ℤ)\n#check (L37.inv3 : ZMod 7)\n#check (L37.crt : Prop)",
-     "message": "Keep the names and the types: `I : Ideal ℤ`, `p : ℤ[X]`, `inv3 : ZMod 7`, and `crt` a statement."}
+     "message": "Keep the names and types: `I : Ideal ℤ`, `p : ℤ[X]`, `inv3 : ZMod 7`, and `crt` a statement."}
   ],
   "hints": [
-    {"match": "is in I", "steps": ["`Ideal.span {4, 6}` contains 6 - 4 = 2. Which single number generates the multiples of both 4 and 6?"],
-     "hint": "`Ideal.span {12}`: the multiples of both 4 and 6 are the multiples of lcm(4, 6) = 12."},
+    {"match": "is in I", "steps": ["`Ideal.span {4, 6}` contains 6 - 4 = 2. Which single number generates the common multiples of 4 and 6?"],
+     "hint": "`Ideal.span {12}`. The common multiples of 4 and 6 are the multiples of lcm(4, 6) = 12."},
     {"match": "p (", "steps": ["A monic polynomial with roots 2 and 3 is `(X - a) * (X - b)` for which `a`, `b`?"],
      "hint": "`(X - 2) * (X - 3)`, or expanded `X ^ 2 - 5 * X + 6`."},
-    {"match": "inv3", "steps": ["Which `b` in 0, …, 6 has `3 * b` leaving remainder 1 when divided by 7?"],
+    {"match": "inv3", "steps": ["Which `b` in 0, …, 6 makes `3 * b` leave remainder 1 mod 7?"],
      "hint": "`3 * 5 = 15 = 2 * 7 + 1`, so `inv3 := 5`."},
     {"match": "crt", "steps": ["Binders: `(m n : ℕ)`, then the hypothesis `(h : Nat.Coprime m n)`."],
      "hint": "`statement crt (m n : ℕ) (h : Nat.Coprime m n) : Nonempty (ZMod (m * n) ≃+* ZMod m × ZMod n)`."}

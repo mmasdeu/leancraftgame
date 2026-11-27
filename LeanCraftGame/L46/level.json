@@ -18,13 +18,13 @@
      "message": "Keep `IsT1`, `IsT2 : Family n → Prop`, `noSubcover : ℕ → Set ℕ` and the answer lines."}
   ],
   "hints": [
-    {"match": "T1", "steps": ["For every two different points `x` and `y`, you want one open set: which point does it contain, and which not?"],
+    {"match": "T1", "steps": ["For two different points `x` and `y`, you want one open set. Which point does it contain, and which not?"],
      "hint": "`∀ x y : Fin n, x ≠ y → ∃ U ∈ T, x ∈ U ∧ y ∉ U`."},
     {"match": "T2", "steps": ["Two open sets this time, one around each point. What must be true of their intersection?"],
-     "hint": "`∀ x y : Fin n, x ≠ y → ∃ U ∈ T, ∃ V ∈ T, x ∈ U ∧ y ∈ V ∧ U ∩ V = ∅`. Did you forget `x ≠ y`? A point cannot be separated from itself."},
-    {"match": "covers ℕ", "hint": "Every `x` must be in some `noSubcover i`: the singletons `fun i => {i}` work, and so do the segments `fun i => {x | x < i}`."},
+     "hint": "`∀ x y : Fin n, x ≠ y → ∃ U ∈ T, ∃ V ∈ T, x ∈ U ∧ y ∈ V ∧ U ∩ V = ∅`. Did you forget `x ≠ y`? A point can't be separated from itself."},
+    {"match": "covers ℕ", "hint": "Every `x` must be in some `noSubcover i`. The singletons `fun i => {i}` work, and so do the segments `fun i => {x | x < i}`."},
     {"match": "finite subcover", "steps": ["If `U 0, …, U N` covered ℕ, which number would they miss?"], "hint": "With `fun i => {x | x < i}`, the sets `U 0, …, U N` all miss `N`."},
-    {"match": "Question 1", "hint": "In a finite T1 space, `{y}` is the complement of a finite union of closed points, so it is open: every set is open."},
-    {"match": "Question 2", "hint": "T2 is Hausdorff: `T2Space`."}
+    {"match": "Question 1", "hint": "In a finite T1 space, `{y}` is the complement of a finite union of closed points, so it's open. Then every set is open."},
+    {"match": "Question 2", "hint": "T2 is Hausdorff, so `T2Space`."}
   ]
 }

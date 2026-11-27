@@ -5,7 +5,7 @@
   "exercise": "Write",
   "predict": [
     {"test": "the numbers ≥ 1 are not an additive submonoid", "statement": "With only the axiom \"closed under `+`\", the numbers `≥ 1` would be accepted as an additive submonoid."},
-    {"test": "{0, 1} is not an additive submonoid", "statement": "`{0, 1}` is closed under multiplication; it is still not an additive submonoid of ℕ."}
+    {"test": "{0, 1} is not an additive submonoid", "statement": "`{0, 1}` is closed under multiplication, but it isn't an additive submonoid of ℕ."}
   ],
   "public": ["the even numbers are an additive submonoid of ℕ"],
   "checks": [
@@ -17,11 +17,11 @@
     {"match": "multiplesOf 3 contains", "hint": "`{n | k ∣ n}` (the bar is `\\mid`), or `{n | n % k = 0}`."},
     {"match": "≥ 1", "steps": ["Which element is in every additive submonoid?"],
      "hint": "Add `zero_mem : (0 : M) ∈ carrier`."},
-    {"match": "{0, 1}", "steps": ["What is 1 + 1? Do your axioms speak of addition?"],
+    {"match": "{0, 1}", "steps": ["What is 1 + 1? Do your axioms mention addition?"],
      "hint": "Add `add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier`."},
-    {"match": "odd numbers", "hint": "1 + 1 = 2 is even, and 0 is not odd: one of your axioms should catch this."},
-    {"match": "other than 2", "hint": "1 + 1 = 2: closure under `+` rules this set out."},
-    {"match": "an additive submonoid of", "steps": ["The report names the axiom that a genuine submonoid fails. Is it true of every additive submonoid?"],
-     "hint": "Only ask for `0 ∈ carrier` and closure under `+`; nothing about `*` or `≤`."}
+    {"match": "odd numbers", "hint": "1 + 1 = 2 is even, and 0 isn't odd. One of your axioms should catch this."},
+    {"match": "other than 2", "hint": "1 + 1 = 2, so closure under `+` rules this set out."},
+    {"match": "an additive submonoid of", "steps": ["The report names the axiom a real submonoid fails. Is it true of every additive submonoid?"],
+     "hint": "Ask only for `0 ∈ carrier` and closure under `+`, nothing about `*` or `≤`."}
   ]
 }

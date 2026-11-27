@@ -12,11 +12,11 @@
      "message": "Keep Sam's `GaussInt` and `Point` as given, and the names and types of your counterexamples."}
   ],
   "hints": [
-    {"match": "gz and gw", "steps": ["The two formulas differ only in the sign of `z.im * w.im`. When does that term vanish?"],
+    {"match": "gz and gw", "steps": ["The two formulas differ only in the sign of `z.im * w.im`. When is that term zero?"],
      "hint": "Both imaginary parts must be nonzero: `gz = gw = ⟨0, 1⟩` (that is, `i · i`)."},
-    {"match": "midpoint", "steps": ["Which coordinate of `mid` does not use `b` at all?"],
-     "hint": "The third coordinate uses `a.z` twice: take points with different `z`, such as `⟨0, 0, 0⟩` and `⟨0, 0, 2⟩`."},
-    {"match": "in_range", "steps": ["`in_range` is an `∨`: how many of its two conditions must hold?"],
+    {"match": "midpoint", "steps": ["Which coordinate of `mid` never uses `b`?"],
+     "hint": "The third coordinate uses `a.z` twice. Take points with different `z`, such as `⟨0, 0, 0⟩` and `⟨0, 0, 2⟩`."},
+    {"match": "in_range", "steps": ["`in_range` is an `∨`. How many of its two conditions must hold?"],
      "hint": "Every rational satisfies `0 ≤ t ∨ t ≤ 1`. Take `badT = 2` (or `-1`)."},
     {"match": "between 0 and 1", "hint": "`badT` must be outside `[0, 1]`, for example `2`."}
   ]

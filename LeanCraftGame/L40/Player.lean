@@ -1,12 +1,12 @@
 /-
 # Subspaces and quotients
 
-*Noor wants the subspaces of the plane catalogued. Sam's draft list has a line through
-the origin, the two axes taken together, a parabola, and a line that misses `0`. Only
-the first belongs on it.*
+*Noor wants a list of the subspaces of the plane. Sam's draft has a line through the
+origin, the two axes together, a parabola, and a line that misses `0`. Only the first
+belongs.*
 
-In Mathlib a subspace of `V` is a `Submodule K V`: as for the sub-objects of level 35, a
-set (its `carrier`) bundled with the proofs that it is closed under the operations.
+In Mathlib a subspace of `V` is a `Submodule K V`. Like the sub-objects of level 35, it's a
+set (its `carrier`) bundled with proofs that it's closed under the operations.
 
 ```lean
 structure Submodule (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] where
@@ -18,34 +18,34 @@ structure Submodule (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] wh
 
 Subspaces are ordered by inclusion, and Mathlib uses lattice notation for them:
 
-* `⊥` is the zero subspace `{0}`, and `⊤` is the whole space;
-* `U ⊓ W` is the intersection `U ∩ W`;
-* `U ⊔ W` is the **smallest subspace containing both**, that is `U + W`. It is *not* the
-  union: the union of two lines through `0` is not a subspace;
-* `Submodule.span K s` is the smallest subspace containing the set `s`;
-* `V ⧸ W` is the quotient space: vectors of `V`, where two vectors are identified when
-  their difference lies in `W`.
+* `⊥` is the zero subspace `{0}`, and `⊤` is the whole space.
+* `U ⊓ W` is the intersection `U ∩ W`.
+* `U ⊔ W` is the smallest subspace containing both, that is `U + W`. It isn't the union.
+  The union of two lines through `0` is not a subspace.
+* `Submodule.span K s` is the smallest subspace containing the set `s`.
+* `V ⧸ W` is the quotient space: vectors of `V`, with two vectors identified when their
+  difference lies in `W`.
 
-The kernel `LinearMap.ker φ` of level 39 is a subspace, and it measures injectivity in
-the sense of level 17: `φ` is injective exactly when `LinearMap.ker φ = ⊥`.
+The kernel `LinearMap.ker φ` of level 39 is a subspace. It measures injectivity in the
+sense of level 17: `φ` is injective exactly when `LinearMap.ker φ = ⊥`.
 
 ## Which sets are subspaces?
 
-A line through the origin is a subspace of the plane. Many sets that look reasonable
-are not: a line that misses `0`, a curve, the union of the two axes. To show that a set
-is **not** a subspace, you give a counterexample to one of the three fields.
+A line through the origin is a subspace of the plane. Many reasonable-looking sets aren't:
+a line that misses `0`, a curve, the union of the two axes. To show a set isn't a
+subspace, give a counterexample to one of the three fields.
 
-As in the previous level, the plane `ℚ²` is `Fin 2 → ℚ`, a vector is `![x, y]` and
-its coordinates are `v 0` and `v 1`. A set is written with set-builder notation, such as
+As in the last level, the plane `ℚ²` is `Fin 2 → ℚ`, a vector is `![x, y]` and its
+coordinates are `v 0` and `v 1`. Write sets with set-builder notation, such as
 `{v | v 0 = 0}` (the vertical axis).
 
 ## Your task
 
 1. `line`: the line through `0` of slope 2, `y = 2x`, as a set.
-2. The axes `{v | v 0 * v 1 = 0}` are not a subspace: give two vectors `a`, `b` on the
-   axes whose sum is not.
-3. The parabola `{v | v 1 = v 0 ^ 2}` is not a subspace: give a point `p` on it such that
-   `2 • p` (the point `![2 * p 0, 2 * p 1]`) is not on it.
+2. The axes `{v | v 0 * v 1 = 0}` aren't a subspace. Give two vectors `a`, `b` on the axes
+   whose sum isn't.
+3. The parabola `{v | v 1 = v 0 ^ 2}` isn't a subspace. Give a point `p` on it such that
+   `2 • p` (the point `![2 * p 0, 2 * p 1]`) isn't on it.
 4. Answer the questions below the lesson.
 -/
 import Mathlib.LinearAlgebra.Quotient.Defs

@@ -1,9 +1,9 @@
 /-
 # Spot the bug: counting
 
-*Sam wrote the counting code below in an afternoon, and plans to test primality with it:
-a prime is a number with exactly two divisors. Each definition compiles, and each one is
-wrong. Noor does not ask you to fix them, but to **prove them wrong**.*
+*Sam wrote this counting code in an afternoon, to test primality: a prime has exactly two
+divisors. Each definition compiles, and each is wrong. Noor asks you to **prove them
+wrong**, not fix them.*
 
 ```lean
 -- 1 + 2 + ⋯ + n
@@ -20,21 +20,18 @@ def size : BinTree → ℕ
 -- "Gauss's formula": for all n, ∑ i ∈ Finset.range n, i = n * (n + 1) / 2
 ```
 
-Give an input on which each one gives the wrong answer. The referee computes both Sam's
-answer and the right one, and checks that they differ. Read each one slowly, with the
-last three levels in mind: what does `Finset.range n` contain, what does `Ico 1 n`
-contain, which nodes does `size` count? (With Sam's `numDivisors`, would `7` have two
-divisors?)
+For each, give an input where it's wrong. The referee computes Sam's answer and the right
+one and checks they differ. What does `Finset.range n` contain? `Ico 1 n`? Which nodes
+does `size` count? (Would `7` have two divisors under Sam's `numDivisors`?)
 
 ## The trap
 
-A wrong definition can still be right on some inputs, and the easy inputs are often
-those. `triangle 0` is `0`, as it should be. A counterexample must be an input where the
-two answers really differ.
+A wrong definition can be right on easy inputs. `triangle 0` is `0`, as it should be. Pick
+an input where the answers really differ.
 
 ## Your task
 
-Give one counterexample for each definition. `BinTree` is the type of trees of level 26.
+One counterexample per definition. `BinTree` is the tree type from level 26.
 -/
 import Mathlib.Tactic
 

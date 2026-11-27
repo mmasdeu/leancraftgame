@@ -15,14 +15,14 @@
      "message": "Keep the maps `f₁ f₂ g : Fin 2 → Fin 2`, the points `p x y : Fin 2` and the answer `q1 : Bool`."}
   ],
   "hints": [
-    {"match": "f₁", "steps": ["Every map out of a discrete space is continuous. Now look for a map whose image of `{0}` is not open in Sierpiński space."],
-     "hint": "`f₁ = id`, written `fun i => i`: the image of the open set `{0}` is `{0}`, which is not open in Sierpiński space."},
+    {"match": "f₁", "steps": ["Every map out of a discrete space is continuous. Look for one whose image of `{0}` isn't open in Sierpiński space."],
+     "hint": "`f₁ = id`, written `fun i => i`. The image of the open set `{0}` is `{0}`, which isn't open in Sierpiński space."},
     {"match": "f₂", "steps": ["Every set is open in `discrete 2`, so Sam's definition accepts any map out of Sierpiński space. Which map pulls `{0}` back to a non-open set?"],
-     "hint": "`f₂ = fun i => i`: the preimage of `{0}` is `{0}`, not open in Sierpiński space."},
+     "hint": "`f₂ = fun i => i`. The preimage of `{0}` is `{0}`, which isn't open in Sierpiński space."},
     {"match": "Claim 2", "steps": ["Any bijection out of a discrete space is continuous. Is its image of `{0}` open?"],
-     "hint": "`g = fun i => i`: continuous, but the image of the open set `{0}` is `{0}`."},
+     "hint": "`g = fun i => i`. It's continuous, but the image of the open set `{0}` is `{0}`."},
     {"match": "Claim 3", "steps": ["The only open set containing `0` is the whole space. Which point lies in every open set containing `1`?"],
-     "hint": "`p = 1`, `x = 0`, `y = 1`: every open set containing `0` or `1` contains `1`."},
+     "hint": "`p = 1`, `x = 0`, `y = 1`. Every open set containing `0` or `1` contains `1`."},
     {"match": "Claim 4", "hint": "For a constant function, the preimage of a small neighbourhood of `1` (one that misses `0`) is `∅`, and `∅` is not a neighbourhood of `0`."}
   ]
 }

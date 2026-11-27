@@ -1,12 +1,11 @@
 /-
 # Sam's groups
 
-*Before the project could use Mathlib's groups, Sam wrote some over lunch: associativity,
-an identity, inverses. The file compiles. Noor asks whether every model of Sam's axioms is
-really a group.*
+*Before the project could use Mathlib's groups, Sam wrote some over lunch. The file
+compiles. Noor asks whether every model of Sam's axioms is really a group.*
 
-Like `StandardTwoSimplex` in level 28, an algebraic structure is a structure whose fields
-are the operations and the axioms:
+Like `StandardTwoSimplex` in level 28, an algebraic structure has the operations and the
+axioms as fields:
 
 ```lean
 structure Group₁ (α : Type*) where
@@ -19,8 +18,8 @@ structure Group₁ (α : Type*) where
   inv_mul_cancel : ∀ x : α, mul (inv x) x = one
 ```
 
-A model is the data (`mul`, `one`, `inv`) plus proofs of the axioms. Getting the axioms
-right is the hard part. Too few, and junk satisfies them. Too many, and real groups fail.
+A model is the data (`mul`, `one`, `inv`) plus proofs of the axioms. With too few axioms,
+junk satisfies them. With too many, real groups fail.
 
 Sam used a *left* identity and a *right* inverse:
 
@@ -30,12 +29,11 @@ one_mul   : ∀ a, mul one a = a
 mul_inv   : ∀ a, mul a (inv a) = one
 ```
 
-One-sided axioms are fine when both are on the same side: a left identity and left
-inverses give a group. With mixed sides they aren't enough. Some operations on a
-two-element set satisfy them even though `mul a one ≠ a`.
+A left identity with left inverses does give a group. Mixed sides don't. Some operations
+on a two-element set satisfy Sam's axioms although `mul a one ≠ a`.
 
-So for any set of axioms, ask: does it allow **junk models**? Don't stare at the axioms.
-Look for a small model that satisfies them and breaks a property every group has.
+So ask of any axioms: do they allow **junk models**? Look for a small model that satisfies
+them and breaks a property every group has.
 -/
 import Mathlib.Tactic
 

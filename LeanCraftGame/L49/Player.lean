@@ -1,16 +1,14 @@
 /-
 # Derivatives in normed spaces
 
-*Noor's next request is derivatives of maps between planes, such as the quarter-turn
-`rot` of level 39, now on `ℝ × ℝ`: `(x, y) ↦ (-y, x)`. The derivative of such a map is
-not a number any more, and the objects of the Linear Algebra world come back: it is a
-linear map.*
+*Noor now wants derivatives of maps between planes, like the quarter-turn `rot` of
+level 39 on `ℝ × ℝ`: `(x, y) ↦ (-y, x)`. The derivative of such a map isn't a number. It's
+a linear map.*
 
-Mathlib differentiates functions between **normed spaces**: `f : E → F`, where `E` and
-`F` have a norm `‖x‖` and are vector spaces over `ℝ`. The plane `ℝ × ℝ` is one, and so is
-`ℝ` itself. The derivative of `f` at a point is the **best linear approximation** of `f`
-near that point. For a map that is already linear, like `rot`, it is the map itself, at
-every point (`ContinuousLinearMap.fderiv`).
+Mathlib differentiates functions `f : E → F` between **normed spaces**: vector spaces over
+`ℝ` with a norm `‖x‖`, such as `ℝ × ℝ` and `ℝ`. The derivative of `f` at a point is the
+best linear approximation of `f` there. For a linear map like `rot`, it's the map itself,
+at every point (`ContinuousLinearMap.fderiv`).
 
 ```lean
 variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -21,23 +19,21 @@ variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 #check ContDiff ℝ n f      -- f is n times continuously differentiable
 ```
 
-* `E →L[ℝ] F` is the type of **continuous linear maps** from `E` to `F`. It is a
-  structure, but it can be applied like a function: `fderiv ℝ f x v` is the derivative of
-  `f` at `x` in the direction `v`.
-* The `F` in `fderiv` stands for *Fréchet*. Its arguments `𝕜` (here `ℝ`), `f` and `x` are
-  explicit; `E` and `F` are implicit, found from the type of `f`.
-* For `f : ℝ → ℝ`, `deriv f x` is defined as `fderiv ℝ f x 1`: the linear map applied to
-  the direction `1`.
-* `ContDiff ℝ 1 f` says that `f` is differentiable and its derivative is continuous;
+* `E →L[ℝ] F` is the type of continuous linear maps from `E` to `F`. You can apply one
+  like a function: `fderiv ℝ f x v` is the derivative of `f` at `x` in the direction `v`.
+* The `F` in `fderiv` stands for *Fréchet*. You write `𝕜` (here `ℝ`), `f` and `x`. `E`
+  and `F` are implicit, found from the type of `f`.
+* For `f : ℝ → ℝ`, `deriv f x` is defined as `fderiv ℝ f x 1`.
+* `ContDiff ℝ 1 f` says `f` is differentiable with a continuous derivative.
   `ContDiff ℝ 2 f` asks the same of the derivative, and so on.
 
 ## Which norm?
 
 On `ℝ × ℝ`, Mathlib's norm is the **maximum** of the absolute values of the coordinates,
-`‖(x, y)‖ = max |x| |y|`, not the Euclidean length `√(x² + y²)`. (The Euclidean plane is a
-different type, `EuclideanSpace ℝ (Fin 2)`.) The derivative does not depend on the choice,
-since all norms on a finite-dimensional space are equivalent, but a statement that
-mentions `‖·‖` does: Sam's first `normPair` was `5`.
+`‖(x, y)‖ = max |x| |y|`, not the Euclidean length `√(x² + y²)`. (The Euclidean plane is
+`EuclideanSpace ℝ (Fin 2)`.) All norms on a finite-dimensional space are equivalent, so
+the derivative doesn't care. A statement that mentions `‖·‖` does. Sam's first `normPair`
+was `5`.
 
 ## Your task
 

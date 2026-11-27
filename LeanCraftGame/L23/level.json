@@ -31,7 +31,7 @@
      "hint": "`1`: its only divisor is `1`, but `Nat.Prime` asks for `2 ≤ p`."},
     {"match": "euclid says", "hint": "`statement euclid : ∀ n : ℕ, ∃ p, n ≤ p ∧ Nat.Prime p`."},
     {"match": "euclid_mod4", "hint": "`statement euclid_mod4 : ∀ n : ℕ, ∃ p, n ≤ p ∧ Nat.Prime p ∧ p % 4 = 3`."},
-    {"match": "Question 1", "hint": "`n / 10` is not `n - 1`: the recursion is not structural, and the `termination_by` lines are there for it."},
+    {"match": "Question 1", "hint": "`n / 10` is not `n - 1`, so the recursion isn't structural. That's what the `termination_by` lines are for."},
     {"match": "Question 2", "hint": "`4 + 3 + 2 + 1`."}
   ]
 }

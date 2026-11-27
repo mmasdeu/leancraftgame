@@ -22,10 +22,10 @@
     {"match": "Dg has", "steps": ["For `g : ℝ → ℝ × ℝ`, the source `E` is `ℝ` and the target `F` is `ℝ × ℝ`."],
      "hint": "`def Dg (g : ℝ → ℝ × ℝ) (t : ℝ) : ℝ →L[ℝ] ℝ × ℝ := fderiv ℝ g t`."},
     {"match": "is the derivative", "hint": "The value should be `fderiv ℝ f p` (or `fderiv ℝ g t`), not another map of the same type."},
-    {"match": "normPair", "steps": ["Is the norm on `ℝ × ℝ` the Euclidean length? Read the section *Which norm?*"],
+    {"match": "normPair", "steps": ["Is the norm on `ℝ × ℝ` the Euclidean length? See *Which norm?*"],
      "hint": "`‖(x, y)‖ = max |x| |y|`, so `‖(3, -4)‖ = max 3 4 = 4`, not 5."},
-    {"match": "Question 1", "hint": "The derivative is the best *linear* approximation: its type is `E →L[ℝ] F`."},
-    {"match": "Question 2", "hint": "`fderiv ℝ f x`: the field is explicit, `E` and `F` are not."},
+    {"match": "Question 1", "hint": "The derivative is the best *linear* approximation. Its type is `E →L[ℝ] F`."},
+    {"match": "Question 2", "hint": "In `fderiv ℝ f x` the field is explicit. `E` and `F` are not."},
     {"match": "Question 3", "hint": "`deriv f x` is defined as `fderiv ℝ f x 1`."}
   ]
 }

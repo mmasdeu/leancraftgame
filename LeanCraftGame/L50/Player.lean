@@ -1,21 +1,20 @@
 /-
 # Integrals and measures
 
-*The last project before the audit: integrals. Noor wants two theorems in the library.
-The fundamental theorem of calculus ties integrals to the `HasDerivAt` of the last world;
-dominated convergence speaks of limits, with the filters of the Topology world.*
+*The last project before the audit: integrals. Noor wants two theorems in the library:
+the fundamental theorem of calculus, and dominated convergence.*
 
-Mathlib's **interval integral** works like the integral of a first calculus course:
+Mathlib's **interval integral** is the integral of a first calculus course:
 
 ```lean
 ∫ x in a..b, f x        -- the integral of f from a to b
 ∫ x in (0:ℝ)..1, x ^ 2  -- = 1 / 3
 ```
 
-* `∫ x in a..b, f x` is a real number. The `x` is a bound variable, like the `x` of
-  `fun x => …`. The type annotation `(0:ℝ)` tells Lean that the bounds are reals.
-* When `b < a` it is **oriented**: `∫ x in b..a, f x = -∫ x in a..b, f x`.
-* Like `deriv` in level 48, it is a total function. If `f` is not integrable, the integral is `0`.
+* `∫ x in a..b, f x` is a real number. The `x` is bound, like in `fun x => …`. The
+  `(0:ℝ)` tells Lean the bounds are reals.
+* It's oriented: `∫ x in b..a, f x = -∫ x in a..b, f x`.
+* Like `deriv`, it's a total function. If `f` isn't integrable, the integral is `0`.
 
 ## The fundamental theorem of calculus
 
@@ -25,25 +24,24 @@ Mathlib's version (`intervalIntegral.integral_eq_sub_of_hasDerivAt`), for `f f' 
 > and `b`, in either order), and `f'` is integrable on it, then
 > `∫ y in a..b, f' y = f b - f a`.
 
-"`f'` is integrable between `a` and `b`" is written
+"`f'` is integrable between `a` and `b`" is
 `IntervalIntegrable f' MeasureTheory.volume a b`.
 
 ## Measures
 
-Behind the interval integral is a **measure**. On `ℝ` the measure is
-`MeasureTheory.volume`, the length: `volume (Set.Icc a b)` is `b - a`. Measures take
-values in `ENNReal`, the numbers in `[0, ∞]`, since a set may have infinite measure.
+Behind the integral is a **measure**. On `ℝ` it's `MeasureTheory.volume`, the length:
+`volume (Set.Icc a b)` is `b - a`. Measures take values in `ENNReal`, the numbers in
+`[0, ∞]`, since a set can have infinite measure.
 
 * `MeasurableSet s`: `s` is one of the sets the measure is defined on.
-* `∀ᵐ x ∂μ, P x`: `P x` holds for **almost every** `x`, that is, the set where it fails
-  has measure `0`. It is a filter statement, `∀ᶠ x in ae μ, P x`, like the "eventually"
-  of level 43.
+* `∀ᵐ x ∂μ, P x`: `P x` holds for almost every `x`, so the set where it fails has
+  measure `0`. It's the filter statement `∀ᶠ x in ae μ, P x`, like "eventually" in
+  level 43.
 * `∫ x, f x ∂μ`: the integral of `f` over the whole space with respect to `μ`.
 
-The great theorem of the subject is **dominated convergence**: under a bound, the limit of
-the integrals is the integral of the limit. Read the `Tendsto` lines as in level 43.
-Here is Mathlib's statement, `MeasureTheory.tendsto_integral_of_dominated_convergence`,
-slightly shortened:
+**Dominated convergence** says that under a bound, the limit of the integrals is the
+integral of the limit. Read the `Tendsto` lines as in level 43. Here is
+`MeasureTheory.tendsto_integral_of_dominated_convergence`, slightly shortened:
 
 ```lean
 theorem tendsto_integral_of_dominated_convergence {F : ℕ → α → ℝ} {f : α → ℝ}

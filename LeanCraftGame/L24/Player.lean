@@ -1,17 +1,13 @@
 /-
 # Finset and Fintype
 
-*A new project: counting. Noor wants numbers the Annex can check by computation: how many
-primes below 20, how many divisors 12 has, how many subsets of a given size. The set of
-primes from level 15 cannot be counted (it is infinite, and Lean cannot list it); counting
-needs another kind of set.*
+*A new project: counting. Noor wants numbers Lean can compute: the primes below 20, the
+divisors of 12, the subsets of a given size. The primes of level 15 form an infinite set
+Lean can't list, so counting needs another kind of set.*
 
-Mathlib has two notions of set, and the difference matters:
-
-* `Set α` is a predicate on `α`: `{n | Nat.Prime n}` may be infinite, and Lean cannot
-  compute with it.
-* `Finset α` is a *finite* set that Lean can compute with: it can list its elements,
-  count them (`s.card`, also written `#s`), and decide whether `3 ∈ s`.
+* `Set α` is a predicate. `{n | Nat.Prime n}` may be infinite; Lean can't compute with it.
+* `Finset α` is a *finite* set Lean can compute with. It can list the elements, count them
+  (`s.card`, also written `#s`) and decide `3 ∈ s`.
 
 ## Building finsets
 
@@ -26,19 +22,16 @@ Finset.Ico 1 5                       -- {1, 2, 3, 4}
 ({1, 2, 3} : Finset ℕ).card                          -- 3
 ```
 
-* `s.filter p` keeps the elements that satisfy `p`, such as the primes of level 20.
-* `s.image f` applies `f` to every element (and removes repetitions), like the image
-  `f '' s` of level 16.
-* `s.powerset` is the finset of all subsets of `s`: a `Finset (Finset α)`.
+* `s.filter p` keeps the elements satisfying `p`.
+* `s.image f` applies `f` to each element and drops repeats, like `f '' s` (level 16).
+* `s.powerset` is all subsets of `s`, a `Finset (Finset α)`.
 
-`Finset.range n` is the most used finset in Mathlib, and the most common source of
-off-by-one errors: it stops **before** `n`, as in the sums of level 22.
+`Finset.range n` stops **before** `n`. It's the usual source of off-by-one errors.
 
 ## Fintype
 
-A *type* can be finite too: `Bool`, `Fin n = {0, …, n-1}`, products and function types
-between finite types. For those, `Finset.univ` is the finset of all elements, and
-`Fintype.card α` counts them:
+Some types are finite: `Bool`, `Fin n = {0, …, n-1}`, and products and function types
+of finite types. `Finset.univ` is all their elements, and `Fintype.card α` counts them:
 
 ```lean
 Fintype.card (Fin 3)          -- 3

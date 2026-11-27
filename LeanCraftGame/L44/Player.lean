@@ -2,8 +2,8 @@
 # Metric spaces
 
 *`Tendsto s atTop (𝓝 a)` is your `ConvergesTo` with `dist` in place of `|s n - a|`. Noor
-wants that to work wherever there is a distance: points, functions, words. First the
-library has to say what a distance is.*
+wants that to work wherever there's a distance. First the library has to say what a
+distance is.*
 
 A **metric space** is a type `X` with a distance `dist : X → X → ℝ`:
 
@@ -16,28 +16,24 @@ variable {X : Type*} [MetricSpace X] (a b c : X)
 #check (dist_triangle a b c : dist a c ≤ dist a b + dist b c)
 ```
 
-The distance gives the open ball `Metric.ball x r = {y | dist y x < r}`, the closed ball
-`Metric.closedBall x r = {y | dist y x ≤ r}`, Cauchy sequences, compactness, and continuity
-in ε–δ form:
+The distance gives balls (`Metric.ball x r = {y | dist y x < r}`, and `Metric.closedBall`
+with `≤`), Cauchy sequences, compactness, and continuity in ε–δ form:
 
 ```lean
 theorem Metric.continuous_iff {f : X → Y} :
     Continuous f ↔ ∀ b, ∀ ε > 0, ∃ δ > 0, ∀ a, dist a b < δ → dist (f a) (f b) < ε
 ```
 
-Here `δ` may depend on the point `b`. If one `δ` works for all points at once, `f` is
-uniformly continuous, and `∃ δ` moves before `∀ b`. In Mathlib that's
-`UniformContinuous f`, with ε–δ form `Metric.uniformContinuous_iff`. It's the quantifier
-swap of level 10 again, where "every term is below some `M`" was not "bounded".
+Here `δ` may depend on `b`. If one `δ` works for all points, `f` is uniformly continuous:
+`∃ δ` moves before `∀ b`. Mathlib calls it `UniformContinuous f` (ε–δ form:
+`Metric.uniformContinuous_iff`). It's the quantifier swap of level 10 again.
 
 ## Part A: the axioms
 
-The class `MetricSpace` bundles `dist` with its axioms. Write them yourself, for a
-distance with values in `ℤ` (so the referee can check examples on four points). Add one
-field per axiom, after `dist`. The referee feeds your structure real metrics, which must
-satisfy your axioms, and impostors, which must each break at least one. Sam's first draft
-let `dist a b = a - b` through. It does satisfy `dist a b = 0 ↔ a = b`, so a distance
-needs more than that.
+`MetricSpace` bundles `dist` with its axioms. Write them yourself, one field per axiom
+after `dist`, for a distance with values in `ℤ` so the referee can test four points. Real
+metrics must satisfy your axioms, and each impostor must break one. Sam's first draft let
+`dist a b = a - b` through, since it does satisfy `dist a b = 0 ↔ a = b`.
 
 ## Part B: uniform continuity
 

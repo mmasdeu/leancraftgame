@@ -1,10 +1,10 @@
 /-
 # Defining structures
 
-*Noor starts a new project: the library needs objects of its own, and the first is a point
-of space. The `Point` you write today comes back later as a class instance and as a vector.*
+*Noor starts a new project: the library needs objects of its own, beginning with a point of
+space. Your `Point` comes back later as a class instance and as a vector.*
 
-A **structure** bundles data together. A point of space:
+A **structure** bundles data together:
 
 ```lean
 @[ext]
@@ -27,7 +27,7 @@ when their coordinates are equal".
 
 ## Dot notation
 
-You can call a function in the namespace `Point` with a dot:
+A function in the namespace `Point` can be called with a dot:
 
 ```lean
 def Point.neg (a : Point) : Point := ⟨-a.x, -a.y, -a.z⟩
@@ -36,8 +36,8 @@ def Point.neg (a : Point) : Point := ⟨-a.x, -a.y, -a.z⟩
 
 ## Fields that are propositions
 
-A field can also be a property. The standard 2-simplex is the set of points with
-nonnegative coordinates that add up to 1:
+A field can also be a property. The standard 2-simplex holds the points with nonnegative
+coordinates that add up to 1:
 
 ```lean
 structure StandardTwoSimplex where
@@ -48,9 +48,9 @@ structure StandardTwoSimplex where
   …
 ```
 
-To build an element, you give the numbers and proofs of the properties. The referee tests
-your fields on points that should and shouldn't be in the simplex. Leave out one property
-and a point Noor never wanted gets in.
+An element needs the numbers and proofs of the properties. The referee tests your fields
+on points inside and outside the simplex. Leave out one property and an unwanted point
+gets in.
 
 ## Your task
 

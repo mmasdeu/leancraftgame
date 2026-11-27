@@ -1,9 +1,8 @@
 /-
 # Spot the bug: sets
 
-*Sam has pushed three things about sets to the library. Each one compiles, and each one is
-wrong. Noor asks you to refute them with counterexamples before anyone builds on them, then
-to repair the first one.*
+*Sam pushed three things about sets. Each compiles, and each is wrong. Noor asks you to
+refute them with counterexamples, then repair the first.*
 
 ## 1. The multiples of `k`
 
@@ -11,9 +10,8 @@ to repair the first one.*
 def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
 ```
 
-This is meant as "the multiples of `k`", like the `multiples` of level 15. (`k % n` is the
-remainder of `k` divided by `n`.) Give `k₁` and `n₁` with `n₁` a multiple of `k₁` that is
-**not** in `multiplesOf k₁`.
+This is meant as the `multiples` of level 15. (`k % n` is the remainder of `k` divided by
+`n`.) Give `k₁` and a multiple `n₁` of `k₁` that is **not** in `multiplesOf k₁`.
 
 ## 2. Preimage of the image
 
@@ -23,22 +21,21 @@ Sam's lemma, for every `f : ℕ → ℕ` and `s : Set ℕ`:
 f ⁻¹' (f '' s) = s
 ```
 
-The inclusion `s ⊆ f ⁻¹' (f '' s)` always holds. Give `f₁`, `s₁` and a point `x₁` that is
-in `f₁ ⁻¹' (f₁ '' s₁)` but not in `s₁`. (For which kind of `f` is the lemma true? Level 17
-has the word.)
+`s ⊆ f ⁻¹' (f '' s)` always holds. Give `f₁`, `s₁` and a point `x₁` in
+`f₁ ⁻¹' (f₁ '' s₁)` but not in `s₁`. (For which `f` is the lemma true? Level 17 has the
+word.)
 
 ## 3. Swapping `⋃` and `⋂`
 
-For a family `A i j` of sets with two indices, Sam claims
+For a family `A i j` with two indices, Sam claims
 
 ```lean
 ⋃ i, ⋂ j, A i j = ⋂ j, ⋃ i, A i j
 ```
 
-`x ∈ ⋃ i, ⋂ j, A i j` is `∃ i, ∀ j, x ∈ A i j`, and the right-hand side is
-`∀ j, ∃ i, x ∈ A i j`. It's the order of quantifiers again (level 10). Give a family
-`A : Bool → Bool → Set ℕ` (the indices are `true` and `false`) and a point `x₂` on the
-right-hand side but not on the left. You may use `if i = j then … else …`.
+The left side is `∃ i, ∀ j, x ∈ A i j`, the right side `∀ j, ∃ i, x ∈ A i j`: quantifier
+order again (level 10). Give `A : Bool → Bool → Set ℕ` and a point `x₂` on the right but
+not on the left. You may use `if i = j then … else …`.
 
 ## 4. Repair
 

@@ -1,12 +1,10 @@
 /-
 # Inductive types
 
-*The counting project reaches trees: Noor wants to check that the number of binary trees
-with `n` nodes follows the Catalan numbers, and for that the Annex needs trees, and
-functions on them, written by recursion as in level 22.*
+*Counting reaches trees. Noor wants to check that binary trees with `n` nodes follow the
+Catalan numbers, so the Annex needs trees and recursive functions on them.*
 
-New types can be built *inductively*: by listing the ways to construct an element. The
-type of binary trees:
+An *inductive* type lists the ways to build its elements. Binary trees:
 
 ```lean
 inductive BinTree where
@@ -14,16 +12,14 @@ inductive BinTree where
   | node : BinTree → BinTree → BinTree
 ```
 
-A binary tree is either `empty`, or a `node` with a left and a right subtree. These two
-**constructors** are the only ways to build a tree, so `node empty (node empty empty)`
-is a tree, with two nodes. ℕ is built the same way, from `0` and `n + 1`: that is why the
-`fac` of level 22 had one line for each.
+A tree is `empty`, or a `node` with a left and a right subtree. These **constructors** are
+the only ways to build one: `node empty (node empty empty)` has two nodes. ℕ is built the
+same way from `0` and `n + 1`, which is why `fac` (level 22) had one line for each.
 
 ## Structural recursion
 
-To define a function on trees, say what it does on each constructor. In the `node`
-case, the function may call itself on the subtrees `l` and `r`: they are smaller, so
-the recursion stops.
+Say what the function does on each constructor. In the `node` case it may call itself on
+the smaller subtrees `l` and `r`, so it stops.
 
 ```lean
 def leaves : BinTree → ℕ
@@ -33,19 +29,17 @@ def leaves : BinTree → ℕ
 
 `leaves (node empty empty)` is `leaves empty + leaves empty = 2`.
 
-Lists are an inductive type too: a list is either `[]` or `x :: xs` (an element `x` in
-front of a list `xs`), and `[1, 2, 3]` is `1 :: 2 :: 3 :: []`. Functions on lists
-recurse the same way.
+Lists work the same way. A list is `[]` or `x :: xs` (`x` in front of `xs`), and
+`[1, 2, 3]` is `1 :: 2 :: 3 :: []`.
 
 ## Counting trees
 
 The number of trees with `n` nodes is the `n`-th **Catalan number**: 1, 1, 2, 5, 14, …
-The referee will check your `size` against it on small trees.
+The referee checks your `size` against it.
 
 ## Your task
 
-Fill in each case. The trap is the case that is easy to forget: a node is itself a
-node, and is counted as one.
+Fill in each case. Don't forget the node itself counts as one.
 -/
 import Mathlib.Tactic
 

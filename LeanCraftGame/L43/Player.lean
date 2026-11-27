@@ -2,8 +2,7 @@
 # Filters
 
 *New project at the Annex: the topology library. Noor wants the home-made limits of the
-Logic world retired. "Mathlib has one notion of convergence for all of them. Learn to
-read it."*
+Logic world replaced by Mathlib's single notion of convergence.*
 
 ## Eventually, infinitely often
 
@@ -21,7 +20,7 @@ with filters.
 ## What a filter is
 
 A **filter** `F : Filter X` is a collection of "large" subsets of `X`. It contains `univ`,
-every superset of its members, and the intersection of any two members. The ones you'll use:
+every superset of its members, and the intersection of any two members. The main ones:
 
 * `atTop : Filter ℕ`: the sets that contain all `n` from some point on, `{n | N ≤ n}`;
 * `𝓝 x` (type `\MCN`, after `open Topology`): the neighbourhoods of `x`, the sets that
@@ -36,10 +35,9 @@ every superset of its members, and the intersection of any two members. The ones
 Tendsto f l₁ l₂         -- for every s ∈ l₂, the preimage f ⁻¹' s is in l₁
 ```
 
-`Filter.eventually_atTop` says `∀ᶠ n in atTop, P n ↔ ∃ N, ∀ n ≥ N, P n`.
+`Filter.eventually_atTop` says `∀ᶠ n in atTop, P n ↔ ∃ N, ∀ n ≥ N, P n`, and
 `Metric.tendsto_atTop` says `Tendsto s atTop (𝓝 a)` is your `ConvergesTo s a`, with
-`dist (s n) a` in place of `|s n - a|`. With `Tendsto`, the limits of analysis are all one
-notion:
+`dist (s n) a` for `|s n - a|`. All the limits of analysis are `Tendsto`:
 
 ```lean
 Tendsto u atTop (𝓝 a)      -- the sequence u converges to a
@@ -47,15 +45,14 @@ Tendsto u atTop atTop      -- u tends to infinity
 Tendsto f (𝓝 x) (𝓝 (f x))  -- f is continuous at x
 ```
 
-Read the arguments in order: the function, the filter on its inputs, the filter on its
-outputs.
+The arguments are the function, the filter on its inputs, then the filter on its outputs.
 
 ## The trap: the filter `⊥`
 
 Mathlib allows the filter `⊥ = 𝓟 ∅`, which contains every set, even `∅`. So
-`∀ᶠ x in ⊥, P x` holds for every `P`, even `False`, and `Tendsto f ⊥ l` holds for every `f`
-and `l`. Hand the Prover a limit along `⊥` and it proves it at once, whatever the sequence.
-Theorems that need a real filter take the hypothesis `[NeBot l]`.
+`∀ᶠ x in ⊥, P x` holds for every `P`, even `False`, and `Tendsto f ⊥ l` always holds. The
+Prover proves any limit along `⊥` at once. Theorems that need a real filter assume
+`[NeBot l]`.
 
 ## Your task
 
