@@ -3,7 +3,7 @@
 
 *Noor needs sub-objects next: the even numbers inside ℕ, the multiples of 12 inside ℤ,
 later a line inside the plane. Sam proposed "a subset closed under `+`", and the referee
-found a subset that should not count before Sam had finished typing.*
+at once found a subset that passes that test and should not.*
 
 A subgroup, a subring, a subspace: a subset that is closed under the operations. A
 submonoid is a structure that bundles a set with the facts that make it one:
