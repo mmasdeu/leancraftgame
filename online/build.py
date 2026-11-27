@@ -30,6 +30,11 @@ INITIALIZE = re.compile(r"^initialize (\w+) : (.+?) ← (.+)$", re.M)
 
 # What the Welcome page says about saving and privacy, locally and online.
 LOCAL_NOTE = re.compile(r"Your code never leaves your computer,.*?which you send yourself\.", re.S)
+# Checking code online is paused: the online version does not contact the Lean Playground.
+LIVE_PAUSED = True
+PAUSED_NOTE = ("Checking code in the browser is paused for now, while we work out how to use the Lean Playground (the Lean community's public server) fairly. You can still read every lesson here. To play, download the app from the Lean Craft Game website: it checks your code on your own computer."
+               " The **Report a problem** button at the top only opens a prefilled page on GitHub, "
+               "which you send yourself.")
 ONLINE_NOTE = ("When you run the tests, your code is sent to the Lean Playground (live.lean-lang.org), "
                "a public server of the Lean community, which checks it: do not put anything private in it. "
                "The **Report a problem** button at the top only opens a prefilled page on GitHub, "
@@ -81,7 +86,7 @@ def library():
 
 def intro():
     text = (ROOT / "LeanCraftGame" / "Intro.md").read_text(encoding="utf-8")
-    text, n = LOCAL_NOTE.subn(ONLINE_NOTE, text)
+    text, n = LOCAL_NOTE.subn(PAUSED_NOTE if LIVE_PAUSED else ONLINE_NOTE, text)
     assert n == 1, "Intro.md no longer has the sentence about nothing being sent"
     return text
 
@@ -105,7 +110,11 @@ def main():
     shutil.rmtree(out, ignore_errors=True)
     shutil.copytree(ROOT / "web" / "static", out)
     (out / "data").mkdir()
-    (out / "config.js").write_text('window.LEANCRAFT = { online: true, goatcounter: "mmasdeu" };\n', encoding="utf-8")
+    # `livePaused`: the online version does not contact the Lean Playground at all (live.js
+    # refuses to run, and the Welcome page says why). Set LIVE_PAUSED to False to re-enable it.
+    (out / "config.js").write_text(
+        'window.LEANCRAFT = { online: true, goatcounter: "mmasdeu"'
+        + (', livePaused: true' if LIVE_PAUSED else '') + ' };\n', encoding="utf-8")
     (out / "data" / "levels.json").write_text(json.dumps(levels(), ensure_ascii=False), encoding="utf-8")
     (out / "data" / "intro.md").write_text(intro(), encoding="utf-8")
     (out / "data" / "prelude.lean").write_text(prelude() + "\n", encoding="utf-8")
