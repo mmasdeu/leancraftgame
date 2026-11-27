@@ -154,7 +154,12 @@ const LiveRunner = (() => {
   }
 
   /* Run `job = { level, prelude, code, ids, stopOnFail, timeout }`. */
+  // While the online version is paused (config.js `livePaused`, see online/build.py), no
+  // connection is opened: a run ends at once with this explanation.
+  const PAUSED = "Checking code in the browser is paused for now, while we work out how to use the Lean Playground (the Lean community's public server) fairly. You can still read every lesson here. To play, download the app from the Lean Craft Game website: it checks your code on your own computer.";
+
   async function run(job, emit, signal) {
+    if (window.LEANCRAFT?.livePaused) throw new Error(PAUSED);
     const { level, prelude, code, stopOnFail, timeout = 60 } = job;
     const chosen = level.tests.map((t, id) => ({ ...t, id })).filter((t) => !job.ids || job.ids.includes(t.id));
     emit("tests", chosen.map((t) => ({ id: t.id, name: t.name, kind: t.kind })));
