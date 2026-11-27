@@ -1,1 +1,1 @@
-window.LEANCRAFT = { online: true, goatcounter: "mmasdeu" };
+window.LEANCRAFT = { online: true, goatcounter: "mmasdeu", livePaused: true };
