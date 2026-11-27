@@ -353,3 +353,7 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
 .questions .q-opt .q-key { color: var(--muted); font-variant-numeric: tabular-nums; }
 .questions .q-opt.picked { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
 .questions .q-opt.picked .q-key { color: inherit; }
+
+/* the timeline of a failed connection to the Lean Playground (live.js) */
+.conn-details { margin-top: 6px; font-size: 13px; }
+.conn-details pre { white-space: pre-wrap; margin: 4px 0 0; font-size: 12px; }
