@@ -154,7 +154,7 @@ with the same disconnected syntax review.
 ## Good to know
 
 * Your code and progress are saved in your browser, so you can close the page and
-  come back. When you run the tests, your code is sent to the Lean Playground (live.lean-lang.org), a public server of the Lean community, which checks it: do not put anything private in it. The **Report a problem** button at the top only opens a prefilled page on GitHub, which you send yourself.
+  come back. Checking code in the browser is paused for now, while we work out how to use the Lean Playground (the Lean community's public server) fairly. You can still read every lesson here. To play, download the app from the Lean Craft Game website: it checks your code on your own computer. The **Report a problem** button at the top only opens a prefilled page on GitHub, which you send yourself.
 * To learn which levels are too hard or too easy, the game counts, anonymously, how often
   each level is run and cleared. Only the level number is sent (through GoatCounter: no
   cookies, no personal data, never your code). It is on by default; untick the box at the
