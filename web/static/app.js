@@ -513,8 +513,7 @@ async function openLevel(id) {
     Audit: "Check whether a formal statement says what it claims to say.",
   };
   const tag = level.exercise ? `<p class="exercise-tag" title="${esc(EXERCISE_TIPS[level.exercise] || "")}">${esc(level.exercise)}</p>` : "";
-  const mil = level.mil ? `<p class="mil-ref">Follows <i>Mathematics in Lean</i>, ${esc(level.mil)}</p>` : "";
-  $("intro").innerHTML = tag + mil + markdown(level.intro);
+  $("intro").innerHTML = tag + markdown(level.intro);
   renderQuestions();
   src.value = store.get(`draft.${id}`, level.template);
   diagnostics = [];

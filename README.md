@@ -1,10 +1,11 @@
 # Lean Craft Game: a Lean game about definitions, not proofs
 
 > **This is the `v3` branch**, to be published at <https://mmasdeu.github.io/leancraftgame/v3/>.
-> Version 3 follows *Mathematics in Lean* (MIL) chapter by chapter: 50 levels in thirteen
-> worlds, one per chapter, plus a final audit. The player reads as much as writes, states
-> theorems without proving them, and uses Mathlib's own names. See [CURRICULUM.md](CURRICULUM.md)
-> and the design in [REDESIGN_PLAN.md](REDESIGN_PLAN.md).
+> Version 3 is a story in thirteen worlds, 50 levels plus a final audit: the player joins
+> the Annex, a team that keeps a Lean library next to an AI prover, and learns to say
+> exactly what is meant. The player reads as much as writes, states theorems without
+> proving them, and uses Mathlib's own names. See [CURRICULUM.md](CURRICULUM.md) and the story
+> in [NARRATIVE.md](NARRATIVE.md).
 
 [![Downloads](https://img.shields.io/github/downloads/mmasdeu/leancraftgame/total?label=downloads)](https://github.com/mmasdeu/leancraftgame/releases) [![Latest release](https://img.shields.io/github/downloads/mmasdeu/leancraftgame/latest/total?label=latest%20release)](https://github.com/mmasdeu/leancraftgame/releases/latest)
 
@@ -78,25 +79,25 @@ python3 web/server.py --run 1 LeanCraftGame/L1/Player.lean
 
 The game starts from zero: no Lean knowledge is assumed. A Welcome page (`LeanCraftGame/Intro.md`)
 introduces Lean and the game to first-time visitors, and then each level teaches one
-piece of syntax or one reading or writing skill, with a worked example from MIL in the
-lesson text, and names the MIL section it follows. There are 50 levels in thirteen
-worlds, one per MIL chapter, and a final audit; [CURRICULUM.md](CURRICULUM.md) lists them
+piece of syntax or one reading or writing skill, with a worked example in the lesson
+text that builds on the objects of earlier levels. There are 50 levels in thirteen
+worlds, each a project of the Annex (see [NARRATIVE.md](NARRATIVE.md)), and a final audit; [CURRICULUM.md](CURRICULUM.md) lists them
 with their exercise types (Write, Read, Construct, Refute, Repair, Audit), and
 [AUTHORING.md](AUTHORING.md) explains how a level is written.
 
-1. **Getting Started** (MIL 1) and **Basics** (MIL 2): reading a Lean file, `def`, how
+1. **Getting Started** and **Basics**: reading a Lean file, `def`, how
    Lean parses, reading Mathlib signatures, stating theorems with `statement`, generic
    statements with type classes.
-2. **Logic** (MIL 3): `∀ ∃ ¬ ∧ ∨ ↔`, pushing negations, the order of quantifiers,
+2. **Logic**: `∀ ∃ ¬ ∧ ∨ ↔`, pushing negations, the order of quantifiers,
    convergence of sequences, mutation testing ("Be the referee").
-3. **Sets and Functions**, **Elementary Number Theory**, **Discrete Mathematics**
-   (MIL 4–6): `Set`, images, injectivity, Schröder–Bernstein; primes, irrationality,
+3. **Sets and Functions**, **Elementary Number Theory**, **Discrete Mathematics**:
+   `Set`, images, injectivity, Schröder–Bernstein; primes, irrationality,
    recursion; `Finset`, big operators, inductive types.
-4. **Structures**, **Hierarchies**, **Groups and Rings** (MIL 7–9): structures, the
+4. **Structures**, **Hierarchies**, **Groups and Rings**: structures, the
    Gaussian integers, classes and instances, morphisms, sub-objects, `ZMod`, ideals,
    polynomials.
 5. **Linear Algebra**, **Topology**, **Differential Calculus**, **Integration and
-   Measure Theory** (MIL 10–13): linear maps, matrices, filters, metric and topological
+   Measure Theory**: linear maps, matrices, filters, metric and topological
    spaces (with finite spaces checked exhaustively), `deriv`, `∫`. Where the referee
    cannot compute, the checks are on types and on the shape of statements.
 
@@ -106,7 +107,9 @@ A *Read* level shows Lean code in the lesson and asks questions about it. The an
 are lines of the player's code (`def q1 : Fin 4 := 2`), and the browser shows the
 questions under the lesson as buttons that write those lines. Questions aim at the
 traps: `#eval (7 + 2) / 2` is `4`, `-x ^ 2` is `-(x ^ 2)`, a hypothesis that an
-application of `pow_le_pow_left₀` must supply.
+application of `pow_le_pow_left₀` must supply. The answers are graded at once, without
+Lean: the level carries each key as a hash (`answer_hash` in `web/server.py`), so a level
+made only of questions never waits for the referee.
 
 ### Stating theorems (Basics, level 5, writing)
 

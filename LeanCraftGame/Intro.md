@@ -1,11 +1,29 @@
 # Welcome to Lean Craft Game
 
 This game teaches you to **read and write Lean**, the language in which mathematicians
-now formalise mathematics, by following the book
-[*Mathematics in Lean*](https://leanprover-community.github.io/mathematics_in_lean/)
-(MIL) chapter by chapter. You do not need to know anything about Lean, or to have read a
+now formalise mathematics. You do not need to know anything about Lean, or to have read a
 line of code before. This page explains what you are about to do. It takes a few minutes
 to read, and you can come back to it at any time with the **Welcome** tab.
+
+## Your new job
+
+*You have just joined **the Annex**, a small team that keeps a Lean library of
+mathematics. Next door hums **the Prover**, an AI that settles any statement it is handed,
+in seconds, and always literally. Proofs have become cheap. What the Annex needs from you
+is the expensive part: saying exactly what is meant.*
+
+* **Noor** runs the Annex and hands you your assignments, one project per world.
+* **Sam**, your colleague, types faster than they think. Sam's code always compiles, and is
+  often wrong in a way worth learning from: you will hunt Sam's bugs at the end of most
+  worlds.
+* **The Prover** never lies about *what* it proved. It just often proves something other
+  than what was meant, and announces it loudly. Auditing its claims is part of the job.
+* **The referee** is the Annex's test bench. It runs hidden tests on everything you write.
+
+The things you build do not disappear: the mean you define on your first day comes back
+in the AM-GM inequality, the convergent sequences of the Logic world come back as filters
+in the Topology world, the Gaussian integers you build by hand become an instance of
+Mathlib's rings.
 
 ## What is Lean?
 
@@ -41,7 +59,7 @@ This is valid Lean, and it is false: `-2 ≤ 1`, but `4 > 1`. A hypothesis `0 �
 missing. Lean checks that the statement is well formed, not that it says what its name
 promises.
 
-So in this game **you never write a proof**. Where MIL proves something, you do one of
+So in this game **you never write a proof**. Where a textbook would prove something, you do one of
 these instead, and a hidden *referee*, an automated prover, does any proving that is
 needed:
 
@@ -115,38 +133,38 @@ with the keys to type it, and a short typing drill. You can try it right now.
 
 ## The road ahead
 
-There is one world per chapter of *Mathematics in Lean*, in the same order, and the
-lesson of each level says which section it follows. A few objects come back again and
-again: the AM-GM inequality, convergent sequences, the primes, the Gaussian integers,
+Each world is one project of the Annex, and each builds on the ones before. A few objects
+come back again and again: the AM-GM inequality, convergent sequences, the primes, the Gaussian integers,
 `ℤ/nℤ`, linear maps on `ℝ²`, and Sierpiński space, the two-point topological space.
 Each level is tagged with its kind of exercise: *Write* (a definition or a statement),
 *Read* (answer questions about Lean code), *Construct* (build an example), *Refute*
 (give a counterexample), *Repair* (fix a colleague's code) or *Audit* (check whether a
 formal statement says what it claims). Most worlds end with a **Spot the bug** level.
 
-1. **Getting Started:** reading a Lean file; your first definitions.
-2. **Basics:** how Lean parses, reading a theorem's signature, stating theorems, generic
-   statements about rings, lattices and metric spaces.
-3. **Logic:** `∀`, `∃`, `¬`, `∧`, `∨`, `↔`, the order of quantifiers, convergence of
-   sequences; and a level where you write the tests and the referee tries to slip wrong
-   definitions past them.
+1. **Getting Started:** your first day. Read a Lean file, write your first definitions.
+2. **Basics:** Noor wants the AM-GM inequality and its friends in the library. Learn how
+   Lean parses, read a theorem's signature, state theorems, make them generic.
+3. **Logic:** the analysis group needs bounds, monotone functions and convergent
+   sequences: `∀`, `∃`, `¬`, `∧`, `∨`, `↔` and the order of quantifiers. In one level you
+   write the tests, and the referee tries to slip wrong definitions past them.
 4. **Sets and Functions:** set notation, images and preimages, injective and surjective
-   functions, the Schröder–Bernstein construction.
+   functions, and a famous construction to read: Schröder–Bernstein.
 5. **Elementary Number Theory:** divisibility and primes, irrational roots, recursion and
-   induction, the infinitude of the primes.
-6. **Discrete Mathematics:** `Finset`, big operators and counting, inductive types.
-7. **Structures:** defining structures, algebraic structures, the Gaussian integers.
+   induction; and the Prover's first announcement, the infinitude of the primes.
+6. **Discrete Mathematics:** counting with `Finset`, big operators, inductive types.
+7. **Structures:** points of space, a colleague's home-made groups, the Gaussian integers.
 8. **Hierarchies:** classes and instances, reading Mathlib's hierarchy, morphisms,
    sub-objects.
-9. **Groups and Rings:** groups, subgroups, `ZMod n`, permutations, ideals, polynomials.
+9. **Groups and Rings:** Mathlib's groups, `ZMod n`, permutations, ideals, polynomials.
 10. **Linear Algebra:** vector spaces and linear maps, subspaces, endomorphisms,
     matrices, bases and dimension.
-11. **Topology:** filters, metric spaces, topological spaces, separation and compactness.
+11. **Topology:** the sequences of the Logic world come back as filters; metric spaces,
+    topological spaces, separation and compactness.
 12. **Differential Calculus:** derivatives, in one variable and in normed spaces.
 13. **Integration and Measure Theory:** integrals and measures.
 
-The game ends with a **final audit**: an AI claims to have proved Goldbach's conjecture
-in one line. What did it really prove?
+The game ends with a **final audit**: the Prover announces a one-line proof of Goldbach's
+conjecture. What did it really prove?
 
 ## Good to know
 

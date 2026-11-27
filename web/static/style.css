@@ -343,7 +343,6 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
 }
 
 /* reading questions (level.json "questions") */
-.mil-ref { font-size: 13px; color: var(--muted); margin: -4px 0 8px; }
 .questions { border-top: 1px solid var(--border); margin-top: 1.5rem; padding-top: .5rem; }
 .questions ol { padding-left: 1.4em; }
 .questions li { margin: 0 0 14px; }

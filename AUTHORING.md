@@ -8,7 +8,7 @@ is the sorted list of directories).
 |---|---|
 | `Player.lean` | The first comment is the lesson (Markdown). Then the `import` lines the level needs (a part of Mathlib, `LeanCraftGame.Lib.*`): the player never sees them, and every test file gets them. The code inside `namespace L<n>` … `end L<n>` is what the player sees and edits; the two lines are hidden in the editor. |
 | `Tests.lean` | `#no_sorry` gates, then `#level_start`, the tests and `#level_report`. Other lines (a referee's copy of a colleague's code, helper definitions) form the preamble. |
-| `level.json` | `world`, `title`, `skill`, `exercise` (one of Write, Read, Construct, Refute, Repair, Audit), `mil` (the section of *Mathematics in Lean* the level follows, such as `"§3.6"`), and optionally `predict`, `public`, `hintsAfter`, `checks` (signature checks), `hints`, `questions` (reading levels) and `timeout` (seconds per test, 60 to 300, for a level whose searches are long; the default is 60). |
+| `level.json` | `world`, `title`, `skill`, `exercise` (one of Write, Read, Construct, Refute, Repair, Audit), and optionally `predict`, `public`, `hintsAfter`, `checks` (signature checks), `hints`, `questions` (reading levels) and `timeout` (seconds per test, 60 to 300, for a level whose searches are long; the default is 60). |
 | `variants/L<n>/*.lean` | `correct*`/`fix*` must clear the level; `bug*` must get at least one ❌ (or be rejected by a check); `other*` (a statement other than the one asked that the referee cannot refute: a true one, or a false one beyond its reach) must not clear the level and must get no ❌. Write them without the `namespace` lines. |
 
 ## Test commands
@@ -61,7 +61,10 @@ entry in `level.json`:
 ```
 
 The browser shows the questions under the lesson as buttons that write the answer into
-the code. Test them with `#expect_choice "Question 1: …" : q1 = 2`, and gate each answer
+the code. Answers are graded without Lean (in the browser, and by `grade_answer` in
+`web/server.py`): the key is read from the `#expect_choice` line, whose right-hand side must
+be a literal (`2`, `true`, `false`). An `#expect_choice` on a name that is not a question
+(a computed value, as in level 18) still runs in Lean. Test them with `#expect_choice "Question 1: …" : q1 = 2`, and gate each answer
 with `#no_sorry`. Name a test after its question, never after its answer.
 
 ## Signature checks
@@ -79,9 +82,11 @@ runs the sample answers through the referee (use `--jobs 2` on a small machine).
 
 ## Rules of thumb
 
-* **Follow MIL.** Each world is a chapter of *Mathematics in Lean*; each level teaches one
-  piece of syntax or one reading or writing skill from its section, with a worked example
-  taken from MIL or close to it, and uses Mathlib's own names (`Set`, `Function.Injective`,
+* **Follow the story.** Each world is a project of the Annex ([NARRATIVE.md](NARRATIVE.md)).
+  A lesson opens with a short italic hook, teaches one piece of syntax or one reading or
+  writing skill, and works an example that builds on an object of an earlier level (the
+  `am` of level 2, the `ConvergesTo` of level 12, the `GaussInt` of level 30). Lessons never
+  refer to an outside book or course. Use Mathlib's own names (`Set`, `Function.Injective`,
   `Filter.Tendsto`, `deriv`) from the Logic world on.
 * **Every level has a trap**, and a prediction (or a question) aims at it.
 * **Definitions only.** The player never proves. Where a mathematician would prove, ask for a
