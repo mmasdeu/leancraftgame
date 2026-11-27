@@ -1,10 +1,16 @@
 /-
 # Derivatives in normed spaces
 
-MIL 12.2 differentiates functions between **normed spaces**: `f : E → F`, where `E` and
+*Noor's next request is derivatives of maps between planes, such as the quarter-turn
+`rot` of level 39, now on `ℝ × ℝ`: `(x, y) ↦ (-y, x)`. The derivative of such a map is
+not a number any more, and the objects of the Linear Algebra world come back: it is a
+linear map.*
+
+Mathlib differentiates functions between **normed spaces**: `f : E → F`, where `E` and
 `F` have a norm `‖x‖` and are vector spaces over `ℝ`. The plane `ℝ × ℝ` is one, and so is
-`ℝ` itself. The derivative of such an `f` at a point is no longer a number: it is the
-**best linear approximation** of `f` near that point.
+`ℝ` itself. The derivative of `f` at a point is the **best linear approximation** of `f`
+near that point. For a map that is already linear, like `rot`, it is the map itself, at
+every point (`ContinuousLinearMap.fderiv`).
 
 ```lean
 variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -31,7 +37,7 @@ On `ℝ × ℝ`, Mathlib's norm is the **maximum** of the absolute values of the
 `‖(x, y)‖ = max |x| |y|`, not the Euclidean length `√(x² + y²)`. (The Euclidean plane is a
 different type, `EuclideanSpace ℝ (Fin 2)`.) The derivative does not depend on the choice,
 since all norms on a finite-dimensional space are equivalent, but a statement that
-mentions `‖·‖` does.
+mentions `‖·‖` does: Sam's first `normPair` was `5`.
 
 ## Your task
 

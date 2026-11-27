@@ -1,8 +1,12 @@
 /-
 # Sub-objects
 
-A subgroup, a subring, a subspace: a subset that is closed under the operations. MIL 8.3
-defines a submonoid as a structure that bundles a set with the facts that make it one:
+*Noor needs sub-objects next: the even numbers inside ℕ, the multiples of 12 inside ℤ,
+later a line inside the plane. Sam proposed "a subset closed under `+`", and the referee
+found a subset that should not count before Sam had finished typing.*
+
+A subgroup, a subring, a subspace: a subset that is closed under the operations. A
+submonoid is a structure that bundles a set with the facts that make it one:
 
 ```lean
 structure Submonoid₁ (M : Type) [Monoid M] where
@@ -17,9 +21,13 @@ structure Submonoid₁ (M : Type) [Monoid M] where
 * `mul_mem` and `one_mem` are fields that hold *propositions*: the axioms. A field such as
   `mul_mem {a b} : …` has its own binders; `{a b}` makes `a` and `b` implicit.
 
-MIL then declares an instance `SetLike (Submonoid₁ M) M`, so that one writes `x ∈ N`
-instead of `x ∈ N.carrier`; Mathlib's `Submonoid`, `Subgroup`, `Ideal` and `Submodule`
-all work this way.
+An instance `SetLike (Submonoid₁ M) M` then lets one write `x ∈ N` instead of
+`x ∈ N.carrier`; Mathlib's `Submonoid`, `Subgroup`, `Ideal` and `Submodule` all work this
+way.
+
+For instance, in the `GaussInt` of level 30 the elements of norm 1, namely `1`, `-1`,
+`i` and `-i`, form a submonoid for multiplication: `1` has norm 1, and since the norm is
+multiplicative, a product of two elements of norm 1 has norm 1.
 
 ## Junk models
 
@@ -30,8 +38,9 @@ every axiom, and junk must break at least one.
 
 ## Set-builder notation
 
-`{n : ℕ | P n}` is the set of `n` satisfying `P n` (MIL 4.1), so `{n | n % 2 = 0}` is
-the even numbers, and `{n | k ∣ n}` the multiples of `k` (type `\|` or `\mid` for `∣`).
+`{n : ℕ | P n}` is the set of `n` satisfying `P n`, as in the Sets and Functions world,
+so `{n | n % 2 = 0}` is the even numbers, and `{n | k ∣ n}` the multiples of `k` (type
+`\|` or `\mid` for `∣`).
 
 ## Your task
 

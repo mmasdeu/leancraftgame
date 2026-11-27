@@ -5,7 +5,7 @@
   "exercise": "Refute",
   "public": "all",
   "predict": [
-    {"test": "the colleague's triangle is right at 0", "statement": "The colleague's `triangle 0` is the right value, 0"}
+    {"test": "Sam's triangle is right at 0", "statement": "Sam's `triangle 0` is the right value, 0"}
   ],
   "checks": [
     {"lean": "#check (L27.tn : ℕ)\n#check (L27.dn : ℕ)\n#check (L27.tree : L27.BinTree)\n#check (L27.gn : ℕ)",
@@ -17,7 +17,7 @@
     {"match": "numDivisors", "steps": ["Which divisor of `n` is missing from `Finset.Ico 1 n`?"],
      "hint": "`n` itself is missing, so any `n ≥ 1` works: `numDivisors 1 = 0`, but 1 has one divisor. At 0 both are 0."},
     {"match": "size", "steps": ["On the empty tree both functions give 0. What about a tree with one node?"],
-     "hint": "`node empty empty`: the colleague's `size` gives 0, the right answer is 1."},
+     "hint": "`node empty empty`: Sam's `size` gives 0, the right answer is 1."},
     {"match": "formula", "steps": ["Try small values of `n`: which `n` makes both sides 0?"],
      "hint": "`gn = 1`: the sum over `range 1` is 0, but `1 * 2 / 2 = 1`."}
   ]

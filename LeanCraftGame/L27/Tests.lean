@@ -22,7 +22,7 @@ end L27Ref
 #no_sorry L27.gn
 #level_start "Spot the bug: counting"
 
-#expect_true "the colleague's triangle is right at 0" :
+#expect_true "Sam's triangle is right at 0" :
   L27Ref.triangle 0 = L27Ref.triangleRight 0
 #expect_true "triangle is wrong on your tn" unfolding L27Ref.triangle L27Ref.triangleRight L27.tn :
   L27Ref.triangle L27.tn ≠ L27Ref.triangleRight L27.tn
@@ -30,7 +30,7 @@ end L27Ref
   L27Ref.numDivisors L27.dn ≠ L27Ref.numDivisorsRight L27.dn
 #expect_true "size is wrong on your tree" unfolding L27.tree :
   L27Ref.size L27.tree ≠ L27Ref.sizeRight L27.tree
-#expect_true "the colleague's formula is false for your gn" unfolding L27.gn :
+#expect_true "Sam's formula is false for your gn" unfolding L27.gn :
   ∑ i ∈ Finset.range L27.gn, i ≠ L27.gn * (L27.gn + 1) / 2
 
 #level_report

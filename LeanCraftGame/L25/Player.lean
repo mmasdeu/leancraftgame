@@ -1,24 +1,28 @@
 /-
 # Big operators and counting
 
+*In level 22 you summed `0 + 1 + ⋯ + n` by recursion, with `sumTo`. Noor would rather
+write such sums the way Mathlib does, so that the library's identities can be stated and
+compared, and asks for Gauss's and Nicomachus's formulas in that form.*
+
 Mathematics is full of sums and products over finite sets. Mathlib writes them with
 **big operators**:
 
 ```lean
-∑ i ∈ Finset.range 5, i ^ 2          -- 0 + 1 + 4 + 9 + 16 = 30
-∏ i ∈ Finset.Icc 1 4, i              -- 1 · 2 · 3 · 4 = 24
-∑ i ∈ (Finset.range 10).filter Even, i    -- 0 + 2 + 4 + 6 + 8 = 20
+∑ i ∈ Finset.range 5, i ^ 2                    -- 0 + 1 + 4 + 9 + 16 = 30
+∏ i ∈ Finset.Icc 1 4, i                        -- 1 · 2 · 3 · 4 = 24
+∑ p ∈ (Finset.range 10).filter Nat.Prime, p    -- 2 + 3 + 5 + 7 = 17
 ```
 
 Read `∑ i ∈ s, f i` as "the sum of `f i` for `i` in `s`" (type `\sum` and `\prod`). The
 variable `i` is bound: `∑ j ∈ s, f j` is the same sum. An empty sum is `0`, an empty
-product is `1`.
+product is `1`: that is why the `fac 0` of level 22 is `1`.
 
 ## Counting with finsets
 
-MIL 6.2 counts by building the finset of the objects and taking its `card`. For
-instance, the pairs `(i, j)` with `i, j < 3` form the product `range 3 ×ˢ range 3` (type
-`\times\^s`… or copy it), and
+To count objects, build the finset of the objects and take its `card`. For instance, the
+pairs `(i, j)` with `i, j < 3` form the product `range 3 ×ˢ range 3` (type `\times\^s`,
+or copy it), and
 
 ```lean
 ((Finset.range 3 ×ˢ Finset.range 3).filter (fun p => p.1 = p.2)).card   -- 3

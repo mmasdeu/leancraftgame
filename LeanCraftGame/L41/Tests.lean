@@ -20,7 +20,7 @@ open L41
 #expect_choice "Question 3: the type of `minpoly K f`" : q3 = 1
 #expect_choice "Question 4: does the theorem stay true over ℝ?" : q4 = false
 
-#expect_equiv "exists_eig states MIL's theorem, with every hypothesis" :
+#expect_equiv "exists_eig states the theorem, with every hypothesis" :
   L41.exists_eig ↔ ∀ {V : Type} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
     [Nontrivial V] (f : Module.End ℂ V), ∃ c : ℂ, f.HasEigenvalue c
   using fun f => Module.End.exists_eigenvalue f

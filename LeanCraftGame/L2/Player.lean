@@ -1,9 +1,9 @@
 /-
 # Your first definitions
 
-MIL's first chapter writes small definitions and checks them with `#check` and
-`#eval`. This level does the same with the quantities of the AM-GM inequality, which
-returns in the next world.
+*Noor's file defined `am`; the library also needs `square`, and both will be used to
+state AM-GM in the next world. "Write them yourself," says Noor, "and mind the
+brackets: Sam's first `am` was `a + b / 2`."*
 
 ## Functions
 

@@ -1,12 +1,14 @@
 /-
 # Spot the bug: algebra
 
-A colleague sends five claims from their algebra notes. Each is false. Prove it the way
-a referee would: with a counterexample, which the referee checks.
+*Sam sends five claims from their algebra notes, to be handed to the Prover tonight.
+Each one is false. The Prover would refute them in seconds, with disproofs nobody reads;
+Noor wants a counterexample for each, small enough to check by hand. The referee checks
+them.*
 
 ## Claim 1: "a set of integers that contains 0 and is closed under + is a subgroup"
 
-The colleague's structures, in the style of MIL 8.3:
+Sam's structures, in the style of level 35:
 
 ```lean
 structure AddSubmonoidℤ where
@@ -34,11 +36,12 @@ fails. (Mathlib's convention: `natDegree 0 = 0`, while `degree 0 = ⊥`.)
 
 ## Claim 4: "in `ZMod n`, every nonzero element has an inverse"
 
-True when `n` is prime. Give `a : ZMod 6`, nonzero, with `a * b ≠ 1` for every `b`.
+True when `n` is prime, as in level 37. Give `a : ZMod 6`, nonzero, with `a * b ≠ 1`
+for every `b`.
 
 ## Claim 5: "permutations commute: `σ * τ = τ * σ`"
 
-Give `σ τ : Equiv.Perm (Fin 3)` with `σ * τ ≠ τ * σ`.
+Give `σ τ : Equiv.Perm (Fin 3)` with `σ * τ ≠ τ * σ`: the S₃ of levels 29 and 36.
 -/
 import Mathlib.RingTheory.Ideal.Span
 import Mathlib.Algebra.Polynomial.Degree.Operations

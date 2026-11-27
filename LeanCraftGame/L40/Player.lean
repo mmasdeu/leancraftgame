@@ -1,8 +1,12 @@
 /-
 # Subspaces and quotients
 
-In Mathlib a subspace of `V` is a `Submodule K V`: a set (its `carrier`) bundled with
-the proofs that it is closed under the operations.
+*Noor wants the subspaces of the plane catalogued. Sam's draft list has a line through
+the origin, the two axes taken together, a parabola, and a line that misses `0`. Only
+the first belongs on it.*
+
+In Mathlib a subspace of `V` is a `Submodule K V`: as for the sub-objects of level 35, a
+set (its `carrier`) bundled with the proofs that it is closed under the operations.
 
 ```lean
 structure Submodule (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] where
@@ -12,7 +16,7 @@ structure Submodule (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] wh
   smul_mem' : ∀ (c : R) {x}, x ∈ carrier → c • x ∈ carrier
 ```
 
-Subspaces are ordered by inclusion, and MIL §10.2 uses the lattice notation for them:
+Subspaces are ordered by inclusion, and Mathlib uses lattice notation for them:
 
 * `⊥` is the zero subspace `{0}`, and `⊤` is the whole space;
 * `U ⊓ W` is the intersection `U ∩ W`;
@@ -21,6 +25,9 @@ Subspaces are ordered by inclusion, and MIL §10.2 uses the lattice notation for
 * `Submodule.span K s` is the smallest subspace containing the set `s`;
 * `V ⧸ W` is the quotient space: vectors of `V`, where two vectors are identified when
   their difference lies in `W`.
+
+The kernel `LinearMap.ker φ` of level 39 is a subspace, and it measures injectivity in
+the sense of level 17: `φ` is injective exactly when `LinearMap.ker φ = ⊥`.
 
 ## Which sets are subspaces?
 

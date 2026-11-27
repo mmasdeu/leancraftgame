@@ -1,8 +1,12 @@
 /-
 # Anatomy of a theorem
 
-MIL §2.3 is about *using* theorems: finding one in Mathlib and applying it. Before you
-can apply a theorem you must read its signature, as `#check` prints it. Here are four,
+*Much of the AM-GM project is already in Mathlib, and Noor wants nothing stated twice.
+So before writing, you read: what does a Mathlib theorem promise, and what does it ask
+for in return? The Prover uses these theorems constantly, and it never applies one
+without every hypothesis.*
+
+To use a theorem you must read its signature, as `#check` prints it. Here are four,
 copied from Mathlib:
 
 ```lean

@@ -1,10 +1,9 @@
 /-
 # Spot the bug: counting
 
-A colleague wrote the code below for a counting project. Each definition compiles, and
-each one is wrong. Your job is not to fix them but to **prove them wrong**: give an
-input on which each one gives the wrong answer. The referee computes both the
-colleague's answer and the right one, and checks that they differ.
+*Sam wrote the counting code below in an afternoon, and plans to test primality with it:
+a prime is a number with exactly two divisors. Each definition compiles, and each one is
+wrong. Noor does not ask you to fix them, but to **prove them wrong**.*
 
 ```lean
 -- 1 + 2 + ⋯ + n
@@ -21,8 +20,11 @@ def size : BinTree → ℕ
 -- "Gauss's formula": for all n, ∑ i ∈ Finset.range n, i = n * (n + 1) / 2
 ```
 
-Read each one slowly: what does `Finset.range n` contain, what does `Ico 1 n`
-contain, which nodes does `size` count?
+Give an input on which each one gives the wrong answer. The referee computes both Sam's
+answer and the right one, and checks that they differ. Read each one slowly, with the
+last three levels in mind: what does `Finset.range n` contain, what does `Ico 1 n`
+contain, which nodes does `size` count? (With Sam's `numDivisors`, would `7` have two
+divisors?)
 
 ## The trap
 
@@ -32,8 +34,7 @@ two answers really differ.
 
 ## Your task
 
-Give one counterexample for each definition. `BinTree` is the type of MIL 6.3, as in
-the previous level.
+Give one counterexample for each definition. `BinTree` is the type of trees of level 26.
 -/
 import Mathlib.Tactic
 
@@ -54,7 +55,7 @@ def dn : ℕ := sorry
 -- a tree on which `size` is wrong
 def tree : BinTree := sorry
 
--- an `n` for which the colleague's "Gauss's formula" is false
+-- an `n` for which Sam's "Gauss's formula" is false
 def gn : ℕ := sorry
 
 end L27

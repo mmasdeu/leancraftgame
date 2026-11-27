@@ -4,7 +4,7 @@ import LeanCraftGame.L22.Player
 
 open L22
 
-/-- MIL's inequality, proved for the referee. -/
+/-- The inequality 2 ^ (n - 1) ≤ n !, proved for the referee. -/
 theorem L22Ref.fac_ge : ∀ n : ℕ, 2 ^ (n - 1) ≤ Nat.factorial n := by
   intro n
   induction n with

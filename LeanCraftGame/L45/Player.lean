@@ -1,8 +1,11 @@
 /-
 # Topological spaces
 
-MIL §11.3 meets Mathlib's most general notion of space. A **topology** on a type `X`
-says which subsets are *open*:
+*Some spaces that Noor needs have no sensible distance. Mathlib's most general notion of
+space keeps only the open sets, and that is too abstract to test on `ℝ`. So the Annex
+builds a gallery of tiny spaces, where the referee can check every open set.*
+
+A **topology** on a type `X` says which subsets are *open*:
 
 ```lean
 class TopologicalSpace (X : Type u) where
@@ -14,7 +17,7 @@ class TopologicalSpace (X : Type u) where
 
 The whole space is open, the intersection of *two* open sets is open, and the union of
 *any* family of open sets is open (`∅` is the union of the empty family). A map is
-continuous when the **preimage** of every open set is open:
+continuous when the **preimage** of every open set is open (the `f ⁻¹' s` of level 16):
 
 ```lean
 theorem continuous_def {f : X → Y} : Continuous f ↔ ∀ s, IsOpen s → IsOpen (f ⁻¹' s)

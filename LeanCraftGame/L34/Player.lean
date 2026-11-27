@@ -1,9 +1,12 @@
 /-
 # Morphisms
 
-A structure is not studied alone: what matters is the maps that respect it. MIL 8.2
-defines a homomorphism of monoids as a *bundled* structure, a function together with
-the facts that it respects the operations:
+*"A structure is never studied alone," says Noor, "what matters is the maps that respect
+it." Sam's first definition of a homomorphism checked products and forgot the unit, and
+the Prover duly proved that the constant map `0` is one.*
+
+Mathlib defines a homomorphism of monoids as a *bundled* structure, a function together
+with the facts that it respects the operations:
 
 ```lean
 structure MonoidHom₁ (G H : Type) [Monoid G] [Monoid H] where
@@ -27,6 +30,10 @@ plain function `f : M → N` that it *is* a homomorphism: that is a predicate, a
 
 Neither condition follows from the other. In `(ℕ, *, 1)`, the constant map `0` respects
 multiplication (`0 = 0 * 0`) but sends `1` to `0`.
+
+A homomorphism you have already met: the norm of the `GaussInt` of level 30,
+`N(a + bi) = a² + b²`. The referee checked there that `N(zw) = N(z) N(w)`, and
+`N(1) = 1`: the norm is a monoid homomorphism from `(ℤ[i], ·, 1)` to `(ℤ, ·, 1)`.
 
 ## Homomorphisms and bijections
 

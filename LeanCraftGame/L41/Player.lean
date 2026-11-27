@@ -1,8 +1,12 @@
 /-
 # Endomorphisms
 
-MIL §10.3 studies linear maps from a space to itself. Mathlib calls them
-**endomorphisms**:
+*The quarter turn of level 39 sends no nonzero vector of the real plane to a multiple of
+itself. Over ℂ it does: its eigenvalues are `i` and `-i`, the `i` of the Gaussian
+integers. Noor wants the theorem behind this stated, with every hypothesis it needs, before
+the Prover is handed it.*
+
+Linear maps from a space to itself are called **endomorphisms**:
 
 ```lean
 abbrev Module.End (R : Type*) (M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] :=
@@ -27,7 +31,7 @@ for every `μ`. And `HasEigenvalue f a` says the eigenspace is not the zero subs
 
 ## A theorem to state
 
-MIL proves that an endomorphism of a finite-dimensional complex vector space has an
+Mathlib proves that an endomorphism of a finite-dimensional complex vector space has an
 eigenvalue. Every hypothesis matters:
 
 * over `ℝ` the quarter turn of the plane has no eigenvalue (no line is mapped to itself);

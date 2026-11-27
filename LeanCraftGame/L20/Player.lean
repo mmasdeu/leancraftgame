@@ -1,7 +1,11 @@
 /-
 # Divisibility and primes
 
-MIL's fifth chapter works with Mathlib's number theory on ℕ. The vocabulary:
+*A new project. The Prover has announced that it proved there are infinitely many primes,
+and Noor wants the Annex to check that claim (level 23). Before an audit, the team needs
+the vocabulary of divisibility, said exactly, junk values included.*
+
+Mathlib's number theory on ℕ starts with these:
 
 ```lean
 a ∣ b            -- a divides b (type \|, it is not the bar |): ∃ c, b = a * c
@@ -10,10 +14,11 @@ Nat.Coprime a b  -- Nat.gcd a b = 1
 Nat.Prime p      -- p is prime; also written p.Prime
 ```
 
-Because `p : ℕ`, `p.Prime` means `Nat.Prime p`: Lean looks up `Prime` in the namespace
-`Nat` of the type of `p`. This *dot notation* is everywhere in Mathlib.
+You met `∣` in level 15: the multiples of `k` were `{n | k ∣ n}`. Because `p : ℕ`,
+`p.Prime` means `Nat.Prime p`: Lean looks up `Prime` in the namespace `Nat` of the type
+of `p`. This *dot notation* is everywhere in Mathlib.
 
-MIL states facts with these, such as
+Mathlib states facts with these, such as
 
 ```lean
 theorem Nat.Prime.two_le {p : ℕ} (hp : p.Prime) : 2 ≤ p
@@ -25,8 +30,9 @@ hypothesis `Nat.Coprime k m` is essential: `4 ∣ 2 * 2` but `4 ∤ 2`.
 
 ## Junk values
 
-Lean's `/` on ℕ is total: `a / 0 = 0`. And `Nat.gcd 0 0 = 0`. A formula such as
-`a * b / Nat.gcd a b` therefore has *some* value at `a = b = 0`, and you should know it.
+Lean's `/` on ℕ is total: `a / 0 = 0` (the junk values of level 7). And `Nat.gcd 0 0 = 0`.
+A formula such as `a * b / Nat.gcd a b` therefore has *some* value at `a = b = 0`, and you
+should know it. Noor's question applies: what should happen at zero?
 
 ## Your task
 

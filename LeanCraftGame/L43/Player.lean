@@ -1,9 +1,22 @@
 /-
 # Filters
 
-In the Logic world you wrote "eventually" and "infinitely often" with explicit
-quantifiers: `∃ N, ∀ n ≥ N, P n` and `∀ N, ∃ n ≥ N, P n`. Mathlib's topology says the same
-things with **filters**, and MIL §11.1 is about reading them.
+*A new project at the Annex: the topology library. Noor's first request is to retire the
+home-made limits of the Logic world. "Every analysis library reinvents convergence," Noor
+says. "Mathlib has one notion for all of them. Learn to read it."*
+
+## Eventually, infinitely often
+
+Here is the `ConvergesTo` you wrote in level 12:
+
+```lean
+def ConvergesTo (s : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n - a| < ε
+```
+
+Its inner part has a shape you will meet everywhere: `∃ N, ∀ n ≥ N, P n`, "`P n` holds
+**eventually**". Swap the quantifiers and you get `∀ N, ∃ n ≥ N, P n`, "`P n` holds
+**infinitely often**": the alternating sequence `0, 1, 0, 1, …` of level 13 is `0`
+infinitely often, but not eventually. Mathlib says both with **filters**.
 
 ## What a filter is
 
@@ -16,7 +29,7 @@ under intersection. The important ones:
   contain an open set around `x`;
 * `Filter.principal s` (`𝓟 s`): the supersets of `s`.
 
-## Eventually, frequently, tends to
+## Filter notation
 
 ```lean
 ∀ᶠ n in atTop, P n      -- the set {n | P n} is in atTop: P n holds eventually
@@ -24,8 +37,10 @@ under intersection. The important ones:
 Tendsto f l₁ l₂         -- for every s ∈ l₂, the preimage f ⁻¹' s is in l₁
 ```
 
-`Filter.eventually_atTop` says that `∀ᶠ n in atTop, P n ↔ ∃ N, ∀ n ≥ N, P n`. With
-`Tendsto`, all the limits of analysis are one notion:
+`Filter.eventually_atTop` says that `∀ᶠ n in atTop, P n ↔ ∃ N, ∀ n ≥ N, P n`, and
+`Metric.tendsto_atTop` that `Tendsto s atTop (𝓝 a)` is your `ConvergesTo s a`, with the
+distance `dist (s n) a` in place of `|s n - a|`. With `Tendsto`, all the limits of
+analysis are one notion:
 
 ```lean
 Tendsto u atTop (𝓝 a)      -- the sequence u converges to a
@@ -40,7 +55,8 @@ variable goes), the filter on its **outputs** (where the values go).
 
 Mathlib allows the filter `⊥ = 𝓟 ∅`, which contains every set, even `∅`. Then
 `∀ᶠ x in ⊥, P x` holds for every `P`, even `False`, and `Tendsto f ⊥ l` holds for every `f`
-and `l`. Theorems that need a "real" filter carry the hypothesis `[NeBot l]`.
+and `l`. Hand the Prover a limit along `⊥` and it proves it at once, whatever the sequence.
+Theorems that need a "real" filter carry the hypothesis `[NeBot l]`.
 
 ## Your task
 

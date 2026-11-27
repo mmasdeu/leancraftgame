@@ -1,8 +1,12 @@
 /-
 # A colleague's groups
 
-MIL 7.2 defines algebraic structures as structures whose fields are the operations
-*and* the axioms:
+*Sam needed groups before the project was allowed Mathlib's, and wrote them over lunch:
+associativity, an identity, inverses. The file compiles. Noor asks the auditor's
+question: is every model of Sam's axioms really a group?*
+
+Like `StandardTwoSimplex` in level 28, an algebraic structure is a structure whose fields
+are the operations *and* the axioms:
 
 ```lean
 structure Group₁ (α : Type*) where
@@ -19,7 +23,7 @@ A model of the structure is data (`mul`, `one`, `inv`) together with proofs of t
 axioms. Writing the axioms is the delicate part: too few, and junk satisfies them; too
 many, and genuine groups are rejected.
 
-A colleague formalised groups with a *left* identity and a *right* inverse:
+Sam formalised groups with a *left* identity and a *right* inverse:
 
 ```lean
 mul_assoc : ∀ a b c, mul (mul a b) c = mul a (mul b c)

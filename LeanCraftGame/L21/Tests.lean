@@ -2,7 +2,7 @@
 import LeanCraftGame.Referee
 import LeanCraftGame.L21.Player
 
-/-- MIL's theorem on ℕ, proved for the referee. -/
+/-- The theorem on ℕ, proved for the referee. -/
 theorem L21Ref.sqrt2_nat : ∀ m n : ℕ, Nat.Coprime m n → m ^ 2 ≠ 2 * n ^ 2 := by
   intro m n hc h
   have h2 : 2 ∣ m := Nat.prime_two.dvd_of_dvd_pow ⟨n ^ 2, h⟩

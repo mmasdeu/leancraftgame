@@ -1,7 +1,10 @@
 /-
 # ∀ and →
 
-MIL's chapter 3 is about logic, and it starts with **upper bounds of functions**:
+*A new project: bounds, monotone functions and, at the end, convergent sequences. Noor
+starts with the simplest notion, an upper bound of a function, because every later
+definition of the project is built from quantifiers in the same way. The definitions you
+write here come back in the next levels.*
 
 ```lean
 def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop :=
@@ -31,7 +34,7 @@ constant.
 The brackets `⦃a b⦄` (or `{a b}`) make `a` and `b` **implicit**: if `h : Monotone f` and
 `hab : 1 ≤ 2`, then `h hab : f 1 ≤ f 2`. Lean reads `a` and `b` off `hab`. With `(a b)`
 or `∀ a b`, you would have to write `h 1 2 hab`. Logically both say the same; for a user
-the implicit version is lighter, which is why MIL and Mathlib use it.
+the implicit version is lighter, which is why Mathlib uses it.
 
 ## Your task
 

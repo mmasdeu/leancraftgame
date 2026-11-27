@@ -1,7 +1,11 @@
 /-
 # ∃
 
-MIL §3.2 continues with functions that **have** an upper bound:
+*`FnUb f a` from level 8 names one particular bound; most of the time Noor only cares
+that **some** bound exists. Meanwhile Sam has written "`f` takes both signs" with a
+single `∃`, a statement that no function satisfies.*
+
+With the `FnUb` of level 8 (given in the template), "`f` has an upper bound" reads:
 
 ```lean
 def FnHasUb (f : ℝ → ℝ) : Prop :=
@@ -24,7 +28,7 @@ The scope of `∃` (and `∀`) extends **as far right as possible**: in
 
 ## Your task
 
-`FnUb` is given. Write:
+`FnUb` is given, as you wrote it in level 8. Write:
 
 * `FnHasUb f`: `f` has an upper bound; `FnHasLb f`: `f` has a lower bound;
 * `bound`: an upper bound of `fun x ↦ min x 3` (a witness);

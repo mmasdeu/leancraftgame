@@ -6,7 +6,7 @@
   "public": ["Toy world: every number is 'prime'"],
   "predict": [
     {"test": "Toy world: the 'primes' are 2 and 3", "statement": "With 'prime' meaning `p = 2 ∨ p = 3`, there are infinitely many 'primes'."},
-    {"test": "Your fakePrime: the AI's IsPrime accepts it", "statement": "The AI's `IsPrime` accepts some number that is not prime."}
+    {"test": "Your fakePrime: the Prover's IsPrime accepts it", "statement": "The Prover's `IsPrime` accepts some number that is not prime."}
   ],
   "questions": [
     {"answer": "q1", "text": "Why does Lean accept the recursive call `digitSum (n / 10)`?",

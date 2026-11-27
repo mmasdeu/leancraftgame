@@ -1,14 +1,17 @@
 /-
 # Reading a Lean file
 
-This game follows the book *Mathematics in Lean* (MIL), one world per chapter. You
-will never write a proof: a hidden *referee* does the proving. Your job is the part a
-proof checker cannot do for you: **reading** Lean and **writing** what you mean.
+*Your first morning at the Annex. Noor hands you a short file: "The Prover will prove
+whatever we write down, so our job is to write down the right thing. That starts with
+reading." The file is about `am`, the arithmetic mean, which the team will need for the
+AM-GM inequality.*
+
+You will never write a proof here: a hidden *referee* does the proving. Your job is the
+part a proof checker cannot do for you: **reading** Lean and **writing** what you mean.
 
 ## A first file
 
-Here is a short file in the style of MIL's first chapter. The numbers on the left are
-line numbers, not part of the file.
+The numbers on the left are line numbers, not part of the file.
 
 ```lean
  1  import Mathlib.Tactic
@@ -31,8 +34,8 @@ line numbers, not part of the file.
 18    sorry
 ```
 
-* `import` loads a library. MIL files start with `import Mathlib.Tactic` or a part
-  of Mathlib.
+* `import` loads a library. Most files start with `import Mathlib.Tactic` or another
+  part of Mathlib, Lean's library of mathematics.
 * `variable (a b : ℝ)` says: in what follows, `a` and `b` are real numbers. Every
   theorem that mentions them gets them as arguments, without repeating the line.
 * `--` starts a **comment**, which Lean ignores.

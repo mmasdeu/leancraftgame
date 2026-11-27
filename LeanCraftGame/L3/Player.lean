@@ -1,16 +1,20 @@
 /-
 # How Lean parses
 
-MIL's first calculations (§2.1) are chains of rewrites such as
-`a * b * c = b * (a * c)`. To read them you must know where Lean puts the brackets that
-nobody writes. Lean follows the usual conventions, with a few surprises.
+*A new project: Noor wants AM-GM and its friends stated for the library, from
+`2 * a * b ≤ a ^ 2 + b ^ 2` to facts about `min` and `max`. Before anyone states
+anything, everyone must agree on where Lean puts the brackets that nobody writes. Lean
+follows the usual conventions, with a few surprises, and the Prover reads every formula
+exactly as Lean parses it.*
 
 ## Precedence: which operation binds tighter
 
 From tightest to loosest:
 
 1. **function application**: `f x`. So `f x + 1` is `(f x) + 1`, and `f x ^ 2` is
-   `(f x) ^ 2`. To apply `f` to `x + 1`, write `f (x + 1)`.
+   `(f x) ^ 2`. To apply `f` to `x + 1`, write `f (x + 1)`. With the `square` and `am`
+   of level 2, `square am a b` is an error; the square of the mean is
+   `square (am a b)`.
 2. `^` (power).
 3. `-x` (negation): **weaker than `^`**, so `-x ^ 2` is `-(x ^ 2)`, as on paper.
 4. `*` and `/`.

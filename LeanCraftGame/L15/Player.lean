@@ -1,8 +1,14 @@
 /-
 # Set notation
 
-MIL's fourth chapter starts with sets. In Mathlib, a set of elements of a type `α` has
-type `Set α`, and it is nothing more than a property: `x ∈ s` is a proposition.
+*A new project. Noor wants the Annex's library to state a famous construction, the
+Schröder–Bernstein theorem, and it is written in the language of sets and images. First the
+vocabulary: Noor asks for the even numbers, the primes and the multiples, as sets.*
+
+In Mathlib, a set of elements of a type `α` has type `Set α`, and it is nothing more than a
+property: `x ∈ s` is a proposition. You already know such properties: `FnUb f a` from
+level 8 ("`a` is an upper bound of `f`") is one, and `{a | FnUb f a}` is the set of the upper
+bounds of `f`.
 
 ## Building sets
 
@@ -29,9 +35,10 @@ A **family** of sets is a function `A : ι → Set α`, one set `A i` for each i
 ⋃₀ S          -- the union of all the sets in a set of sets S
 ```
 
-The index can range over a set: `⋃ k ∈ ({2, 3} : Set ℕ), A k` is `A 2 ∪ A 3`.
-For example `⋃ i : ℕ, Set.Icc 0 i` is all of ℕ: every `n` lies in `[0, n]`. And
-`⋂ i : ℕ, Set.Ici i` is empty: no number is `≥ i` for every `i`.
+`⋃` is an `∃` and `⋂` is a `∀`, the quantifiers of the Logic world in disguise. The index
+can range over a set: `⋃ k ∈ ({2, 3} : Set ℕ), A k` is `A 2 ∪ A 3`. For example
+`⋃ i : ℕ, Set.Icc 0 i` is all of ℕ: every `n` lies in `[0, n]`. And `⋂ i : ℕ, Set.Ici i`
+is empty: no number is `≥ i` for every `i`.
 
 ## Reading set expressions
 
@@ -43,6 +50,7 @@ that are in `t` or in `u`".
 
 Answer the two questions under the lesson, then fill in the sets. Use Mathlib's `Even`
 and `Nat.Prime`, and the operations above (not a new property) where the comment asks.
+Two traps wait at the border: `2` is a prime, and in `k ∣ n` the order says who divides whom.
 -/
 namespace L15
 

@@ -1,24 +1,30 @@
 /-
 # Sequences and convergence
 
-MIL §3.6 puts the whole chapter to work on one definition, convergence of a sequence of
-reals:
+*The project's main definition: convergence of a sequence of reals. Every quantifier of
+the last four levels appears in it, and Noor has seen it written wrong in every possible
+way. Sam keeps two sequences pinned above the desk for testing such definitions, and
+they come back in the next two levels.*
 
 ```lean
 def ConvergesTo (s : ℕ → ℝ) (a : ℝ) :=
   ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n - a| < ε
+
+def late : ℕ → ℝ := fun n ↦ if n < 5 then 7 else 0      -- 7, 7, 7, 7, 7, 0, 0, …
+def blink : ℕ → ℝ := fun n ↦ if n % 2 = 0 then 0 else 1  -- 0, 1, 0, 1, …
 ```
 
-Read it aloud: for every tolerance `ε > 0` there is an index `N` from which on every
-term is within `ε` of `a`. Every symbol matters:
+Read the definition aloud: for every tolerance `ε > 0` there is an index `N` from which
+on every term is within `ε` of `a`. Every symbol matters:
 
 * `ε > 0`: without it, `ε = 0` asks for `|s n - a| < 0`, which never holds, so no
   sequence would converge;
-* `∃ N, ∀ n ≥ N`: from some point on, **every** term. With `∃ n` instead, one close term
-  would be enough, and `0, 1, 0, 1, …` would "converge" to `0`;
+* `∃ N, ∀ n ≥ N`: from some point on, **every** term, whatever the first terms do.
+  With `∃ n` instead, one close term would be enough, and `blink` would "converge"
+  to `0`;
 * the order `∀ ε, ∃ N`: `N` may depend on `ε`.
 
-MIL then proves three theorems about it. You will **state** them.
+The library then needs theorems about the definition. You will **state** three of them.
 
 ## Theorems about your definition
 

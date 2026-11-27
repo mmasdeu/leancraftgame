@@ -1,7 +1,10 @@
 /-
 # Separation and compactness
 
-MIL §11.3 ends with two families of properties of a space.
+*In level 12 you stated `convergesTo_unique`: a sequence of reals has at most one limit.
+Does that survive in the gallery of the last level? Noor asks for the properties that
+decide it, how well a space separates its points, and for the one that replaces "closed
+and bounded" in general: compactness.*
 
 ## Separation
 
@@ -13,8 +16,8 @@ class T1Space (X : Type u) [TopologicalSpace X] : Prop   -- for x ≠ y, an open
 class T2Space (X : Type u) [TopologicalSpace X] : Prop   -- for x ≠ y, disjoint open sets around x and around y
 ```
 
-`T2Space` is the Hausdorff property: limits are unique. Each property implies the one
-before. Sierpiński space (`{1}` open, `{0}` not) is T0 and not T1: the only open set
+`T2Space` is the Hausdorff property: it is what makes limits unique, as on `ℝ` in
+level 12. Each property implies the one before. Sierpiński space (`{1}` open, `{0}` not) is T0 and not T1: the only open set
 containing `0` is the whole space, which also contains `1`.
 
 On a **finite** space, T1 is already very strong. Question 1 asks how strong: think of
@@ -22,7 +25,7 @@ the complement of a point `{x}ᶜ`, and of the finitely many open sets that avoi
 
 ## Compactness
 
-Mathlib defines `IsCompact s` with filters, and proves that it agrees with the textbook
+Mathlib defines `IsCompact s` with filters, and proves that it agrees with the usual
 definition (`isCompact_iff_finite_subcover`): every cover of `s` by open sets has a
 finite subcover. On `ℕ` with the discrete topology every set is open, so `ℕ` is compact
 only if *every* cover of `ℕ` has a finite subcover. A cover is a family `U : ℕ → Set ℕ`

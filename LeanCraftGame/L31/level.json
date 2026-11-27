@@ -5,11 +5,11 @@
   "exercise": "Refute",
   "public": "all",
   "predict": [
-    {"test": "with the colleague's product, i · i = -1", "statement": "With the colleague's `GaussInt.mul`, `i · i` has real part `-1`"}
+    {"test": "with Sam's product, i · i = -1", "statement": "With Sam's `GaussInt.mul`, `i · i` has real part `-1`"}
   ],
   "checks": [
     {"lean": "#check (L31.gz : L31.GaussInt)\n#check (L31.gw : L31.GaussInt)\n#check (L31.pa : L31.Point)\n#check (L31.pb : L31.Point)\n#check (L31.badT : ℚ)\n#check (L31.GaussInt.mk : ℤ → ℤ → L31.GaussInt)\n#check (L31.Point.mk : ℚ → ℚ → ℚ → L31.Point)",
-     "message": "Keep the colleague's `GaussInt` and `Point` as given, and the names and types of your counterexamples."}
+     "message": "Keep Sam's `GaussInt` and `Point` as given, and the names and types of your counterexamples."}
   ],
   "hints": [
     {"match": "gz and gw", "steps": ["The two formulas differ only in the sign of `z.im * w.im`. When does that term vanish?"],

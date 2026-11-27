@@ -1,8 +1,10 @@
 /-
 # Stating theorems
 
-MIL's second chapter proves its first identities and inequalities. In this game you
-**state** them, and the referee checks that your statement says what was asked.
+*Time to write for the library. Noor's first list starts with AM-GM itself: with the
+`square` and `am` of level 2, it reads `a * b ≤ square (am a b)`, and expanding the
+square turns it into `2 * a * b ≤ a ^ 2 + b ^ 2`. You write the statements; the
+Prover will prove whatever you write, so the referee checks that you wrote what was asked.*
 
 ## The `statement` command
 
@@ -13,19 +15,22 @@ colon) and a **conclusion** (after the colon):
 theorem add_pos {a b : ℝ} (ha : 0 < a) (hb : 0 < b) : 0 < a + b := …
 ```
 
-This game adds a command that is a theorem without its proof:
+This game adds a command that is a theorem without its proof. Here it is with the `am`
+of level 2, restated so that the file has it:
 
 ```lean
-statement add_pos' {a b : ℝ} (ha : 0 < a) (hb : 0 < b) : 0 < a + b
+def am (a b : ℝ) : ℝ := (a + b) / 2
+
+statement am_pos {a b : ℝ} (ha : 0 < a) (hb : 0 < b) : 0 < am a b
 ```
 
 It names the proposition "for all reals `a` and `b`, if `0 < a` and `0 < b`, then
-`0 < a + b`". The pieces:
+`0 < am a b`". The pieces:
 
 * `(a b : ℝ)`: **explicit** variables. A user of the theorem supplies them:
-  `add_pos' 2 3 …`.
+  `am_pos 2 3 …`.
 * `{a b : ℝ}`: **implicit** variables. Lean works them out from the hypotheses, so a
-  user writes `add_pos' h₁ h₂`. Logically, `( )` and `{ }` say the same: "for all".
+  user writes `am_pos h₁ h₂`. Logically, `( )` and `{ }` say the same: "for all".
 * `(ha : 0 < a)`: a **hypothesis**, named `ha` so that a proof can refer to it. A
   hypothesis is an assumption: the statement says "*if* `0 < a` then …".
 * After the last colon: the **conclusion**.

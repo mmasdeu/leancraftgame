@@ -1,10 +1,10 @@
 /-
 # Reading a construction: Schröder–Bernstein
 
-The Schröder–Bernstein theorem: if there are injections `f : α → β` and `g : β → α`,
-then there is a bijection between `α` and `β`. MIL §4.3 builds the bijection explicitly.
-Reading such a construction is a large part of using Mathlib, so here it is, with no
-proof to write. Read it, then answer the questions.
+*The Prover settled Schröder–Bernstein in seconds: if there are injections `f : α → β`
+and `g : β → α`, then there is a bijection between `α` and `β`. Before the Annex files it,
+Noor wants someone to read the bijection the proof builds, and to say what it does on
+actual numbers. No proof to write: read, then answer.*
 
 ```lean
 variable {α β : Type*} [Nonempty β]
@@ -21,16 +21,20 @@ def sbFun (x : α) : β :=
   if x ∈ sbSet f g then f x else invFun g x
 ```
 
+Everything here is from the last three levels: images (level 16), an indexed union
+(level 15), `invFun` (level 17).
+
 ## How to read it
 
 * `sbAux` is defined **by recursion on n**, by cases: one line for `0`, one for `n + 1`.
-  The `| 0 => …` and `| n + 1 => …` lines are *pattern matching*.
+  The `| 0 => …` and `| n + 1 => …` lines are *pattern matching* (you will write such
+  definitions yourself in level 22).
 * `sbAux 0` is `univ \ g '' univ`: the points of `α` that are **not** in the range of
   `g`. Then each step applies `f` and then `g`.
 * `sbSet` collects all the `sbAux n`: an indexed union.
 * `sbFun` uses `if … then … else`. On `sbSet` it is `f`. Off `sbSet`, the point `x` is in
   the range of `g` (it is not in `sbAux 0`), so `invFun g x` is a `y` with `g y = x`: there
-  `sbFun` undoes `g`. `invFun g : α → β` needs `[Nonempty β]` (Level 17).
+  `sbFun` undoes `g`. `invFun g : α → β` needs `[Nonempty β]` (level 17).
 
 ## An example to compute
 

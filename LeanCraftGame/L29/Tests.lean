@@ -18,7 +18,7 @@ def S3.inv (x : Fin 6) : Fin 6 :=
 #level_start "A colleague's groups"
 
 /-! ### Part A: your junk model -/
-#expect_model "Part A: your junk model satisfies the colleague's axioms" :
+#expect_model "Part A: your junk model satisfies Sam's axioms" :
   Group'.mk junkMul junkOne junkInv
 #expect_true "Part A: …and yet it is not a group" :
   (∃ a, junkMul a junkOne ≠ a) ∨ (∃ a, junkMul (junkInv a) a ≠ junkOne)

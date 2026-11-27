@@ -20,19 +20,19 @@ end L14Ref
 
 #expect_true "seqA converges to limA" unfolding L14Ref.ConvergesTo L14.seqA L14.limA :
   L14Ref.ConvergesTo L14.seqA L14.limA
-#expect_true "Alice's ConvergesA rejects seqA and limA" unfolding L14Ref.ConvergesA L14.seqA L14.limA :
+#expect_true "Sam's ConvergesA rejects seqA and limA" unfolding L14Ref.ConvergesA L14.seqA L14.limA :
   ¬ L14Ref.ConvergesA L14.seqA L14.limA
 #expect_true "seqB does not converge to limB" unfolding L14Ref.ConvergesTo L14.seqB L14.limB :
   ¬ L14Ref.ConvergesTo L14.seqB L14.limB
-#expect_true "Bob's ConvergesB accepts seqB and limB" unfolding L14Ref.ConvergesB L14.seqB L14.limB :
+#expect_true "Sam's ConvergesB accepts seqB and limB" unfolding L14Ref.ConvergesB L14.seqB L14.limB :
   L14Ref.ConvergesB L14.seqB L14.limB
 #expect_true "no term of seqC is positive" unfolding L14.seqC :
   ∀ n, L14.seqC n ≤ 0
-#expect_true "Carol's SomePositive accepts seqC" unfolding L14Ref.SomePositive L14.seqC :
+#expect_true "Sam's SomePositive accepts seqC" unfolding L14Ref.SomePositive L14.seqC :
   L14Ref.SomePositive L14.seqC
 #expect_true "funD is not bounded above" unfolding L14.funD :
   ¬ ∃ M, ∀ x, L14.funD x ≤ M
-#expect_true "Dan's BoundedAbove accepts funD" unfolding L14Ref.BoundedAbove L14.funD :
+#expect_true "Sam's BoundedAbove accepts funD" unfolding L14Ref.BoundedAbove L14.funD :
   L14Ref.BoundedAbove L14.funD
 
 #level_report

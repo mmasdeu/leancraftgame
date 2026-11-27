@@ -13,7 +13,7 @@
   ],
   "hints": [
     {"match": "1. n₁ is not", "steps": ["What is `2 % 4`? Is `4` a multiple of `2`?"],
-     "hint": "`k₁ := 2`, `n₁ := 4`: `4` is a multiple of `2`, but `2 % 4 = 2`. The colleague wrote \"`n` divides `k`\"."},
+     "hint": "`k₁ := 2`, `n₁ := 4`: `4` is a multiple of `2`, but `2 % 4 = 2`. Sam wrote \"`n` divides `k`\"."},
     {"match": "2.", "steps": ["The lemma holds for injective `f`. Take a function that sends two points to the same place."],
      "hint": "`f₁ := fun n => n % 2`, `s₁ := {0}`, `x₁ := 2`: `f₁ 2 = 0 = f₁ 0`."},
     {"match": "3.", "steps": ["For every `j` some `i` works, but no single `i` works for every `j`: let the right `i` be `j` itself."],

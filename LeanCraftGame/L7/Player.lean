@@ -1,10 +1,13 @@
 /-
 # Spot the bug: statements
 
-A colleague wrote three statements for their notes on MIL's chapter 2. Each compiles.
-Each is **false**:
+*Sam's contribution to the AM-GM project arrives late on Friday: three statements, typed
+fast, all of which compile. Noor asks you to check them before they reach the Prover,
+which would spend the weekend failing to prove them: each of the three is **false**.
+Your job is to show it, then repair what can be repaired.*
 
 ```lean
+-- Sam's statements
 statement sub_sq_nat (a b : ℕ) : (a - b) ^ 2 = a ^ 2 - 2 * a * b + b ^ 2
 
 statement sq_le_sq_of_le (a b : ℝ) (hab : a ≤ b) : a ^ 2 ≤ b ^ 2

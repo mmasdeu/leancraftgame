@@ -1,6 +1,10 @@
 /-
 # Reading the hierarchy
 
+*Sam is puzzled: `ring` works in `ℤ` and in `ℝ`, yet a lemma about fields refuses `ℤ`.
+Noor's answer: read the hierarchy. A lemma applies to a type exactly when Lean finds the
+classes the lemma asks for.*
+
 In the last level you built a three-class hierarchy. Mathlib's has hundreds of classes,
 and reading it is a daily skill: a lemma states its assumptions as classes, and you must
 know whether your type has them.

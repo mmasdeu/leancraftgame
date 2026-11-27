@@ -1,8 +1,12 @@
 /-
 # Inductive types
 
-MIL 6.3 builds new types *inductively*: by listing the ways to construct an element.
-Its main example is the type of binary trees:
+*The counting project reaches trees: Noor wants to check that the number of binary trees
+with `n` nodes follows the Catalan numbers, and for that the Annex needs trees, and
+functions on them, written by recursion as in level 22.*
+
+New types can be built *inductively*: by listing the ways to construct an element. The
+type of binary trees:
 
 ```lean
 inductive BinTree where
@@ -12,7 +16,8 @@ inductive BinTree where
 
 A binary tree is either `empty`, or a `node` with a left and a right subtree. These two
 **constructors** are the only ways to build a tree, so `node empty (node empty empty)`
-is a tree, with two nodes.
+is a tree, with two nodes. ℕ is built the same way, from `0` and `n + 1`: that is why the
+`fac` of level 22 had one line for each.
 
 ## Structural recursion
 
@@ -35,7 +40,7 @@ recurse the same way.
 ## Counting trees
 
 The number of trees with `n` nodes is the `n`-th **Catalan number**: 1, 1, 2, 5, 14, …
-MIL proves it; the referee will check your `size` against it on small trees.
+The referee will check your `size` against it on small trees.
 
 ## Your task
 
@@ -46,7 +51,7 @@ import Mathlib.Tactic
 
 namespace L26
 
--- binary trees, as in MIL 6.3 (already done)
+-- binary trees, as in the lesson (given)
 inductive BinTree where
   | empty : BinTree
   | node : BinTree → BinTree → BinTree

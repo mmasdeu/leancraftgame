@@ -1,10 +1,10 @@
 /-
 # Classes and instances
 
-`x ^ n` means repeated multiplication in `ℕ`, in `ℤ`, in a ring of matrices, in a group
-of permutations: the *same* definition, read in different structures. MIL's chapter 8
-shows how Mathlib does this with **type classes**, by building a small copy of the
-hierarchy. This level follows it.
+*A new project. Noor has noticed that the library defines powers four times: in `ℕ`, in
+`ℤ`, for the `GaussInt` of level 30, for permutations. "It is the same definition every
+time. Write it once, and let Lean find the structure." The tool for that is the
+**type class**, and this world builds a small copy of Mathlib's hierarchy of them.*
 
 ## Classes
 
@@ -24,7 +24,7 @@ class Monoid₁ (α : Type) extends Dia₁ α, One₁ α
 
 `One₁ α` says "`α` has a distinguished element", `Dia₁ α` "`α` has a binary operation",
 written `a ⋄ b` (type `\diamond`). `extends` builds a bigger class from smaller ones: a
-`Monoid₁ α` has both. (MIL's real `Monoid₁` also has the axioms; they are left out
+`Monoid₁ α` has both. (A real monoid class also has the axioms; they are left out
 here, and the tests check them on your examples.)
 
 ## Instances
@@ -35,6 +35,18 @@ An **instance** says that a particular type has the structure:
 instance natMul : Monoid₁ ℕ where
   dia a b := a * b
   one := 1
+```
+
+The Gaussian integers of level 30 are a monoid too, under their own product:
+
+```lean
+structure GaussInt where
+  re : ℤ
+  im : ℤ
+
+instance gaussMul : Monoid₁ GaussInt where
+  dia z w := ⟨z.re * w.re - z.im * w.im, z.re * w.im + z.im * w.re⟩
+  one := ⟨1, 0⟩
 ```
 
 ## Using a class
@@ -49,10 +61,12 @@ def mpow {α : Type} [Monoid₁ α] (x : α) : ℕ → α
   | n + 1 => mpow x n ⋄ x
 ```
 
-`mpow 2 10` finds `natMul` and gives `1024`. This search is how Mathlib knows that `ℝ` is
-a field and `ℤ` a ring, and why one lemma about monoids applies to all of them. A type
-gets **one** instance of a class, so `ℕ` cannot be a `Monoid₁` both under `*` and
-under `+`; Mathlib has separate additive classes (`AddMonoid`) for that reason.
+`mpow 2 10` finds `natMul` and gives `1024`; `mpow (⟨0, 1⟩ : GaussInt) 2` finds
+`gaussMul` and gives `⟨-1, 0⟩`, that is `i² = -1`, with no new definition of powers.
+This search is how Mathlib knows that `ℝ` is a field and `ℤ` a ring, and why one lemma
+about monoids applies to all of them. A type gets **one** instance of a class, so `ℕ`
+cannot be a `Monoid₁` both under `*` and under `+`; Mathlib has separate additive classes
+(`AddMonoid`) for that reason.
 
 ## Your task
 

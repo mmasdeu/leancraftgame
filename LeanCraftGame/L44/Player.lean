@@ -1,7 +1,12 @@
 /-
 # Metric spaces
 
-MIL §11.2 works in a metric space: a type `X` with a distance `dist : X → X → ℝ`.
+*In the last level, `Tendsto s atTop (𝓝 a)` turned out to be your `ConvergesTo` of
+level 12 with `dist (s n) a` in place of `|s n - a|`. Noor wants that to work wherever
+there is a distance: points of the plane, functions, words. First, the library needs to
+say what a distance is.*
+
+A **metric space** is a type `X` with a distance `dist : X → X → ℝ`:
 
 ```lean
 variable {X : Type*} [MetricSpace X] (a b c : X)
@@ -23,14 +28,17 @@ theorem Metric.continuous_iff {f : X → Y} :
 
 The `δ` may depend on the point `b`. When one `δ` works for all points at once, `f` is
 **uniformly continuous**: the quantifier `∃ δ` moves before `∀ b`. In Mathlib that is
-`UniformContinuous f`, and its ε–δ form is `Metric.uniformContinuous_iff`.
+`UniformContinuous f`, and its ε–δ form is `Metric.uniformContinuous_iff`. It is the swap
+of level 10 again, where "every term is below some `M`" was not "bounded".
 
 ## Part A: the axioms
 
 The class `MetricSpace` bundles `dist` with its axioms. Write them yourself, for a
 distance with values in `ℤ` (so that the referee can check examples on four points):
 one field per axiom, after `dist`. The referee feeds your structure genuine metrics, which
-must satisfy your axioms, and impostors, each of which must break at least one.
+must satisfy your axioms, and impostors, each of which must break at least one. Sam's
+first draft let `dist a b = a - b` through, although it satisfies
+`dist a b = 0 ↔ a = b`: a distance needs more than that.
 
 ## Part B: uniform continuity
 

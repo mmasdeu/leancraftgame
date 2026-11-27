@@ -1,7 +1,9 @@
 /-
 # Matrices, bases and dimension
 
-MIL §10.4 connects linear maps with the arrays of numbers that represent them.
+*The last level of the project turns linear maps into arrays of numbers. Noor wants the
+quarter turn of level 39 as a matrix, and an old acquaintance from level 22: the
+Fibonacci numbers, which turn up as entries of a matrix power.*
 
 ## Matrices
 

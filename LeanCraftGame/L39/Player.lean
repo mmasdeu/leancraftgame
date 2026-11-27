@@ -1,8 +1,12 @@
 /-
 # Vector spaces and linear maps
 
-MIL's chapter on linear algebra starts with the hypotheses that make `V` a vector space
-over a field `K`:
+*A new project: linear algebra, starting in the plane. "You have met vectors already,"
+says Noor: "the `Point` of level 28 had `add` and `smul`. Now Mathlib supplies them, and
+the question is which maps respect them." Sam has already proposed one that does not.*
+
+Linear algebra in Mathlib starts with the hypotheses that make `V` a vector space over a
+field `K`:
 
 ```lean
 variable {K : Type*} [Field K] {V : Type*} [AddCommGroup V] [Module K V]
@@ -26,7 +30,7 @@ structure LinearMap … (M : Type*) (M₂ : Type*) … where
   map_smul' : ∀ (c : R) x, toFun (c • x) = c • toFun x
 ```
 
-MIL builds one by giving the three fields:
+One is built by giving the three fields:
 
 ```lean
 example : V →ₗ[K] V where
@@ -44,8 +48,12 @@ finds that they fail.
 
 ## Not every formula is linear
 
-`v ↦ v + ![1, 0]` moves every point one step to the right. It looks harmless, but it is
-not linear: a linear map sends `0` to `0`, since `φ 0 = φ (0 + 0) = φ 0 + φ 0`.
+Sam's `shift`, `v ↦ v + ![1, 0]`, moves every point one step to the right. It looks
+harmless, but it is not linear: a linear map sends `0` to `0`, since
+`φ 0 = φ (0 + 0) = φ 0 + φ 0`.
+
+The quarter turn, on the other hand, is linear, and you have computed it before: it is
+multiplication by `i` on the Gaussian integers of level 30, read in coordinates.
 
 ## Your task
 

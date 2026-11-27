@@ -23,10 +23,10 @@ end L23Ref
 #expect_true "Toy world: the 'primes' are the odd numbers" unfolding Unbounded : Unbounded (fun p => p % 2 = 1)
 #expect_true "Your world: nothing outside [2, 100]" unfolding smallWorld :
   ∀ p, smallWorld p → 2 ≤ p ∧ p ≤ 100
-#expect_true "Your world: the AI's claim holds there" unfolding AIClaim smallWorld : AIClaim smallWorld
+#expect_true "Your world: the Prover's claim holds there" unfolding AIClaim smallWorld : AIClaim smallWorld
 #expect_false "Your world: infinitely many 'primes' there" unfolding L23Ref.Real smallWorld :
   L23Ref.Real smallWorld
-#expect_true "Your fakePrime: the AI's IsPrime accepts it" unfolding IsPrime fakePrime : IsPrime fakePrime
+#expect_true "Your fakePrime: the Prover's IsPrime accepts it" unfolding IsPrime fakePrime : IsPrime fakePrime
 #expect_false "Your fakePrime: it is a real prime" unfolding fakePrime : Nat.Prime fakePrime
 #expect_equiv "euclid says: for every n, a prime p ≥ n" :
   L23.euclid ↔ ∀ n : ℕ, ∃ p, n ≤ p ∧ Nat.Prime p

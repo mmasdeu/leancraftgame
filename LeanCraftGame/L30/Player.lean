@@ -1,8 +1,12 @@
 /-
 # Gaussian integers
 
-MIL 7.3 builds the **Gaussian integers** `ℤ[i]`: the complex numbers `a + bi` with `a`
-and `b` integers. As a structure, a Gaussian integer is just its two integer parts:
+*Noor's second object has arithmetic: the **Gaussian integers** `ℤ[i]`, the complex
+numbers `a + bi` with `a` and `b` integers. "A `Point` with one coordinate fewer, and a
+multiplication. The multiplication is where people slip." `GaussInt` will come back in
+the next two worlds.*
+
+As a structure, a Gaussian integer is just its two integer parts:
 
 ```lean
 structure GaussInt where

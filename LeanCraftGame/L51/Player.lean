@@ -1,11 +1,11 @@
 /-
 # Final audit: the AI proved Goldbach!
 
-You have read and written statements about numbers, sets, structures, spaces, derivatives
-and integrals. One skill remains, and it is the one that matters when proofs are cheap:
-**auditing** a statement that someone else proved.
-
-An AI announces two proofs, and Lean accepts both, with no `sorry`:
+*The Annex is quiet when the Prover posts its announcement: "The AI proved Goldbach's
+conjecture! And Collatz!" Lean accepts both proofs, with no `sorry`. Noor does not
+celebrate. Noor opens the statements and hands them to you: everything since your first
+day, from the quantifiers of the Logic world to the junk values of calculus, was practice
+for this.*
 
 ```lean
 theorem ai_goldbach :
@@ -16,18 +16,20 @@ theorem ai_collatz : ∀ n, ∃ k, collatz^[k] n ≤ n :=
   fun n => ⟨0, le_refl n⟩
 ```
 
-A one-line proof of a famous open problem is not a breakthrough. It is evidence that the
-statement is not the problem.
+The Prover did not lie: it proved exactly these statements. But a one-line proof of a
+famous open problem is not a breakthrough. It is evidence that the statement is not the
+problem.
 
 * In `ai_goldbach`, `→` binds more loosely than `∧`: the body is
   `∃ p q, (Nat.Prime p ∧ Nat.Prime q) → p + q = n`. Take `p = q = 0`, which are not prime:
-  the implication holds vacuously. (The Logic world's `∃ x, P x → Q x`.)
+  the implication holds vacuously. It is the trap of level 11, `→` under `∃`.
 * In `ai_collatz`, take `k = 0`: after zero steps you are at `n`, and `n ≤ n`.
 
 ## The auditor's tool: toy worlds
 
 You cannot test a statement nobody can prove. You *can* test it in worlds where you know
-the answer. So write the statement **parametrised** by the notion it depends on:
+the answer, as you did with the Prover's primes in level 23. So write the statement
+**parametrised** by the notion it depends on:
 
 * `GoldbachFor P`: "every even number greater than `2` is the sum of two numbers that
   satisfy `P`". With `P := Nat.Prime` it is Goldbach's conjecture; with `P := fun _ => False`
@@ -44,9 +46,9 @@ vacuous, or false for a silly reason.
 ## Your task
 
 1. `GoldbachFor` and `CollatzFor`, as described.
-2. Audit three more theorems an AI proved, one from each of three earlier worlds (the
-   questions below the lesson). For each, say whether the Lean statement says what the
-   English claim says.
+2. Audit three more theorems the Prover proved, about primes, convergence and
+   derivatives (the questions below the lesson). For each, say whether the Lean
+   statement says what the English claim says.
 -/
 import Mathlib.Tactic
 

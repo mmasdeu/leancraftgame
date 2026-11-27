@@ -4,7 +4,7 @@ import LeanCraftGame.L19.Player
 
 open L19
 
-/-- The colleague's definition. -/
+/-- Sam's definition. -/
 def L19Ref.multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
 
 #no_sorry k₁
@@ -18,7 +18,7 @@ def L19Ref.multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
 #level_start "Spot the bug: sets"
 
 #expect_true "1. n₁ is a multiple of k₁" unfolding k₁ n₁ : k₁ ∣ n₁
-#expect_true "1. n₁ is not in the colleague's multiplesOf k₁" unfolding k₁ n₁ L19Ref.multiplesOf :
+#expect_true "1. n₁ is not in Sam's multiplesOf k₁" unfolding k₁ n₁ L19Ref.multiplesOf :
   n₁ ∉ L19Ref.multiplesOf k₁
 #expect_true "2. x₁ is in f₁ ⁻¹' (f₁ '' s₁)" unfolding x₁ f₁ s₁ Set.preimage Set.image :
   x₁ ∈ f₁ ⁻¹' (f₁ '' s₁)

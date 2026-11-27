@@ -1,7 +1,11 @@
 /-
 # Images and preimages
 
-A function `f : α → β` moves sets around in two directions (MIL §4.2):
+*Noor rewrites the Logic world's bounds as statements about sets: `FnUb f a`, the upper
+bound from level 8, says that every value of `f` lies below `a`, that is, the set of
+values of `f` sits inside `{y | y ≤ a}`. To say "the set of values" you need images.*
+
+A function `f : α → β` moves sets around in two directions:
 
 ```lean
 f '' s      -- the image of s : Set α, a Set β:      {y | ∃ x, x ∈ s ∧ f x = y}
@@ -12,6 +16,9 @@ Set.range f -- the image of everything:               {y | ∃ x, f x = y}
 Type `''` as two apostrophes, and `⁻¹'` as `\inv'`. Read `f '' s` as "f of s" and
 `f ⁻¹' t` as "f inverse of t". The preimage needs no inverse function: it is defined
 for every `f`, injective or not.
+
+So `FnUb f a` says the same as `Set.range f ⊆ Set.Iic a` (`Set.Iic a` is `{y | y ≤ a}`),
+and for a sequence `s : ℕ → ℝ`, like those of level 12, `Set.range s` is the set of its terms.
 
 ## A worked example
 
@@ -24,8 +31,8 @@ Image and preimage are easy to confuse, and they are rarely the same set.
 
 ## Statements about images
 
-MIL proves facts such as `f '' (s ∪ t) = f '' s ∪ f '' t`. As statements, for every
-pair of types and every function:
+The image of a union is the union of the images. As a statement, for every pair of types
+and every function:
 
 ```lean
 statement image_union' {α β : Type*} (f : α → β) (s t : Set α) :

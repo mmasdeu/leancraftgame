@@ -1,10 +1,14 @@
 /-
 # Finset and Fintype
 
-MIL's chapter on discrete mathematics starts with **finite sets**. Mathlib has two
-notions of set, and the difference matters:
+*A new project: counting. Noor wants numbers the Annex can check by computation: how many
+primes below 20, how many divisors 12 has, how many subsets of a given size. The set of
+primes from level 15 cannot be counted (it is infinite, and Lean cannot list it); counting
+needs another kind of set.*
 
-* `Set α` is a predicate on `α`: `{n | Even n}` may be infinite, and Lean cannot
+Mathlib has two notions of set, and the difference matters:
+
+* `Set α` is a predicate on `α`: `{n | Nat.Prime n}` may be infinite, and Lean cannot
   compute with it.
 * `Finset α` is a *finite* set that Lean can compute with: it can list its elements,
   count them (`s.card`, also written `#s`), and decide whether `3 ∈ s`.
@@ -16,17 +20,19 @@ Finset.range 5                       -- {0, 1, 2, 3, 4}: 5 itself is NOT in it
 Finset.Icc 1 5                       -- {1, 2, 3, 4, 5}: both ends included
 Finset.Ico 1 5                       -- {1, 2, 3, 4}
 (Finset.range 10).filter (fun n => n % 3 = 0)        -- {0, 3, 6, 9}
+(Finset.range 20).filter Nat.Prime   -- {2, 3, 5, 7, 11, 13, 17, 19}: card 8
 (Finset.range 4).image (fun n => 2 * n)              -- {0, 2, 4, 6}
 ({1, 2, 3} : Finset ℕ).powerset                      -- all 8 subsets
 ({1, 2, 3} : Finset ℕ).card                          -- 3
 ```
 
-* `s.filter p` keeps the elements that satisfy `p`.
-* `s.image f` applies `f` to every element (and removes repetitions).
+* `s.filter p` keeps the elements that satisfy `p`, such as the primes of level 20.
+* `s.image f` applies `f` to every element (and removes repetitions), like the image
+  `f '' s` of level 16.
 * `s.powerset` is the finset of all subsets of `s`: a `Finset (Finset α)`.
 
 `Finset.range n` is the most used finset in Mathlib, and the most common source of
-off-by-one errors: it stops **before** `n`.
+off-by-one errors: it stops **before** `n`, as in the sums of level 22.
 
 ## Fintype
 

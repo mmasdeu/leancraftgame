@@ -17,15 +17,15 @@
   "questions": [
     {
       "answer": "q1",
-      "text": "Claim: *there are infinitely many primes*. The AI's theorem: `∀ n : ℕ, ∃ p, n ≤ p ∨ Nat.Prime p`. True or false: the statement says what the claim says."
+      "text": "Claim: *there are infinitely many primes*. The Prover's theorem: `∀ n : ℕ, ∃ p, n ≤ p ∨ Nat.Prime p`. True or false: the statement says what the claim says."
     },
     {
       "answer": "q2",
-      "text": "Claim: *every convergent sequence is bounded*. The AI's theorem: `∀ s : ℕ → ℝ, (∃ a, ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n - a| < ε) → ∃ M, ∀ n, |s n| ≤ M`. True or false: the statement says what the claim says."
+      "text": "Claim: *every convergent sequence is bounded*. The Prover's theorem: `∀ s : ℕ → ℝ, (∃ a, ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n - a| < ε) → ∃ M, ∀ n, |s n| ≤ M`. True or false: the statement says what the claim says."
     },
     {
       "answer": "q3",
-      "text": "Claim: *`|x|` has no derivative at `0`*. The AI's theorem: `deriv (fun x : ℝ => |x|) 0 = 0`. True or false: the statement says what the claim says."
+      "text": "Claim: *`|x|` has no derivative at `0`*. The Prover's theorem: `deriv (fun x : ℝ => |x|) 0 = 0`. True or false: the statement says what the claim says."
     }
   ],
   "checks": [

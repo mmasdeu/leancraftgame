@@ -1,8 +1,11 @@
 /-
 # Generic statements
 
-MIL §2.2 and §2.5 prove identities not for `ℝ` but for **every** ring, lattice or metric
-space at once. In Mathlib this is the normal way to state a theorem:
+*Noor reads your AM-GM statements and asks: "Why only `ℝ`? Half of these hold in every
+ring, or every ordered type." A Mathlib theorem is stated once, for every type where it
+makes sense, and then serves `ℤ`, `ℚ`, `ℝ` and the rest.*
+
+In Mathlib it looks like this:
 
 ```lean
 variable {R : Type*} [CommRing R]
@@ -15,8 +18,8 @@ theorem sub_mul_add (a b : R) : (a - b) * (a + b) = a ^ 2 - b ^ 2 := by ring
 * `[CommRing R]`: an **instance argument**, the assumption "`R` is a commutative ring".
   It is what makes `+`, `-`, `*`, `0`, `1` and `^` available on `R`, with their laws.
 
-The same statement then applies to `ℤ`, `ℚ`, `ℝ`, `ℤ/nℤ`, polynomials… Other classes
-from MIL's chapter:
+The same statement then applies to `ℤ`, `ℚ`, `ℝ`, `ℤ/nℤ`, polynomials… Other common
+classes:
 
 | Class | Gives | Example |
 |---|---|---|
@@ -29,9 +32,16 @@ from MIL's chapter:
 ## Choosing the class
 
 The class must be strong enough for the statement to **make sense**, and no stronger
-than needed, or the theorem says less than it could. `max a b` only exists in a
-**linear** order: with `[PartialOrder α]` the statement does not even typecheck, and Lean
-complains that it cannot find `Max α`. With `[LinearOrder α]` it does.
+than needed, or the theorem says less than it could. The `am` of level 2 divides by 2,
+so it needs a **field**: with `[CommRing K]` Lean cannot find a division on `K`, while
+
+```lean
+def am {K : Type*} [Field K] (a b : K) : K := (a + b) / 2
+```
+
+works for `ℚ` and `ℝ` alike. In the same way, `max a b` only exists in a **linear**
+order: with `[PartialOrder α]` a statement about `max` does not even typecheck (Lean
+cannot find `Max α`), while with `[LinearOrder α]` it does.
 
 In this game, write the type and the class inside each statement, as in
 `statement foo {R : Type*} [CommRing R] (a b : R) : …`. (A `variable` line would turn

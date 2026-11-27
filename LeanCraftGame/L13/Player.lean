@@ -1,8 +1,10 @@
 /-
 # Be the referee
 
-So far the referee tested *your* definitions. Now you write the tests, and the referee
-tries to slip wrong definitions past them.
+*Everyone at the Annex writes convergence from memory, and not everyone gets it right.
+Noor's question for you: are the referee's tests good enough to catch them? So far the
+referee tested *your* definitions. Now you write the tests, and the referee tries to
+slip wrong definitions past them.*
 
 Here is the right definition, for limit `0`:
 
@@ -34,9 +36,10 @@ should sit **on the boundary** of the notion:
   side).
 
 The referee proves things about sequences by computing, so use sequences that are
-**eventually constant** or that **alternate**, such as
-`fun n ↦ if n < 3 then 5 else 0` or `fun n ↦ if n % 2 = 0 then 0 else 1`, and small
-numbers (`1`, `2`, `1/2`, `-1`).
+**eventually constant** or that **alternate**, like Sam's `late` and `blink` from
+level 12 (`fun n ↦ if n < 5 then 7 else 0` and `fun n ↦ if n % 2 = 0 then 0 else 1`),
+and small numbers (`1`, `2`, `1/2`, `-1`). Write them out in full: the template does
+not know `late` and `blink`.
 
 ## Your task
 

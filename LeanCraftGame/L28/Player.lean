@@ -1,7 +1,11 @@
 /-
 # Defining structures
 
-MIL's chapter 7 bundles data into **structures**. Its first example is a point of space:
+*Noor opens a new project: the library needs objects of its own. "Before groups, before
+anything clever: a point of space. Three numbers that travel together." The `Point` you
+write today comes back later, as an instance of a class and as a vector.*
+
+Lean bundles data into **structures**. The first example is a point of space:
 
 ```lean
 @[ext]
@@ -33,7 +37,7 @@ def Point.neg (a : Point) : Point := ⟨-a.x, -a.y, -a.z⟩
 
 ## Fields that are propositions
 
-A field can also be a *property*. MIL's standard 2-simplex is the set of points with
+A field can also be a *property*. The standard 2-simplex is the set of points with
 nonnegative coordinates that add up to 1:
 
 ```lean
@@ -47,7 +51,7 @@ structure StandardTwoSimplex where
 
 To build an element you must provide the numbers *and* proofs of the properties. The
 referee does that part: it checks your fields against points that should and should not
-belong to the simplex.
+belong to the simplex. Forget one property and a point Noor never wanted slips in.
 
 ## Your task
 
@@ -58,7 +62,7 @@ import Mathlib.Tactic
 
 namespace L28
 
--- MIL's points of space (already done)
+-- points of space (already done)
 @[ext]
 structure Point where
   x : ℝ

@@ -1,16 +1,18 @@
 /-
 # Infinitely many primes
 
-MIL §5.3 proves Euclid's theorem, in the form Mathlib states it:
+*"The AI proved the infinitude of primes!" The Prover's announcement is on every screen,
+and Lean accepts its proof. Noor's only question: does its **statement** say what the
+announcement claims? This level is your audit.*
+
+Euclid's theorem, in the form Mathlib states it:
 
 ```lean
 theorem Nat.exists_infinite_primes (n : ℕ) : ∃ p, n ≤ p ∧ Nat.Prime p
 ```
 
 "For every bound `n` there is a prime at least `n`": that is how "infinitely many" is
-said with quantifiers. This level is an **audit**: an AI also claims to have proved
-Euclid's theorem, and Lean accepts its proof. Your job is to decide whether its
-*statement* says what it claims.
+said with quantifiers.
 
 ## How to audit a formalisation
 
@@ -20,7 +22,7 @@ Euclid's theorem, and Lean accepts its proof. Your job is to decide whether its
    the answer. A statement that holds in a world where there are *not* infinitely many
    "primes" does not say "infinitely many".
 
-The AI's statement is written for any notion of "prime" `P`, which makes step 3 easy:
+The Prover's statement is written for any notion of "prime" `P`, which makes step 3 easy:
 
 ```lean
 def IsPrime (p : ℕ) : Prop := ∀ d, d ∣ p → d = 1 ∨ d = p
@@ -28,9 +30,12 @@ def AIClaim (P : ℕ → Prop) : Prop := ∀ n, ∃ p, P p ∧ p ≠ n
 theorem ai_primes : AIClaim IsPrime := …     -- Lean accepts the proof
 ```
 
-## Strong recursion (MIL §5.4), read only
+Compare `IsPrime` with the `Nat.Prime` of level 20 at the borders.
 
-Not every recursion is on `n` and `n + 1`. This one calls itself on `n / 10`:
+## Strong recursion, read only
+
+Not every recursion is on `n` and `n + 1`, like the `fac` of level 22. This one calls
+itself on `n / 10`:
 
 ```lean
 def digitSum (n : ℕ) : ℕ :=
@@ -46,8 +51,8 @@ does (here `n / 10 < n` when `n ≥ 10`): Lean only accepts a recursion that sto
 
 1. `Unbounded P`: the faithful "there are infinitely many numbers satisfying `P`".
 2. `smallWorld`: a toy notion of "prime", with only numbers between 2 and 100, in which
-   the AI's claim holds but there are not infinitely many "primes".
-3. `fakePrime`: a number that the AI's `IsPrime` accepts but `Nat.Prime` rejects.
+   the Prover's claim holds but there are not infinitely many "primes".
+3. `fakePrime`: a number that the Prover's `IsPrime` accepts but `Nat.Prime` rejects.
 4. State Euclid as Mathlib does (`euclid`), and its variant for the primes `p` with
    `p % 4 = 3` (`euclid_mod4`: for every `n` a prime `p ≥ n` with `p % 4 = 3`), in the
    order "bound, prime, remainder".

@@ -1,8 +1,10 @@
 /-
 # Spot the bug: structures
 
-A colleague used this world's structures in a project. Each piece below compiles, and
-each one is wrong. Prove it with a counterexample.
+*Sam rebuilt this world's structures for a project of their own: Gaussian integers as in
+level 30, points with rational coordinates, a unit interval. Each piece compiles, and
+each one is wrong. Noor wants a counterexample for each, so that Sam sees the bug rather
+than being told about it.*
 
 ```lean
 structure GaussInt where
@@ -36,12 +38,12 @@ structure UnitInterval where
   gives a test for free: swap the arguments and compare.
 * A propositional field can be **vacuous**: so weak that junk satisfies it. Here, an
   element of `UnitInterval` is a number together with a proof of `in_range`. Find a
-  number that satisfies the colleague's `in_range` and is not in `[0, 1]`.
+  number that satisfies Sam's `in_range` and is not in `[0, 1]`.
 
 ## Your task
 
-Give the counterexamples. The template has the colleague's types; the referee uses its
-own copy of the colleague's functions.
+Give the counterexamples. The template has Sam's types; the referee uses its own copy
+of Sam's functions.
 -/
 import Mathlib.Tactic
 
@@ -56,7 +58,7 @@ structure Point where
   y : ℚ
   z : ℚ
 
--- two Gaussian integers whose product the colleague gets wrong
+-- two Gaussian integers whose product Sam gets wrong
 def gz : GaussInt := sorry
 def gw : GaussInt := sorry
 
@@ -64,7 +66,7 @@ def gw : GaussInt := sorry
 def pa : Point := sorry
 def pb : Point := sorry
 
--- a number that satisfies the colleague's `in_range` but is not between 0 and 1
+-- a number that satisfies Sam's `in_range` but is not between 0 and 1
 def badT : ℚ := sorry
 
 end L31

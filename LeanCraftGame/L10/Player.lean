@@ -1,8 +1,13 @@
 /-
 # ¬ and the order of quantifiers
 
-MIL §3.3 is about negation. To work with `¬ FnHasUb f` ("`f` has no upper bound") you
-first **push the negation inwards**, turning each quantifier over:
+*The Prover's reports are full of negations: whenever it refutes `FnHasUb f`, it hands
+back `¬ FnHasUb f`, already pushed inwards. Noor wants everyone to read those by hand,
+and to stop confusing "bounded" with "every term is below something".*
+
+`FnUb` (level 8) and `FnHasUb` (level 9) are given in the template. To work with
+`¬ FnHasUb f` ("`f` has no upper bound") you first **push the negation inwards**,
+turning each quantifier over:
 
 * `¬ ∀ x, P x` is `∃ x, ¬ P x` (a counterexample exists);
 * `¬ ∃ x, P x` is `∀ x, ¬ P x`;
@@ -28,7 +33,8 @@ Write the negations **pushed inwards**: no `¬` in front of a quantifier, and no
 
 * `NotFnUb f a`: `a` is *not* an upper bound of `f`.
 * `NoUpperBound f`: `f` has *no* upper bound.
-* `NotMonotone f`: `f` is *not* monotone.
+* `NotMonotone f`: `f` is *not* monotone (in the sense of `MonotoneFn` from level 8:
+  `∀ {a b : ℝ}, a ≤ b → f a ≤ f b`).
 * `BoundedSeq u`: the sequence `u : ℕ → ℕ` is bounded.
 -/
 namespace L10

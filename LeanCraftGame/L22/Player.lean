@@ -1,8 +1,10 @@
 /-
 # Recursion and induction
 
-MIL §5.2 defines functions by **recursion**, and proves facts about them by
-**induction**. You write the definitions and state the facts.
+*Level 18 read a definition by recursion, `sbAux`. Now the Annex needs its own: Noor asks
+for factorials, Fibonacci numbers and sums for the counting project ahead, and for the
+facts about them stated, ready for the Prover. Facts about recursive definitions are
+proved by induction; you only state them.*
 
 ## Pattern matching
 
@@ -14,7 +16,9 @@ def fac : ℕ → ℕ
 
 There is no `:=`: each line `| pattern => value` covers one shape of the argument. A
 natural number is either `0` or `n + 1` for some `n`, so these two lines cover
-everything, and `fac (n + 1)` may call `fac n`. Patterns can go deeper:
+everything, and `fac (n + 1)` may call `fac n`. The `0` line is the one to think about:
+every value is built from it, and `fac 0 = 0` would make every `fac n` zero. Patterns can
+go deeper:
 
 ```lean
 def fib : ℕ → ℕ
@@ -26,8 +30,8 @@ def fib : ℕ → ℕ
 ## Sums: `∑ i ∈ Finset.range n, f i`
 
 `Finset.range n` is the finite set `{0, 1, …, n - 1}`: it has `n` elements, and it does
-**not** contain `n`. So `∑ i ∈ Finset.range n, i` is `0 + 1 + ⋯ + (n - 1)`. MIL's first
-induction proof is Gauss's formula, with `range (n + 1)`:
+**not** contain `n`. So `∑ i ∈ Finset.range n, i` is `0 + 1 + ⋯ + (n - 1)`. The classic
+first proof by induction is Gauss's formula, with `range (n + 1)`:
 
 ```lean
 theorem sum_id (n : ℕ) : ∑ i ∈ range (n + 1), i = n * (n + 1) / 2
@@ -46,7 +50,7 @@ Collatz conjecture says that iterating it from any `n ≥ 1` reaches `1`; nobody
 Fill in `fac`, `fib`, `sumTo` and `collatz`, then state two facts (do not prove them):
 
 * `sum_id`: Gauss's formula above, for all `n`, with `Finset.range`.
-* `fac_ge`: for all `n`, `2 ^ (n - 1) ≤ n !` (MIL §5.2). Mathlib's factorial is
+* `fac_ge`: for all `n`, `2 ^ (n - 1) ≤ n !`. Mathlib's factorial is
   `Nat.factorial n`, also written `n !` (with a space) after `open Nat`. State it with
   `Nat.factorial`, not with your `fac`.
 -/

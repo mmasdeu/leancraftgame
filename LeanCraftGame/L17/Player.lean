@@ -1,19 +1,24 @@
 /-
 # Injective, surjective, inverses
 
-MIL §4.2 defines injectivity, and Mathlib has it under the name `Function.Injective`:
+*Schröder–Bernstein starts from two injections, so the Annex needs injectivity said right.
+Sam's first draft read "if `a₁ = a₂` then `f a₁ = f a₂`". It compiles, and every function
+satisfies it.*
+
+Mathlib's injectivity is `Function.Injective`:
 
 ```lean
 def Function.Injective (f : α → β) : Prop := ∀ ⦃a₁ a₂⦄, f a₁ = f a₂ → a₁ = a₂
 ```
 
 "If two inputs have the same output, they are the same input." The **order** matters:
-the hypothesis is about outputs, the conclusion about inputs. The converse,
-`a₁ = a₂ → f a₁ = f a₂`, holds for every function and says nothing.
+the hypothesis is about outputs, the conclusion about inputs. Sam's converse,
+`a₁ = a₂ → f a₁ = f a₂`, holds for every function and says nothing. (The brackets `⦃ ⦄`
+make `a₁ a₂` implicit, as in the `Monotone` of level 8.)
 
 `Function.Surjective f` says that every `b : β` is an output: `∀ b, ∃ a, f a = b`. Here
-too the order of quantifiers matters: `∃ a, ∀ b, f a = b` would say that one input hits
-everything at once.
+too the order of quantifiers matters (level 10): `∃ a, ∀ b, f a = b` would say that one
+input hits everything at once.
 
 ## Variants in Mathlib
 
@@ -32,7 +37,8 @@ Function.invFun {α : Sort u} {β : Sort v} [Nonempty α] (f : α → β) : β �
 
 ## Truncated subtraction, again
 
-On ℕ, `n - 1` is `0` when `n = 0`. So `fun n => n - 1` sends both `0` and `1` to `0`.
+On ℕ, `n - 1` is `0` when `n = 0` (level 3). So `fun n => n - 1` sends both `0` and `1`
+to `0`.
 
 ## Your task
 
