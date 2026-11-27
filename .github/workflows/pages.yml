@@ -3,6 +3,7 @@
 #
 #   main      -> https://mmasdeu.github.io/leancraftgame/ and .../play/
 #   topology  -> https://mmasdeu.github.io/leancraftgame/beta/
+#   v2, v3    -> .../v2/, .../v3/ (their own workflows; kept here)
 #
 # Runs when either deployment's inputs change, or by hand.
 #
@@ -47,9 +48,10 @@ jobs:
           fi
 
           if [ "$DEPLOY_BRANCH" = main ]; then
-            # main owns the root site and /play, but leaves /beta intact.
+            # main owns the root site and /play, but leaves /beta and the versions (/v2, /v3, …),
+            # published from their own branches, intact.
             find "$PAGES" -mindepth 1 -maxdepth 1 \
-              ! -name .git ! -name beta -exec rm -rf {} +
+              ! -name .git ! -name beta ! -name 'v[0-9]*' -exec rm -rf {} +
             cp -r site/. "$PAGES/"
             python3 online/build.py --out "$PAGES/play"
           elif [ "$DEPLOY_BRANCH" = topology ]; then
