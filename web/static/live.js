@@ -105,38 +105,108 @@ const LiveRunner = (() => {
     return errors.length ? { status: "error", detail: tidy(errors.join("\n")) } : null;
   }
 
+  /* ---------------------------------------------------------------- connection diagnostics
+
+     A browser does not let a page see why a WebSocket failed: a refused handshake (an HTTP 403
+     for this site's Origin, say), a server that is down and a network that blocks it all look
+     the same, an `error` event and a close with code 1006. So each session keeps a timeline of
+     what it saw, and when it fails before Lean answered, one more request tells the cases
+     apart: a plain `no-cors` fetch of the Playground's home page succeeds whenever the host is
+     reachable, whatever it thinks of this site. The timeline is shown with the error, logged
+     to the console, and added to "Report a problem" (`LiveRunner.lastDiagnostic`). */
+
+  const PROBE = "https://live.lean-lang.org/";
+  const PROBE_TIMEOUT = 10000;
+  let lastDiagnostic = null;
+
+  /* Can the browser reach the Playground's host at all? true, false, or null (no answer in time). */
+  async function hostReachable() {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), PROBE_TIMEOUT);
+    try {
+      await fetch(PROBE, { mode: "no-cors", cache: "no-store", signal: ctl.signal });
+      return true;
+    } catch (e) {
+      return e.name === "AbortError" ? null : false;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  /* An error with a likely cause for the player (`message`) and the timeline (`details`). */
+  async function connectionError(stage, log) {
+    const reach = stage === "connect" ? await hostReachable() : true;
+    log("probe of " + PROBE + ": " + (reach === true ? "reachable" : reach === false ? "unreachable" : "no answer in time"));
+    const site = location.origin;
+    const message =
+      !navigator.onLine ? "Your browser is offline, so the Lean Playground cannot check your code."
+      : stage === "connect" && reach === true
+        ? `The Lean Playground (live.lean-lang.org) is up, but refused the connection from this page. ` +
+          `It may be refusing this site (${site}), or limiting connections; try again in a few minutes. ` +
+          `If it keeps happening, please use "Report a problem".`
+      : stage === "connect" && reach === false
+        ? "The Lean Playground (live.lean-lang.org) cannot be reached from here: it may be down, " +
+          "or blocked by your network (a firewall, a proxy, a browser extension)."
+      : stage === "connect"
+        ? "The Lean Playground (live.lean-lang.org) is not answering. It may be down or overloaded; try again in a minute."
+      : stage === "start"
+        ? "Connected to the Lean Playground, but Lean did not start in time. The Playground is probably busy; try again in a minute."
+        : "Connected to the Lean Playground, but it closed the connection before Lean started. " +
+          "The Playground is probably busy or limiting connections; try again in a minute.";
+    const details = lastDiagnostic.lines.join("\n");
+    console.warn("Lean Playground connection failed:\n" + details);
+    return Object.assign(new Error(message), { details });
+  }
+
   /* One Lean session on `file`. Calls `onUpdate({diags, upTo, done})` whenever Lean publishes
      something: `upTo` is the number of lines Lean has completely processed. Resolves with
      why it ended: "closed", "aborted" or the reason given by `onUpdate`'s return value (true
      stops the session). */
   function session(file, onUpdate, signal) {
     return new Promise((resolve, reject) => {
-      let ws, diags = [], upTo = 0, done = false, opened = false, finished = false;
+      let ws, diags = [], upTo = 0, done = false, opened = false, finished = false, connected = false;
+      const t0 = performance.now();
+      lastDiagnostic = { when: new Date().toISOString(), lines: [] };
+      const log = (text) => lastDiagnostic.lines.push(`${String(Math.round(performance.now() - t0)).padStart(6)} ms  ${text}`);
+      log(`page ${location.origin}, socket ${SOCKET}, browser ${navigator.onLine ? "online" : "OFFLINE"}`);
       const end = (how, err) => {
         if (finished) return;
         finished = true;
         clearTimeout(watchdog);
         signal.removeEventListener("abort", onAbort);
         try { ws.close(); } catch { /* already closed */ }
-        err ? reject(err) : resolve(how);
+        if (!err) return resolve(how);
+        if (opened) {                       // Lean had started: the connection broke during the run
+          const details = lastDiagnostic.lines.join("\n");
+          console.warn("Lean Playground connection lost:\n" + details);
+          return reject(Object.assign(new Error(
+            "The connection to the Lean Playground broke while Lean was checking your code. Try again."), { details }));
+        }
+        // before Lean answered: work out the likely cause (this may take one more request)
+        const stage = !connected ? "connect" : err === "timeout" ? "start" : "closed";
+        connectionError(stage, log).then(reject, reject);
       };
-      const onAbort = () => end("aborted");
-      const watchdog = setTimeout(() => end("", new Error(
-        "The Lean Playground did not answer. It may be busy or blocking this page; try again in a minute.")),
-        CONNECT_TIMEOUT);
+      const onAbort = () => { log("stopped by the player"); end("aborted"); };
+      const watchdog = setTimeout(() => {
+        log(`no answer from Lean within ${CONNECT_TIMEOUT / 1000} s`);
+        end("", "timeout");
+      }, CONNECT_TIMEOUT);
       signal.addEventListener("abort", onAbort);
       const send = (m) => ws.send(JSON.stringify({ jsonrpc: "2.0", ...m }));
-      try { ws = new WebSocket(SOCKET); } catch (e) { return end("", e); }
-      ws.onerror = () => end("", new Error("Could not connect to the Lean Playground (live.lean-lang.org)."));
-      ws.onclose = () => end(opened ? "closed" : "", opened ? null : new Error(
-        "The Lean Playground closed the connection. It may be busy or blocking this page."));
-      ws.onopen = () => send({ id: 0, method: "initialize", params: {
-        processId: null, clientInfo: { name: "Lean Craft Game" }, rootPath: `/${PROJECT}`, rootUri: ROOT, capabilities: { textDocument: { publishDiagnostics: {} } } } });
+      try { ws = new WebSocket(SOCKET); } catch (e) { log(`WebSocket could not be created: ${e.message}`); return end("", "create"); }
+      ws.onerror = () => { log("WebSocket error event (the browser gives no reason)"); end("", "error"); };
+      ws.onclose = (ev) => {
+        log(`WebSocket closed: code ${ev.code}${ev.reason ? `, reason "${ev.reason}"` : ""}, ${ev.wasClean ? "clean" : "not clean"}`);
+        end(opened ? "closed" : "", opened ? null : "closed");
+      };
+      ws.onopen = () => { connected = true; log("WebSocket open: asking Lean to start"); send({ id: 0, method: "initialize", params: {
+        processId: null, clientInfo: { name: "Lean Craft Game" }, rootPath: `/${PROJECT}`, rootUri: ROOT, capabilities: { textDocument: { publishDiagnostics: {} } } } }); };
       ws.onmessage = (ev) => {
         let msg;
         try { msg = JSON.parse(ev.data); } catch { return; }
         if (msg.id === 0 && !opened) {
           opened = true;
+          log("Lean answered: sending the file");
           clearTimeout(watchdog);
           send({ method: "initialized", params: {} });
           send({ method: "textDocument/didOpen", params: { textDocument: { uri: URI, languageId: "lean4", version: 1, text: file } } });
@@ -250,7 +320,9 @@ const LiveRunner = (() => {
     emit("done", { total: chosen.length, ...summary, stopped });
   }
 
-  return { run, assemble, compileReport, verdict, locate, tidy };
+  return { run, assemble, compileReport, verdict, locate, tidy,
+    /* the timeline of the last session, for "Report a problem" (null before the first run) */
+    get lastDiagnostic() { return lastDiagnostic; } };
 })();
 
 if (typeof module !== "undefined") module.exports = LiveRunner;

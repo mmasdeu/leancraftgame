@@ -880,7 +880,8 @@ async function runTests(ids = null) {
       }
     }
   } catch (err) {
-    if (err.name !== "AbortError") outcome = ONLINE ? `Could not check your code: ${esc(err.message || String(err))}`
+    if (err.name !== "AbortError") outcome = ONLINE ? `Could not check your code: ${esc(err.message || String(err))}` +
+        (err.details ? `<details class="conn-details"><summary>Connection details</summary><pre>${esc(err.details)}</pre></details>` : "")
       : `Lost contact with the server (${esc(String(err))}). Is <code>web/server.py</code> still running?`;
   }
   if (controller !== ctl) return;           // superseded or stopped
@@ -1030,6 +1031,9 @@ function reportProblem() {
   const lines = ["**What went wrong?**", "", "<!-- Describe the problem here. -->", "", "---",
     `Level: ${level ? `${level.num} · ${level.title}` : "Welcome page"}`,
     `Browser: ${navigator.userAgent}`];
+  // online: how the last connection to the Lean Playground went (see live.js)
+  const conn = ONLINE && typeof LiveRunner !== "undefined" ? LiveRunner.lastDiagnostic : null;
+  if (conn) lines.push("", `Last connection to the Lean Playground (${conn.when}):`, "```", ...conn.lines, "```");
   if (level) {
     const failing = tests.filter((t) => view(t) === "fail").map((t) => `- ❌ ${t.name}`);
     if (failing.length) lines.push("", "Failing tests:", ...failing.slice(0, 8));

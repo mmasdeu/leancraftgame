@@ -164,6 +164,14 @@ python3 online/build.py          # writes dist/online/: upload it to any static 
   runs more than 60 s is dropped (✅ for a test that should stay open, ❓ otherwise), and a
   cut-off session continues with the remaining tests.
 * The Welcome page tells the player that the code goes to a public server.
+* When the connection fails, the page says why it most likely failed. A browser hides the
+  reason a WebSocket was refused, so `live.js` keeps a timeline of the session (socket open,
+  Lean answered, close code) and, when the socket never opened, makes one plain request to
+  `https://live.lean-lang.org/`. If the host answers that request but refused the socket, the
+  Playground is up and refusing this page (or limiting connections). If it does not answer, the
+  host is down or blocked by the player's network. The timeline is shown under the error, logged
+  to the console, and included in **Report a problem**. `python3 tests/browser_connection.py`
+  tests this offline, playing the Playground's part.
 * It depends on the Playground: its Lean and Mathlib versions (this project pins
   `lean-toolchain`; the Playground follows the latest Mathlib), its availability and its limits.
   Ask the Lean community before sending real traffic its way.
