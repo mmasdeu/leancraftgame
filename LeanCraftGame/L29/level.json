@@ -16,37 +16,37 @@
   "hints": [
     {
       "match": "satisfies Sam's axioms",
-      "hint": "Your three functions must satisfy associativity, `mul one a = a` and `mul a (inv a) = one`. Try an operation that ignores one of its arguments.",
+      "hint": "Your functions must satisfy associativity, `mul one a = a` and `mul a (inv a) = one`. Try an operation that ignores one argument.",
       "steps": [
-        "Three functions on `Bool`. Which axioms constrain them, and could `mul` simply ignore one of its arguments?"
+        "Which axioms limit your three functions on `Bool`? Could `mul` just ignore one argument?"
       ]
     },
     {
       "match": "and yet it is not a group",
-      "hint": "Your model satisfies the axioms, but it is a genuine group. Look for an operation where `one` is a left identity but not a right identity.",
+      "hint": "Your model satisfies the axioms, but it's a real group. Look for an operation where `one` is a left identity but not a right identity.",
       "steps": [
-        "Compare Sam's axioms with the textbook definition of a group. What does a group need that the axioms never say?"
+        "Compare Sam's axioms with the usual definition of a group. What does a group need that they never say?"
       ]
     },
     {
       "match": "S₃",
-      "hint": "S₃ is not commutative. If you added `mul_comm` to be safe, remove it: groups need not be commutative.",
+      "hint": "S₃ isn't commutative. If you added `mul_comm` to be safe, remove it. Groups needn't be commutative.",
       "steps": [
         "Is multiplication in S₃ commutative? Do your axioms ask for it?"
       ]
     },
     {
       "match": "is a group",
-      "hint": "A genuine group fails one of your axioms, and the report names it. Is that axiom true in every group?",
+      "hint": "A real group fails one of your axioms, and the report names it. Is that axiom true in every group?",
       "steps": [
-        "The report names the axiom that a genuine group fails. Is that axiom true in *every* group?"
+        "The report names the axiom a real group fails. Is it true in every group?"
       ]
     },
     {
       "match": "'a * b = b'",
-      "hint": "Sam's axioms allow `a * b = b`. Add an axiom that this operation violates, such as a right identity or a left inverse.",
+      "hint": "Sam's axioms allow `a * b = b`. Add an axiom it breaks, such as a right identity or a left inverse.",
       "steps": [
-        "This operation passes Sam's axioms. Which familiar group axiom does it violate?"
+        "This operation passes Sam's axioms. Which usual group axiom does it break?"
       ]
     },
     {

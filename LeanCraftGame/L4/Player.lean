@@ -1,13 +1,11 @@
 /-
 # Anatomy of a theorem
 
-*Much of the AM-GM project is already in Mathlib, and Noor wants nothing stated twice.
-So before writing, you read: what does a Mathlib theorem promise, and what does it ask
-for in return? The Prover uses these theorems constantly, and it never applies one
-without every hypothesis.*
+*Much of the AM-GM project is already in Mathlib, and Noor wants nothing stated twice. So
+you read first: what does a Mathlib theorem promise, and what does it ask for? The Prover
+never applies one without every hypothesis.*
 
-To use a theorem you must read its signature, as `#check` prints it. Here are four,
-copied from Mathlib:
+To use a theorem, read its signature as `#check` prints it. Here are four from Mathlib:
 
 ```lean
 mul_le_mul {α : Type u_1} [Mul α] [Zero α] [Preorder α] {a b c d : α}
@@ -26,26 +24,23 @@ le_div_iff₀ {G₀ : Type u_3} [GroupWithZero G₀] [PartialOrder G₀] [MulPos
 
 ## Three kinds of brackets
 
-* `( )` **explicit** arguments: you write them when you apply the theorem. In
+* `( )` **explicit** arguments. You write them when you use the theorem. In
   `add_pow_two x y`, `x` and `y` fill `a` and `b`.
-* `{ }` **implicit** arguments: Lean works them out from the other arguments. In
-  `mul_le_mul h₁ h₂ c0 b0`, the numbers `a b c d` are read off the types of `h₁` and
-  `h₂`, and the type `α` too.
-* `[ ]` **instance** arguments: facts about the type that Lean finds in its library on
-  its own. `[CommSemiring α]` says "`α` has `+` and `*` satisfying the usual laws of a
-  commutative semiring", which holds for `ℕ`, `ℤ`, `ℚ`, `ℝ`. The odd names
-  (`PosMulMono`: multiplying by a nonnegative number is monotone) are the precise
-  conditions the proof needs; for `ℝ` they all hold.
+* `{ }` **implicit** arguments. Lean works them out. In `mul_le_mul h₁ h₂ c0 b0`, Lean
+  reads `a b c d` and `α` off the types of `h₁` and `h₂`.
+* `[ ]` **instance** arguments. Facts about the type that Lean finds in its library.
+  `[CommSemiring α]` says `α` has `+` and `*` with the usual laws, as `ℕ`, `ℤ`, `ℚ`, `ℝ`
+  do. Odd names like `PosMulMono` (multiplying by a nonnegative number is monotone) are
+  the exact conditions the proof needs. For `ℝ` they all hold.
 
 ## Hypotheses and conclusion
 
-The explicit arguments named `h…` are **hypotheses**: to use the theorem you must supply a
-proof of each. The type after the **last** colon is the **conclusion**: what you get. A
-theorem is only as strong as its hypotheses allow: `pow_le_pow_left₀` gives `a ^ n ≤ b ^ n`
-from `a ≤ b` *only when* `0 ≤ a`. Forgetting a hypothesis is how false statements are
-born (`-2 ≤ 1`, but `4 > 1`).
+Explicit arguments named `h…` are **hypotheses**. To use the theorem you supply a proof of
+each. The type after the last colon is the **conclusion**, what you get. So
+`pow_le_pow_left₀` gives `a ^ n ≤ b ^ n` from `a ≤ b` only when `0 ≤ a`. Drop that
+hypothesis and the statement is false: `-2 ≤ 1`, but `4 > 1`.
 
-An `↔` conclusion, as in `le_div_iff₀`, can be used in both directions.
+An `↔` conclusion, as in `le_div_iff₀`, works in both directions.
 
 ## Your task
 

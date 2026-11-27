@@ -152,13 +152,13 @@ def grade_answer(lv, t, code):
     """Grade a reading question without Lean: a result, or a problem (str) if unanswered."""
     v = answer_of(code, t["answer"])
     if v is None:
-        return f"The line `def {t['answer']} …` is missing from your code: press Reset to get it back."
+        return f"The line `def {t['answer']} …` is missing. Press Reset to get it back."
     if not re.fullmatch(r"\d+|true|false", v):
-        return f"Question `{t['answer']}` has no answer yet: pick one of the choices."
+        return f"Question `{t['answer']}` has no answer yet."
     if v == t["key"]:
         return {"status": "pass", "detail": "", "seconds": 0}
     return {"status": "fail", "seconds": 0,
-            "detail": "This is not the right answer. Read the question and the lesson again."}
+            "detail": "Not the right answer. Read the question and the lesson again."}
 
 
 # What the browser needs to know about a level, besides its tests. `predict`, `public` and

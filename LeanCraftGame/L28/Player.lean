@@ -1,11 +1,10 @@
 /-
 # Defining structures
 
-*Noor opens a new project: the library needs objects of its own. "Before groups, before
-anything clever: a point of space. Three numbers that travel together." The `Point` you
-write today comes back later, as an instance of a class and as a vector.*
+*Noor starts a new project: the library needs objects of its own, and the first is a point
+of space. The `Point` you write today comes back later as a class instance and as a vector.*
 
-Lean bundles data into **structures**. The first example is a point of space:
+A **structure** bundles data together. A point of space:
 
 ```lean
 @[ext]
@@ -15,7 +14,7 @@ structure Point where
   z : ℝ
 ```
 
-A `Point` has three **fields**. There are three ways to build one:
+A `Point` has three fields. You can build one in three ways:
 
 ```lean
 def p : Point := ⟨1, 2, 3⟩                    -- anonymous constructor: fields in order
@@ -23,12 +22,12 @@ def q : Point := Point.mk 1 2 3               -- the constructor `Point.mk`
 def r : Point := { x := 1, y := 2, z := 3 }   -- field names: order does not matter
 ```
 
-and `p.x` is the first coordinate of `p`. `@[ext]` asks Lean for the lemma "two points
-are equal when their coordinates are": a structure is nothing more than its fields.
+`p.x` is the first coordinate of `p`. `@[ext]` gives you the lemma "two points are equal
+when their coordinates are equal".
 
 ## Dot notation
 
-A function in the namespace `Point` can be called with a dot:
+You can call a function in the namespace `Point` with a dot:
 
 ```lean
 def Point.neg (a : Point) : Point := ⟨-a.x, -a.y, -a.z⟩
@@ -37,7 +36,7 @@ def Point.neg (a : Point) : Point := ⟨-a.x, -a.y, -a.z⟩
 
 ## Fields that are propositions
 
-A field can also be a *property*. The standard 2-simplex is the set of points with
+A field can also be a property. The standard 2-simplex is the set of points with
 nonnegative coordinates that add up to 1:
 
 ```lean
@@ -49,13 +48,13 @@ structure StandardTwoSimplex where
   …
 ```
 
-To build an element you must provide the numbers *and* proofs of the properties. The
-referee does that part: it checks your fields against points that should and should not
-belong to the simplex. Forget one property and a point Noor never wanted slips in.
+To build an element, you give the numbers and proofs of the properties. The referee tests
+your fields on points that should and shouldn't be in the simplex. Leave out one property
+and a point Noor never wanted gets in.
 
 ## Your task
 
-Write the definitions, and finish `StandardTwoSimplex`: after the three coordinates,
+Write the definitions, and finish `StandardTwoSimplex`: after the three coordinates, add
 the fields `x_nonneg`, `y_nonneg`, `z_nonneg` and `sum_eq`, in this order.
 -/
 import Mathlib.Tactic

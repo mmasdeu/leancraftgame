@@ -17,8 +17,8 @@
     {"match": "(x - y)²", "steps": ["Compare the distance from 0 to 2 with the distances 0 to 1 and 1 to 2."], "hint": "`4 > 1 + 1`: add the triangle inequality `∀ a b c, dist a c ≤ dist a b + dist b c`."},
     {"match": "zero distance", "steps": ["Which axiom says that different points are at a positive distance?"], "hint": "Add `eq_zero : ∀ a b, dist a b = 0 ↔ a = b`."},
     {"match": "constant distance 1", "hint": "The distance from a point to itself must be `0`: `∀ a b, dist a b = 0 ↔ a = b`."},
-    {"match": "one-way", "hint": "Going from 3 to 0 costs twice as much as from 0 to 3: symmetry rules it out."},
-    {"match": "is a metric", "hint": "A genuine metric breaks one of your axioms, and the report names it. Is that axiom true for `|x - y|`? Watch the direction of `≤` in the triangle inequality."},
+    {"match": "one-way", "hint": "Going from 3 to 0 costs twice as much as from 0 to 3. Symmetry rules it out."},
+    {"match": "is a metric", "hint": "A real metric breaks one of your axioms, and the report names it. Is that axiom true for `|x - y|`? Watch the direction of `≤` in the triangle inequality."},
     {"match": "UnifCont", "steps": ["The order: `∀ ε > 0`, then `∃ δ > 0`, then `∀ x y`. Where does pointwise continuity put `∀ x`?"],
      "hint": "`∀ ε > 0, ∃ δ > 0, ∀ x y, dist x y < δ → dist (f x) (f y) < ε`."}
   ]

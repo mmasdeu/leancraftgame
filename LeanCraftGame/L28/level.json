@@ -46,7 +46,7 @@
     {
       "match": "simplex",
       "steps": [
-        "Which property says that a coordinate may not be negative? Is there one for each coordinate?"
+        "Which property says a coordinate can't be negative? Do you have one for each coordinate?"
       ],
       "hint": "`x_nonneg : 0 ≤ x`, `y_nonneg : 0 ≤ y`, `z_nonneg : 0 ≤ z` and `sum_eq : x + y + z = 1`."
     }

@@ -2,8 +2,8 @@
 # Generic statements
 
 *Noor reads your AM-GM statements and asks: "Why only `ℝ`? Half of these hold in every
-ring, or every ordered type." A Mathlib theorem is stated once, for every type where it
-makes sense, and then serves `ℤ`, `ℚ`, `ℝ` and the rest.*
+ring, or every ordered type." Mathlib states a theorem once, for every type where it makes
+sense, and it then serves `ℤ`, `ℚ`, `ℝ` and the rest.*
 
 In Mathlib it looks like this:
 
@@ -13,12 +13,12 @@ variable {R : Type*} [CommRing R]
 theorem sub_mul_add (a b : R) : (a - b) * (a + b) = a ^ 2 - b ^ 2 := by ring
 ```
 
-* `{R : Type*}`: `R` is a **type**, any type, given implicitly (Lean reads it off `a`
-  and `b`). `Type*` means "a type in any universe"; you can read it as "a type".
-* `[CommRing R]`: an **instance argument**, the assumption "`R` is a commutative ring".
-  It is what makes `+`, `-`, `*`, `0`, `1` and `^` available on `R`, with their laws.
+* `{R : Type*}`: `R` is any type, given implicitly (Lean reads it off `a` and `b`). Read
+  `Type*` as "a type".
+* `[CommRing R]`: an instance argument, the assumption "`R` is a commutative ring". It
+  makes `+`, `-`, `*`, `0`, `1` and `^` available on `R`, with their laws.
 
-The same statement then applies to `ℤ`, `ℚ`, `ℝ`, `ℤ/nℤ`, polynomials… Other common
+The same statement then applies to `ℤ`, `ℚ`, `ℝ`, `ℤ/nℤ`, polynomials. Other common
 classes:
 
 | Class | Gives | Example |
@@ -31,21 +31,21 @@ classes:
 
 ## Choosing the class
 
-The class must be strong enough for the statement to **make sense**, and no stronger
-than needed, or the theorem says less than it could. The `am` of level 2 divides by 2,
-so it needs a **field**: with `[CommRing K]` Lean cannot find a division on `K`, while
+Pick a class strong enough for the statement to make sense, and no stronger, or the theorem
+says less than it could. The `am` of level 2 divides by 2, so it needs a **field**. With
+`[CommRing K]` Lean finds no division on `K`, while
 
 ```lean
 def am {K : Type*} [Field K] (a b : K) : K := (a + b) / 2
 ```
 
-works for `ℚ` and `ℝ` alike. In the same way, `max a b` only exists in a **linear**
-order: with `[PartialOrder α]` a statement about `max` does not even typecheck (Lean
-cannot find `Max α`), while with `[LinearOrder α]` it does.
+works for `ℚ` and `ℝ` alike. Likewise, `max a b` only exists in a linear order. With
+`[PartialOrder α]` a statement about `max` doesn't even typecheck (Lean can't find
+`Max α`). With `[LinearOrder α]` it does.
 
-In this game, write the type and the class inside each statement, as in
-`statement foo {R : Type*} [CommRing R] (a b : R) : …`. (A `variable` line would turn
-the statement into a family of statements, one for each `R`.)
+In this game, write the type and the class inside each statement:
+`statement foo {R : Type*} [CommRing R] (a b : R) : …`. (A `variable` line would turn the
+statement into a family of statements, one for each `R`.)
 
 ## Your task
 
@@ -54,8 +54,8 @@ the statement into a family of statements, one for each `R`.)
 3. `max_comm'`: in every linear order, `max a b = max b a`.
 4. `dist_triangle'`: in every metric space, `dist x z ≤ dist x y + dist y z`.
 
-Make the type and the class implicit or instance arguments, and the elements explicit,
-as Mathlib does: a user should be able to write `sq_sub_sq' 3 2` for integers.
+As in Mathlib, make the type implicit, the class an instance argument, and the elements
+explicit. A user should be able to write `sq_sub_sq' 3 2` for integers.
 -/
 namespace L6
 

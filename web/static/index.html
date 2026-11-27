@@ -35,12 +35,10 @@
 
   <aside id="symbols" class="drawer" hidden aria-label="Symbols">
     <div class="drawer-head"><h2>Typing symbols</h2><button id="symbols-close" class="quiet" aria-label="Close">✕</button></div>
-    <p>Lean uses mathematical symbols that are not on your keyboard. Type a <b>backslash</b>
-      <code>\</code>, then the name, as in VS Code: <code>\forall</code> gives ∀. Some symbols
-      appear by themselves; for the others (like <code>\le</code> or <code>\to</code>, which
-      could be the start of a longer name) press <kbd>Space</kbd> or <kbd>Tab</kbd>.</p>
-    <p class="muted">Click a row to insert the symbol into your code. Most symbols also have a
-      plain-keyboard spelling that Lean understands.</p>
+    <p>Type a backslash and a name: <code>\forall</code> gives ∀. If a symbol doesn't appear
+      right away (like <code>\le</code> or <code>\to</code>), press <kbd>Space</kbd> or <kbd>Tab</kbd>.</p>
+    <p class="muted">Click a row to insert the symbol. Most symbols also have a plain-keyboard
+      spelling that Lean understands.</p>
     <div id="symtable" class="symtable"></div>
     <h3>Practice</h3>
     <div id="drill" class="drill"></div>
@@ -80,10 +78,10 @@
         </div>
       </div>
       <p class="editor-help">
-        Type Lean symbols with a backslash, as in VS Code:
+        Type symbols with a backslash:
         <code>\forall</code> ∀ · <code>\exists</code> ∃ · <code>\to</code> → · <code>\and</code> ∧ ·
         <code>\or</code> ∨ · <code>\le</code> ≤ · <code>\ge</code> ≥ · <code>\ne</code> ≠ · <code>\N</code> ℕ ·
-        <code>\_2</code> ₂. See <b>∀ Symbols</b> above for the full list and practice.
+        <code>\_2</code> ₂. <b>∀ Symbols</b> has the full list.
         <kbd>Ctrl</kbd>+<kbd>Enter</kbd> runs the tests.
       </p>
       <div id="diagnostics"></div>
@@ -96,10 +94,9 @@
         <div id="predict" class="predict" hidden></div>
         <ol id="tests" class="tests"></ol>
         <p class="legend">
-          ✅ as expected · ❌ the referee proved the opposite, so it has a counterexample to your
-          definition · ❓ the referee could not settle it · ○ – not run on this code ·
-          ▶ run only that test · 🔒 hidden tests show up when they fail. A level is cleared when
-          every test passes on the same code. Hints unlock after runs with a ❌.
+          ✅ passed · ❌ failed, with a counterexample · ❓ undecided · ○ – not run on this code ·
+          ▶ run one test · 🔒 hidden until it fails. Clear the level by passing every test on the
+          same code. Hints unlock after runs with a ❌.
         </p>
       </div>
     </aside>

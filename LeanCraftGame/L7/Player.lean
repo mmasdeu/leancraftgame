@@ -1,10 +1,9 @@
 /-
 # Spot the bug: statements
 
-*Sam's contribution to the AM-GM project arrives late on Friday: three statements, typed
-fast, all of which compile. Noor asks you to check them before they reach the Prover,
-which would spend the weekend failing to prove them: each of the three is **false**.
-Your job is to show it, then repair what can be repaired.*
+*Sam's part of the AM-GM project arrives late on Friday: three statements, typed fast. All
+three compile, and all three are false. Noor asks you to show it before they reach the
+Prover, then repair what can be repaired.*
 
 ```lean
 -- Sam's statements
@@ -15,23 +14,23 @@ statement sq_le_sq_of_le (a b : ℝ) (hab : a ≤ b) : a ^ 2 ≤ b ^ 2
 statement div_mul_cancel_bad (x y : ℝ) : x / y * y = x
 ```
 
-A false statement about *all* numbers is refuted by **one** counterexample: values of the
-variables that satisfy every hypothesis and break the conclusion. Usual suspects:
+One **counterexample** refutes a false statement about all numbers: values that satisfy
+every hypothesis and break the conclusion. The usual suspects:
 
-* **truncated subtraction**: in `ℕ`, `a - b = 0` when `a ≤ b`;
-* a **missing hypothesis**: here, a sign condition;
-* **junk values**: Mathlib defines `x / 0 = 0` for every `x`, so that division is a
-  function on all of `ℝ`. Theorems about division therefore carry a hypothesis `y ≠ 0`.
+* truncated subtraction: in `ℕ`, `a - b = 0` when `a ≤ b`;
+* a missing hypothesis, here a sign condition;
+* junk values: Mathlib sets `x / 0 = 0` for every `x`, so that division works on all of
+  `ℝ`. That's why theorems about division carry a hypothesis `y ≠ 0`.
 
 ## Part A: counterexamples
 
 Give the values. The referee checks that they satisfy the hypotheses and break the
-conclusion. Small numbers suffice (the referee computes, it does not search).
+conclusion. Use small numbers: the referee computes, it doesn't search.
 
 ## Part B: repairs
 
-State the two real-number facts correctly, by **adding** the missing hypothesis (and
-nothing else). Name the hypotheses as you like.
+State the two real-number facts correctly by adding the missing hypothesis, and nothing
+else. Name the hypotheses as you like.
 -/
 namespace L7
 

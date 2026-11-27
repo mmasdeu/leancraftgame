@@ -2,8 +2,8 @@
 # Spot the bug: sets
 
 *Sam has pushed three things about sets to the library. Each one compiles, and each one is
-wrong. Noor asks you to **prove them wrong** with counterexamples before anyone builds on
-them, then to repair the first one.*
+wrong. Noor asks you to refute them with counterexamples before anyone builds on them, then
+to repair the first one.*
 
 ## 1. The multiples of `k`
 
@@ -11,9 +11,9 @@ them, then to repair the first one.*
 def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
 ```
 
-meant as "the multiples of `k`", like the `multiples` of level 15. (Recall that `k % n` is
-the remainder of `k` divided by `n`.) Give `k₁` and `n₁` with `n₁` a multiple of `k₁`
-that is **not** in `multiplesOf k₁`.
+This is meant as "the multiples of `k`", like the `multiples` of level 15. (`k % n` is the
+remainder of `k` divided by `n`.) Give `k₁` and `n₁` with `n₁` a multiple of `k₁` that is
+**not** in `multiplesOf k₁`.
 
 ## 2. Preimage of the image
 
@@ -35,10 +35,10 @@ For a family `A i j` of sets with two indices, Sam claims
 ⋃ i, ⋂ j, A i j = ⋂ j, ⋃ i, A i j
 ```
 
-Read both sides: `x ∈ ⋃ i, ⋂ j, A i j` is `∃ i, ∀ j, x ∈ A i j`, and the right-hand side
-is `∀ j, ∃ i, x ∈ A i j`. It is the order of quantifiers again (level 10). Give a
-family `A : Bool → Bool → Set ℕ` (the indices are `true` and `false`) and a point `x₂` on
-the right-hand side but not on the left. You may use `if i = j then … else …`.
+`x ∈ ⋃ i, ⋂ j, A i j` is `∃ i, ∀ j, x ∈ A i j`, and the right-hand side is
+`∀ j, ∃ i, x ∈ A i j`. It's the order of quantifiers again (level 10). Give a family
+`A : Bool → Bool → Set ℕ` (the indices are `true` and `false`) and a point `x₂` on the
+right-hand side but not on the left. You may use `if i = j then … else …`.
 
 ## 4. Repair
 

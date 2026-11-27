@@ -1,9 +1,9 @@
 /-
 # Divisibility and primes
 
-*A new project. The Prover has announced that it proved there are infinitely many primes,
-and Noor wants the Annex to check that claim (level 23). Before an audit, the team needs
-the vocabulary of divisibility, said exactly, junk values included.*
+*A new project. The Prover says it has proved there are infinitely many primes, and Noor
+wants the Annex to check that claim (level 23). First the team needs the vocabulary of
+divisibility, stated exactly, junk values included.*
 
 Mathlib's number theory on ℕ starts with these:
 
@@ -14,7 +14,7 @@ Nat.Coprime a b  -- Nat.gcd a b = 1
 Nat.Prime p      -- p is prime; also written p.Prime
 ```
 
-You met `∣` in level 15: the multiples of `k` were `{n | k ∣ n}`. Because `p : ℕ`,
+You met `∣` in level 15, where the multiples of `k` were `{n | k ∣ n}`. Since `p : ℕ`,
 `p.Prime` means `Nat.Prime p`: Lean looks up `Prime` in the namespace `Nat` of the type
 of `p`. This *dot notation* is everywhere in Mathlib.
 
@@ -25,14 +25,14 @@ theorem Nat.Prime.two_le {p : ℕ} (hp : p.Prime) : 2 ≤ p
 theorem Nat.Coprime.dvd_of_dvd_mul_left {k m n : ℕ} (H1 : Nat.Coprime k m) (H2 : k ∣ m * n) : k ∣ n
 ```
 
-Read the second one: "if `k` is coprime to `m` and divides `m * n`, it divides `n`". The
-hypothesis `Nat.Coprime k m` is essential: `4 ∣ 2 * 2` but `4 ∤ 2`.
+The second one says: if `k` is coprime to `m` and divides `m * n`, it divides `n`. You
+can't drop `Nat.Coprime k m`: `4 ∣ 2 * 2` but `4 ∤ 2`.
 
 ## Junk values
 
 Lean's `/` on ℕ is total: `a / 0 = 0` (the junk values of level 7). And `Nat.gcd 0 0 = 0`.
-A formula such as `a * b / Nat.gcd a b` therefore has *some* value at `a = b = 0`, and you
-should know it. Noor's question applies: what should happen at zero?
+So a formula like `a * b / Nat.gcd a b` has *some* value at `a = b = 0`, and you should
+know what it is. What should happen at zero?
 
 ## Your task
 

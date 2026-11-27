@@ -1,12 +1,12 @@
 /-
 # Sam's groups
 
-*Sam needed groups before the project was allowed Mathlib's, and wrote them over lunch:
-associativity, an identity, inverses. The file compiles. Noor asks the auditor's
-question: is every model of Sam's axioms really a group?*
+*Before the project could use Mathlib's groups, Sam wrote some over lunch: associativity,
+an identity, inverses. The file compiles. Noor asks whether every model of Sam's axioms is
+really a group.*
 
 Like `StandardTwoSimplex` in level 28, an algebraic structure is a structure whose fields
-are the operations *and* the axioms:
+are the operations and the axioms:
 
 ```lean
 structure Group₁ (α : Type*) where
@@ -19,11 +19,10 @@ structure Group₁ (α : Type*) where
   inv_mul_cancel : ∀ x : α, mul (inv x) x = one
 ```
 
-A model of the structure is data (`mul`, `one`, `inv`) together with proofs of the
-axioms. Writing the axioms is the delicate part: too few, and junk satisfies them; too
-many, and genuine groups are rejected.
+A model is the data (`mul`, `one`, `inv`) plus proofs of the axioms. Getting the axioms
+right is the hard part. Too few, and junk satisfies them. Too many, and real groups fail.
 
-Sam formalised groups with a *left* identity and a *right* inverse:
+Sam used a *left* identity and a *right* inverse:
 
 ```lean
 mul_assoc : ∀ a b c, mul (mul a b) c = mul a (mul b c)
@@ -31,15 +30,12 @@ one_mul   : ∀ a, mul one a = a
 mul_inv   : ∀ a, mul a (inv a) = one
 ```
 
-Textbooks often give one-sided axioms, and with the *same* side they are
-enough: a left identity and left inverses imply a group. With mixed sides
-they are not. The axioms are satisfied by structures that are not groups,
-for instance some operations on a two-element set where `mul a one ≠ a`.
+One-sided axioms are fine when both are on the same side: a left identity and left
+inverses give a group. With mixed sides they aren't enough. Some operations on a
+two-element set satisfy them even though `mul a one ≠ a`.
 
-This is the auditor's question about any set of axioms: **does it admit
-junk models?** The way to answer it is not to stare at the axioms, but to
-look for a small model that satisfies them and fails a property every group
-has.
+So for any set of axioms, ask: does it allow **junk models**? Don't stare at the axioms.
+Look for a small model that satisfies them and breaks a property every group has.
 -/
 import Mathlib.Tactic
 
@@ -56,12 +52,11 @@ structure Group' (G : Type) where
 /-
 ## Part A: Break it
 
-Find a *junk model*: an operation on `Bool` (the type with the two values `true`
-and `false`) that satisfies every axiom of
-`Group'` but is NOT a group. Only give the data; the referee checks the
-axioms for you.
+Find a junk model: an operation on `Bool` (the type with the two values `true` and
+`false`) that satisfies every axiom of `Group'` but is not a group. Give only the data.
+The referee checks the axioms for you.
 
-Hint: is `mul a one = a` a consequence of the axioms above?
+Hint: do the axioms above imply `mul a one = a`?
 -/
 
 def junkMul : Bool → Bool → Bool := sorry
@@ -71,12 +66,11 @@ def junkInv : Bool → Bool := sorry
 /-
 ## Part B: Fix it
 
-Write a correct definition. Keep `mul`, `one`, `inv` as the first three
-fields, in this order; the axioms are up to you.
+Write a correct definition. Keep `mul`, `one`, `inv` as the first three fields, in this
+order. The axioms are up to you.
 
-The referee checks your structure against a zoo of models: real groups
-(which must satisfy all your axioms) and junk models (each of which must
-violate at least one). Some of the groups are not commutative.
+The referee tries your structure on many models. Real groups must satisfy all your axioms.
+Each junk model must break at least one. Some of the groups are not commutative.
 -/
 
 structure Group₂ (G : Type) where

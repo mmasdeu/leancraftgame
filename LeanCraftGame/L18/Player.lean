@@ -2,9 +2,9 @@
 # Reading a construction: Schröder–Bernstein
 
 *The Prover settled Schröder–Bernstein in seconds: if there are injections `f : α → β`
-and `g : β → α`, then there is a bijection between `α` and `β`. Before the Annex files it,
-Noor wants someone to read the bijection the proof builds, and to say what it does on
-actual numbers. No proof to write: read, then answer.*
+and `g : β → α`, there is a bijection between `α` and `β`. Before the Annex files it, Noor
+wants someone to read the bijection the proof builds and work it out on actual numbers.
+There's no proof to write here.*
 
 ```lean
 variable {α β : Type*} [Nonempty β]
@@ -21,19 +21,19 @@ def sbFun (x : α) : β :=
   if x ∈ sbSet f g then f x else invFun g x
 ```
 
-Everything here is from the last three levels: images (level 16), an indexed union
+Everything here comes from the last three levels: images (level 16), an indexed union
 (level 15), `invFun` (level 17).
 
 ## How to read it
 
-* `sbAux` is defined **by recursion on n**, by cases: one line for `0`, one for `n + 1`.
-  The `| 0 => …` and `| n + 1 => …` lines are *pattern matching* (you will write such
-  definitions yourself in level 22).
-* `sbAux 0` is `univ \ g '' univ`: the points of `α` that are **not** in the range of
-  `g`. Then each step applies `f` and then `g`.
-* `sbSet` collects all the `sbAux n`: an indexed union.
+* `sbAux` is defined **by recursion on n**, with one line for `0` and one for `n + 1`.
+  These `| 0 => …` and `| n + 1 => …` lines are *pattern matching*. You'll write such
+  definitions yourself in level 22.
+* `sbAux 0` is `univ \ g '' univ`, the points of `α` that are **not** in the range of `g`.
+  Each step then applies `f`, then `g`.
+* `sbSet` is the union of all the `sbAux n`.
 * `sbFun` uses `if … then … else`. On `sbSet` it is `f`. Off `sbSet`, the point `x` is in
-  the range of `g` (it is not in `sbAux 0`), so `invFun g x` is a `y` with `g y = x`: there
+  the range of `g` (it isn't in `sbAux 0`), so `invFun g x` is a `y` with `g y = x`. There
   `sbFun` undoes `g`. `invFun g : α → β` needs `[Nonempty β]` (level 17).
 
 ## An example to compute
@@ -44,8 +44,8 @@ Take `α = β = ℕ` and `f n = g n = 2 * n`. Then `g '' univ` is the even numbe
 
 ## Your task
 
-Answer the questions under the lesson. For the last two, write a number: the value of
-`sbFun f g` at `12` and at `8`, for this `f` and `g`.
+Answer the questions. For the last two, write a number: the value of `sbFun f g` at `12`
+and at `8`, for this `f` and `g`.
 -/
 namespace L18
 

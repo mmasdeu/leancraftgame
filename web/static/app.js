@@ -324,12 +324,12 @@ function answerHash(answer, value) {
 /* The local verdict of a question's test: a result, or a problem (a string) when unanswered. */
 function gradeQuestion(q) {
   if (!answerLine(q.answer).exec(src.value))
-    return `The line \`def ${q.answer} …\` is missing from your code: press Reset to get it back.`;
+    return `The line \`def ${q.answer} …\` is missing. Press Reset to get it back.`;
   const a = currentAnswer(q);
-  if (a === null) return `Question \`${q.answer}\` has no answer yet: pick one of the choices.`;
+  if (a === null) return `Question \`${q.answer}\` has no answer yet.`;
   return answerHash(q.answer, String(a)) === q.key
     ? { status: "pass", detail: "", seconds: 0 }
-    : { status: "fail", detail: "This is not the right answer. Read the question and the lesson again.", seconds: 0 };
+    : { status: "fail", detail: "Not the right answer. Read the question and the lesson again.", seconds: 0 };
 }
 
 function renderQuestions() {
@@ -338,8 +338,8 @@ function renderQuestions() {
   const box = document.createElement("section");
   box.className = "questions";
   box.id = "questions";
-  box.innerHTML = `<h2>Questions</h2><p class="muted">Your choices are written into the code on the right
-    (the lines <code>def ${esc(qs[0].answer)} …</code>); <b>Run tests</b> checks them.</p><ol>${qs.map((q, i) => {
+  box.innerHTML = `<h2>Questions</h2><p class="muted">Click an answer and it's written into the code on the right
+    (<code>def ${esc(qs[0].answer)} …</code>). <b>Run tests</b> checks your answers.</p><ol>${qs.map((q, i) => {
     const opts = q.choices ? q.choices.map((c, k) => [k, c]) : [[true, "true"], [false, "false"]];
     return `<li data-q="${i}"><div class="q-text">${markdown(q.text)}</div><div class="q-opts">${opts.map(([v, label]) =>
       `<button type="button" class="q-opt" data-v="${v}"><span class="q-key">${q.choices ? `(${v})` : ""}</span> ${inline(label)}</button>`).join("")}</div></li>`;
@@ -348,7 +348,7 @@ function renderQuestions() {
   box.querySelectorAll(".q-opt").forEach((b) => b.onclick = () => {
     const q = qs[+b.closest("li").dataset.q];
     const m = answerLine(q.answer).exec(src.value);
-    if (!m) { alert(`The line \`def ${q.answer} …\` is missing from your code: press Reset to get it back.`); return; }
+    if (!m) { alert(`The line \`def ${q.answer} …\` is missing. Press Reset to get it back.`); return; }
     const start = m.index + m[1].length;
     src.value = src.value.slice(0, start) + " " + b.dataset.v + src.value.slice(m.index + m[0].length);
     codeChanged();
@@ -505,12 +505,12 @@ async function openLevel(id) {
   renderTabs();
   // the kind of exercise (level.json "exercise"), as a tag above the lesson
   const EXERCISE_TIPS = {
-    Write: "Write a definition or a statement from a mathematical description.",
-    Read: "Read Lean code and say what it means: answer the questions.",
-    Construct: "Build an example: a witness, a function, a set, a structure.",
-    Refute: "A claim or a colleague's definition is wrong: give the counterexample.",
-    Repair: "A colleague's definition or statement is wrong: fix it.",
-    Audit: "Check whether a formal statement says what it claims to say.",
+    Write: "Write a definition or a statement.",
+    Read: "Read some Lean and answer questions about it.",
+    Construct: "Build an example.",
+    Refute: "Something is wrong. Find the counterexample.",
+    Repair: "Sam's code is wrong. Fix it.",
+    Audit: "Check whether a statement says what it claims.",
   };
   const tag = level.exercise ? `<p class="exercise-tag" title="${esc(EXERCISE_TIPS[level.exercise] || "")}">${esc(level.exercise)}</p>` : "";
   $("intro").innerHTML = tag + markdown(level.intro);
@@ -526,7 +526,7 @@ async function openLevel(id) {
 
 $("reset").onclick = () => {
   if (!level) return;
-  if (src.value !== level.template && !confirm("Discard your changes and restore the original file?")) return;
+  if (src.value !== level.template && !confirm("Throw away your changes and start over?")) return;
   src.value = level.template;
   codeChanged();
 };
@@ -609,9 +609,8 @@ function renderPredict() {
   }).join("");
   const ready = probes().every((q) => q.test in draftPredictions);
   box.innerHTML = `<h3>Before you run: predict</h3>
-    <p class="muted">For each statement, what should the answer be, if the definitions mean what the
-      lesson says? Your answers lock in when you confirm them, and the referee then checks your
-      definitions on exactly these statements, among others.</p>
+    <p class="muted">If the definitions mean what the lesson says, is each statement true or false?
+      Once you lock in, you can't change your answers. The referee will test these statements too.</p>
     <ol class="probes">${rows}</ol>
     <div class="predict-buttons"><button class="quiet" id="predict-skip">Skip (no ★ for predictions)</button>
       <button class="primary" id="predict-lock"${ready ? "" : " disabled"}>Lock in my predictions</button></div>`;
@@ -632,8 +631,8 @@ function afterPredict() {
     return p[q.test] !== expectedTrue(t.kind);
   }).length : 0;
   updateSummary(p === "skipped" ? "" : wrong
-    ? `${wrong === 1 ? "One prediction was" : `${wrong} predictions were`} wrong: see ✗ below. Re-read the lesson before you write your definition.`
-    : "All your predictions are right. Now make your definition agree with them.");
+    ? `${wrong === 1 ? "One prediction was" : `${wrong} predictions were`} wrong (see ✗ below). Reread the lesson before you write your definition.`
+    : "All your predictions are right. Now make your definition agree.");
 }
 
 /* Hints: the tiers of the first hint that matches the test, and how many are unlocked. */
@@ -652,11 +651,11 @@ function hintHtml(t) {
   if (k === 0) {
     const more = hintsAfter() - failedRuns();
     return `<div class="hint-locked">🔒 A hint unlocks after ${more === 1 ? "one more failed run" : `${more} more failed runs`}.
-      Until then: which input would show what is wrong?</div>`;
+      Meanwhile, which input would show the problem?</div>`;
   }
   const label = tiers.length > 1 ? `Hint (${k} of ${tiers.length})` : "Hint";
   const items = tiers.slice(0, k).map((h) => `<li>${inline(h)}</li>`).join("");
-  const more = k < tiers.length ? '<p class="muted">The next step of this hint unlocks after your next failed run.</p>' : "";
+  const more = k < tiers.length ? '<p class="muted">The next step unlocks after your next failed run.</p>' : "";
   return `<details data-name="${esc(t.name)}"${openHints.has(t.name) ? " open" : ""}><summary>${label}</summary>
     <ol class="hint-steps">${items}</ol>${more}</details>`;
 }
@@ -760,9 +759,8 @@ function renderTests() {
 }
 
 /* Shown under a ❓ instead of a hint: hints are written for a test that failed. */
-const UNSETTLED = `<div class="hint-locked">❓ is not a verdict against your definition: the referee could
-  neither prove nor refute this one in time. If the other tests pass, try a simpler way of writing
-  your definition or your example (the referee is a small search, not a mathematician).</div>`;
+const UNSETTLED = `<div class="hint-locked">❓ doesn't count against you. The referee couldn't decide this one in
+  time. If everything else passes, try writing your definition or example more simply.</div>`;
 
 /* One row standing for the tests that are still hidden. */
 function hiddenRow(hidden) {
@@ -774,7 +772,7 @@ function hiddenRow(hidden) {
   return `<li class="test hidden-tests"><div class="row"><span class="icon">🔒</span>
     <span class="name">${hidden.length === 1 ? "1 hidden test" : `${hidden.length} hidden tests`}</span>
     <span class="kind">${parts.join(" · ")}</span></div>
-    <div class="detail">A hidden test shows up when it fails. Do not wait for it: which inputs could break your definition?</div></li>`;
+    <div class="detail">Hidden tests show up when they fail. Which inputs could break your definition?</div></li>`;
 }
 
 /* The summary box, from the results that hold for the current code. */
@@ -794,18 +792,17 @@ function updateSummary(note = "") {
     renderTabs();
     if (wasHidden) renderTests();          // a cleared level shows every test
     const next = levels[levels.findIndex((l) => l.id === level.id) + 1];
-    setSummary("cleared", `🏆 <b>Level cleared!</b> Every test passed on this code.${line}${starsLine()}` +
-      (next ? `<button class="primary" id="next">Next: ${esc(next.title)} →</button>` : "You have cleared the last level."));
+    setSummary("cleared", `🏆 <b>Level cleared.</b> Every test passed.${line}${starsLine()}` +
+      (next ? `<button class="primary" id="next">Next: ${esc(next.title)} →</button>` : "That was the last level. Well done."));
     if (next) $("next").onclick = () => openLevel(next.id);
   } else if (failed) {
-    setSummary("failed", `${pre}🔁 <b>Not yet.</b> Read the ❌ test below: it tells you what your
-      definition gets wrong.${line}`);
+    setSummary("failed", `${pre}🔁 <b>Not yet.</b> The ❌ below shows what's wrong.${line}`);
   } else if (passed || n("unknown")) {
     setSummary("", `${pre}${line}${n("unknown") ? `${n("unknown")} could not be settled. ` : ""}
       Press <b>Run tests</b> to run the rest, or ▶ to run a single test.`);
   } else {
     setSummary("muted", pre + (stale
-      ? "Your code changed since the last run, so the earlier results no longer apply. Press <b>Run tests</b>."
+      ? "Your code changed since the last run. Press <b>Run tests</b> again."
       : "Write your definition, then press <b>Run tests</b>."));
   }
 }
@@ -832,7 +829,7 @@ function showCompile(c) {
 async function runTests(ids = null) {
   if (!setupReady) return;
   if (predictionsPending()) {
-    updateSummary("<b>Predict first.</b> Lock in your predictions above (or skip them): they cannot be changed once you have seen the referee's verdicts.");
+    updateSummary("<b>Predict first.</b> Lock in your predictions above, or skip them.");
     $("predict").classList.remove("flash");
     void $("predict").offsetWidth;                 // restart the animation
     $("predict").classList.add("flash");
@@ -856,7 +853,7 @@ async function runTests(ids = null) {
       showCompile(data);
       if (!data.ok) {
         for (const i of run) Object.assign(tests[i], { state: "waiting", code: undefined });
-        outcome = "Your code does not compile yet, or does not fit the level. Fix the problems shown below the editor.";
+        outcome = "Your code doesn't compile yet, or doesn't fit the level. Fix the problems below the editor.";
       } else progress(run);
     } else if (event === "start") {
       Object.assign(tests[data.id], { state: "running", started: Date.now() });
@@ -868,7 +865,7 @@ async function runTests(ids = null) {
     } else if (event === "skipped") {
       Object.assign(tests[data.id], { state: "skipped", detail: "", code });
     } else if (event === "done") {
-      outcome = data.stopped ? "Stopped at the first failure: the remaining tests were not run." : "";
+      outcome = data.stopped ? "Stopped at the first failure." : "";
     } else if (event === "fatal") {
       outcome = `The server hit an error: ${esc(data.message)}`;
     }
@@ -892,7 +889,7 @@ async function runTests(ids = null) {
     const failed = graded.some(([, g]) => g.status === "fail");
     if (ids === null && failed && rest.length) {
       for (const id of rest) handle("skipped", { id });
-      outcome = "Stopped at the first failure: the remaining tests were not run.";
+      outcome = "Stopped at the first failure.";
       remote = [];
     } else if (!rest.length) outcome = "";
   }
@@ -929,7 +926,7 @@ async function runTests(ids = null) {
       : `Lost contact with the server (${esc(String(err))}). Is <code>web/server.py</code> still running?`;
   }
   if (controller !== ctl) return;           // superseded or stopped
-  if (outcome === null) outcome = "The run ended unexpectedly. Check the server's terminal.";
+  if (outcome === null) outcome = "The run stopped unexpectedly. Check the server's terminal.";
   if (failedThisRun) {
     const before = tiersUnlocked();
     store.set(levelKey("failedRuns"), failedRuns() + 1);
