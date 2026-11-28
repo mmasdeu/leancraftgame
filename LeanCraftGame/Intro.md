@@ -74,6 +74,8 @@ counterexample. A ❓ means it couldn't decide, and never counts against you.
    instead, and they're written into the code for you.
 4. Press **Run tests**. Results appear on the right: ✅ passed, ❌ failed, ❓ undecided.
    Answers to reading questions are checked instantly.
+   A test tagged **false:** checks that its statement is false, so a ✅ there means your
+   definition makes it false, as it should.
 5. Most tests are hidden (🔒) until they fail. Don't wait for them. Ask yourself which
    inputs could break your definition.
 6. A run stops at the first ❌. The ▶ next to a test runs just that test.
@@ -81,7 +83,8 @@ counterexample. A ❓ means it couldn't decide, and never counts against you.
    test offers a first hint, usually a question. Each further failure unlocks the next
    step, and the last one gives the answer.
 8. When every test passes on the same code, the level is cleared and every test is
-   shown. If you edit your code, old results turn grey.
+   shown. A ❓ never counts against you, but the level only clears once every test is ✅,
+   so try a simpler way to write your answer. If you edit your code, old results turn grey.
 
 Run the tests as often as you like. Mistakes cost nothing. A cleared level earns up to
 three stars: one for clearing it, one for not opening a hint, and one for getting every

@@ -693,6 +693,9 @@ const KIND = {
   expect_caught: "must be caught", expect_equiv: "must say the same", expect_type: "must typecheck",
   expect_choice: "your answer",
 };
+/* Tests that check that something does NOT hold: the label states the claim, the tag says
+   which way it must go, so that "✅ x ↦ x² is monotone" is not read as a claim that holds. */
+const NEG = { expect_false: "false:", expect_not_model: "ruled out:", expect_caught: "caught:" };
 const ICON = { pass: "✅", fail: "❌", unknown: "❓", error: "⚠️" };
 let tests = [], ticker = null, controller = null;
 let setupReady = true;     // false while the app is still installing Lean and Mathlib
@@ -741,7 +744,7 @@ function renderTests() {
       ${p.right ? "✓" : `✗: the intended answer is <b>${p.said ? no : yes}</b>.`}
       ${p.right && v === "fail" ? " You knew the answer; your definition does not say it yet." : ""}</div>`;
     return `<li class="test ${v}">
-      <div class="row"><span class="icon" title="${title}">${icon}</span><span class="name">${nameToHtml(t.name)}</span>
+      <div class="row"><span class="icon" title="${title}">${icon}</span><span class="name">${NEG[t.kind] ? `<span class="neg" title="${KIND[t.kind]}">${NEG[t.kind]}</span> ` : ""}${nameToHtml(t.name)}</span>
         <span class="kind">${KIND[t.kind] || ""}</span><span class="time">${time}</span>
         <button class="run1" data-id="${t.id}" title="Run only this test on the current code"${busy ? " disabled" : ""}>▶</button></div>
       ${said || ""}
