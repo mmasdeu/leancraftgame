@@ -14,7 +14,7 @@ open Filter Topology
 #no_sorry L43.q3
 #level_start "Filters"
 
-#expect_choice "Question 1: what `∃ᶠ n in atTop, P n` says" : L43.q1 = 3
+#expect_choice "Question 1: the negation of `∀ᶠ n in atTop, P n`" : L43.q1 = 1
 #expect_choice "Question 2: in `Tendsto f l₁ l₂`, the filter on the inputs of `f`" : L43.q2 = 1
 #expect_choice "Question 3: `Tendsto u ⊥ (𝓝 0)` for every sequence `u`?" : L43.q3 = true
 

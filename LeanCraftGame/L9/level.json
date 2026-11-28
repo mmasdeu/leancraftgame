@@ -13,7 +13,7 @@
   ],
   "hints": [
     {"match": "has an upper bound", "steps": ["Is it *some* `a` or *every* `a`?"], "hint": "`∃ a, FnUb f a`."},
-    {"match": "has a lower bound", "hint": "`∃ a, ∀ x, a ≤ f x`."},
+    {"match": "has a lower bound", "hint": "`∃ a, FnLb f a`."},
     {"match": "bound is", "hint": "Any number at least 3."},
     {"match": "root", "hint": "`x² - 4x + 4 = (x - 2)²`."},
     {"match": "x ↦ x takes both signs", "steps": ["Can one `x` be both positive and negative?"], "hint": "`(∃ x, f x > 0) ∧ (∃ x, f x < 0)`: two separate `∃`."},

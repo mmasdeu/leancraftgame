@@ -22,6 +22,8 @@ import LeanCraftGame.L10.Player
   L10.NotMonotone (fun x => -x)
 #expect_false "x ↦ 2x is not monotone" unfolding L10.NotMonotone :
   L10.NotMonotone (fun x => 2 * x)
+#expect_true "∀ n, ∃ M, n ≤ M holds in ℕ" :
+  ∀ n : ℕ, ∃ M : ℕ, n ≤ M
 #expect_true "the constant sequence 5 is bounded" unfolding L10.BoundedSeq :
   L10.BoundedSeq (fun _ => 5)
 #expect_false "the sequence 0, 1, 2, 3, … is bounded" unfolding L10.BoundedSeq :

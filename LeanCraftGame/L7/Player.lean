@@ -18,9 +18,11 @@ One **counterexample** refutes a statement about all numbers: values that satisf
 hypothesis and break the conclusion. Usual suspects:
 
 * truncated subtraction: in `ℕ`, `a - b = 0` when `a ≤ b`;
-* a missing hypothesis, here a sign condition;
-* junk values: Mathlib sets `x / 0 = 0`, so division works on all of `ℝ`. Theorems about
-  division need a hypothesis `y ≠ 0`.
+* a missing hypothesis, such as a sign condition;
+* junk values: Mathlib sets `x / 0 = 0`. Dividing by zero is no error in Lean, so a
+  theorem about division must exclude the bad case itself.
+
+`x ≠ y` (type `\ne`) means `x` is not equal to `y`.
 
 ## Part A: counterexamples
 
@@ -29,8 +31,10 @@ conclusion. Use small numbers: the referee computes, it doesn't search.
 
 ## Part B: repairs
 
-State the two real-number facts correctly by adding the missing hypothesis, and nothing
-else. Name the hypotheses as you like.
+Repair Sam's two real-number statements: write each in full, with Sam's binders, plus
+one missing hypothesis, and nothing else. For example
+`statement sq_le_sq_of_le (a b : ℝ) (h : …) (hab : a ≤ b) : …`. Name the hypotheses as
+you like.
 -/
 namespace L7
 

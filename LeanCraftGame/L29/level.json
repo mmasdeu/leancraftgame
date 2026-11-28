@@ -67,7 +67,7 @@
   "predict": [
     {
       "test": "Part B: S₃ (non-commutative!) is a group",
-      "statement": "S₃, the symmetries of a triangle, satisfies every axiom of a group"
+      "statement": "S₃ satisfies every axiom of your `Group₂`"
     }
   ]
 }

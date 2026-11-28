@@ -7,7 +7,6 @@ space. Your `Point` comes back later as a class instance and as a vector.*
 A **structure** bundles data together:
 
 ```lean
-@[ext]
 structure Point where
   x : ℝ
   y : ℝ
@@ -18,12 +17,11 @@ A `Point` has three fields. You can build one in three ways:
 
 ```lean
 def p : Point := ⟨1, 2, 3⟩                    -- anonymous constructor: fields in order
-def q : Point := Point.mk 1 2 3               -- the constructor `Point.mk`
+def q : Point := Point.mk 1 2 3               -- `Point.mk` builds a Point from its fields
 def r : Point := { x := 1, y := 2, z := 3 }   -- field names: order does not matter
 ```
 
-`p.x` is the first coordinate of `p`. `@[ext]` gives you the lemma "two points are equal
-when their coordinates are equal".
+`p.x` is the first coordinate of `p`.
 
 ## Dot notation
 
@@ -36,8 +34,8 @@ def Point.neg (a : Point) : Point := ⟨-a.x, -a.y, -a.z⟩
 
 ## Fields that are propositions
 
-A field can also be a property. The standard 2-simplex holds the points with nonnegative
-coordinates that add up to 1:
+A field can also be a property. The standard 2-simplex is the triangle of points with
+nonnegative coordinates that add up to 1:
 
 ```lean
 structure StandardTwoSimplex where
@@ -45,7 +43,7 @@ structure StandardTwoSimplex where
   y : ℝ
   z : ℝ
   x_nonneg : 0 ≤ x
-  …
+  -- … one field for each remaining property
 ```
 
 An element needs the numbers and proofs of the properties. The referee tests your fields
@@ -62,7 +60,6 @@ import Mathlib.Tactic
 namespace L28
 
 -- points of space (already done)
-@[ext]
 structure Point where
   x : ℝ
   y : ℝ

@@ -10,9 +10,9 @@
   "questions": [
     {"answer": "q1", "text": "Mathlib's Rolle theorem has no hypothesis that `f` is differentiable. Why is it still true?",
      "choices": ["every function continuous on `[a, b]` is differentiable on `(a, b)`",
-                 "at a point where `f` is not differentiable, `deriv f c` is `0` anyway, so an extremum in `(a, b)` is a witness either way",
-                 "it's false, and Mathlib has a bug",
-                 "Lean's `ℝ` only contains differentiable functions"]},
+                 "where `f` is not differentiable, `deriv f c` is `0`, so an extremum in `(a, b)` works either way",
+                 "`f a = f b` forces `f` to be differentiable somewhere in `(a, b)`",
+                 "in Mathlib, `ContinuousOn` includes differentiability"]},
     {"answer": "q2", "text": "True or false: `HasDerivAt f 3 2` says that the derivative of `f` at `3` is `2`."}
   ],
   "checks": [

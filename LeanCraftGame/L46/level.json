@@ -10,8 +10,8 @@
   "public": ["noSubcover covers ℕ"],
   "questions": [
     {"answer": "q1", "text": "True or false: every T1 topology on the three points `{0, 1, 2}` is the discrete topology."},
-    {"answer": "q2", "text": "Which Mathlib class is the Hausdorff property?",
-     "choices": ["`T0Space X`", "`CompactSpace X`", "`T2Space X`"]}
+    {"answer": "q2", "text": "In which space does some sequence converge to two different points?",
+     "choices": ["`ℝ`", "the indiscrete space on two points", "the discrete space on three points"]}
   ],
   "checks": [
     {"lean": "#check (@L46.IsT1 : {n : Nat} → Family n → Prop)\n#check (@L46.IsT2 : {n : Nat} → Family n → Prop)\n#check (L46.noSubcover : ℕ → Set ℕ)\n#check (L46.q1 : Bool)\n#check (L46.q2 : Fin 3)",
@@ -25,6 +25,6 @@
     {"match": "covers ℕ", "hint": "Every `x` must be in some `noSubcover i`. The singletons `fun i => {i}` work, and so do the segments `fun i => {x | x < i}`."},
     {"match": "finite subcover", "steps": ["If `U 0, …, U N` covered ℕ, which number would they miss?"], "hint": "With `fun i => {x | x < i}`, the sets `U 0, …, U N` all miss `N`."},
     {"match": "Question 1", "hint": "In a finite T1 space, `{y}` is the complement of a finite union of closed points, so it's open. Then every set is open."},
-    {"match": "Question 2", "hint": "T2 is Hausdorff, so `T2Space`."}
+    {"match": "Question 2", "hint": "In the indiscrete space, the only open set containing a point is the whole space. Which points does a constant sequence converge to?"}
   ]
 }

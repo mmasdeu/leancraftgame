@@ -7,4 +7,4 @@ def IsT2 {n : Nat} (T : Family n) : Prop :=
 def noSubcover : ℕ → Set ℕ := fun i => {x | x < i}
 
 def q1 : Bool := true
-def q2 : Fin 3 := 2
+def q2 : Fin 3 := 1

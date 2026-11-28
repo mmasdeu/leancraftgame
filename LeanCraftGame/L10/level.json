@@ -4,7 +4,7 @@
   "skill": "writing definitions",
   "exercise": "Write",
   "predict": [
-    {"test": "the sequence 0, 1, 2, 3, … is bounded", "statement": "Written as `∀ n, ∃ M, u n ≤ M`, the sequence `u n = n` is \"bounded\"."}
+    {"test": "∀ n, ∃ M, n ≤ M holds in ℕ", "statement": "For the sequence `u n = n` (that is, `0, 1, 2, …`), `∀ n, ∃ M, u n ≤ M` holds."}
   ],
   "public": ["x ↦ x has no upper bound", "the constant sequence 5 is bounded"],
   "checks": [
@@ -15,7 +15,7 @@
     {"match": "NotFnUb", "hint": "`∃ x, a < f x`: some value exceeds `a`."},
     {"match": "NoUpperBound f means", "hint": "`∀ a, ∃ x, a < f x`."},
     {"match": "no upper bound", "steps": ["Which comes first: the proposed bound `a`, or the point `x` that beats it?"], "hint": "`∀ a, ∃ x, a < f x`: `x` may depend on `a`."},
-    {"match": "not monotone", "steps": ["Push `¬` through `∀ a b, a ≤ b → f a ≤ f b`."], "hint": "`∃ a b, a ≤ b ∧ f b < f a`."},
+    {"match": "not monotone", "steps": ["Push `¬` through `∀ a b, a ≤ b → f a ≤ f b`. When does an implication `P → Q` fail?"], "hint": "`∃ a b, a ≤ b ∧ f b < f a`."},
     {"match": "means ¬ Monotone", "hint": "`∃ a b, a ≤ b ∧ f b < f a`."},
     {"match": "bounded", "steps": ["Is it one `M` for all `n`, or an `M` for each `n`?"], "hint": "`∃ M, ∀ n, u n ≤ M`."}
   ]

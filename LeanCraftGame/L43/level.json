@@ -5,8 +5,8 @@
   "exercise": "Write",
   "public": "all",
   "questions": [
-    {"answer": "q1", "text": "What does `∃ᶠ n in atTop, P n` say?",
-     "choices": ["`∃ N, ∀ n ≥ N, P n`: eventually", "`∃ n, P n`: at least once", "`∀ n, P n`: always", "`∀ N, ∃ n ≥ N, P n`: infinitely often"]},
+    {"answer": "q1", "text": "Which statement says the same as `¬ (∀ᶠ n in atTop, P n)`?",
+     "choices": ["`∀ᶠ n in atTop, ¬ P n`", "`∃ᶠ n in atTop, ¬ P n`", "`∃ n, ¬ P n`", "`∀ n, ¬ P n`"]},
     {"answer": "q2", "text": "In `Tendsto f l₁ l₂`, which filter describes where the *inputs* of `f` go?",
      "choices": ["`l₂`", "`l₁`", "neither: the inputs are fixed"]},
     {"answer": "q3", "text": "True or false: in Mathlib, `Tendsto u ⊥ (𝓝 0)` holds for every sequence `u : ℕ → ℝ`."}
@@ -16,11 +16,11 @@
      "message": "Keep the names and the types of the five definitions."}
   ],
   "hints": [
-    {"match": "Question 1", "hint": "`∃ᶠ` means \"frequently\". However far you go, `P` holds again further on."},
+    {"match": "Question 1", "hint": "Write `∀ᶠ` with `∃ N, ∀ n ≥ N` and push the `¬` inside: `∀ N, ∃ n ≥ N, ¬ P n`. Which notation is that?"},
     {"match": "Question 2", "hint": "The order is: function, filter on its inputs, filter on its outputs."},
     {"match": "Question 3", "hint": "`⊥` contains every set, so every preimage is in it. Along `⊥`, everything tends to everything."},
     {"match": "EventuallyPos", "hint": "`∀ᶠ n in atTop, 0 < u n`."},
-    {"match": "OftenZero", "steps": ["\"Infinitely often\" is \"frequently\": which of `∀ᶠ` and `∃ᶠ`?"], "hint": "`∃ᶠ n in atTop, u n = 0`."},
+    {"match": "OftenZero", "steps": ["\"Infinitely often\": which of `∀ᶠ` and `∃ᶠ`?"], "hint": "`∃ᶠ n in atTop, u n = 0`."},
     {"match": "ConvTo", "steps": ["The index `n` goes to infinity: `atTop`. Where do the values `u n` go?"], "hint": "`Tendsto u atTop (𝓝 a)`."},
     {"match": "ToInfinity", "hint": "`Tendsto u atTop atTop`. On `ℝ`, `atTop` is the filter of sets that contain some `[M, ∞)`."},
     {"match": "ContAt", "steps": ["As `y` approaches `x`, `f y` should approach `f x`. Which filter is on the inputs?"], "hint": "`Tendsto f (𝓝 x) (𝓝 (f x))`."}

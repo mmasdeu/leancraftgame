@@ -12,7 +12,8 @@ structure GaussInt where
   im : ℤ
 ```
 
-So `⟨3, 4⟩` is `3 + 4i`, and `z.re`, `z.im` are the parts of `z`.
+`ℤ` (type `\Z`) is the type of integers. So `⟨3, 4⟩` is `3 + 4i`, and `z.re`, `z.im` are
+the parts of `z`.
 
 ## Operations
 
@@ -26,18 +27,14 @@ They follow the rules of complex numbers, with `i² = -1`:
 The trap is multiplication: it isn't coordinate by coordinate. `i · i` must be `-1`, but
 multiplying coordinates gives `0 · 0 + (1 · 1)i = i`.
 
-## Sums of two squares
-
-The norm is multiplicative: `N(zw) = N(z) N(w)`. This is Brahmagupta's identity: a product
-of two sums of two squares is a sum of two squares. Take `5 = 2² + 1²` and
-`13 = 3² + 2²`. Multiplying a Gaussian integer of norm 5 by one of norm 13, or by its
-conjugate, writes `65` as a sum of two squares in two different ways.
+The norm is multiplicative: `N(zw) = N(z) N(w)`. The referee checks this on your
+operations.
 
 ## Your task
 
 Write the structure (fields `re` then `im`), the four operations, and two Gaussian integers
-of norm 5 and 13. The operations live in the namespace `GaussInt`, so you can write
-`z.mul w` and `w.conj`.
+`z5` and `w13` with `GaussInt.norm` equal to 5 and 13. The operations live in the namespace
+`GaussInt`, so `z.mul w` means `GaussInt.mul z w`, as with `p.neg` in level 28.
 -/
 import Mathlib.Tactic
 

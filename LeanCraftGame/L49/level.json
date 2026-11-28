@@ -25,7 +25,7 @@
     {"match": "normPair", "steps": ["Is the norm on `ℝ × ℝ` the Euclidean length? See *Which norm?*"],
      "hint": "`‖(x, y)‖ = max |x| |y|`, so `‖(3, -4)‖ = max 3 4 = 4`, not 5."},
     {"match": "Question 1", "hint": "The derivative is the best *linear* approximation. Its type is `E →L[ℝ] F`."},
-    {"match": "Question 2", "hint": "In `fderiv ℝ f x` the field is explicit. `E` and `F` are not."},
-    {"match": "Question 3", "hint": "`deriv f x` is defined as `fderiv ℝ f x 1`."}
+    {"match": "Question 2", "hint": "Read the `#check fderiv ℝ f x` line: which arguments appear? `E` and `F` are in curly braces in `variable`."},
+    {"match": "Question 3", "hint": "`fderiv ℝ f x 1` is the derivative of `f` at `x` in the direction `1`. For `f : ℝ → ℝ`, that is the usual derivative."}
   ]
 }

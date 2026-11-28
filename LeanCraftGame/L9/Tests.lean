@@ -13,9 +13,9 @@ import LeanCraftGame.L9.Player
   L9.FnHasUb (fun x => min x 3)
 #expect_false "x ↦ x has an upper bound" unfolding L9.FnHasUb L9.FnUb :
   L9.FnHasUb (fun x => x)
-#expect_true "x ↦ x² has a lower bound" unfolding L9.FnHasLb :
+#expect_true "x ↦ x² has a lower bound" unfolding L9.FnHasLb L9.FnLb :
   L9.FnHasLb (fun x => x ^ 2)
-#expect_false "x ↦ x has a lower bound" unfolding L9.FnHasLb :
+#expect_false "x ↦ x has a lower bound" unfolding L9.FnHasLb L9.FnLb :
   L9.FnHasLb (fun x => x)
 #expect_true "bound is an upper bound of x ↦ min x 3" unfolding L9.bound :
   ∀ x : ℝ, min x 3 ≤ L9.bound

@@ -1,9 +1,8 @@
 /-
 # Stating theorems
 
-*Noor's list starts with AM-GM: `a * b ≤ square (am a b)`, with level 2's `square` and
-`am`, or `2 * a * b ≤ a ^ 2 + b ^ 2` once expanded. The Prover proves whatever you write,
-so the referee checks you wrote what was asked.*
+*Noor's list starts with AM-GM for two numbers, `2ab ≤ a² + b²`. The Prover proves
+whatever you write, so the referee checks you wrote what was asked.*
 
 ## The `statement` command
 
@@ -26,11 +25,8 @@ It says: for all reals `a` and `b`, if `0 < a` and `0 < b`, then `0 < am a b`.
 
 * `(a b : ℝ)`: explicit variables. A user supplies them: `am_pos 2 3 …`.
 * `{a b : ℝ}`: implicit variables. Lean infers them from the hypotheses, so a user writes
-  `am_pos h₁ h₂`. Logically, both mean "for all".
+  `am_pos h₁ h₂`. Logically, both mean "for all", and either is fine in this level.
 * `(ha : 0 < a)`: a hypothesis, named `ha` so a proof can use it. It means "*if* `0 < a`".
-
-So `statement foo (x : ℝ) (h : 0 ≤ x) : P x` is the same as
-`statement foo : ∀ x : ℝ, 0 ≤ x → P x`.
 
 ## How the referee reads your statement
 
@@ -50,7 +46,9 @@ State the five facts below. Use the names given, and `ℝ` for every variable.
 4. `min_comm'`: for all reals `a` and `b`, `min a b = min b a`.
 5. `max_assoc'`: for all reals `a`, `b`, `c`, `max a (max b c) = max (max a b) c`.
 
-Write `x²` as `x ^ 2`. Write `|x|` as `|x|` (type `\|` or the key itself).
+Write `x²` as `x ^ 2`. `|x|` is the absolute value: type it with the bar key on your
+keyboard, `|a * b|`. `min a b` and `max a b` are the smaller and the larger of `a` and
+`b`.
 -/
 namespace L5
 

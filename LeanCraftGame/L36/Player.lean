@@ -10,17 +10,16 @@ The names to know:
   additive version (`+`, `0`, `-x`).
 * `H : Subgroup G`: a subgroup (a carrier and its axioms, as in level 35). As a type, `↥H`,
   its elements are the elements of `G` in `H`.
-* `orderOf x`: the least `n > 0` with `x ^ n = 1`, or `0` if there is none. `addOrderOf a`
-  is the additive version, with `n • a = 0`.
+* `orderOf x`: the least `n > 0` with `x ^ n = 1`, or `0` if there is none.
 * `Nat.card G`: the number of elements of `G` (`0` if `G` is infinite). With `[Fintype G]`
-  there is also `Fintype.card G`.
+  (`G` is finite) there is also `Fintype.card G`.
 * `ZMod n`: the integers modulo `n`. It's a commutative ring, so as a group it's the
-  additive group ℤ/nℤ. The order of `4` in `ZMod 12` is the least `n > 0` with
-  `n • 4 = 0`, which is `3`.
+  additive group ℤ/nℤ, and `n • x` means `x + ⋯ + x` (`n` times). The order of `3` in
+  `ZMod 12` is the least `n > 0` with `n • 3 = 0`, which is `4`.
 * `Equiv.Perm α`: the permutations of `α`, a group under composition. `Equiv.swap a b`
-  exchanges `a` and `b`. `σ * τ` means first `τ`, then `σ`, like `f ⋄ g` in level 32.
-  `Equiv.Perm (Fin 3)` is S₃, the non-commutative group from level 29.
-* `MonoidHom.ker f : Subgroup G` and the quotient `G ⧸ H`.
+  exchanges `a` and `b` and fixes the rest. `σ * τ` means first `τ`, then `σ`, like
+  `f ⋄ g` in level 32. Products of swaps give every permutation.
+  `Equiv.Perm (Fin 3)` is S₃, the symmetries of a triangle from level 29.
 
 ## Stating Lagrange
 

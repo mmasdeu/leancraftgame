@@ -4,8 +4,8 @@
   "skill": "axioms",
   "exercise": "Write",
   "predict": [
-    {"test": "the numbers ≥ 1 are not an additive submonoid", "statement": "With only the axiom \"closed under `+`\", the numbers `≥ 1` would be accepted as an additive submonoid."},
-    {"test": "{0, 1} is not an additive submonoid", "statement": "`{0, 1}` is closed under multiplication, but it isn't an additive submonoid of ℕ."}
+    {"test": "the numbers ≥ 1 are not an additive submonoid", "statement": "The numbers `≥ 1` form an additive submonoid of ℕ."},
+    {"test": "{0, 1} is not an additive submonoid", "statement": "`{0, 1}` is an additive submonoid of ℕ."}
   ],
   "public": ["the even numbers are an additive submonoid of ℕ"],
   "checks": [

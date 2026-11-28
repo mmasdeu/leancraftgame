@@ -6,8 +6,8 @@
   "public": "all",
   "hintsAfter": 1,
   "predict": [
-    {"test": "f ⋄ g is \"first g, then f\": (· * 2) ⋄ (· + 1) sends 5 to 12", "statement": "With `f ⋄ g` defined as `f ∘ g`, the composite of `(· * 2)` and `(· + 1)` sends 5 to (5 + 1) · 2 = 12."},
-    {"test": "In (ℤ, +): mpow 5 3 = 15 and mpow (-2) 4 = -8", "statement": "In the monoid (ℤ, +, 0), the \"power\" `mpow 5 3` is 15, not 125."}
+    {"test": "f ⋄ g is \"first g, then f\": (· * 2) ⋄ (· + 1) sends 5 to 12", "statement": "In `endo`, `(· * 2) ⋄ (· + 1)` sends 5 to 12."},
+    {"test": "In (ℤ, +): mpow 5 3 = 15 and mpow (-2) 4 = -8", "statement": "In the monoid (ℤ, +, 0), the \"power\" `mpow 5 3` is 15."}
   ],
   "checks": [
     {"lean": "#check (L32.boolXor : L32.Monoid₁ Bool)\n#check (L32.intAdd : L32.Monoid₁ ℤ)\n#check (L32.endo : L32.Monoid₁ (ℕ → ℕ))",

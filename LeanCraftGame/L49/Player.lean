@@ -2,13 +2,13 @@
 # Derivatives in normed spaces
 
 *Noor now wants derivatives of maps between planes, like the quarter-turn `rot` of
-level 39 on `ℝ × ℝ`: `(x, y) ↦ (-y, x)`. The derivative of such a map isn't a number. It's
-a linear map.*
+level 39, now on the real plane `ℝ × ℝ`: `(x, y) ↦ (-y, x)`. The derivative of such a map
+isn't a number. It's a linear map.*
 
 Mathlib differentiates functions `f : E → F` between **normed spaces**: vector spaces over
-`ℝ` with a norm `‖x‖`, such as `ℝ × ℝ` and `ℝ`. The derivative of `f` at a point is the
-best linear approximation of `f` there. For a linear map like `rot`, it's the map itself,
-at every point (`ContinuousLinearMap.fderiv`).
+`ℝ` with a norm `‖x‖` (read-only here; `\norm` in VS Code), such as `ℝ × ℝ` and `ℝ`. The
+derivative of `f` at a point is the best linear approximation of `f` there. For a linear
+map like `rot`, it's the map itself, at every point.
 
 ```lean
 variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -16,16 +16,12 @@ variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
 
 #check fderiv ℝ f x        -- fderiv ℝ f x : E →L[ℝ] F
 #check HasFDerivAt f f' x  -- f' : E →L[ℝ] F
-#check ContDiff ℝ n f      -- f is n times continuously differentiable
 ```
 
-* `E →L[ℝ] F` is the type of continuous linear maps from `E` to `F`. You can apply one
-  like a function: `fderiv ℝ f x v` is the derivative of `f` at `x` in the direction `v`.
-* The `F` in `fderiv` stands for *Fréchet*. You write `𝕜` (here `ℝ`), `f` and `x`. `E`
-  and `F` are implicit, found from the type of `f`.
-* For `f : ℝ → ℝ`, `deriv f x` is defined as `fderiv ℝ f x 1`.
-* `ContDiff ℝ 1 f` says `f` is differentiable with a continuous derivative.
-  `ContDiff ℝ 2 f` asks the same of the derivative, and so on.
+* `E →L[ℝ] F` is the type of continuous linear maps from `E` to `F`. `×` binds tighter
+  than `→L[ℝ]`, so `ℝ →L[ℝ] ℝ × ℝ` has target `ℝ × ℝ`.
+* You can apply one like a function: `fderiv ℝ f x v` is the derivative of `f` at `x` in
+  the direction `v`. For `rot`, `fderiv ℝ rot p (1, 0)` is `rot (1, 0) = (0, 1)`.
 
 ## Which norm?
 

@@ -5,7 +5,8 @@
 of its claims are wrong. Before Noor merges it, refute each one on a two-point space.*
 
 The spaces live on `Fin 2 = {0, 1}`: Sierpiński space `sierpinski` (`{1}` open, `{0}`
-not) and `discrete 2` (every set open).
+not) and `discrete 2` (every set open), both from the gallery of level 45. The line
+`open Top` in the code lets you write them without the `Top.` prefix.
 
 ## Claim 1: continuity with images
 
@@ -14,6 +15,7 @@ def SamCont (T : Family m) (S : Family n) (f : Fin m → Fin n) : Prop :=
   ∀ U ∈ T, img f U ∈ S        -- the image of every open set is open
 ```
 
+`img f U` is the image `f '' U` and `pre f V` the preimage `f ⁻¹' V`, both as `Finset`s.
 The real definition pulls open sets back: `∀ V ∈ S, pre f V ∈ T`. The two disagree both
 ways. Give a continuous map `f₁` from `discrete 2` to `sierpinski` that Sam's definition
 rejects, and a map `f₂` from `sierpinski` to `discrete 2` that it accepts but that isn't
@@ -21,7 +23,8 @@ continuous.
 
 ## Claim 2: "a continuous bijection is a homeomorphism"
 
-True for compact Hausdorff spaces, false in general. Give a continuous bijection `g` from
+A **homeomorphism** is a continuous bijection whose inverse is continuous too. The claim is
+true for compact Hausdorff spaces, false in general. Give a continuous bijection `g` from
 `discrete 2` to `sierpinski` that sends some open set to a set that isn't open, so its
 inverse isn't continuous.
 
@@ -34,7 +37,7 @@ the constant sequence `p` converges to both.
 
 ## Claim 4: a reading
 
-Sam writes continuity at a point with `Tendsto`, arguments in the wrong order:
+Sam writes continuity at a point with `Tendsto` (level 43), arguments in the wrong order:
 
 ```lean
 def SamContAt (f : ℝ → ℝ) (x : ℝ) : Prop := Tendsto f (𝓝 (f x)) (𝓝 x)

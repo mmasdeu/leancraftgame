@@ -13,19 +13,21 @@ def ConvergesTo (s : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n �
 ```
 
 Its inner part, `∃ N, ∀ n ≥ N, P n`, says `P n` holds **eventually**. Swap the
-quantifiers, `∀ N, ∃ n ≥ N, P n`, and `P n` holds infinitely often. The sequence
-`0, 1, 0, 1, …` of level 13 is `0` infinitely often, but not eventually. Mathlib says both
+quantifiers, `∀ N, ∃ n ≥ N, P n`, and `P n` holds infinitely often. Sam's `blink` of
+level 12, `0, 1, 0, 1, …`, is `0` infinitely often, but not eventually. Mathlib says both
 with filters.
 
 ## What a filter is
 
 A **filter** `F : Filter X` is a collection of "large" subsets of `X`. It contains `univ`,
-every superset of its members, and the intersection of any two members. The main ones:
+every superset of its members, and the intersection of any two members. Two you'll use:
 
 * `atTop : Filter ℕ`: the sets that contain all `n` from some point on, `{n | N ≤ n}`;
-* `𝓝 x` (type `\MCN`, after `open Topology`): the neighbourhoods of `x`, the sets that
-  contain an open set around `x`;
-* `Filter.principal s` (`𝓟 s`): the supersets of `s`.
+* `𝓝 x` (type `\MCN`): the neighbourhoods of `x`, the sets that contain an open set
+  around `x`.
+
+The line `open Filter Topology` in the code lets you write `atTop`, `Tendsto` and `𝓝`
+without the `Filter.` prefix.
 
 ## Filter notation
 
@@ -35,9 +37,13 @@ every superset of its members, and the intersection of any two members. The main
 Tendsto f l₁ l₂         -- for every s ∈ l₂, the preimage f ⁻¹' s is in l₁
 ```
 
-`Filter.eventually_atTop` says `∀ᶠ n in atTop, P n ↔ ∃ N, ∀ n ≥ N, P n`, and
-`Metric.tendsto_atTop` says `Tendsto s atTop (𝓝 a)` is your `ConvergesTo s a`, with
-`dist (s n) a` for `|s n - a|`. All the limits of analysis are `Tendsto`:
+You can copy these symbols from the lesson. Or write `nhds x` for `𝓝 x`, and
+`Filter.Eventually (fun n => P n) atTop` for `∀ᶠ n in atTop, P n` (`Filter.Frequently`
+for `∃ᶠ`).
+
+`Tendsto s atTop (𝓝 a)` is your `ConvergesTo s a` (Mathlib's `Metric.tendsto_atTop`
+says so, with `dist (s n) a`, which is `|s n - a|` on `ℝ`). All the limits of analysis
+are `Tendsto`:
 
 ```lean
 Tendsto u atTop (𝓝 a)      -- the sequence u converges to a
@@ -45,19 +51,16 @@ Tendsto u atTop atTop      -- u tends to infinity
 Tendsto f (𝓝 x) (𝓝 (f x))  -- f is continuous at x
 ```
 
-The arguments are the function, the filter on its inputs, then the filter on its outputs.
-
 ## The trap: the filter `⊥`
 
-Mathlib allows the filter `⊥ = 𝓟 ∅`, which contains every set, even `∅`. So
-`∀ᶠ x in ⊥, P x` holds for every `P`, even `False`, and `Tendsto f ⊥ l` always holds. The
-Prover proves any limit along `⊥` at once. Theorems that need a real filter assume
-`[NeBot l]`.
+Mathlib allows the filter `⊥`, which contains every set, even `∅`. So
+`∀ᶠ x in ⊥, P x` holds for every `P`, even `False`. A statement about a filter that
+doesn't rule out `⊥` can be true for a silly reason.
 
 ## Your task
 
 Write each definition with filter notation (no explicit `∃ N`), then answer the
-questions below the lesson.
+questions below the lesson. Question 3 is answered `true` or `false`.
 -/
 import Mathlib.Topology.Instances.Real.Lemmas
 

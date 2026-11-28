@@ -18,7 +18,7 @@ open L34
   IsMonoidHom (fun n : ℕ => 2 * n)
 #expect_false "n ↦ -n is a homomorphism of (ℤ, *)" unfolding IsMonoidHom :
   IsMonoidHom (fun n : ℤ => -n)
-#expect_true "Every bundled f : ℕ →* ℤ satisfies IsMonoidHom ⇑f" unfolding IsMonoidHom :
+#expect_true "Every bundled f : ℕ →* ℤ satisfies IsMonoidHom f" unfolding IsMonoidHom :
   ∀ f : ℕ →* ℤ, IsMonoidHom f
 #expect_true "n ↦ 3n is a homomorphism of (ℤ, +)" unfolding IsAddMonoidHom :
   IsAddMonoidHom (fun n : ℤ => 3 * n)
@@ -26,7 +26,7 @@ open L34
   IsAddMonoidHom (fun n : ℤ => n + 1)
 #expect_false "n ↦ 2ⁿ is a homomorphism of (ℕ, +)" unfolding IsAddMonoidHom :
   IsAddMonoidHom (fun n : ℕ => 2 ^ n)
-#expect_true "Every bundled f : ℤ →+ ℤ satisfies IsAddMonoidHom ⇑f" unfolding IsAddMonoidHom :
+#expect_true "Every bundled f : ℤ →+ ℤ satisfies IsAddMonoidHom f" unfolding IsAddMonoidHom :
   ∀ f : ℤ →+ ℤ, IsAddMonoidHom f
 #expect_true "homNotOnto preserves 0 and +" unfolding homNotOnto :
   homNotOnto 0 = 0 ∧ ∀ a b, homNotOnto (a + b) = homNotOnto a + homNotOnto b

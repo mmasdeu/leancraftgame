@@ -4,7 +4,7 @@
   "skill": "refuting",
   "exercise": "Refute",
   "predict": [
-    {"test": "Claim 2: g sends open sets to open sets (its inverse is continuous)", "statement": "Every continuous bijection from `discrete 2` to Sierpiński space has a continuous inverse."}
+    {"test": "Claim 2 on Sierpiński space: every continuous bijection to itself has a continuous inverse", "statement": "Every continuous bijection from Sierpiński space to itself has a continuous inverse."}
   ],
   "public": ["Claim 1: f₁ is continuous from discrete 2 to Sierpiński space", "Claim 2: g is a bijection", "Claim 3: x and y are different"],
   "questions": [

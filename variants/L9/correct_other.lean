@@ -1,4 +1,5 @@
 def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, f x ≤ a
+def FnLb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, a ≤ f x
 def FnHasUb (f : ℝ → ℝ) : Prop := ∃ a : ℝ, ∀ x, f x ≤ a
 def FnHasLb (f : ℝ → ℝ) : Prop := ∃ b, ∀ y, f y ≥ b
 def bound : ℝ := 100

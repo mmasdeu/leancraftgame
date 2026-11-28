@@ -12,6 +12,8 @@ A definition with arguments is a function:
 def cube (x : ℝ) : ℝ := x ^ 3
 ```
 
+`x ^ n` is the `n`-th power of `x`.
+
 You can write the same function with `fun` (also `λ`) and the arrow `↦` (type `\mapsto`,
 or write `=>`):
 
@@ -30,12 +32,13 @@ You apply a function **without brackets**: `cube 2`, `max a b`. Brackets only gr
 
 ## The type of a number
 
-A numeral like `2` takes the type the context asks for. With no context it's in `ℕ`,
-where division rounds down: `7 / 2 = 3`. For a real, write `(7 : ℝ) / 2`, which is `3.5`.
+A numeral like `2` takes the type its surroundings ask for: in `x / 2` with `x : ℝ`, the
+`2` is a real. With nothing around it, it's in `ℕ`, where division rounds down:
+`5 / 2 = 2`. For a real, write `(5 : ℝ) / 2`, which is `2.5`.
 
 ## Your task
 
-Fill in the five definitions. Each comment says what the value should be.
+Replace each `sorry` with a definition. Each comment says what the value should be.
 -/
 namespace L2
 

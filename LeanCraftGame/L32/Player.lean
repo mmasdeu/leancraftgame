@@ -35,18 +35,6 @@ instance natMul : Monoid₁ ℕ where
   one := 1
 ```
 
-The Gaussian integers of level 30 are a monoid too, under their own product:
-
-```lean
-structure GaussInt where
-  re : ℤ
-  im : ℤ
-
-instance gaussMul : Monoid₁ GaussInt where
-  dia z w := ⟨z.re * w.re - z.im * w.im, z.re * w.im + z.im * w.re⟩
-  one := ⟨1, 0⟩
-```
-
 ## Using a class
 
 A definition asks for any monoid through an instance argument in square brackets,
@@ -58,8 +46,7 @@ def mpow {α : Type} [Monoid₁ α] (x : α) : ℕ → α
   | n + 1 => mpow x n ⋄ x
 ```
 
-`mpow 2 10` finds `natMul` and gives `1024`. `mpow (⟨0, 1⟩ : GaussInt) 2` finds `gaussMul`
-and gives `⟨-1, 0⟩`, that is `i² = -1`. This search is how Mathlib knows `ℝ` is a field,
+`mpow 2 10` finds `natMul` and gives `1024`. This search is how Mathlib knows `ℝ` is a field,
 and why one lemma about monoids covers them all. A type gets one instance of a class, so
 `ℕ` can't be a `Monoid₁` under both `*` and `+`. That's why Mathlib has separate additive
 classes such as `AddMonoid`.
@@ -68,11 +55,14 @@ classes such as `AddMonoid`.
 
 Write three instances. Powers then come for free:
 
-* `(Bool, xor, false)`: `xor a b` means exactly one of `a`, `b` is true. Then `mpow true n`
-  is the parity of `n`.
-* `(ℤ, +, 0)`: here `x ⋄ y` means `x + y`, so `mpow x n` is `n * x`.
-* `(ℕ → ℕ, ∘, id)`: `f ⋄ g` is "first `g`, then `f`", as in `f ∘ g`. Then `mpow f n` is
-  `f` applied `n` times.
+* `(Bool, xor, false)`: the Lean function `xor a b` is `true` when exactly one of `a`, `b`
+  is `true`.
+* `(ℤ, +, 0)`: here `x ⋄ y` means `x + y`.
+* `(ℕ → ℕ, ∘, id)`: `f ⋄ g` is "first `g`, then `f`". In Lean that is `f ∘ g`
+  (type `\comp`), the function `fun n => f (g n)`. The identity function is `id`.
+  Then `mpow f n` is `f` applied `n` times.
+
+The tests write `(· * 2)` for the function `fun n => n * 2`.
 -/
 namespace L32
 

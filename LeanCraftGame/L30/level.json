@@ -5,8 +5,8 @@
   "exercise": "Write",
   "predict": [
     {
-      "test": "i · i = -1",
-      "statement": "`i · i = -1`: so `GaussInt.mul ⟨0, 1⟩ ⟨0, 1⟩` must be `⟨-1, 0⟩`, not `⟨0, 1⟩` as coordinate-by-coordinate multiplication would give"
+      "test": "(1 + 2i)(2 + 3i) = -4 + 7i",
+      "statement": "`(1 + 2i)(2 + 3i) = -4 + 7i`"
     }
   ],
   "public": [

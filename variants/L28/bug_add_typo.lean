@@ -1,4 +1,3 @@
-@[ext]
 structure Point where
   x : ℝ
   y : ℝ

@@ -14,19 +14,17 @@ DifferentiableAt ℝ f x     -- a statement: f is differentiable at x
 ```
 
 * `deriv f x` is a number you can compute with: `deriv (fun x : ℝ => x ^ 2) 3` is `6`.
-* `HasDerivAt f f' x` takes the function, then the derivative, then the point.
-  `HasDerivAt (fun x : ℝ => x ^ 2) 6 3` says the derivative at `3` is `6`. Sam's
-  `HasDerivAt (fun x : ℝ => x ^ 2) 3 6` says the derivative at `6` is `3`, which is false.
+* `HasDerivAt f f' x` takes the function, then the derivative, then the point:
+  `HasDerivAt (fun x : ℝ => x ^ 2) 6 3` says the derivative at `3` is `6`.
 * `DifferentiableAt ℝ f x` names `ℝ` because Mathlib also differentiates over `ℂ`. On a
-  set, use `DifferentiableOn ℝ f s` and `ContinuousOn f s`.
+  set, write `DifferentiableOn ℝ f (Set.Ioo a b)` and `ContinuousOn f (Set.Icc a b)`.
 
 ## A junk value
 
 `deriv f x` is always defined. Where `f` has no derivative, it's `0`. So
-`deriv (fun x : ℝ => |x|) 0 = 0` and `deriv (fun x : ℝ => min x 3) 3 = 0`, despite the
-corners. A real `0` looks the same: `x² - 4x + 4` has derivative `0` at `2`, where the
-graph is flat. It's the convention of `x / 0 = 0`. Theorems that need differentiability
-say so in a hypothesis.
+`deriv (fun x : ℝ => min x 3) 3 = 0`, despite the corner. A real `0` looks the same:
+`x² - 4x + 4` has derivative `0` at `2`, where the graph is flat. It's the convention of
+`x / 0 = 0`. Theorems that need differentiability say so in a hypothesis.
 
 ## Intervals
 
@@ -35,29 +33,22 @@ say so in a hypothesis.
 
 ## Two theorems
 
-**Rolle's theorem** (`exists_deriv_eq_zero`):
+**Rolle's theorem** (`exists_deriv_eq_zero`): if `a < b`, `f` is continuous on `[a, b]`
+and `f a = f b`, then some `c ∈ (a, b)` has `deriv f c = 0`. Mathlib's version has no
+differentiability hypothesis.
 
-> if `a < b`, `f` is continuous on `[a, b]` and `f a = f b`, then some `c ∈ (a, b)` has
-> `deriv f c = 0`.
-
-It needs no differentiability: where `f` isn't differentiable, `deriv f c` is `0` anyway.
-
-**The mean value theorem** (`exists_deriv_eq_slope`):
-
-> if `a < b`, `f` is continuous on `[a, b]` and differentiable on `(a, b)`, then some
-> `c ∈ (a, b)` has `deriv f c = (f b - f a) / (b - a)`.
-
-Here differentiability is needed, or the junk `0` would pass for the slope.
+**The mean value theorem** (`exists_deriv_eq_slope`): if `a < b`, `f` is continuous on
+`[a, b]` and differentiable on `(a, b)`, then some `c ∈ (a, b)` has
+`deriv f c = (f b - f a) / (b - a)`. Here differentiability is needed, or the junk `0`
+would pass for the slope.
 
 ## Your task
 
 1. `d3`: the derivative of `x ↦ x³` at `2`, written with `deriv`.
 2. `sq_hasDeriv`: the statement "`x ↦ x²` has derivative `6` at `3`", with `HasDerivAt`.
-3. `rolle`: Rolle's theorem as above, with the variables and hypotheses in this order:
-   `(f : ℝ → ℝ) (a b : ℝ)`, then `a < b`, continuity on `[a, b]`, `f a = f b`.
-4. `mvt`: the mean value theorem, in the order `(f : ℝ → ℝ) (a b : ℝ)`, `a < b`,
-   continuity on `[a, b]`, differentiability on `(a, b)`.
-5. Answer the two questions below the lesson.
+3. `rolle` and `mvt`: the two theorems, starting `(f : ℝ → ℝ) (a b : ℝ)`, then the
+   hypotheses in the order stated above, each with a name such as `(hab : a < b)`.
+4. Answer the two questions below the lesson.
 -/
 import Mathlib.Analysis.Calculus.Deriv.Pow
 import Mathlib.Analysis.Calculus.Deriv.Abs

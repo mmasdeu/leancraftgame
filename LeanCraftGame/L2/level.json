@@ -11,8 +11,8 @@
       "statement": "In ℕ, `7 / 2 = 3`."
     },
     {
-      "test": "am 0 4 = 2: the mean lies halfway (watch the brackets)",
-      "statement": "If `am a b` is written `a + b / 2`, then `am 0 4 = 2` still holds."
+      "test": "am 2 4 = 2 + 4 / 2: Sam's formula gives the mean of 2 and 4",
+      "statement": "Sam's `a + b / 2` gives the right mean for `a = 2`, `b = 4`."
     }
   ],
   "checks": [

@@ -39,6 +39,9 @@ end L47Ref
   Ref.IsContinuous (discrete 2) sierpinski L47.g
 #expect_false "Claim 2: g sends open sets to open sets (its inverse is continuous)" unfolding L47.g :
   ∀ U ∈ discrete 2, Ref.img L47.g U ∈ sierpinski
+#expect_true "Claim 2 on Sierpiński space: every continuous bijection to itself has a continuous inverse" :
+  ∀ h : Fin 2 → Fin 2, Ref.IsBijective h → Ref.IsContinuous sierpinski sierpinski h →
+    ∀ U ∈ sierpinski, Ref.img h U ∈ sierpinski
 #expect_true "Claim 3: x and y are different" unfolding L47.x L47.y : L47.x ≠ L47.y
 #expect_true "Claim 3: the constant sequence p converges to x" unfolding L47.p L47.x :
   L47Ref.ConstConverges sierpinski L47.p L47.x

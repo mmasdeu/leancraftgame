@@ -27,6 +27,6 @@ open Top
 #expect_false "noSubcover has a finite subcover" unfolding L46.noSubcover :
   ∃ N, ∀ x, ∃ i ≤ N, x ∈ L46.noSubcover i
 #expect_choice "Question 1: are the T1 topologies on {0, 1, 2} discrete?" : L46.q1 = true
-#expect_choice "Question 2: Mathlib's name for the Hausdorff property" : L46.q2 = 2
+#expect_choice "Question 2: a space where a sequence has two limits" : L46.q2 = 1
 
 #level_report

@@ -2,9 +2,10 @@
 # Morphisms
 
 *What matters about a structure is the maps that respect it. Sam's first homomorphism
-checked products and forgot the unit, so the Prover proved the constant map `0` is one.*
+checked products and forgot the unit.*
 
-Mathlib defines a monoid homomorphism as a **bundled** structure, a function plus the facts
+`[Monoid M]` says `M` has `*` and `1` with the monoid laws; `[AddMonoid M]` says the same
+for `+` and `0`. Mathlib defines a monoid homomorphism as a **bundled** structure, a function plus the facts
 that it respects the operations:
 
 ```lean
@@ -15,7 +16,7 @@ structure MonoidHom₁ (G H : Type) [Monoid G] [Monoid H] where
 ```
 
 Mathlib writes it `G →* H` (and `G →+ H` for additive monoids, `R →+* S` for rings). You
-apply a bundled map like a function, `f x`. Lean inserts a coercion, shown as `⇑f`.
+apply a bundled map like a function, `f x`.
 
 ## Bundled and unbundled
 
@@ -26,29 +27,23 @@ asks for:
 * `map_one`: `f 1 = 1`;
 * `map_mul`: `f (a * b) = f a * f b` for all `a`, `b`.
 
-Neither implies the other. In `(ℕ, *, 1)`, the constant map `0` respects multiplication
-(`0 = 0 * 0`) but sends `1` to `0`.
+Neither implies the other: a map can respect `*` and still send `1` elsewhere.
 
 You've met one homomorphism already: the norm `N(a + bi) = a² + b²` of the `GaussInt` of
 level 30. It has `N(zw) = N(z) N(w)` and `N(1) = 1`, so it's a monoid homomorphism from
 `(ℤ[i], ·, 1)` to `(ℤ, ·, 1)`.
 
-## Homomorphisms and bijections
-
-A homomorphism needn't be surjective: `n ↦ 2n` on `(ℤ, +)` misses the odd numbers. A
-bijection needn't be a homomorphism either. One is about the sets, the other about the
-operations.
-
 ## Your task
 
-1. `IsMonoidHom f`: `f` preserves `1` and `*`, for any two monoids `M` and `N`.
+1. `IsMonoidHom f`: `f` preserves `1` and `*`, for any two monoids `M` and `N`. Join the
+   conditions with `∧` (level 11).
 2. `IsAddMonoidHom f`: `f` preserves `0` and `+`, for any two additive monoids.
 3. `homNotOnto`: an additive homomorphism `ℤ → ℤ` that isn't surjective.
-4. `bijNotHom`: a map `ℤ → ℤ` that is its own inverse (so a bijection) and isn't an
-   additive homomorphism.
+4. `bijNotHom`: a map `ℤ → ℤ` with `f (f n) = n` for every `n` (so a bijection) that isn't
+   an additive homomorphism.
 
 The referee tests your predicates on many maps. It also checks that every bundled
-`f : M →* N` satisfies your `IsMonoidHom ⇑f`.
+`f : M →* N` satisfies your `IsMonoidHom`.
 -/
 namespace L34
 
@@ -61,7 +56,7 @@ def IsAddMonoidHom {M N : Type} [AddMonoid M] [AddMonoid N] (f : M → N) : Prop
 -- an additive homomorphism of ℤ that isn't surjective
 def homNotOnto : ℤ → ℤ := sorry
 
--- a map of ℤ that is its own inverse but isn't an additive homomorphism
+-- a map of ℤ with f (f n) = n that isn't an additive homomorphism
 def bijNotHom : ℤ → ℤ := sorry
 
 end L34

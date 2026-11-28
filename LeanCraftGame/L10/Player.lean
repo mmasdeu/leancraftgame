@@ -5,34 +5,35 @@
 pushed inwards. Noor wants everyone to read those by hand, and to stop confusing "bounded"
 with "every term is below something".*
 
-`FnUb` (level 8) and `FnHasUb` (level 9) are in the template. To read `¬ FnHasUb f`,
-**push the negation inwards**, flipping each quantifier:
+`¬ P` (type `\not`) means "not `P`". To read a negated statement, **push the negation
+inwards**, flipping each quantifier it passes:
 
 * `¬ ∀ x, P x` is `∃ x, ¬ P x` (a counterexample exists);
 * `¬ ∃ x, P x` is `∀ x, ¬ P x`;
-* `¬ (a ≤ b)` is `b < a`; `¬ (P ∧ Q)` is `P → ¬ Q`.
+* `¬ (a ≤ b)` is `b < a`.
 
-So `¬ FnHasUb f` = `¬ ∃ a, ∀ x, f x ≤ a` = `∀ a, ∃ x, ¬ (f x ≤ a)` = `∀ a, ∃ x, a < f x`.
-Whatever bound you propose, some value beats it. Mathlib's `push_neg` does this, and you'll
-read its output in proofs.
+For example, `¬ ∀ x, 0 ≤ f x` becomes `∃ x, ¬ (0 ≤ f x)`, then `∃ x, f x < 0`: some
+value is negative. Mathlib's `push_neg` does this, and the Prover prints its results that
+way.
 
 ## The order of quantifiers
 
 In `∀ a, ∃ x, …`, `x` may depend on `a`. In `∃ x, ∀ a, …`, one `x` must work for every
-`a`. For sequences:
+`a`. Over the reals:
 
-* `∃ M, ∀ n, u n ≤ M`: the sequence is **bounded** (one `M` for all `n`);
-* `∀ n, ∃ M, u n ≤ M`: true of every sequence (take `M = u n`).
+* `∀ x, ∃ y, x < y` is true: for each `x`, take `y = x + 1`;
+* `∃ y, ∀ x, x < y` is false: no real is above all reals, itself included.
 
 ## Your task
 
-Write the negations pushed inwards: no `¬` in front of a quantifier, and no `¬ (_ ≤ _)`.
+`FnUb` (level 8) and `FnHasUb` (level 9) are in the template. Write these definitions with
+the negation pushed all the way in: no `¬` in front of a quantifier, and no `¬ (_ ≤ _)`.
 
 * `NotFnUb f a`: `a` is *not* an upper bound of `f`.
 * `NoUpperBound f`: `f` has *no* upper bound.
 * `NotMonotone f`: `f` is *not* monotone, in the sense of `MonotoneFn` from level 8:
   `∀ {a b : ℝ}, a ≤ b → f a ≤ f b`.
-* `BoundedSeq u`: the sequence `u : ℕ → ℕ` is bounded.
+* `BoundedSeq u`: the sequence `u : ℕ → ℕ` is bounded (above).
 -/
 namespace L10
 

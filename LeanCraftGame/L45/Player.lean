@@ -16,21 +16,16 @@ class TopologicalSpace (X : Type u) where
 ```
 
 The whole space is open, the intersection of *two* open sets is open, and the union of
-*any* family of open sets is open (`∅` is the empty union). A map is continuous when the
-preimage of every open set is open (the `f ⁻¹' s` of level 16):
-
-```lean
-theorem continuous_def {f : X → Y} : Continuous f ↔ ∀ s, IsOpen s → IsOpen (f ⁻¹' s)
-```
-
-Preimage, not image. Maps that send open sets to open sets are *open maps*, a different
-notion.
+*any* family of open sets is open (`∅` is the empty union). A map `f : X → Y` between two
+spaces is **continuous** when the preimage of every open set of `Y` is open in `X` (the
+`f ⁻¹' s` of level 16). Preimage, not image.
 
 ## Finite spaces
 
 This level works on `Fin n = {0, 1, …, n-1}`. A subset is a `Finset (Fin n)`, and a family
-of subsets is a `Family n := Finset (Finset (Fin n))`. Every union is finite here, so the
-axioms only need `∅`, `Finset.univ`, and *binary* unions and intersections.
+of subsets is a `Family n`, short for `Finset (Finset (Fin n))`. Every union is finite
+here, so the axioms only need `∅`, `Finset.univ`, and unions and intersections of *two*
+open sets.
 
 Two spaces worth knowing:
 
@@ -39,14 +34,16 @@ Two spaces worth knowing:
   containing `p`.
 
 Write a family like a set: `({∅, {1}, Finset.univ} : Family 2)`. The library also has
-`Top.discrete n` (every set open), `Top.indiscrete n` (only `∅` and everything), and the
-preimage `Top.Ref.pre f V = {x | f x ∈ V}`.
+`Top.discrete n` (every set open) and `Top.Ref.pre f V`, the preimage of `V` as a `Finset`
+(the finite `f ⁻¹' V`). `∀ U ∈ T, P U` means "every `U` in `T` has `P U`".
 
 ## Your task
 
-1. Give `FinTopology` its axioms, one field per axiom, after `opens`.
+1. Give `FinTopology` its axioms, one field per axiom, after `opens`: `∅` and
+   `Finset.univ` are open, and for open `U` and `V`, so are `U ∩ V` and `U ∪ V`.
 2. Define Sierpiński space and the particular-point topology.
-3. Define continuity, with preimages (`Top.Ref.pre f V`).
+3. Define `IsCont T S f` for `f` from `Fin m` with topology `T` to `Fin n` with topology
+   `S`, with preimages (`Top.Ref.pre f V`).
 -/
 import LeanCraftGame.Lib.Topology
 

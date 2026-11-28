@@ -1,7 +1,7 @@
 /-
 # Sub-objects
 
-*Noor needs sub-objects next: the even numbers inside ℕ, the multiples of 12 inside ℤ.
+*Noor needs sub-objects next: the even numbers inside ℕ, the multiples of 12 inside ℕ.
 Sam proposed "a subset closed under `+`". The referee quickly found a subset that passes
 and shouldn't.*
 
@@ -21,28 +21,23 @@ structure Submonoid₁ (M : Type) [Monoid M] where
 * `mul_mem` and `one_mem` hold propositions, the axioms. `mul_mem {a b} : …` has its own
   binders, and `{a b}` makes `a` and `b` implicit.
 
-An instance `SetLike (Submonoid₁ M) M` then lets you write `x ∈ N` for `x ∈ N.carrier`.
-Mathlib's `Submonoid`, `Subgroup`, `Ideal` and `Submodule` all work this way.
-
-For example, in the `GaussInt` of level 30, the elements of norm 1 (`1`, `-1`, `i`, `-i`)
-form a submonoid under multiplication: `1` has norm 1, and the norm is multiplicative.
-
 ## Junk models
 
-Leave out an axiom and junk gets in. The numbers `≥ 1` are closed under addition, but they
-aren't an additive submonoid of ℕ: `0` is missing. The referee tests your axioms on many
-subsets. Real submonoids must satisfy every axiom, and junk must break at least one.
+Leave out an axiom and junk gets in. The numbers `≥ 2` are closed under multiplication,
+but they aren't a submonoid of `(ℕ, *, 1)`: `1` is missing. The referee tests your axioms
+on many subsets. Real submonoids must satisfy every axiom, and junk must break at least one.
 
 ## Set-builder notation
 
 `{n : ℕ | P n}` is the set of `n` satisfying `P n`, as in the Sets and Functions world. So
-`{n | n % 2 = 0}` is the even numbers, and `{n | k ∣ n}` the multiples of `k` (type `\|`
-or `\mid` for `∣`).
+`{n | n % 2 = 0}` is the even numbers, and `{n | k ∣ n}` the multiples of `k` (type `\mid`
+for `∣`). A list in braces, like `{0, 1}`, is the set with exactly those elements.
 
 ## Your task
 
 1. Complete `AddSubmonoid₁`, the additive version: the carrier is closed under `+` and
-   contains `0`. Keep `carrier` as the first field and add the axioms after it.
+   contains `0`. Keep `carrier` as the first field and add the axioms after it. Name them
+   as you like, say `add_mem` and `zero_mem`.
 2. Define `evens`, the even natural numbers, and `multiplesOf k`, the multiples of `k`.
 -/
 namespace L35

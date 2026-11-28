@@ -15,7 +15,7 @@ open L3
 #level_start "How Lean parses"
 
 #expect_choice "Question 1: `-x ^ 2` at x = 3" : q1 = 1
-#expect_choice "Question 2: `2 * 3 + 4`" : q2 = 0
+#expect_choice "Question 2: `7 / 2 * 2` in ℕ" : q2 = 1
 #expect_choice "Question 3: `8 / 4 * 2`" : q3 = 1
 #expect_choice "Question 4: `3 - 5 + 4` in ℕ" : q4 = 1
 #expect_choice "Question 5: `2 ^ 3 ^ 2`" : q5 = 1

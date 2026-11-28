@@ -1,8 +1,8 @@
 /-
 # Integrals and measures
 
-*The last project before the audit: integrals. Noor wants two theorems in the library:
-the fundamental theorem of calculus, and dominated convergence.*
+*The last project before the audit: integrals. Noor wants the fundamental theorem of
+calculus in the library, and everyone able to read Mathlib's dominated convergence.*
 
 Mathlib's **interval integral** is the integral of a first calculus course:
 
@@ -14,7 +14,7 @@ Mathlib's **interval integral** is the integral of a first calculus course:
 * `∫ x in a..b, f x` is a real number. The `x` is bound, like in `fun x => …`. The
   `(0:ℝ)` tells Lean the bounds are reals.
 * It's oriented: `∫ x in b..a, f x = -∫ x in a..b, f x`.
-* Like `deriv`, it's a total function. If `f` isn't integrable, the integral is `0`.
+* Like `deriv`, it's a total function, with a junk value where there's no honest answer.
 
 ## The fundamental theorem of calculus
 
@@ -29,14 +29,15 @@ Mathlib's version (`intervalIntegral.integral_eq_sub_of_hasDerivAt`), for `f f' 
 
 ## Measures
 
-Behind the integral is a **measure**. On `ℝ` it's `MeasureTheory.volume`, the length:
-`volume (Set.Icc a b)` is `b - a`. Measures take values in `ENNReal`, the numbers in
-`[0, ∞]`, since a set can have infinite measure.
+Behind the integral is a **measure**. On `ℝ` it's `MeasureTheory.volume`, the length.
+Measures take values in `ENNReal`, the numbers in `[0, ∞]`, since a set can have infinite
+measure. So `volume (Set.Icc a b)` is the real `b - a` turned into an `ENNReal`,
+`ENNReal.ofReal (b - a)`. A numeral such as `2` can be written directly as an `ENNReal`.
 
 * `MeasurableSet s`: `s` is one of the sets the measure is defined on.
-* `∀ᵐ x ∂μ, P x`: `P x` holds for almost every `x`, so the set where it fails has
-  measure `0`. It's the filter statement `∀ᶠ x in ae μ, P x`, like "eventually" in
-  level 43.
+* `∀ᵐ x ∂μ, P x`: `P x` holds for almost every `x` (`∂μ` reads "with respect to `μ`").
+  It's the filter statement `∀ᶠ x in ae μ, P x`, like "eventually" in level 43. The
+  filter `ae μ` holds the sets whose complement has measure `0`.
 * `∫ x, f x ∂μ`: the integral of `f` over the whole space with respect to `μ`.
 
 **Dominated convergence** says that under a bound, the limit of the integrals is the
@@ -56,7 +57,8 @@ theorem tendsto_integral_of_dominated_convergence {F : ℕ → α → ℝ} {f : 
 ## Your task
 
 1. `I2`: the integral of `x ↦ x²` from `0` to `1`, written with `∫`.
-2. `vol`: the measure (`MeasureTheory.volume`) of the closed interval `[0, 2]` of `ℝ`.
+2. `vol`: the measure of the closed interval `[0, 2]` of `ℝ`, written with
+   `MeasureTheory.volume`.
 3. `ftc`: the fundamental theorem of calculus as above, with the binders in this order:
    `(f f' : ℝ → ℝ) (a b : ℝ)`, the derivative hypothesis, the integrability hypothesis.
 4. Answer the questions below the lesson.

@@ -4,7 +4,27 @@
 *Sam rebuilt this world's structures for a side project. Each piece compiles and each is
 wrong. Noor wants a counterexample for each, so Sam can see the bug.*
 
-```lean
+Sam's code is at the top of the editor. Don't edit it: the referee tests your
+counterexamples against its own copy.
+
+## Reading a structure
+
+* A wrong operation shows up on some input where it disagrees with the right formula.
+  Avoid inputs where the wrong term is zero.
+* A symmetric notion gives a free test. The midpoint of `a` and `b` is the midpoint of `b`
+  and `a`, so swap the arguments and compare.
+* A propositional field can be **vacuous**, so weak that junk satisfies it. Read its
+  connectives (`∧`, `∨`, level 11) closely.
+
+## Your task
+
+Give the counterexamples asked for below Sam's code.
+-/
+import Mathlib.Tactic
+
+namespace L31
+
+-- Sam's code (don't edit)
 structure GaussInt where
   re : ℤ
   im : ℤ
@@ -26,35 +46,8 @@ def Point.mid (a b : Point) : Point :=
 structure UnitInterval where
   t : ℚ
   in_range : 0 ≤ t ∨ t ≤ 1
-```
 
-## Reading a structure
-
-* A wrong operation shows up on some input where it disagrees with the right formula.
-  Avoid inputs that make the wrong term vanish.
-* A symmetric notion gives a free test. The midpoint of `a` and `b` is the midpoint of `b`
-  and `a`, so swap the arguments and compare.
-* A propositional field can be **vacuous**, so weak that junk satisfies it. Find a number
-  that satisfies Sam's `in_range` but isn't in `[0, 1]`.
-
-## Your task
-
-Give the counterexamples. The template has Sam's types. The referee uses its own copy of
-Sam's functions.
--/
-import Mathlib.Tactic
-
-namespace L31
-
-structure GaussInt where
-  re : ℤ
-  im : ℤ
-
-structure Point where
-  x : ℚ
-  y : ℚ
-  z : ℚ
-
+-- Your counterexamples
 -- two Gaussian integers whose product Sam gets wrong
 def gz : GaussInt := sorry
 def gw : GaussInt := sorry

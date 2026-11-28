@@ -7,7 +7,7 @@
   "hintsAfter": 1,
   "questions": [
     {"answer": "q1", "text": "With `x = 3` in `ℤ`, what is `-x ^ 2`?", "choices": ["`9`", "`-9`"]},
-    {"answer": "q2", "text": "What is `2 * 3 + 4`?", "choices": ["`10`", "`14`"]},
+    {"answer": "q2", "text": "What is `7 / 2 * 2` in `ℕ`?", "choices": ["`7`", "`6`"]},
     {"answer": "q3", "text": "What is `8 / 4 * 2`?", "choices": ["`1`", "`4`"]},
     {"answer": "q4", "text": "What is `3 - 5 + 4` in `ℕ`?", "choices": ["`2`", "`4`", "`0`", "`-2`"]},
     {"answer": "q5", "text": "What is `2 ^ 3 ^ 2`?", "choices": ["`64`", "`512`"]},
@@ -21,7 +21,7 @@
   ],
   "hints": [
     {"match": "Question 1", "hint": "`^` binds tighter than the minus sign: `-(3 ^ 2)`."},
-    {"match": "Question 2", "hint": "`*` before `+`: `6 + 4`."},
+    {"match": "Question 2", "steps": ["Which comes first, `/` or `*`? And what is `7 / 2` in ℕ?"], "hint": "`(7 / 2) * 2 = 3 * 2`."},
     {"match": "Question 3", "hint": "`/` and `*` group to the left: `(8 / 4) * 2`."},
     {"match": "Question 4", "steps": ["Which subtraction happens first, and what is `3 - 5` in ℕ?"], "hint": "`(3 - 5) + 4 = 0 + 4`."},
     {"match": "Question 5", "hint": "`^` groups to the right: `2 ^ (3 ^ 2) = 2 ^ 9`."},
