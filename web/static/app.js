@@ -40,8 +40,21 @@ function markdown(text) {
     if (quote.length) out.push(`<blockquote>${inline(quote.join(" "))}</blockquote>`);
     para = []; list = []; quote = [];
   };
+  let more = null;          // lines of an open `:::more Title` … `:::` box
   for (const line of text.split("\n")) {
     let m;
+    if (more) {
+      if (/^:::\s*$/.test(line) && !more.code) {
+        out.push(`<details class="more"><summary><span class="more-tag">More info</span> ${inline(more.title)}</summary>` +
+          `<div class="more-body">${markdown(more.lines.join("\n"))}</div></details>`);
+        more = null;
+      } else {
+        if (line.startsWith("```")) more.code = !more.code;
+        more.lines.push(line);
+      }
+      continue;
+    }
+    if (!code && (m = /^:::more\s*(.*)$/.exec(line))) { flush(); more = { title: m[1] || "", lines: [], code: false }; continue; }
     if (line.startsWith("```")) {
       if (code) { out.push(`<pre class="hl">${highlight(code.join("\n"))}</pre>`); code = null; }
       else { flush(); code = []; }

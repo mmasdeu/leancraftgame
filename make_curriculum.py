@@ -41,7 +41,7 @@ def first_paragraph(intro):
     """The first paragraph of the lesson after its title, as one line."""
     paras = [p.strip() for p in re.split(r"\n\s*\n", intro) if p.strip()]
     for p in paras:
-        if not p.startswith(("#", "```", "|", "*", "-", ">")):
+        if not p.startswith(("#", "```", "|", "*", "-", ">", ":::")):
             return " ".join(p.split())
     return ""
 

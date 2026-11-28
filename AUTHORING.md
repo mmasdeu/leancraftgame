@@ -11,6 +11,20 @@ is the sorted list of directories).
 | `level.json` | `world`, `title`, `skill`, `exercise` (one of Write, Read, Construct, Refute, Repair, Audit), and optionally `predict`, `public`, `hintsAfter`, `checks` (signature checks), `hints`, `questions` (reading levels) and `timeout` (seconds per test, 60 to 300, for a level whose searches are long; the default is 60). |
 | `variants/L<n>/*.lean` | `correct*`/`fix*` must clear the level; `bug*` must get at least one ❌ (or be rejected by a check); `other*` (a statement other than the one asked that the referee cannot refute: a true one, or a false one beyond its reach) must not clear the level and must get no ❌. Write them without the `namespace` lines. |
 
+## "More info" boxes
+
+A lesson can hold optional material in a collapsible box, closed by default:
+
+```
+:::more How Mathlib names lemmas
+Text, lists and code blocks, as in the rest of the lesson.
+:::
+```
+
+Use them for what a working Mathlib user needs but the task does not: how Mathlib really does
+it (names, where things live, how to find a lemma, pitfalls) and the Lean behind it (coercions,
+typeclass resolution, definitional equality, universes). A task must never depend on a box.
+
 ## Test commands
 
 | Command | Passes when |
