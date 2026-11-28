@@ -38,8 +38,8 @@ that checks arithmetic). The type after the last colon is the **conclusion**, wh
 get.
 
 Every hypothesis is there for a reason. `le_div_iff₀` needs `hc : 0 < c`: with `c = -1`,
-`a = 0` and `b = 1`, its left side `0 ≤ 1 / -1` is false and its right side
-`0 * -1 ≤ 1` is true. Its conclusion is an `↔`, which works in both directions.
+`a = 0` and `b = 1`, its left side `a ≤ b / c` is `0 ≤ -1`, false, and its right side
+`a * c ≤ b` is `0 ≤ 1`, true. Its conclusion is an `↔`, which works in both directions.
 
 ## Your task
 

@@ -13,9 +13,9 @@ def TendsToInfinity (s : ℕ → ℝ) : Prop :=
   ∀ M : ℝ, ∃ N : ℕ, ∀ n ≥ N, M < s n
 ```
 
-For every height `M` there is an index `N` from which on every term is above `M`. As in
+For every height `M` there is an index `N` from which every term is above `M`. As in
 level 8, `∀ n ≥ N, …` is short for `∀ n, n ≥ N → …`, and `∀ ε > 0, …` works the same
-way. Indices are natural numbers, so Lean knows `N : ℕ` without being told.
+way. Indices are natural numbers: Lean infers `N : ℕ` even if you leave the type out.
 
 Sam's two test sequences:
 

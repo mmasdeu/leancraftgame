@@ -13,7 +13,7 @@ From tightest to loosest:
    `f` to `x + 1`. With level 2's `square` and `am`, `square am a b` is an error. You
    want `square (am a b)`.
 2. `^` (power).
-3. `-x` (negation). It is weaker than `^`, so `-2 ^ 4` is `-(2 ^ 4) = -16`, as on paper.
+3. `-x` (negation). It is weaker than `^`, so `-a ^ 4` is `-(a ^ 4)`, as on paper.
 4. `*` and `/`.
 5. `+` and `-`.
 6. `=`, `≤`, `<`, then `∧`, `∨`, `→` (next world).
