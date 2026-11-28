@@ -28,24 +28,21 @@ background: a lesson is about mathematics and Lean, the story frames it.
 ## The arc
 
 Each world is one project of the Annex. Objects built early come back later, and a lesson
-says so ("the `am` you wrote in level 2", "Sam's sequences from the Logic world").
+says so ("the `am` you wrote in level {{level:definitions-parsing}}", "Sam's sequences from the Logic world"). Lessons name levels by slug, never by number.
 
 | World | Project | Recurring objects introduced or reused |
 |---|---|---|
-| Getting Started | First day: reading a file, the AM-GM quantities | `am`, `square` |
-| Basics | Stating AM-GM and its friends for the library | `am`, AM-GM, `abs`, `min`/`max` |
-| Logic | Bounds, monotone functions, convergence | `FnUb`, `ConvergesTo`, explicit sequences |
-| Sets and Functions | Sets, images, injectivity; the Schröder–Bernstein construction | `FnUb` as a set statement, images of sequences |
-| Elementary Number Theory | Primes and divisibility; the Prover's "infinitude of primes" | primes, `√2`, recursion |
-| Discrete Mathematics | Counting with `Finset`, sums, trees | divisors, sums of primes |
-| Structures | Points, home-made groups, the Gaussian integers | `Point`, `GaussInt` |
-| Hierarchies | Classes, morphisms, sub-objects | `GaussInt` and `Point` as instances |
-| Groups and Rings | Mathlib's groups, `ZMod n`, ideals, polynomials | `ZMod n`, Gaussian integers again |
-| Linear Algebra | Linear maps on `ℝ²`, subspaces, matrices | `Point`-like vectors, rotations |
-| Topology | Filters, metric and topological spaces; sequences revisited | `ConvergesTo` becomes `Tendsto`, Sierpiński space |
-| Differential Calculus | Derivatives | functions from the Logic world |
-| Integration and Measure Theory | Integrals and measures | |
-| Final Audit | The Prover announces Goldbach | everything |
+| First Contact | First week: reading files, parsing, numbers and casts, error messages | `am`, `square` |
+| Statements | Stating AM-GM and its friends; finding what Mathlib already has | `am`, AM-GM, junk values |
+| Logic | Bounds, monotone functions, convergence | `FnUb`, `ConvergesTo`, `late`, `blink` |
+| Sets, Functions, Types | Sets, images, injectivity, subtypes | `FnUb` as a set statement, Schröder–Bernstein |
+| Number Theory and Recursion | Primes, casts, recursion; the Prover's "infinitude of primes" | primes, `√2`, `collatz`, trees |
+| Counting | `Finset`, sums, pigeonhole | divisors, harmonic numbers |
+| Structures and Classes | Points, Sam's groups, the Gaussian integers, instances | `Point`, `GaussInt`, S₃ |
+| Algebra | Mathlib's groups, rings, ideals, polynomials | `ZMod n`, Gaussian integers again |
+| Linear Algebra | Linear maps on `ℝ²`, subspaces, matrices | `Point`-like vectors, `rot` |
+| Analysis and Topology | Filters, metric and finite spaces, derivatives, integrals | `ConvergesTo` becomes `Tendsto`, Sierpiński space, `rot` |
+| Audits | Vacuous statements, faithful formalizations, the Prover's Goldbach | everything |
 
 ## Writing a lesson
 

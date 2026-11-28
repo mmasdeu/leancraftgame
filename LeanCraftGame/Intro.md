@@ -113,25 +113,29 @@ Each world is one project of the Annex. Some objects keep coming back: the AM-GM
 inequality, convergent sequences, primes, the Gaussian integers, `ℤ/nℤ`, linear maps on
 `ℝ²`, and Sierpiński space. A tag above each lesson says what kind of exercise it is:
 Write, Read, Construct (build an example), Refute (find a counterexample), Repair (fix
-Sam's code) or Audit (check whether a statement says what it claims).
+Sam's code) or Audit (check whether a statement says what it claims). Boxes marked
+**More info** hold optional material: how Mathlib really does things, and the Lean behind
+it. Open them when you're curious; no task depends on them.
 
-1. **Getting Started:** your first day. Read a Lean file, write your first definitions.
-2. **Basics:** put AM-GM in the library. How Lean parses, reading a theorem, stating
-   theorems, making them general.
-3. **Logic:** bounds, monotone functions, convergence; `∀ ∃ ¬ ∧ ∨ ↔` and the order of
-   quantifiers. In one level you write the tests yourself.
-4. **Sets and Functions:** sets, images, injective and surjective maps, and the
-   Schröder–Bernstein construction.
-5. **Number Theory:** primes, irrational roots, recursion, and the Prover's first
-   announcement.
-6. **Discrete Mathematics:** counting with `Finset`, sums, trees.
-7. **Structures:** points, Sam's home-made groups, the Gaussian integers.
-8. **Hierarchies:** classes and instances, morphisms, subgroups and friends.
-9. **Groups and Rings:** Mathlib's groups, `ZMod n`, permutations, ideals, polynomials.
-10. **Linear Algebra:** linear maps, subspaces, eigenvectors, matrices.
-11. **Topology:** filters, metric and topological spaces, compactness.
-12. **Differential Calculus:** derivatives in one and several variables.
-13. **Integration:** integrals and measures.
+1. **First Contact:** read a Lean file; how Lean parses; numbers, types and casts;
+   reading error messages.
+2. **Statements:** read real Mathlib signatures, find lemmas, state theorems from a paper,
+   choose the right generality, and spot junk values and missing hypotheses.
+3. **Logic:** `∀ ∃ ¬` and the order of quantifiers, convergence; you write the tests
+   yourself once, and audit Sam's definitions.
+4. **Sets, Functions, Types:** sets as predicates, images, injectivity, and sets used as
+   types (subtypes, `Fin n`).
+5. **Number Theory and Recursion:** primes, casts in statements, recursion and inductive
+   types, and the Prover's first announcement.
+6. **Counting:** `Finset`, sums with the casts in the right place, `Fintype` and the
+   pigeonhole principle.
+7. **Structures and Classes:** structures, Sam's home-made groups, classes and instance
+   search, morphisms, sub-objects.
+8. **Algebra:** Mathlib's groups, rings, ideals and polynomials.
+9. **Linear Algebra:** linear maps, subspaces, eigenvectors, matrices.
+10. **Analysis and Topology:** filters, metric spaces, finite topological spaces,
+    derivatives, integrals.
+11. **Audits:** vacuous statements, faithful formalizations, and a last announcement.
 
 At the end, the Prover announces a one-line proof of Goldbach's conjecture. Your last job
 is to find out what it really proved.
