@@ -28,15 +28,17 @@ Obvious examples like `fun _ ↦ 0` and `fun n ↦ n` catch little. Aim at the b
 * a sequence that doesn't converge even though it has such a property (it keeps coming
   back near `0`, or stays small, or stays below every `ε` but on the wrong side).
 
-The referee computes, so use sequences that are eventually constant or alternate, like Sam's `late` and `blink` from level 12
-(`fun n ↦ if n < 5 then 7 else 0` and `fun n ↦ if n % 2 = 0 then 0 else 1`), with small
-numbers (`1`, `2`, `1/2`, `-1`). Write them out in full: the template doesn't know `late`
-and `blink`.
+The referee computes, so use sequences that are eventually constant or alternate, like
+Sam's `late` and `blink` from level 12 (`fun n ↦ if n < 5 then 7 else 0` and
+`fun n ↦ if n % 2 = 0 then 0 else 1`), with small numbers (`1`, `2`, `1/2`, `-1`). Write
+them out in full: the template doesn't know `late` and `blink`.
 
 ## Your task
 
 Fill in the four sequences so that every mutant is caught. The report says how many
-mutants there are, and shows the definition of any mutant that survives.
+mutants there are. A ❌ on a mutant means the referee proved that your four sequences
+can't tell it apart from the right definition, and it shows that mutant. The run stops
+at the first one that survives.
 -/
 namespace L13
 

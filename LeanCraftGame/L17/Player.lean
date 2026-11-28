@@ -1,39 +1,43 @@
 /-
 # Injective, surjective, inverses
 
-*Schröder–Bernstein starts from two injections. Sam's first draft of injectivity read "if
-`a₁ = a₂` then `f a₁ = f a₂`". It compiles, and every function satisfies it.*
+*Schröder–Bernstein starts from two injections. Sam's first draft of injectivity compiles,
+and every function satisfies it:*
 
-Mathlib's version:
+```lean
+def SamInj (f : α → β) : Prop := ∀ a₁ a₂, a₁ = a₂ → f a₁ = f a₂
+```
+
+Mathlib's version goes the other way:
 
 ```lean
 def Function.Injective (f : α → β) : Prop := ∀ ⦃a₁ a₂⦄, f a₁ = f a₂ → a₁ = a₂
 ```
 
 Same output means same input. The hypothesis is about outputs, the conclusion about
-inputs. Sam's converse holds for every function. (`⦃ ⦄` makes `a₁ a₂` implicit, as in the
-`Monotone` of level 8.)
+inputs. (`⦃ ⦄` makes `a₁ a₂` implicit, as in the `Monotone` of level 8; `∀ a₁ a₂, …`
+works just as well for your own definitions.)
 
 `Function.Surjective f` says every `b : β` is an output: `∀ b, ∃ a, f a = b`. Quantifier
 order matters again (level 10): `∃ a, ∀ b, f a = b` says one input hits everything.
 
 ## Variants
 
-* `Set.InjOn f s`: `f` is injective *on* `s`: `∀ x ∈ s, ∀ y ∈ s, f x = f y → x = y`.
-  Squaring on ℝ isn't injective, but it is on `{x | 0 ≤ x}`.
+* `Set.InjOn f s`: `∀ x ∈ s, ∀ y ∈ s, f x = f y → x = y`. Here `∀ x ∈ s, …` is short
+  for `∀ x, x ∈ s → …`. Squaring on ℝ isn't injective, but it is on `{x | 0 ≤ x}`.
 * `Function.LeftInverse g f`: `∀ x, g (f x) = x`, so `g` undoes `f`.
-* `Function.invFun f`: *an* inverse, built by choice:
+* `Function.invFun f`: *an* inverse:
 
 ```lean
-Function.invFun {α : Sort u} {β : Sort v} [Nonempty α] (f : α → β) : β → α
+Function.invFun [Nonempty α] (f : α → β) : β → α
 ```
 
-  For `y` in the range of `f`, it returns some `x` with `f x = y`. Outside the range it
-  must still return something in `α`, hence `[Nonempty α]`. It's a left inverse of `f`
-  when `f` is injective.
+  For `y` in the range of `f`, it returns some `x` with `f x = y`. If there are several,
+  Lean picks one (by the axiom of choice) without saying which. `[Nonempty α]` is an
+  assumption in square brackets: `α` has at least one element. Lean finds such
+  assumptions by itself.
 
-On ℕ, `n - 1` is `0` when `n = 0` (level 3), so `fun n => n - 1` sends both `0` and `1`
-to `0`.
+Remember that on ℕ, subtraction stops at zero (level 3).
 
 ## Your task
 

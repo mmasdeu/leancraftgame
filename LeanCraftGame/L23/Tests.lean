@@ -23,7 +23,11 @@ end L23Ref
 #expect_true "Toy world: the 'primes' are the odd numbers" unfolding Unbounded : Unbounded (fun p => p % 2 = 1)
 #expect_true "Your world: nothing outside [2, 100]" unfolding smallWorld :
   ∀ p, smallWorld p → 2 ≤ p ∧ p ≤ 100
-#expect_true "Your world: the Prover's claim holds there" unfolding AIClaim smallWorld : AIClaim smallWorld
+-- `AIClaim P` holds exactly when `P` has two different members. Inside [2, 100] (the test
+-- above) that is a finite check, which the referee settles for any decidable rule; the
+-- literal `AIClaim smallWorld` is a `∀ n, ∃ p` that it often can't.
+#expect_true "Your world: two 'primes' in [2, 100], so the Prover's claim holds there" unfolding smallWorld :
+  ∃ a ∈ Finset.Icc 2 100, ∃ b ∈ Finset.Icc 2 100, a ≠ b ∧ smallWorld a ∧ smallWorld b
 #expect_false "Your world: infinitely many 'primes' there" unfolding L23Ref.Real smallWorld :
   L23Ref.Real smallWorld
 #expect_true "Your fakePrime: the Prover's IsPrime accepts it" unfolding IsPrime fakePrime : IsPrime fakePrime

@@ -1,9 +1,9 @@
 /-
 # Vector spaces and linear maps
 
-*A new project: linear algebra in the plane. The `Point` of level 28 had `add` and `smul`.
-Now Mathlib supplies them, and Noor asks which maps respect them. Sam has already proposed
-one that doesn't.*
+*A new project: linear algebra in the plane. The `Point` you wrote in level 28 had `add`
+and `smul`. Now Mathlib supplies them, and Noor asks which maps respect them. Sam has
+already proposed one that doesn't.*
 
 Linear algebra in Mathlib starts with these hypotheses:
 
@@ -19,26 +19,16 @@ function from the indices `0`, `1` to `ℚ`, and `v 0`, `v 1` are its coordinate
 ## Linear maps are bundled
 
 A linear map `V →ₗ[K] W` (type `\to\_l`) is a **structure**: a function plus proofs that
-it's linear.
+it's linear. Roughly:
 
 ```lean
-structure LinearMap … (M : Type*) (M₂ : Type*) … where
-  toFun : M → M₂
+structure LinearMap (V W : Type*) where
+  toFun : V → W
   map_add' : ∀ x y, toFun (x + y) = toFun x + toFun y
-  map_smul' : ∀ (c : R) x, toFun (c • x) = c • toFun x
+  map_smul' : ∀ (c : K) x, toFun (c • x) = c • toFun x
 ```
 
-You build one by giving the three fields:
-
-```lean
-example : V →ₗ[K] V where
-  toFun v := 3 • v
-  map_add' _ _ := smul_add ..
-  map_smul' _ _ := smul_comm ..
-```
-
-You apply it like a function (`φ v`), through a coercion. Its kernel `LinearMap.ker φ` and
-range `LinearMap.range φ` are subspaces (next level).
+You apply it like a function, `φ v`.
 
 Here you give only the `toFun`. The referee proves `map_add'` and `map_smul'`, or finds
 that they fail.

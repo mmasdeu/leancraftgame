@@ -40,14 +40,18 @@ termination_by n
 decreasing_by omega
 ```
 
-`termination_by n` names what goes down, and `decreasing_by` proves it does (`n / 10 < n`
-when `n ≥ 10`). Lean only accepts recursions that stop.
+Lean only accepts recursions that stop. When the call isn't on `n - 1`, you help it:
+`termination_by e` names a quantity `e` that gets smaller at each call, and `decreasing_by`
+gives the proof. `omega` is a tactic that proves simple arithmetic facts on ℕ; you won't
+need to write one.
 
 ## Your task
 
 1. `Unbounded P`: an honest "infinitely many numbers satisfy `P`".
 2. `smallWorld`: a toy "prime", using only numbers between 2 and 100, where the Prover's
-   claim holds but there are only finitely many "primes".
+   claim holds but there are only finitely many "primes". Give a rule Lean can check
+   number by number (built from `=`, `≤`, `∧`, `∨`, `Nat.Prime`…), so the referee can
+   settle it.
 3. `fakePrime`: a number the Prover's `IsPrime` accepts but `Nat.Prime` rejects.
 4. State Euclid as Mathlib does (`euclid`), and its variant for primes `p` with
    `p % 4 = 3` (`euclid_mod4`: for every `n` a prime `p ≥ n` with `p % 4 = 3`), in the

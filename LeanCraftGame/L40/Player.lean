@@ -2,41 +2,34 @@
 # Subspaces and quotients
 
 *Noor wants a list of the subspaces of the plane. Sam's draft has a line through the
-origin, the two axes together, a parabola, and a line that misses `0`. Only the first
-belongs.*
+origin, the two axes together, a parabola, and a line that misses `0`.*
 
-A subspace of `V` is a `Submodule K V`. Like the sub-objects of level 35, it's a set (its
-`carrier`) bundled with proofs that it's closed under the operations:
+A subspace of `V` is a `Submodule K V`, with `K` and `V` as in level 39 (for the plane,
+`ℚ` and `Fin 2 → ℚ`). Like the sub-objects of level 35, it's a set (its `carrier`)
+bundled with proofs that it's closed under the operations. Roughly:
 
 ```lean
-structure Submodule (R M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] where
-  carrier : Set M
+structure Submodule (K V : Type*) where
+  carrier : Set V
   add_mem' : ∀ {a b}, a ∈ carrier → b ∈ carrier → a + b ∈ carrier
-  zero_mem' : (0 : M) ∈ carrier
-  smul_mem' : ∀ (c : R) {x}, x ∈ carrier → c • x ∈ carrier
+  zero_mem' : (0 : V) ∈ carrier
+  smul_mem' : ∀ (c : K) {x}, x ∈ carrier → c • x ∈ carrier
 ```
 
-Subspaces are ordered by inclusion, with lattice notation:
+Subspaces are ordered by inclusion, and Mathlib uses lattice notation for that order:
 
-* `⊥` is the zero subspace `{0}`, and `⊤` the whole space.
-* `U ⊓ W` is the intersection `U ∩ W`.
-* `U ⊔ W` is the smallest subspace containing both, that is `U + W`. It isn't the union:
-  two lines through `0` don't form a subspace.
-* `Submodule.span K s` is the smallest subspace containing the set `s`.
+* `⊥` (type `\bot`) is the smallest subspace, and `⊤` (`\top`) the largest.
+* `U ⊓ W` (`\sqcap`) is the largest subspace contained in both `U` and `W`.
+* `U ⊔ W` (`\sqcup`) is the smallest subspace containing both.
 * `V ⧸ W` is the quotient space: two vectors are identified when their difference lies
   in `W`.
 
-The kernel `LinearMap.ker φ` of level 39 is a subspace. `φ` is injective (level 17)
-exactly when `LinearMap.ker φ = ⊥`.
-
 ## Which sets are subspaces?
 
-A line through the origin is a subspace of the plane. A line that misses `0`, a curve, or
-the union of the axes isn't. To show that, give a counterexample to one of the three
-fields.
+To show that a set isn't a subspace, give a counterexample to one of the three fields.
 
-As before, the plane is `Fin 2 → ℚ`, a vector is `![x, y]` with coordinates `v 0` and
-`v 1`. Write sets as `{v | v 0 = 0}` (the vertical axis).
+As before, a vector is `![x, y]` with coordinates `v 0` and `v 1`. Write sets as
+`{v | v 0 = 0}` (the vertical axis).
 
 ## Your task
 

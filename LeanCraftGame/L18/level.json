@@ -23,7 +23,7 @@
   ],
   "hints": [
     {"match": "Question 1", "hint": "Look for the `| 0 => …` and `| n + 1 => …` lines."},
-    {"match": "Question 2", "hint": "`univ \\ g '' univ`: everything, minus the image of everything under `g`."},
+    {"match": "Question 2", "hint": "`Set.univ \\ g '' Set.univ`: everything, minus the image of everything under `g`."},
     {"match": "Question 3", "hint": "`if x ∈ sbSet f g then f x else …`."},
     {"match": "Question 4", "hint": "`invFun g` returns elements of `β`, the domain of `g`."},
     {"match": "Question 5", "hint": "`sbAux 0` is the odd numbers."},

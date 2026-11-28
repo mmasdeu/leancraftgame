@@ -1,18 +1,18 @@
 /-
 # Finset and Fintype
 
-*A new project: counting. Noor wants numbers Lean can compute: the primes below 20, the
-divisors of 12, the subsets of a given size. The primes of level 15 form an infinite set
-Lean can't list, so counting needs another kind of set.*
+*A new project: counting. Noor wants sets Lean can compute: the divisors of 12, the squares
+up to `n²`, the subsets of a given size. The primes of level 15 form an infinite set Lean
+can't list, so counting needs another kind of set.*
 
 * `Set α` is a predicate. `{n | Nat.Prime n}` may be infinite; Lean can't compute with it.
 * `Finset α` is a *finite* set Lean can compute with. It can list the elements, count them
-  (`s.card`, also written `#s`) and decide `3 ∈ s`.
+  (`s.card`) and decide `3 ∈ s`.
 
 ## Building finsets
 
 ```lean
-Finset.range 5                       -- {0, 1, 2, 3, 4}: 5 itself is NOT in it
+Finset.range 5                       -- {0, 1, 2, 3, 4}
 Finset.Icc 1 5                       -- {1, 2, 3, 4, 5}: both ends included
 Finset.Ico 1 5                       -- {1, 2, 3, 4}
 (Finset.range 10).filter (fun n => n % 3 = 0)        -- {0, 3, 6, 9}
@@ -22,11 +22,12 @@ Finset.Ico 1 5                       -- {1, 2, 3, 4}
 ({1, 2, 3} : Finset ℕ).card                          -- 3
 ```
 
-* `s.filter p` keeps the elements satisfying `p`.
+* `s.filter p` keeps the elements satisfying `p`. Lean must be able to check `p` on each
+  element, as it can for `n % 3 = 0` or `Nat.Prime n`.
 * `s.image f` applies `f` to each element and drops repeats, like `f '' s` (level 16).
 * `s.powerset` is all subsets of `s`, a `Finset (Finset α)`.
 
-`Finset.range n` stops **before** `n`. It's the usual source of off-by-one errors.
+Read the ends of a range carefully: they're the usual source of off-by-one errors.
 
 ## Fintype
 

@@ -4,7 +4,7 @@
   "skill": "reading",
   "exercise": "Refute",
   "predict": [
-    {"test": "Claim 4: in ZMod 7 every nonzero element has an inverse (7 is prime)", "statement": "In `ZMod 7`, every nonzero element has an inverse."}
+    {"test": "Claim 4: in ZMod 7 every nonzero element has an inverse (7 is prime)", "statement": "Sam's Claim 4 holds for `n = 7`: in `ZMod 7`, every nonzero element has an inverse."}
   ],
   "public": ["Claim 1: junk contains 0 and is closed under +", "Claim 2: x is in Ideal.span {2}", "Claim 5: σ * τ ≠ τ * σ"],
   "checks": [

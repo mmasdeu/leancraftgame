@@ -21,7 +21,6 @@ theorem L22Ref.fac_ge : ∀ n : ℕ, 2 ^ (n - 1) ≤ Nat.factorial n := by
 #no_sorry fib
 #no_sorry sumTo
 #no_sorry collatz
-#no_sorry L22.sum_id
 #no_sorry L22.fac_ge
 #level_start "Recursion and induction"
 
@@ -32,9 +31,6 @@ theorem L22Ref.fac_ge : ∀ n : ℕ, 2 ^ (n - 1) ≤ Nat.factorial n := by
 #expect_true "sumTo 4 = 10" : sumTo 4 = 10
 #expect_true "collatz 6 = 3" unfolding collatz : collatz 6 = 3
 #expect_true "collatz 7 = 22" unfolding collatz : collatz 7 = 22
-#expect_equiv "sum_id says ∑ i ∈ range (n + 1), i = n (n + 1) / 2" :
-  L22.sum_id ↔ ∀ n : ℕ, ∑ i ∈ Finset.range (n + 1), i = n * (n + 1) / 2
-  using fun n => by rw [Finset.sum_range_id]; simp [Nat.mul_comm]
 #expect_equiv "fac_ge says 2 ^ (n - 1) ≤ n !" :
   L22.fac_ge ↔ ∀ n : ℕ, 2 ^ (n - 1) ≤ Nat.factorial n
   using L22Ref.fac_ge

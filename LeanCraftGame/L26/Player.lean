@@ -34,12 +34,15 @@ Lists work the same way. A list is `[]` or `x :: xs` (`x` in front of `xs`), and
 
 ## Counting trees
 
-The number of trees with `n` nodes is the `n`-th **Catalan number**: 1, 1, 2, 5, 14, …
-The referee checks your `size` against it.
+The number of trees with `n` nodes is the **Catalan number** `C n`, starting from
+`C 0 = 1` (the empty tree). The referee lists small trees and counts those of each size,
+using your `size`.
 
 ## Your task
 
-Fill in each case. Don't forget the node itself counts as one.
+Fill in each case. In the editor, `deriving DecidableEq` lets Lean decide whether two trees
+are equal, and `open BinTree` lets you write `empty` and `node` for `BinTree.empty` and
+`BinTree.node`.
 -/
 import Mathlib.Tactic
 

@@ -29,7 +29,7 @@ open L26Ref
   ((treesH 3).filter (fun t => decide (L26.size t = 3))).length = 5
 #expect_true "a single node has height 1" : L26.height n1 = 1
 #expect_true "node (node (node empty empty) empty) empty has height 3" : L26.height path3 = 3
-#expect_true "the tree with 3 nodes in a row has height 3, the balanced one height 2" :
+#expect_true "the balanced tree with 3 nodes has height 2" :
   L26.height t3 = 2
 #expect_true "mirror swaps at every level, not only at the top" :
   L26.mirror path3 = .node .empty (.node .empty n1)

@@ -10,8 +10,9 @@ refute them with counterexamples, then repair the first.*
 def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
 ```
 
-This is meant as the `multiples` of level 15. (`k % n` is the remainder of `k` divided by
-`n`.) Give `k₁` and a multiple `n₁` of `k₁` that is **not** in `multiplesOf k₁`.
+It's meant to be the multiples of `k`. (`k % n` is the remainder of `k` divided by `n`.)
+Give `k₁` and a multiple `n₁` of `k₁` that is **not** in `multiplesOf k₁`. (Sam's code is
+in the editor too.)
 
 ## 2. Preimage of the image
 
@@ -35,13 +36,18 @@ For a family `A i j` with two indices, Sam claims
 
 The left side is `∃ i, ∀ j, x ∈ A i j`, the right side `∀ j, ∃ i, x ∈ A i j`: quantifier
 order again (level 10). Give `A : Bool → Bool → Set ℕ` and a point `x₂` on the right but
-not on the left. You may use `if i = j then … else …`.
+not on the left. `Bool` is the type with the two values `true` and `false`, so each index
+takes two values. You may use `if i = j then S else T`: it is `S` when `i = j`, and `T`
+otherwise.
 
 ## 4. Repair
 
 Write `multiplesOfFixed k`, the multiples of `k`, correctly.
 -/
 namespace L19
+
+-- Sam's code (given, don't edit)
+def multiplesOf (k : ℕ) : Set ℕ := {n | k % n = 0}
 
 def k₁ : ℕ := sorry
 def n₁ : ℕ := sorry

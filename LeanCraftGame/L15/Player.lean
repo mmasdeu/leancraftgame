@@ -16,12 +16,17 @@ example : 4 ∈ evens' := …                   -- membership is a Prop
 ```
 
 * `{x | P x}`: the set of `x` with property `P`.
+* `{a, b}`: the set with elements `a` and `b`; `{a}` has one element. Lean may need the
+  type spelled out: `({2, 3} : Set ℕ)`.
 * `x ∈ s` (`\in`), `x ∉ s` (`\notin`): membership.
 * `s ⊆ t` (`\sub`): `∀ x, x ∈ s → x ∈ t`.
 * `s ∩ t` (`\cap`), `s ∪ t` (`\cup`), `s \ t` (difference), `sᶜ` (`\compl`, the
   complement).
 * `∅` (`\empty`) and `Set.univ`: the empty set and the set of everything.
 * Intervals: `Set.Icc a b` is `{x | a ≤ x ∧ x ≤ b}`, `Set.Ici a` is `{x | a ≤ x}`.
+
+Mathlib has the properties you need here: `Even n` (`n` is even), `Nat.Prime n` (`n` is
+prime), and `k ∣ n` (`k` divides `n`, typed `\|`; it is not the bar `|`).
 
 ## Indexed unions and intersections
 
@@ -35,18 +40,18 @@ A **family** of sets is a function `A : ι → Set α`, one set `A i` for each i
 
 So `⋃` is an `∃` and `⋂` is a `∀`. The index can range over a set:
 `⋃ k ∈ ({2, 3} : Set ℕ), A k` is `A 2 ∪ A 3`. `⋃ i : ℕ, Set.Icc 0 i` is all of ℕ, since
-`n ∈ [0, n]`. `⋂ i : ℕ, Set.Ici i` is empty, since no number is `≥ i` for every `i`.
+`n ∈ [0, n]`.
 
 ## Precedence
 
-`ᶜ` binds tightest, then `∩`, then `∪`, then `∈` and `⊆`. When in doubt, use brackets:
-`s ∩ (t ∪ u)` is "the elements of `s` that are in `t` or in `u`".
+`ᶜ` binds tightest, then `∩`, then `∪`, then `∈` and `⊆`. So `s ∪ t ∩ u` is
+`s ∪ (t ∩ u)`. Brackets are computed first. When in doubt, use them.
 
 ## Your task
 
-Answer the two questions, then fill in the sets with Mathlib's `Even` and `Nat.Prime`.
-Where a comment asks, use set operations, not a new property. Careful: `2` is prime, and
-in `k ∣ n` the order says who divides whom.
+Answer the two questions (`q2` is `true` or `false`), then fill in the sets. Where a
+comment asks, use set operations, not a new property. Careful: `2` is prime, and in
+`k ∣ n` the order says who divides whom.
 -/
 namespace L15
 

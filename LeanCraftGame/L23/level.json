@@ -10,7 +10,7 @@
   ],
   "questions": [
     {"answer": "q1", "text": "Why does Lean accept the recursive call `digitSum (n / 10)`?",
-     "choices": ["it is structural recursion, from `n + 1` to `n`", "`termination_by n` and `decreasing_by` show that `n / 10 < n` in that branch", "Lean evaluates `digitSum` on every number first"]},
+     "choices": ["it calls itself on `n - 1`, like `fac` in level 22", "`termination_by n` and `decreasing_by` show that `n / 10 < n` in that branch", "Lean evaluates `digitSum` on every number first"]},
     {"answer": "q2", "text": "True or false: `digitSum 1234 = 10`."}
   ],
   "checks": [
@@ -31,7 +31,7 @@
      "hint": "`1`: its only divisor is `1`, but `Nat.Prime` asks for `2 ≤ p`."},
     {"match": "euclid says", "hint": "`statement euclid : ∀ n : ℕ, ∃ p, n ≤ p ∧ Nat.Prime p`."},
     {"match": "euclid_mod4", "hint": "`statement euclid_mod4 : ∀ n : ℕ, ∃ p, n ≤ p ∧ Nat.Prime p ∧ p % 4 = 3`."},
-    {"match": "Question 1", "hint": "`n / 10` is not `n - 1`, so the recursion isn't structural. That's what the `termination_by` lines are for."},
+    {"match": "Question 1", "hint": "The call is on `n / 10`, not `n - 1`. That's what the `termination_by` and `decreasing_by` lines are for."},
     {"match": "Question 2", "hint": "`4 + 3 + 2 + 1`."}
   ]
 }

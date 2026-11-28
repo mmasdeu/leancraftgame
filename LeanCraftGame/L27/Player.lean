@@ -1,11 +1,40 @@
 /-
 # Spot the bug: counting
 
-*Sam wrote this counting code in an afternoon, to test primality: a prime has exactly two
+*Sam wrote some counting code in an afternoon, to test primality: a prime has exactly two
 divisors. Each definition compiles, and each is wrong. Noor asks you to **prove them
 wrong**, not fix them.*
 
-```lean
+Sam's code is in the editor: `triangle`, `numDivisors`, `size` and a "Gauss's formula".
+The comment above each says what it should compute. Two new bits of notation:
+
+* `(· ∣ n)` is `fun d => d ∣ n`: the `·` stands for the missing input.
+* `BinTree` is the tree type from level 26, given again.
+
+A counterexample is an input (a number, or a tree) on which Sam's answer and the right
+answer differ. The referee computes both and checks that they differ.
+
+## The trap
+
+A wrong definition can be right on easy inputs. Try each one on a few small inputs and
+compare with the right value by hand.
+
+## Your task
+
+One counterexample per definition.
+-/
+import Mathlib.Tactic
+
+namespace L27
+
+inductive BinTree where
+  | empty : BinTree
+  | node : BinTree → BinTree → BinTree
+
+open BinTree
+
+-- Sam's code (given, don't edit; the referee uses its own copy)
+
 -- 1 + 2 + ⋯ + n
 def triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, i
 
@@ -17,31 +46,10 @@ def size : BinTree → ℕ
   | empty => 0
   | node l r => size l + size r
 
--- "Gauss's formula": for all n, ∑ i ∈ Finset.range n, i = n * (n + 1) / 2
-```
+-- "Gauss's formula"
+statement samGauss (n : ℕ) : ∑ i ∈ Finset.range n, i = n * (n + 1) / 2
 
-For each, give an input where it's wrong. The referee computes Sam's answer and the right
-one and checks they differ. What does `Finset.range n` contain? `Ico 1 n`? Which nodes
-does `size` count? (Would `7` have two divisors under Sam's `numDivisors`?)
-
-## The trap
-
-A wrong definition can be right on easy inputs. `triangle 0` is `0`, as it should be. Pick
-an input where the answers really differ.
-
-## Your task
-
-One counterexample per definition. `BinTree` is the tree type from level 26.
--/
-import Mathlib.Tactic
-
-namespace L27
-
-inductive BinTree where
-  | empty : BinTree
-  | node : BinTree → BinTree → BinTree
-
-open BinTree
+-- Your counterexamples
 
 -- an input on which `triangle` is wrong
 def tn : ℕ := sorry

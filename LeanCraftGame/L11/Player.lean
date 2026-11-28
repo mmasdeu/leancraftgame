@@ -4,30 +4,32 @@
 *Noor wants three Mathlib characterisations restated as a warm-up, and one new
 definition: "`f` has a zero in `[a, b]`". Sam's draft of it holds for every function.*
 
-* `P ∧ Q`: both. For example, `x < y` is the same as `x ≤ y ∧ x ≠ y`.
-* `P ∨ Q`: at least one. For example, `x ≤ |y|` holds exactly when `x ≤ y ∨ x ≤ -y`.
-* `P ↔ Q`: `P` and `Q` say the same thing, as in `abs_le : |a| ≤ b ↔ -b ≤ a ∧ a ≤ b`.
-  With it, level 8's `FnUb (fun x ↦ |f x|) a` unpacks into `∀ x, -a ≤ f x ∧ f x ≤ a`.
+* `P ∧ Q` (type `\and`): both. `0 < x ∧ x < 1` says `x` lies in `(0, 1)`.
+* `P ∨ Q` (type `\or`): at least one. `x < 0 ∨ 1 < x` says `x` lies outside `[0, 1]`.
+* `P ↔ Q` (type `\iff`): "`P` if and only if `Q`". For example
+  `x ^ 2 = 1 ↔ x = 1 ∨ x = -1`.
 
 ## Precedence
 
 From tightest to loosest: `¬`, then `∧`, then `∨`, then `→` and `↔`. So `P ∧ Q → R` is
 `(P ∧ Q) → R`, and `¬ P ∨ Q` is `(¬ P) ∨ Q`.
 
-## The trap: `→` under `∃`
+## `→` and `∧` under quantifiers
 
-"`f` has a zero in `[a, b]`" is `∃ x, a ≤ x ∧ x ≤ b ∧ f x = 0`: one `x` that meets all
-three conditions. Sam wrote `∃ x, a ≤ x ∧ x ≤ b → f x = 0`, which holds as soon as some
-`x` lies outside `[a, b]`: an implication with a false hypothesis is true. Under `∀`, use
-`→`. Under `∃`, use `∧`.
+`P → Q` is false only when `P` is true and `Q` is false. So the two quantifiers want
+different connectives: "every `x ≥ 0` has `f x ≤ x`" is `∀ x, 0 ≤ x → f x ≤ x`, while
+"some `x ≥ 0` has `f x ≤ x`" is `∃ x, 0 ≤ x ∧ f x ≤ x`.
 
 ## Your task
 
-State the three characterisations, for all reals `x` and `y`:
+State the three characterisations for all reals `x` and `y`, binders before the colon as
+in level 5: `statement lt_iff' (x y : ℝ) : …`. The prime keeps the names apart from
+Mathlib's own. Each right-hand side joins the two given inequalities with `∧` or `∨`:
+decide which.
 
-1. `lt_iff'`: `x < y ↔ x ≤ y ∧ x ≠ y`;
-2. `abs_lt'`: `|x| < y ↔ -y < x ∧ x < y`;
-3. `le_abs'`: `x ≤ |y| ↔ x ≤ y ∨ x ≤ -y`.
+1. `lt_iff'`: `x < y` in terms of `x ≤ y` and `x ≠ y`;
+2. `abs_lt'`: `|x| < y` in terms of `-y < x` and `x < y`;
+3. `le_abs'`: `x ≤ |y|` in terms of `x ≤ y` and `x ≤ -y`.
 
 Then define `HasZeroIn f a b`: `f` has a zero in the closed interval `[a, b]`.
 -/

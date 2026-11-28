@@ -13,25 +13,26 @@ Mathlib writes finite sums and products with **big operators**:
 ```
 
 `∑ i ∈ s, f i` is the sum of `f i` for `i` in `s` (type `\sum`, `\prod`). `i` is bound,
-so `∑ j ∈ s, f j` is the same sum. An empty sum is `0`, an empty product `1`, which is why
-`fac 0 = 1` in level 22.
+so `∑ j ∈ s, f j` is the same sum. An empty sum is `0`, the neutral element of `+`.
 
 ## Counting
 
-To count things, build their finset and take `card`. The pairs `(i, j)` with `i, j < 3`
-form `range 3 ×ˢ range 3` (type `\times\^s`, or copy it), and
+To count things, build their finset and take `card`. `s ×ˢ t` is the finset of pairs
+`(i, j)` with `i ∈ s` and `j ∈ t` (type `\times\^s`, or copy it). So
 
 ```lean
 ((Finset.range 3 ×ˢ Finset.range 3).filter (fun p => p.1 = p.2)).card   -- 3
 ```
 
-counts the pairs on the diagonal. `p.1` and `p.2` are a pair's coordinates.
+counts the pairs `(i, j)` with `i, j < 3` on the diagonal. `p.1` and `p.2` are a pair's
+coordinates.
 
 ## Identities
 
-Gauss: `0 + 1 + ⋯ + n = n (n + 1) / 2`. Nicomachus: `0³ + 1³ + ⋯ + n³` is the square of
-`0 + 1 + ⋯ + n`. "From 0 to `n` included" is `Finset.range (n + 1)`. Write your sums that
-way, since the referee compares shapes.
+Gauss: `0 + 1 + ⋯ + n = n (n + 1) / 2` (the division is exact: `n (n + 1)` is even).
+Nicomachus: `0³ + 1³ + ⋯ + n³` is the square of `0 + 1 + ⋯ + n`. "From 0 to `n`
+included" is `Finset.range (n + 1)`. Write your sums that way in the statements: the
+referee compares the shape of your statement with its own.
 
 ## Your task
 

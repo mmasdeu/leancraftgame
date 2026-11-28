@@ -1,7 +1,7 @@
 /-
 # Spot the bug: algebra
 
-*Sam sends five claims from their algebra notes for the Prover tonight. Each is false.
+*Sam sends five claims from their algebra notes for the Prover tonight. Each is false as stated.
 Noor wants a counterexample for each, small enough to check by hand.*
 
 ## Claim 1: "a set of integers that contains 0 and is closed under + is a subgroup"
@@ -30,11 +30,11 @@ Give `x`, an integer in `Ideal.span {2}` that isn't divisible by both 4 and 6.
 ## Claim 3: "`(p * q).natDegree = p.natDegree + q.natDegree` for all `p q : ℤ[X]`"
 
 Mathlib's `Polynomial.natDegree_mul` has hypotheses. Give `p` and `q` where the claim
-fails. Note `natDegree 0 = 0`, while `degree 0 = ⊥`.
+fails. Every polynomial has a `natDegree`, even the zero polynomial: `natDegree 0 = 0`.
 
 ## Claim 4: "in `ZMod n`, every nonzero element has an inverse"
 
-True when `n` is prime (level 37). Give a nonzero `a : ZMod 6` with `a * b ≠ 1` for
+Give a nonzero `a : ZMod 6` with `a * b ≠ 1` for
 every `b`.
 
 ## Claim 5: "permutations commute: `σ * τ = τ * σ`"

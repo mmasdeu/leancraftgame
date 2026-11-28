@@ -45,13 +45,6 @@
       "hint": "`if n % 2 = 0 then n / 2 else 3 * n + 1`."
     },
     {
-      "match": "sum_id",
-      "steps": [
-        "Does `Finset.range n` contain `n`? Which range contains `0, 1, …, n`?"
-      ],
-      "hint": "`statement sum_id (n : ℕ) : ∑ i ∈ Finset.range (n + 1), i = n * (n + 1) / 2`."
-    },
-    {
       "match": "fac_ge",
       "steps": [
         "Check your statement at `n = 1` and `n = 2`."

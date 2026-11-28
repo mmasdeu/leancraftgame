@@ -4,7 +4,7 @@
   "skill": "writing and refuting",
   "exercise": "Write",
   "predict": [
-    {"test": "a + b is not on the axes", "statement": "The union of the two axes is closed under addition."}
+    {"test": "![2, 1] is on line", "statement": "`![2, 1]` lies on the line `y = 2x`."}
   ],
   "public": ["![1, 2] is on line", "your a and b lie on the axes", "your p lies on the parabola"],
   "questions": [
