@@ -8,7 +8,7 @@ const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">"
 /* Version 3 has its own levels and numbering, and is served from the same site as the earlier
    versions (…/play/, …/v2/ and …/v3/ share the browser's storage), so it keeps its progress
    under its own prefix. */
-const STORE = "leancraftgame.v3.";
+const STORE = "leancraftgame.v3r.";   // v3r: the revised v3 (44 levels); its numbering differs from v3
 const store = {
   get(key, fallback) {
     try { const v = localStorage.getItem(STORE + key); return v === null ? fallback : JSON.parse(v); }
@@ -30,15 +30,22 @@ function inline(s) {
 }
 function markdown(text) {
   const out = [];
-  let para = [], list = [], ordered = false, quote = [], code = null;
+  let para = [], list = [], ordered = false, quote = [], code = null, table = [];
+  const cells = (row) => row.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map((c) => c.trim());
   const flush = () => {
+    if (table.length) {
+      const rows = table.filter((r) => !/^\s*\|?\s*:?-{2,}/.test(r)).map(cells);
+      const [head, ...body] = rows;
+      out.push(`<table class="md"><thead><tr>${head.map((c) => `<th>${inline(c)}</th>`).join("")}</tr></thead>` +
+        `<tbody>${body.map((r) => `<tr>${r.map((c) => `<td>${inline(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`);
+    }
     if (para.length) out.push(`<p>${inline(para.join(" "))}</p>`);
     if (list.length) {
       const tag = ordered ? "ol" : "ul";
       out.push(`<${tag}>${list.map((l) => `<li>${inline(l)}</li>`).join("")}</${tag}>`);
     }
     if (quote.length) out.push(`<blockquote>${inline(quote.join(" "))}</blockquote>`);
-    para = []; list = []; quote = [];
+    para = []; list = []; quote = []; table = [];
   };
   let more = null;          // lines of an open `:::more Title` … `:::` box
   for (const line of text.split("\n")) {
@@ -60,6 +67,7 @@ function markdown(text) {
       else { flush(); code = []; }
     } else if (code) code.push(line);
     else if (!line.trim()) flush();
+    else if (/^\s*\|.*\|\s*$/.test(line)) { if (!table.length) flush(); table.push(line); }
     else if ((m = /^(#{1,3})\s+(.*)/.exec(line))) { flush(); out.push(`<h${m[1].length}>${inline(m[2])}</h${m[1].length}>`); }
     else if ((m = /^(?:([*-])|\d+\.)\s+(.*)/.exec(line))) {
       if (para.length || quote.length || (list.length && ordered !== !m[1])) flush();
@@ -179,6 +187,7 @@ const NAMES = Object.keys(ABBREV);
 const src = $("src"), hl = $("hl"), gutter = $("gutter"), marks = $("marks");
 let expanding = false;
 let diagnostics = [];
+let readOpen = false;        // the "What Lean read" box stays open across runs once opened
 
 const TOKEN = /(\/-[\s\S]*?(?:-\/|$)|--[^\n]*)|("(?:[^"\\\n]|\\.)*"?)|\b(sorry)\b|\b(def|structure|namespace|end|where|fun|theorem|lemma|abbrev|open|by|if|then|else|let|match|with|instance|class|example|deriving|import|variable|section|noncomputable)\b|\b(Prop|Type|Nat|Int|Bool|Fin|True|False)\b|([∀∃λ→↔∧∨¬≤≥≠⟨⟩×∣∘∈∉⊆∅↑ℕℤℚℝ])|(\b\d+\b)/g;
 const CLASSES = [null, "com", "str", "sorry", "kw", "ty", "sym", "num"];
@@ -201,7 +210,7 @@ function render() {
   const sev = {};
   for (const d of diagnostics)
     for (let l = d.line; l <= Math.max(d.line, d.endLine); l++)
-      if (sev[l] !== "err") sev[l] = d.severity === "error" ? "err" : "warn";
+      if (sev[l] !== "err") sev[l] = d.severity === "error" ? "err" : d.severity === "warning" ? "warn" : sev[l] || "info";
   gutter.innerHTML = Array.from({ length: n }, (_, i) =>
     sev[i + 1] ? `<span class="${sev[i + 1]}">${i + 1}</span>` : String(i + 1)).join("\n");
   marks.innerHTML = Object.entries(sev).filter(([l]) => l <= n).map(([l, s]) =>
@@ -836,8 +845,14 @@ function showCompile(c) {
   diagnostics = c.diagnostics;
   render();
   $("diagnostics").innerHTML = c.diagnostics.map((d, i) =>
-    `<button class="diag ${d.severity}" data-i="${i}"><span class="where">${d.severity === "error" ? "Error" : "Warning"} on line ${d.line}</span>${esc(d.text)}</button>`).join("") +
-    c.problems.map((p) => `<div class="diag error">${inline(p)}</div>`).join("");
+    `<button class="diag ${d.severity}" data-i="${i}"><span class="where">${{ error: "Error", warning: "Warning" }[d.severity] || "Lean says"} on line ${d.line}</span>${esc(d.text)}</button>`).join("") +
+    c.problems.map((p) => `<div class="diag error">${inline(p)}</div>`).join("") +
+    (c.read && c.read.length ? `<details class="read"${readOpen ? " open" : ""}><summary>What Lean read</summary>
+      <p class="muted">Your declarations as Lean understood them, with every bracket and the type of every
+      numeral shown. Check here where a cast (<code>↑</code>) went, or how an expression was grouped. (A <code>statement</code> shows as a <code>def … : Prop</code>.)</p>
+      ${c.read.map((r) => `<pre class="hl">${highlight(r.text)}</pre>`).join("")}</details>` : "");
+  const rd = $("diagnostics").querySelector("details.read");
+  if (rd) rd.addEventListener("toggle", () => { readOpen = rd.open; });
   for (const b of $("diagnostics").querySelectorAll("button.diag"))
     b.onclick = () => jumpTo(c.diagnostics[Number(b.dataset.i)]);
 }

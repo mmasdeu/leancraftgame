@@ -154,6 +154,7 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
 }
 .gutter .err { color: var(--fail); font-weight: 700; }
 .gutter .warn { color: var(--unknown); font-weight: 700; }
+.gutter .info { color: var(--accent); font-weight: 700; }
 /* The code area is as wide as the longest line (`flex-basis: auto`), so the textarea, which fills
    it, covers all the text. The editor scrolls, by touch too; a textarea only as wide as the screen
    leaves the rest of a long line untouchable. */
@@ -190,7 +191,9 @@ kbd { border: 1px solid var(--border); border-bottom-width: 2px; padding: 0 4px;
   background: var(--surface);
   font-family: var(--mono); font-size: 13px; white-space: pre-wrap;
 }
-.diag.warning, .diag.information { border-left-color: var(--unknown); }
+.diag.warning { border-left-color: var(--unknown); }
+.diag.information { border-left-color: var(--accent); }
+.diag.information .where { color: var(--accent); }
 .diag .where { font-family: var(--sans); font-weight: 600; display: block; margin-bottom: 2px; }
 
 /* report */
@@ -369,3 +372,11 @@ details.more .more-tag { font-size: 11px; text-transform: uppercase; letter-spac
   margin-right: 6px; }
 details.more[open] > summary { border-bottom: 1px solid var(--border); margin-bottom: 8px; }
 details.more .more-body { padding-bottom: 8px; }
+
+table.md { border-collapse: collapse; margin: 10px 0; font-size: 14px; }
+table.md th, table.md td { border: 1px solid var(--border); padding: 4px 8px; text-align: left; vertical-align: top; }
+table.md th { background: var(--code-bg); }
+
+details.read { margin: 10px 0; border: 1px solid var(--border); border-radius: 6px; padding: 0 10px; background: var(--surface); }
+details.read > summary { cursor: pointer; padding: 6px 0; font-weight: 600; }
+details.read pre { font-size: 12.5px; white-space: pre-wrap; }

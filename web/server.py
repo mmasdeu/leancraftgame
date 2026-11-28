@@ -380,18 +380,31 @@ class Cache:
             CACHE_FILE.write_text(json.dumps(self.data), encoding="utf-8")
 
 
+# A declaration of the player's, for "What Lean read": the name after the keyword.
+DECL = re.compile(r"^(?:@\[[^\]]*\]\s*)?(?:noncomputable\s+|private\s+|protected\s+)*"
+                  r"(?:def|abbrev|statement|theorem|lemma|structure|inductive|class)\s+([^\s:({\[⦃]+)", re.M)
+
+
 def compile_check(run, lv, code, timeout):
-    """Elaborate the player's code with the level's gates and signature checks."""
+    """Elaborate the player's code with the level's gates and signature checks, and print
+    back each of the player's declarations as Lean read it (brackets and numeral types shown)."""
     extra = [("gate", g, None) for g in lv["gates"]]
     extra += [("check", c["lean"], c["message"]) for c in lv.get("checks", [])]
+    for name in dict.fromkeys(DECL.findall(code)):
+        extra.append(("read", "set_option pp.parens true in\nset_option pp.numericTypes true in\n"
+                      f"#print {lv['namespace']}.{name}", name))
     text, ranges = assemble(lv, code, extra)
     msgs = run.lean("check", text, timeout)
     if msgs is None:
         return None
-    diags, problems = [], []
+    diags, problems, read = [], [], []
     for m in msgs:
         kind, lo, info = locate(m, ranges)
         sev = m.get("severity", "error")
+        if kind == "read":
+            if sev == "information":
+                read.append({"name": info, "text": tidy(m["data"])[:2000]})
+            continue
         if kind == "player":
             pos, end = m.get("pos") or {}, m.get("endPos") or m.get("pos") or {}
             diags.append({"severity": sev, "text": tidy(m["data"]),
@@ -405,7 +418,7 @@ def compile_check(run, lv, code, timeout):
                             f"The level could not be set up with your code:\n{m['data']}")
     player_errors = any(d["severity"] == "error" for d in diags)
     return {"ok": not player_errors and not problems, "diagnostics": diags,
-            "problems": [] if player_errors else problems}
+            "problems": [] if player_errors else problems, "read": read}
 
 
 def interpret(msgs, ranges):
