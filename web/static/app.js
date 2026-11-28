@@ -157,6 +157,8 @@ const ABBREV = {
   "a": "α", "alpha": "α", "b": "β", "beta": "β", "g": "γ", "gamma": "γ", "d": "δ", "delta": "δ",
   "e": "ε", "epsilon": "ε", "mu": "μ", "pi": "π", "sigma": "σ", "phi": "φ", "G": "Γ",
   "^2": "²", "^3": "³", "u": "↑",
+  "MCN": "𝓝", "nhds": "𝓝", "^f": "ᶠ", "^m": "ᵐ", "^c": "ᶜ", "compl": "ᶜ", "norm": "‖",
+  "quot": "⧸", "sup": "⊔", "inf": "⊓", "sqrt": "√", "nabla": "∇",
 };
 for (let i = 0; i <= 9; i++) ABBREV["_" + i] = "₀₁₂₃₄₅₆₇₈₉"[i];
 const NAMES = Object.keys(ABBREV);
@@ -987,6 +989,13 @@ const SYMBOLS = [
   ["α", ["\\a", "\\alpha"], "a type variable", ""],
   ["ε", ["\\e", "\\epsilon"], "epsilon", ""],
   ["₀ ₁ ₂", ["\\_0", "\\_1", "\\_2"], "subscripts, as in Group₂", ""],
+  ["‖", ["\\norm"], "norm, as in ‖x‖", ""],
+  ["√", ["\\sqrt"], "square root", "Real.sqrt x"],
+  ["ᶜ", ["\\^c", "\\compl"], "complement, as in sᶜ", ""],
+  ["⊔", ["\\sup"], "join (sup)", ""],
+  ["⧸", ["\\quot"], "quotient, as in R ⧸ I", ""],
+  ["𝓝", ["\\MCN", "\\nhds"], "neighbourhood filter, as in 𝓝 x", "nhds x"],
+  ["ᶠ", ["\\^f"], "as in ∀ᶠ (eventually) and ∃ᶠ (frequently)", "Filter.Eventually"],
 ];
 const PRIMARY = {};
 for (const [sym, keys] of SYMBOLS) if (sym.length === 1) PRIMARY[sym] = keys[0];
