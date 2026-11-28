@@ -22,7 +22,7 @@ code), **Construct** (a witness, a function, a structure), **Refute** (a counter
 | # | Level | Kind | Tests |
 |---|---|---|---|
 | 1 | Reading a Lean file | Read | 6 |
-| 2 | Your first definitions | Write | 9 |
+| 2 | Your first definitions | Write | 10 |
 
 **1. Reading a Lean file.** You won't write proofs here: a hidden *referee* does that. Your job is to read Lean and to write what you mean.
 
@@ -30,7 +30,7 @@ Questions: Which line gives a name to a value; What does `#check am` (line 8) te
 
 **2. Your first definitions.** A definition with arguments is a function:
 
-Predictions: In ℕ, `7 / 2 = 3`; If `am a b` is written `a + b / 2`, then `am 0 4 = 2` still holds.
+Predictions: In ℕ, `7 / 2 = 3`; Sam's `a + b / 2` gives the right mean for `a = 2`, `b = 4`.
 
 
 ## Basics (levels 3–7)
@@ -45,7 +45,7 @@ Predictions: In ℕ, `7 / 2 = 3`; If `am a b` is written `a + b / 2`, then `am 0
 
 **3. How Lean parses.** From tightest to loosest:
 
-Questions: With `x = 3` in `ℤ`, what is `-x ^ 2`; What is `2 * 3 + 4`; What is `8 / 4 * 2`; What is `3 - 5 + 4` in `ℕ`; What is `2 ^ 3 ^ 2`; With `f := fun x ↦ 2 * x`, what is `f 3 + 1`; How does Lean read `a - b - c`; How does Lean read `f x ^ 2`.
+Questions: With `x = 3` in `ℤ`, what is `-x ^ 2`; What is `7 / 2 * 2` in `ℕ`; What is `8 / 4 * 2`; What is `3 - 5 + 4` in `ℕ`; What is `2 ^ 3 ^ 2`; With `f := fun x ↦ 2 * x`, what is `f 3 + 1`; How does Lean read `a - b - c`; How does Lean read `f x ^ 2`.
 
 **4. Anatomy of a theorem.** To use a theorem, read its signature as `#check` prints it. Four from Mathlib:
 
@@ -55,7 +55,7 @@ Questions: How many **explicit** arguments does `mul_le_mul` take; What is the c
 
 Predictions: For all reals `a` and `b`, `(a + b) ^ 2 = a ^ 2 + b ^ 2`.
 
-**6. Generic statements.** theorem sub_mul_add (a b : R) : (a - b) * (a + b) = a ^ 2 - b ^ 2 := by ring ```
+**6. Generic statements.** theorem add_sq' (a b : R) : (a + b) ^ 2 = a ^ 2 + 2 * a * b + b ^ 2 := by ring ```
 
 **7. Spot the bug: statements.** statement sq_le_sq_of_le (a b : ℝ) (hab : a ≤ b) : a ^ 2 ≤ b ^ 2
 
@@ -68,29 +68,29 @@ Predictions: In ℕ, `(0 - 1) ^ 2 = 0 ^ 2 - 2 * 0 * 1 + 1 ^ 2`.
 |---|---|---|---|
 | 8 | ∀ and → | Write | 10 |
 | 9 | ∃ | Write | 9 |
-| 10 | ¬ and the order of quantifiers | Write | 9 |
+| 10 | ¬ and the order of quantifiers | Write | 10 |
 | 11 | ∧, ∨ and ↔ | Write | 7 |
 | 12 | Sequences and convergence | Write | 8 |
 | 13 | Be the referee | Construct | 9 |
 | 14 | Spot the bug: logic | Refute | 8 |
 
-**8. ∀ and →.** `FnUb f a` is a `Prop`, a statement: "for every `x`, `f x ≤ a`". The `→` in `ℝ → ℝ` builds a function type. Between two statements it means **implies**: `P → Q` is "if `P` then `Q`".
+**8. ∀ and →.** `FnPos f` says "for every `x`, `f x` is positive". A `def` whose type is `Prop` defines a statement, which can be true or false.
 
 Predictions: `FnUb (fun x ↦ x) 5`: 5 is an upper bound of the identity; `MonotoneFn (fun x ↦ x ^ 2)` on all of ℝ.
 
-**9. ∃.** With `FnUb` (given in the template), "`f` has an upper bound" reads:
+**9. ∃.** `∃ x, P x` says "there is an `x` with `P x`". For example, "`f` has a zero":
 
 Predictions: `∃ x : ℝ, x > 0 ∧ x < 0`.
 
-**10. ¬ and the order of quantifiers.** `FnUb` (level 8) and `FnHasUb` (level 9) are in the template. To read `¬ FnHasUb f`, **push the negation inwards**, flipping each quantifier:
+**10. ¬ and the order of quantifiers.** `¬ P` (type `\not`) means "not `P`". To read a negated statement, **push the negation inwards**, flipping each quantifier it passes:
 
-Predictions: Written as `∀ n, ∃ M, u n ≤ M`, the sequence `u n = n` is "bounded".
+Predictions: For the sequence `u n = n` (that is, `0, 1, 2, …`), `∀ n, ∃ M, u n ≤ M` holds.
 
 **11. ∧, ∨ and ↔.** From tightest to loosest: `¬`, then `∧`, then `∨`, then `→` and `↔`. So `P ∧ Q → R` is `(P ∧ Q) → R`, and `¬ P ∨ Q` is `(¬ P) ∨ Q`.
 
 Predictions: `∃ x : ℝ, x > 5 → x = 0`.
 
-**12. Sequences and convergence.** def late : ℕ → ℝ := fun n ↦ if n < 5 then 7 else 0 -- 7, 7, 7, 7, 7, 0, 0, … def blink : ℕ → ℝ := fun n ↦ if n % 2 = 0 then 0 else 1 -- 0, 1, 0, 1, … ```
+**12. Sequences and convergence.** A sequence of reals is a function `s : ℕ → ℝ`, and `s n` is its `n`-th term. Here is a cousin of convergence, "`s` tends to `+∞`":
 
 Predictions: `ConvergesTo (fun n ↦ if n < 5 then 7 else 0) 0`; `ConvergesTo (fun n ↦ if n % 2 = 0 then 0 else 1) 0`.
 
@@ -117,15 +117,15 @@ Questions: `4 ∈ {n | 12 ∣ n}`; `2 ∈ primes \ evens`; How does `s ∩ (t �
 
 Predictions: `2 ∈ (fun n => 2 * n) ⁻¹' {m | m % 4 = 0}`; `3 ∈ (fun n => 2 * n) ⁻¹' {m | m % 4 = 0}`.
 
-**17. Injective, surjective, inverses.** Mathlib's version:
+**17. Injective, surjective, inverses.** Mathlib's version goes the other way:
 
 Questions: `fun n : ℕ => n - 1` is surjective; `fun n : ℕ => n - 1` is injective; Why does `Function.invFun` have the argument `[Nonempty α]`; True or false: `Function.LeftInverse (Function.invFun f) f` holds for every `f : α → β` (with `α` nonempty); What does `Set.InjOn f s` say.
 
-**18. Reading a construction: Schröder–Bernstein.** def sbAux : ℕ → Set α | 0 => univ \ g '' univ | n + 1 => g '' (f '' sbAux n)
+**18. Reading a construction: Schröder–Bernstein.** def sbAux : ℕ → Set α | 0 => Set.univ \ g '' Set.univ | n + 1 => g '' (f '' sbAux n)
 
 Questions: Which of the three definitions is by recursion on a natural number; What is `sbAux f g 0`; For `x ∈ sbSet f g`, what is `sbFun f g x`; True or false: `[Nonempty β]` is needed because `sbFun` uses `invFun g`, a function `α → β`; With `f n = g n = 2 * n` on ℕ: true or false, `3 ∈ sbSet f g`; Same `f` and `g`: true or false, `12 ∈ sbSet f g`; Same `f` and `g`: true or false, `8 ∈ sbSet f g`.
 
-**19. Spot the bug: sets.** This is meant as the `multiples` of level 15. (`k % n` is the remainder of `k` divided by `n`.) Give `k₁` and a multiple `n₁` of `k₁` that is **not** in `multiplesOf k₁`.
+**19. Spot the bug: sets.** It's meant to be the multiples of `k`. (`k % n` is the remainder of `k` divided by `n`.) Give `k₁` and a multiple `n₁` of `k₁` that is **not** in `multiplesOf k₁`. (Sam's code is in the editor too.)
 
 Predictions: `4` is a multiple of `12`.
 
@@ -136,16 +136,16 @@ Predictions: `4` is a multiple of `12`.
 |---|---|---|---|
 | 20 | Divisibility and primes | Write | 10 |
 | 21 | Irrational roots | Write | 5 |
-| 22 | Recursion and induction | Write | 9 |
+| 22 | Recursion and induction | Write | 8 |
 | 23 | The AI proved the infinitude of primes! | Audit | 13 |
 
-**20. Divisibility and primes.** You met `∣` in level 15. Since `p : ℕ`, `p.Prime` means `Nat.Prime p`: Lean looks up `Prime` in the namespace `Nat` of `p`'s type. This *dot notation* is all over Mathlib.
+**20. Divisibility and primes.** You met `∣` in level 15. Since `p : ℕ`, `p.Prime` means `Nat.Prime p`: Lean looks up `Prime` in the namespace `Nat` of `p`'s type. This *dot notation* is all over Mathlib, and works on any expression in brackets: `(n * n).Prime`.
 
 Predictions: With `lcm' a b := a * b / Nat.gcd a b`, `lcm' 0 0 = 0` (and not an error); `(6, 8, 10)` is a primitive Pythagorean triple.
 
-**21. Irrational roots.** The classical proof: if `√2 = m / n` in lowest terms, then `m² = 2 n²`, which is impossible. Three Lean statements of it:
+**21. Irrational roots.** The classical proof: if `√2 = m / n` in lowest terms, then `m² = 2 n²`, which is impossible. So the fact has a version on ℕ with no `√` at all. "Lowest terms" is the `Nat.Coprime` of level 20.
 
-**22. Recursion and induction.** No `:=`. Each line `| pattern => value` covers one shape of the argument. A natural number is `0` or `n + 1`, so two lines cover everything, and `fac (n + 1)` may call `fac n`. Every value is built from the `0` line, so get it right. Patterns can go deeper:
+**22. Recursion and induction.** No `:=`. Each line `| pattern => value` covers one shape of the argument. A natural number is `0` or `n + 1`, so two lines cover everything, and `pow2 (n + 1)` may call `pow2 n`. The `0` line is where every value starts: `pow2 3 = 2 * (2 * (2 * 1))`. Patterns can go deeper:
 
 Predictions: With `fib 0 = 0`, `fib 1 = 1`, `fib (n + 2) = fib n + fib (n + 1)`: `fib 2 = 1`; `fac 0 = 1` (the empty product).
 
@@ -163,7 +163,7 @@ Questions: With 'prime' meaning `p = 2 ∨ p = 3`, there are infinitely many 'pr
 | 26 | Inductive types | Write | 11 |
 | 27 | Spot the bug: counting | Refute | 5 |
 
-**24. Finset and Fintype.** `Finset.range n` stops **before** `n`. It's the usual source of off-by-one errors.
+**24. Finset and Fintype.** Read the ends of a range carefully: they're the usual source of off-by-one errors.
 
 Predictions: `4 ∈ Finset.range 4`; `9 ∈ divs 9`: a number is one of its own divisors.
 
@@ -175,7 +175,7 @@ Predictions: `∏ i ∈ Finset.range 4, i = 0`; `∏ i ∈ Finset.range 0, i = 1
 
 Predictions: `height (node empty empty) = 1`; There are exactly 5 binary trees with 3 nodes.
 
-**27. Spot the bug: counting.** For each, give an input where it's wrong. The referee computes Sam's answer and the right one and checks they differ. What does `Finset.range n` contain? `Ico 1 n`? Which nodes does `size` count? (Would `7` have two divisors under Sam's `numDivisors`?)
+**27. Spot the bug: counting.** Sam's code is in the editor: `triangle`, `numDivisors`, `size` and a "Gauss's formula". The comment above each says what it should compute. Two new bits of notation:
 
 Predictions: Sam's `triangle 0` is the right value, 0.
 
@@ -191,17 +191,17 @@ Predictions: Sam's `triangle 0` is the right value, 0.
 
 **28. Defining structures.** A **structure** bundles data together:
 
-Predictions: The point (1, 1, -1) belongs to the standard 2-simplex (its coordinates add up to 1).
+Predictions: The point (1, 1, -1) belongs to the standard 2-simplex.
 
-**29. Sam's groups.** Like `StandardTwoSimplex` in level 28, an algebraic structure has the operations and the axioms as fields:
+**29. Sam's groups.** A **group** is a set with an associative product, an element `one` with `one * a = a * one = a` for every `a`, and an inverse for each `a`, with `a * a⁻¹ = a⁻¹ * a = one`. Some groups are not commutative. For example, S₃, the six symmetries of a triangle: a reflection followed by a rotation differs from the rotation followed by the reflection.
 
-Predictions: S₃, the symmetries of a triangle, satisfies every axiom of a group.
+Predictions: S₃ satisfies every axiom of your `Group₂`.
 
 **30. Gaussian integers.** As a structure, a Gaussian integer is its two integer parts:
 
-Predictions: `i · i = -1`: so `GaussInt.mul ⟨0, 1⟩ ⟨0, 1⟩` must be `⟨-1, 0⟩`, not `⟨0, 1⟩` as coordinate-by-coordinate multiplication would give.
+Predictions: `(1 + 2i)(2 + 3i) = -4 + 7i`.
 
-**31. Spot the bug: structures.** structure Point where x : ℚ y : ℚ z : ℚ
+**31. Spot the bug: structures.** Sam's code is at the top of the editor. Don't edit it: the referee tests your counterexamples against its own copy.
 
 Predictions: With Sam's `GaussInt.mul`, `i · i` has real part `-1`.
 
@@ -217,19 +217,19 @@ Predictions: With Sam's `GaussInt.mul`, `i · i` has real part `-1`.
 
 **32. Classes and instances.** A class is a structure whose instances Lean searches for by itself:
 
-Predictions: With `f ⋄ g` defined as `f ∘ g`, the composite of `(· * 2)` and `(· + 1)` sends 5 to (5 + 1) · 2 = 12; In the monoid (ℤ, +, 0), the "power" `mpow 5 3` is 15, not 125.
+Predictions: In `endo`, `(· * 2) ⋄ (· + 1)` sends 5 to 12; In the monoid (ℤ, +, 0), the "power" `mpow 5 3` is 15.
 
 **33. Reading the hierarchy.** Mathlib's hierarchy has hundreds of classes. A lemma states its assumptions as classes, and you need to know whether your type has them.
 
 Questions: From an instance `Field ℝ`, Lean finds three of these instances automatically. Which one does **not** follow; What does `#check (-3 : ℕ)` do; `mul_comm` is stated as `theorem mul_comm {G : Type*} [CommMagma G] (a b : G) : a * b = b * a`. True or false: it applies to `A B : Matrix (Fin 2) (Fin 2) ℚ`, giving `A * B = B * A`; `#check @add_comm` prints `@add_comm : ∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b + a`. How many arguments do you write when you use it; `class CommRing (R : Type*) extends Ring R, CommMonoid R`. True or false: a lemma stated for every `[Ring R]` applies to ℤ, which Mathlib declares a `CommRing`; After `variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]`, what is `E`; True or false: Lean finds an instance `Field ℤ`.
 
-**34. Morphisms.** Mathlib defines a monoid homomorphism as a **bundled** structure, a function plus the facts that it respects the operations:
+**34. Morphisms.** `[Monoid M]` says `M` has `*` and `1` with the monoid laws; `[AddMonoid M]` says the same for `+` and `0`. Mathlib defines a monoid homomorphism as a **bundled** structure, a function plus the facts that it respects the operations:
 
 Predictions: The constant map `n ↦ 0` is a homomorphism of the monoid (ℕ, *, 1); `n ↦ n²` is a homomorphism of the monoid (ℕ, *, 1).
 
 **35. Sub-objects.** A submonoid is a structure that bundles a set with the facts that make it closed under the operations:
 
-Predictions: With only the axiom "closed under `+`", the numbers `≥ 1` would be accepted as an additive submonoid; `{0, 1}` is closed under multiplication, but it isn't an additive submonoid of ℕ.
+Predictions: The numbers `≥ 1` form an additive submonoid of ℕ; `{0, 1}` is an additive submonoid of ℕ.
 
 
 ## Groups and Rings (levels 36–38)
@@ -246,11 +246,11 @@ Predictions: In the additive group `ZMod 12`, `3 • 4 = 0`; A permutation of or
 
 **37. Rings, ideals, polynomials.** The vocabulary:
 
-Predictions: 6 is in `Ideal.span {4, 6}`, the ideal generated by 4 and 6; In `ZMod 7`, `3 * 5 = 1`.
+Predictions: Sam is right: `Ideal.span {4, 6}` is the set of integers divisible by both 4 and 6; `3` has an inverse in `ZMod 7`, although it has none in ℤ.
 
 **38. Spot the bug: algebra.** Sam's structures, in the style of level 35:
 
-Predictions: In `ZMod 7`, every nonzero element has an inverse.
+Predictions: Sam's Claim 4 holds for `n = 7`: in `ZMod 7`, every nonzero element has an inverse.
 
 
 ## Linear Algebra (levels 39–42)
@@ -266,17 +266,17 @@ Predictions: In `ZMod 7`, every nonzero element has an inverse.
 
 Predictions: `shift v = v + ![1, 0]` sends the zero vector to the zero vector.
 
-**40. Subspaces and quotients.** A subspace of `V` is a `Submodule K V`. Like the sub-objects of level 35, it's a set (its `carrier`) bundled with proofs that it's closed under the operations:
+**40. Subspaces and quotients.** A subspace of `V` is a `Submodule K V`, with `K` and `V` as in level 39 (for the plane, `ℚ` and `Fin 2 → ℚ`). Like the sub-objects of level 35, it's a set (its `carrier`) bundled with proofs that it's closed under the operations. Roughly:
 
-Questions: The union of the two axes is closed under addition; For subspaces `U` and `W`, what is `U ⊔ W`; What is `⊥ : Submodule K V`; True or false: the line `{v | v 1 = 2 * v 0 + 1}` is a subspace of `ℚ²`.
+Questions: `![2, 1]` lies on the line `y = 2x`; For subspaces `U` and `W`, what is `U ⊔ W`; What is `⊥ : Submodule K V`; True or false: the line `{v | v 1 = 2 * v 0 + 1}` is a subspace of `ℚ²`.
 
-**41. Endomorphisms.** Linear maps from a space to itself are **endomorphisms**:
+**41. Endomorphisms.** Linear maps from a space to itself are **endomorphisms** (`K` and `V` as in level 39):
 
 Questions: What is `Module.End K V`; True or false: by Mathlib's definition, `0` is an eigenvector of every endomorphism, for every `μ`; What is the type of `minpoly K f`; True or false: every endomorphism of a nontrivial finite-dimensional *real* vector space has a real eigenvalue.
 
 **42. Matrices, bases and dimension.** `Matrix (Fin 2) (Fin 2) ℚ` is the type of 2 × 2 rational matrices. A matrix is a function of two indices: `M i j` is the entry in **row `i`, column `j`**, both counted from 0. The notation lists the rows, separated by `;`:
 
-Predictions: In `!![1, 2; 3, 4]`, the entry `A 0 1` is `2`; The entry `(fibM ^ n) 0 1` is `F n` for every `n`, including `n = 0`.
+Predictions: In `A = !![1, 2; 3, 4]`, the entry `A 0 1` is `2`; The entry `(fibM ^ n) 0 1` is `F n` for every `n`, including `n = 0`.
 
 
 ## Topology (levels 43–47)
@@ -287,13 +287,13 @@ Predictions: In `!![1, 2; 3, 4]`, the entry `A 0 1` is `2`; The entry `(fibM ^ n
 | 44 | Metric spaces | Write | 9 |
 | 45 | Topological spaces | Write | 13 |
 | 46 | Separation and compactness | Write | 11 |
-| 47 | Spot the bug: topology | Refute | 11 |
+| 47 | Spot the bug: topology | Refute | 12 |
 
 **43. Filters.** Here is the `ConvergesTo` you wrote in level 12:
 
-Questions: What does `∃ᶠ n in atTop, P n` say; In `Tendsto f l₁ l₂`, which filter describes where the *inputs* of `f` go; True or false: in Mathlib, `Tendsto u ⊥ (𝓝 0)` holds for every sequence `u : ℕ → ℝ`.
+Questions: Which statement says the same as `¬ (∀ᶠ n in atTop, P n)`; In `Tendsto f l₁ l₂`, which filter describes where the *inputs* of `f` go; True or false: in Mathlib, `Tendsto u ⊥ (𝓝 0)` holds for every sequence `u : ℕ → ℝ`.
 
-**44. Metric spaces.** A **metric space** is a type `X` with a distance `dist : X → X → ℝ`:
+**44. Metric spaces.** A **metric space** is a type `X` with a distance `dist : X → X → ℝ`. Mathlib's axioms:
 
 Predictions: `(x - y) ^ 2` is a distance on the points 0, 1, 2, 3; The distance that is always `0` is a metric.
 
@@ -303,11 +303,11 @@ Predictions: The identity map from Sierpiński space to the discrete space on {0
 
 **46. Separation and compactness.** How well do open sets tell points apart? Mathlib has a class for each answer:
 
-Questions: Sierpiński space is T1; The space with one point is Hausdorff; True or false: every T1 topology on the three points `{0, 1, 2}` is the discrete topology; Which Mathlib class is the Hausdorff property.
+Questions: Sierpiński space is T1; The space with one point is Hausdorff; True or false: every T1 topology on the three points `{0, 1, 2}` is the discrete topology; In which space does some sequence converge to two different points.
 
-**47. Spot the bug: topology.** The spaces live on `Fin 2 = {0, 1}`: Sierpiński space `sierpinski` (`{1}` open, `{0}` not) and `discrete 2` (every set open).
+**47. Spot the bug: topology.** The spaces live on `Fin 2 = {0, 1}`: Sierpiński space `sierpinski` (`{1}` open, `{0}` not) and `discrete 2` (every set open), both from the gallery of level 45. The line `open Top` in the code lets you write them without the `Top.` prefix.
 
-Questions: Every continuous bijection from `discrete 2` to Sierpiński space has a continuous inverse; True or false: `SamContAt (fun _ => 0) 1` holds, that is, Sam's definition says that the constant function `0` is continuous at `1`.
+Questions: Every continuous bijection from Sierpiński space to itself has a continuous inverse; True or false: `SamContAt (fun _ => 0) 1` holds, that is, Sam's definition says that the constant function `0` is continuous at `1`.
 
 
 ## Differential Calculus (levels 48–49)
@@ -321,7 +321,7 @@ Questions: Every continuous bijection from `discrete 2` to Sierpiński space has
 
 Questions: In Mathlib, `deriv (fun x : ℝ => |x|) 0 = 0`, although `|x|` is not differentiable at 0; Mathlib's Rolle theorem has no hypothesis that `f` is differentiable. Why is it still true; True or false: `HasDerivAt f 3 2` says that the derivative of `f` at `3` is `2`.
 
-**49. Derivatives in normed spaces.** Mathlib differentiates functions `f : E → F` between **normed spaces**: vector spaces over `ℝ` with a norm `‖x‖`, such as `ℝ × ℝ` and `ℝ`. The derivative of `f` at a point is the best linear approximation of `f` there. For a linear map like `rot`, it's the map itself, at every point (`ContinuousLinearMap.fderiv`).
+**49. Derivatives in normed spaces.** Mathlib differentiates functions `f : E → F` between **normed spaces**: vector spaces over `ℝ` with a norm `‖x‖` (read-only here; `\norm` in VS Code), such as `ℝ × ℝ` and `ℝ`. The derivative of `f` at a point is the best linear approximation of `f` there. For a linear map like `rot`, it's the map itself, at every point.
 
 Questions: Let `f : ℝ × ℝ → ℝ` and `x : ℝ × ℝ`. What kind of object is `fderiv ℝ f x`; Which arguments of `fderiv` does a user write explicitly; True or false: for `f : ℝ → ℝ`, `fderiv ℝ f x 1 = deriv f x`.
 
