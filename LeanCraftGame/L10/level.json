@@ -1,22 +1,25 @@
 {
+  "slug": "forall",
   "world": "Logic",
-  "title": "¬ and the order of quantifiers",
+  "title": "∀ and →",
   "skill": "writing definitions",
   "exercise": "Write",
   "predict": [
-    {"test": "∀ n, ∃ M, n ≤ M holds in ℕ", "statement": "For the sequence `u n = n` (that is, `0, 1, 2, …`), `∀ n, ∃ M, u n ≤ M` holds."}
+    {"test": "5 is an upper bound of x ↦ x", "statement": "`FnUb (fun x ↦ x) 5`: 5 is an upper bound of the identity."},
+    {"test": "x ↦ x² is monotone", "statement": "`MonotoneFn (fun x ↦ x ^ 2)` on all of ℝ."}
   ],
-  "public": ["x ↦ x has no upper bound", "the constant sequence 5 is bounded"],
+  "public": ["3 is an upper bound of the constant function 3", "x ↦ 2x + 1 is monotone"],
   "checks": [
-    {"lean": "#check (L10.NotFnUb : (ℝ → ℝ) → ℝ → Prop)\n#check (L10.NoUpperBound : (ℝ → ℝ) → Prop)\n#check (L10.NotMonotone : (ℝ → ℝ) → Prop)\n#check (L10.BoundedSeq : (ℕ → ℕ) → Prop)",
-     "message": "Keep the names and the types of the four definitions."}
+    {"lean": "#check (L10.FnUb : (ℝ → ℝ) → ℝ → Prop)\n#check (L10.FnLb : (ℝ → ℝ) → ℝ → Prop)\n#check (L10.MonotoneFn : (ℝ → ℝ) → Prop)",
+     "message": "Keep `FnUb FnLb : (ℝ → ℝ) → ℝ → Prop` and `MonotoneFn : (ℝ → ℝ) → Prop`."}
   ],
   "hints": [
-    {"match": "NotFnUb", "hint": "`∃ x, a < f x`: some value exceeds `a`."},
-    {"match": "NoUpperBound f means", "hint": "`∀ a, ∃ x, a < f x`."},
-    {"match": "no upper bound", "steps": ["Which comes first: the proposed bound `a`, or the point `x` that beats it?"], "hint": "`∀ a, ∃ x, a < f x`: `x` may depend on `a`."},
-    {"match": "not monotone", "steps": ["Push `¬` through `∀ a b, a ≤ b → f a ≤ f b`. When does an implication `P → Q` fail?"], "hint": "`∃ a b, a ≤ b ∧ f b < f a`."},
-    {"match": "means ¬ Monotone", "hint": "`∃ a b, a ≤ b ∧ f b < f a`."},
-    {"match": "bounded", "steps": ["Is it one `M` for all `n`, or an `M` for each `n`?"], "hint": "`∃ M, ∀ n, u n ≤ M`."}
+    {"match": "upper bound of the constant", "steps": ["Is 3 strictly greater than 3?"], "hint": "`∀ x, f x ≤ a`, with `≤`, not `<`."},
+    {"match": "upper bound of x ↦", "hint": "`FnUb f a` is `∀ x, f x ≤ a`."},
+    {"match": "lower bound", "hint": "`FnLb f a` is `∀ x, a ≤ f x`."},
+    {"match": "x ↦ 2x + 1 is monotone", "steps": ["Did you put the hypothesis `a ≤ b` before `f a ≤ f b`?"], "hint": "`∀ {a b : ℝ}, a ≤ b → f a ≤ f b`."},
+    {"match": "is monotone", "hint": "`MonotoneFn f` is `∀ {a b : ℝ}, a ≤ b → f a ≤ f b`."},
+    {"match": "Mathlib's Monotone", "hint": "`∀ {a b : ℝ}, a ≤ b → f a ≤ f b`."},
+    {"match": "implicitly", "steps": ["Are `a` and `b` in curly brackets in your definition?"], "hint": "Write `∀ {a b : ℝ}, a ≤ b → f a ≤ f b`: the curly brackets make them implicit."}
   ]
 }

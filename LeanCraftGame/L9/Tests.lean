@@ -1,31 +1,31 @@
-/- Hidden test battery for Level 9: ∃. -/
+/- Hidden test battery for Level 7: Spot the bug: statements. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L9.Player
 
-#no_sorry L9.FnHasUb
-#no_sorry L9.FnHasLb
-#no_sorry L9.bound
-#no_sorry L9.root
-#no_sorry L9.TakesBothSigns
-#level_start "∃"
+open L9
 
-#expect_true "x ↦ min x 3 has an upper bound" unfolding L9.FnHasUb L9.FnUb :
-  L9.FnHasUb (fun x => min x 3)
-#expect_false "x ↦ x has an upper bound" unfolding L9.FnHasUb L9.FnUb :
-  L9.FnHasUb (fun x => x)
-#expect_true "x ↦ x² has a lower bound" unfolding L9.FnHasLb L9.FnLb :
-  L9.FnHasLb (fun x => x ^ 2)
-#expect_false "x ↦ x has a lower bound" unfolding L9.FnHasLb L9.FnLb :
-  L9.FnHasLb (fun x => x)
-#expect_true "bound is an upper bound of x ↦ min x 3" unfolding L9.bound :
-  ∀ x : ℝ, min x 3 ≤ L9.bound
-#expect_true "root² - 4·root + 4 = 0" unfolding L9.root :
-  L9.root ^ 2 - 4 * L9.root + 4 = 0
-#expect_false "some real number is both positive and negative" :
-  ∃ x : ℝ, x > 0 ∧ x < 0
-#expect_true "x ↦ x takes both signs" unfolding L9.TakesBothSigns :
-  L9.TakesBothSigns (fun x => x)
-#expect_false "x ↦ x² + 1 takes both signs" unfolding L9.TakesBothSigns :
-  L9.TakesBothSigns (fun x => x ^ 2 + 1)
+#no_sorry a₁
+#no_sorry b₁
+#no_sorry a₂
+#no_sorry b₂
+#no_sorry x₃
+#no_sorry y₃
+#no_sorry sq_le_sq_of_le
+#no_sorry div_mul_cancel_ok
+#level_start "Spot the bug: statements"
+
+#expect_false "In ℕ, (0 - 1)² = 0² - 2·0·1 + 1²" :
+  ((0 : ℕ) - 1) ^ 2 = 0 ^ 2 - 2 * 0 * 1 + 1 ^ 2
+#expect_true "Part A: a₁, b₁ break (a - b)² = a² - 2ab + b² in ℕ" unfolding a₁ b₁ :
+  (a₁ - b₁) ^ 2 ≠ a₁ ^ 2 - 2 * a₁ * b₁ + b₁ ^ 2
+#expect_true "Part A: a₂ ≤ b₂ (the hypothesis holds)" unfolding a₂ b₂ : a₂ ≤ b₂
+#expect_true "Part A: a₂² > b₂² (the conclusion fails)" unfolding a₂ b₂ : b₂ ^ 2 < a₂ ^ 2
+#expect_true "Part A: x₃ / y₃ * y₃ ≠ x₃" unfolding x₃ y₃ : x₃ / y₃ * y₃ ≠ x₃
+#expect_equiv "Part B: sq_le_sq_of_le, repaired" :
+  L9.sq_le_sq_of_le ↔ ∀ a b : ℝ, 0 ≤ a → a ≤ b → a ^ 2 ≤ b ^ 2
+  using fun a b ha hab => pow_le_pow_left₀ ha hab 2
+#expect_equiv "Part B: div_mul_cancel_ok, repaired" :
+  L9.div_mul_cancel_ok ↔ ∀ x y : ℝ, y ≠ 0 → x / y * y = x
+  using fun x y h => div_mul_cancel₀ x h
 
 #level_report

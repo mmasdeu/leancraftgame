@@ -1,23 +1,31 @@
 {
-  "world": "Structures",
-  "title": "Spot the bug: structures",
-  "skill": "reading",
-  "exercise": "Refute",
-  "public": "all",
+  "slug": "morphisms",
+  "world": "Structures and Classes",
+  "title": "Morphisms",
+  "skill": "writing definitions",
+  "exercise": "Write",
   "predict": [
-    {"test": "with Sam's product, i · i = -1", "statement": "With Sam's `GaussInt.mul`, `i · i` has real part `-1`"}
+    {"test": "The constant map 0 is a homomorphism of (ℕ, *)", "statement": "The constant map `n ↦ 0` is a homomorphism of the monoid (ℕ, *, 1)."},
+    {"test": "n ↦ n² is a homomorphism of (ℕ, *)", "statement": "`n ↦ n²` is a homomorphism of the monoid (ℕ, *, 1)."}
   ],
+  "public": ["n ↦ n² is a homomorphism of (ℕ, *)", "n ↦ 3n is a homomorphism of (ℤ, +)"],
   "checks": [
-    {"lean": "#check (L31.gz : L31.GaussInt)\n#check (L31.gw : L31.GaussInt)\n#check (L31.pa : L31.Point)\n#check (L31.pb : L31.Point)\n#check (L31.badT : ℚ)\n#check (L31.GaussInt.mk : ℤ → ℤ → L31.GaussInt)\n#check (L31.Point.mk : ℚ → ℚ → ℚ → L31.Point)",
-     "message": "Keep Sam's `GaussInt` and `Point` as given, and the names and types of your counterexamples."}
+    {"lean": "#check (@L31.IsMonoidHom : {M N : Type} → [Monoid M] → [Monoid N] → (M → N) → Prop)\n#check (@L31.IsAddMonoidHom : {M N : Type} → [AddMonoid M] → [AddMonoid N] → (M → N) → Prop)\n#check (L31.homNotOnto : ℤ → ℤ)\n#check (L31.bijNotHom : ℤ → ℤ)",
+     "message": "Keep the names and the types of `IsMonoidHom`, `IsAddMonoidHom`, `homNotOnto` and `bijNotHom`."}
   ],
   "hints": [
-    {"match": "gz and gw", "steps": ["The two formulas differ only in the sign of `z.im * w.im`. When is that term zero?"],
-     "hint": "Both imaginary parts must be nonzero: `gz = gw = ⟨0, 1⟩` (that is, `i · i`)."},
-    {"match": "midpoint", "steps": ["Which coordinate of `mid` never uses `b`?"],
-     "hint": "The third coordinate uses `a.z` twice. Take points with different `z`, such as `⟨0, 0, 0⟩` and `⟨0, 0, 2⟩`."},
-    {"match": "in_range", "steps": ["`in_range` is an `∨`. How many of its two conditions must hold?"],
-     "hint": "Every rational satisfies `0 ≤ t ∨ t ≤ 1`. Take `badT = 2` (or `-1`)."},
-    {"match": "between 0 and 1", "hint": "`badT` must be outside `[0, 1]`, for example `2`."}
+    {"match": "constant map 0", "steps": ["The constant map 0 respects multiplication, since 0 = 0 · 0. What else must a monoid homomorphism do?"],
+     "hint": "Ask for `f 1 = 1` as well: `f 1 = 1 ∧ ∀ a b, f (a * b) = f a * f b`."},
+    {"match": "2n is a homomorphism of (ℕ, *)", "hint": "`2 · (a · b)` isn't `(2a) · (2b)`. Your definition must say `f (a * b) = f a * f b` for all `a`, `b`."},
+    {"match": "-n is a homomorphism", "hint": "`-(a · b) ≠ (-a) · (-b)`. Check that your condition compares `f (a * b)` with `f a * f b`."},
+    {"match": "Every bundled f : ℕ →* ℤ", "steps": ["A bundled homomorphism has exactly two properties, `map_one` and `map_mul`. Do you ask for more?"],
+     "hint": "Ask for exactly `f 1 = 1 ∧ ∀ a b, f (a * b) = f a * f b`, and nothing more (no injectivity, no surjectivity)."},
+    {"match": "n + 1 is a homomorphism", "hint": "`n ↦ n + 1` sends 0 to 1. Ask for `f 0 = 0`."},
+    {"match": "2ⁿ is a homomorphism of (ℕ, +)", "hint": "The additive version compares `f (a + b)` with `f a + f b`, a sum, not a product."},
+    {"match": "Every bundled f : ℤ →+ ℤ", "hint": "Ask for exactly `f 0 = 0 ∧ ∀ a b, f (a + b) = f a + f b`."},
+    {"match": "homNotOnto", "steps": ["The homomorphisms ℤ → ℤ are all `n ↦ k · n`. Which `k` misses some integer?"],
+     "hint": "`fun n => 2 * n` misses every odd number."},
+    {"match": "bijNotHom", "steps": ["A reflection `n ↦ c - n` is its own inverse. For which `c` isn't it a homomorphism?"],
+     "hint": "`fun n => 1 - n` is its own inverse, and sends 0 to 1."}
   ]
 }

@@ -1,56 +1,65 @@
 /-
-# Spot the bug: statements
+# Stating theorems
 
-*Sam's part of the AM-GM project arrives late on Friday: three statements, typed fast. All
-three compile, and all three are false. Noor asks you to show it before they reach the
-Prover, then repair what can be repaired.*
+*Noor's list starts with AM-GM for two numbers, `2ab ≤ a² + b²`. The Prover proves
+whatever you write, so the referee checks you wrote what was asked.*
+
+## The `statement` command
+
+A theorem has a name, **binders** (variables and hypotheses, before the colon) and a
+conclusion (after it):
 
 ```lean
--- Sam's statements
-statement sub_sq_nat (a b : ℕ) : (a - b) ^ 2 = a ^ 2 - 2 * a * b + b ^ 2
-
-statement sq_le_sq_of_le (a b : ℝ) (hab : a ≤ b) : a ^ 2 ≤ b ^ 2
-
-statement div_mul_cancel_bad (x y : ℝ) : x / y * y = x
+theorem add_pos {a b : ℝ} (ha : 0 < a) (hb : 0 < b) : 0 < a + b := …
 ```
 
-One **counterexample** refutes a statement about all numbers: values that satisfy every
-hypothesis and break the conclusion. Usual suspects:
+This game adds `statement`, a theorem without its proof. With `am` from level 2:
 
-* truncated subtraction: in `ℕ`, `a - b = 0` when `a ≤ b`;
-* a missing hypothesis, such as a sign condition;
-* junk values: Mathlib sets `x / 0 = 0`. Dividing by zero is no error in Lean, so a
-  theorem about division must exclude the bad case itself.
+```lean
+def am (a b : ℝ) : ℝ := (a + b) / 2
 
-`x ≠ y` (type `\ne`) means `x` is not equal to `y`.
+statement am_pos {a b : ℝ} (ha : 0 < a) (hb : 0 < b) : 0 < am a b
+```
 
-## Part A: counterexamples
+It says: for all reals `a` and `b`, if `0 < a` and `0 < b`, then `0 < am a b`.
 
-Give the values. The referee checks that they satisfy the hypotheses and break the
-conclusion. Use small numbers: the referee computes, it doesn't search.
+* `(a b : ℝ)`: explicit variables. A user supplies them: `am_pos 2 3 …`.
+* `{a b : ℝ}`: implicit variables. Lean infers them from the hypotheses, so a user writes
+  `am_pos h₁ h₂`. Logically, both mean "for all", and either is fine in this level.
+* `(ha : 0 < a)`: a hypothesis, named `ha` so a proof can use it. It means "*if* `0 < a`".
 
-## Part B: repairs
+## How the referee reads your statement
 
-Repair Sam's two real-number statements: write each in full, with Sam's binders, plus
-one missing hypothesis, and nothing else. For example
-`statement sq_le_sq_of_le (a b : ℝ) (h : …) (hab : a ≤ b) : …`. Name the hypotheses as
-you like.
+The referee compares your statement with the intended one: same variables, hypotheses
+and conclusion, in the same order. Harmless differences are fine (variable names, `b ≥ a`
+for `a ≤ b`, `a * b` for `b * a`, the sides of an `=` swapped). A false statement gets a
+counterexample. A proof can't tell two true statements apart, so a true but different
+statement gets ❓, not ✅.
+
+## Your task
+
+State the five facts below. Use the names given, and `ℝ` for every variable.
+
+1. `sq_add`: for all reals `a` and `b`, `(a + b)² = a² + 2ab + b²`.
+2. `two_mul_le`: for all reals `a` and `b`, `2ab ≤ a² + b²` (two-variable AM-GM).
+3. `abs_mul_le`: for all reals `a` and `b`, `|ab| ≤ (a² + b²) / 2`.
+4. `min_comm'`: for all reals `a` and `b`, `min a b = min b a`.
+5. `max_assoc'`: for all reals `a`, `b`, `c`, `max a (max b c) = max (max a b) c`.
+
+Write `x²` as `x ^ 2`. `|x|` is the absolute value: type it with the bar key on your
+keyboard, `|a * b|`. `min a b` and `max a b` are the smaller and the larger of `a` and
+`b`.
 -/
 namespace L7
 
--- Part A
-def a₁ : ℕ := sorry
-def b₁ : ℕ := sorry
+statement sq_add : sorry
 
-def a₂ : ℝ := sorry
-def b₂ : ℝ := sorry
+statement two_mul_le : sorry
 
-def x₃ : ℝ := sorry
-def y₃ : ℝ := sorry
+statement abs_mul_le : sorry
 
--- Part B
-statement sq_le_sq_of_le : sorry
+statement min_comm' : sorry
 
-statement div_mul_cancel_ok : sorry
+statement max_assoc' : sorry
 
 end L7

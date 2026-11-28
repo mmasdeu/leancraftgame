@@ -1,7 +1,10 @@
-def q1 : Fin 4 := 3
-def q2 : Fin 4 := 2
-def q3 : Bool := false
-def q4 : Fin 3 := 1
-def q5 : Bool := true
-def q6 : Fin 4 := 0
-def q7 : Bool := false
+statement lagrange {G : Type*} [Group G] (H : Subgroup G) : Nat.card H ∣ Nat.card G
+
+statement cauchy {G : Type*} [Group G] [Fintype G] (p : ℕ) (hp : p.Prime)
+    (hdvd : p ∣ Fintype.card G) : ∃ x : G, orderOf x = p
+
+def ord4 : ℕ := 3
+
+def σ : Equiv.Perm (Fin 3) := Equiv.swap 0 1 * Equiv.swap 1 2
+
+def τ : Equiv.Perm (Fin 3) := Equiv.swap 0 1

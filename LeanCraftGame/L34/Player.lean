@@ -1,62 +1,56 @@
 /-
-# Morphisms
+# Rings, ideals, polynomials
 
-*What matters about a structure is the maps that respect it. Sam's first homomorphism
-checked products and forgot the unit.*
+*From groups to rings, and back to divisibility. In ℤ, an ideal is divisibility in
+disguise. Sam's notes call `Ideal.span {4, 6}` "the multiples of 4 and of 6", and Noor
+circles it in red.*
 
-`[Monoid M]` says `M` has `*` and `1` with the monoid laws; `[AddMonoid M]` says the same
-for `+` and `0`. Mathlib defines a monoid homomorphism as a **bundled** structure, a function plus the facts
-that it respects the operations:
+The vocabulary:
 
-```lean
-structure MonoidHom₁ (G H : Type) [Monoid G] [Monoid H] where
-  toFun : G → H
-  map_one : toFun 1 = 1
-  map_mul : ∀ g g', toFun (g * g') = toFun g * toFun g'
-```
+* `[CommRing R]`: a commutative ring, such as ℤ, ℚ, ℝ, `ZMod n` or a polynomial ring.
+* `I : Ideal R`: an ideal of `R`, a subset closed under `+` and under multiplication by
+  any element of `R`. `Ideal.span {a, b}` is the ideal **generated** by `a`
+  and `b`: all `r * a + s * b`. In ℤ, `x ∈ Ideal.span {a} ↔ a ∣ x`, with the `∣` of
+  level 20, and every ideal is `Ideal.span {a}` for one number `a`.
+* `ZMod n`: the integers modulo `n`, a commutative ring. For prime `p`, `ZMod p` is a field: every nonzero element has an inverse. A numeral in
+  `ZMod 7` is a residue mod 7, and `#eval (3 : ZMod 7) * 4` prints `5`.
+* `R ≃+* S`: a ring isomorphism, a bijection that preserves `+` and `*`.
+* `Polynomial R`, written `R[X]` after `open Polynomial`. `X` is the variable and `C a` the
+  constant `a`. Numerals work directly, so `X ^ 2 - 3 * X + C 7` equals
+  `X ^ 2 - 3 * X + 7`. `p.eval a` evaluates `p` at `a`, and `p.natDegree` is its degree.
 
-Mathlib writes it `G →* H` (and `G →+ H` for additive monoids, `R →+* S` for rings). You
-apply a bundled map like a function, `f x`.
+## The Chinese remainder theorem
 
-## Bundled and unbundled
-
-Sometimes you want to say that a plain function `f : M → N` is a homomorphism. That's a
-predicate, an "unbundled" definition. It must ask for exactly what the bundled structure
-asks for:
-
-* `map_one`: `f 1 = 1`;
-* `map_mul`: `f (a * b) = f a * f b` for all `a`, `b`.
-
-Neither implies the other: a map can respect `*` and still send `1` elsewhere.
-
-You've met one homomorphism already: the norm `N(a + bi) = a² + b²` of the `GaussInt` of
-level 30. It has `N(zw) = N(z) N(w)` and `N(1) = 1`, so it's a monoid homomorphism from
-`(ℤ[i], ·, 1)` to `(ℤ, ·, 1)`.
+For integers: if `m` and `n` are coprime, then `ZMod (m * n)` is isomorphic, as a ring, to
+`ZMod m × ZMod n`. An isomorphism is data, so the statement says one exists:
+`Nonempty (ZMod (m * n) ≃+* ZMod m × ZMod n)`.
 
 ## Your task
 
-1. `IsMonoidHom f`: `f` preserves `1` and `*`, for any two monoids `M` and `N`. Join the
-   conditions with `∧` (level 11).
-2. `IsAddMonoidHom f`: `f` preserves `0` and `+`, for any two additive monoids.
-3. `homNotOnto`: an additive homomorphism `ℤ → ℤ` that isn't surjective.
-4. `bijNotHom`: a map `ℤ → ℤ` with `f (f n) = n` for every `n` (so a bijection) that isn't
-   an additive homomorphism.
-
-The referee tests your predicates on many maps. It also checks that every bundled
-`f : M →* N` satisfies your `IsMonoidHom`.
+1. `I`: the ideal of the integers divisible by both 4 and 6, as `Ideal.span {…}`.
+2. `p`: the monic polynomial of degree 2 over ℤ whose roots are 2 and 3.
+3. `inv3`: the inverse of 3 in `ZMod 7`, written as a number from 0 to 6.
+4. `crt`: for all natural numbers `m` and `n`, if `Nat.Coprime m n`, then
+   `Nonempty (ZMod (m * n) ≃+* ZMod m × ZMod n)`. Write `m` and `n` as explicit binders,
+   then the hypothesis.
 -/
+import Mathlib.RingTheory.Ideal.Span
+import Mathlib.Algebra.Polynomial.Eval.Defs
+import Mathlib.Data.ZMod.QuotientRing
+
 namespace L34
 
--- f preserves 1 and multiplication
-def IsMonoidHom {M N : Type} [Monoid M] [Monoid N] (f : M → N) : Prop := sorry
+open Polynomial
 
--- f preserves 0 and addition
-def IsAddMonoidHom {M N : Type} [AddMonoid M] [AddMonoid N] (f : M → N) : Prop := sorry
+-- the integers divisible by both 4 and 6
+def I : Ideal ℤ := sorry
 
--- an additive homomorphism of ℤ that isn't surjective
-def homNotOnto : ℤ → ℤ := sorry
+-- the monic polynomial of degree 2 with roots 2 and 3
+def p : ℤ[X] := sorry
 
--- a map of ℤ with f (f n) = n that isn't an additive homomorphism
-def bijNotHom : ℤ → ℤ := sorry
+-- the inverse of 3 in ZMod 7
+def inv3 : ZMod 7 := sorry
+
+statement crt : sorry
 
 end L34

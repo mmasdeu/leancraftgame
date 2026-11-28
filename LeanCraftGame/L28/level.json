@@ -1,54 +1,74 @@
 {
-  "world": "Structures",
-  "title": "Defining structures",
-  "skill": "structures",
-  "exercise": "Write",
-  "predict": [
-    {
-      "test": "(1, 1, -1) is not in the simplex",
-      "statement": "The point (1, 1, -1) belongs to the standard 2-simplex"
-    }
-  ],
-  "public": [
-    "p123 has coordinates (1, 2, 3)",
-    "(1/2, 1/2, 0) is in the simplex"
-  ],
+  "slug": "sams-groups",
+  "world": "Structures and Classes",
+  "title": "Sam's groups",
+  "skill": "axioms",
+  "exercise": "Repair",
   "checks": [
     {
-      "lean": "#check (L28.origin : L28.Point)\n#check (L28.p123 : L28.Point)\n#check (L28.Point.add : L28.Point → L28.Point → L28.Point)\n#check (L28.Point.smul : ℝ → L28.Point → L28.Point)\n#check (L28.Point.mk : ℝ → ℝ → ℝ → L28.Point)",
-      "message": "Keep `Point` as given, and the names and types of `origin`, `p123`, `Point.add` and `Point.smul`."
+      "lean": "#check (L28.junkMul : Bool → Bool → Bool)\n#check (L28.junkOne : Bool)\n#check (L28.junkInv : Bool → Bool)",
+      "message": "Keep the names and types of Part A: `junkMul : Bool → Bool → Bool`, `junkOne : Bool`, `junkInv : Bool → Bool`."
     },
     {
-      "lean": "example := fun (x y z : ℝ) => L28.StandardTwoSimplex.mk x y z\nexample : ∀ s : L28.StandardTwoSimplex, 0 ≤ s.x ∧ 0 ≤ s.y ∧ 0 ≤ s.z := fun s => ⟨s.x_nonneg, s.y_nonneg, s.z_nonneg⟩\nexample := fun s : L28.StandardTwoSimplex => s.sum_eq",
-      "message": "`StandardTwoSimplex` must start with the fields `x`, `y`, `z : ℝ`, then have the fields `x_nonneg : 0 ≤ x`, `y_nonneg : 0 ≤ y`, `z_nonneg : 0 ≤ z` and `sum_eq`."
+      "lean": "example := fun (G : Type) (m : G → G → G) (o : G) (i : G → G) => L28.Group₂.mk m o i",
+      "message": "`Group₂` must keep `mul`, `one`, `inv` as its first three fields, in this order."
     }
   ],
   "hints": [
     {
-      "match": "origin",
-      "hint": "`{ x := 0, y := 0, z := 0 }`."
-    },
-    {
-      "match": "p123",
-      "hint": "`⟨1, 2, 3⟩`."
-    },
-    {
-      "match": "add",
+      "match": "satisfies Sam's axioms",
+      "hint": "Your functions must satisfy associativity, `mul one a = a` and `mul a (inv a) = one`. Try an operation that ignores one argument.",
       "steps": [
-        "Each coordinate of the sum uses the same coordinate of `a` and of `b`."
-      ],
-      "hint": "`⟨a.x + b.x, a.y + b.y, a.z + b.z⟩`."
+        "Which axioms limit your three functions on `Bool`? Could `mul` just ignore one argument?"
+      ]
     },
     {
-      "match": "smul",
-      "hint": "`⟨r * a.x, r * a.y, r * a.z⟩`."
-    },
-    {
-      "match": "simplex",
+      "match": "and yet it is not a group",
+      "hint": "Your model satisfies the axioms, but it's a real group. Look for an operation where `one` is a left identity but not a right identity.",
       "steps": [
-        "Which property says a coordinate can't be negative? Do you have one for each coordinate?"
-      ],
-      "hint": "`x_nonneg : 0 ≤ x`, `y_nonneg : 0 ≤ y`, `z_nonneg : 0 ≤ z` and `sum_eq : x + y + z = 1`."
+        "Compare Sam's axioms with the usual definition of a group. What does a group need that they never say?"
+      ]
+    },
+    {
+      "match": "S₃",
+      "hint": "S₃ isn't commutative. If you added `mul_comm` to be safe, remove it. Groups needn't be commutative.",
+      "steps": [
+        "Is multiplication in S₃ commutative? Do your axioms ask for it?"
+      ]
+    },
+    {
+      "match": "is a group",
+      "hint": "A real group fails one of your axioms, and the report names it. Is that axiom true in every group?",
+      "steps": [
+        "The report names the axiom a real group fails. Is it true in every group?"
+      ]
+    },
+    {
+      "match": "'a * b = b'",
+      "hint": "Sam's axioms allow `a * b = b`. Add an axiom it breaks, such as a right identity or a left inverse.",
+      "steps": [
+        "This operation passes Sam's axioms. Which usual group axiom does it break?"
+      ]
+    },
+    {
+      "match": "(ℕ, +)",
+      "hint": "With `inv = id`, (ℕ, +) has no inverses: 1 + 1 ≠ 0. Do your axioms really require inverses?",
+      "steps": [
+        "Does every element of (ℕ, +) have an inverse? Do your axioms need that?"
+      ]
+    },
+    {
+      "match": "(Bool, and)",
+      "hint": "In (Bool, and) with identity `true`, the element `false` has no inverse. Do your axioms really require inverses?",
+      "steps": [
+        "Does every element of (Bool, and) have an inverse? Do your axioms need that?"
+      ]
+    }
+  ],
+  "predict": [
+    {
+      "test": "Part B: S₃ (non-commutative!) is a group",
+      "statement": "S₃ satisfies every axiom of your `Group₂`"
     }
   ]
 }

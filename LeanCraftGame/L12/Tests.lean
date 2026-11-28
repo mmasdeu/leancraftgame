@@ -1,30 +1,32 @@
-/- Hidden test battery for Level 12: Sequences and convergence. -/
+/- Hidden test battery for Level 10: ¬ and the order of quantifiers. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L12.Player
 
-#no_sorry L12.ConvergesTo
-#no_sorry L12.convergesTo_const
-#no_sorry L12.convergesTo_add
-#no_sorry L12.convergesTo_unique
-#level_start "Sequences and convergence"
+#no_sorry L12.NotFnUb
+#no_sorry L12.NoUpperBound
+#no_sorry L12.NotMonotone
+#no_sorry L12.BoundedSeq
+#level_start "¬ and the order of quantifiers"
 
-#expect_true "the constant sequence 3 converges to 3" unfolding L12.ConvergesTo :
-  L12.ConvergesTo (fun _ => 3) 3
-#expect_true "7, 7, 7, 7, 7, 0, 0, 0, … converges to 0" unfolding L12.ConvergesTo :
-  L12.ConvergesTo (fun n => if n < 5 then 7 else 0) 0
-#expect_false "the constant sequence 3 converges to 4" unfolding L12.ConvergesTo :
-  L12.ConvergesTo (fun _ => 3) 4
-#expect_false "0, 1, 2, 3, … converges to 0" unfolding L12.ConvergesTo :
-  L12.ConvergesTo (fun n => (n : ℝ)) 0
-#expect_false "0, 1, 0, 1, … converges to 0" unfolding L12.ConvergesTo :
-  L12.ConvergesTo (fun n => if n % 2 = 0 then 0 else 1) 0
-#expect_equiv "convergesTo_const: a constant sequence converges to its value" :
-  L12.convergesTo_const ↔ ∀ a : ℝ, L12.ConvergesTo (fun _ => a) a
-#expect_equiv "convergesTo_add: limits add up" :
-  L12.convergesTo_add ↔ ∀ (s t : ℕ → ℝ) (a b : ℝ),
-    L12.ConvergesTo s a → L12.ConvergesTo t b → L12.ConvergesTo (fun n => s n + t n) (a + b)
-#expect_equiv "convergesTo_unique: a limit is unique" :
-  L12.convergesTo_unique ↔ ∀ (s : ℕ → ℝ) (a b : ℝ),
-    L12.ConvergesTo s a → L12.ConvergesTo s b → a = b
+#expect_equiv "NotFnUb f a means ¬ FnUb f a" unfolding L12.NotFnUb L12.FnUb :
+  ∀ f a, L12.NotFnUb f a ↔ ∃ x, a < f x
+#expect_equiv "NoUpperBound f means ¬ FnHasUb f" unfolding L12.NoUpperBound :
+  ∀ f, L12.NoUpperBound f ↔ ∀ a, ∃ x, a < f x
+#expect_equiv "NotMonotone f means ¬ Monotone f" unfolding L12.NotMonotone :
+  ∀ f : ℝ → ℝ, L12.NotMonotone f ↔ ∃ a b, a ≤ b ∧ f b < f a
+#expect_true "x ↦ x has no upper bound" unfolding L12.NoUpperBound :
+  L12.NoUpperBound (fun x => x)
+#expect_false "x ↦ min x 0 has no upper bound" unfolding L12.NoUpperBound :
+  L12.NoUpperBound (fun x => min x 0)
+#expect_true "x ↦ -x is not monotone" unfolding L12.NotMonotone :
+  L12.NotMonotone (fun x => -x)
+#expect_false "x ↦ 2x is not monotone" unfolding L12.NotMonotone :
+  L12.NotMonotone (fun x => 2 * x)
+#expect_true "∀ n, ∃ M, n ≤ M holds in ℕ" :
+  ∀ n : ℕ, ∃ M : ℕ, n ≤ M
+#expect_true "the constant sequence 5 is bounded" unfolding L12.BoundedSeq :
+  L12.BoundedSeq (fun _ => 5)
+#expect_false "the sequence 0, 1, 2, 3, … is bounded" unfolding L12.BoundedSeq :
+  L12.BoundedSeq (fun n => n)
 
 #level_report

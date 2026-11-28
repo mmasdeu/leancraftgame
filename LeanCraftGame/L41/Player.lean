@@ -1,74 +1,81 @@
 /-
-# Endomorphisms
+# Integrals and measures
 
-*Noor wants a classic theorem stated, with every hypothesis it needs: an endomorphism of a
-finite-dimensional complex vector space has an eigenvalue. The quarter turn of level 39
-is a good test case.*
+*The last project before the audit: integrals. Noor wants the fundamental theorem of
+calculus in the library, and everyone able to read Mathlib's dominated convergence.*
 
-Linear maps from a space to itself are **endomorphisms** (`K` and `V` as in level 39):
-
-```lean
-abbrev Module.End (R : Type*) (M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] :=
-  M →ₗ[R] M
-```
-
-`abbrev` is a `def` that Lean unfolds freely. You can compose endomorphisms (`f * g` is
-`f ∘ g`) and add them, so `Module.End K V` is a ring. The vocabulary:
+Mathlib's **interval integral** is the integral of a first calculus course:
 
 ```lean
-#check (Module.End.eigenspace f μ : Submodule K V)   -- {x | f x = μ • x}
-def Module.End.HasEigenvector (f : Module.End R M) (μ : R) (x : M) : Prop :=
-  x ∈ eigenspace f μ ∧ x ≠ 0
-def Module.End.HasEigenvalue (f : Module.End R M) (a : R) : Prop :=
-  eigenspace f a ≠ ⊥
-#check (minpoly K f : K[X])   -- the minimal polynomial: monic, of least degree, kills f
+∫ x in a..b, f x        -- the integral of f from a to b
+∫ x in (0:ℝ)..1, x ^ 2  -- = 1 / 3
 ```
 
-`HasEigenvalue f a` says the eigenspace isn't the zero subspace `⊥`.
+* `∫ x in a..b, f x` is a real number. The `x` is bound, like in `fun x => …`. The
+  `(0:ℝ)` tells Lean the bounds are reals.
+* It's oriented: `∫ x in b..a, f x = -∫ x in a..b, f x`.
+* Like `deriv`, it's a total function, with a junk value where there's no honest answer.
 
-## A theorem to state
+## The fundamental theorem of calculus
 
-Mathlib proves that an endomorphism of a finite-dimensional complex vector space has an
-eigenvalue. Every hypothesis matters. For example, the zero space `{0}` has no
-eigenvectors, so the space must be `Nontrivial`: it has two different elements.
+Mathlib's version (`intervalIntegral.integral_eq_sub_of_hasDerivAt`), for `f f' : ℝ → ℝ`:
 
-Type-class hypotheses go in square brackets: `[FiniteDimensional ℂ V]` (`V` has a finite
-basis over `ℂ`, the complex numbers) and `[Nontrivial V]`.
+> if `f` has derivative `f' x` at every `x` of `Set.uIcc a b` (the interval between `a`
+> and `b`, in either order), and `f'` is integrable on it, then
+> `∫ y in a..b, f' y = f b - f a`.
 
-## Matrices
+"`f'` is integrable between `a` and `b`" is
+`IntervalIntegrable f' MeasureTheory.volume a b`.
 
-`!![2, 1; 0, 3]` is the 2 × 2 matrix with rows `2 1` and `0 3`. `A *ᵥ v` (or
-`A.mulVec v`) is the matrix times the column vector `v`. For example
-`!![1, 2; 3, 4] *ᵥ ![1, 0] = ![1, 3]`. An eigenpair is `c` and `v ≠ 0` with
-`A *ᵥ v = c • v`.
+## Measures
+
+Behind the integral is a **measure**. On `ℝ` it's `MeasureTheory.volume`, the length.
+Measures take values in `ENNReal`, the numbers in `[0, ∞]`, since a set can have infinite
+measure. So `volume (Set.Icc a b)` is the real `b - a` turned into an `ENNReal`,
+`ENNReal.ofReal (b - a)`. A numeral such as `2` can be written directly as an `ENNReal`.
+
+* `MeasurableSet s`: `s` is one of the sets the measure is defined on.
+* `∀ᵐ x ∂μ, P x`: `P x` holds for almost every `x` (`∂μ` reads "with respect to `μ`").
+  It's the filter statement `∀ᶠ x in ae μ, P x`, like "eventually" in level 43. The
+  filter `ae μ` holds the sets whose complement has measure `0`.
+* `∫ x, f x ∂μ`: the integral of `f` over the whole space with respect to `μ`.
+
+**Dominated convergence** says that under a bound, the limit of the integrals is the
+integral of the limit. Read the `Tendsto` lines as in level 43. Here is
+`MeasureTheory.tendsto_integral_of_dominated_convergence`, slightly shortened:
+
+```lean
+theorem tendsto_integral_of_dominated_convergence {F : ℕ → α → ℝ} {f : α → ℝ}
+    (bound : α → ℝ)
+    (F_measurable : ∀ n, AEStronglyMeasurable (F n) μ)
+    (bound_integrable : Integrable bound μ)
+    (h_bound : ∀ n, ∀ᵐ a ∂μ, ‖F n a‖ ≤ bound a)
+    (h_lim : ∀ᵐ a ∂μ, Tendsto (fun n => F n a) atTop (𝓝 (f a))) :
+    Tendsto (fun n => ∫ a, F n a ∂μ) atTop (𝓝 (∫ a, f a ∂μ))
+```
 
 ## Your task
 
-1. Answer the questions below the lesson.
-2. State `exists_eig`: for every type `V : Type` with `[AddCommGroup V] [Module ℂ V]`,
-   finite-dimensional over `ℂ` and nontrivial, every `f : Module.End ℂ V` has some
-   eigenvalue `c : ℂ`. Write the binders in this order: `{V : Type}` (implicit), the four
-   instances, then `(f : Module.End ℂ V)`.
-3. Give the two eigenvalues of `A = !![2, 1; 0, 3]` (`ev₁ < ev₂`), each with an
-   eigenvector.
+1. `I2`: the integral of `x ↦ x²` from `0` to `1`, written with `∫`.
+2. `vol`: the measure of the closed interval `[0, 2]` of `ℝ`, written with
+   `MeasureTheory.volume`.
+3. `ftc`: the fundamental theorem of calculus as above, with the binders in this order:
+   `(f f' : ℝ → ℝ) (a b : ℝ)`, the derivative hypothesis, the integrability hypothesis.
+4. Answer the questions below the lesson.
 -/
-import Mathlib.LinearAlgebra.Eigenspace.Triangularizable
-import Mathlib.Analysis.Complex.Polynomial.Basic
+import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+import Mathlib.MeasureTheory.Integral.IntervalIntegral.FundThmCalculus
 
 namespace L41
 
-def q1 : Fin 4 := sorry
-def q2 : Bool := sorry
+def I2 : ℝ := sorry
+
+def vol : ENNReal := sorry
+
+statement ftc : sorry
+
+def q1 : Bool := sorry
+def q2 : Fin 4 := sorry
 def q3 : Fin 4 := sorry
-def q4 : Bool := sorry
-
-statement exists_eig : sorry
-
-def A : Matrix (Fin 2) (Fin 2) ℚ := !![2, 1; 0, 3]
-
-def ev₁ : ℚ := sorry
-def vec₁ : Fin 2 → ℚ := sorry
-def ev₂ : ℚ := sorry
-def vec₂ : Fin 2 → ℚ := sorry
 
 end L41

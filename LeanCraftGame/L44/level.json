@@ -1,25 +1,98 @@
 {
-  "world": "Topology",
-  "title": "Metric spaces",
-  "skill": "writing definitions",
-  "exercise": "Write",
+  "slug": "final-audit",
+  "world": "Audits",
+  "title": "Final audit: the AI proved Goldbach!",
+  "skill": "auditing",
+  "exercise": "Audit",
+  "timeout": 120,
   "predict": [
-    {"test": "(x - y)² is not a metric", "statement": "`(x - y) ^ 2` is a distance on the points 0, 1, 2, 3."},
-    {"test": "the zero distance is not a metric", "statement": "The distance that is always `0` is a metric."}
+    {
+      "test": "Goldbach, world C: no number is 'prime'",
+      "statement": "`GoldbachFor (fun _ => False)`: Goldbach holds in a world where no number is prime."
+    },
+    {
+      "test": "Collatz, process B: everything falls to 0 after the start",
+      "statement": "`CollatzFor (fun n k => if k = 0 then n else 0)`: every positive start reaches 1 if the process falls to 0 after one step."
+    }
   ],
-  "public": ["|x - y| on {0, 1, 2, 3} is a metric", "x - y is not a metric"],
+  "questions": [
+    {
+      "answer": "q1",
+      "text": "Claim: *there are infinitely many primes*. The Prover's theorem: `∀ n : ℕ, ∃ p, n ≤ p ∨ Nat.Prime p`. True or false: the statement says what the claim says."
+    },
+    {
+      "answer": "q2",
+      "text": "Claim: *every convergent sequence is bounded*. The Prover's theorem: `∀ s : ℕ → ℝ, (∃ a, ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n - a| < ε) → ∃ M, ∀ n, |s n| ≤ M`. True or false: the statement says what the claim says."
+    },
+    {
+      "answer": "q3",
+      "text": "Claim: *`|x|` has no derivative at `0`*. The Prover's theorem: `deriv (fun x : ℝ => |x|) 0 = 0`. True or false: the statement says what the claim says."
+    }
+  ],
   "checks": [
-    {"lean": "#check fun (α : Type) (d : α → α → ℤ) => L44.Metric'.mk d", "message": "`Metric'` needs the field `dist : α → α → ℤ` first, then your axioms."},
-    {"lean": "#check (L44.UnifCont : (ℝ → ℝ) → Prop)", "message": "Keep `UnifCont : (ℝ → ℝ) → Prop`."}
+    {
+      "lean": "#check (L44.GoldbachFor : (ℕ → Prop) → Prop)\n#check (L44.CollatzFor : (ℕ → ℕ → ℕ) → Prop)\n#check (L44.q1 : Bool)\n#check (L44.q2 : Bool)\n#check (L44.q3 : Bool)",
+      "message": "Keep `GoldbachFor : (ℕ → Prop) → Prop`, `CollatzFor : (ℕ → ℕ → ℕ) → Prop` and the three `Bool` answers."
+    }
   ],
   "hints": [
-    {"match": "x - y is not", "steps": ["What is the distance from 0 to 1, and from 1 to 0?"], "hint": "A distance is symmetric: add `symm : ∀ a b, dist a b = dist b a`, or ask that it be nonnegative."},
-    {"match": "(x - y)²", "steps": ["Compare the distance from 0 to 2 with the distances 0 to 1 and 1 to 2."], "hint": "`4 > 1 + 1`: add the triangle inequality `∀ a b c, dist a c ≤ dist a b + dist b c`."},
-    {"match": "zero distance", "steps": ["Which axiom says that different points are at a positive distance?"], "hint": "Add `eq_zero : ∀ a b, dist a b = 0 ↔ a = b`."},
-    {"match": "constant distance 1", "hint": "The distance from a point to itself must be `0`: `∀ a b, dist a b = 0 ↔ a = b`."},
-    {"match": "one-way", "hint": "Going from 3 to 0 costs twice as much as from 0 to 3. Symmetry rules it out."},
-    {"match": "is a metric", "hint": "A real metric breaks one of your axioms, and the report names it. Is that axiom true for `|x - y|`? Watch the direction of `≤` in the triangle inequality."},
-    {"match": "UnifCont", "steps": ["The order: `∀ ε > 0`, then `∃ δ > 0`, then `∀ x y`. Where does pointwise continuity put `∀ x`?"],
-     "hint": "`∀ ε > 0, ∃ δ > 0, ∀ x y, dist x y < δ → dist (f x) (f y) < ε`."}
+    {
+      "match": "world A",
+      "steps": [
+        "The 'primes' are the even numbers here. Is every even n > 2 a sum of two of them? Is an odd n, such as 3?"
+      ],
+      "hint": "Every even n is n + 0, but an odd n is never a sum of two even numbers. Did you assume n is even (`n % 2 = 0 →`)?"
+    },
+    {
+      "match": "world B",
+      "steps": [
+        "Every n ≥ 2 is 'prime' here. Which n does your statement cover? Try n = 2."
+      ],
+      "hint": "2 isn't a sum of two numbers ≥ 2. The conjecture is about n > 2 (`2 < n`), not `2 ≤ n`. Also, assume the hypotheses with `→`; don't claim them with `∧`."
+    },
+    {
+      "match": "world C",
+      "steps": [
+        "If nothing is prime, can any number be a sum of two primes?"
+      ],
+      "hint": "If your statement still holds, the `∃ p q` is satisfied for a silly reason. Write `P p ∧ P q ∧ p + q = n`, with `∧`, not `→`."
+    },
+    {
+      "match": "real world",
+      "hint": "A simple search settled your statement of an open problem, so it's probably vacuous or false for a silly reason. Compare with the toy worlds."
+    },
+    {
+      "match": "process A",
+      "steps": [
+        "Counting down from n reaches 1 at step n − 1. But from 0?"
+      ],
+      "hint": "From 0 you never reach 1. Assume the start is positive, `∀ n, 0 < n → …`."
+    },
+    {
+      "match": "process B",
+      "steps": [
+        "The process falls to 0 and stays. Is 0 equal to 1? Is it ≤ 1?"
+      ],
+      "hint": "Ask for `o n k = 1`, not `o n k ≤ 1` or `o n k ≤ n`. 0 isn't 1."
+    },
+    {
+      "match": "process C",
+      "steps": [
+        "Which quantifier comes first in your statement, `∀ n` or `∃ k`?"
+      ],
+      "hint": "The step k may depend on the start n, so `∀ n, 0 < n → ∃ k, o n k = 1`."
+    },
+    {
+      "match": "Audit 1",
+      "hint": "Take `p = n`. Then `n ≤ n` holds, so the statement is true without a single prime. The faithful version uses `∧`."
+    },
+    {
+      "match": "Audit 2",
+      "hint": "Read it slowly. A limit `a` with the ε-N condition, and a bound `M` for every term. That's the claim."
+    },
+    {
+      "match": "Audit 3",
+      "hint": "`deriv` is a total function, with the junk value 0 where there's no derivative. `deriv f 0 = 0` also holds for differentiable functions with a flat tangent. The faithful statement is `¬ DifferentiableAt ℝ (fun x : ℝ => |x|) 0`."
+    }
   ]
 }

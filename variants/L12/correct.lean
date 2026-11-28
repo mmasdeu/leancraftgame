@@ -1,5 +1,6 @@
-def ConvergesTo (s : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n - a| < ε
-statement convergesTo_const (a : ℝ) : ConvergesTo (fun _ ↦ a) a
-statement convergesTo_add (s t : ℕ → ℝ) (a b : ℝ) (hs : ConvergesTo s a) (ht : ConvergesTo t b) :
-    ConvergesTo (fun n ↦ s n + t n) (a + b)
-statement convergesTo_unique (s : ℕ → ℝ) (a b : ℝ) (sa : ConvergesTo s a) (sb : ConvergesTo s b) : a = b
+def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, f x ≤ a
+def FnHasUb (f : ℝ → ℝ) : Prop := ∃ a, FnUb f a
+def NotFnUb (f : ℝ → ℝ) (a : ℝ) : Prop := ∃ x, f x > a
+def NoUpperBound (f : ℝ → ℝ) : Prop := ∀ a, ∃ x, f x > a
+def NotMonotone (f : ℝ → ℝ) : Prop := ∃ a b, a ≤ b ∧ f a > f b
+def BoundedSeq (u : ℕ → ℕ) : Prop := ∃ M, ∀ n, u n ≤ M

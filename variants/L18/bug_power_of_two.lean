@@ -1,9 +1,0 @@
-def q1 : Fin 3 := 0
-def q2 : Fin 3 := 1
-def q3 : Fin 3 := 2
-def q4 : Bool := true
-def q5 : Bool := true
-def q6 : Bool := true
-def q7 : Bool := true
-def sbFun12 : ℕ := 24
-def sbFun8 : ℕ := 16

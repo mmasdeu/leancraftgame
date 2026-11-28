@@ -1,6 +1,9 @@
-def IsMonoidHom {M N : Type} [Monoid M] [Monoid N] (f : M → N) : Prop :=
-  f 1 = 1 ∧ ∀ a b, f (a * b) = f a * f b
-def IsAddMonoidHom {M N : Type} [AddMonoid M] [AddMonoid N] (f : M → N) : Prop :=
-  f 0 = 0 ∧ ∀ a b, f (a + b) = f a + f b
-def homNotOnto : ℤ → ℤ := fun n => 2 * n
-def bijNotHom : ℤ → ℤ := fun n => 1 - n
+open Polynomial
+
+def I : Ideal ℤ := Ideal.span {12}
+
+def p : ℤ[X] := (X - 2) * (X - 3)
+
+def inv3 : ZMod 7 := 5
+
+statement crt (m n : ℕ) (h : Nat.Coprime m n) : Nonempty (ZMod (m * n) ≃+* ZMod m × ZMod n)

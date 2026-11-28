@@ -1,36 +1,31 @@
-/- Hidden test battery for Level 27: Spot the bug: counting. -/
+/- Hidden test battery for Level 28: Defining structures. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L27.Player
 
-namespace L27Ref
-open L27.BinTree
-def triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, i
-def triangleRight (n : ℕ) : ℕ := ∑ i ∈ Finset.Icc 1 n, i
-def numDivisors (n : ℕ) : ℕ := ((Finset.Ico 1 n).filter (· ∣ n)).card
-def numDivisorsRight (n : ℕ) : ℕ := ((Finset.Icc 1 n).filter (· ∣ n)).card
-def size : L27.BinTree → ℕ
-  | empty => 0
-  | node l r => size l + size r
-def sizeRight : L27.BinTree → ℕ
-  | empty => 0
-  | node l r => sizeRight l + sizeRight r + 1
-end L27Ref
+open L27
 
-#no_sorry L27.tn
-#no_sorry L27.dn
-#no_sorry L27.tree
-#no_sorry L27.gn
-#level_start "Spot the bug: counting"
+#no_sorry origin
+#no_sorry p123
+#no_sorry Point.add
+#no_sorry Point.smul
+#level_start "Defining structures"
 
-#expect_true "Sam's triangle is right at 0" :
-  L27Ref.triangle 0 = L27Ref.triangleRight 0
-#expect_true "triangle is wrong on your tn" unfolding L27Ref.triangle L27Ref.triangleRight L27.tn :
-  L27Ref.triangle L27.tn ≠ L27Ref.triangleRight L27.tn
-#expect_true "numDivisors is wrong on your dn" unfolding L27Ref.numDivisors L27Ref.numDivisorsRight L27.dn :
-  L27Ref.numDivisors L27.dn ≠ L27Ref.numDivisorsRight L27.dn
-#expect_true "size is wrong on your tree" unfolding L27.tree :
-  L27Ref.size L27.tree ≠ L27Ref.sizeRight L27.tree
-#expect_true "Sam's formula is false for your gn" unfolding L27.gn :
-  ∑ i ∈ Finset.range L27.gn, i ≠ L27.gn * (L27.gn + 1) / 2
+#expect_true "the origin has coordinates (0, 0, 0)" unfolding origin :
+  origin.x = 0 ∧ origin.y = 0 ∧ origin.z = 0
+#expect_true "p123 has coordinates (1, 2, 3)" unfolding p123 :
+  p123.x = 1 ∧ p123.y = 2 ∧ p123.z = 3
+#expect_true "p123.add p123 has coordinates (2, 4, 6)" unfolding Point.add p123 :
+  (p123.add p123).x = 2 ∧ (p123.add p123).y = 4 ∧ (p123.add p123).z = 6
+#expect_true "adding the origin changes nothing" unfolding Point.add origin :
+  ∀ a : Point, (a.add origin).x = a.x ∧ (a.add origin).y = a.y ∧ (a.add origin).z = a.z
+#expect_true "Point.smul 2 p123 has coordinates (2, 4, 6)" unfolding Point.smul p123 :
+  (Point.smul 2 p123).x = 2 ∧ (Point.smul 2 p123).y = 4 ∧ (Point.smul 2 p123).z = 6
+#expect_true "scaling by 0 gives the origin" unfolding Point.smul :
+  ∀ a : Point, (Point.smul 0 a).x = 0 ∧ (Point.smul 0 a).y = 0 ∧ (Point.smul 0 a).z = 0
+#expect_model "(1/2, 1/2, 0) is in the simplex" : StandardTwoSimplex.mk (1 / 2) (1 / 2) 0
+#expect_model "(1/3, 1/3, 1/3) is in the simplex" : StandardTwoSimplex.mk (1 / 3) (1 / 3) (1 / 3)
+#expect_not_model "(1, 1, -1) is not in the simplex" : StandardTwoSimplex.mk 1 1 (-1)
+#expect_not_model "(1/2, 1/2, 1/2) is not in the simplex" : StandardTwoSimplex.mk (1 / 2) (1 / 2) (1 / 2)
+#expect_not_model "(0, 0, 0) is not in the simplex" : StandardTwoSimplex.mk 0 0 0
 
 #level_report

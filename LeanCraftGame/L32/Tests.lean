@@ -1,31 +1,34 @@
-/- Hidden test battery for Level 32: Classes and instances. -/
+/- Hidden test battery for Level 35: Sub-objects. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L32.Player
 
 open L32
 
-#no_sorry L32.boolXor
-#no_sorry L32.intAdd
-#no_sorry L32.endo
-#level_start "Classes and instances"
+#no_sorry evens
+#no_sorry multiplesOf
+#level_start "Sub-objects"
 
-#expect_true "mpow 2 10 = 1024 in (ℕ, *)" :
-  mpow (2 : ℕ) 10 = 1024
-#expect_true "In (Bool, xor): mpow true 3 = true and mpow true 4 = false" :
-  mpow true 3 = true ∧ mpow true 4 = false
-#expect_true "(Bool, xor) is associative, with unit false on both sides" :
-  ∀ a b c : Bool, (a ⋄ b) ⋄ c = a ⋄ (b ⋄ c) ∧ One₁.one ⋄ a = a ∧ a ⋄ One₁.one = a
-#expect_true "In (Bool, xor) every element is its own inverse" :
-  ∀ a : Bool, a ⋄ a = One₁.one
-#expect_true "In (ℤ, +): mpow 5 3 = 15 and mpow (-2) 4 = -8" :
-  mpow (5 : ℤ) 3 = 15 ∧ mpow (-2 : ℤ) 4 = -8
-#expect_true "In (ℤ, +): the unit is a unit on both sides" :
-  One₁.one ⋄ (7 : ℤ) = 7 ∧ (-3 : ℤ) ⋄ One₁.one = -3 ∧ (2 : ℤ) ⋄ 3 = 5
-#expect_true "In (ℕ → ℕ, ∘): mpow (fun n => n + 3) 4 sends 0 to 12" :
-  mpow (fun n : ℕ => n + 3) 4 0 = 12
-#expect_true "f ⋄ g is \"first g, then f\": (· * 2) ⋄ (· + 1) sends 5 to 12" :
-  ((fun n : ℕ => n * 2) ⋄ (fun n => n + 1)) 5 = 12
-#expect_true "The unit of (ℕ → ℕ, ∘) is the identity" :
-  (One₁.one : ℕ → ℕ) 7 = 7 ∧ (One₁.one : ℕ → ℕ) 0 = 0
+#expect_true "evens contains 0 and 4, but not 7" unfolding evens :
+  0 ∈ evens ∧ 4 ∈ evens ∧ 7 ∉ evens
+#expect_true "multiplesOf 3 contains 0 and 6, but not 4" unfolding multiplesOf :
+  0 ∈ multiplesOf 3 ∧ 6 ∈ multiplesOf 3 ∧ 4 ∉ multiplesOf 3
+
+#expect_model "the even numbers are an additive submonoid of ℕ" :
+  AddSubmonoid₁.mk (M := ℕ) {n | n % 2 = 0}
+#expect_model "the multiples of 3 are an additive submonoid of ℕ" :
+  AddSubmonoid₁.mk (M := ℕ) {n | 3 ∣ n}
+#expect_model "{0} is an additive submonoid of ℕ" :
+  AddSubmonoid₁.mk (M := ℕ) {0}
+#expect_model "all of ℤ is an additive submonoid of ℤ" :
+  AddSubmonoid₁.mk (M := ℤ) Set.univ
+
+#expect_not_model "the odd numbers are not an additive submonoid" :
+  AddSubmonoid₁.mk (M := ℕ) {n | n % 2 = 1}
+#expect_not_model "the numbers ≥ 1 are not an additive submonoid" :
+  AddSubmonoid₁.mk (M := ℕ) {n | 1 ≤ n}
+#expect_not_model "{0, 1} is not an additive submonoid" :
+  AddSubmonoid₁.mk (M := ℕ) {0, 1}
+#expect_not_model "the numbers other than 2 are not an additive submonoid" :
+  AddSubmonoid₁.mk (M := ℕ) {n | n ≠ 2}
 
 #level_report

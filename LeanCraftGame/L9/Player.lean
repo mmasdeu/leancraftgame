@@ -1,51 +1,56 @@
 /-
-# ∃
+# Spot the bug: statements
 
-*`FnUb f a` from level 8 names one bound. Usually Noor only cares that some bound exists.
-Meanwhile Sam wrote "`f` takes both signs" with a single `∃`, and no function satisfies it.*
-
-`∃ x, P x` says "there is an `x` with `P x`". For example, "`f` has a zero":
+*Sam's part of the AM-GM project arrives late on Friday: three statements, typed fast. All
+three compile, and all three are false. Noor asks you to show it before they reach the
+Prover, then repair what can be repaired.*
 
 ```lean
-def HasZero (f : ℝ → ℝ) : Prop :=
-  ∃ x, f x = 0
+-- Sam's statements
+statement sub_sq_nat (a b : ℕ) : (a - b) ^ 2 = a ^ 2 - 2 * a * b + b ^ 2
+
+statement sq_le_sq_of_le (a b : ℝ) (hab : a ≤ b) : a ^ 2 ≤ b ^ 2
+
+statement div_mul_cancel_bad (x y : ℝ) : x / y * y = x
 ```
 
-To show an `∃` statement, you give a **witness**. For `fun x ↦ 2 * x - 6`, the witness is
-`3`. A definition can also use earlier ones: `FnUb` and `FnLb` from level 8 are given in
-the template.
+One **counterexample** refutes a statement about all numbers: values that satisfy every
+hypothesis and break the conclusion. Usual suspects:
 
-## The scope of ∃
+* truncated subtraction: in `ℕ`, `a - b = 0` when `a ≤ b`;
+* a missing hypothesis, such as a sign condition;
+* junk values: Mathlib sets `x / 0 = 0`. Dividing by zero is no error in Lean, so a
+  theorem about division must exclude the bad case itself.
 
-`∃ x, P x ∧ Q x` says one `x` satisfies both `P` and `Q`. `(∃ x, P x) ∧ (∃ x, Q x)` says
-some `x` satisfies `P` and some `x`, maybe another, satisfies `Q`. "Some natural number is
-even and some is odd" is the second kind: no number is both.
+`x ≠ y` (type `\ne`) means `x` is not equal to `y`.
 
-The scope of `∃` (and `∀`) reaches as far right as possible, so in `∃ x, P x ∧ Q x` both
-`P` and `Q` are under it.
+## Part A: counterexamples
 
-## Your task
+Give the values. The referee checks that they satisfy the hypotheses and break the
+conclusion. Use small numbers: the referee computes, it doesn't search.
 
-Write:
+## Part B: repairs
 
-* `FnHasUb f`: `f` has an upper bound; `FnHasLb f`: `f` has a lower bound;
-* `bound`: a number that is an upper bound of `fun x ↦ min x 3` (a witness, of type `ℝ`);
-* `root`: a zero of `x ↦ x² - 4x + 4` (a witness);
-* `TakesBothSigns f`: `f` takes a positive value and also a negative value.
+Repair Sam's two real-number statements: write each in full, with Sam's binders, plus
+one missing hypothesis, and nothing else. For example
+`statement sq_le_sq_of_le (a b : ℝ) (h : …) (hab : a ≤ b) : …`. Name the hypotheses as
+you like.
 -/
 namespace L9
 
-def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, f x ≤ a
-def FnLb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, a ≤ f x
+-- Part A
+def a₁ : ℕ := sorry
+def b₁ : ℕ := sorry
 
-def FnHasUb (f : ℝ → ℝ) : Prop := sorry
+def a₂ : ℝ := sorry
+def b₂ : ℝ := sorry
 
-def FnHasLb (f : ℝ → ℝ) : Prop := sorry
+def x₃ : ℝ := sorry
+def y₃ : ℝ := sorry
 
-def bound : ℝ := sorry
+-- Part B
+statement sq_le_sq_of_le : sorry
 
-def root : ℝ := sorry
-
-def TakesBothSigns (f : ℝ → ℝ) : Prop := sorry
+statement div_mul_cancel_ok : sorry
 
 end L9

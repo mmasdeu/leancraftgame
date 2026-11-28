@@ -1,9 +1,6 @@
+def Inj (f : ℕ → ℕ) : Prop := ∀ a b, f a = f b → a = b
+def Surj (f : ℕ → ℕ) : Prop := ∀ b, ∃ a, f a = b
+def pred' : ℕ → ℕ := fun n => n - 1
 def q1 : Fin 3 := 0
-def q2 : Fin 3 := 1
+def q2 : Bool := false
 def q3 : Fin 3 := 2
-def q4 : Bool := true
-def q5 : Bool := true
-def q6 : Bool := true
-def q7 : Bool := false
-def sbFun12 : ℕ := 24
-def sbFun8 : ℕ := 4

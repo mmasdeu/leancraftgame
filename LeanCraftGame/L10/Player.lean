@@ -1,51 +1,54 @@
 /-
-# ¬ and the order of quantifiers
+# ∀ and →
 
-*When the Prover refutes `FnHasUb f`, it hands back `¬ FnHasUb f` with the negation
-pushed inwards. Noor wants everyone to read those by hand, and to stop confusing "bounded"
-with "every term is below something".*
+*A new project: bounds, monotone functions and, at the end, convergent sequences. Noor
+starts with bounds of a function. Your definitions here come back later.*
 
-`¬ P` (type `\not`) means "not `P`". To read a negated statement, **push the negation
-inwards**, flipping each quantifier it passes:
+```lean
+def FnPos (f : ℝ → ℝ) : Prop :=
+  ∀ x, 0 < f x
+```
 
-* `¬ ∀ x, P x` is `∃ x, ¬ P x` (a counterexample exists);
-* `¬ ∃ x, P x` is `∀ x, ¬ P x`;
-* `¬ (a ≤ b)` is `b < a`.
+`FnPos f` says "for every `x`, `f x` is positive". A `def` whose type is `Prop` defines a
+statement, which can be true or false.
 
-For example, `¬ ∀ x, 0 ≤ f x` becomes `∃ x, ¬ (0 ≤ f x)`, then `∃ x, f x < 0`: some
-value is negative. Mathlib's `push_neg` does this, and the Prover prints its results that
-way.
+The `→` in `ℝ → ℝ` builds a function type. Between two statements it means **implies**:
+`P → Q` is "if `P` then `Q`".
 
-## The order of quantifiers
+## ∀ with a hypothesis
 
-In `∀ a, ∃ x, …`, `x` may depend on `a`. In `∃ x, ∀ a, …`, one `x` must work for every
-`a`. Over the reals:
+"For every `x ≥ 0`, …" puts a hypothesis inside the quantifier. Lean writes it
+`∀ x, 0 ≤ x → …`, or `∀ x ≥ 0, …` for short:
 
-* `∀ x, ∃ y, x < y` is true: for each `x`, take `y = x + 1`;
-* `∃ y, ∀ x, x < y` is false: no real is above all reals, itself included.
+```lean
+def PosOnPos (f : ℝ → ℝ) : Prop := ∀ x, 0 < x → 0 < f x
+```
+
+Forget the hypothesis and the meaning changes: `∀ x, 0 < f x` is `FnPos f`, a much
+stronger claim.
+
+## Implicit variables in a definition
+
+Curly brackets make a variable implicit: `∀ {x : ℝ}, 0 < x → 0 < f x`. If `h` is a proof
+of that and `hx : 0 < 2`, then `h hx : 0 < f 2`: Lean reads `x` off `hx`. With `∀ x`,
+you'd write `h 2 hx`. Mathlib's own definitions often use the brackets `⦃x⦄` instead,
+which also make `x` implicit.
 
 ## Your task
 
-`FnUb` (level 8) and `FnHasUb` (level 9) are in the template. Write these definitions with
-the negation pushed all the way in: no `¬` in front of a quantifier, and no `¬ (_ ≤ _)`.
+Write the three definitions.
 
-* `NotFnUb f a`: `a` is *not* an upper bound of `f`.
-* `NoUpperBound f`: `f` has *no* upper bound.
-* `NotMonotone f`: `f` is *not* monotone, in the sense of `MonotoneFn` from level 8:
-  `∀ {a b : ℝ}, a ≤ b → f a ≤ f b`.
-* `BoundedSeq u`: the sequence `u : ℕ → ℕ` is bounded (above).
+* `FnUb f a`: `a` is an upper bound of `f`.
+* `FnLb f a`: `a` is a lower bound of `f`.
+* `MonotoneFn f`: `f` is non-decreasing (Mathlib's `Monotone`), with the two points
+  implicit: `∀ {a b : ℝ}, …`.
 -/
 namespace L10
 
-def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, f x ≤ a
-def FnHasUb (f : ℝ → ℝ) : Prop := ∃ a, FnUb f a
+def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop := sorry
 
-def NotFnUb (f : ℝ → ℝ) (a : ℝ) : Prop := sorry
+def FnLb (f : ℝ → ℝ) (a : ℝ) : Prop := sorry
 
-def NoUpperBound (f : ℝ → ℝ) : Prop := sorry
-
-def NotMonotone (f : ℝ → ℝ) : Prop := sorry
-
-def BoundedSeq (u : ℕ → ℕ) : Prop := sorry
+def MonotoneFn (f : ℝ → ℝ) : Prop := sorry
 
 end L10

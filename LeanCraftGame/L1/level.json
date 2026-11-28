@@ -1,5 +1,6 @@
 {
-  "world": "Getting Started",
+  "slug": "reading-a-file",
+  "world": "First Contact",
   "title": "Reading a Lean file",
   "skill": "reading",
   "exercise": "Read",

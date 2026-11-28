@@ -1,34 +1,27 @@
 {
-  "world": "Hierarchies",
-  "title": "Reading the hierarchy",
-  "skill": "reading",
-  "exercise": "Read",
-  "public": "all",
-  "hintsAfter": 1,
-  "questions": [
-    {"answer": "q1", "text": "From an instance `Field ℝ`, Lean finds three of these instances automatically. Which one does **not** follow?",
-     "choices": ["`CommRing ℝ`", "`DivisionRing ℝ`", "`AddCommGroup ℝ`", "`LinearOrder ℝ`"]},
-    {"answer": "q2", "text": "What does `#check (-3 : ℕ)` do?",
-     "choices": ["prints `-3 : ℕ`", "prints `0 : ℕ`, since subtraction in ℕ stops at 0", "fails: `failed to synthesize Neg ℕ`", "prints `3 : ℕ`"]},
-    {"answer": "q3", "text": "`mul_comm` is stated as `theorem mul_comm {G : Type*} [CommMagma G] (a b : G) : a * b = b * a`. True or false: it applies to `A B : Matrix (Fin 2) (Fin 2) ℚ`, giving `A * B = B * A`."},
-    {"answer": "q4", "text": "`#check @add_comm` prints `@add_comm : ∀ {G : Type u_1} [inst : AddCommMagma G] (a b : G), a + b = b + a`. How many arguments do you write when you use it?",
-     "choices": ["1", "2", "3"]},
-    {"answer": "q5", "text": "`class CommRing (R : Type*) extends Ring R, CommMonoid R`. True or false: a lemma stated for every `[Ring R]` applies to ℤ, which Mathlib declares a `CommRing`."},
-    {"answer": "q6", "text": "After `variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℝ E]`, what is `E`?",
-     "choices": ["a real vector space with an inner product, and the norm it defines", "a field containing ℝ", "a subset of ℝ", "a group of real matrices under multiplication"]},
-    {"answer": "q7", "text": "True or false: Lean finds an instance `Field ℤ`."}
+  "slug": "groups",
+  "world": "Algebra",
+  "title": "Groups in Mathlib",
+  "skill": "writing statements",
+  "exercise": "Write",
+  "predict": [
+    {"test": "3 • (4 : ZMod 12) = 0", "statement": "In the additive group `ZMod 12`, `3 • 4 = 0`."},
+    {"test": "Perm (Fin 3) is not commutative: σ * τ ≠ τ * σ", "statement": "A permutation of order 3 and one of order 2 in `Perm (Fin 3)` never commute."}
   ],
+  "public": ["3 • (4 : ZMod 12) = 0"],
   "checks": [
-    {"lean": "#check (L33.q1 : Fin 4)\n#check (L33.q2 : Fin 4)\n#check (L33.q3 : Bool)\n#check (L33.q4 : Fin 3)\n#check (L33.q5 : Bool)\n#check (L33.q6 : Fin 4)\n#check (L33.q7 : Bool)",
-     "message": "Keep the seven answer lines as they are, and only change the value after `:=`."}
+    {"lean": "#check (L33.lagrange : Prop)\n#check (L33.cauchy : Prop)\n#check (L33.ord4 : ℕ)\n#check (L33.σ : Equiv.Perm (Fin 3))\n#check (L33.τ : Equiv.Perm (Fin 3))",
+     "message": "Keep the names and types: `lagrange` and `cauchy` are statements, `ord4 : ℕ`, `σ τ : Equiv.Perm (Fin 3)`."}
   ],
   "hints": [
-    {"match": "Question 1", "hint": "Order is a separate branch of the hierarchy. ℂ is a field with no linear order that fits its operations."},
-    {"match": "Question 2", "hint": "Writing `-3` needs a `Neg ℕ` instance. ℕ has none, so the search fails."},
-    {"match": "Question 3", "steps": ["Is multiplication of 2 × 2 matrices commutative?"], "hint": "Matrix multiplication isn't commutative, so matrices have no `CommMagma` instance."},
-    {"match": "Question 4", "hint": "You write only the round-bracket arguments `(a b : G)`. Lean finds `{G}` and `[inst]`."},
-    {"match": "Question 5", "hint": "`extends` gives the instance `CommRing.toRing`. Every commutative ring is a ring."},
-    {"match": "Question 6", "hint": "`InnerProductSpace ℝ E` gives vectors over ℝ with an inner product. `NormedAddCommGroup E` gives addition and a norm."},
-    {"match": "Question 7", "hint": "In ℤ, 2 has no inverse. ℤ is a commutative ring, not a field."}
+    {"match": "lagrange", "hint": "`statement lagrange {G : Type*} [Group G] (H : Subgroup G) : Nat.card H ∣ Nat.card G` (the bar is `\\mid`)."},
+    {"match": "cauchy", "steps": ["The binders, in order: `{G : Type*}`, `[Group G]`, `[Fintype G]`, `(p : ℕ)`, then the hypotheses `(hp : p.Prime)` and `(hdvd : p ∣ Fintype.card G)`.", "The conclusion says some element exists: `∃ x : G, orderOf x = p`."],
+     "hint": "`statement cauchy {G : Type*} [Group G] [Fintype G] (p : ℕ) (hp : p.Prime) (hdvd : p ∣ Fintype.card G) : ∃ x : G, orderOf x = p`."},
+    {"match": "ord4", "steps": ["List 4, 8, 12, … modulo 12. When do you first reach 0?"],
+     "hint": "`4 + 4 + 4 = 12 = 0`, so `ord4 := 3`."},
+    {"match": "σ ^ 3", "steps": ["An order-3 permutation moves all three points in a cycle 0 → 1 → 2 → 0."],
+     "hint": "A product of two different swaps: `Equiv.swap 0 1 * Equiv.swap 1 2`."},
+    {"match": "τ ^ 2", "hint": "A single swap has order 2: `Equiv.swap 0 1`."},
+    {"match": "not commutative", "hint": "This always holds when σ has order 3 and τ order 2. Check σ and τ first."}
   ]
 }

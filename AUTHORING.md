@@ -25,6 +25,18 @@ Use them for what a working Mathlib user needs but the task does not: how Mathli
 it (names, where things live, how to find a lemma, pitfalls) and the Lean behind it (coercions,
 typeclass resolution, definitional equality, universes). A task must never depend on a box.
 
+## Referring to other levels
+
+Every `level.json` has a `slug`. Lessons, hints and questions name another level as
+`{{level:convergence}}`, which the player sees as its number, so that levels can be added or
+reordered without editing every lesson. `check_levels.py --static` reports unknown slugs.
+
+## Predictions and questions
+
+A prediction or question must target a Lean convention (a junk value, a cast, how something
+parses, the order of quantifiers, an instance argument), must not be answered word for word
+by the lesson, and must not be plain arithmetic.
+
 ## Test commands
 
 | Command | Passes when |

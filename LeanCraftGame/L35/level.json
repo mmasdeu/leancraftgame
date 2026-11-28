@@ -1,27 +1,25 @@
 {
-  "world": "Hierarchies",
-  "title": "Sub-objects",
-  "skill": "axioms",
-  "exercise": "Write",
+  "slug": "linear-maps",
+  "world": "Linear Algebra",
+  "title": "Vector spaces and linear maps",
+  "skill": "constructing examples",
+  "exercise": "Construct",
   "predict": [
-    {"test": "the numbers ≥ 1 are not an additive submonoid", "statement": "The numbers `≥ 1` form an additive submonoid of ℕ."},
-    {"test": "{0, 1} is not an additive submonoid", "statement": "`{0, 1}` is an additive submonoid of ℕ."}
+    {"test": "shift sends the zero vector to zero", "statement": "`shift v = v + ![1, 0]` sends the zero vector to the zero vector."}
   ],
-  "public": ["the even numbers are an additive submonoid of ℕ"],
+  "public": ["rot sends ![1, 0] to ![0, 1]", "proj sends ![3, 5] to ![3, 0]", "your u and w: shift (u + w) ≠ shift u + shift w"],
   "checks": [
-    {"lean": "#check (fun (s : Set ℕ) => L35.AddSubmonoid₁.mk (M := ℕ) s)\n#check (L35.evens : Set ℕ)\n#check (L35.multiplesOf : ℕ → Set ℕ)",
-     "message": "Keep `carrier : Set M` as the first field of `AddSubmonoid₁` (the axioms come after it), and the names and types of `evens` and `multiplesOf`."}
+    {"lean": "#check (L35.rot : (Fin 2 → ℚ) → (Fin 2 → ℚ))\n#check (L35.proj : (Fin 2 → ℚ) → (Fin 2 → ℚ))\n#check (L35.u : Fin 2 → ℚ)\n#check (L35.w : Fin 2 → ℚ)",
+     "message": "Keep `rot`, `proj : (Fin 2 → ℚ) → (Fin 2 → ℚ)` and `u`, `w : Fin 2 → ℚ`."}
   ],
   "hints": [
-    {"match": "evens contains", "hint": "`{n | n % 2 = 0}`."},
-    {"match": "multiplesOf 3 contains", "hint": "`{n | k ∣ n}` (the bar is `\\mid`), or `{n | n % k = 0}`."},
-    {"match": "≥ 1", "steps": ["Which element is in every additive submonoid?"],
-     "hint": "Add `zero_mem : (0 : M) ∈ carrier`."},
-    {"match": "{0, 1}", "steps": ["What is 1 + 1? Do your axioms mention addition?"],
-     "hint": "Add `add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier`."},
-    {"match": "odd numbers", "hint": "1 + 1 = 2 is even, and 0 isn't odd. One of your axioms should catch this."},
-    {"match": "other than 2", "hint": "1 + 1 = 2, so closure under `+` rules this set out."},
-    {"match": "an additive submonoid of", "steps": ["The report names the axiom a real submonoid fails. Is it true of every additive submonoid?"],
-     "hint": "Ask only for `0 ∈ carrier` and closure under `+`, nothing about `*` or `≤`."}
+    {"match": "rot sends", "steps": ["Where does the quarter turn send the point `(x, y)`? Try `(1, 0)` and `(0, 1)`."],
+     "hint": "`fun v => ![-v 1, v 0]`: `(x, y) ↦ (-y, x)`."},
+    {"match": "proj sends", "steps": ["Which coordinate stays, and what does the other become?"],
+     "hint": "`fun v => ![v 0, 0]`."},
+    {"match": "additive", "hint": "A linear map uses only sums and constant multiples of the coordinates. No `+ 1`, no products of coordinates."},
+    {"match": "scalars", "hint": "A linear map uses only sums and constant multiples of the coordinates. No `+ 1`, no products of coordinates."},
+    {"match": "your u and w", "steps": ["Compute `shift (u + w)` and `shift u + shift w` for `u = w = 0`. How many times is `![1, 0]` added on each side?"],
+     "hint": "Any two vectors work, for example `u = ![0, 0]` and `w = ![0, 0]`. One side adds `![1, 0]` once, the other twice."}
   ]
 }

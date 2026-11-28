@@ -1,55 +1,61 @@
 /-
-# Be the referee
+# Sequences and convergence
 
-*Everyone at the Annex writes convergence from memory, and not always right. Would the
-referee's tests catch them? This time you write the tests, and the referee tries to slip
-wrong definitions past them.*
+*The project's main definition: convergence of a sequence. It uses every quantifier so
+far, and Noor has seen it written wrong in every way. Sam keeps two test sequences pinned
+above the desk.*
 
-The right definition, for limit `0`:
+A sequence of reals is a function `s : ℕ → ℝ`, and `s n` is its `n`-th term. Here is a
+cousin of convergence, "`s` tends to `+∞`":
 
 ```lean
-def ConvergesTo0 (s : ℕ → ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n| < ε
+def TendsToInfinity (s : ℕ → ℝ) : Prop :=
+  ∀ M : ℝ, ∃ N : ℕ, ∀ n ≥ N, M < s n
 ```
 
-Your test suite is four sequences: two that converge to 0 (`good₁`, `good₂`) and two that
-don't (`bad₁`, `bad₂`).
+For every height `M` there is an index `N` from which every term is above `M`. As in
+level 8, `∀ n ≥ N, …` is short for `∀ n, n ≥ N → …`, and `∀ ε > 0, …` works the same
+way. Indices are natural numbers: Lean infers `N : ℕ` even if you leave the type out.
 
-The referee first checks your labels. Then it brings out the **mutants**: hidden wrong
-definitions of convergence, the kind people write from memory. A mutant is caught when it
-rejects a `good` sequence or accepts a `bad` one. A mutant that gets all four right
-survives. This is *mutation testing*, and it's how this game's tests were chosen.
+Sam's two test sequences:
 
-## Choosing good tests
+```lean
+def late : ℕ → ℝ := fun n ↦ if n < 5 then 7 else 0      -- 7, 7, 7, 7, 7, 0, 0, …
+def blink : ℕ → ℝ := fun n ↦ if n % 2 = 0 then 0 else 1  -- 0, 1, 0, 1, …
+```
 
-Obvious examples like `fun _ ↦ 0` and `fun n ↦ n` catch little. Aim at the boundary:
+`if c then x else y` is `x` when `c` holds and `y` otherwise. `n % 2` is the remainder of
+`n` divided by `2`.
 
-* a sequence that converges even though it lacks a property people confuse with
-  convergence (it isn't monotone, or isn't always positive);
-* a sequence that doesn't converge even though it has such a property (it keeps coming
-  back near `0`, or stays small, or stays below every `ε` but on the wrong side).
+## Theorems about your definition
 
-The referee computes, so use sequences that are eventually constant or alternate, like
-Sam's `late` and `blink` from level 12 (`fun n ↦ if n < 5 then 7 else 0` and
-`fun n ↦ if n % 2 = 0 then 0 else 1`), with small numbers (`1`, `2`, `1/2`, `-1`). Write
-them out in full: the template doesn't know `late` and `blink`.
+You'll also state three theorems. A statement can use your own definitions:
+
+```lean
+statement tendsToInfinity_add (s : ℕ → ℝ) (c : ℝ) (h : TendsToInfinity s) :
+    TendsToInfinity (fun n ↦ s n + c)
+```
+
+`fun _ ↦ a` is the constant sequence `a, a, a, …` (the `_` is an unused index).
 
 ## Your task
 
-Fill in the four sequences so that every mutant is caught. The report says how many
-mutants there are. A ❌ on a mutant means the referee proved that your four sequences
-can't tell it apart from the right definition, and it shows that mutant. The run stops
-at the first one that survives.
+1. Define `ConvergesTo s a`: `s` converges to `a`, with the usual `ε`-`N` definition.
+2. `convergesTo_const`: for every real `a`, the constant sequence `a` converges to `a`.
+3. `convergesTo_add`: for all sequences `s t` and reals `a b` (in this order), if `s`
+   converges to `a` and `t` converges to `b`, then `fun n ↦ s n + t n` converges to
+   `a + b`.
+4. `convergesTo_unique`: for every sequence `s` and reals `a b`, if `s` converges to `a`
+   and to `b`, then `a = b`.
 -/
 namespace L13
 
-def ConvergesTo0 (s : ℕ → ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n| < ε
+def ConvergesTo (s : ℕ → ℝ) (a : ℝ) : Prop := sorry
 
--- two sequences that converge to 0
-def good₁ : ℕ → ℝ := sorry
-def good₂ : ℕ → ℝ := sorry
+statement convergesTo_const : sorry
 
--- two sequences that don't
-def bad₁ : ℕ → ℝ := sorry
-def bad₂ : ℕ → ℝ := sorry
+statement convergesTo_add : sorry
+
+statement convergesTo_unique : sorry
 
 end L13

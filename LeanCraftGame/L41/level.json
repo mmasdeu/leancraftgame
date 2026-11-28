@@ -1,30 +1,84 @@
 {
-  "world": "Linear Algebra",
-  "title": "Endomorphisms",
-  "skill": "reading and writing statements",
-  "exercise": "Read",
-  "public": "all",
+  "slug": "integrals",
+  "world": "Analysis and Topology",
+  "title": "Integrals and measures",
+  "skill": "writing statements",
+  "exercise": "Write",
+  "predict": [
+    {
+      "test": "In Mathlib, ∫ x in (1:ℝ)..0, x = 1 / 2",
+      "statement": "In Mathlib, `∫ x in (1:ℝ)..0, x = 1 / 2` (the bounds are in the \"wrong\" order)."
+    }
+  ],
+  "public": [
+    "I2 is the integral of x² from 0 to 1"
+  ],
   "questions": [
-    {"answer": "q1", "text": "What is `Module.End K V`?",
-     "choices": ["the matrices with entries in `K`", "the elements of `V` fixed by every linear map", "the linear maps from `V` to itself", "the field automorphisms of `K`"]},
-    {"answer": "q2", "text": "True or false: by Mathlib's definition, `0` is an eigenvector of every endomorphism, for every `μ`."},
-    {"answer": "q3", "text": "What is the type of `minpoly K f`?",
-     "choices": ["`K`", "`K[X]`, the polynomials over `K`", "`Module.End K V`", "`ℕ`, its degree"]},
-    {"answer": "q4", "text": "True or false: every endomorphism of a nontrivial finite-dimensional *real* vector space has a real eigenvalue."}
+    {
+      "answer": "q1",
+      "text": "True or false: Lean refuses to write `∫ x in (0:ℝ)..1, 1 / x`, because this integral diverges."
+    },
+    {
+      "answer": "q2",
+      "text": "What does `∀ᵐ x ∂μ, f x = 0` say?",
+      "choices": [
+        "`f x = 0` for every `x`",
+        "the set of `x` with `f x ≠ 0` has measure `0`",
+        "`f x = 0` for some `x`",
+        "`∫ x, f x ∂μ = 0`"
+      ]
+    },
+    {
+      "answer": "q3",
+      "text": "In the dominated convergence theorem shown in the lesson, which hypothesis says that the functions `F n` are dominated by `bound`?",
+      "choices": [
+        "`F_measurable`",
+        "`bound_integrable`",
+        "`h_bound`",
+        "`h_lim`"
+      ]
+    }
   ],
   "checks": [
-    {"lean": "#check (L41.exists_eig : Prop)\n#check (L41.ev₁ : ℚ)\n#check (L41.vec₁ : Fin 2 → ℚ)\n#check (L41.ev₂ : ℚ)\n#check (L41.vec₂ : Fin 2 → ℚ)",
-     "message": "Keep `exists_eig` a `statement`, `ev₁ ev₂ : ℚ` and `vec₁ vec₂ : Fin 2 → ℚ`."}
+    {
+      "lean": "#check (L41.I2 : ℝ)\n#check (L41.vol : ENNReal)\n#check (L41.ftc : Prop)\n#check (L41.q1 : Bool)\n#check (L41.q2 : Fin 4)\n#check (L41.q3 : Fin 4)",
+      "message": "Keep the names and kinds: `I2 : ℝ`, `vol : ENNReal`, the `statement ftc`, `q1 : Bool`, `q2 q3 : Fin 4`."
+    }
   ],
   "hints": [
-    {"match": "Question 1", "hint": "`Module.End R M` is an abbreviation for `M →ₗ[R] M`."},
-    {"match": "Question 2", "hint": "`HasEigenvector f μ x` is `x ∈ eigenspace f μ ∧ x ≠ 0`."},
-    {"match": "Question 3", "hint": "The minimal polynomial is a polynomial: `K[X]`."},
-    {"match": "Question 4", "hint": "The quarter turn `(x, y) ↦ (-y, x)` of `ℝ²` sends no nonzero vector to a multiple of itself."},
-    {"match": "exists_eig", "steps": ["In order: the type `V`, its additive group, the `ℂ`-module structure, finite dimension, nontriviality, then the endomorphism `f`.", "The conclusion is `∃ c : ℂ, f.HasEigenvalue c`."],
-     "hint": "`statement exists_eig {V : Type} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V] [Nontrivial V] (f : Module.End ℂ V) : ∃ c : ℂ, f.HasEigenvalue c`."},
-    {"match": "ev₁ •", "steps": ["`A` is upper triangular, so its eigenvalues are on the diagonal."], "hint": "`ev₁ = 2` with `vec₁ = ![1, 0]`."},
-    {"match": "ev₂ •", "steps": ["For `ev₂ = 3` solve `2x + y = 3x`, that is `y = x`."], "hint": "`ev₂ = 3` with `vec₂ = ![1, 1]`."},
-    {"match": "zero vector", "hint": "An eigenvector can't be `0`. `A *ᵥ 0 = c • 0` holds for every `c`, so it tells you nothing."}
+    {
+      "match": "(1:ℝ)..0",
+      "hint": "The interval integral is oriented. From 1 down to 0 it's `-1/2`."
+    },
+    {
+      "match": "I2",
+      "hint": "`∫ x in (0:ℝ)..1, x ^ 2`. Write the square as `x ^ 2`, since the referee integrates powers `x ^ n`."
+    },
+    {
+      "match": "vol",
+      "steps": [
+        "The closed interval is `Set.Icc 0 2`. Did you say its points are reals?"
+      ],
+      "hint": "`MeasureTheory.volume (Set.Icc (0:ℝ) 2)`."
+    },
+    {
+      "match": "ftc",
+      "steps": [
+        "Which is subtracted from which: `f b - f a` or `f a - f b`? Integrability is about `f'`, not `f`."
+      ],
+      "hint": "`statement ftc (f f' : ℝ → ℝ) (a b : ℝ) (hderiv : ∀ x ∈ Set.uIcc a b, HasDerivAt f (f' x) x) (hint : IntervalIntegrable f' MeasureTheory.volume a b) : ∫ y in a..b, f' y = f b - f a`."
+    },
+    {
+      "match": "Question 1",
+      "hint": "The integral is a total function, like `deriv` and `/`. What's its value on a function that isn't integrable?"
+    },
+    {
+      "match": "Question 2",
+      "hint": "\"Almost every\" means the exceptions form a set of measure zero."
+    },
+    {
+      "match": "Question 3",
+      "hint": "Domination is an inequality `‖F n a‖ ≤ bound a`."
+    }
   ]
 }

@@ -1,26 +1,28 @@
 {
-  "world": "Hierarchies",
-  "title": "Classes and instances",
-  "skill": "type classes",
+  "slug": "subobjects",
+  "world": "Structures and Classes",
+  "title": "Sub-objects",
+  "skill": "axioms",
   "exercise": "Write",
-  "public": "all",
-  "hintsAfter": 1,
   "predict": [
-    {"test": "f ⋄ g is \"first g, then f\": (· * 2) ⋄ (· + 1) sends 5 to 12", "statement": "In `endo`, `(· * 2) ⋄ (· + 1)` sends 5 to 12."},
-    {"test": "In (ℤ, +): mpow 5 3 = 15 and mpow (-2) 4 = -8", "statement": "In the monoid (ℤ, +, 0), the \"power\" `mpow 5 3` is 15."}
+    {"test": "the numbers ≥ 1 are not an additive submonoid", "statement": "The numbers `≥ 1` form an additive submonoid of ℕ."},
+    {"test": "{0, 1} is not an additive submonoid", "statement": "`{0, 1}` is an additive submonoid of ℕ."}
   ],
+  "public": ["the even numbers are an additive submonoid of ℕ"],
   "checks": [
-    {"lean": "#check (L32.boolXor : L32.Monoid₁ Bool)\n#check (L32.intAdd : L32.Monoid₁ ℤ)\n#check (L32.endo : L32.Monoid₁ (ℕ → ℕ))",
-     "message": "Keep the three instances `boolXor`, `intAdd` and `endo`, with their types."}
+    {"lean": "#check (fun (s : Set ℕ) => L32.AddSubmonoid₁.mk (M := ℕ) s)\n#check (L32.evens : Set ℕ)\n#check (L32.multiplesOf : ℕ → Set ℕ)",
+     "message": "Keep `carrier : Set M` as the first field of `AddSubmonoid₁` (the axioms come after it), and the names and types of `evens` and `multiplesOf`."}
   ],
   "hints": [
-    {"match": "Bool", "steps": ["Which Boolean is the unit of xor? Which `u` has `xor u a = a` for every `a`?"],
-     "hint": "`dia a b := xor a b` and `one := false`."},
-    {"match": "(ℤ, +)", "steps": ["Here the operation is addition. What's its unit?"],
-     "hint": "`dia a b := a + b` and `one := 0`."},
-    {"match": "first g", "steps": ["Which function runs first in `f (g n)`?"],
-     "hint": "`dia f g := fun n => f (g n)` (or `f ∘ g`)."},
-    {"match": "mpow (fun n", "hint": "`one := fun n => n`, and `dia f g := fun n => f (g n)`."},
-    {"match": "unit of (ℕ → ℕ", "hint": "The unit of composition is the identity function `fun n => n` (or `id`)."}
+    {"match": "evens contains", "hint": "`{n | n % 2 = 0}`."},
+    {"match": "multiplesOf 3 contains", "hint": "`{n | k ∣ n}` (the bar is `\\mid`), or `{n | n % k = 0}`."},
+    {"match": "≥ 1", "steps": ["Which element is in every additive submonoid?"],
+     "hint": "Add `zero_mem : (0 : M) ∈ carrier`."},
+    {"match": "{0, 1}", "steps": ["What is 1 + 1? Do your axioms mention addition?"],
+     "hint": "Add `add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier`."},
+    {"match": "odd numbers", "hint": "1 + 1 = 2 is even, and 0 isn't odd. One of your axioms should catch this."},
+    {"match": "other than 2", "hint": "1 + 1 = 2, so closure under `+` rules this set out."},
+    {"match": "an additive submonoid of", "steps": ["The report names the axiom a real submonoid fails. Is it true of every additive submonoid?"],
+     "hint": "Ask only for `0 ∈ carrier` and closure under `+`, nothing about `*` or `≤`."}
   ]
 }

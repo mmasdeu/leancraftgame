@@ -1,7 +1,10 @@
-def evens : Set ℕ := {n | Even n}
-def primes : Set ℕ := {n | Nat.Prime n}
-def oddPrimes : Set ℕ := primes \ evens
-def multiples (k : ℕ) : Set ℕ := {n | k ∣ n}
-def fourOrSix : Set ℕ := ⋃ k ∈ ({4, 6} : Set ℕ), multiples k
-def q1 : Fin 3 := 1
-def q2 : Bool := true
+def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
+def ConvergesB (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ n, |u n - a| < ε
+def SomePositive (u : ℕ → ℝ) : Prop := ∃ n, n > 0 → u n > 0
+def BoundedAbove (f : ℝ → ℝ) : Prop := ∀ x, ∃ M, f x ≤ M
+def seqA : ℕ → ℝ := fun _ => 0
+def limA : ℝ := 0
+def seqB : ℕ → ℝ := fun n => if n % 2 = 0 then 0 else 1
+def limB : ℝ := 0
+def seqC : ℕ → ℝ := fun _ => -1
+def funD : ℝ → ℝ := fun x => x

@@ -1,32 +1,36 @@
 {
-  "world": "Linear Algebra",
-  "title": "Subspaces and quotients",
-  "skill": "writing and refuting",
+  "slug": "derivatives",
+  "world": "Analysis and Topology",
+  "title": "Derivatives",
+  "skill": "writing statements",
   "exercise": "Write",
   "predict": [
-    {"test": "![2, 1] is on line", "statement": "`![2, 1]` lies on the line `y = 2x`."}
+    {"test": "In Mathlib, deriv (fun x => |x|) 0 = 0", "statement": "In Mathlib, `deriv (fun x : ℝ => |x|) 0 = 0`, although `|x|` is not differentiable at 0."}
   ],
-  "public": ["![1, 2] is on line", "your a and b lie on the axes", "your p lies on the parabola"],
+  "public": ["d3 is the derivative of x ↦ x³ at 2"],
   "questions": [
-    {"answer": "q1", "text": "For subspaces `U` and `W`, what is `U ⊔ W`?",
-     "choices": ["the union `U ∪ W`", "the intersection `U ∩ W`", "the smallest subspace containing `U` and `W`, that is `U + W`"]},
-    {"answer": "q2", "text": "What is `⊥ : Submodule K V`?",
-     "choices": ["the zero subspace `{0}`", "the empty set", "the whole space `V`"]},
-    {"answer": "q3", "text": "True or false: the line `{v | v 1 = 2 * v 0 + 1}` is a subspace of `ℚ²`."}
+    {"answer": "q1", "text": "Mathlib's Rolle theorem has no hypothesis that `f` is differentiable. Why is it still true?",
+     "choices": ["every function continuous on `[a, b]` is differentiable on `(a, b)`",
+                 "where `f` is not differentiable, `deriv f c` is `0`, so an extremum in `(a, b)` works either way",
+                 "`f a = f b` forces `f` to be differentiable somewhere in `(a, b)`",
+                 "in Mathlib, `ContinuousOn` includes differentiability"]},
+    {"answer": "q2", "text": "True or false: `HasDerivAt f 3 2` says that the derivative of `f` at `3` is `2`."}
   ],
   "checks": [
-    {"lean": "#check (L40.line : Set (Fin 2 → ℚ))\n#check (L40.a : Fin 2 → ℚ)\n#check (L40.b : Fin 2 → ℚ)\n#check (L40.p : Fin 2 → ℚ)\n#check (L40.q1 : Fin 3)\n#check (L40.q2 : Fin 3)\n#check (L40.q3 : Bool)",
-     "message": "Keep `line : Set (Fin 2 → ℚ)`, the vectors `a b p : Fin 2 → ℚ`, and the three answer lines."}
+    {"lean": "#check (L40.d3 : ℝ)\n#check (L40.sq_hasDeriv : Prop)\n#check (L40.rolle : Prop)\n#check (L40.mvt : Prop)\n#check (L40.q1 : Fin 4)\n#check (L40.q2 : Bool)",
+     "message": "Keep the names and kinds: `d3 : ℝ`, the three `statement`s, `q1 : Fin 4` and `q2 : Bool`."}
   ],
   "hints": [
-    {"match": "on line", "steps": ["Which coordinate is `x` and which is `y`? `y = 2x` relates `v 1` and `v 0`."],
-     "hint": "`{v | v 1 = 2 * v 0}`."},
-    {"match": "line contains", "hint": "A line through the origin contains `![0, 0]`. Is there a `+ 1` in your equation?"},
-    {"match": "closed", "hint": "Use a linear equation: `{v | v 1 = 2 * v 0}`. Squares, products and constants break closure."},
-    {"match": "axes", "steps": ["Take one vector on each axis."], "hint": "`a = ![1, 0]` and `b = ![0, 1]`. Their sum `![1, 1]` is on neither axis."},
-    {"match": "parabola", "steps": ["Pick a point of the parabola other than `0`. Is its double on it?"], "hint": "`p = ![1, 1]`. Then `![2, 2]` isn't on the parabola, since `2 ≠ 2 ^ 2`."},
-    {"match": "Question 1", "hint": "The union of two lines isn't a subspace. `⊔` is the smallest subspace containing both."},
-    {"match": "Question 2", "hint": "Every subspace contains `0`, so the smallest one is `{0}`."},
-    {"match": "Question 3", "hint": "Does that line contain `![0, 0]`?"}
+    {"match": "|x|", "hint": "`deriv` is a total function. Where there's no derivative, its value is `0`."},
+    {"match": "d3", "steps": ["`deriv` takes a function and a point, `deriv (fun x : ℝ => …) …`."],
+     "hint": "`deriv (fun x : ℝ => x ^ 3) 2`, which is `3 · 2² = 12`."},
+    {"match": "sq_hasDeriv", "steps": ["In `HasDerivAt f f' x`, which argument is the derivative and which is the point?"],
+     "hint": "`statement sq_hasDeriv : HasDerivAt (fun x : ℝ => x ^ 2) 6 3`. The derivative `6` comes before the point `3`."},
+    {"match": "rolle", "steps": ["Three hypotheses: `a < b`, `ContinuousOn f (Set.Icc a b)`, `f a = f b`. Did you add one Mathlib doesn't need?"],
+     "hint": "`statement rolle (f : ℝ → ℝ) (a b : ℝ) (hab : a < b) (hfc : ContinuousOn f (Set.Icc a b)) (hfab : f a = f b) : ∃ c ∈ Set.Ioo a b, deriv f c = 0`."},
+    {"match": "mvt", "steps": ["For the slope of the chord from `(a, f a)` to `(b, f b)`, which difference goes on top?"],
+     "hint": "`statement mvt (f : ℝ → ℝ) (a b : ℝ) (hab : a < b) (hfc : ContinuousOn f (Set.Icc a b)) (hfd : DifferentiableOn ℝ f (Set.Ioo a b)) : ∃ c ∈ Set.Ioo a b, deriv f c = (f b - f a) / (b - a)`."},
+    {"match": "Question 1", "hint": "Think of the junk value. What is `deriv f c` where `f` has no derivative?"},
+    {"match": "Question 2", "hint": "In `HasDerivAt f f' x`, the derivative `f'` comes before the point `x`. So `HasDerivAt f 3 2` says the derivative at `2` is `3`."}
   ]
 }

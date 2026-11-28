@@ -1,7 +1,8 @@
-def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, f x ≤ a
-def FnLb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, a ≤ f x
-def FnHasUb (f : ℝ → ℝ) : Prop := ∃ a : ℝ, ∀ x, f x ≤ a
-def FnHasLb (f : ℝ → ℝ) : Prop := ∃ b, ∀ y, f y ≥ b
-def bound : ℝ := 100
-def root : ℝ := 4 / 2
-def TakesBothSigns (f : ℝ → ℝ) : Prop := ∃ x y, 0 < f x ∧ f y < 0
+def a₁ : ℕ := 1
+def b₁ : ℕ := 2
+def a₂ : ℝ := -3
+def b₂ : ℝ := 0
+def x₃ : ℝ := 2
+def y₃ : ℝ := 0
+statement sq_le_sq_of_le (a b : ℝ) (hab : a ≤ b) (ha : 0 ≤ a) : a ^ 2 ≤ b ^ 2
+statement div_mul_cancel_ok : ∀ x y : ℝ, y ≠ 0 → x / y * y = x

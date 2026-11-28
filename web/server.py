@@ -103,10 +103,30 @@ def has_namespace(code, ns):
     return re.search(rf"^\s*namespace\s+{re.escape(ns)}\s*$", code, re.M) is not None
 
 
-def load_level(n):
+REF = re.compile(r"\{\{level:([\w-]+)\}\}")
+
+
+def level_numbers():
+    """{slug: number shown to the player}, from the "slug" of every level.json."""
+    out = {}
+    for n in LEVELS:
+        slug = json.loads((ROOT / "LeanCraftGame" / f"L{n}" / "level.json").read_text(encoding="utf-8")).get("slug")
+        if slug:
+            out[slug] = LEVELS.index(n) + 1
+    return out
+
+
+def resolve_refs(text, numbers):
+    """Lessons and hints name other levels as {{level:slug}}; the player sees the number."""
+    return REF.sub(lambda m: str(numbers.get(m.group(1), m.group(0))), text)
+
+
+def load_level(n, numbers=None):
     d = ROOT / "LeanCraftGame" / f"L{n}"
-    meta = json.loads((d / "level.json").read_text(encoding="utf-8"))
+    numbers = numbers if numbers is not None else level_numbers()
+    meta = json.loads(resolve_refs((d / "level.json").read_text(encoding="utf-8"), numbers))
     intro, template = split_intro((d / "Player.lean").read_text(encoding="utf-8"))
+    intro = resolve_refs(intro, numbers)
     ns = f"L{n}"
     # The imports of Player.lean (the shared library LeanCraftGame.Lib.*, the parts of Mathlib a
     # level needs) are the level's: the player never sees them, and every test file gets them.
@@ -192,7 +212,7 @@ def validate_level(lv):
     * hints: {"match", "hint", "steps"?}. The steps come first, one more after each
       failed run, and the `hint` itself last."""
     names = {t["name"]: t["kind"] for t in lv["tests"]}
-    out = []
+    out = [f"unknown level reference {r}" for r in REF.findall(json.dumps(lv, ensure_ascii=False))]
     if "exercise" in lv and lv["exercise"] not in EXERCISES:
         out.append(f"exercise must be one of {', '.join(EXERCISES)}")
     for p in lv.get("predict", []):
@@ -535,9 +555,9 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/api/intro":
             return self.send(200, {"markdown": (ROOT / "LeanCraftGame" / "Intro.md").read_text(encoding="utf-8")})
         if path == "/api/levels":
-            out = []
+            out, numbers = [], level_numbers()
             for n in LEVELS:
-                lv = load_level(n)
+                lv = load_level(n, numbers)
                 out.append({k: lv[k] for k in ("id", "num", "world", "title", "skill")})
             return self.send(200, out)
         m = re.fullmatch(r"/api/levels/(\d+)", path)

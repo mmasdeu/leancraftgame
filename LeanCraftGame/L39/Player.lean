@@ -1,67 +1,65 @@
 /-
-# Vector spaces and linear maps
+# Topological spaces
 
-*A new project: linear algebra in the plane. The `Point` you wrote in level 28 had `add`
-and `smul`. Now Mathlib supplies them, and Noor asks which maps respect them. Sam has
-already proposed one that doesn't.*
+*Some spaces Noor needs have no sensible distance. Mathlib's most general notion of space
+keeps only the open sets. That's hard to test on `ℝ`, so the Annex builds a gallery of
+tiny spaces where the referee can check every open set.*
 
-Linear algebra in Mathlib starts with these hypotheses:
-
-```lean
-variable {K : Type*} [Field K] {V : Type*} [AddCommGroup V] [Module K V]
-```
-
-`K` is a field, `V` has an addition with `0` and `-`, and `K` acts on `V` by scalar
-multiplication `c • v` (type `\smul`). Mathlib says "module" for "vector space". Over a
-field they're the same. The plane `ℚ²` is the type `Fin 2 → ℚ`. A vector `![x, y]` is a
-function from the indices `0`, `1` to `ℚ`, and `v 0`, `v 1` are its coordinates.
-
-## Linear maps are bundled
-
-A linear map `V →ₗ[K] W` (type `\to\_l`) is a **structure**: a function plus proofs that
-it's linear. Roughly:
+A **topology** on a type `X` says which subsets are *open*:
 
 ```lean
-structure LinearMap (V W : Type*) where
-  toFun : V → W
-  map_add' : ∀ x y, toFun (x + y) = toFun x + toFun y
-  map_smul' : ∀ (c : K) x, toFun (c • x) = c • toFun x
+class TopologicalSpace (X : Type u) where
+  IsOpen : Set X → Prop
+  isOpen_univ : IsOpen Set.univ
+  isOpen_inter : ∀ s t, IsOpen s → IsOpen t → IsOpen (s ∩ t)
+  isOpen_sUnion : ∀ S : Set (Set X), (∀ t ∈ S, IsOpen t) → IsOpen (⋃₀ S)
 ```
 
-You apply it like a function, `φ v`.
+The whole space is open, the intersection of *two* open sets is open, and the union of
+*any* family of open sets is open (`∅` is the empty union). A map `f : X → Y` between two
+spaces is **continuous** when the preimage of every open set of `Y` is open in `X` (the
+`f ⁻¹' s` of level 16). Preimage, not image.
 
-Here you give only the `toFun`. The referee proves `map_add'` and `map_smul'`, or finds
-that they fail.
+## Finite spaces
 
-## Not every formula is linear
+This level works on `Fin n = {0, 1, …, n-1}`. A subset is a `Finset (Fin n)`, and a family
+of subsets is a `Family n`, short for `Finset (Finset (Fin n))`. Every union is finite
+here, so the axioms only need `∅`, `Finset.univ`, and unions and intersections of *two*
+open sets.
 
-Sam's `shift`, `v ↦ v + ![1, 0]`, moves every point one step right. It isn't linear. A
-linear map sends `0` to `0`, since `φ 0 = φ (0 + 0) = φ 0 + φ 0`.
+Two spaces worth knowing:
 
-The quarter turn is linear. It's multiplication by `i` on the Gaussian integers of
-level 30, read in coordinates.
+* **Sierpiński space**: two points `0` and `1`, open sets `∅`, `{1}`, `{0, 1}`.
+* the **particular-point topology** at `p`: the open sets are `∅` and every set
+  containing `p`.
+
+Write a family like a set: `({∅, {1}, Finset.univ} : Family 2)`. The library also has
+`Top.discrete n` (every set open) and `Top.Ref.pre f V`, the preimage of `V` as a `Finset`
+(the finite `f ⁻¹' V`). `∀ U ∈ T, P U` means "every `U` in `T` has `P U`".
 
 ## Your task
 
-1. `rot`: the counterclockwise quarter turn. It sends `![1, 0]` to `![0, 1]` and
-   `![0, 1]` to `![-1, 0]`.
-2. `proj`: the projection onto the first axis, `![x, y] ↦ ![x, 0]`.
-3. Show `shift` isn't linear: give two vectors `u` and `w` with
-   `shift (u + w) ≠ shift u + shift w`.
+1. Give `FinTopology` its axioms, one field per axiom, after `opens`: `∅` and
+   `Finset.univ` are open, and for open `U` and `V`, so are `U ∩ V` and `U ∪ V`.
+2. Define Sierpiński space and the particular-point topology.
+3. Define `IsCont T S f` for `f` from `Fin m` with topology `T` to `Fin n` with topology
+   `S`, with preimages (`Top.Ref.pre f V`).
 -/
-import Mathlib.LinearAlgebra.Matrix.ToLin
+import LeanCraftGame.Lib.Topology
 
 namespace L39
 
-def rot : (Fin 2 → ℚ) → (Fin 2 → ℚ) := sorry
+structure FinTopology (n : Nat) where
+  opens : Family n
+  -- your axioms here, for example `empty_mem : ∅ ∈ opens`
 
-def proj : (Fin 2 → ℚ) → (Fin 2 → ℚ) := sorry
+-- the open sets of Sierpiński space
+def mySierpinski : Family 2 := sorry
 
--- a translation, given
-def shift : (Fin 2 → ℚ) → (Fin 2 → ℚ) := fun v => v + ![1, 0]
+-- ∅, and every subset of Fin n that contains p
+def myParticular (n : Nat) (p : Fin n) : Family n := sorry
 
--- two vectors on which `shift` isn't additive
-def u : Fin 2 → ℚ := sorry
-def w : Fin 2 → ℚ := sorry
+-- the preimage under f of every S-open set is T-open
+def IsCont {m n : Nat} (T : Family m) (S : Family n) (f : Fin m → Fin n) : Prop := sorry
 
 end L39

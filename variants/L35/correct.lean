@@ -1,12 +1,5 @@
-
-structure AddSubmonoid₁ (M : Type) [AddMonoid M] where
-  carrier : Set M
-  zero_mem : (0 : M) ∈ carrier
-  add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier
-
--- the even natural numbers
-def evens : Set ℕ := {n | n % 2 = 0}
-
--- the natural numbers divisible by k
-def multiplesOf (k : ℕ) : Set ℕ := {n | k ∣ n}
-
+def rot : (Fin 2 → ℚ) → (Fin 2 → ℚ) := fun v => ![-v 1, v 0]
+def proj : (Fin 2 → ℚ) → (Fin 2 → ℚ) := fun v => ![v 0, 0]
+def shift : (Fin 2 → ℚ) → (Fin 2 → ℚ) := fun v => v + ![1, 0]
+def u : Fin 2 → ℚ := ![0, 0]
+def w : Fin 2 → ℚ := ![0, 0]

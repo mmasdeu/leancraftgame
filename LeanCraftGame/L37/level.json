@@ -1,25 +1,29 @@
 {
-  "world": "Groups and Rings",
-  "title": "Rings, ideals, polynomials",
-  "skill": "writing definitions",
+  "slug": "filters",
+  "world": "Analysis and Topology",
+  "title": "Filters",
+  "skill": "reading and writing statements",
   "exercise": "Write",
-  "predict": [
-    {"test": "6 is in I", "statement": "Sam is right: `Ideal.span {4, 6}` is the set of integers divisible by both 4 and 6."},
-    {"test": "3 * inv3 = 1 in ZMod 7", "statement": "`3` has an inverse in `ZMod 7`, although it has none in ℤ."}
+  "public": "all",
+  "questions": [
+    {"answer": "q1", "text": "Which statement says the same as `¬ (∀ᶠ n in atTop, P n)`?",
+     "choices": ["`∀ᶠ n in atTop, ¬ P n`", "`∃ᶠ n in atTop, ¬ P n`", "`∃ n, ¬ P n`", "`∀ n, ¬ P n`"]},
+    {"answer": "q2", "text": "In `Tendsto f l₁ l₂`, which filter describes where the *inputs* of `f` go?",
+     "choices": ["`l₂`", "`l₁`", "neither: the inputs are fixed"]},
+    {"answer": "q3", "text": "True or false: in Mathlib, `Tendsto u ⊥ (𝓝 0)` holds for every sequence `u : ℕ → ℝ`."}
   ],
-  "public": ["p (2) = 0", "p (3) = 0"],
   "checks": [
-    {"lean": "#check (L37.I : Ideal ℤ)\n#check (L37.p : Polynomial ℤ)\n#check (L37.inv3 : ZMod 7)\n#check (L37.crt : Prop)",
-     "message": "Keep the names and types: `I : Ideal ℤ`, `p : ℤ[X]`, `inv3 : ZMod 7`, and `crt` a statement."}
+    {"lean": "#check (L37.EventuallyPos : (ℕ → ℝ) → Prop)\n#check (L37.OftenZero : (ℕ → ℝ) → Prop)\n#check (L37.ConvTo : (ℕ → ℝ) → ℝ → Prop)\n#check (L37.ToInfinity : (ℕ → ℝ) → Prop)\n#check (L37.ContAt : (ℝ → ℝ) → ℝ → Prop)",
+     "message": "Keep the names and the types of the five definitions."}
   ],
   "hints": [
-    {"match": "is in I", "steps": ["`Ideal.span {4, 6}` contains 6 - 4 = 2. Which single number generates the common multiples of 4 and 6?"],
-     "hint": "`Ideal.span {12}`. The common multiples of 4 and 6 are the multiples of lcm(4, 6) = 12."},
-    {"match": "p (", "steps": ["A monic polynomial with roots 2 and 3 is `(X - a) * (X - b)` for which `a`, `b`?"],
-     "hint": "`(X - 2) * (X - 3)`, or expanded `X ^ 2 - 5 * X + 6`."},
-    {"match": "inv3", "steps": ["Which `b` in 0, …, 6 makes `3 * b` leave remainder 1 mod 7?"],
-     "hint": "`3 * 5 = 15 = 2 * 7 + 1`, so `inv3 := 5`."},
-    {"match": "crt", "steps": ["Binders: `(m n : ℕ)`, then the hypothesis `(h : Nat.Coprime m n)`."],
-     "hint": "`statement crt (m n : ℕ) (h : Nat.Coprime m n) : Nonempty (ZMod (m * n) ≃+* ZMod m × ZMod n)`."}
+    {"match": "Question 1", "hint": "Write `∀ᶠ` with `∃ N, ∀ n ≥ N` and push the `¬` inside: `∀ N, ∃ n ≥ N, ¬ P n`. Which notation is that?"},
+    {"match": "Question 2", "hint": "The order is: function, filter on its inputs, filter on its outputs."},
+    {"match": "Question 3", "hint": "`⊥` contains every set, so every preimage is in it. Along `⊥`, everything tends to everything."},
+    {"match": "EventuallyPos", "hint": "`∀ᶠ n in atTop, 0 < u n`."},
+    {"match": "OftenZero", "steps": ["\"Infinitely often\": which of `∀ᶠ` and `∃ᶠ`?"], "hint": "`∃ᶠ n in atTop, u n = 0`."},
+    {"match": "ConvTo", "steps": ["The index `n` goes to infinity: `atTop`. Where do the values `u n` go?"], "hint": "`Tendsto u atTop (𝓝 a)`."},
+    {"match": "ToInfinity", "hint": "`Tendsto u atTop atTop`. On `ℝ`, `atTop` is the filter of sets that contain some `[M, ∞)`."},
+    {"match": "ContAt", "steps": ["As `y` approaches `x`, `f y` should approach `f x`. Which filter is on the inputs?"], "hint": "`Tendsto f (𝓝 x) (𝓝 (f x))`."}
   ]
 }

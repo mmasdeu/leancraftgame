@@ -1,64 +1,74 @@
 /-
-# Groups in Mathlib
+# Endomorphisms
 
-*A new project: the library moves from home-made classes to Mathlib's groups and rings.
-Noor starts with vocabulary: state two classic theorems, and compute in two small groups.*
+*Noor wants a classic theorem stated, with every hypothesis it needs: an endomorphism of a
+finite-dimensional complex vector space has an eigenvalue. The quarter turn of level 39
+is a good test case.*
 
-The names to know:
-
-* `[Group G]`: `G` is a group, written with `*`, `1`, `x⁻¹`. `[AddGroup A]` is the
-  additive version (`+`, `0`, `-x`).
-* `H : Subgroup G`: a subgroup (a carrier and its axioms, as in level 35). As a type, `↥H`,
-  its elements are the elements of `G` in `H`.
-* `orderOf x`: the least `n > 0` with `x ^ n = 1`, or `0` if there is none.
-* `Nat.card G`: the number of elements of `G` (`0` if `G` is infinite). With `[Fintype G]`
-  (`G` is finite) there is also `Fintype.card G`.
-* `ZMod n`: the integers modulo `n`. It's a commutative ring, so as a group it's the
-  additive group ℤ/nℤ, and `n • x` means `x + ⋯ + x` (`n` times). The order of `3` in
-  `ZMod 12` is the least `n > 0` with `n • 3 = 0`, which is `4`.
-* `Equiv.Perm α`: the permutations of `α`, a group under composition. `Equiv.swap a b`
-  exchanges `a` and `b` and fixes the rest. `σ * τ` means first `τ`, then `σ`, like
-  `f ⋄ g` in level 32. Products of swaps give every permutation.
-  `Equiv.Perm (Fin 3)` is S₃, the symmetries of a triangle from level 29.
-
-## Stating Lagrange
-
-Lagrange's theorem: the order of a subgroup divides the order of the group.
+Linear maps from a space to itself are **endomorphisms** (`K` and `V` as in level 39):
 
 ```lean
-statement lagrange {G : Type*} [Group G] (H : Subgroup G) : Nat.card H ∣ Nat.card G
+abbrev Module.End (R : Type*) (M : Type*) [Semiring R] [AddCommMonoid M] [Module R M] :=
+  M →ₗ[R] M
 ```
 
-Read: for every type `G` with a group structure, and every subgroup `H` of `G`. Note the
-instance binder `[Group G]` and the coercion in `Nat.card H` (the size of `↥H`).
+`abbrev` is a `def` that Lean unfolds freely. You can compose endomorphisms (`f * g` is
+`f ∘ g`) and add them, so `Module.End K V` is a ring. The vocabulary:
+
+```lean
+#check (Module.End.eigenspace f μ : Submodule K V)   -- {x | f x = μ • x}
+def Module.End.HasEigenvector (f : Module.End R M) (μ : R) (x : M) : Prop :=
+  x ∈ eigenspace f μ ∧ x ≠ 0
+def Module.End.HasEigenvalue (f : Module.End R M) (a : R) : Prop :=
+  eigenspace f a ≠ ⊥
+#check (minpoly K f : K[X])   -- the minimal polynomial: monic, of least degree, kills f
+```
+
+`HasEigenvalue f a` says the eigenspace isn't the zero subspace `⊥`.
+
+## A theorem to state
+
+Mathlib proves that an endomorphism of a finite-dimensional complex vector space has an
+eigenvalue. Every hypothesis matters. For example, the zero space `{0}` has no
+eigenvectors, so the space must be `Nontrivial`: it has two different elements.
+
+Type-class hypotheses go in square brackets: `[FiniteDimensional ℂ V]` (`V` has a finite
+basis over `ℂ`, the complex numbers) and `[Nontrivial V]`.
+
+## Matrices
+
+`!![2, 1; 0, 3]` is the 2 × 2 matrix with rows `2 1` and `0 3`. `A *ᵥ v` (or
+`A.mulVec v`) is the matrix times the column vector `v`. For example
+`!![1, 2; 3, 4] *ᵥ ![1, 0] = ![1, 3]`. An eigenpair is `c` and `v ≠ 0` with
+`A *ᵥ v = c • v`.
 
 ## Your task
 
-1. Write `lagrange` as above. It's your model.
-2. Write `cauchy`, Cauchy's theorem: for a finite group `G` (`[Group G] [Fintype G]`) and a
-   natural number `p`, if `p` is prime (`p.Prime`) and `p` divides `Fintype.card G`, then
-   some `x : G` has `orderOf x = p`. Binders in this order: `G`, the two instances, `p`,
-   then the two hypotheses.
-3. `ord4`: the order of `4` in the additive group `ZMod 12`.
-4. `σ`: a permutation of `Fin 3 = {0, 1, 2}` of order 3, and `τ` one of order 2.
+1. Answer the questions below the lesson.
+2. State `exists_eig`: for every type `V : Type` with `[AddCommGroup V] [Module ℂ V]`,
+   finite-dimensional over `ℂ` and nontrivial, every `f : Module.End ℂ V` has some
+   eigenvalue `c : ℂ`. Write the binders in this order: `{V : Type}` (implicit), the four
+   instances, then `(f : Module.End ℂ V)`.
+3. Give the two eigenvalues of `A = !![2, 1; 0, 3]` (`ev₁ < ev₂`), each with an
+   eigenvector.
 -/
-import Mathlib.GroupTheory.OrderOfElement
-import Mathlib.GroupTheory.Perm.Cycle.Basic
-import Mathlib.Data.ZMod.Basic
+import Mathlib.LinearAlgebra.Eigenspace.Triangularizable
+import Mathlib.Analysis.Complex.Polynomial.Basic
 
 namespace L36
 
-statement lagrange : sorry
+def q1 : Fin 4 := sorry
+def q2 : Bool := sorry
+def q3 : Fin 4 := sorry
+def q4 : Bool := sorry
 
-statement cauchy : sorry
+statement exists_eig : sorry
 
--- the least n > 0 with n • (4 : ZMod 12) = 0
-def ord4 : ℕ := sorry
+def A : Matrix (Fin 2) (Fin 2) ℚ := !![2, 1; 0, 3]
 
--- a permutation of {0, 1, 2} of order 3
-def σ : Equiv.Perm (Fin 3) := sorry
-
--- a permutation of {0, 1, 2} of order 2
-def τ : Equiv.Perm (Fin 3) := sorry
+def ev₁ : ℚ := sorry
+def vec₁ : Fin 2 → ℚ := sorry
+def ev₂ : ℚ := sorry
+def vec₂ : Fin 2 → ℚ := sorry
 
 end L36

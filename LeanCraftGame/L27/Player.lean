@@ -1,66 +1,87 @@
 /-
-# Spot the bug: counting
+# Defining structures
 
-*Sam wrote some counting code in an afternoon, to test primality: a prime has exactly two
-divisors. Each definition compiles, and each is wrong. Noor asks you to **prove them
-wrong**, not fix them.*
+*Noor starts a new project: the library needs objects of its own, beginning with a point of
+space. Your `Point` comes back later as a class instance and as a vector.*
 
-Sam's code is in the editor: `triangle`, `numDivisors`, `size` and a "Gauss's formula".
-The comment above each says what it should compute. Two new bits of notation:
+A **structure** bundles data together:
 
-* `(· ∣ n)` is `fun d => d ∣ n`: the `·` stands for the missing input.
-* `BinTree` is the tree type from level 26, given again.
+```lean
+structure Point where
+  x : ℝ
+  y : ℝ
+  z : ℝ
+```
 
-A counterexample is an input (a number, or a tree) on which Sam's answer and the right
-answer differ. The referee computes both and checks that they differ.
+A `Point` has three fields. You can build one in three ways:
 
-## The trap
+```lean
+def p : Point := ⟨1, 2, 3⟩                    -- anonymous constructor: fields in order
+def q : Point := Point.mk 1 2 3               -- `Point.mk` builds a Point from its fields
+def r : Point := { x := 1, y := 2, z := 3 }   -- field names: order does not matter
+```
 
-A wrong definition can be right on easy inputs. Try each one on a few small inputs and
-compare with the right value by hand.
+`p.x` is the first coordinate of `p`.
+
+## Dot notation
+
+A function in the namespace `Point` can be called with a dot:
+
+```lean
+def Point.neg (a : Point) : Point := ⟨-a.x, -a.y, -a.z⟩
+-- now `p.neg` means `Point.neg p`
+```
+
+## Fields that are propositions
+
+A field can also be a property. The standard 2-simplex is the triangle of points with
+nonnegative coordinates that add up to 1:
+
+```lean
+structure StandardTwoSimplex where
+  x : ℝ
+  y : ℝ
+  z : ℝ
+  x_nonneg : 0 ≤ x
+  -- … one field for each remaining property
+```
+
+An element needs the numbers and proofs of the properties. The referee tests your fields
+on points inside and outside the simplex. Leave out one property and an unwanted point
+gets in.
 
 ## Your task
 
-One counterexample per definition.
+Write the definitions, and finish `StandardTwoSimplex`: after the three coordinates, add
+the fields `x_nonneg`, `y_nonneg`, `z_nonneg` and `sum_eq`, in this order.
 -/
 import Mathlib.Tactic
 
 namespace L27
 
-inductive BinTree where
-  | empty : BinTree
-  | node : BinTree → BinTree → BinTree
+-- points of space (already done)
+structure Point where
+  x : ℝ
+  y : ℝ
+  z : ℝ
 
-open BinTree
+-- the origin, written with field names `{ x := …, y := …, z := … }`
+def origin : Point := sorry
 
--- Sam's code (given, don't edit; the referee uses its own copy)
+-- the point (1, 2, 3), written with `⟨…⟩`
+def p123 : Point := sorry
 
--- 1 + 2 + ⋯ + n
-def triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, i
+-- the sum of two points, coordinate by coordinate
+def Point.add (a b : Point) : Point := sorry
 
--- the number of positive divisors of n
-def numDivisors (n : ℕ) : ℕ := ((Finset.Ico 1 n).filter (· ∣ n)).card
+-- the point a scaled by the factor r
+def Point.smul (r : ℝ) (a : Point) : Point := sorry
 
--- the number of nodes of a binary tree
-def size : BinTree → ℕ
-  | empty => 0
-  | node l r => size l + size r
-
--- "Gauss's formula"
-statement samGauss (n : ℕ) : ∑ i ∈ Finset.range n, i = n * (n + 1) / 2
-
--- Your counterexamples
-
--- an input on which `triangle` is wrong
-def tn : ℕ := sorry
-
--- an input on which `numDivisors` is wrong
-def dn : ℕ := sorry
-
--- a tree on which `size` is wrong
-def tree : BinTree := sorry
-
--- an `n` for which Sam's "Gauss's formula" is false
-def gn : ℕ := sorry
+-- the points with nonnegative coordinates whose sum is 1
+structure StandardTwoSimplex where
+  x : ℝ
+  y : ℝ
+  z : ℝ
+  -- your four fields here
 
 end L27

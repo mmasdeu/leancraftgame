@@ -1,61 +1,51 @@
 /-
-# Sequences and convergence
+# ¬ and the order of quantifiers
 
-*The project's main definition: convergence of a sequence. It uses every quantifier so
-far, and Noor has seen it written wrong in every way. Sam keeps two test sequences pinned
-above the desk.*
+*When the Prover refutes `FnHasUb f`, it hands back `¬ FnHasUb f` with the negation
+pushed inwards. Noor wants everyone to read those by hand, and to stop confusing "bounded"
+with "every term is below something".*
 
-A sequence of reals is a function `s : ℕ → ℝ`, and `s n` is its `n`-th term. Here is a
-cousin of convergence, "`s` tends to `+∞`":
+`¬ P` (type `\not`) means "not `P`". To read a negated statement, **push the negation
+inwards**, flipping each quantifier it passes:
 
-```lean
-def TendsToInfinity (s : ℕ → ℝ) : Prop :=
-  ∀ M : ℝ, ∃ N : ℕ, ∀ n ≥ N, M < s n
-```
+* `¬ ∀ x, P x` is `∃ x, ¬ P x` (a counterexample exists);
+* `¬ ∃ x, P x` is `∀ x, ¬ P x`;
+* `¬ (a ≤ b)` is `b < a`.
 
-For every height `M` there is an index `N` from which every term is above `M`. As in
-level 8, `∀ n ≥ N, …` is short for `∀ n, n ≥ N → …`, and `∀ ε > 0, …` works the same
-way. Indices are natural numbers: Lean infers `N : ℕ` even if you leave the type out.
+For example, `¬ ∀ x, 0 ≤ f x` becomes `∃ x, ¬ (0 ≤ f x)`, then `∃ x, f x < 0`: some
+value is negative. Mathlib's `push_neg` does this, and the Prover prints its results that
+way.
 
-Sam's two test sequences:
+## The order of quantifiers
 
-```lean
-def late : ℕ → ℝ := fun n ↦ if n < 5 then 7 else 0      -- 7, 7, 7, 7, 7, 0, 0, …
-def blink : ℕ → ℝ := fun n ↦ if n % 2 = 0 then 0 else 1  -- 0, 1, 0, 1, …
-```
+In `∀ a, ∃ x, …`, `x` may depend on `a`. In `∃ x, ∀ a, …`, one `x` must work for every
+`a`. Over the reals:
 
-`if c then x else y` is `x` when `c` holds and `y` otherwise. `n % 2` is the remainder of
-`n` divided by `2`.
-
-## Theorems about your definition
-
-You'll also state three theorems. A statement can use your own definitions:
-
-```lean
-statement tendsToInfinity_add (s : ℕ → ℝ) (c : ℝ) (h : TendsToInfinity s) :
-    TendsToInfinity (fun n ↦ s n + c)
-```
-
-`fun _ ↦ a` is the constant sequence `a, a, a, …` (the `_` is an unused index).
+* `∀ x, ∃ y, x < y` is true: for each `x`, take `y = x + 1`;
+* `∃ y, ∀ x, x < y` is false: no real is above all reals, itself included.
 
 ## Your task
 
-1. Define `ConvergesTo s a`: `s` converges to `a`, with the usual `ε`-`N` definition.
-2. `convergesTo_const`: for every real `a`, the constant sequence `a` converges to `a`.
-3. `convergesTo_add`: for all sequences `s t` and reals `a b` (in this order), if `s`
-   converges to `a` and `t` converges to `b`, then `fun n ↦ s n + t n` converges to
-   `a + b`.
-4. `convergesTo_unique`: for every sequence `s` and reals `a b`, if `s` converges to `a`
-   and to `b`, then `a = b`.
+`FnUb` (level 8) and `FnHasUb` (level 9) are in the template. Write these definitions with
+the negation pushed all the way in: no `¬` in front of a quantifier, and no `¬ (_ ≤ _)`.
+
+* `NotFnUb f a`: `a` is *not* an upper bound of `f`.
+* `NoUpperBound f`: `f` has *no* upper bound.
+* `NotMonotone f`: `f` is *not* monotone, in the sense of `MonotoneFn` from level 8:
+  `∀ {a b : ℝ}, a ≤ b → f a ≤ f b`.
+* `BoundedSeq u`: the sequence `u : ℕ → ℕ` is bounded (above).
 -/
 namespace L12
 
-def ConvergesTo (s : ℕ → ℝ) (a : ℝ) : Prop := sorry
+def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, f x ≤ a
+def FnHasUb (f : ℝ → ℝ) : Prop := ∃ a, FnUb f a
 
-statement convergesTo_const : sorry
+def NotFnUb (f : ℝ → ℝ) (a : ℝ) : Prop := sorry
 
-statement convergesTo_add : sorry
+def NoUpperBound (f : ℝ → ℝ) : Prop := sorry
 
-statement convergesTo_unique : sorry
+def NotMonotone (f : ℝ → ℝ) : Prop := sorry
+
+def BoundedSeq (u : ℕ → ℕ) : Prop := sorry
 
 end L12

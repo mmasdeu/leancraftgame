@@ -1,62 +1,62 @@
 /-
-# Injective, surjective, inverses
+# Images and preimages
 
-*Schröder–Bernstein starts from two injections. Sam's first draft of injectivity compiles,
-and every function satisfies it:*
+*Schröder–Bernstein moves sets back and forth along functions. Before that, Noor wants
+the team fluent with the two moves: images and preimages.*
 
-```lean
-def SamInj (f : α → β) : Prop := ∀ a₁ a₂, a₁ = a₂ → f a₁ = f a₂
-```
-
-Mathlib's version goes the other way:
+A function `f : α → β` moves sets both ways:
 
 ```lean
-def Function.Injective (f : α → β) : Prop := ∀ ⦃a₁ a₂⦄, f a₁ = f a₂ → a₁ = a₂
+f '' s      -- the image of s : Set α, a Set β:      {y | ∃ x, x ∈ s ∧ f x = y}
+f ⁻¹' t     -- the preimage of t : Set β, a Set α:   {x | f x ∈ t}
+Set.range f -- the image of everything:               {y | ∃ x, f x = y}
 ```
 
-Same output means same input. The hypothesis is about outputs, the conclusion about
-inputs. (`⦃ ⦄` makes `a₁ a₂` implicit, as in the `Monotone` of level 8; `∀ a₁ a₂, …`
-works just as well for your own definitions.)
+Type `''` as two apostrophes and `⁻¹'` as `\inv'`. The preimage needs no inverse
+function: it exists for every `f`. For a sequence `s : ℕ → ℝ` (level 12), `Set.range s`
+is the set of its terms.
 
-`Function.Surjective f` says every `b : β` is an output: `∀ b, ∃ a, f a = b`. Quantifier
-order matters again (level 10): `∃ a, ∀ b, f a = b` says one input hits everything.
+## Example
 
-## Variants
+Take `f n = 2 * n` on ℕ and `M = {m | m % 3 = 0}`, the multiples of 3:
 
-* `Set.InjOn f s`: `∀ x ∈ s, ∀ y ∈ s, f x = f y → x = y`. Here `∀ x ∈ s, …` is short
-  for `∀ x, x ∈ s → …`. Squaring on ℝ isn't injective, but it is on `{x | 0 ≤ x}`.
-* `Function.LeftInverse g f`: `∀ x, g (f x) = x`, so `g` undoes `f`.
-* `Function.invFun f`: *an* inverse:
+* `f '' M` is the multiples of 6. So `3 ∉ f '' M`.
+* `f ⁻¹' M` is the `n` with `2 n` a multiple of 3: the multiples of 3. So `3 ∈ f ⁻¹' M`.
+
+## Statements about images
+
+The image of a union is the union of the images:
 
 ```lean
-Function.invFun [Nonempty α] (f : α → β) : β → α
+statement image_union' {α β : Type*} (f : α → β) (s t : Set α) :
+    f '' (s ∪ t) = f '' s ∪ f '' t
 ```
 
-  For `y` in the range of `f`, it returns some `x` with `f x = y`. If there are several,
-  Lean picks one (by the axiom of choice) without saying which. `[Nonempty α]` is an
-  assumption in square brackets: `α` has at least one element. Lean finds such
-  assumptions by itself.
-
-Remember that on ℕ, subtraction stops at zero (level 3).
+`Type*` means "a type, in any universe". `α` and `β` are implicit; Lean finds them from
+`f`. For intersections this fails: `f '' (s ∩ t)` can be smaller than `f '' s ∩ f '' t`
+when a point of `s` and a different point of `t` have the same image.
 
 ## Your task
 
-1. Write your own `Inj` and `Surj` for `ℕ → ℕ`, without Mathlib's names. The referee
-   tries them on `n + 1`, `n - 1`, `2 n` and others.
-2. `pred'`: a left inverse of `fun n => n + 1`.
-3. Answer the questions.
+1. `squares`: the perfect squares, as the range of `n ↦ n ^ 2`.
+2. `evensPre`: the even numbers, as the preimage of `{m | m % 4 = 0}` under `n ↦ 2 * n`.
+3. `preimage_inter'`: the preimage of `u ∩ v` under `f : α → β` is the intersection of the
+   preimages. Use the binders of `image_union'`: `{α β : Type*} (f : α → β) (u v : Set β)`.
+4. A counterexample to `f '' (s ∩ t) = f '' s ∩ f '' t` on ℕ: a function `f₀`, sets `s₀`,
+   `t₀` and a point `y₀` in `f₀ '' s₀` and in `f₀ '' t₀`, but not in `f₀ '' (s₀ ∩ t₀)`.
+   Use small numbers and sets written as `{a, b}` (level 15).
 -/
 namespace L17
 
-def Inj (f : ℕ → ℕ) : Prop := sorry
+def squares : Set ℕ := sorry
 
-def Surj (f : ℕ → ℕ) : Prop := sorry
+def evensPre : Set ℕ := sorry
 
--- a left inverse of `fun n => n + 1`
-def pred' : ℕ → ℕ := sorry
+statement preimage_inter' : sorry
 
-def q1 : Fin 3 := sorry
-def q2 : Bool := sorry
-def q3 : Fin 3 := sorry
+def f₀ : ℕ → ℕ := sorry
+def s₀ : Set ℕ := sorry
+def t₀ : Set ℕ := sorry
+def y₀ : ℕ := sorry
 
 end L17

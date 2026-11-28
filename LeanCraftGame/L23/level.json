@@ -1,5 +1,6 @@
 {
-  "world": "Elementary Number Theory",
+  "slug": "infinitely-many-primes",
+  "world": "Number Theory and Recursion",
   "title": "The AI proved the infinitude of primes!",
   "skill": "auditing",
   "exercise": "Audit",

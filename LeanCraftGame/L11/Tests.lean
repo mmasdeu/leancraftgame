@@ -1,29 +1,31 @@
-/- Hidden test battery for Level 11: ∧, ∨ and ↔. -/
+/- Hidden test battery for Level 9: ∃. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L11.Player
 
-#no_sorry L11.lt_iff'
-#no_sorry L11.abs_lt'
-#no_sorry L11.le_abs'
-#no_sorry L11.HasZeroIn
-#level_start "∧, ∨ and ↔"
+#no_sorry L11.FnHasUb
+#no_sorry L11.FnHasLb
+#no_sorry L11.bound
+#no_sorry L11.root
+#no_sorry L11.TakesBothSigns
+#level_start "∃"
 
-#expect_equiv "lt_iff' says x < y ↔ x ≤ y ∧ x ≠ y" :
-  L11.lt_iff' ↔ ∀ x y : ℝ, x < y ↔ x ≤ y ∧ x ≠ y
-  using fun x y => lt_iff_le_and_ne
-#expect_equiv "abs_lt' says |x| < y ↔ -y < x ∧ x < y" :
-  L11.abs_lt' ↔ ∀ x y : ℝ, |x| < y ↔ -y < x ∧ x < y
-  using fun x y => abs_lt
-#expect_equiv "le_abs' says x ≤ |y| ↔ x ≤ y ∨ x ≤ -y" :
-  L11.le_abs' ↔ ∀ x y : ℝ, x ≤ |y| ↔ x ≤ y ∨ x ≤ -y
-  using fun x y => le_abs
-#expect_true "some x satisfies x > 5 → x = 0" :
-  ∃ x : ℝ, x > 5 → x = 0
-#expect_true "x ↦ x - 1 has a zero in [0, 2]" unfolding L11.HasZeroIn :
-  L11.HasZeroIn (fun x => x - 1) 0 2
-#expect_true "x ↦ x² - 4 has a zero in [0, 3]" unfolding L11.HasZeroIn :
-  L11.HasZeroIn (fun x => x ^ 2 - 4) 0 3
-#expect_false "x ↦ x + 10 has a zero in [0, 1]" unfolding L11.HasZeroIn :
-  L11.HasZeroIn (fun x => x + 10) 0 1
+#expect_true "x ↦ min x 3 has an upper bound" unfolding L11.FnHasUb L11.FnUb :
+  L11.FnHasUb (fun x => min x 3)
+#expect_false "x ↦ x has an upper bound" unfolding L11.FnHasUb L11.FnUb :
+  L11.FnHasUb (fun x => x)
+#expect_true "x ↦ x² has a lower bound" unfolding L11.FnHasLb L11.FnLb :
+  L11.FnHasLb (fun x => x ^ 2)
+#expect_false "x ↦ x has a lower bound" unfolding L11.FnHasLb L11.FnLb :
+  L11.FnHasLb (fun x => x)
+#expect_true "bound is an upper bound of x ↦ min x 3" unfolding L11.bound :
+  ∀ x : ℝ, min x 3 ≤ L11.bound
+#expect_true "root² - 4·root + 4 = 0" unfolding L11.root :
+  L11.root ^ 2 - 4 * L11.root + 4 = 0
+#expect_false "some real number is both positive and negative" :
+  ∃ x : ℝ, x > 0 ∧ x < 0
+#expect_true "x ↦ x takes both signs" unfolding L11.TakesBothSigns :
+  L11.TakesBothSigns (fun x => x)
+#expect_false "x ↦ x² + 1 takes both signs" unfolding L11.TakesBothSigns :
+  L11.TakesBothSigns (fun x => x ^ 2 + 1)
 
 #level_report

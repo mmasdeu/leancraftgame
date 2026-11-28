@@ -1,42 +1,31 @@
 {
-  "world": "Basics",
-  "title": "Stating theorems",
-  "skill": "writing statements",
-  "exercise": "Write",
+  "slug": "signatures",
+  "world": "Statements",
+  "title": "Anatomy of a theorem",
+  "skill": "reading",
+  "exercise": "Read",
   "public": "all",
   "hintsAfter": 1,
-  "hints": [
-    {
-      "match": "sq_add",
-      "hint": "`statement sq_add (a b : ℝ) : (a + b) ^ 2 = a ^ 2 + 2 * a * b + b ^ 2`."
-    },
-    {
-      "match": "two_mul_le",
-      "steps": [
-        "Which side is the smaller one? `≤` reads \"is at most\"."
-      ],
-      "hint": "`statement two_mul_le (a b : ℝ) : 2 * a * b ≤ a ^ 2 + b ^ 2`."
-    },
-    {
-      "match": "abs_mul_le",
-      "steps": [
-        "Did you divide the whole sum by 2, or only `b ^ 2`?"
-      ],
-      "hint": "`statement abs_mul_le (a b : ℝ) : |a * b| ≤ (a ^ 2 + b ^ 2) / 2`."
-    },
-    {
-      "match": "min_comm'",
-      "hint": "`statement min_comm' (a b : ℝ) : min a b = min b a`."
-    },
-    {
-      "match": "max_assoc'",
-      "hint": "`statement max_assoc' (a b c : ℝ) : max a (max b c) = max (max a b) c`."
-    }
+  "questions": [
+    {"answer": "q1", "text": "How many **explicit** arguments does `mul_le_mul` take?", "choices": ["4", "8", "10", "2"]},
+    {"answer": "q2", "text": "What is the conclusion of `mul_le_mul`?", "choices": ["`a ≤ b`", "`a * c ≤ b * d`", "`0 ≤ b`", "`Preorder α`"]},
+    {"answer": "q3", "text": "In `add_pow_two`, the arguments `a` and `b` are…", "choices": ["explicit: you write `add_pow_two x y`", "implicit: Lean infers them", "instance arguments: Lean finds them in the library"]},
+    {"answer": "q4", "text": "In `add_pow_two`, what is `[CommSemiring α]`?", "choices": ["a hypothesis you must prove when you use the theorem", "the conclusion", "an instance argument: Lean finds on its own that `α` has `+` and `*` with the usual laws"]},
+    {"answer": "q5", "text": "True or false: `pow_le_pow_left₀` says that for all reals, `a ≤ b` implies `a ^ n ≤ b ^ n`."},
+    {"answer": "q6", "text": "You have `h : (2 : ℝ) ≤ 3`. Which of these is a correct use of `pow_le_pow_left₀`, giving `2 ^ 5 ≤ 3 ^ 5`?", "choices": ["`pow_le_pow_left₀ h 5`", "`pow_le_pow_left₀ (by norm_num) h 5`", "`pow_le_pow_left₀ 2 3 h 5`"]},
+    {"answer": "q7", "text": "With `hc : (0 : ℝ) < 3`, what does `le_div_iff₀ hc` say about reals `a` and `b`?", "choices": ["`a ≤ b / 3 ↔ a * 3 ≤ b`", "`a ≤ b / 3`", "`0 < 3`"]}
   ],
-  "predict": [
-    {
-      "test": "(a + b)² = a² + b² for all reals",
-      "statement": "For all reals `a` and `b`, `(a + b) ^ 2 = a ^ 2 + b ^ 2`."
-    }
+  "checks": [
+    {"lean": "#check (L5.q1 : Fin 4)\n#check (L5.q2 : Fin 4)\n#check (L5.q3 : Fin 3)\n#check (L5.q4 : Fin 3)\n#check (L5.q5 : Bool)\n#check (L5.q6 : Fin 3)\n#check (L5.q7 : Fin 3)",
+     "message": "Keep the seven answer lines. Only change the value after `:=`."}
+  ],
+  "hints": [
+    {"match": "Question 1", "hint": "Count the round brackets: `h₁`, `h₂`, `c0`, `b0`."},
+    {"match": "Question 2", "hint": "The conclusion comes after the last colon."},
+    {"match": "Question 3", "hint": "Round brackets mean explicit."},
+    {"match": "Question 4", "hint": "Square brackets are instance arguments: Lean finds them."},
+    {"match": "Question 5", "steps": ["Which hypotheses does `pow_le_pow_left₀` have, besides `a ≤ b`?"], "hint": "It also needs `ha : 0 ≤ a`: `-2 ≤ 1` but `(-2) ^ 2 = 4 > 1`."},
+    {"match": "Question 6", "steps": ["What is the first explicit argument of `pow_le_pow_left₀`?"], "hint": "The first explicit argument is `ha : 0 ≤ a`, a proof that `0 ≤ 2`. `a` and `b` are implicit."},
+    {"match": "Question 7", "hint": "The conclusion of `le_div_iff₀` is an `↔`, with `c` replaced by `3`."}
   ]
 }

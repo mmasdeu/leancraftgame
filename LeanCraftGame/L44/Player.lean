@@ -1,50 +1,65 @@
 /-
-# Metric spaces
+# Final audit: the AI proved Goldbach!
 
-*`Tendsto s atTop (𝓝 a)` is your `ConvergesTo` with `dist` in place of `|s n - a|`. To
-use it on other spaces, the library first has to say what a distance is.*
-
-A **metric space** is a type `X` with a distance `dist : X → X → ℝ`. Mathlib's axioms:
+*The Prover posts: "The AI proved Goldbach's conjecture! And Collatz!" Lean accepts both
+proofs, with no `sorry`. Noor opens the statements and hands them to you.*
 
 ```lean
-variable {X : Type*} [MetricSpace X] (a b c : X)
-#check (dist a b : ℝ)
-#check (dist_nonneg : 0 ≤ dist a b)
-#check (dist_eq_zero : dist a b = 0 ↔ a = b)
-#check (dist_comm a b : dist a b = dist b a)
-#check (dist_triangle a b c : dist a c ≤ dist a b + dist b c)
+theorem ai_goldbach :
+    ∀ n, 2 < n → n % 2 = 0 → ∃ p q, Nat.Prime p ∧ Nat.Prime q → p + q = n :=
+  fun _ _ _ => ⟨0, 0, fun h => absurd h.1 Nat.not_prime_zero⟩
+
+theorem ai_collatz : ∀ n, ∃ k, collatz^[k] n ≤ n :=
+  fun n => ⟨0, le_refl n⟩
 ```
 
-On `ℝ`, `dist x y` is `|x - y|`. The distance gives continuity in ε–δ form: `f` is
-continuous when
+`collatz^[k] n` is `collatz` applied `k` times to `n`. The Prover proved exactly these
+statements. A one-line proof of a famous open problem
+means the statement is wrong.
 
-```lean
-∀ b, ∀ ε > 0, ∃ δ > 0, ∀ a, dist a b < δ → dist (f a) (f b) < ε
-```
+* In `ai_goldbach`, `→` binds more loosely than `∧`, so the body is
+  `∃ p q, (Nat.Prime p ∧ Nat.Prime q) → p + q = n`. Take `p = q = 0`, which aren't prime,
+  and the implication holds vacuously. It's the trap of level 11, `→` under `∃`.
+* In `ai_collatz`, take `k = 0`. After zero steps you're at `n`, and `n ≤ n`.
 
-Here `δ` may depend on `b`. If one `δ` works for all points, `f` is **uniformly
-continuous**: `∃ δ` moves before `∀ b`. It's the quantifier order of level 10 again.
+## Toy worlds
 
-## Part A: the axioms
+As in level 23, test a statement nobody can prove in worlds where you know the answer.
+So write it **parametrised** by the notion it depends on:
 
-Write the axioms yourself as fields of `Metric'`, one field per axiom after `dist`, each
-with its own `∀`. The distance takes values in `ℤ` so the referee can test it on four
-points. Real metrics must satisfy your axioms, and each impostor must break one. Sam's
-first draft let `dist a b = a - b` through, since it does satisfy `dist a b = 0 ↔ a = b`.
+* `GoldbachFor P`: "every even number greater than `2` is the sum of two numbers that
+  satisfy `P`". With `P := Nat.Prime` it's Goldbach's conjecture. With
+  `P := fun p => 2 ≤ p` it must be true.
+* `CollatzFor o`: "from every **positive** start `n`, some step `k` has `o n k = 1`",
+  where `o n k` is the number reached after `k` steps from `n`. With the Collatz map it's
+  the Collatz conjecture. Positive, because the map sends `0` to `0 / 2 = 0`, so `0`
+  never reaches `1`.
 
-## Part B: uniform continuity
+The referee checks your statements in several toy worlds (world A, B, C for Goldbach,
+process A, B, C for Collatz), and in the real one, where it must *not* settle them. If a simple search settles your version of an open problem, it's
+vacuous or false for a silly reason.
 
-State `UnifCont f`: for every `ε > 0` there is `δ > 0` such that for all `x` and `y`,
-`dist x y < δ` implies `dist (f x) (f y) < ε`. Write the quantifiers in this order.
+## Your task
+
+1. `GoldbachFor` and `CollatzFor`, as described.
+2. Audit three more theorems the Prover proved, about primes, convergence and
+   derivatives (the questions below the lesson). For each, say whether the Lean
+   statement says what the English claim says.
 -/
-import Mathlib.Topology.MetricSpace.Pseudo.Defs
+import Mathlib.Tactic
 
 namespace L44
 
-structure Metric' (α : Type) where
-  dist : α → α → ℤ
-  -- your axioms here
+def collatz (n : ℕ) : ℕ := if n % 2 = 0 then n / 2 else 3 * n + 1
 
-def UnifCont (f : ℝ → ℝ) : Prop := sorry
+def GoldbachFor (P : ℕ → Prop) : Prop :=
+  sorry
+
+def CollatzFor (o : ℕ → ℕ → ℕ) : Prop :=
+  sorry
+
+def q1 : Bool := sorry
+def q2 : Bool := sorry
+def q3 : Bool := sorry
 
 end L44

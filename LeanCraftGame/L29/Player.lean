@@ -1,80 +1,104 @@
 /-
-# Sam's groups
+# Classes and instances
 
-*Before the project could use Mathlib's groups, Sam wrote some over lunch. The file
-compiles. Noor asks whether every model of Sam's axioms is really a group.*
+*A new project. The library defines powers four times: in `ℕ`, in `ℤ`, for the `GaussInt`
+of level 30, and for permutations. Noor wants it written once, with Lean finding the
+structure. This world builds a small copy of Mathlib's **type classes**.*
 
-A **group** is a set with an associative product, an element `one` with
-`one * a = a * one = a` for every `a`, and an inverse for each `a`, with
-`a * a⁻¹ = a⁻¹ * a = one`. Some groups are not commutative. For example, S₃, the six
-symmetries of a triangle: a reflection followed by a rotation differs from the rotation
-followed by the reflection.
+## Classes
 
-Like `StandardTwoSimplex` in level 28, an algebraic structure has the operations and the
-axioms as fields. Here is a monoid (a group without inverses):
+A class is a structure whose instances Lean searches for by itself:
 
 ```lean
-structure Monoid₁ (α : Type*) where
-  mul : α → α → α
+class One₁ (α : Type) where
   one : α
-  mul_assoc : ∀ x y z : α, mul (mul x y) z = mul x (mul y z)
-  mul_one : ∀ x : α, mul x one = x
-  one_mul : ∀ x : α, mul one x = x
+
+class Dia₁ (α : Type) where
+  dia : α → α → α
+
+infixl:70 " ⋄ " => Dia₁.dia
+
+class Monoid₁ (α : Type) extends Dia₁ α, One₁ α
 ```
 
-A model is the data (`mul`, `one`) plus proofs of the axioms. With too few axioms,
-junk satisfies them. With too many, real groups fail.
+`One₁ α` says `α` has a chosen element. `Dia₁ α` says `α` has a binary operation, written
+`a ⋄ b` (type `\diamond`). `extends` combines classes, so a `Monoid₁ α` has both. A real
+monoid class would also have the axioms. Here the tests check them on your examples.
 
-Sam's `Group'` (in the editor) uses a *left* identity and a *right* inverse. A left
-identity with left inverses does give a group. Mixed sides don't.
+## Instances
 
-So ask of any axioms: do they allow **junk models**? Look for a small model that satisfies
-them and breaks a property every group has.
+An **instance** says that a given type has the structure:
+
+```lean
+instance natMul : Monoid₁ ℕ where
+  dia a b := a * b
+  one := 1
+```
+
+## Using a class
+
+A definition asks for any monoid through an instance argument in square brackets,
+`[Monoid₁ α]`. Lean finds the instance at each use:
+
+```lean
+def mpow {α : Type} [Monoid₁ α] (x : α) : ℕ → α
+  | 0 => One₁.one
+  | n + 1 => mpow x n ⋄ x
+```
+
+`mpow 2 10` finds `natMul` and gives `1024`. This search is how Mathlib knows `ℝ` is a field,
+and why one lemma about monoids covers them all. A type gets one instance of a class, so
+`ℕ` can't be a `Monoid₁` under both `*` and `+`. That's why Mathlib has separate additive
+classes such as `AddMonoid`.
+
+## Your task
+
+Write three instances. Powers then come for free:
+
+* `(Bool, xor, false)`: the Lean function `xor a b` is `true` when exactly one of `a`, `b`
+  is `true`.
+* `(ℤ, +, 0)`: here `x ⋄ y` means `x + y`.
+* `(ℕ → ℕ, ∘, id)`: `f ⋄ g` is "first `g`, then `f`". In Lean that is `f ∘ g`
+  (type `\comp`), the function `fun n => f (g n)`. The identity function is `id`.
+  Then `mpow f n` is `f` applied `n` times.
+
+The tests write `(· * 2)` for the function `fun n => n * 2`.
 -/
-import Mathlib.Tactic
-
 namespace L29
 
-structure Group' (G : Type) where
-  mul : G → G → G
-  one : G
-  inv : G → G
-  mul_assoc : ∀ a b c, mul (mul a b) c = mul a (mul b c)
-  one_mul   : ∀ a, mul one a = a
-  mul_inv   : ∀ a, mul a (inv a) = one
+class One₁ (α : Type) where
+  one : α
 
--- Text between `/-` and `-/` is a block comment, like `--` over several lines.
-/-
-## Part A: Break it
+class Dia₁ (α : Type) where
+  dia : α → α → α
 
-Find a junk model: an operation on `Bool` (the type with the two values `true` and
-`false`) that satisfies every axiom of `Group'` but is not a group. Give only the data.
-The referee checks the axioms for you. A function of two arguments is written
-`fun a b => …`.
+infixl:70 " ⋄ " => Dia₁.dia
 
-Hint: do the axioms above imply `mul a one = a`?
--/
+class Monoid₁ (α : Type) extends Dia₁ α, One₁ α
 
-def junkMul : Bool → Bool → Bool := sorry
-def junkOne : Bool := sorry
-def junkInv : Bool → Bool := sorry
+-- x ⋄ x ⋄ ⋯ ⋄ x (n times), in every monoid at once (done)
+def mpow {α : Type} [Monoid₁ α] (x : α) : ℕ → α
+  | 0 => One₁.one
+  | n + 1 => mpow x n ⋄ x
 
-/-
-## Part B: Fix it
+-- (ℕ, *, 1) (done)
+instance natMul : Monoid₁ ℕ where
+  dia a b := a * b
+  one := 1
 
-Write a correct definition. Keep `mul`, `one`, `inv` as the first three fields, in this
-order. The axioms are up to you.
+-- (Bool, xor, false)
+instance boolXor : Monoid₁ Bool where
+  dia a b := sorry
+  one := sorry
 
-The referee tries your structure on many models. Real groups must satisfy all your axioms.
-Each junk model must break at least one. One of the groups is S₃.
--/
+-- (ℤ, +, 0)
+instance intAdd : Monoid₁ ℤ where
+  dia a b := sorry
+  one := sorry
 
-structure Group₂ (G : Type) where
-  mul : G → G → G
-  one : G
-  inv : G → G
-  mul_assoc : ∀ a b c, mul (mul a b) c = mul a (mul b c)
-  one_mul   : ∀ a, mul one a = a
-  mul_inv   : ∀ a, mul a (inv a) = one
+-- (ℕ → ℕ, composition, identity): f ⋄ g is "first g, then f"
+instance endo : Monoid₁ (ℕ → ℕ) where
+  dia f g := sorry
+  one := sorry
 
 end L29

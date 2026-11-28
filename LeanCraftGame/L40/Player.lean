@@ -1,60 +1,72 @@
 /-
-# Subspaces and quotients
+# Derivatives
 
-*Noor wants a list of the subspaces of the plane. Sam's draft has a line through the
-origin, the two axes together, a parabola, and a line that misses `0`.*
+*New project: calculus. Noor wants the library to handle functions like `x ↦ x² - 4x + 4`
+from level 9 and `x ↦ min x 3`, which has a corner. Sam's first attempt already mixed up
+two arguments, so read the signatures slowly.*
 
-A subspace of `V` is a `Submodule K V`, with `K` and `V` as in level 39 (for the plane,
-`ℚ` and `Fin 2 → ℚ`). Like the sub-objects of level 35, it's a set (its `carrier`)
-bundled with proofs that it's closed under the operations. Roughly:
+Mathlib has three ways to talk about the derivative of `f : ℝ → ℝ` at `x`:
 
 ```lean
-structure Submodule (K V : Type*) where
-  carrier : Set V
-  add_mem' : ∀ {a b}, a ∈ carrier → b ∈ carrier → a + b ∈ carrier
-  zero_mem' : (0 : V) ∈ carrier
-  smul_mem' : ∀ (c : K) {x}, x ∈ carrier → c • x ∈ carrier
+deriv f x                  -- a real number: the derivative of f at x
+HasDerivAt f f' x          -- a statement: f has derivative f' at x
+DifferentiableAt ℝ f x     -- a statement: f is differentiable at x
 ```
 
-Subspaces are ordered by inclusion, and Mathlib uses lattice notation for that order:
+* `deriv f x` is a number you can compute with: `deriv (fun x : ℝ => x ^ 2) 3` is `6`.
+* `HasDerivAt f f' x` takes the function, then the derivative, then the point:
+  `HasDerivAt (fun x : ℝ => x ^ 2) 6 3` says the derivative at `3` is `6`.
+* `DifferentiableAt ℝ f x` names `ℝ` because Mathlib also differentiates over `ℂ`. On a
+  set, write `DifferentiableOn ℝ f (Set.Ioo a b)` and `ContinuousOn f (Set.Icc a b)`.
 
-* `⊥` (type `\bot`) is the smallest subspace, and `⊤` (`\top`) the largest.
-* `U ⊓ W` (`\sqcap`) is the largest subspace contained in both `U` and `W`.
-* `U ⊔ W` (`\sqcup`) is the smallest subspace containing both.
-* `V ⧸ W` is the quotient space: two vectors are identified when their difference lies
-  in `W`.
+## A junk value
 
-## Which sets are subspaces?
+`deriv f x` is always defined. Where `f` has no derivative, it's `0`. So
+`deriv (fun x : ℝ => min x 3) 3 = 0`, despite the corner. A real `0` looks the same:
+`x² - 4x + 4` has derivative `0` at `2`, where the graph is flat. It's the convention of
+`x / 0 = 0`. Theorems that need differentiability say so in a hypothesis.
 
-To show that a set isn't a subspace, give a counterexample to one of the three fields.
+## Intervals
 
-As before, a vector is `![x, y]` with coordinates `v 0` and `v 1`. Write sets as
-`{v | v 0 = 0}` (the vertical axis).
+`Set.Icc a b` is `[a, b]` and `Set.Ioo a b` is `(a, b)` (closed or open at each end).
+"Some `c` in `(a, b)` has `P c`" is `∃ c ∈ Set.Ioo a b, P c`.
+
+## Two theorems
+
+**Rolle's theorem** (`exists_deriv_eq_zero`): if `a < b`, `f` is continuous on `[a, b]`
+and `f a = f b`, then some `c ∈ (a, b)` has `deriv f c = 0`. Mathlib's version has no
+differentiability hypothesis.
+
+**The mean value theorem** (`exists_deriv_eq_slope`): if `a < b`, `f` is continuous on
+`[a, b]` and differentiable on `(a, b)`, then some `c ∈ (a, b)` has
+`deriv f c = (f b - f a) / (b - a)`. Here differentiability is needed, or the junk `0`
+would pass for the slope.
 
 ## Your task
 
-1. `line`: the line through `0` of slope 2, `y = 2x`, as a set.
-2. The axes `{v | v 0 * v 1 = 0}` aren't a subspace. Give two vectors `a`, `b` on the axes
-   whose sum isn't.
-3. The parabola `{v | v 1 = v 0 ^ 2}` isn't a subspace. Give a point `p` on it such that
-   `2 • p` (the point `![2 * p 0, 2 * p 1]`) isn't on it.
-4. Answer the questions below the lesson.
+1. `d3`: the derivative of `x ↦ x³` at `2`, written with `deriv`.
+2. `sq_hasDeriv`: the statement "`x ↦ x²` has derivative `6` at `3`", with `HasDerivAt`.
+3. `rolle` and `mvt`: the two theorems, starting `(f : ℝ → ℝ) (a b : ℝ)`, then the
+   hypotheses in the order stated above, each with a name such as `(hab : a < b)`.
+4. Answer the two questions below the lesson.
 -/
-import Mathlib.LinearAlgebra.Quotient.Defs
+import Mathlib.Analysis.Calculus.Deriv.Pow
+import Mathlib.Analysis.Calculus.Deriv.Abs
+import Mathlib.Analysis.Calculus.LocalExtr.Rolle
+import Mathlib.Analysis.Calculus.MeanValue
+import Mathlib.Analysis.Calculus.Deriv.MeanValue
 
 namespace L40
 
-def line : Set (Fin 2 → ℚ) := sorry
+def d3 : ℝ := sorry
 
-def axes : Set (Fin 2 → ℚ) := {v | v 0 * v 1 = 0}
-def a : Fin 2 → ℚ := sorry
-def b : Fin 2 → ℚ := sorry
+statement sq_hasDeriv : sorry
 
-def parabola : Set (Fin 2 → ℚ) := {v | v 1 = v 0 ^ 2}
-def p : Fin 2 → ℚ := sorry
+statement rolle : sorry
 
-def q1 : Fin 3 := sorry
-def q2 : Fin 3 := sorry
-def q3 : Bool := sorry
+statement mvt : sorry
+
+def q1 : Fin 4 := sorry
+def q2 : Bool := sorry
 
 end L40

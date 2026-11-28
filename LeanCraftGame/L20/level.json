@@ -1,5 +1,6 @@
 {
-  "world": "Elementary Number Theory",
+  "slug": "divisibility",
+  "world": "Number Theory and Recursion",
   "title": "Divisibility and primes",
   "skill": "library",
   "exercise": "Write",

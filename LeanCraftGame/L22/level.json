@@ -1,5 +1,6 @@
 {
-  "world": "Elementary Number Theory",
+  "slug": "recursion",
+  "world": "Number Theory and Recursion",
   "title": "Recursion and induction",
   "skill": "recursion",
   "exercise": "Write",

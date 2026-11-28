@@ -1,10 +1,14 @@
-statement lagrange {G : Type*} [Group G] (H : Subgroup G) : Nat.card H ∣ Nat.card G
+def q1 : Fin 4 := 2
+def q2 : Bool := false
+def q3 : Fin 4 := 1
+def q4 : Bool := false
 
-statement cauchy {G : Type*} [Group G] [Fintype G] (p : ℕ) (hp : p.Prime)
-    (hdvd : p ∣ Fintype.card G) : ∃ x : G, orderOf x = p
+statement exists_eig {V : Type} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
+    [Nontrivial V] (f : Module.End ℂ V) : ∃ c : ℂ, f.HasEigenvalue c
 
-def ord4 : ℕ := 3
+def A : Matrix (Fin 2) (Fin 2) ℚ := !![2, 1; 0, 3]
 
-def σ : Equiv.Perm (Fin 3) := Equiv.swap 0 1 * Equiv.swap 1 2
-
-def τ : Equiv.Perm (Fin 3) := Equiv.swap 0 1
+def ev₁ : ℚ := 2
+def vec₁ : Fin 2 → ℚ := ![1, 0]
+def ev₂ : ℚ := 3
+def vec₂ : Fin 2 → ℚ := ![1, 1]

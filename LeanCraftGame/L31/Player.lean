@@ -1,62 +1,62 @@
 /-
-# Spot the bug: structures
+# Morphisms
 
-*Sam rebuilt this world's structures for a side project. Each piece compiles and each is
-wrong. Noor wants a counterexample for each, so Sam can see the bug.*
+*What matters about a structure is the maps that respect it. Sam's first homomorphism
+checked products and forgot the unit.*
 
-Sam's code is at the top of the editor. Don't edit it: the referee tests your
-counterexamples against its own copy.
+`[Monoid M]` says `M` has `*` and `1` with the monoid laws; `[AddMonoid M]` says the same
+for `+` and `0`. Mathlib defines a monoid homomorphism as a **bundled** structure, a function plus the facts
+that it respects the operations:
 
-## Reading a structure
+```lean
+structure MonoidHom₁ (G H : Type) [Monoid G] [Monoid H] where
+  toFun : G → H
+  map_one : toFun 1 = 1
+  map_mul : ∀ g g', toFun (g * g') = toFun g * toFun g'
+```
 
-* A wrong operation shows up on some input where it disagrees with the right formula.
-  Avoid inputs where the wrong term is zero.
-* A symmetric notion gives a free test. The midpoint of `a` and `b` is the midpoint of `b`
-  and `a`, so swap the arguments and compare.
-* A propositional field can be **vacuous**, so weak that junk satisfies it. Read its
-  connectives (`∧`, `∨`, level 11) closely.
+Mathlib writes it `G →* H` (and `G →+ H` for additive monoids, `R →+* S` for rings). You
+apply a bundled map like a function, `f x`.
+
+## Bundled and unbundled
+
+Sometimes you want to say that a plain function `f : M → N` is a homomorphism. That's a
+predicate, an "unbundled" definition. It must ask for exactly what the bundled structure
+asks for:
+
+* `map_one`: `f 1 = 1`;
+* `map_mul`: `f (a * b) = f a * f b` for all `a`, `b`.
+
+Neither implies the other: a map can respect `*` and still send `1` elsewhere.
+
+You've met one homomorphism already: the norm `N(a + bi) = a² + b²` of the `GaussInt` of
+level 30. It has `N(zw) = N(z) N(w)` and `N(1) = 1`, so it's a monoid homomorphism from
+`(ℤ[i], ·, 1)` to `(ℤ, ·, 1)`.
 
 ## Your task
 
-Give the counterexamples asked for below Sam's code.
--/
-import Mathlib.Tactic
+1. `IsMonoidHom f`: `f` preserves `1` and `*`, for any two monoids `M` and `N`. Join the
+   conditions with `∧` (level 11).
+2. `IsAddMonoidHom f`: `f` preserves `0` and `+`, for any two additive monoids.
+3. `homNotOnto`: an additive homomorphism `ℤ → ℤ` that isn't surjective.
+4. `bijNotHom`: a map `ℤ → ℤ` with `f (f n) = n` for every `n` (so a bijection) that isn't
+   an additive homomorphism.
 
+The referee tests your predicates on many maps. It also checks that every bundled
+`f : M →* N` satisfies your `IsMonoidHom`.
+-/
 namespace L31
 
--- Sam's code (don't edit)
-structure GaussInt where
-  re : ℤ
-  im : ℤ
+-- f preserves 1 and multiplication
+def IsMonoidHom {M N : Type} [Monoid M] [Monoid N] (f : M → N) : Prop := sorry
 
--- the product (a + bi)(c + di)
-def GaussInt.mul (z w : GaussInt) : GaussInt :=
-  ⟨z.re * w.re + z.im * w.im, z.re * w.im + z.im * w.re⟩
+-- f preserves 0 and addition
+def IsAddMonoidHom {M N : Type} [AddMonoid M] [AddMonoid N] (f : M → N) : Prop := sorry
 
-structure Point where
-  x : ℚ
-  y : ℚ
-  z : ℚ
+-- an additive homomorphism of ℤ that isn't surjective
+def homNotOnto : ℤ → ℤ := sorry
 
--- the midpoint of a and b
-def Point.mid (a b : Point) : Point :=
-  ⟨(a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + a.z) / 2⟩
-
--- the rational numbers t with 0 ≤ t ≤ 1
-structure UnitInterval where
-  t : ℚ
-  in_range : 0 ≤ t ∨ t ≤ 1
-
--- Your counterexamples
--- two Gaussian integers whose product Sam gets wrong
-def gz : GaussInt := sorry
-def gw : GaussInt := sorry
-
--- two points a, b with `mid a b ≠ mid b a`
-def pa : Point := sorry
-def pb : Point := sorry
-
--- a number that satisfies Sam's `in_range` but isn't between 0 and 1
-def badT : ℚ := sorry
+-- a map of ℤ with f (f n) = n that isn't an additive homomorphism
+def bijNotHom : ℤ → ℤ := sorry
 
 end L31

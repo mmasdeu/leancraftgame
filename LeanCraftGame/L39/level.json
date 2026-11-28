@@ -1,24 +1,33 @@
 {
-  "world": "Linear Algebra",
-  "title": "Vector spaces and linear maps",
-  "skill": "constructing examples",
-  "exercise": "Construct",
+  "slug": "finite-topology",
+  "world": "Analysis and Topology",
+  "title": "Topological spaces",
+  "skill": "writing definitions",
+  "exercise": "Write",
   "predict": [
-    {"test": "shift sends the zero vector to zero", "statement": "`shift v = v + ![1, 0]` sends the zero vector to the zero vector."}
+    {"test": "The identity from Sierpiński space to the discrete space on {0, 1} is continuous",
+     "statement": "The identity map from Sierpiński space to the discrete space on {0, 1} is continuous."},
+    {"test": "{∅, {0, 1}, {1, 2}, {0, 1, 2}} is ruled out",
+     "statement": "{∅, {0, 1}, {1, 2}, {0, 1, 2}} is a topology on {0, 1, 2}."}
   ],
-  "public": ["rot sends ![1, 0] to ![0, 1]", "proj sends ![3, 5] to ![3, 0]", "your u and w: shift (u + w) ≠ shift u + shift w"],
+  "public": ["Sierpiński space satisfies your axioms", "{∅, {0}} on 2 points is ruled out"],
   "checks": [
-    {"lean": "#check (L39.rot : (Fin 2 → ℚ) → (Fin 2 → ℚ))\n#check (L39.proj : (Fin 2 → ℚ) → (Fin 2 → ℚ))\n#check (L39.u : Fin 2 → ℚ)\n#check (L39.w : Fin 2 → ℚ)",
-     "message": "Keep `rot`, `proj : (Fin 2 → ℚ) → (Fin 2 → ℚ)` and `u`, `w : Fin 2 → ℚ`."}
+    {"lean": "#check fun (T : Family 2) => L39.FinTopology.mk T", "message": "Keep `opens : Family n` as the first field of `FinTopology`; the axioms come after it."},
+    {"lean": "#check (L39.mySierpinski : Family 2)\n#check (L39.myParticular : (n : Nat) → Fin n → Family n)\n#check (@L39.IsCont : {m n : Nat} → Family m → Family n → (Fin m → Fin n) → Prop)",
+     "message": "Keep `mySierpinski : Family 2`, `myParticular (n : Nat) (p : Fin n) : Family n` and `IsCont (T : Family m) (S : Family n) (f : Fin m → Fin n) : Prop`."}
   ],
   "hints": [
-    {"match": "rot sends", "steps": ["Where does the quarter turn send the point `(x, y)`? Try `(1, 0)` and `(0, 1)`."],
-     "hint": "`fun v => ![-v 1, v 0]`: `(x, y) ↦ (-y, x)`."},
-    {"match": "proj sends", "steps": ["Which coordinate stays, and what does the other become?"],
-     "hint": "`fun v => ![v 0, 0]`."},
-    {"match": "additive", "hint": "A linear map uses only sums and constant multiples of the coordinates. No `+ 1`, no products of coordinates."},
-    {"match": "scalars", "hint": "A linear map uses only sums and constant multiples of the coordinates. No `+ 1`, no products of coordinates."},
-    {"match": "your u and w", "steps": ["Compute `shift (u + w)` and `shift u + shift w` for `u = w = 0`. How many times is `![1, 0]` added on each side?"],
-     "hint": "Any two vectors work, for example `u = ![0, 0]` and `w = ![0, 0]`. One side adds `![1, 0]` once, the other twice."}
+    {"match": "{∅, {0}} on 2 points", "steps": ["Which open set must every topology contain, besides ∅?"],
+     "hint": "Add `univ_mem : Finset.univ ∈ opens`."},
+    {"match": "{∅, {0, 1}, {1, 2}", "steps": ["{0, 1} and {1, 2} are open. Which set built from them is missing?"],
+     "hint": "Add `inter_mem : ∀ U ∈ opens, ∀ V ∈ opens, U ∩ V ∈ opens`."},
+    {"match": "{∅, {0}, {1}, {0, 1, 2}}", "steps": ["{0} and {1} are open. Which set built from them is missing?"],
+     "hint": "Add `union_mem : ∀ U ∈ opens, ∀ V ∈ opens, U ∪ V ∈ opens`."},
+    {"match": "satisfies your axioms", "hint": "One of your axioms is too strong. A real topology breaks it, and the report names it. Did you ask for complements or for every set to be open?"},
+    {"match": "Sierpiński space is the referee's", "hint": "`{∅, {1}, Finset.univ}`. `{1}` is open, `{0}` is not."},
+    {"match": "particular-point", "steps": ["Which sets contain `p`? `Finset.univ.powerset.filter (fun U => p ∈ U)`."],
+     "hint": "`insert ∅ (Finset.univ.powerset.filter (fun U => p ∈ U))`. Don't forget `∅`."},
+    {"match": "continuous", "steps": ["Continuity pulls open sets back. For every `V ∈ S`, which set must be in `T`?"],
+     "hint": "`∀ V ∈ S, Top.Ref.pre f V ∈ T`. With images (`img f U ∈ S`) you get open maps instead."}
   ]
 }

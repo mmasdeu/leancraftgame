@@ -1,5 +1,7 @@
-statement sq_add (a b : ℝ) : (a + b) ^ 2 = a ^ 2 + 2 * a * b + b ^ 2
-statement two_mul_le (a b : ℝ) : 2 * a * b ≤ a ^ 2 + b ^ 2
-statement abs_mul_le (a b : ℝ) : |a * b| ≤ (a ^ 2 + b ^ 2) / 2
-statement min_comm' (a b : ℝ) : min a b = min b a
-statement max_assoc' (a b c : ℝ) : max a (max b c) = max (max a b) c
+def q1 : Fin 4 := 0
+def q2 : Fin 4 := 1
+def q3 : Fin 3 := 0
+def q4 : Fin 3 := 2
+def q5 : Bool := false
+def q6 : Fin 3 := 1
+def q7 : Fin 3 := 0

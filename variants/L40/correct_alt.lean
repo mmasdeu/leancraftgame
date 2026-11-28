@@ -1,12 +1,12 @@
-def line : Set (Fin 2 → ℚ) := {v | 2 * v 0 - v 1 = 0}
+def d3 : ℝ := deriv (fun t => t ^ 3) 2
 
-def axes : Set (Fin 2 → ℚ) := {v | v 0 * v 1 = 0}
-def a : Fin 2 → ℚ := ![0, 3]
-def b : Fin 2 → ℚ := ![2, 0]
+statement sq_hasDeriv : HasDerivAt (fun x : ℝ => x ^ 2) 6 3
 
-def parabola : Set (Fin 2 → ℚ) := {v | v 1 = v 0 ^ 2}
-def p : Fin 2 → ℚ := ![-1, 1]
+statement rolle {f : ℝ → ℝ} {a b : ℝ} : a < b → ContinuousOn f (Set.Icc a b) → f a = f b →
+    ∃ c ∈ Set.Ioo a b, 0 = deriv f c
 
-def q1 : Fin 3 := 2
-def q2 : Fin 3 := 0
-def q3 : Bool := false
+statement mvt : ∀ (f : ℝ → ℝ) (a b : ℝ), a < b → ContinuousOn f (Set.Icc a b) →
+    DifferentiableOn ℝ f (Set.Ioo a b) → ∃ c, c ∈ Set.Ioo a b ∧ deriv f c = (f b - f a) / (b - a)
+
+def q1 : Fin 4 := 1
+def q2 : Bool := false

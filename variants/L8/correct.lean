@@ -1,3 +1,4 @@
-def FnUb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, f x ≤ a
-def FnLb (f : ℝ → ℝ) (a : ℝ) : Prop := ∀ x, a ≤ f x
-def MonotoneFn (f : ℝ → ℝ) : Prop := ∀ {a b : ℝ}, a ≤ b → f a ≤ f b
+statement sq_sub_sq' {R : Type*} [CommRing R] (a b : R) : (a + b) * (a - b) = a ^ 2 - b ^ 2
+statement absorb {α : Type*} [Lattice α] (x y : α) : x ⊓ (x ⊔ y) = x
+statement max_comm' {α : Type*} [LinearOrder α] (a b : α) : max a b = max b a
+statement dist_triangle' {X : Type*} [MetricSpace X] (x y z : X) : dist x z ≤ dist x y + dist y z

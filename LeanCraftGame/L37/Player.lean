@@ -1,56 +1,90 @@
 /-
-# Rings, ideals, polynomials
+# Filters
 
-*From groups to rings, and back to divisibility. In ℤ, an ideal is divisibility in
-disguise. Sam's notes call `Ideal.span {4, 6}` "the multiples of 4 and of 6", and Noor
-circles it in red.*
+*New project at the Annex: the topology library. Noor wants the home-made limits of the
+Logic world replaced by Mathlib's single notion of convergence.*
 
-The vocabulary:
+## Eventually, infinitely often
 
-* `[CommRing R]`: a commutative ring, such as ℤ, ℚ, ℝ, `ZMod n` or a polynomial ring.
-* `I : Ideal R`: an ideal of `R`, a subset closed under `+` and under multiplication by
-  any element of `R`. `Ideal.span {a, b}` is the ideal **generated** by `a`
-  and `b`: all `r * a + s * b`. In ℤ, `x ∈ Ideal.span {a} ↔ a ∣ x`, with the `∣` of
-  level 20, and every ideal is `Ideal.span {a}` for one number `a`.
-* `ZMod n`: the integers modulo `n`, a commutative ring. For prime `p`, `ZMod p` is a field: every nonzero element has an inverse. A numeral in
-  `ZMod 7` is a residue mod 7, and `#eval (3 : ZMod 7) * 4` prints `5`.
-* `R ≃+* S`: a ring isomorphism, a bijection that preserves `+` and `*`.
-* `Polynomial R`, written `R[X]` after `open Polynomial`. `X` is the variable and `C a` the
-  constant `a`. Numerals work directly, so `X ^ 2 - 3 * X + C 7` equals
-  `X ^ 2 - 3 * X + 7`. `p.eval a` evaluates `p` at `a`, and `p.natDegree` is its degree.
+Here is the `ConvergesTo` you wrote in level 12:
 
-## The Chinese remainder theorem
+```lean
+def ConvergesTo (s : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n - a| < ε
+```
 
-For integers: if `m` and `n` are coprime, then `ZMod (m * n)` is isomorphic, as a ring, to
-`ZMod m × ZMod n`. An isomorphism is data, so the statement says one exists:
-`Nonempty (ZMod (m * n) ≃+* ZMod m × ZMod n)`.
+Its inner part, `∃ N, ∀ n ≥ N, P n`, says `P n` holds **eventually**. Swap the
+quantifiers, `∀ N, ∃ n ≥ N, P n`, and `P n` holds infinitely often. Sam's `blink` of
+level 12, `0, 1, 0, 1, …`, is `0` infinitely often, but not eventually. Mathlib says both
+with filters.
+
+## What a filter is
+
+A **filter** `F : Filter X` is a collection of "large" subsets of `X`. It contains `univ`,
+every superset of its members, and the intersection of any two members. Two you'll use:
+
+* `atTop : Filter ℕ`: the sets that contain all `n` from some point on, `{n | N ≤ n}`;
+* `𝓝 x` (type `\MCN`): the neighbourhoods of `x`, the sets that contain an open set
+  around `x`.
+
+The line `open Filter Topology` in the code lets you write `atTop`, `Tendsto` and `𝓝`
+without the `Filter.` prefix.
+
+## Filter notation
+
+```lean
+∀ᶠ n in atTop, P n      -- the set {n | P n} is in atTop: P n holds eventually
+∃ᶠ n in atTop, P n      -- P n holds for arbitrarily large n: infinitely often
+Tendsto f l₁ l₂         -- for every s ∈ l₂, the preimage f ⁻¹' s is in l₁
+```
+
+You can copy these symbols from the lesson. Or write `nhds x` for `𝓝 x`, and
+`Filter.Eventually (fun n => P n) atTop` for `∀ᶠ n in atTop, P n` (`Filter.Frequently`
+for `∃ᶠ`).
+
+`Tendsto s atTop (𝓝 a)` is your `ConvergesTo s a` (Mathlib's `Metric.tendsto_atTop`
+says so, with `dist (s n) a`, which is `|s n - a|` on `ℝ`). All the limits of analysis
+are `Tendsto`:
+
+```lean
+Tendsto u atTop (𝓝 a)      -- the sequence u converges to a
+Tendsto u atTop atTop      -- u tends to infinity
+Tendsto f (𝓝 x) (𝓝 (f x))  -- f is continuous at x
+```
+
+## The trap: the filter `⊥`
+
+Mathlib allows the filter `⊥`, which contains every set, even `∅`. So
+`∀ᶠ x in ⊥, P x` holds for every `P`, even `False`. A statement about a filter that
+doesn't rule out `⊥` can be true for a silly reason.
 
 ## Your task
 
-1. `I`: the ideal of the integers divisible by both 4 and 6, as `Ideal.span {…}`.
-2. `p`: the monic polynomial of degree 2 over ℤ whose roots are 2 and 3.
-3. `inv3`: the inverse of 3 in `ZMod 7`, written as a number from 0 to 6.
-4. `crt`: for all natural numbers `m` and `n`, if `Nat.Coprime m n`, then
-   `Nonempty (ZMod (m * n) ≃+* ZMod m × ZMod n)`. Write `m` and `n` as explicit binders,
-   then the hypothesis.
+Write each definition with filter notation (no explicit `∃ N`), then answer the
+questions below the lesson. Question 3 is answered `true` or `false`.
 -/
-import Mathlib.RingTheory.Ideal.Span
-import Mathlib.Algebra.Polynomial.Eval.Defs
-import Mathlib.Data.ZMod.QuotientRing
+import Mathlib.Topology.Instances.Real.Lemmas
 
 namespace L37
 
-open Polynomial
+open Filter Topology
 
--- the integers divisible by both 4 and 6
-def I : Ideal ℤ := sorry
+-- u n is positive for every large enough n
+def EventuallyPos (u : ℕ → ℝ) : Prop := sorry
 
--- the monic polynomial of degree 2 with roots 2 and 3
-def p : ℤ[X] := sorry
+-- u n = 0 for infinitely many n
+def OftenZero (u : ℕ → ℝ) : Prop := sorry
 
--- the inverse of 3 in ZMod 7
-def inv3 : ZMod 7 := sorry
+-- u converges to a
+def ConvTo (u : ℕ → ℝ) (a : ℝ) : Prop := sorry
 
-statement crt : sorry
+-- u tends to infinity
+def ToInfinity (u : ℕ → ℝ) : Prop := sorry
+
+-- f is continuous at x
+def ContAt (f : ℝ → ℝ) (x : ℝ) : Prop := sorry
+
+def q1 : Fin 4 := sorry
+def q2 : Fin 3 := sorry
+def q3 : Bool := sorry
 
 end L37

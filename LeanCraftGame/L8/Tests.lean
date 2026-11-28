@@ -1,31 +1,28 @@
-/- Hidden test battery for Level 8: ∀ and →. -/
+/- Hidden test battery for Level 6: Generic statements. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L8.Player
 
-#no_sorry L8.FnUb
-#no_sorry L8.FnLb
-#no_sorry L8.MonotoneFn
-#level_start "∀ and →"
+#no_sorry L8.sq_sub_sq'
+#no_sorry L8.absorb
+#no_sorry L8.max_comm'
+#no_sorry L8.dist_triangle'
+#level_start "Generic statements"
 
-#expect_true "3 is an upper bound of the constant function 3" unfolding L8.FnUb :
-  L8.FnUb (fun _ => 3) 3
-#expect_false "5 is an upper bound of x ↦ x" unfolding L8.FnUb :
-  L8.FnUb (fun x => x) 5
-#expect_true "0 is an upper bound of x ↦ min x 0" unfolding L8.FnUb :
-  L8.FnUb (fun x => min x 0) 0
-#expect_true "0 is a lower bound of x ↦ x²" unfolding L8.FnLb :
-  L8.FnLb (fun x => x ^ 2) 0
-#expect_false "1 is a lower bound of x ↦ x²" unfolding L8.FnLb :
-  L8.FnLb (fun x => x ^ 2) 1
-#expect_true "x ↦ 2x + 1 is monotone" unfolding L8.MonotoneFn :
-  L8.MonotoneFn (fun x => 2 * x + 1)
-#expect_false "x ↦ -x is monotone" unfolding L8.MonotoneFn :
-  L8.MonotoneFn (fun x => -x)
-#expect_false "x ↦ x² is monotone" unfolding L8.MonotoneFn :
-  L8.MonotoneFn (fun x => x ^ 2)
-#expect_equiv "MonotoneFn is Mathlib's Monotone" unfolding L8.MonotoneFn :
-  ∀ f : ℝ → ℝ, L8.MonotoneFn f ↔ Monotone f
-#expect_type "MonotoneFn takes a and b implicitly: `h hab` makes sense" :
-  (fun (h : L8.MonotoneFn (fun x => x)) (hab : (1 : ℝ) ≤ 2) => h hab) : _ → _ → _
+#expect_equiv "sq_sub_sq' says (a + b)(a - b) = a² - b² in every commutative ring" :
+  L8.sq_sub_sq' ↔ ∀ {R : Type} [CommRing R] (a b : R), (a + b) * (a - b) = a ^ 2 - b ^ 2
+  using fun a b => by ring
+#expect_equiv "absorb says x ⊓ (x ⊔ y) = x in every lattice" :
+  L8.absorb ↔ ∀ {α : Type} [Lattice α] (x y : α), x ⊓ (x ⊔ y) = x
+  using fun x y => inf_sup_self
+#expect_equiv "max_comm' says max a b = max b a in every linear order" :
+  L8.max_comm' ↔ ∀ {α : Type} [LinearOrder α] (a b : α), max a b = max b a
+  using fun a b => max_comm a b
+#expect_equiv "dist_triangle' is the triangle inequality in every metric space" :
+  L8.dist_triangle' ↔ ∀ {X : Type} [MetricSpace X] (x y z : X), dist x z ≤ dist x y + dist y z
+  using fun x y z => dist_triangle x y z
+#expect_type "sq_sub_sq' can be used as `h 3 2` for integers" :
+  (fun h : L8.sq_sub_sq' => h (3 : ℤ) 2) : L8.sq_sub_sq' → _
+#expect_type "max_comm' can be used as `h 1 2` for reals" :
+  (fun h : L8.max_comm' => h (1 : ℝ) 2) : L8.max_comm' → _
 
 #level_report

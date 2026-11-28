@@ -1,26 +1,31 @@
 {
-  "world": "Groups and Rings",
-  "title": "Groups in Mathlib",
-  "skill": "writing statements",
-  "exercise": "Write",
-  "predict": [
-    {"test": "3 • (4 : ZMod 12) = 0", "statement": "In the additive group `ZMod 12`, `3 • 4 = 0`."},
-    {"test": "Perm (Fin 3) is not commutative: σ * τ ≠ τ * σ", "statement": "A permutation of order 3 and one of order 2 in `Perm (Fin 3)` never commute."}
+  "slug": "matrices",
+  "world": "Linear Algebra",
+  "title": "Endomorphisms",
+  "skill": "reading and writing statements",
+  "exercise": "Read",
+  "public": "all",
+  "questions": [
+    {"answer": "q1", "text": "What is `Module.End K V`?",
+     "choices": ["the matrices with entries in `K`", "the elements of `V` fixed by every linear map", "the linear maps from `V` to itself", "the field automorphisms of `K`"]},
+    {"answer": "q2", "text": "True or false: by Mathlib's definition, `0` is an eigenvector of every endomorphism, for every `μ`."},
+    {"answer": "q3", "text": "What is the type of `minpoly K f`?",
+     "choices": ["`K`", "`K[X]`, the polynomials over `K`", "`Module.End K V`", "`ℕ`, its degree"]},
+    {"answer": "q4", "text": "True or false: every endomorphism of a nontrivial finite-dimensional *real* vector space has a real eigenvalue."}
   ],
-  "public": ["3 • (4 : ZMod 12) = 0"],
   "checks": [
-    {"lean": "#check (L36.lagrange : Prop)\n#check (L36.cauchy : Prop)\n#check (L36.ord4 : ℕ)\n#check (L36.σ : Equiv.Perm (Fin 3))\n#check (L36.τ : Equiv.Perm (Fin 3))",
-     "message": "Keep the names and types: `lagrange` and `cauchy` are statements, `ord4 : ℕ`, `σ τ : Equiv.Perm (Fin 3)`."}
+    {"lean": "#check (L36.exists_eig : Prop)\n#check (L36.ev₁ : ℚ)\n#check (L36.vec₁ : Fin 2 → ℚ)\n#check (L36.ev₂ : ℚ)\n#check (L36.vec₂ : Fin 2 → ℚ)",
+     "message": "Keep `exists_eig` a `statement`, `ev₁ ev₂ : ℚ` and `vec₁ vec₂ : Fin 2 → ℚ`."}
   ],
   "hints": [
-    {"match": "lagrange", "hint": "`statement lagrange {G : Type*} [Group G] (H : Subgroup G) : Nat.card H ∣ Nat.card G` (the bar is `\\mid`)."},
-    {"match": "cauchy", "steps": ["The binders, in order: `{G : Type*}`, `[Group G]`, `[Fintype G]`, `(p : ℕ)`, then the hypotheses `(hp : p.Prime)` and `(hdvd : p ∣ Fintype.card G)`.", "The conclusion says some element exists: `∃ x : G, orderOf x = p`."],
-     "hint": "`statement cauchy {G : Type*} [Group G] [Fintype G] (p : ℕ) (hp : p.Prime) (hdvd : p ∣ Fintype.card G) : ∃ x : G, orderOf x = p`."},
-    {"match": "ord4", "steps": ["List 4, 8, 12, … modulo 12. When do you first reach 0?"],
-     "hint": "`4 + 4 + 4 = 12 = 0`, so `ord4 := 3`."},
-    {"match": "σ ^ 3", "steps": ["An order-3 permutation moves all three points in a cycle 0 → 1 → 2 → 0."],
-     "hint": "A product of two different swaps: `Equiv.swap 0 1 * Equiv.swap 1 2`."},
-    {"match": "τ ^ 2", "hint": "A single swap has order 2: `Equiv.swap 0 1`."},
-    {"match": "not commutative", "hint": "This always holds when σ has order 3 and τ order 2. Check σ and τ first."}
+    {"match": "Question 1", "hint": "`Module.End R M` is an abbreviation for `M →ₗ[R] M`."},
+    {"match": "Question 2", "hint": "`HasEigenvector f μ x` is `x ∈ eigenspace f μ ∧ x ≠ 0`."},
+    {"match": "Question 3", "hint": "The minimal polynomial is a polynomial: `K[X]`."},
+    {"match": "Question 4", "hint": "The quarter turn `(x, y) ↦ (-y, x)` of `ℝ²` sends no nonzero vector to a multiple of itself."},
+    {"match": "exists_eig", "steps": ["In order: the type `V`, its additive group, the `ℂ`-module structure, finite dimension, nontriviality, then the endomorphism `f`.", "The conclusion is `∃ c : ℂ, f.HasEigenvalue c`."],
+     "hint": "`statement exists_eig {V : Type} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V] [Nontrivial V] (f : Module.End ℂ V) : ∃ c : ℂ, f.HasEigenvalue c`."},
+    {"match": "ev₁ •", "steps": ["`A` is upper triangular, so its eigenvalues are on the diagonal."], "hint": "`ev₁ = 2` with `vec₁ = ![1, 0]`."},
+    {"match": "ev₂ •", "steps": ["For `ev₂ = 3` solve `2x + y = 3x`, that is `y = x`."], "hint": "`ev₂ = 3` with `vec₂ = ![1, 1]`."},
+    {"match": "zero vector", "hint": "An eigenvector can't be `0`. `A *ᵥ 0 = c • 0` holds for every `c`, so it tells you nothing."}
   ]
 }

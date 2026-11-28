@@ -1,31 +1,43 @@
-/- Hidden test battery for Level 40: Subspaces and quotients. -/
+/- Hidden test battery for Level 48: Derivatives. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L40.Player
 
-open L40
+theorem L48T.sq_ref : HasDerivAt (fun x : ℝ => x ^ 2) 6 3 := by
+  have := hasDerivAt_pow 2 (3 : ℝ); norm_num at this; exact this
 
-#no_sorry line
-#no_sorry a
-#no_sorry b
-#no_sorry p
-#no_sorry q1
-#no_sorry q2
-#no_sorry q3
-#level_start "Subspaces and quotients"
+-- Facts the referee may use: Mathlib's derivative of `|x|`, and `HasDerivAt` in terms of `deriv`.
+@[simp] theorem L48T.deriv_abs' (x : ℝ) : deriv (fun y : ℝ => |y|) x = SignType.sign x :=
+  deriv_abs x
+@[simp] theorem L48T.hasDerivAt_iff' {f : ℝ → ℝ} {f' x : ℝ} :
+    HasDerivAt f f' x ↔ DifferentiableAt ℝ f x ∧ deriv f x = f' := by
+  constructor
+  · intro h; exact ⟨h.differentiableAt, h.deriv⟩
+  · rintro ⟨h₁, rfl⟩; exact h₁.hasDerivAt
 
-#expect_true "![1, 2] is on line" unfolding line : ![1, 2] ∈ line
-#expect_false "![2, 1] is on line" unfolding line : ![2, 1] ∈ line
-#expect_true "line contains the zero vector (zero_mem')" unfolding line : ![0, 0] ∈ line
-#expect_true "line is closed under addition (add_mem')" unfolding line :
-  ∀ x y z t : ℚ, ![x, y] ∈ line → ![z, t] ∈ line → ![x + z, y + t] ∈ line
-#expect_true "line is closed under negation and tripling (smul_mem')" unfolding line :
-  ∀ x y : ℚ, ![x, y] ∈ line → ![-x, -y] ∈ line ∧ ![3 * x, 3 * y] ∈ line
-#expect_true "your a and b lie on the axes" unfolding axes a b : a ∈ axes ∧ b ∈ axes
-#expect_true "a + b is not on the axes" unfolding axes a b : a + b ∉ axes
-#expect_true "your p lies on the parabola" unfolding parabola p : p ∈ parabola
-#expect_true "2 • p is not on the parabola" unfolding parabola p : ![2 * p 0, 2 * p 1] ∉ parabola
-#expect_choice "Question 1: what `U ⊔ W` is" : q1 = 2
-#expect_choice "Question 2: what `⊥ : Submodule K V` is" : q2 = 0
-#expect_choice "Question 3: is `{v | v 1 = 2 * v 0 + 1}` a subspace?" : q3 = false
+#no_sorry L40.d3
+#no_sorry L40.sq_hasDeriv
+#no_sorry L40.rolle
+#no_sorry L40.mvt
+#no_sorry L40.q1
+#no_sorry L40.q2
+#level_start "Derivatives"
+
+#expect_true "In Mathlib, deriv (fun x => |x|) 0 = 0" :
+  deriv (fun x : ℝ => |x|) 0 = 0
+#expect_true "d3 is the derivative of x ↦ x³ at 2" unfolding L40.d3 :
+  L40.d3 = 12
+#expect_equiv "sq_hasDeriv says: x ↦ x² has derivative 6 at 3" :
+  L40.sq_hasDeriv ↔ HasDerivAt (fun x : ℝ => x ^ 2) 6 3
+  using L48T.sq_ref
+#expect_equiv "rolle is Rolle's theorem, with Mathlib's hypotheses" :
+  L40.rolle ↔ ∀ (f : ℝ → ℝ) (a b : ℝ), a < b → ContinuousOn f (Set.Icc a b) → f a = f b →
+    ∃ c ∈ Set.Ioo a b, deriv f c = 0
+  using fun _ _ _ => exists_deriv_eq_zero
+#expect_equiv "mvt is the mean value theorem" :
+  L40.mvt ↔ ∀ (f : ℝ → ℝ) (a b : ℝ), a < b → ContinuousOn f (Set.Icc a b) →
+    DifferentiableOn ℝ f (Set.Ioo a b) → ∃ c ∈ Set.Ioo a b, deriv f c = (f b - f a) / (b - a)
+  using fun f _ _ => exists_deriv_eq_slope f
+#expect_choice "Question 1: why Mathlib's Rolle needs no differentiability" : L40.q1 = 1
+#expect_choice "Question 2: the order of the arguments of HasDerivAt" : L40.q2 = false
 
 #level_report

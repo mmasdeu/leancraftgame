@@ -1,87 +1,80 @@
 /-
-# Defining structures
+# Sam's groups
 
-*Noor starts a new project: the library needs objects of its own, beginning with a point of
-space. Your `Point` comes back later as a class instance and as a vector.*
+*Before the project could use Mathlib's groups, Sam wrote some over lunch. The file
+compiles. Noor asks whether every model of Sam's axioms is really a group.*
 
-A **structure** bundles data together:
+A **group** is a set with an associative product, an element `one` with
+`one * a = a * one = a` for every `a`, and an inverse for each `a`, with
+`a * a⁻¹ = a⁻¹ * a = one`. Some groups are not commutative. For example, S₃, the six
+symmetries of a triangle: a reflection followed by a rotation differs from the rotation
+followed by the reflection.
 
-```lean
-structure Point where
-  x : ℝ
-  y : ℝ
-  z : ℝ
-```
-
-A `Point` has three fields. You can build one in three ways:
+Like `StandardTwoSimplex` in level 28, an algebraic structure has the operations and the
+axioms as fields. Here is a monoid (a group without inverses):
 
 ```lean
-def p : Point := ⟨1, 2, 3⟩                    -- anonymous constructor: fields in order
-def q : Point := Point.mk 1 2 3               -- `Point.mk` builds a Point from its fields
-def r : Point := { x := 1, y := 2, z := 3 }   -- field names: order does not matter
+structure Monoid₁ (α : Type*) where
+  mul : α → α → α
+  one : α
+  mul_assoc : ∀ x y z : α, mul (mul x y) z = mul x (mul y z)
+  mul_one : ∀ x : α, mul x one = x
+  one_mul : ∀ x : α, mul one x = x
 ```
 
-`p.x` is the first coordinate of `p`.
+A model is the data (`mul`, `one`) plus proofs of the axioms. With too few axioms,
+junk satisfies them. With too many, real groups fail.
 
-## Dot notation
+Sam's `Group'` (in the editor) uses a *left* identity and a *right* inverse. A left
+identity with left inverses does give a group. Mixed sides don't.
 
-A function in the namespace `Point` can be called with a dot:
-
-```lean
-def Point.neg (a : Point) : Point := ⟨-a.x, -a.y, -a.z⟩
--- now `p.neg` means `Point.neg p`
-```
-
-## Fields that are propositions
-
-A field can also be a property. The standard 2-simplex is the triangle of points with
-nonnegative coordinates that add up to 1:
-
-```lean
-structure StandardTwoSimplex where
-  x : ℝ
-  y : ℝ
-  z : ℝ
-  x_nonneg : 0 ≤ x
-  -- … one field for each remaining property
-```
-
-An element needs the numbers and proofs of the properties. The referee tests your fields
-on points inside and outside the simplex. Leave out one property and an unwanted point
-gets in.
-
-## Your task
-
-Write the definitions, and finish `StandardTwoSimplex`: after the three coordinates, add
-the fields `x_nonneg`, `y_nonneg`, `z_nonneg` and `sum_eq`, in this order.
+So ask of any axioms: do they allow **junk models**? Look for a small model that satisfies
+them and breaks a property every group has.
 -/
 import Mathlib.Tactic
 
 namespace L28
 
--- points of space (already done)
-structure Point where
-  x : ℝ
-  y : ℝ
-  z : ℝ
+structure Group' (G : Type) where
+  mul : G → G → G
+  one : G
+  inv : G → G
+  mul_assoc : ∀ a b c, mul (mul a b) c = mul a (mul b c)
+  one_mul   : ∀ a, mul one a = a
+  mul_inv   : ∀ a, mul a (inv a) = one
 
--- the origin, written with field names `{ x := …, y := …, z := … }`
-def origin : Point := sorry
+-- Text between `/-` and `-/` is a block comment, like `--` over several lines.
+/-
+## Part A: Break it
 
--- the point (1, 2, 3), written with `⟨…⟩`
-def p123 : Point := sorry
+Find a junk model: an operation on `Bool` (the type with the two values `true` and
+`false`) that satisfies every axiom of `Group'` but is not a group. Give only the data.
+The referee checks the axioms for you. A function of two arguments is written
+`fun a b => …`.
 
--- the sum of two points, coordinate by coordinate
-def Point.add (a b : Point) : Point := sorry
+Hint: do the axioms above imply `mul a one = a`?
+-/
 
--- the point a scaled by the factor r
-def Point.smul (r : ℝ) (a : Point) : Point := sorry
+def junkMul : Bool → Bool → Bool := sorry
+def junkOne : Bool := sorry
+def junkInv : Bool → Bool := sorry
 
--- the points with nonnegative coordinates whose sum is 1
-structure StandardTwoSimplex where
-  x : ℝ
-  y : ℝ
-  z : ℝ
-  -- your four fields here
+/-
+## Part B: Fix it
+
+Write a correct definition. Keep `mul`, `one`, `inv` as the first three fields, in this
+order. The axioms are up to you.
+
+The referee tries your structure on many models. Real groups must satisfy all your axioms.
+Each junk model must break at least one. One of the groups is S₃.
+-/
+
+structure Group₂ (G : Type) where
+  mul : G → G → G
+  one : G
+  inv : G → G
+  mul_assoc : ∀ a b c, mul (mul a b) c = mul a (mul b c)
+  one_mul   : ∀ a, mul one a = a
+  mul_inv   : ∀ a, mul a (inv a) = one
 
 end L28

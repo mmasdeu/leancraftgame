@@ -1,40 +1,32 @@
-/- Hidden test battery for Level 34: Morphisms. -/
+/- Hidden test battery for Level 37: Rings, ideals, polynomials. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L34.Player
 
-open L34
+#no_sorry L34.I
+#no_sorry L34.p
+#no_sorry L34.inv3
+#no_sorry L34.crt
 
-#no_sorry IsMonoidHom
-#no_sorry IsAddMonoidHom
-#no_sorry homNotOnto
-#no_sorry bijNotHom
-#level_start "Morphisms"
+-- The referee's normalisation would unfold `x ∈ Ideal.span s` into statements about sets:
+-- membership in the player's ideal hides behind an irreducible name, and simp rewrites it
+-- to divisibility (`Ideal.mem_span_singleton`).
+attribute [simp] Ideal.mem_span_singleton L34.I
+@[irreducible] def InI (x : ℤ) : Prop := x ∈ L34.I
+@[simp] theorem InI_iff (x : ℤ) : InI x ↔ x ∈ L34.I := by unfold InI; rfl
 
-#expect_true "n ↦ n² is a homomorphism of (ℕ, *)" unfolding IsMonoidHom :
-  IsMonoidHom (fun n : ℕ => n ^ 2)
-#expect_false "The constant map 0 is a homomorphism of (ℕ, *)" unfolding IsMonoidHom :
-  IsMonoidHom (fun _ : ℕ => (0 : ℕ))
-#expect_false "n ↦ 2n is a homomorphism of (ℕ, *)" unfolding IsMonoidHom :
-  IsMonoidHom (fun n : ℕ => 2 * n)
-#expect_false "n ↦ -n is a homomorphism of (ℤ, *)" unfolding IsMonoidHom :
-  IsMonoidHom (fun n : ℤ => -n)
-#expect_true "Every bundled f : ℕ →* ℤ satisfies IsMonoidHom f" unfolding IsMonoidHom :
-  ∀ f : ℕ →* ℤ, IsMonoidHom f
-#expect_true "n ↦ 3n is a homomorphism of (ℤ, +)" unfolding IsAddMonoidHom :
-  IsAddMonoidHom (fun n : ℤ => 3 * n)
-#expect_false "n ↦ n + 1 is a homomorphism of (ℤ, +)" unfolding IsAddMonoidHom :
-  IsAddMonoidHom (fun n : ℤ => n + 1)
-#expect_false "n ↦ 2ⁿ is a homomorphism of (ℕ, +)" unfolding IsAddMonoidHom :
-  IsAddMonoidHom (fun n : ℕ => 2 ^ n)
-#expect_true "Every bundled f : ℤ →+ ℤ satisfies IsAddMonoidHom f" unfolding IsAddMonoidHom :
-  ∀ f : ℤ →+ ℤ, IsAddMonoidHom f
-#expect_true "homNotOnto preserves 0 and +" unfolding homNotOnto :
-  homNotOnto 0 = 0 ∧ ∀ a b, homNotOnto (a + b) = homNotOnto a + homNotOnto b
-#expect_false "homNotOnto is surjective" unfolding homNotOnto :
-  ∀ m, ∃ n, homNotOnto n = m
-#expect_true "bijNotHom is its own inverse" unfolding bijNotHom :
-  ∀ n, bijNotHom (bijNotHom n) = n
-#expect_false "bijNotHom preserves 0 and +" unfolding bijNotHom :
-  bijNotHom 0 = 0 ∧ ∀ a b, bijNotHom (a + b) = bijNotHom a + bijNotHom b
+#level_start "Rings, ideals, polynomials"
+
+#expect_true "24 is in I" : InI 24
+#expect_true "-36 is in I" : InI (-36)
+#expect_false "6 is in I" : InI 6
+#expect_false "4 is in I" : InI 4
+#expect_true "p (2) = 0" unfolding L34.p : L34.p.eval 2 = 0
+#expect_true "p (3) = 0" unfolding L34.p : L34.p.eval 3 = 0
+#expect_true "p (0) = 6" unfolding L34.p : L34.p.eval 0 = 6
+#expect_true "p (1) = 2" unfolding L34.p : L34.p.eval 1 = 2
+#expect_true "3 * inv3 = 1 in ZMod 7" unfolding L34.inv3 : 3 * L34.inv3 = 1
+#expect_equiv "crt: coprime moduli split ZMod (m * n)" :
+  L34.crt ↔ ∀ m n : ℕ, Nat.Coprime m n → Nonempty (ZMod (m * n) ≃+* ZMod m × ZMod n)
+  using fun m n h => ⟨ZMod.chineseRemainder h⟩
 
 #level_report

@@ -1,5 +1,6 @@
 {
-  "world": "Discrete Mathematics",
+  "slug": "big-operators",
+  "world": "Counting",
   "title": "Big operators and counting",
   "skill": "sums and products",
   "exercise": "Write",

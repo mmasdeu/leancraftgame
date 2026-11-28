@@ -1,5 +1,6 @@
 {
-  "world": "Discrete Mathematics",
+  "slug": "finset",
+  "world": "Counting",
   "title": "Finset and Fintype",
   "skill": "finite sets",
   "exercise": "Write",

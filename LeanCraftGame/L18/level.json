@@ -1,37 +1,36 @@
 {
-  "world": "Sets and Functions",
-  "title": "Reading a construction: Schröder–Bernstein",
-  "skill": "reading",
-  "exercise": "Read",
-  "public": "all",
-  "hintsAfter": 1,
+  "slug": "injective",
+  "world": "Sets, Functions, Types",
+  "title": "Injective, surjective, inverses",
+  "skill": "functions",
+  "exercise": "Write",
+  "public": ["Inj (n + 1)", "Surj of the identity"],
+  "predict": [
+    {"test": "Surj (n - 1)", "statement": "`fun n : ℕ => n - 1` is surjective."},
+    {"test": "Inj (n - 1)", "statement": "`fun n : ℕ => n - 1` is injective."}
+  ],
   "questions": [
-    {"answer": "q1", "text": "Which of the three definitions is by recursion on a natural number?",
-     "choices": ["`sbAux`", "`sbSet`", "`sbFun`"]},
-    {"answer": "q2", "text": "What is `sbAux f g 0`?",
-     "choices": ["the range of `g`", "the points of `α` that are not in the range of `g`", "the empty set"]},
-    {"answer": "q3", "text": "For `x ∈ sbSet f g`, what is `sbFun f g x`?",
-     "choices": ["`invFun g x`", "`x`", "`f x`"]},
-    {"answer": "q4", "text": "True or false: `[Nonempty β]` is needed because `sbFun` uses `invFun g`, a function `α → β`."},
-    {"answer": "q5", "text": "With `f n = g n = 2 * n` on ℕ: true or false, `3 ∈ sbSet f g`."},
-    {"answer": "q6", "text": "Same `f` and `g`: true or false, `12 ∈ sbSet f g`."},
-    {"answer": "q7", "text": "Same `f` and `g`: true or false, `8 ∈ sbSet f g`."}
+    {"answer": "q1", "text": "Why does `Function.invFun` have the argument `[Nonempty α]`?",
+     "choices": ["for `y` outside the range of `f`, `invFun f y` must still return an element of `α`", "because `f` must be injective", "so that Lean can compute `invFun f`"]},
+    {"answer": "q2", "text": "True or false: `Function.LeftInverse (Function.invFun f) f` holds for every `f : α → β` (with `α` nonempty)."},
+    {"answer": "q3", "text": "What does `Set.InjOn f s` say?",
+     "choices": ["`f` sends `s` into `s`", "`s` is the image of `f`", "two points of `s` with the same image under `f` are equal"]}
   ],
   "checks": [
-    {"lean": "#check (L18.sbFun12 : ℕ)\n#check (L18.sbFun8 : ℕ)",
-     "message": "Keep `sbFun12 : ℕ` and `sbFun8 : ℕ`, and the answer lines as they are."}
+    {"lean": "#check (L18.Inj : (ℕ → ℕ) → Prop)\n#check (L18.Surj : (ℕ → ℕ) → Prop)\n#check (L18.pred' : ℕ → ℕ)\n#check (L18.q1 : Fin 3)\n#check (L18.q2 : Bool)\n#check (L18.q3 : Fin 3)",
+     "message": "Keep the names and types: `Inj`, `Surj : (ℕ → ℕ) → Prop`, `pred' : ℕ → ℕ`, and the three answer lines."}
   ],
   "hints": [
-    {"match": "Question 1", "hint": "Look for the `| 0 => …` and `| n + 1 => …` lines."},
-    {"match": "Question 2", "hint": "`Set.univ \\ g '' Set.univ`: everything, minus the image of everything under `g`."},
-    {"match": "Question 3", "hint": "`if x ∈ sbSet f g then f x else …`."},
-    {"match": "Question 4", "hint": "`invFun g` returns elements of `β`, the domain of `g`."},
-    {"match": "Question 5", "hint": "`sbAux 0` is the odd numbers."},
-    {"match": "Question 6", "hint": "`sbAux 1` is the odd numbers times 4, and `12 = 4 · 3`."},
-    {"match": "Question 7", "steps": ["`sbSet` is the numbers `4 ^ k · (odd)`. Is `8 = 2 ^ 3` of that form?"],
-     "hint": "No: the power of 2 in `8` is odd. So `8 ∉ sbSet`."},
-    {"match": "sbFun f g 12", "hint": "`12 ∈ sbSet`, so `sbFun 12 = f 12 = 24`."},
-    {"match": "sbFun f g 8", "steps": ["Is `8` in `sbSet`? If not, `sbFun 8 = invFun g 8`: which `y` has `g y = 8`?"],
-     "hint": "`8 ∉ sbSet`, and `g 4 = 8`, so `sbFun 8 = 4`."}
+    {"match": "Inj (n + 1)", "steps": ["Which part of your definition is the hypothesis: equal inputs, or equal outputs?"],
+     "hint": "`∀ a b, f a = f b → a = b`."},
+    {"match": "Inj (n - 1)", "steps": ["What are `0 - 1` and `1 - 1` in ℕ?"],
+     "hint": "`0` and `1` have the same output. Your definition should catch that: `∀ a b, f a = f b → a = b`."},
+    {"match": "Inj of a constant", "hint": "Did you write the converse, `a = b → f a = f b`? Every function satisfies it."},
+    {"match": "Surj", "steps": ["\"Every output is hit\": which quantifier comes first, the one over outputs or over inputs?"],
+     "hint": "`∀ b, ∃ a, f a = b`."},
+    {"match": "pred'", "hint": "`fun n => n - 1`: then `pred' (n + 1) = n`."},
+    {"match": "Question 1", "hint": "What should `invFun f y` be when no `x` has `f x = y`?"},
+    {"match": "Question 2", "hint": "If `f` is constant, can any `g` satisfy `g (f x) = x` for all `x`?"},
+    {"match": "Question 3", "hint": "It's injectivity, restricted to the points of `s`."}
   ]
 }

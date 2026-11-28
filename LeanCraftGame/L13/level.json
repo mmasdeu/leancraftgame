@@ -1,72 +1,25 @@
 {
+  "slug": "convergence",
   "world": "Logic",
-  "title": "Be the referee",
-  "skill": "testing",
-  "exercise": "Construct",
-  "timeout": 150,
-  "public": [
-    "good₁ converges to 0",
-    "good₂ converges to 0",
-    "bad₁ does not converge to 0",
-    "bad₂ does not converge to 0"
+  "title": "Sequences and convergence",
+  "skill": "writing definitions",
+  "exercise": "Write",
+  "predict": [
+    {"test": "7, 7, 7, 7, 7, 0, 0, 0, … converges to 0", "statement": "`ConvergesTo (fun n ↦ if n < 5 then 7 else 0) 0`"},
+    {"test": "0, 1, 0, 1, … converges to 0", "statement": "`ConvergesTo (fun n ↦ if n % 2 = 0 then 0 else 1) 0`"}
   ],
+  "public": ["the constant sequence 3 converges to 3"],
   "checks": [
-    {
-      "lean": "#check (L13.good₁ : ℕ → ℝ)\n#check (L13.good₂ : ℕ → ℝ)\n#check (L13.bad₁ : ℕ → ℝ)\n#check (L13.bad₂ : ℕ → ℝ)",
-      "message": "Keep `good₁`, `good₂`, `bad₁` and `bad₂` as sequences `ℕ → ℝ`."
-    }
+    {"lean": "#check (L13.ConvergesTo : (ℕ → ℝ) → ℝ → Prop)", "message": "Keep `ConvergesTo : (ℕ → ℝ) → ℝ → Prop`."}
   ],
   "hints": [
-    {
-      "match": "good₁ converges",
-      "hint": "`good₁` is labelled as converging to 0, but it doesn't."
-    },
-    {
-      "match": "good₂ converges",
-      "hint": "`good₂` is labelled as converging to 0, but it doesn't."
-    },
-    {
-      "match": "bad₁ does not",
-      "hint": "`bad₁` is labelled as not converging to 0, but it does."
-    },
-    {
-      "match": "bad₂ does not",
-      "hint": "`bad₂` is labelled as not converging to 0, but it does."
-    },
-    {
-      "match": "nonnegative, eventually below",
-      "steps": [
-        "This mutant only accepts sequences whose terms are all `≥ 0`. Must a sequence that converges to 0 stay nonnegative?"
-      ],
-      "hint": "`fun n ↦ if n = 0 then -1 else 0` (-1, 0, 0, …) converges to 0: use it as a `good` sequence."
-    },
-    {
-      "match": "close again and again",
-      "steps": [
-        "This mutant accepts every sequence that comes back close to 0 infinitely often. Which non-convergent sequence does that?"
-      ],
-      "hint": "`fun n ↦ if n % 2 = 0 then 0 else 1` (0, 1, 0, 1, …) as a `bad` sequence."
-    },
-    {
-      "match": "eventually small",
-      "steps": [
-        "This mutant accepts any sequence that eventually stays below 1 in size. Can a sequence do that without converging to 0?"
-      ],
-      "hint": "A constant such as `fun _ ↦ 1/2`, or `fun _ ↦ -1/2`, as a `bad` sequence."
-    },
-    {
-      "match": "no absolute value",
-      "steps": [
-        "Without `|·|`, the mutant only checks `s n < ε`. Which sequences pass that easily?"
-      ],
-      "hint": "A negative constant, `fun _ ↦ -1/2`, as a `bad` sequence."
-    },
-    {
-      "match": "decreasing",
-      "steps": [
-        "This mutant only accepts sequences that never go up. Can a sequence converge to 0 while going up somewhere?"
-      ],
-      "hint": "`fun n ↦ if n = 1 then 1 else 0` (0, 1, 0, 0, …) as a `good` sequence."
-    }
+    {"match": "constant sequence 3 converges to 3", "steps": ["Is there a tolerance `ε` for which even a constant sequence fails?"], "hint": "Did you forget `ε > 0`? With `ε = 0` nothing is close enough: `∀ ε > 0, …`."},
+    {"match": "7, 7, 7", "hint": "The first terms must not matter: `∃ N, ∀ n ≥ N, …`."},
+    {"match": "converges to 4", "hint": "`|s n - a| < ε`: the distance to the limit."},
+    {"match": "0, 1, 0, 1", "steps": ["Is one close term enough, or must all terms from some point on be close?"], "hint": "`∃ N, ∀ n ≥ N, |s n - a| < ε`."},
+    {"match": "0, 1, 2", "hint": "`∀ ε > 0, ∃ N, ∀ n ≥ N, |s n - a| < ε`."},
+    {"match": "convergesTo_const", "hint": "`statement convergesTo_const (a : ℝ) : ConvergesTo (fun _ ↦ a) a`."},
+    {"match": "convergesTo_add", "hint": "`statement convergesTo_add (s t : ℕ → ℝ) (a b : ℝ) (hs : ConvergesTo s a) (ht : ConvergesTo t b) : ConvergesTo (fun n ↦ s n + t n) (a + b)`."},
+    {"match": "convergesTo_unique", "hint": "`statement convergesTo_unique (s : ℕ → ℝ) (a b : ℝ) (sa : ConvergesTo s a) (sb : ConvergesTo s b) : a = b`."}
   ]
 }

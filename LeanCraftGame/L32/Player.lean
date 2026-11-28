@@ -1,104 +1,55 @@
 /-
-# Classes and instances
+# Sub-objects
 
-*A new project. The library defines powers four times: in `ℕ`, in `ℤ`, for the `GaussInt`
-of level 30, and for permutations. Noor wants it written once, with Lean finding the
-structure. This world builds a small copy of Mathlib's **type classes**.*
+*Noor needs sub-objects next: the even numbers inside ℕ, the multiples of 12 inside ℕ.
+Sam proposed "a subset closed under `+`". The referee quickly found a subset that passes
+and shouldn't.*
 
-## Classes
-
-A class is a structure whose instances Lean searches for by itself:
-
-```lean
-class One₁ (α : Type) where
-  one : α
-
-class Dia₁ (α : Type) where
-  dia : α → α → α
-
-infixl:70 " ⋄ " => Dia₁.dia
-
-class Monoid₁ (α : Type) extends Dia₁ α, One₁ α
-```
-
-`One₁ α` says `α` has a chosen element. `Dia₁ α` says `α` has a binary operation, written
-`a ⋄ b` (type `\diamond`). `extends` combines classes, so a `Monoid₁ α` has both. A real
-monoid class would also have the axioms. Here the tests check them on your examples.
-
-## Instances
-
-An **instance** says that a given type has the structure:
+A submonoid is a structure that bundles a set with the facts that make it closed under the
+operations:
 
 ```lean
-instance natMul : Monoid₁ ℕ where
-  dia a b := a * b
-  one := 1
+structure Submonoid₁ (M : Type) [Monoid M] where
+  carrier : Set M                -- the subset
+  -- the product of two elements of the submonoid is in it
+  mul_mem {a b} : a ∈ carrier → b ∈ carrier → a * b ∈ carrier
+  -- the unit is in it
+  one_mem : 1 ∈ carrier
 ```
 
-## Using a class
+* `carrier : Set M` holds data, the subset.
+* `mul_mem` and `one_mem` hold propositions, the axioms. `mul_mem {a b} : …` has its own
+  binders, and `{a b}` makes `a` and `b` implicit.
 
-A definition asks for any monoid through an instance argument in square brackets,
-`[Monoid₁ α]`. Lean finds the instance at each use:
+## Junk models
 
-```lean
-def mpow {α : Type} [Monoid₁ α] (x : α) : ℕ → α
-  | 0 => One₁.one
-  | n + 1 => mpow x n ⋄ x
-```
+Leave out an axiom and junk gets in. The numbers `≥ 2` are closed under multiplication,
+but they aren't a submonoid of `(ℕ, *, 1)`: `1` is missing. The referee tests your axioms
+on many subsets. Real submonoids must satisfy every axiom, and junk must break at least one.
 
-`mpow 2 10` finds `natMul` and gives `1024`. This search is how Mathlib knows `ℝ` is a field,
-and why one lemma about monoids covers them all. A type gets one instance of a class, so
-`ℕ` can't be a `Monoid₁` under both `*` and `+`. That's why Mathlib has separate additive
-classes such as `AddMonoid`.
+## Set-builder notation
+
+`{n : ℕ | P n}` is the set of `n` satisfying `P n`, as in the Sets and Functions world. So
+`{n | n % 2 = 0}` is the even numbers, and `{n | k ∣ n}` the multiples of `k` (type `\mid`
+for `∣`). A list in braces, like `{0, 1}`, is the set with exactly those elements.
 
 ## Your task
 
-Write three instances. Powers then come for free:
-
-* `(Bool, xor, false)`: the Lean function `xor a b` is `true` when exactly one of `a`, `b`
-  is `true`.
-* `(ℤ, +, 0)`: here `x ⋄ y` means `x + y`.
-* `(ℕ → ℕ, ∘, id)`: `f ⋄ g` is "first `g`, then `f`". In Lean that is `f ∘ g`
-  (type `\comp`), the function `fun n => f (g n)`. The identity function is `id`.
-  Then `mpow f n` is `f` applied `n` times.
-
-The tests write `(· * 2)` for the function `fun n => n * 2`.
+1. Complete `AddSubmonoid₁`, the additive version: the carrier is closed under `+` and
+   contains `0`. Keep `carrier` as the first field and add the axioms after it. Name them
+   as you like, say `add_mem` and `zero_mem`.
+2. Define `evens`, the even natural numbers, and `multiplesOf k`, the multiples of `k`.
 -/
 namespace L32
 
-class One₁ (α : Type) where
-  one : α
+structure AddSubmonoid₁ (M : Type) [AddMonoid M] where
+  carrier : Set M
+  -- add the axioms here
 
-class Dia₁ (α : Type) where
-  dia : α → α → α
+-- the even natural numbers
+def evens : Set ℕ := sorry
 
-infixl:70 " ⋄ " => Dia₁.dia
-
-class Monoid₁ (α : Type) extends Dia₁ α, One₁ α
-
--- x ⋄ x ⋄ ⋯ ⋄ x (n times), in every monoid at once (done)
-def mpow {α : Type} [Monoid₁ α] (x : α) : ℕ → α
-  | 0 => One₁.one
-  | n + 1 => mpow x n ⋄ x
-
--- (ℕ, *, 1) (done)
-instance natMul : Monoid₁ ℕ where
-  dia a b := a * b
-  one := 1
-
--- (Bool, xor, false)
-instance boolXor : Monoid₁ Bool where
-  dia a b := sorry
-  one := sorry
-
--- (ℤ, +, 0)
-instance intAdd : Monoid₁ ℤ where
-  dia a b := sorry
-  one := sorry
-
--- (ℕ → ℕ, composition, identity): f ⋄ g is "first g, then f"
-instance endo : Monoid₁ (ℕ → ℕ) where
-  dia f g := sorry
-  one := sorry
+-- the natural numbers divisible by k
+def multiplesOf (k : ℕ) : Set ℕ := sorry
 
 end L32

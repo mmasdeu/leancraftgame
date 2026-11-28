@@ -1,55 +1,67 @@
 /-
-# Sub-objects
+# Vector spaces and linear maps
 
-*Noor needs sub-objects next: the even numbers inside ℕ, the multiples of 12 inside ℕ.
-Sam proposed "a subset closed under `+`". The referee quickly found a subset that passes
-and shouldn't.*
+*A new project: linear algebra in the plane. The `Point` you wrote in level 28 had `add`
+and `smul`. Now Mathlib supplies them, and Noor asks which maps respect them. Sam has
+already proposed one that doesn't.*
 
-A submonoid is a structure that bundles a set with the facts that make it closed under the
-operations:
+Linear algebra in Mathlib starts with these hypotheses:
 
 ```lean
-structure Submonoid₁ (M : Type) [Monoid M] where
-  carrier : Set M                -- the subset
-  -- the product of two elements of the submonoid is in it
-  mul_mem {a b} : a ∈ carrier → b ∈ carrier → a * b ∈ carrier
-  -- the unit is in it
-  one_mem : 1 ∈ carrier
+variable {K : Type*} [Field K] {V : Type*} [AddCommGroup V] [Module K V]
 ```
 
-* `carrier : Set M` holds data, the subset.
-* `mul_mem` and `one_mem` hold propositions, the axioms. `mul_mem {a b} : …` has its own
-  binders, and `{a b}` makes `a` and `b` implicit.
+`K` is a field, `V` has an addition with `0` and `-`, and `K` acts on `V` by scalar
+multiplication `c • v` (type `\smul`). Mathlib says "module" for "vector space". Over a
+field they're the same. The plane `ℚ²` is the type `Fin 2 → ℚ`. A vector `![x, y]` is a
+function from the indices `0`, `1` to `ℚ`, and `v 0`, `v 1` are its coordinates.
 
-## Junk models
+## Linear maps are bundled
 
-Leave out an axiom and junk gets in. The numbers `≥ 2` are closed under multiplication,
-but they aren't a submonoid of `(ℕ, *, 1)`: `1` is missing. The referee tests your axioms
-on many subsets. Real submonoids must satisfy every axiom, and junk must break at least one.
+A linear map `V →ₗ[K] W` (type `\to\_l`) is a **structure**: a function plus proofs that
+it's linear. Roughly:
 
-## Set-builder notation
+```lean
+structure LinearMap (V W : Type*) where
+  toFun : V → W
+  map_add' : ∀ x y, toFun (x + y) = toFun x + toFun y
+  map_smul' : ∀ (c : K) x, toFun (c • x) = c • toFun x
+```
 
-`{n : ℕ | P n}` is the set of `n` satisfying `P n`, as in the Sets and Functions world. So
-`{n | n % 2 = 0}` is the even numbers, and `{n | k ∣ n}` the multiples of `k` (type `\mid`
-for `∣`). A list in braces, like `{0, 1}`, is the set with exactly those elements.
+You apply it like a function, `φ v`.
+
+Here you give only the `toFun`. The referee proves `map_add'` and `map_smul'`, or finds
+that they fail.
+
+## Not every formula is linear
+
+Sam's `shift`, `v ↦ v + ![1, 0]`, moves every point one step right. It isn't linear. A
+linear map sends `0` to `0`, since `φ 0 = φ (0 + 0) = φ 0 + φ 0`.
+
+The quarter turn is linear. It's multiplication by `i` on the Gaussian integers of
+level 30, read in coordinates.
 
 ## Your task
 
-1. Complete `AddSubmonoid₁`, the additive version: the carrier is closed under `+` and
-   contains `0`. Keep `carrier` as the first field and add the axioms after it. Name them
-   as you like, say `add_mem` and `zero_mem`.
-2. Define `evens`, the even natural numbers, and `multiplesOf k`, the multiples of `k`.
+1. `rot`: the counterclockwise quarter turn. It sends `![1, 0]` to `![0, 1]` and
+   `![0, 1]` to `![-1, 0]`.
+2. `proj`: the projection onto the first axis, `![x, y] ↦ ![x, 0]`.
+3. Show `shift` isn't linear: give two vectors `u` and `w` with
+   `shift (u + w) ≠ shift u + shift w`.
 -/
+import Mathlib.LinearAlgebra.Matrix.ToLin
+
 namespace L35
 
-structure AddSubmonoid₁ (M : Type) [AddMonoid M] where
-  carrier : Set M
-  -- add the axioms here
+def rot : (Fin 2 → ℚ) → (Fin 2 → ℚ) := sorry
 
--- the even natural numbers
-def evens : Set ℕ := sorry
+def proj : (Fin 2 → ℚ) → (Fin 2 → ℚ) := sorry
 
--- the natural numbers divisible by k
-def multiplesOf (k : ℕ) : Set ℕ := sorry
+-- a translation, given
+def shift : (Fin 2 → ℚ) → (Fin 2 → ℚ) := fun v => v + ![1, 0]
+
+-- two vectors on which `shift` isn't additive
+def u : Fin 2 → ℚ := sorry
+def w : Fin 2 → ℚ := sorry
 
 end L35

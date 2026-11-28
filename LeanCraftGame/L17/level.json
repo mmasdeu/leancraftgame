@@ -1,35 +1,24 @@
 {
-  "world": "Sets and Functions",
-  "title": "Injective, surjective, inverses",
-  "skill": "functions",
+  "slug": "images",
+  "world": "Sets, Functions, Types",
+  "title": "Images and preimages",
+  "skill": "sets",
   "exercise": "Write",
-  "public": ["Inj (n + 1)", "Surj of the identity"],
+  "public": ["9 ∈ squares", "y₀ is in the image of s₀"],
   "predict": [
-    {"test": "Surj (n - 1)", "statement": "`fun n : ℕ => n - 1` is surjective."},
-    {"test": "Inj (n - 1)", "statement": "`fun n : ℕ => n - 1` is injective."}
-  ],
-  "questions": [
-    {"answer": "q1", "text": "Why does `Function.invFun` have the argument `[Nonempty α]`?",
-     "choices": ["for `y` outside the range of `f`, `invFun f y` must still return an element of `α`", "because `f` must be injective", "so that Lean can compute `invFun f`"]},
-    {"answer": "q2", "text": "True or false: `Function.LeftInverse (Function.invFun f) f` holds for every `f : α → β` (with `α` nonempty)."},
-    {"answer": "q3", "text": "What does `Set.InjOn f s` say?",
-     "choices": ["`f` sends `s` into `s`", "`s` is the image of `f`", "two points of `s` with the same image under `f` are equal"]}
+    {"test": "2 ∈ evensPre", "statement": "`2 ∈ (fun n => 2 * n) ⁻¹' {m | m % 4 = 0}`"},
+    {"test": "3 ∈ evensPre", "statement": "`3 ∈ (fun n => 2 * n) ⁻¹' {m | m % 4 = 0}`"}
   ],
   "checks": [
-    {"lean": "#check (L17.Inj : (ℕ → ℕ) → Prop)\n#check (L17.Surj : (ℕ → ℕ) → Prop)\n#check (L17.pred' : ℕ → ℕ)\n#check (L17.q1 : Fin 3)\n#check (L17.q2 : Bool)\n#check (L17.q3 : Fin 3)",
-     "message": "Keep the names and types: `Inj`, `Surj : (ℕ → ℕ) → Prop`, `pred' : ℕ → ℕ`, and the three answer lines."}
+    {"lean": "#check (L17.squares : Set ℕ)\n#check (L17.evensPre : Set ℕ)\n#check (L17.f₀ : ℕ → ℕ)\n#check (L17.s₀ : Set ℕ)\n#check (L17.t₀ : Set ℕ)\n#check (L17.y₀ : ℕ)",
+     "message": "Keep the names and types: `squares`, `evensPre`, `s₀`, `t₀ : Set ℕ`, `f₀ : ℕ → ℕ`, `y₀ : ℕ`."}
   ],
   "hints": [
-    {"match": "Inj (n + 1)", "steps": ["Which part of your definition is the hypothesis: equal inputs, or equal outputs?"],
-     "hint": "`∀ a b, f a = f b → a = b`."},
-    {"match": "Inj (n - 1)", "steps": ["What are `0 - 1` and `1 - 1` in ℕ?"],
-     "hint": "`0` and `1` have the same output. Your definition should catch that: `∀ a b, f a = f b → a = b`."},
-    {"match": "Inj of a constant", "hint": "Did you write the converse, `a = b → f a = f b`? Every function satisfies it."},
-    {"match": "Surj", "steps": ["\"Every output is hit\": which quantifier comes first, the one over outputs or over inputs?"],
-     "hint": "`∀ b, ∃ a, f a = b`."},
-    {"match": "pred'", "hint": "`fun n => n - 1`: then `pred' (n + 1) = n`."},
-    {"match": "Question 1", "hint": "What should `invFun f y` be when no `x` has `f x = y`?"},
-    {"match": "Question 2", "hint": "If `f` is constant, can any `g` satisfy `g (f x) = x` for all `x`?"},
-    {"match": "Question 3", "hint": "It's injectivity, restricted to the points of `s`."}
+    {"match": "squares", "hint": "`Set.range (fun n => n ^ 2)`."},
+    {"match": "evensPre", "steps": ["Which arrow sends a set of outputs back to the inputs: `''` or `⁻¹'`?"],
+     "hint": "`(fun n => 2 * n) ⁻¹' {m | m % 4 = 0}`."},
+    {"match": "preimage_inter'", "hint": "`statement preimage_inter' {α β : Type*} (f : α → β) (u v : Set β) : f ⁻¹' (u ∩ v) = f ⁻¹' u ∩ f ⁻¹' v`."},
+    {"match": "y₀", "steps": ["You need two *different* points, one in `s₀` and one in `t₀`, with the same image. Then make `s₀` and `t₀` disjoint."],
+     "hint": "`f₀ := fun n => n % 2`, `s₀ := {0}`, `t₀ := {2}`, `y₀ := 0`."}
   ]
 }

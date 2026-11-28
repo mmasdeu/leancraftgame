@@ -1,25 +1,26 @@
 {
-  "world": "Groups and Rings",
-  "title": "Spot the bug: algebra",
-  "skill": "reading",
-  "exercise": "Refute",
+  "slug": "metric-spaces",
+  "world": "Analysis and Topology",
+  "title": "Metric spaces",
+  "skill": "writing definitions",
+  "exercise": "Write",
   "predict": [
-    {"test": "Claim 4: in ZMod 7 every nonzero element has an inverse (7 is prime)", "statement": "Sam's Claim 4 holds for `n = 7`: in `ZMod 7`, every nonzero element has an inverse."}
+    {"test": "(x - y)² is not a metric", "statement": "`(x - y) ^ 2` is a distance on the points 0, 1, 2, 3."},
+    {"test": "the zero distance is not a metric", "statement": "The distance that is always `0` is a metric."}
   ],
-  "public": ["Claim 1: junk contains 0 and is closed under +", "Claim 2: x is in Ideal.span {2}", "Claim 5: σ * τ ≠ τ * σ"],
+  "public": ["|x - y| on {0, 1, 2, 3} is a metric", "x - y is not a metric"],
   "checks": [
-    {"lean": "#check (L38.junk : Set ℤ)\n#check (L38.x : ℤ)\n#check (L38.p : Polynomial ℤ)\n#check (L38.q : Polynomial ℤ)\n#check (L38.a : ZMod 6)\n#check (L38.σ : Equiv.Perm (Fin 3))\n#check (L38.τ : Equiv.Perm (Fin 3))",
-     "message": "Keep the names and types: `junk : Set ℤ`, `x : ℤ`, `p q : ℤ[X]`, `a : ZMod 6`, `σ τ : Equiv.Perm (Fin 3)`."}
+    {"lean": "#check fun (α : Type) (d : α → α → ℤ) => L38.Metric'.mk d", "message": "`Metric'` needs the field `dist : α → α → ℤ` first, then your axioms."},
+    {"lean": "#check (L38.UnifCont : (ℝ → ℝ) → Prop)", "message": "Keep `UnifCont : (ℝ → ℝ) → Prop`."}
   ],
   "hints": [
-    {"match": "Claim 1", "steps": ["Which axiom does a subgroup have that a submonoid lacks? Which familiar subset of ℤ contains 0, is closed under + and has no negatives?"],
-     "hint": "`{n | 0 ≤ n}`, the natural numbers inside ℤ. 1 is in it, -1 isn't."},
-    {"match": "Claim 2", "hint": "Any even number that isn't a multiple of 12, such as `2`."},
-    {"match": "Claim 3", "steps": ["Over ℤ the formula holds for nonzero polynomials. What's the degree of the zero polynomial in Mathlib?"],
-     "hint": "`p := 0` and `q := X`. `0 * X = 0` has degree 0, but `0 + 1 = 1`."},
-    {"match": "a is not 0", "hint": "Choose a nonzero element: 1, 2, 3, 4 or 5."},
-    {"match": "no b has", "steps": ["If `a` and 6 have a common factor, can `a * b` be 1 modulo 6?"],
-     "hint": "`a := 2`. `2 * b` is always even modulo 6, never 1."},
-    {"match": "Claim 5", "hint": "Two different swaps: `σ := Equiv.swap 0 1`, `τ := Equiv.swap 1 2`."}
+    {"match": "x - y is not", "steps": ["What is the distance from 0 to 1, and from 1 to 0?"], "hint": "A distance is symmetric: add `symm : ∀ a b, dist a b = dist b a`, or ask that it be nonnegative."},
+    {"match": "(x - y)²", "steps": ["Compare the distance from 0 to 2 with the distances 0 to 1 and 1 to 2."], "hint": "`4 > 1 + 1`: add the triangle inequality `∀ a b c, dist a c ≤ dist a b + dist b c`."},
+    {"match": "zero distance", "steps": ["Which axiom says that different points are at a positive distance?"], "hint": "Add `eq_zero : ∀ a b, dist a b = 0 ↔ a = b`."},
+    {"match": "constant distance 1", "hint": "The distance from a point to itself must be `0`: `∀ a b, dist a b = 0 ↔ a = b`."},
+    {"match": "one-way", "hint": "Going from 3 to 0 costs twice as much as from 0 to 3. Symmetry rules it out."},
+    {"match": "is a metric", "hint": "A real metric breaks one of your axioms, and the report names it. Is that axiom true for `|x - y|`? Watch the direction of `≤` in the triangle inequality."},
+    {"match": "UnifCont", "steps": ["The order: `∀ ε > 0`, then `∃ δ > 0`, then `∀ x y`. Where does pointwise continuity put `∀ x`?"],
+     "hint": "`∀ ε > 0, ∃ δ > 0, ∀ x y, dist x y < δ → dist (f x) (f y) < ε`."}
   ]
 }

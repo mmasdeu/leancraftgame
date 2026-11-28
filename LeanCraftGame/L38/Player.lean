@@ -1,81 +1,50 @@
 /-
-# Spot the bug: algebra
+# Metric spaces
 
-*Sam sends five claims from their algebra notes for the Prover tonight. Each is false as stated.
-Noor wants a counterexample for each, small enough to check by hand.*
+*`Tendsto s atTop (𝓝 a)` is your `ConvergesTo` with `dist` in place of `|s n - a|`. To
+use it on other spaces, the library first has to say what a distance is.*
 
-## Claim 1: "a set of integers that contains 0 and is closed under + is a subgroup"
-
-Sam's structures, in the style of level 35:
+A **metric space** is a type `X` with a distance `dist : X → X → ℝ`. Mathlib's axioms:
 
 ```lean
-structure AddSubmonoidℤ where
-  carrier : Set ℤ
-  zero_mem : 0 ∈ carrier
-  add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier
-
-structure AddSubgroupℤ where
-  carrier : Set ℤ
-  zero_mem : 0 ∈ carrier
-  add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier
-  neg_mem {a} : a ∈ carrier → -a ∈ carrier
+variable {X : Type*} [MetricSpace X] (a b c : X)
+#check (dist a b : ℝ)
+#check (dist_nonneg : 0 ≤ dist a b)
+#check (dist_eq_zero : dist a b = 0 ↔ a = b)
+#check (dist_comm a b : dist a b = dist b a)
+#check (dist_triangle a b c : dist a c ≤ dist a b + dist b c)
 ```
 
-Give `junk`, a set that satisfies the first structure but not the second.
+On `ℝ`, `dist x y` is `|x - y|`. The distance gives continuity in ε–δ form: `f` is
+continuous when
 
-## Claim 2: "`Ideal.span {2}` is the ideal of the integers divisible by 4 and by 6"
+```lean
+∀ b, ∀ ε > 0, ∃ δ > 0, ∀ a, dist a b < δ → dist (f a) (f b) < ε
+```
 
-Give `x`, an integer in `Ideal.span {2}` that isn't divisible by both 4 and 6.
+Here `δ` may depend on `b`. If one `δ` works for all points, `f` is **uniformly
+continuous**: `∃ δ` moves before `∀ b`. It's the quantifier order of level 10 again.
 
-## Claim 3: "`(p * q).natDegree = p.natDegree + q.natDegree` for all `p q : ℤ[X]`"
+## Part A: the axioms
 
-Mathlib's `Polynomial.natDegree_mul` has hypotheses. Give `p` and `q` where the claim
-fails. Every polynomial has a `natDegree`, even the zero polynomial: `natDegree 0 = 0`.
+Write the axioms yourself as fields of `Metric'`, one field per axiom after `dist`, each
+with its own `∀`. The distance takes values in `ℤ` so the referee can test it on four
+points. Real metrics must satisfy your axioms, and each impostor must break one. Sam's
+first draft let `dist a b = a - b` through, since it does satisfy `dist a b = 0 ↔ a = b`.
 
-## Claim 4: "in `ZMod n`, every nonzero element has an inverse"
+## Part B: uniform continuity
 
-Give a nonzero `a : ZMod 6` with `a * b ≠ 1` for
-every `b`.
-
-## Claim 5: "permutations commute: `σ * τ = τ * σ`"
-
-Give `σ τ : Equiv.Perm (Fin 3)` with `σ * τ ≠ τ * σ`, in the S₃ of levels 29 and 36.
+State `UnifCont f`: for every `ε > 0` there is `δ > 0` such that for all `x` and `y`,
+`dist x y < δ` implies `dist (f x) (f y) < ε`. Write the quantifiers in this order.
 -/
-import Mathlib.RingTheory.Ideal.Span
-import Mathlib.Algebra.Polynomial.Degree.Operations
-import Mathlib.GroupTheory.Perm.Basic
-import Mathlib.Data.ZMod.Basic
+import Mathlib.Topology.MetricSpace.Pseudo.Defs
 
 namespace L38
 
-open Polynomial
+structure Metric' (α : Type) where
+  dist : α → α → ℤ
+  -- your axioms here
 
-structure AddSubmonoidℤ where
-  carrier : Set ℤ
-  zero_mem : 0 ∈ carrier
-  add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier
-
-structure AddSubgroupℤ where
-  carrier : Set ℤ
-  zero_mem : 0 ∈ carrier
-  add_mem {a b} : a ∈ carrier → b ∈ carrier → a + b ∈ carrier
-  neg_mem {a} : a ∈ carrier → -a ∈ carrier
-
--- Claim 1: an additive submonoid of ℤ that isn't a subgroup
-def junk : Set ℤ := sorry
-
--- Claim 2: in Ideal.span {2}, but not divisible by both 4 and 6
-def x : ℤ := sorry
-
--- Claim 3: natDegree (p * q) ≠ natDegree p + natDegree q
-def p : ℤ[X] := sorry
-def q : ℤ[X] := sorry
-
--- Claim 4: nonzero, and not invertible in ZMod 6
-def a : ZMod 6 := sorry
-
--- Claim 5: two permutations that don't commute
-def σ : Equiv.Perm (Fin 3) := sorry
-def τ : Equiv.Perm (Fin 3) := sorry
+def UnifCont (f : ℝ → ℝ) : Prop := sorry
 
 end L38

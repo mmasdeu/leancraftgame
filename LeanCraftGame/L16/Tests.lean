@@ -1,28 +1,31 @@
-/- Hidden test battery for Level 16: Images and preimages. -/
+/- Hidden test battery for Level 15: Set notation. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L16.Player
 
 open L16
 
-#no_sorry squares
-#no_sorry evensPre
-#no_sorry L16.preimage_inter'
-#no_sorry f₀
-#no_sorry s₀
-#no_sorry t₀
-#no_sorry y₀
-#level_start "Images and preimages"
+#no_sorry evens
+#no_sorry primes
+#no_sorry oddPrimes
+#no_sorry multiples
+#no_sorry fourOrSix
+#no_sorry q1
+#no_sorry q2
+#level_start "Set notation"
 
-#expect_true "9 ∈ squares" unfolding squares Set.range : 9 ∈ squares
-#expect_true "16 ∈ squares" unfolding squares Set.range : 16 ∈ squares
-#expect_true "2 ∈ evensPre" unfolding evensPre Set.preimage : 2 ∈ evensPre
-#expect_false "3 ∈ evensPre" unfolding evensPre Set.preimage : 3 ∈ evensPre
-#expect_true "8 ∈ evensPre" unfolding evensPre Set.preimage : 8 ∈ evensPre
-#expect_equiv "preimage_inter' says f ⁻¹' (u ∩ v) = f ⁻¹' u ∩ f ⁻¹' v" :
-  L16.preimage_inter' ↔ ∀ {α β : Type} (f : α → β) (u v : Set β), f ⁻¹' (u ∩ v) = f ⁻¹' u ∩ f ⁻¹' v
-  using fun _ _ _ => Set.preimage_inter
-#expect_true "y₀ is in the image of s₀" unfolding y₀ f₀ s₀ Set.image : y₀ ∈ f₀ '' s₀
-#expect_true "y₀ is in the image of t₀" unfolding y₀ f₀ t₀ Set.image : y₀ ∈ f₀ '' t₀
-#expect_true "y₀ is not in the image of s₀ ∩ t₀" unfolding y₀ f₀ s₀ t₀ Set.image : y₀ ∉ f₀ '' (s₀ ∩ t₀)
+#expect_choice "Question 1: how to read `s ∩ (t ∪ u)`" : q1 = 1
+#expect_choice "Question 2: what `⋂ i : ℕ, Set.Ici i` is" : q2 = true
+#expect_true "6 ∈ evens" unfolding evens : 6 ∈ evens
+#expect_false "7 ∈ evens" unfolding evens : 7 ∈ evens
+#expect_true "7 ∈ primes" unfolding primes : 7 ∈ primes
+#expect_false "1 ∈ primes" unfolding primes : 1 ∈ primes
+#expect_true "3 ∈ oddPrimes" unfolding oddPrimes primes evens : 3 ∈ oddPrimes
+#expect_false "2 ∈ oddPrimes" unfolding oddPrimes primes evens : 2 ∈ oddPrimes
+#expect_false "9 ∈ oddPrimes" unfolding oddPrimes primes evens : 9 ∈ oddPrimes
+#expect_true "12 ∈ multiples 4" unfolding multiples : 12 ∈ multiples 4
+#expect_false "4 ∈ multiples 12" unfolding multiples : 4 ∈ multiples 12
+#expect_true "18 ∈ fourOrSix" unfolding fourOrSix multiples : 18 ∈ fourOrSix
+#expect_true "8 ∈ fourOrSix" unfolding fourOrSix multiples : 8 ∈ fourOrSix
+#expect_false "10 ∈ fourOrSix" unfolding fourOrSix multiples : 10 ∈ fourOrSix
 
 #level_report

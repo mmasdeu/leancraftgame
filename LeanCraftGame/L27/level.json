@@ -1,24 +1,55 @@
 {
-  "world": "Discrete Mathematics",
-  "title": "Spot the bug: counting",
-  "skill": "reading",
-  "exercise": "Refute",
-  "public": "all",
+  "slug": "structures",
+  "world": "Structures and Classes",
+  "title": "Defining structures",
+  "skill": "structures",
+  "exercise": "Write",
   "predict": [
-    {"test": "Sam's triangle is right at 0", "statement": "Sam's `triangle 0` is the right value, 0"}
+    {
+      "test": "(1, 1, -1) is not in the simplex",
+      "statement": "The point (1, 1, -1) belongs to the standard 2-simplex"
+    }
+  ],
+  "public": [
+    "p123 has coordinates (1, 2, 3)",
+    "(1/2, 1/2, 0) is in the simplex"
   ],
   "checks": [
-    {"lean": "#check (L27.tn : ℕ)\n#check (L27.dn : ℕ)\n#check (L27.tree : L27.BinTree)\n#check (L27.gn : ℕ)",
-     "message": "Keep `tn`, `dn`, `gn : ℕ` and `tree : BinTree`, and keep `BinTree` as given."}
+    {
+      "lean": "#check (L27.origin : L27.Point)\n#check (L27.p123 : L27.Point)\n#check (L27.Point.add : L27.Point → L27.Point → L27.Point)\n#check (L27.Point.smul : ℝ → L27.Point → L27.Point)\n#check (L27.Point.mk : ℝ → ℝ → ℝ → L27.Point)",
+      "message": "Keep `Point` as given, and the names and types of `origin`, `p123`, `Point.add` and `Point.smul`."
+    },
+    {
+      "lean": "example := fun (x y z : ℝ) => L27.StandardTwoSimplex.mk x y z\nexample : ∀ s : L27.StandardTwoSimplex, 0 ≤ s.x ∧ 0 ≤ s.y ∧ 0 ≤ s.z := fun s => ⟨s.x_nonneg, s.y_nonneg, s.z_nonneg⟩\nexample := fun s : L27.StandardTwoSimplex => s.sum_eq",
+      "message": "`StandardTwoSimplex` must start with the fields `x`, `y`, `z : ℝ`, then have the fields `x_nonneg : 0 ≤ x`, `y_nonneg : 0 ≤ y`, `z_nonneg : 0 ≤ z` and `sum_eq`."
+    }
   ],
   "hints": [
-    {"match": "triangle is wrong", "steps": ["`Finset.range n` stops before `n`. On which inputs does that change the sum?"],
-     "hint": "Any `n ≥ 1` works: `triangle 1 = 0`, but the right answer is `1`. (At 0 both are 0.)"},
-    {"match": "numDivisors", "steps": ["Which divisor of `n` is missing from `Finset.Ico 1 n`?"],
-     "hint": "`n` itself is missing, so any `n ≥ 1` works: `numDivisors 1 = 0`, but 1 has one divisor. At 0 both are 0."},
-    {"match": "size", "steps": ["On the empty tree both functions give 0. What about a tree with one node?"],
-     "hint": "`node empty empty`: Sam's `size` gives 0, the right answer is 1."},
-    {"match": "formula", "steps": ["Try small values of `n`: which `n` makes both sides 0?"],
-     "hint": "`gn = 1`: the sum over `range 1` is 0, but `1 * 2 / 2 = 1`."}
+    {
+      "match": "origin",
+      "hint": "`{ x := 0, y := 0, z := 0 }`."
+    },
+    {
+      "match": "p123",
+      "hint": "`⟨1, 2, 3⟩`."
+    },
+    {
+      "match": "add",
+      "steps": [
+        "Each coordinate of the sum uses the same coordinate of `a` and of `b`."
+      ],
+      "hint": "`⟨a.x + b.x, a.y + b.y, a.z + b.z⟩`."
+    },
+    {
+      "match": "smul",
+      "hint": "`⟨r * a.x, r * a.y, r * a.z⟩`."
+    },
+    {
+      "match": "simplex",
+      "steps": [
+        "Which property says a coordinate can't be negative? Do you have one for each coordinate?"
+      ],
+      "hint": "`x_nonneg : 0 ≤ x`, `y_nonneg : 0 ≤ y`, `z_nonneg : 0 ≤ z` and `sum_eq : x + y + z = 1`."
+    }
   ]
 }

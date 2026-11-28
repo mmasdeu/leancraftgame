@@ -1,57 +1,55 @@
 /-
-# Spot the bug: logic
+# Be the referee
 
-*Before the Logic project closes, Noor goes through Sam's notebook. Four definitions,
-written from memory, are in the editor. Each compiles, and each is wrong. Sam asks for
-one example per definition, "so I can see it fail".*
+*Everyone at the Annex writes convergence from memory, and not always right. Would the
+referee's tests catch them? This time you write the tests, and the referee tries to slip
+wrong definitions past them.*
 
-A wrong definition is either **too strong** (it rejects something it should accept) or
-**too weak** (it accepts something it should reject). One example shows it.
+The right definition, for limit `0`:
+
+```lean
+def ConvergesTo0 (s : ℕ → ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n| < ε
+```
+
+Your test suite is four sequences: two that converge to 0 (`good₁`, `good₂`) and two that
+don't (`bad₁`, `bad₂`).
+
+The referee first checks your labels. Then it brings out the **mutants**: hidden wrong
+definitions of convergence, the kind people write from memory. A mutant is caught when it
+rejects a `good` sequence or accepts a `bad` one. A mutant that gets all four right
+survives. This is *mutation testing*, and it's how this game's tests were chosen.
+
+## Choosing good tests
+
+Obvious examples like `fun _ ↦ 0` and `fun n ↦ n` catch little. Aim at the boundary:
+
+* a sequence that converges even though it lacks a property people confuse with
+  convergence (it isn't monotone, or isn't always positive);
+* a sequence that doesn't converge even though it has such a property (it keeps coming
+  back near `0`, or stays small, or stays below every `ε` but on the wrong side).
+
+The referee computes, so use sequences that are eventually constant or alternate, like
+Sam's `late` and `blink` from level 12 (`fun n ↦ if n < 5 then 7 else 0` and
+`fun n ↦ if n % 2 = 0 then 0 else 1`), with small numbers (`1`, `2`, `1/2`, `-1`). Write
+them out in full: the template doesn't know `late` and `blink`.
 
 ## Your task
 
-Read Sam's definitions in the editor (don't change them), then fill in the examples.
-
-* `ConvergesA` is too strong. Give a sequence `seqA` and a limit `limA` that really
-  converge, which it rejects.
-* `ConvergesB` is too weak. Give a sequence `seqB` and a limit `limB` that don't converge,
-  which it accepts. Sam's test sequences from level 12, `late` and `blink`, are a good
-  place to look.
-* `SomePositive` is too weak. Give a sequence `seqC` with no positive term that it
-  accepts.
-* `BoundedAbove` is too weak. Give a function `funD` that isn't bounded above that it
-  accepts.
-
-The referee checks both halves of each claim: that your example really does (or doesn't)
-converge or have the property, and that Sam's definition gets it wrong. Use eventually
-constant or alternating sequences and small numbers, so it can compute.
+Fill in the four sequences so that every mutant is caught. The report says how many
+mutants there are. A ❌ on a mutant means the referee proved that your four sequences
+can't tell it apart from the right definition, and it shows that mutant. The run stops
+at the first one that survives.
 -/
 namespace L14
 
--- Sam's code (don't edit)
+def ConvergesTo0 (s : ℕ → ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n| < ε
 
--- u converges to a
-def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
+-- two sequences that converge to 0
+def good₁ : ℕ → ℝ := sorry
+def good₂ : ℕ → ℝ := sorry
 
--- u converges to a
-def ConvergesB (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ n, |u n - a| < ε
-
--- some term of u is positive
-def SomePositive (u : ℕ → ℝ) : Prop := ∃ n, n > 0 → u n > 0
-
--- f is bounded above
-def BoundedAbove (f : ℝ → ℝ) : Prop := ∀ x, ∃ M, f x ≤ M
-
--- Your examples
-
-def seqA : ℕ → ℝ := sorry
-def limA : ℝ := sorry
-
-def seqB : ℕ → ℝ := sorry
-def limB : ℝ := sorry
-
-def seqC : ℕ → ℝ := sorry
-
-def funD : ℝ → ℝ := sorry
+-- two sequences that don't
+def bad₁ : ℕ → ℝ := sorry
+def bad₂ : ℕ → ℝ := sorry
 
 end L14

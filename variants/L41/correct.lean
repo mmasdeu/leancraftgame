@@ -1,14 +1,10 @@
-def q1 : Fin 4 := 2
-def q2 : Bool := false
-def q3 : Fin 4 := 1
-def q4 : Bool := false
+def I2 : ℝ := ∫ x in (0:ℝ)..1, x ^ 2
 
-statement exists_eig {V : Type} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
-    [Nontrivial V] (f : Module.End ℂ V) : ∃ c : ℂ, f.HasEigenvalue c
+def vol : ENNReal := MeasureTheory.volume (Set.Icc (0:ℝ) 2)
 
-def A : Matrix (Fin 2) (Fin 2) ℚ := !![2, 1; 0, 3]
+statement ftc (f f' : ℝ → ℝ) (a b : ℝ) (hderiv : ∀ x ∈ Set.uIcc a b, HasDerivAt f (f' x) x)
+    (hint : IntervalIntegrable f' MeasureTheory.volume a b) : ∫ y in a..b, f' y = f b - f a
 
-def ev₁ : ℚ := 2
-def vec₁ : Fin 2 → ℚ := ![1, 0]
-def ev₂ : ℚ := 3
-def vec₂ : Fin 2 → ℚ := ![1, 1]
+def q1 : Bool := false
+def q2 : Fin 4 := 1
+def q3 : Fin 4 := 2

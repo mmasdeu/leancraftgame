@@ -1,38 +1,44 @@
-/- Hidden test battery for Level 14: Spot the bug: logic. -/
+/- Hidden test battery for Level 13: Be the referee. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L14.Player
 
-namespace L14Ref
-def ConvergesTo (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - a| < ε
-def ConvergesA (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε, ∃ N, ∀ n ≥ N, |u n - a| < ε
-def ConvergesB (u : ℕ → ℝ) (a : ℝ) : Prop := ∀ ε > 0, ∃ n, |u n - a| < ε
-def SomePositive (u : ℕ → ℝ) : Prop := ∃ n, n > 0 → u n > 0
-def BoundedAbove (f : ℝ → ℝ) : Prop := ∀ x, ∃ M, f x ≤ M
-end L14Ref
+namespace L13Ref
+def ConvergesTo0 (s : ℕ → ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, |s n| < ε
+-- The mutants. MutNonneg is stronger than convergence; MutFrequently, MutEventuallySmall
+-- and MutNoAbs are weaker; MutDecreasing is neither.
+def MutNonneg (s : ℕ → ℝ) : Prop := (∀ n, 0 ≤ s n) ∧ ∀ ε > 0, ∃ N, ∀ n ≥ N, s n < ε
+def MutFrequently (s : ℕ → ℝ) : Prop := ∀ ε > 0, ∀ N, ∃ n ≥ N, |s n| < ε
+def MutEventuallySmall (s : ℕ → ℝ) : Prop := ∃ N, ∀ n ≥ N, |s n| < 1
+def MutNoAbs (s : ℕ → ℝ) : Prop := ∀ ε > 0, ∃ N, ∀ n ≥ N, s n < ε
+def MutDecreasing (s : ℕ → ℝ) : Prop := (∀ n, s (n + 1) ≤ s n) ∧ ∀ ε > 0, ∃ n, |s n| < ε
+end L13Ref
 
-#no_sorry L14.seqA
-#no_sorry L14.limA
-#no_sorry L14.seqB
-#no_sorry L14.limB
-#no_sorry L14.seqC
-#no_sorry L14.funD
-#level_start "Spot the bug: logic"
+#no_sorry L14.good₁
+#no_sorry L14.good₂
+#no_sorry L14.bad₁
+#no_sorry L14.bad₂
+#level_start "Be the referee"
 
-#expect_true "seqA converges to limA" unfolding L14Ref.ConvergesTo L14.seqA L14.limA :
-  L14Ref.ConvergesTo L14.seqA L14.limA
-#expect_true "Sam's ConvergesA rejects seqA and limA" unfolding L14Ref.ConvergesA L14.seqA L14.limA :
-  ¬ L14Ref.ConvergesA L14.seqA L14.limA
-#expect_true "seqB does not converge to limB" unfolding L14Ref.ConvergesTo L14.seqB L14.limB :
-  ¬ L14Ref.ConvergesTo L14.seqB L14.limB
-#expect_true "Sam's ConvergesB accepts seqB and limB" unfolding L14Ref.ConvergesB L14.seqB L14.limB :
-  L14Ref.ConvergesB L14.seqB L14.limB
-#expect_true "no term of seqC is positive" unfolding L14.seqC :
-  ∀ n, L14.seqC n ≤ 0
-#expect_true "Sam's SomePositive accepts seqC" unfolding L14Ref.SomePositive L14.seqC :
-  L14Ref.SomePositive L14.seqC
-#expect_true "funD is not bounded above" unfolding L14.funD :
-  ¬ ∃ M, ∀ x, L14.funD x ≤ M
-#expect_true "Sam's BoundedAbove accepts funD" unfolding L14Ref.BoundedAbove L14.funD :
-  L14Ref.BoundedAbove L14.funD
+#expect_true "good₁ converges to 0" unfolding L13Ref.ConvergesTo0 L14.good₁ :
+  L13Ref.ConvergesTo0 L14.good₁
+#expect_true "good₂ converges to 0" unfolding L13Ref.ConvergesTo0 L14.good₂ :
+  L13Ref.ConvergesTo0 L14.good₂
+#expect_true "bad₁ does not converge to 0" unfolding L13Ref.ConvergesTo0 L14.bad₁ :
+  ¬ L13Ref.ConvergesTo0 L14.bad₁
+#expect_true "bad₂ does not converge to 0" unfolding L13Ref.ConvergesTo0 L14.bad₂ :
+  ¬ L13Ref.ConvergesTo0 L14.bad₂
+
+-- A stronger mutant can only be caught by a good sequence it rejects, a weaker one only by a
+-- bad sequence it accepts: only that half is stated (the labels are tested above).
+#expect_caught "mutant `(∀ n, 0 ≤ s n) ∧ ∀ ε > 0, ∃ N, ∀ n ≥ N, s n < ε` (nonnegative, eventually below ε) is caught" unfolding L13Ref.MutNonneg L14.good₁ L14.good₂ :
+  L13Ref.MutNonneg L14.good₁ ∧ L13Ref.MutNonneg L14.good₂
+#expect_caught "mutant `∀ ε > 0, ∀ N, ∃ n ≥ N, |s n| < ε` (close again and again) is caught" unfolding L13Ref.MutFrequently L14.bad₁ L14.bad₂ :
+  ¬ L13Ref.MutFrequently L14.bad₁ ∧ ¬ L13Ref.MutFrequently L14.bad₂
+#expect_caught "mutant `∃ N, ∀ n ≥ N, |s n| < 1` (eventually small) is caught" unfolding L13Ref.MutEventuallySmall L14.bad₁ L14.bad₂ :
+  ¬ L13Ref.MutEventuallySmall L14.bad₁ ∧ ¬ L13Ref.MutEventuallySmall L14.bad₂
+#expect_caught "mutant `∀ ε > 0, ∃ N, ∀ n ≥ N, s n < ε` (no absolute value) is caught" unfolding L13Ref.MutNoAbs L14.bad₁ L14.bad₂ :
+  ¬ L13Ref.MutNoAbs L14.bad₁ ∧ ¬ L13Ref.MutNoAbs L14.bad₂
+#expect_caught "mutant `decreasing, with a term within ε of 0` is caught" unfolding L13Ref.MutDecreasing L14.good₁ L14.good₂ :
+  L13Ref.MutDecreasing L14.good₁ ∧ L13Ref.MutDecreasing L14.good₂
 
 #level_report

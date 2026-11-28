@@ -1,81 +1,22 @@
 {
-  "world": "Sets and Functions",
-  "title": "Set notation",
-  "skill": "sets",
-  "exercise": "Write",
-  "public": [
-    "6 ∈ evens",
-    "7 ∈ primes",
-    "12 ∈ multiples 4"
-  ],
-  "predict": [
-    {
-      "test": "4 ∈ multiples 12",
-      "statement": "`4 ∈ {n | 12 ∣ n}`"
-    },
-    {
-      "test": "2 ∈ oddPrimes",
-      "statement": "`2 ∈ primes \\ evens`"
-    }
-  ],
-  "questions": [
-    {
-      "answer": "q1",
-      "text": "How does `s ∩ (t ∪ u)` read?",
-      "choices": [
-        "the elements that are in `s` and `t`, or in `u`",
-        "the elements of `s` that are in `t` or in `u`",
-        "the elements in all three sets"
-      ]
-    },
-    {
-      "answer": "q2",
-      "text": "True or false: `⋂ i : ℕ, Set.Ici i` is the empty set."
-    }
-  ],
+  "slug": "audit-definitions",
+  "world": "Logic",
+  "title": "Spot the bug: logic",
+  "skill": "reading",
+  "exercise": "Refute",
+  "public": "all",
   "checks": [
-    {
-      "lean": "#check (L15.evens : Set ℕ)\n#check (L15.primes : Set ℕ)\n#check (L15.oddPrimes : Set ℕ)\n#check (L15.multiples : ℕ → Set ℕ)\n#check (L15.fourOrSix : Set ℕ)\n#check (L15.q1 : Fin 3)\n#check (L15.q2 : Bool)",
-      "message": "Keep the names and the types: `evens`, `primes`, `oddPrimes`, `fourOrSix : Set ℕ`, `multiples : ℕ → Set ℕ`, and the answers `q1 : Fin 3`, `q2 : Bool`."
-    }
+    {"lean": "#check (L15.seqA : ℕ → ℝ)\n#check (L15.limA : ℝ)\n#check (L15.seqB : ℕ → ℝ)\n#check (L15.limB : ℝ)\n#check (L15.seqC : ℕ → ℝ)\n#check (L15.funD : ℝ → ℝ)",
+     "message": "Keep the names and types: sequences `ℕ → ℝ`, limits `ℝ`, `funD : ℝ → ℝ`."}
   ],
   "hints": [
-    {
-      "match": "Question 1",
-      "hint": "The brackets are computed first: `t ∪ u`, then the intersection with `s`."
-    },
-    {
-      "match": "Question 2",
-      "hint": "A number `n` would have to satisfy `i ≤ n` for every `i`, including `i = n + 1`."
-    },
-    {
-      "match": "evens",
-      "hint": "`{n | Even n}`."
-    },
-    {
-      "match": "primes",
-      "hint": "`{n | Nat.Prime n}`."
-    },
-    {
-      "match": "oddPrimes",
-      "steps": [
-        "Is `2` prime? Is it odd? Which operation removes the elements of one set from another?"
-      ],
-      "hint": "`primes \\ evens`, or `primes ∩ evensᶜ`."
-    },
-    {
-      "match": "multiples",
-      "steps": [
-        "`a ∣ b` reads \"a divides b\". Which of `k` and `n` divides the other?"
-      ],
-      "hint": "`{n | k ∣ n}`: `k` divides `n`."
-    },
-    {
-      "match": "fourOrSix",
-      "steps": [
-        "A multiple of 4 *or* of 6: for some k in {4, 6}, or for every k? Which of `⋃` and `⋂` is \"for some\"?"
-      ],
-      "hint": "`⋃ k ∈ ({4, 6} : Set ℕ), multiples k`."
-    }
+    {"match": "seqA converges", "hint": "Any convergent sequence will do, such as the constant `fun _ ↦ 0` with limit `0`."},
+    {"match": "ConvergesA rejects", "steps": ["What does `ConvergesA` ask for when `ε = 0`?"], "hint": "With `ε = 0` it needs `|u n - a| < 0`, which never holds: `ConvergesA` rejects *every* sequence."},
+    {"match": "seqB does not", "hint": "Try `blink` from level 12, which keeps returning to 0 and leaving again: `fun n ↦ if n % 2 = 0 then 0 else 1`, limit `0`."},
+    {"match": "ConvergesB accepts", "hint": "`ConvergesB` only needs one close term for each `ε`. `0, 1, 0, 1, …` has many terms equal to `0`."},
+    {"match": "no term of seqC", "hint": "Every term must be `≤ 0`: a constant such as `fun _ ↦ -1`."},
+    {"match": "SomePositive accepts", "steps": ["Which `n` makes the implication `n > 0 → u n > 0` true for free?"], "hint": "`n = 0`: the hypothesis `0 > 0` is false, so the implication holds, whatever `u` is."},
+    {"match": "funD is not bounded", "hint": "The identity `fun x ↦ x` is not bounded above."},
+    {"match": "BoundedAbove accepts", "hint": "For each `x`, `BoundedAbove` may choose `M = f x`: every function passes."}
   ]
 }

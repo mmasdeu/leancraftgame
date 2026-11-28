@@ -1,6 +1,8 @@
-def Inj (f : ℕ → ℕ) : Prop := ∀ a b, f a = f b → a = b
-def Surj (f : ℕ → ℕ) : Prop := ∀ b, ∃ a, f a = b
-def pred' : ℕ → ℕ := fun n => n - 1
-def q1 : Fin 3 := 0
-def q2 : Bool := false
-def q3 : Fin 3 := 2
+def squares : Set ℕ := Set.range (fun n => n ^ 2)
+def evensPre : Set ℕ := (fun n => 2 * n) ⁻¹' {m | m % 4 = 0}
+statement preimage_inter' {α β : Type*} (f : α → β) (u v : Set β) :
+    f ⁻¹' (u ∩ v) = f ⁻¹' u ∩ f ⁻¹' v
+def f₀ : ℕ → ℕ := fun n => n % 2
+def s₀ : Set ℕ := {0}
+def t₀ : Set ℕ := {2}
+def y₀ : ℕ := 0

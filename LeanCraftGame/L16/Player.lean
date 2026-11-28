@@ -1,62 +1,77 @@
 /-
-# Images and preimages
+# Set notation
 
-*Schröder–Bernstein moves sets back and forth along functions. Before that, Noor wants
-the team fluent with the two moves: images and preimages.*
+*A new project: Noor wants the library to state the Schröder–Bernstein theorem, which is
+about sets and images. First, some sets: the evens, the primes, the multiples.*
 
-A function `f : α → β` moves sets both ways:
+In Mathlib, a set of elements of `α` has type `Set α`. It's just a property: `x ∈ s` is a
+proposition. `FnUb f a` from level 8 is such a property, and `{a | FnUb f a}` is the set
+of upper bounds of `f`.
 
-```lean
-f '' s      -- the image of s : Set α, a Set β:      {y | ∃ x, x ∈ s ∧ f x = y}
-f ⁻¹' t     -- the preimage of t : Set β, a Set α:   {x | f x ∈ t}
-Set.range f -- the image of everything:               {y | ∃ x, f x = y}
-```
-
-Type `''` as two apostrophes and `⁻¹'` as `\inv'`. The preimage needs no inverse
-function: it exists for every `f`. For a sequence `s : ℕ → ℝ` (level 12), `Set.range s`
-is the set of its terms.
-
-## Example
-
-Take `f n = 2 * n` on ℕ and `M = {m | m % 3 = 0}`, the multiples of 3:
-
-* `f '' M` is the multiples of 6. So `3 ∉ f '' M`.
-* `f ⁻¹' M` is the `n` with `2 n` a multiple of 3: the multiples of 3. So `3 ∈ f ⁻¹' M`.
-
-## Statements about images
-
-The image of a union is the union of the images:
+## Building sets
 
 ```lean
-statement image_union' {α β : Type*} (f : α → β) (s t : Set α) :
-    f '' (s ∪ t) = f '' s ∪ f '' t
+def evens' : Set ℕ := {n | Even n}          -- "the n such that n is even"
+example : 4 ∈ evens' := …                   -- membership is a Prop
 ```
 
-`Type*` means "a type, in any universe". `α` and `β` are implicit; Lean finds them from
-`f`. For intersections this fails: `f '' (s ∩ t)` can be smaller than `f '' s ∩ f '' t`
-when a point of `s` and a different point of `t` have the same image.
+* `{x | P x}`: the set of `x` with property `P`.
+* `{a, b}`: the set with elements `a` and `b`; `{a}` has one element. Lean may need the
+  type spelled out: `({2, 3} : Set ℕ)`.
+* `x ∈ s` (`\in`), `x ∉ s` (`\notin`): membership.
+* `s ⊆ t` (`\sub`): `∀ x, x ∈ s → x ∈ t`.
+* `s ∩ t` (`\cap`), `s ∪ t` (`\cup`), `s \ t` (difference), `sᶜ` (`\compl`, the
+  complement).
+* `∅` (`\empty`) and `Set.univ`: the empty set and the set of everything.
+* Intervals: `Set.Icc a b` is `{x | a ≤ x ∧ x ≤ b}`, `Set.Ici a` is `{x | a ≤ x}`.
+
+Mathlib has the properties you need here: `Even n` (`n` is even), `Nat.Prime n` (`n` is
+prime), and `k ∣ n` (`k` divides `n`, typed `\|`; it is not the bar `|`).
+
+## Indexed unions and intersections
+
+A **family** of sets is a function `A : ι → Set α`, one set `A i` for each index `i`.
+
+```lean
+⋃ i, A i      -- \bigcup: x is in it when x ∈ A i for SOME i
+⋂ i, A i      -- \bigcap: x is in it when x ∈ A i for EVERY i
+⋃₀ S          -- the union of all the sets in a set of sets S
+```
+
+So `⋃` is an `∃` and `⋂` is a `∀`. The index can range over a set:
+`⋃ k ∈ ({2, 3} : Set ℕ), A k` is `A 2 ∪ A 3`. `⋃ i : ℕ, Set.Icc 0 i` is all of ℕ, since
+`n ∈ [0, n]`.
+
+## Precedence
+
+`ᶜ` binds tightest, then `∩`, then `∪`, then `∈` and `⊆`. So `s ∪ t ∩ u` is
+`s ∪ (t ∩ u)`. Brackets are computed first. When in doubt, use them.
 
 ## Your task
 
-1. `squares`: the perfect squares, as the range of `n ↦ n ^ 2`.
-2. `evensPre`: the even numbers, as the preimage of `{m | m % 4 = 0}` under `n ↦ 2 * n`.
-3. `preimage_inter'`: the preimage of `u ∩ v` under `f : α → β` is the intersection of the
-   preimages. Use the binders of `image_union'`: `{α β : Type*} (f : α → β) (u v : Set β)`.
-4. A counterexample to `f '' (s ∩ t) = f '' s ∩ f '' t` on ℕ: a function `f₀`, sets `s₀`,
-   `t₀` and a point `y₀` in `f₀ '' s₀` and in `f₀ '' t₀`, but not in `f₀ '' (s₀ ∩ t₀)`.
-   Use small numbers and sets written as `{a, b}` (level 15).
+Answer the two questions (`q2` is `true` or `false`), then fill in the sets. Where a
+comment asks, use set operations, not a new property. Careful: `2` is prime, and in
+`k ∣ n` the order says who divides whom.
 -/
 namespace L16
 
-def squares : Set ℕ := sorry
+-- the even natural numbers
+def evens : Set ℕ := sorry
 
-def evensPre : Set ℕ := sorry
+-- the prime numbers
+def primes : Set ℕ := sorry
 
-statement preimage_inter' : sorry
+-- the primes that are not even: build it from `primes` and `evens` with set operations
+def oddPrimes : Set ℕ := sorry
 
-def f₀ : ℕ → ℕ := sorry
-def s₀ : Set ℕ := sorry
-def t₀ : Set ℕ := sorry
-def y₀ : ℕ := sorry
+-- the multiples of k: the n such that k divides n (`∣` is typed `\|`, it is not `|`)
+def multiples (k : ℕ) : Set ℕ := sorry
+
+-- the numbers that are a multiple of 4 or of 6, written as a union over k ∈ {4, 6}
+-- of `multiples k` (an indexed union `⋃ k ∈ s, A k`)
+def fourOrSix : Set ℕ := sorry
+
+def q1 : Fin 3 := sorry
+def q2 : Bool := sorry
 
 end L16

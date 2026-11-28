@@ -1,5 +1,6 @@
 {
-  "world": "Elementary Number Theory",
+  "slug": "irrational",
+  "world": "Number Theory and Recursion",
   "title": "Irrational roots",
   "skill": "writing statements",
   "exercise": "Write",

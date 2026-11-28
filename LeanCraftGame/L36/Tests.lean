@@ -1,32 +1,34 @@
-/- Hidden test battery for Level 36: Groups in Mathlib. -/
+/- Hidden test battery for Level 41: Endomorphisms. -/
 import LeanCraftGame.Referee
 import LeanCraftGame.L36.Player
 
-#no_sorry L36.lagrange
-#no_sorry L36.cauchy
-#no_sorry L36.ord4
-#no_sorry L36.σ
-#no_sorry L36.τ
-#level_start "Groups in Mathlib"
+open L36
 
-#expect_equiv "lagrange: the order of a subgroup divides the order of the group" :
-  L36.lagrange ↔ ∀ {G : Type} [Group G] (H : Subgroup G), Nat.card H ∣ Nat.card G
-  using fun H => Subgroup.card_subgroup_dvd_card H
-#expect_equiv "cauchy: a prime divisor of |G| is the order of an element" :
-  L36.cauchy ↔ ∀ {G : Type} [Group G] [Fintype G] (p : ℕ), p.Prime → p ∣ Fintype.card G →
-    ∃ x : G, orderOf x = p
-  using fun p hp hd => @exists_prime_orderOf_dvd_card _ _ _ p ⟨hp⟩ hd
-#expect_true "3 • (4 : ZMod 12) = 0" :
-  3 • (4 : ZMod 12) = 0
-#expect_true "ord4 • 4 = 0 in ZMod 12" unfolding L36.ord4 :
-  L36.ord4 • (4 : ZMod 12) = 0
-#expect_true "no smaller positive multiple of 4 is 0 in ZMod 12" unfolding L36.ord4 :
-  ∀ k < L36.ord4, 0 < k → k • (4 : ZMod 12) ≠ 0
-#expect_true "σ ^ 3 = 1, and σ ≠ 1" unfolding L36.σ :
-  L36.σ ^ 3 = 1 ∧ L36.σ ≠ 1
-#expect_true "τ ^ 2 = 1, and τ ≠ 1" unfolding L36.τ :
-  L36.τ ^ 2 = 1 ∧ L36.τ ≠ 1
-#expect_true "Perm (Fin 3) is not commutative: σ * τ ≠ τ * σ" unfolding L36.σ L36.τ :
-  L36.σ * L36.τ ≠ L36.τ * L36.σ
+#no_sorry q1
+#no_sorry q2
+#no_sorry q3
+#no_sorry q4
+#no_sorry exists_eig
+#no_sorry ev₁
+#no_sorry vec₁
+#no_sorry ev₂
+#no_sorry vec₂
+#level_start "Endomorphisms"
+
+#expect_choice "Question 1: what `Module.End K V` is" : q1 = 2
+#expect_choice "Question 2: can the zero vector be an eigenvector?" : q2 = false
+#expect_choice "Question 3: the type of `minpoly K f`" : q3 = 1
+#expect_choice "Question 4: does the theorem stay true over ℝ?" : q4 = false
+
+#expect_equiv "exists_eig states the theorem, with every hypothesis" :
+  L36.exists_eig ↔ ∀ {V : Type} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
+    [Nontrivial V] (f : Module.End ℂ V), ∃ c : ℂ, f.HasEigenvalue c
+  using fun f => Module.End.exists_eigenvalue f
+
+#expect_true "A *ᵥ vec₁ = ev₁ • vec₁" unfolding A ev₁ vec₁ : A.mulVec vec₁ = ev₁ • vec₁
+#expect_true "vec₁ is not the zero vector" unfolding vec₁ : vec₁ ≠ 0
+#expect_true "A *ᵥ vec₂ = ev₂ • vec₂" unfolding A ev₂ vec₂ : A.mulVec vec₂ = ev₂ • vec₂
+#expect_true "vec₂ is not the zero vector" unfolding vec₂ : vec₂ ≠ 0
+#expect_true "ev₁ < ev₂" unfolding ev₁ ev₂ : ev₁ < ev₂
 
 #level_report

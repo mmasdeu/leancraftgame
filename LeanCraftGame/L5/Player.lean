@@ -1,65 +1,58 @@
 /-
-# Stating theorems
+# Anatomy of a theorem
 
-*Noor's list starts with AM-GM for two numbers, `2ab ≤ a² + b²`. The Prover proves
-whatever you write, so the referee checks you wrote what was asked.*
+*Much of the AM-GM project is already in Mathlib, and Noor wants nothing stated twice. So
+you read first: what does a Mathlib theorem promise, and what does it ask for?*
 
-## The `statement` command
-
-A theorem has a name, **binders** (variables and hypotheses, before the colon) and a
-conclusion (after it):
+To use a theorem, read its signature as `#check` prints it. Four from Mathlib:
 
 ```lean
-theorem add_pos {a b : ℝ} (ha : 0 < a) (hb : 0 < b) : 0 < a + b := …
+mul_le_mul {α : Type*} [Mul α] [Zero α] [Preorder α] {a b c d : α}
+    [PosMulMono α] [MulPosMono α]
+    (h₁ : a ≤ b) (h₂ : c ≤ d) (c0 : 0 ≤ c) (b0 : 0 ≤ b) : a * c ≤ b * d
+
+add_pow_two {α : Type*} [CommSemiring α] (a b : α) :
+    (a + b) ^ 2 = a ^ 2 + 2 * a * b + b ^ 2
+
+pow_le_pow_left₀ {M₀ : Type*} [MonoidWithZero M₀] [Preorder M₀] {a b : M₀}
+    [PosMulMono M₀] [MulPosMono M₀] (ha : 0 ≤ a) (hab : a ≤ b) (n : ℕ) : a ^ n ≤ b ^ n
+
+le_div_iff₀ {G₀ : Type*} [GroupWithZero G₀] [PartialOrder G₀] [MulPosReflectLT G₀]
+    {a b c : G₀} (hc : 0 < c) : a ≤ b / c ↔ a * c ≤ b
 ```
 
-This game adds `statement`, a theorem without its proof. With `am` from level 2:
+## Three kinds of brackets
 
-```lean
-def am (a b : ℝ) : ℝ := (a + b) / 2
+* `( )` **explicit** arguments. You write them, in order, after the theorem's name.
+* `{ }` **implicit** arguments. Lean works them out from the explicit ones. `{α : Type*}`
+  means "`α` is some type", such as `ℝ`.
+* `[ ]` **instance** arguments. Facts about the type that Lean finds in its library on
+  its own. `[Preorder α]` says `α` has a `≤`. You can skip odd names like `PosMulMono`:
+  they all hold for `ℝ`.
 
-statement am_pos {a b : ℝ} (ha : 0 < a) (hb : 0 < b) : 0 < am a b
-```
+## Hypotheses and conclusion
 
-It says: for all reals `a` and `b`, if `0 < a` and `0 < b`, then `0 < am a b`.
+Explicit arguments named `h…` are **hypotheses**: you supply a proof of each. For a
+numeric fact, `(by norm_num)` is such a proof, written in place (`norm_num` is a tactic
+that checks arithmetic). The type after the last colon is the **conclusion**, what you
+get.
 
-* `(a b : ℝ)`: explicit variables. A user supplies them: `am_pos 2 3 …`.
-* `{a b : ℝ}`: implicit variables. Lean infers them from the hypotheses, so a user writes
-  `am_pos h₁ h₂`. Logically, both mean "for all", and either is fine in this level.
-* `(ha : 0 < a)`: a hypothesis, named `ha` so a proof can use it. It means "*if* `0 < a`".
-
-## How the referee reads your statement
-
-The referee compares your statement with the intended one: same variables, hypotheses
-and conclusion, in the same order. Harmless differences are fine (variable names, `b ≥ a`
-for `a ≤ b`, `a * b` for `b * a`, the sides of an `=` swapped). A false statement gets a
-counterexample. A proof can't tell two true statements apart, so a true but different
-statement gets ❓, not ✅.
+Every hypothesis is there for a reason. `le_div_iff₀` needs `hc : 0 < c`: with `c = -1`,
+`a = 0` and `b = 1`, its left side `a ≤ b / c` is `0 ≤ -1`, false, and its right side
+`a * c ≤ b` is `0 ≤ 1`, true. Its conclusion is an `↔`, which works in both directions.
 
 ## Your task
 
-State the five facts below. Use the names given, and `ℝ` for every variable.
-
-1. `sq_add`: for all reals `a` and `b`, `(a + b)² = a² + 2ab + b²`.
-2. `two_mul_le`: for all reals `a` and `b`, `2ab ≤ a² + b²` (two-variable AM-GM).
-3. `abs_mul_le`: for all reals `a` and `b`, `|ab| ≤ (a² + b²) / 2`.
-4. `min_comm'`: for all reals `a` and `b`, `min a b = min b a`.
-5. `max_assoc'`: for all reals `a`, `b`, `c`, `max a (max b c) = max (max a b) c`.
-
-Write `x²` as `x ^ 2`. `|x|` is the absolute value: type it with the bar key on your
-keyboard, `|a * b|`. `min a b` and `max a b` are the smaller and the larger of `a` and
-`b`.
+Answer the questions below the lesson.
 -/
 namespace L5
 
-statement sq_add : sorry
-
-statement two_mul_le : sorry
-
-statement abs_mul_le : sorry
-
-statement min_comm' : sorry
-
-statement max_assoc' : sorry
+def q1 : Fin 4 := sorry
+def q2 : Fin 4 := sorry
+def q3 : Fin 3 := sorry
+def q4 : Fin 3 := sorry
+def q5 : Bool := sorry
+def q6 : Fin 3 := sorry
+def q7 : Fin 3 := sorry
 
 end L5

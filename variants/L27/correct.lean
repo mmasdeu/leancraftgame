@@ -1,26 +1,18 @@
-inductive BinTree where
-  | empty : BinTree
-  | node : BinTree → BinTree → BinTree
+structure Point where
+  x : ℝ
+  y : ℝ
+  z : ℝ
 
-open BinTree
+def origin : Point := { x := 0, y := 0, z := 0 }
+def p123 : Point := ⟨1, 2, 3⟩
+def Point.add (a b : Point) : Point := ⟨a.x + b.x, a.y + b.y, a.z + b.z⟩
+def Point.smul (r : ℝ) (a : Point) : Point := ⟨r * a.x, r * a.y, r * a.z⟩
 
--- Sam's code (given, don't edit; the referee uses its own copy)
-
--- 1 + 2 + ⋯ + n
-def triangle (n : ℕ) : ℕ := ∑ i ∈ Finset.range n, i
-
--- the number of positive divisors of n
-def numDivisors (n : ℕ) : ℕ := ((Finset.Ico 1 n).filter (· ∣ n)).card
-
--- the number of nodes of a binary tree
-def size : BinTree → ℕ
-  | empty => 0
-  | node l r => size l + size r
-
--- "Gauss's formula"
-statement samGauss (n : ℕ) : ∑ i ∈ Finset.range n, i = n * (n + 1) / 2
-
-def tn : ℕ := 1
-def dn : ℕ := 6
-def tree : BinTree := node empty empty
-def gn : ℕ := 1
+structure StandardTwoSimplex where
+  x : ℝ
+  y : ℝ
+  z : ℝ
+  x_nonneg : 0 ≤ x
+  y_nonneg : 0 ≤ y
+  z_nonneg : 0 ≤ z
+  sum_eq : x + y + z = 1
